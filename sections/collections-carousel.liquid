@@ -1,0 +1,488 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Collections carousel
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign container 			           = section.settings.container_width -%}
+{%- assign color_scheme      	           = section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- capture styles -%}
+	--container-width: {{ container_width }}; {{-  -}}
+	--inner-offset-top: {{- section.settings.inner_offset_top -}}px; {{-  -}}
+	--inner-offset-bottom: {{- section.settings.inner_offset_bottom -}}px; {{-  -}}
+	--inner-offset-top-mobile: {{- section.settings.inner_offset_top_mobile -}}px; {{-  -}}
+	--inner-offset-bottom-mobile: {{- section.settings.inner_offset_bottom_mobile -}}px; {{-  -}}
+{%- endcapture -%}
+
+{%- assign enable_autoplay	= section.settings.enable_autoplay -%}
+{%- assign autoplay_speed	= section.settings.autoplay_speed | times: 1000 -%}
+{%- assign blocks = section.blocks -%}
+
+{%- capture slider_settings -%}
+	{
+		{% if enable_autoplay -%}
+			"autoplay": {
+				"delay": {{- autoplay_speed -}},
+				"disableOnInteraction": false
+			}
+		{%- else -%}
+			"autoplay": false
+		{%- endif %}
+	}
+{%- endcapture -%}
+
+{%- if blocks.size > 0 -%}
+	{%- render 'adastra' with '/src/styles/collections-carousel.scss' -%}
+
+	{%- style -%}
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_mobile -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+		}
+
+		@media screen and (min-width: 768px) {
+			#shopify-section-{{- section.id -}} {
+				padding-top: {{- section.settings.offset_top_desktop -}}px;
+				padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+			}
+		}
+	{%- endstyle -%}
+
+	<section class="collections-carousel js-collections-carousel color-{{ color_scheme }} js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}" style="{{ styles }}">
+		<div class="container section-animate collections-carousel__container {%  if container_width == "100%" %}collections-carousel__container--no-x-paddings{% endif %}">
+			<div class="collections-carousel__wrapper {% if blocks.size <= 1 %}collections-carousel__wrapper--no-slider{% endif %}">
+				<div class="collections-carousel__slider {% if blocks.size > 1 %}swiper js-slider{% endif %}">
+					<div class="collections-carousel__slider-wrapper {% if blocks.size > 1 %}swiper-wrapper{% endif %}">
+						{%- for block in blocks -%}
+							{%- assign collection = block.settings.collection -%}
+							{%- assign heading_active_color = block.settings.heading_active_color -%}
+							{%- assign custom_title = block.settings.custom_title | default: collection.title -%}
+							{%- assign default_collection_title = "general.heading" | t -%}
+
+							{%- capture collection_block_styles -%}
+								--heading-active-color: {{ heading_active_color }}; {{-  -}}
+							{%- endcapture -%}
+
+							<div class="collections-carousel__slide {% if blocks.size > 1 %}swiper-slide{% endif %}" style="{{- collection_block_styles -}}">
+								<div class="h1 collections-carousel__slide-title">
+									{%- if collection == blank -%}
+										{{- custom_title | default: default_collection_title -}}
+									{%- else -%}
+										{{- custom_title -}}
+									{%- endif -%}
+								</div>
+							</div>
+						{%- endfor -%}
+					</div>
+				</div>
+			</div>
+
+			<div class="collections-carousel__image-blocks">
+				{%- for block in blocks -%}
+					{%- assign collection = block.settings.collection -%}
+					{%- assign image = block.settings.image | default: collection.featured_image -%}
+					{%- assign button_label = block.settings.button_label -%}
+					{%- assign button_style = block.settings.button_style -%}
+					{%- assign button_color = block.settings.button_color -%}
+					{%- assign button_background = block.settings.button_background -%}
+					{%- assign button_border_color = block.settings.button_border_color -%}
+					{%- assign button_color_hover = block.settings.button_color_hover -%}
+					{%- assign button_background_hover = block.settings.button_background_hover -%}
+					{%- assign button_border_color_hover = block.settings.button_border_color_hover -%}
+
+					{%- assign is_lazy = false -%}
+
+					{%- if section.index > 1 or forloop.index > 1 -%}
+						{%- assign is_lazy = true -%}
+					{%- endif -%}
+
+					{%- if image != blank -%}
+						{%- capture img_focal -%}
+							--img-desktop-pos: {{ image.presentation.focal_point }};
+						{%- endcapture -%}
+					{%- endif -%}
+
+					<div class="collections-carousel__image-block js-collections-carousel-image-block {% if forloop.index0 == 0 %}is-visible{% endif %}" data-slide-index="{{ forloop.index0 }}">
+						<div class="collections-carousel__image-wrapper">
+							{%- if image != blank -%}
+								<picture>
+									<source
+										srcset="{{ image | image_url: height: 378 }} 1x, {{ image | image_url: height: 756 }} 2x"
+										width="303"
+										height="378"
+										media="(max-width: 575px)"
+									>
+
+									<source
+										srcset="{{ image | image_url: height: 480 }} 1x, {{ image | image_url: height: 960 }} 2x"
+										width="384"
+										height="480"
+										media="(max-width: 991px)"
+									>
+
+									<source
+										srcset="{{ image | image_url: height: 600 }} 1x, {{ image | image_url: height: 1200 }} 2x"
+										width="480"
+										height="600"
+										media="(max-width: 1500px)"
+									>
+
+									<img class="collections-carousel__image"
+										 src="{{ image | image_url: height: 680 }}"
+										 srcset="{{ image | image_url: height: 680 }} 1x, {{ image | image_url: height: 1360 }} 2x"
+										 alt="{{ image.alt | escape }}"
+										 fetchpriority="high"
+										 {% if is_lazy %}
+											 fetchpriority="low"
+											 loading="lazy"
+										 {% else %}
+											 fetchpriority="high"
+											 loading="eager"
+										 {% endif %}
+										 {% if img_focal != blank %}
+											style="{{ img_focal }}"
+										 {% endif %}
+										 width="544"
+										 height="680"
+									>
+								</picture>
+							{%- else -%}
+								{{ 'collection-1' | placeholder_svg_tag: 'collections-carousel__image collections-carousel__image--placeholder' }}
+							{%- endif -%}
+
+							{%- if button_label != blank -%}
+								{%- capture button_styles -%}
+									--button-text-color-{{- button_style -}}: {{- button_color-}}; {{-  -}}
+									--button-background-color-{{- button_style -}}: {{- button_background -}}; {{-  -}}
+									--button-border-color-{{- button_style -}}: {{- button_border_color -}}; {{-  -}}
+									--button-text-color-{{- button_style -}}-hover: {{- button_color_hover -}}; {{-  -}}
+									--button-background-color-{{- button_style -}}-hover: {{- button_background_hover -}}; {{-  -}}
+									--button-border-color-{{- button_style -}}-hover: {{- button_border_color_hover -}}; {{-  -}}
+								{%- endcapture -%}
+
+								<a class="collections-carousel__image-link button button--{{- button_style -}}"
+								   href="{{- collection.url -}}"
+								   style="{{- button_styles -}}"
+								>
+									{%- if button_style == 'primary' -%}
+										{{ button_label }}
+									{%- else -%}
+										<span data-text="{{ button_label | escape }}">
+											<span>{{ button_label }}</span>
+										</span>
+									{%- endif -%}
+								</a>
+							{%- endif -%}
+						</div>
+					</div>
+				{%- endfor -%}
+			</div>
+		</div>
+
+		<script class="js-slider-settings" type="application/json">
+			{{- slider_settings -}}
+		</script>
+	</section>
+
+	{%- render 'adastra' with '/src/scripts/component-swiper-modules.js' -%}
+	{%- render 'adastra' with '/src/scripts/section-collections-carousel.js' -%}
+{% endif %}
+
+{%- schema -%}
+{
+	"name": "Collections carousel",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Slideshow settings"
+		},
+		{
+			"type": "paragraph",
+			"content": "For a loop effect, please add at least 7 collection slides."
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_autoplay",
+			"label": "Enable autoplay",
+			"default": true
+		},
+		{
+			"type": "range",
+			"id": "autoplay_speed",
+			"label": "Autoplay speed",
+			"unit": "s",
+			"min": 3,
+			"max": 15,
+			"step": 1,
+			"default": 5,
+			"info": "Works only with enabled autoplay"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1808px",
+					"label": "Default - 1680px"
+				},
+				{
+					"value": "2048px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "100%",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset bottom",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset bottom",
+			"default": 0
+		},
+		{
+			"type": "paragraph",
+			"content": "Internal offsets"
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset top",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset bottom",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset top",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset bottom",
+			"default": 32
+		}
+	],
+	"blocks": [
+		{
+			"name": "Collection",
+			"type": "collection",
+			"settings": [
+				{
+					"type": "collection",
+					"id": "collection",
+					"label": "Collection"
+				},
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "Image",
+					"info": "Use instead of collection image"
+				},
+				{
+					"type": "text",
+					"id": "custom_title",
+					"label": "Custom heading",
+					"info": "Use instead of collection heading"
+				},
+				{
+					"type": "text",
+					"id": "button_label",
+					"label": "Button label",
+					"default": "View Collections"
+				},
+				{
+					"type": "select",
+					"id": "button_style",
+					"label": "Button style",
+					"options": [
+						{
+							"value": "primary",
+							"label": "Primary"
+						},
+						{
+							"value": "secondary",
+							"label": "Secondary"
+						}
+					],
+					"default": "primary"
+				},
+				{
+					"type": "color",
+					"id": "heading_active_color",
+					"label": "Heading active color",
+					"default": "#ffffff"
+				},
+				{
+					"type": "color",
+					"id": "button_color",
+					"label": "Button label",
+					"default": "#000000"
+				},
+				{
+					"type": "color",
+					"id": "button_background",
+					"label": "Button background",
+					"default": "#ffffff"
+				},
+				{
+					"type": "color",
+					"id": "button_border_color",
+					"label": "Button border",
+					"default": "#e9e9e9"
+				},
+				{
+					"type": "color",
+					"id": "button_color_hover",
+					"label": "Button label (hover)",
+					"default": "#ffffff"
+				},
+				{
+					"type": "color",
+					"id": "button_background_hover",
+					"label": "Button background (hover)",
+					"default": "#000000"
+				},
+				{
+					"type": "color",
+					"id": "button_border_color_hover",
+					"label": "Button border (hover)",
+					"default": "#000000"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Collections carousel",
+			"blocks": [
+				{
+					"type": "collection"
+				},
+				{
+					"type": "collection"
+				},
+				{
+					"type": "collection"
+				},
+				{
+					"type": "collection"
+				},
+				{
+					"type": "collection"
+				},
+				{
+					"type": "collection"
+				},
+				{
+					"type": "collection"
+				}
+			]
+		}
+	]
+}
+{%- endschema -%}

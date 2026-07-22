@@ -1,0 +1,43 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Cart notification
+	Render shopping cart notification
+
+	Usage:
+	{%- render 'cart-notification' -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/scripts/cart-notification-error.js' -%}
+
+{%- assign color_scheme 					= settings.cart_notification_color_scheme -%}
+{%- assign enable_color_scheme_inheritance 	= settings.cart_notification_enable_color_scheme_inheritance -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+<div class="cart-notification color-{{ color_scheme }} error js-cart-notification-error">
+	<div class="cart-notification__container js-cart-notification-modal" aria-modal="true" role="dialog" tabindex="-1">
+		<div class="cart-notification__header">
+			<h2 class="cart-notification__heading">
+				{%- render 'icons', icon: 'info' -%}
+
+				<span class="js-notification-error-heading">
+					{{- 'cart.notifications.error' | t -}}
+				</span>
+			</h2>
+
+			<button
+				type="button"
+				class="focus-visible-outline cart-notification__close"
+				data-notification-close
+				aria-label="{{- 'general.accessibility.close_modal' | t | escape -}}"
+			>
+				{%- render 'icons', icon: 'menu-close' -%}
+			</button>
+		</div>
+
+		<div class="cart-notification__body js-cart-notification-content"></div>
+	</div>
+</div>

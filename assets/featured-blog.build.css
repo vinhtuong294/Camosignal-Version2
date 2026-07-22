@@ -1,0 +1,91 @@
+.featured-blog {
+  padding-top: var(--inner-offset-top-mobile);
+  padding-bottom: var(--inner-offset-bottom-mobile);
+  background-color: var(--color-background);
+}
+.featured-blog .featured-blog__title {
+  margin-bottom: 16px;
+}
+.featured-blog .featured-blog__row {
+  display: flex;
+  flex-wrap: wrap;
+}
+.featured-blog .featured-blog__col {
+  width: 100%;
+}
+.featured-blog .featured-blog__grid {
+  margin: -16px 0;
+}
+.featured-blog .featured-blog__grid-col {
+  padding: 16px 0;
+}
+.featured-blog .featured-blog__link-wrapper {
+  margin-top: 32px;
+  text-align: center;
+}
+.featured-blog.need-animate {
+  opacity: 0;
+  transform: translateY(var(--animate-section-translateY));
+}
+.featured-blog.animated {
+  opacity: 1;
+  transform: translateY(0);
+  transition-duration: var(--animate-time);
+  transition-property: opacity, transform;
+  transition-timing-function: var(--cubic-timing-section);
+}
+html.no-js .featured-blog.need-animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (max-width: 767.98px) {
+  .featured-blog .featured-blog__link {
+    width: 100%;
+  }
+}
+@media (max-width: 991.98px) {
+  .featured-blog .featured-blog__col.featured-blog__col--small {
+    margin-top: 32px;
+  }
+  .featured-blog .featured-blog__grid {
+    margin: -24px 0;
+  }
+  .featured-blog .featured-blog__grid-col {
+    padding: 24px 0;
+  }
+  .featured-blog .featured-blog__grid-col + .featured-blog__grid-col {
+    border-top: 1px solid var(--color-border-secondary);
+  }
+}
+@media (min-width: 768px) {
+  .featured-blog {
+    padding-top: var(--inner-offset-top);
+    padding-bottom: var(--inner-offset-bottom);
+  }
+}
+@media (min-width: 992px) {
+  .featured-blog .featured-blog__title {
+    margin-bottom: 40px;
+  }
+  .featured-blog .featured-blog__row {
+    column-gap: 24px;
+  }
+  .featured-blog .featured-blog__row.featured-blog__row--center {
+    justify-content: center;
+  }
+  .featured-blog .featured-blog__col {
+    width: calc(50% - 12px);
+  }
+  .featured-blog .featured-blog__col.featured-blog__col--big {
+    position: sticky;
+    top: 40px;
+    align-self: flex-start;
+  }
+  .featured-blog .featured-blog__grid {
+    column-count: 2;
+    column-gap: 24px;
+  }
+  .featured-blog .featured-blog__grid-col {
+    break-inside: avoid-column;
+  }
+}

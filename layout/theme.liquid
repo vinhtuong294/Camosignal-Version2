@@ -1,0 +1,1625 @@
+<!doctype html>
+<html class="no-js" lang="{{- request.locale.iso_code -}}">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<meta name="theme-color" content="{{- settings.color_button -}}">
+		<meta name="format-detection" content="telephone=no">
+
+		{%- if settings.hide_search_engine -%}
+			<meta name="robots" content="noindex">
+		{%- endif -%}
+
+		<link rel="canonical" href="{{- canonical_url -}}">
+		<link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+		<link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+		{%- if settings.favicon != blank -%}
+			<link rel="icon" href="{{ settings.favicon | image_url: width: 32 }}" type="image/png">
+		{%- endif -%}
+
+		{%- capture seo_title -%}
+			{%- if template == 'search' and search.performed == true -%}
+				{{ 'general.search.heading' | t }}: {{ search.terms | escape }} ({{ search.results_count }})
+			{%- else -%}
+				{{ page_title }}
+			{%- endif -%}
+
+			{%- if current_tags -%}
+				{%- assign meta_tags = current_tags | join: ', ' -%} &ndash; {{ 'general.meta.tags' | t: tags: meta_tags -}}
+			{%- endif -%}
+
+			{%- if current_page != 1 -%}
+				&ndash; {{ 'general.meta.page' | t: page: current_page }}
+			{%- endif -%}
+
+			{%- assign escaped_page_title = page_title | escape -%}
+			{%- unless escaped_page_title contains shop.name -%}
+				&ndash; {{ shop.name }}
+			{%- endunless -%}
+		{%- endcapture -%}
+
+		<title>
+			{{- seo_title | strip -}}
+		</title>
+
+		{%- if page_description -%}
+			<meta name="description" content="{{- page_description | escape -}}">
+		{%- endif -%}
+
+		{%- render 'head-theme-meta', layout: 'theme' -%}
+		{%- render 'social-meta-tags' -%}
+
+		{%- render 'custom-variables.css' -%}
+
+		{%- render 'adastra' with '/src/styles/main.scss', preload: true -%}
+
+		{%- if template.directory == 'customers' -%}
+			<script src="{{- 'shopify_common.js' | shopify_asset_url -}}" defer="defer"></script>
+		{%- endif -%}
+
+		<script>
+			window.themeCore = window.themeCore || {};
+			window.themeCore.productPlaceholderImage = {%- if settings.product_default_image -%} {{- settings.product_default_image | image_url: width: 2048 | replace: "//", "https://" | json -}} {%- else -%} null {%- endif -%};
+			window.themeCore.productPlaceholderAspectRatio = {{ settings.product_default_image.aspect_ratio | json }};
+			{% if settings.cart_reminder_enable %}
+				window.themeCore.CartReminder = {
+					config: {
+						enableColorSchemeInheritance: {{- settings.enable_color_scheme_inheritance | json -}},
+						colorSchemeLocal: "{{- settings.color_scheme -}}",
+						colorSchemeGlobal: "{{- settings.main_color_scheme -}}",
+						cookieTime: {{- settings.cart_reminder_cookie_time | json -}},
+						displayFrequency: {{- settings.cart_reminder_display_frequency | json -}},
+						text: {{- settings.cart_reminder_text | json -}},
+						cartType: {{- settings.cart_type | json -}},
+						cartRoute: {{- routes.cart_url | json -}},
+						cartLinkA11y: {{- "cart.reminder.accessibility.cart" | t | escape | json -}},
+						cartButtonA11y: {{- "cart.reminder.accessibility.cart_drawer" | t | escape | json -}},
+						closeButtonA11y: {{- "cart.reminder.accessibility.close_button" | t | escape | json -}}
+					}
+				}
+			{% endif %}
+		</script>
+
+		{%- render 'translations-methods' -%}
+		{%- render 'translations' -%}
+
+		<style>
+			/* Hide Judge.me Reviews tab on mobile */
+			@media screen and (max-width: 767px) {
+				.jdgm-revs-tab {
+					display: none !important;
+				}
+			}
+
+			/* Match Judge.me review text to the product short description typography */
+			.jdgm-widget .jdgm-rev__author,
+			.jdgm-widget .jdgm-rev__timestamp,
+			.jdgm-widget .jdgm-rev__title,
+			.jdgm-widget .jdgm-rev__body,
+			.jdgm-widget .jdgm-rev__body p,
+			.jdgm-widget .jdgm-rev__content,
+			.jdgm-widget .jdgm-rev__content p,
+			.jdgm-all-reviews-page .jdgm-rev__author,
+			.jdgm-all-reviews-page .jdgm-rev__timestamp,
+			.jdgm-all-reviews-page .jdgm-rev__title,
+			.jdgm-all-reviews-page .jdgm-rev__body,
+			.jdgm-all-reviews-page .jdgm-rev__body p,
+			.jdgm-all-reviews-page .jdgm-rev__content,
+			.jdgm-all-reviews-page .jdgm-rev__content p,
+			.jdgm-carousel-wrapper .jdgm-carousel-item__reviewer-name,
+			.jdgm-carousel-wrapper .jdgm-carousel-item__timestamp,
+			.jdgm-carousel-wrapper .jdgm-carousel-item__review-title,
+			.jdgm-carousel-wrapper .jdgm-carousel-item__review-body,
+			.jdgm-carousel-wrapper .jdgm-carousel-item__review-body p {
+				font-family: var(--base-font-family) !important;
+				font-size: calc(var(--body-font-size) * 0.875) !important;
+				font-weight: 400 !important;
+				line-height: 1.65 !important;
+				letter-spacing: 0 !important;
+				text-transform: none !important;
+				color: var(--color-text-thirdly) !important;
+			}
+
+			.jdgm-widget .jdgm-rev__body p,
+			.jdgm-all-reviews-page .jdgm-rev__body p,
+			.jdgm-carousel-wrapper .jdgm-carousel-item__review-body p {
+				margin-bottom: 0.5em !important;
+			}
+
+			.jdgm-widget .jdgm-rev__body p:last-child,
+			.jdgm-all-reviews-page .jdgm-rev__body p:last-child,
+			.jdgm-carousel-wrapper .jdgm-carousel-item__review-body p:last-child {
+				margin-bottom: 0 !important;
+			}
+
+			@media screen and (max-width: 767px) {
+				.jdgm-widget .jdgm-rev__author,
+				.jdgm-widget .jdgm-rev__timestamp,
+				.jdgm-widget .jdgm-rev__title,
+				.jdgm-widget .jdgm-rev__body,
+				.jdgm-widget .jdgm-rev__body p,
+				.jdgm-widget .jdgm-rev__content,
+				.jdgm-widget .jdgm-rev__content p,
+				.jdgm-all-reviews-page .jdgm-rev__author,
+				.jdgm-all-reviews-page .jdgm-rev__timestamp,
+				.jdgm-all-reviews-page .jdgm-rev__title,
+				.jdgm-all-reviews-page .jdgm-rev__body,
+				.jdgm-all-reviews-page .jdgm-rev__body p,
+				.jdgm-all-reviews-page .jdgm-rev__content,
+				.jdgm-all-reviews-page .jdgm-rev__content p,
+				.jdgm-carousel-wrapper .jdgm-carousel-item__reviewer-name,
+				.jdgm-carousel-wrapper .jdgm-carousel-item__timestamp,
+				.jdgm-carousel-wrapper .jdgm-carousel-item__review-title,
+				.jdgm-carousel-wrapper .jdgm-carousel-item__review-body,
+				.jdgm-carousel-wrapper .jdgm-carousel-item__review-body p {
+					font-size: 13px !important;
+					line-height: 1.5 !important;
+				}
+			}
+		</style>
+
+		{{ content_for_header }}
+
+		<script>
+			// Delay non-critical third-party scripts (Judge.me widgets, chat, etc.)
+			// by replacing their script src loading until page is idle
+			(function() {
+				var DEFER_DELAY = 12000; // keep third-party scripts out of the first interaction window
+				var loaded = false;
+
+				function loadDeferredScripts() {
+					if (loaded) return;
+					loaded = true;
+					// Trigger Shopify's lazy-loaded app scripts if available
+					document.querySelectorAll('script[data-src]').forEach(function(s) {
+						s.src = s.getAttribute('data-src');
+						s.removeAttribute('data-src');
+					});
+				}
+
+				// Load on first user interaction (instant responsiveness for real users)
+				['pointerdown','keydown','touchstart','scroll'].forEach(function(ev) {
+					window.addEventListener(ev, loadDeferredScripts, { once: true, passive: true });
+				});
+
+				// Fallback: load after delay even if no interaction
+				window.addEventListener('load', function() {
+					setTimeout(loadDeferredScripts, DEFER_DELAY);
+				});
+			})();
+		</script>
+
+		<script>
+			document.querySelector("html").classList.remove("no-js");
+		</script>
+		{% comment %} startClarity {% endcomment %}
+		<script type="text/javascript">
+		(function() {
+			var loaded = false;
+			var CLARITY_DELAY = 12000;
+
+			function loadClarity() {
+				if (loaded) return;
+				loaded = true;
+				(function(c,l,a,r,i,t,y){
+					c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+					t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+					y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+				})(window, document, "clarity", "script", "wgkwr65k4s");
+			}
+
+			function scheduleClarity() {
+				if ('requestIdleCallback' in window) {
+					window.requestIdleCallback(loadClarity, { timeout: 3000 });
+				} else {
+					loadClarity();
+				}
+			}
+
+			window.addEventListener('load', function() {
+				setTimeout(scheduleClarity, CLARITY_DELAY);
+			});
+		})();
+		</script>
+		{% comment %} endClarity {% endcomment %}
+		<style>
+			/* Ensure third-party app dropdowns appear above cart drawer */
+			.select2-container,
+			.select2-container--open,
+			.select2-dropdown,
+			[class*="sll-dropdown"],
+			[class*="selleasy"],
+			.sll-popup,
+			.choices__list--dropdown {
+				z-index: 999999 !important;
+			}
+
+			/* Soft Blurred Shadow Effect for Product Cards on Desktop */
+			@media (min-width: 990px) {
+				.product-card {
+					border: 1px solid #e5e7eb !important;
+					border-radius: 8px !important;
+					box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04) !important;
+					background-color: #ffffff !important;
+					display: flex;
+					flex-direction: column;
+					height: 100%;
+					transition: transform 0.3s ease, box-shadow 0.3s ease;
+					overflow: hidden !important;
+				}
+				.product-card:hover {
+					box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+				}
+				.product-card .product-card__main {
+					border-bottom: 1px solid #e5e7eb !important;
+				}
+				.product-card .product-card__footer {
+					padding: 16px !important;
+				}
+			}
+		</style>
+	</head>
+
+	{%- assign rtl_langs = 'ar,arc,dv,fa,ha,he,khw,ks,ku,ps,ur,yi' | split: ',' -%}
+	{%- assign current_langs = localization.language.iso_code | split: '-' | first -%}
+
+	<body class="template-{{ template | split: '.' | first }}{% if rtl_langs contains current_langs %} rtl{% endif %}">
+		{%- comment -%}
+			Cart sections response cache.
+			--------------------------------------------------------------------
+			cart-149fe4ce.js's refreshSections() has a broken guard that ALWAYS
+			triggers an extra GET ${url}?sections=...&lazyload=false even though
+			the rendered section HTML is already present in the /cart/*.js
+			response. That extra fetch adds ~200-400ms to every cart action.
+
+			This interceptor must be the FIRST fetch patch so it is the innermost
+			wrapper — that way it populates the cache before any later wrapper's
+			.then() emits cart:refresh and triggers refreshSections().
+
+			It:
+			  1. Pre-populates a cache from /cart/(add|change|update|clear).js
+			     responses (theme.CartApi always passes `sections` so Shopify
+			     renders them inline).
+			  2. Short-circuits the redundant refresh fetch by returning the
+			     cached payload as a synthetic Response.
+		{%- endcomment -%}
+		<script>
+			(function() {
+				if (window.__camoSectionsCacheInstalled) return;
+				window.__camoSectionsCacheInstalled = true;
+
+				if (typeof window.fetch !== 'function' || typeof Response !== 'function') return;
+
+				var sectionsCache = null;
+				var sectionsCacheAt = 0;
+				var CACHE_TTL_MS = 3000;
+				var cartMutationRegex = /\/cart\/(add|change|update|clear)\.js(\?|$)/i;
+
+				function getRequestedSectionIds(url) {
+					if (typeof url !== 'string') return null;
+
+					try {
+						var requestURL = new URL(url, window.location.href);
+						if (requestURL.searchParams.get('lazyload') !== 'false') return null;
+
+						var sections = requestURL.searchParams.get('sections');
+						if (!sections) return null;
+
+						var ids = sections.split(',').filter(Boolean);
+						return ids.length ? ids : null;
+					} catch (error) {
+						return null;
+					}
+				}
+
+				function canServeCachedSections(url) {
+					if (!sectionsCache || Date.now() - sectionsCacheAt >= CACHE_TTL_MS) return false;
+
+					var requestedIds = getRequestedSectionIds(url);
+					if (!requestedIds) return false;
+
+					for (var i = 0; i < requestedIds.length; i++) {
+						if (!Object.prototype.hasOwnProperty.call(sectionsCache, requestedIds[i])) return false;
+					}
+
+					return true;
+				}
+
+				var origFetch = window.fetch;
+				window.fetch = function(input, init) {
+					var url = '';
+					if (typeof input === 'string') {
+						url = input;
+					} else if (input && typeof input.url === 'string') {
+						url = input.url;
+					}
+
+					/* Cache hit: skip the network round-trip entirely. */
+					if (canServeCachedSections(url)) {
+						var cached = sectionsCache;
+						sectionsCache = null;
+						sectionsCacheAt = 0;
+						return Promise.resolve(new Response(JSON.stringify(cached), {
+							status: 200,
+							headers: { 'Content-Type': 'application/json' }
+						}));
+					}
+
+					/* Invalidate stale cache when a new mutation starts — handles
+					   the case where an external app (Selleasy) fires /cart/add.js
+					   without `sections` in the body, so the follow-up refresh
+					   doesn't serve outdated HTML from a previous theme action. */
+					if (url && cartMutationRegex.test(url)) {
+						sectionsCache = null;
+						sectionsCacheAt = 0;
+					}
+
+					var promise = origFetch.apply(this, arguments);
+
+					/* Cache populate: every theme cart mutation request goes out
+					   with `sections=...`, so the JSON response contains the
+					   rendered HTML we need for the follow-up refreshSections(). */
+					if (url && cartMutationRegex.test(url)) {
+						return promise.then(function(response) {
+							if (!response || typeof response.clone !== 'function') return response;
+							return response.clone().json().then(function(data) {
+								if (data && data.sections && typeof data.sections === 'object' && !Array.isArray(data.sections) && Object.keys(data.sections).length > 0) {
+									sectionsCache = data.sections;
+									sectionsCacheAt = Date.now();
+								}
+								return response;
+							}).catch(function() {
+								return response;
+							});
+						});
+					}
+
+					return promise;
+				};
+			})();
+		</script>
+
+		<style>
+			/* Suppress the full-section preloader overlay during quantity
+			   changes — the optimistic input value + the in-place price
+			   update already give the user enough feedback. */
+			html.is-cart-qty-changing [data-section-type="cart-template"] .js-preloader.is-active,
+			html.is-cart-qty-changing [data-section-type="cart-template"] .preloader-wrapper.is-active,
+			html.is-cart-app-adding [data-section-type="cart-template"] .js-preloader.is-active,
+			html.is-cart-app-adding [data-section-type="cart-template"] .preloader-wrapper.is-active {
+				opacity: 0 !important;
+				visibility: hidden !important;
+				pointer-events: none !important;
+			}
+
+			[data-cart-item].camo-cart-item-updating {
+				position: relative;
+			}
+
+			[data-cart-item].camo-cart-item-updating::after {
+				display: none;
+			}
+
+			[data-cart-item].camo-cart-item-updating .cart-item__image-container,
+			[data-cart-item].camo-cart-item-updating .cart-item-drawer__image-container {
+				position: relative;
+			}
+
+			[data-cart-item].camo-cart-item-updating .cart-item__image-container::after,
+			[data-cart-item].camo-cart-item-updating .cart-item-drawer__image-container::after {
+				content: "";
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				width: 22px;
+				height: 22px;
+				margin: -11px 0 0 -11px;
+				border: 2px solid rgba(255, 255, 255, 0.7);
+				border-top-color: #263e30;
+				border-radius: 999px;
+				animation: camo-cart-spin 0.7s linear infinite;
+				box-shadow: 0 3px 10px rgba(38, 62, 48, 0.22);
+				z-index: 5;
+			}
+
+			html.is-cart-qty-changing lb-upsell-widget,
+			html.is-cart-qty-changing .lb-widget,
+			html.is-cart-qty-changing [id*="lb-upsell" i],
+			html.is-cart-qty-changing [class*="lb-upsell" i],
+			html.is-cart-qty-changing [id*="selleasy" i],
+			html.is-cart-qty-changing [class*="selleasy" i] {
+				opacity: 1 !important;
+				visibility: visible !important;
+				transition: none !important;
+				content-visibility: visible !important;
+			}
+
+			html.is-cart-qty-changing lb-upsell-widget *,
+			html.is-cart-qty-changing .lb-widget *,
+			html.is-cart-qty-changing [id*="lb-upsell" i] *,
+			html.is-cart-qty-changing [class*="lb-upsell" i] *,
+			html.is-cart-qty-changing [id*="selleasy" i] *,
+			html.is-cart-qty-changing [class*="selleasy" i] * {
+				transition: none !important;
+				animation-duration: 0s !important;
+			}
+
+			@keyframes camo-cart-spin {
+				to {
+					transform: rotate(360deg);
+				}
+			}
+		</style>
+
+		{%- comment -%}
+			Cart partial update for item-level changes.
+			--------------------------------------------------------------------
+			By default theme.refreshSections() blows away the entire
+			.js-cart-content innerHTML on every cart:updated, which makes the
+			+/- buttons in the drawer feel janky (flicker, lost focus, every
+			widget re-bound).
+
+			For action === 'changeQuantity' / 'removeItem' / add actions we:
+			  1. Inject a `noRefresh` flag into the cart:updated params, which
+			     makes theme.onCartUpdated bail out without touching the DOM.
+			  2. Surgically update only what actually changes — the affected
+			     line item's price/discount, the subtotal, the discount-tier
+			     banner, and the free-shipping progress bar — leaving the
+			     quantity input element (and its theme widget binding) intact.
+
+			This also handles inserted/removed line items without replacing the
+			entire cart drawer/page content.
+		{%- endcomment -%}
+		<script>
+			(function() {
+				if (window.__camoCartPartialUpdateInstalled) return;
+
+				function partialCartUpdate(payload) {
+					if (!payload || !payload.sections) return;
+					var sectionIds = Object.keys(payload.sections);
+					for (var i = 0; i < sectionIds.length; i++) {
+						var sectionId = sectionIds[i];
+						var html = payload.sections[sectionId];
+						if (typeof html !== 'string' || !html) continue;
+
+						var sectionEl = document.querySelector('[data-section-id="' + sectionId + '"]');
+						if (!sectionEl) continue;
+
+						var template = document.createElement('template');
+						template.innerHTML = html;
+						updateSectionPartially(sectionEl, template.content);
+					}
+				}
+
+				function updateSectionPartially(sectionEl, newRoot) {
+					/* 1. Morph the cart-items list:
+					      - update items present in both
+					      - remove items missing from the response
+					      - insert items that are new (e.g. from an add action)
+					        in the same order the server rendered them. */
+					var oldItemsRoot = getCartItemsRoot(sectionEl);
+					var newItemsRoot = getCartItemsRoot(newRoot);
+					var newItemEls = getThemeCartItems(newItemsRoot);
+					var oldItemEls = getThemeCartItems(oldItemsRoot);
+					var newKeys = newItemEls.map(function(el) { return el.getAttribute('data-cart-item'); });
+
+					/* Remove items that are no longer in the new list. */
+					oldItemEls.forEach(function(oldItem) {
+						var key = oldItem.getAttribute('data-cart-item');
+						if (key && newKeys.indexOf(key) === -1) {
+							oldItem.remove();
+						}
+					});
+
+					/* Walk the new list in order; update existing rows or insert
+					   missing ones before the next-existing sibling. */
+					for (var i = 0; i < newItemEls.length; i++) {
+						var newItem = newItemEls[i];
+						var key = newItem.getAttribute('data-cart-item');
+						var oldItem = findThemeCartItemByKey(oldItemsRoot, key);
+
+						if (oldItem) {
+							updateLineItemPartially(oldItem, newItem);
+							continue;
+						}
+
+						/* New item — find the nearest existing successor and
+						   insertBefore it. Falls back to appending into the
+						   nearest valid items container. */
+						var anchor = null;
+						for (var j = i + 1; j < newItemEls.length; j++) {
+							var nextKey = newItemEls[j].getAttribute('data-cart-item');
+							var nextOld = findThemeCartItemByKey(oldItemsRoot, nextKey);
+							if (nextOld) { anchor = nextOld; break; }
+						}
+
+						var clone = document.importNode(newItem, true);
+						if (anchor && anchor.parentNode) {
+							anchor.parentNode.insertBefore(clone, anchor);
+						} else {
+							/* Find the theme-owned cart items container. Keep this
+							   deliberately scoped so third-party cart app widgets
+							   are not mistaken for cart rows. */
+							var container = oldItemsRoot;
+							if (container) {
+								var appWidget = getCartAppWidget(container);
+								var appAnchor = appWidget;
+								while (appAnchor && appAnchor.parentNode !== container) {
+									appAnchor = appAnchor.parentNode;
+								}
+								if (appAnchor && appAnchor.parentNode === container) {
+									container.insertBefore(clone, appAnchor);
+								} else {
+									container.appendChild(clone);
+								}
+							}
+						}
+						bindNewItemQuantityWidget(clone);
+					}
+
+					/* 2. Subtotal, discount, and footer button blocks. */
+					replaceInnerHTMLIfDifferent(sectionEl, newRoot, '.js-cart-subtotal');
+					replaceInnerHTMLIfDifferent(sectionEl, newRoot, '.js-cart-discount-block');
+					replaceInnerHTMLIfDifferent(sectionEl, newRoot, '.js-cart-footer-button');
+					replaceInnerHTMLIfDifferent(sectionEl, newRoot, '.js-cart-footer-additional-buttons');
+
+					/* 3. Drop the is-empty flag if items reappeared, or set it
+					      when the cart just became empty. */
+					var newSection = newRoot.querySelector('[data-section-type="cart-template"]');
+					if (newSection) {
+						sectionEl.classList.toggle('is-empty', newSection.classList.contains('is-empty'));
+					}
+
+					/* 4. Discount-tier banner (BUY 2/3/4 …). */
+					var oldTier = sectionEl.querySelector('.cart-drawer__tier-offers');
+					var newTier = newRoot.querySelector('.cart-drawer__tier-offers');
+					if (oldTier && newTier && oldTier.outerHTML !== newTier.outerHTML) {
+						oldTier.outerHTML = newTier.outerHTML;
+					}
+
+					/* 5. Free-shipping bar progress + message. */
+					updateShippingBar(sectionEl, newRoot);
+				}
+
+				function getCartItemsRoot(root) {
+					if (!root || !root.querySelector) return null;
+					return root.querySelector('.cart-drawer__section--items .cart-items__body')
+						|| root.querySelector('.cart-template__items .cart-items__body')
+						|| root.querySelector('form.cart-items__form .cart-items__body')
+						|| root.querySelector('.cart-drawer__section--items .cart-items')
+						|| root.querySelector('.cart-drawer__section--items');
+				}
+
+				var cartAppWidgetSelector = 'lb-upsell-widget.lb-widget, lb-upsell-widget, .lb-widget, .shopify-app-block, [id*="selleasy" i], [class*="selleasy" i], [id*="lb_upsell" i], [id*="lb-upsell" i], [class*="lb-widget" i], [class*="lb-upsell" i], [id*="sll" i], [class*="sll" i]';
+				var preservedCartAppWidget = null;
+				var preservedCartAppScope = null;
+				var preservedCartAppMinHeight = null;
+				var preservedCartAppMinHeightPriority = '';
+				var cartAppWidgetObserver = null;
+				var cartAppWidgetObservedRoot = null;
+
+				function getCartAppWidget(root) {
+					if (!root || !root.querySelector) return null;
+					return root.querySelector(cartAppWidgetSelector);
+				}
+
+				function isInsideCartAppWidget(el) {
+					return !!(el && el.closest && el.closest(cartAppWidgetSelector));
+				}
+
+				function isThemeCartItem(el) {
+					if (!el || el.nodeType !== 1 || isInsideCartAppWidget(el)) return false;
+					if (el.matches && el.matches('.cart-item-drawer[data-cart-item], .cart-item[data-cart-item], [data-cart-item].cart-item-drawer, [data-cart-item].cart-item')) return true;
+					return !!(el.querySelector && el.querySelector('.cart-item-drawer__media, .cart-item__media, .cart-item-drawer__quantity, .cart-item__quantity'));
+				}
+
+				function getThemeCartItems(root) {
+					if (!root || !root.querySelectorAll) return [];
+					return Array.from(root.querySelectorAll('[data-cart-item]')).filter(isThemeCartItem);
+				}
+
+				function findThemeCartItemByKey(root, key) {
+					if (!root || !key || !root.querySelectorAll) return null;
+					var matches = root.querySelectorAll('[data-cart-item="' + cssEscape(key) + '"]');
+					for (var i = 0; i < matches.length; i++) {
+						if (isThemeCartItem(matches[i])) return matches[i];
+					}
+					return null;
+				}
+
+				function getCartContentRoot(root) {
+					if (!root || !root.querySelector) return null;
+					return root.querySelector('.js-cart-content') || root.querySelector('#cart-drawer-main-content');
+				}
+
+				function installCartAppWidgetObserver(scope) {
+					var contentRoot = getCartContentRoot(scope)
+						|| document.querySelector('#CartDrawer .js-cart-content, .cart-drawer .js-cart-content, .js-cart-content');
+					if (!contentRoot || typeof MutationObserver === 'undefined') return;
+					if (cartAppWidgetObserver && cartAppWidgetObservedRoot === contentRoot) return;
+					if (cartAppWidgetObserver) {
+						cartAppWidgetObserver.disconnect();
+						cartAppWidgetObserver = null;
+					}
+
+					cartAppWidgetObserver = new MutationObserver(function() {
+						if (!document.documentElement.classList.contains('is-cart-qty-changing')) return;
+						restoreCartAppWidget();
+					});
+					cartAppWidgetObserver.observe(contentRoot, { childList: true, subtree: true });
+					cartAppWidgetObservedRoot = contentRoot;
+				}
+
+				function preserveCartAppWidget(target) {
+					var scope = target && target.closest ? target.closest('#CartDrawer, [data-section-type="cart-template"]') : null;
+					var widget = getCartAppWidget(scope || document);
+					if (!widget) return;
+					if (preservedCartAppWidget !== widget) {
+						preservedCartAppMinHeight = widget.style.getPropertyValue('min-height');
+						preservedCartAppMinHeightPriority = widget.style.getPropertyPriority('min-height');
+					}
+					preservedCartAppWidget = widget;
+					preservedCartAppScope = scope || document;
+					var rect = widget.getBoundingClientRect();
+					if (rect && rect.height > 0) {
+						widget.style.setProperty('min-height', Math.ceil(rect.height) + 'px', 'important');
+					}
+					installCartAppWidgetObserver(scope || document);
+				}
+
+				function restoreCartAppWidget() {
+					if (!preservedCartAppWidget) return;
+					var scope = preservedCartAppScope || document.querySelector('#CartDrawer') || document;
+					if (scope !== document && !document.contains(scope)) {
+						scope = document.querySelector('#CartDrawer.is-active')
+							|| document.querySelector('[data-section-type="cart-template"]:not([data-section-modification="drawer"])')
+							|| document.querySelector('[data-section-type="cart-template"]')
+							|| document;
+					}
+					var currentWidget = getCartAppWidget(scope);
+
+					if (currentWidget && currentWidget !== preservedCartAppWidget) {
+						preservedCartAppWidget = currentWidget;
+						return;
+					}
+					if (document.contains(preservedCartAppWidget)) return;
+
+					var itemsRoot = getCartItemsRoot(scope);
+					if (!itemsRoot) return;
+					itemsRoot.appendChild(preservedCartAppWidget);
+				}
+
+				function releaseCartAppWidgetPreservation() {
+					restoreCartAppWidget();
+					if (preservedCartAppWidget) {
+						if (preservedCartAppMinHeight) {
+							preservedCartAppWidget.style.setProperty('min-height', preservedCartAppMinHeight, preservedCartAppMinHeightPriority);
+						} else {
+							preservedCartAppWidget.style.removeProperty('min-height');
+						}
+					}
+					preservedCartAppWidget = null;
+					preservedCartAppScope = null;
+					preservedCartAppMinHeight = null;
+					preservedCartAppMinHeightPriority = '';
+					if (cartAppWidgetObserver) {
+						cartAppWidgetObserver.disconnect();
+						cartAppWidgetObserver = null;
+					}
+					cartAppWidgetObservedRoot = null;
+				}
+
+				/* Bind theme's QuantityWidget to a freshly inserted line item.
+				   We pipe the change through our own debounced handler instead of
+				   theme's internal onQuantityChange (which is closure-private). */
+				var customPending = (typeof Map === 'function') ? new Map() : null;
+
+				function bindNewItemQuantityWidget(itemEl) {
+					if (!itemEl || itemEl.nodeType !== 1) return;
+					var quantityEl = itemEl.querySelector('.js-quantity');
+					if (!quantityEl) return;
+					if (quantityEl.dataset.camoQtyBound === 'true') return;
+					var QuantityWidget = window.themeCore && window.themeCore.utils && window.themeCore.utils.QuantityWidget;
+					if (!QuantityWidget) return;
+
+					quantityEl.dataset.camoQtyBound = 'true';
+					try {
+						var widget = QuantityWidget(quantityEl, { onQuantityChange: handleCustomQuantityChange });
+						widget.init();
+					} catch (e) { /* ignore widget init errors */ }
+				}
+
+				function handleCustomQuantityChange(widget) {
+					if (!widget || !widget.controls || !widget.controls.input || !customPending) return;
+					var key = widget.controls.input.dataset.itemKey;
+					if (!key) return;
+					var quantity = Number(widget.quantity.value);
+					if (!Number.isFinite(quantity)) return;
+
+					var existing = customPending.get(key);
+					if (existing && existing.timer) clearTimeout(existing.timer);
+
+					customPending.set(key, {
+						widget: widget,
+						quantity: quantity,
+						timer: setTimeout(function() { flushCustomQuantity(key); }, 140),
+						inFlight: false
+					});
+					markQtyChanging(widget.controls.input);
+				}
+
+				function flushCustomQuantity(key) {
+					if (!customPending) return;
+					var pending = customPending.get(key);
+					if (!pending || pending.inFlight) return;
+					var CartApi = window.themeCore && window.themeCore.CartApi;
+					if (!CartApi || !CartApi.actions) return;
+
+					pending.inFlight = true;
+					pending.timer = null;
+					var sectionsIds = Array.from(document.querySelectorAll('[data-section-type="cart-template"]'))
+						.map(function(s) { return s.dataset.sectionId; })
+						.filter(Boolean)
+						.join(',');
+
+					CartApi.makeRequest(CartApi.actions.CHANGE_CART_ITEM_QUANTITY, key, pending.quantity, sectionsIds)
+						.catch(function() {
+							if (pending.widget && typeof pending.widget.rollbackValue === 'function') {
+								pending.widget.rollbackValue();
+							}
+						})
+						.finally(function() {
+							customPending.delete(key);
+						});
+				}
+
+				function updateLineItemPartially(oldItem, newItem) {
+					var priceSelectors = [
+						'.cart-item-drawer__price-wrapper',
+						'.cart-item-drawer__summary',
+						'.cart-item-drawer__price-varies',
+						'.cart-item__prices',
+						'.cart-item__price-varies',
+						'.cart-item__summary',
+						'.cart-item__total',
+						'.cart-item__final-price'
+					];
+					for (var i = 0; i < priceSelectors.length; i++) {
+						var sel = priceSelectors[i];
+						var oldEl = oldItem.querySelector(sel);
+						var newEl = newItem.querySelector(sel);
+						if (oldEl && newEl && oldEl.innerHTML !== newEl.innerHTML) {
+							oldEl.innerHTML = newEl.innerHTML;
+							break;
+						}
+					}
+
+					/* Inline discount badges that sit next to the variant name. */
+					var oldText = oldItem.querySelector('.cart-item-drawer__details-text, .cart-item__details-text');
+					var newText = newItem.querySelector('.cart-item-drawer__details-text, .cart-item__details-text');
+					if (oldText && newText && oldText.innerHTML !== newText.innerHTML) {
+						oldText.innerHTML = newText.innerHTML;
+					}
+
+					/* Keep the quantity input value in sync, but never overwrite
+					   one the user is actively typing in. */
+					var oldQty = oldItem.querySelector('[data-quantity-input]');
+					var newQty = newItem.querySelector('[data-quantity-input]');
+					if (oldQty && newQty && oldQty.value !== newQty.value && document.activeElement !== oldQty) {
+						oldQty.value = newQty.value;
+					}
+				}
+
+				function replaceInnerHTMLIfDifferent(sectionEl, newRoot, selector) {
+					var oldEl = sectionEl.querySelector(selector);
+					var newEl = newRoot.querySelector(selector);
+					if (oldEl && newEl && oldEl.innerHTML !== newEl.innerHTML) {
+						oldEl.innerHTML = newEl.innerHTML;
+					}
+				}
+
+				function updateShippingBar(sectionEl, newRoot) {
+					var oldBar = sectionEl.querySelector('.js-cart-shipping');
+					var newBar = newRoot.querySelector('.js-cart-shipping');
+					if (!oldBar || !newBar) return;
+
+					var attrsToSync = ['data-cart-total', 'data-amount-cents', 'data-amount-message', 'data-success-message'];
+					for (var i = 0; i < attrsToSync.length; i++) {
+						var attr = attrsToSync[i];
+						if (newBar.hasAttribute(attr)) {
+							oldBar.setAttribute(attr, newBar.getAttribute(attr));
+						}
+					}
+
+					var shopCurrencyRate = (window.Shopify && Shopify.currency && Shopify.currency.rate) || 1;
+					var moneyFormat = (window.themeCore && window.themeCore.objects && window.themeCore.objects.shop && window.themeCore.objects.shop.money_format) || '';
+					var cartTotal = Number(oldBar.getAttribute('data-cart-total')) || 0;
+					var amountCents = (Number(oldBar.getAttribute('data-amount-cents')) || 0) * shopCurrencyRate;
+					var percentage = amountCents > 0 ? (cartTotal / amountCents * 100) : 0;
+					var amountMessage = oldBar.getAttribute('data-amount-message');
+					var successMessage = oldBar.getAttribute('data-success-message');
+
+					oldBar.style.setProperty('--shipping-bar-progress-value', percentage + '%');
+
+					var hiddenClass = (window.themeCore && window.themeCore.utils && window.themeCore.utils.cssClasses && window.themeCore.utils.cssClasses.hidden) || 'is-hidden';
+					var shippingTextEl = oldBar.querySelector('.js-cart-shipping-amount-msg');
+					var progressBar = oldBar.querySelector('.js-cart-shipping-progress-bar');
+					var shippingIcon = oldBar.querySelector('.js-cart-shipping-icon');
+					var hiddenTextEl = oldBar.querySelector('.js-shipping-bar-progress-hidden-text');
+
+					if (hiddenTextEl && window.themeCore && window.themeCore.translations && typeof window.themeCore.translations.get === 'function') {
+						try {
+							var hiddenMessage = window.themeCore.translations.get('cart.shipping_bar.progress');
+							if (hiddenMessage) {
+								hiddenTextEl.textContent = hiddenMessage.replace('{' + '{ value }}', percentage.toFixed(1));
+							}
+						} catch (e) { /* ignore translation lookup errors */ }
+					}
+
+					if (percentage < 100) {
+						if (shippingTextEl && amountMessage) {
+							var remaining = Math.max(0, amountCents - cartTotal);
+							var remainingMoney = formatMoneyCompat(remaining, moneyFormat);
+							shippingTextEl.innerHTML = amountMessage.replace('{amount}', '<strong>' + remainingMoney + '</strong>');
+						}
+						if (progressBar) progressBar.classList.remove(hiddenClass);
+						if (shippingIcon) shippingIcon.classList.add(hiddenClass);
+					} else {
+						if (shippingTextEl && successMessage) shippingTextEl.innerHTML = successMessage;
+						if (progressBar) progressBar.classList.add(hiddenClass);
+						if (shippingIcon) shippingIcon.classList.remove(hiddenClass);
+					}
+				}
+
+				function formatMoneyCompat(cents, format) {
+					if (window.themeCore && window.themeCore.utils && typeof window.themeCore.utils.formatMoney === 'function') {
+						return window.themeCore.utils.formatMoney(cents, format);
+					}
+					var value = (Number(cents) / 100).toFixed(2);
+					return format ? format.replace(/\{\{\s*amount\s*\}\}/, value) : value;
+				}
+
+				function cssEscape(value) {
+					if (window.CSS && typeof window.CSS.escape === 'function') return window.CSS.escape(value);
+					return String(value).replace(/(["\\])/g, '\\$1');
+				}
+
+				/* Toggle a sentinel class so CSS can suppress the section preloader
+				   overlay during a quantity change (it's redundant once we update
+				   the price in-place). Set it as soon as the user interacts so
+				   the overlay never gets a chance to flash in. */
+				var qtyChangeTimer = null;
+				var cartScrollSnapshot = null;
+
+				function captureCartScrollPosition(target) {
+					var drawer = target && target.closest ? target.closest('#CartDrawer') : null;
+					var scrollable = drawer ? drawer.querySelector('[data-scrollable]') : null;
+
+					if (scrollable) {
+						cartScrollSnapshot = {
+							type: 'element',
+							element: scrollable,
+							top: scrollable.scrollTop,
+							left: scrollable.scrollLeft
+						};
+						return;
+					}
+
+					var scrollingElement = document.scrollingElement || document.documentElement;
+					cartScrollSnapshot = {
+						type: 'window',
+						element: scrollingElement,
+						top: window.pageYOffset || scrollingElement.scrollTop || 0,
+						left: window.pageXOffset || scrollingElement.scrollLeft || 0
+					};
+				}
+
+				function restoreCartScrollPosition() {
+					if (!cartScrollSnapshot) return;
+					var snapshot = cartScrollSnapshot;
+					var restore = function() {
+						if (snapshot.type === 'element' && snapshot.element && document.contains(snapshot.element)) {
+							snapshot.element.scrollTop = snapshot.top;
+							snapshot.element.scrollLeft = snapshot.left;
+							return;
+						}
+						window.scrollTo(snapshot.left, snapshot.top);
+					};
+
+					restore();
+					if (window.requestAnimationFrame) {
+						window.requestAnimationFrame(restore);
+						window.requestAnimationFrame(function() {
+							window.requestAnimationFrame(restore);
+						});
+					}
+					setTimeout(restore, 80);
+				}
+
+				function getScrollTopArg(args) {
+					if (!args || !args.length) return null;
+					if (typeof args[0] === 'object' && args[0] !== null) {
+						return typeof args[0].top === 'number' ? args[0].top : null;
+					}
+					return typeof args[1] === 'number' ? args[1] : null;
+				}
+
+				function installCartScrollGuard() {
+					if (window.__camoCartScrollGuardInstalled) return;
+					window.__camoCartScrollGuardInstalled = true;
+
+					if (window.Element && Element.prototype && typeof Element.prototype.scrollTo === 'function') {
+						var nativeElementScrollTo = Element.prototype.scrollTo;
+						Element.prototype.scrollTo = function() {
+							var top = getScrollTopArg(arguments);
+							var isCartAppAdding = document.documentElement.classList.contains('is-cart-app-adding');
+							if (
+								top === 0 &&
+								(document.documentElement.classList.contains('is-cart-qty-changing') || isCartAppAdding) &&
+								this.matches &&
+								this.matches('#CartDrawer [data-scrollable]')
+							) {
+								if (isCartAppAdding && typeof window.__camoRestoreCartAppScrollAnchor === 'function') {
+									window.__camoRestoreCartAppScrollAnchor();
+								} else {
+									restoreCartScrollPosition();
+								}
+								return;
+							}
+							return nativeElementScrollTo.apply(this, arguments);
+						};
+					}
+
+					if (typeof window.scrollTo === 'function') {
+						var nativeWindowScrollTo = window.scrollTo;
+						window.scrollTo = function() {
+							var top = getScrollTopArg(arguments);
+							var isCartAppAdding = document.documentElement.classList.contains('is-cart-app-adding');
+							if (
+								top === 0 &&
+								((
+									document.documentElement.classList.contains('is-cart-qty-changing') &&
+									cartScrollSnapshot &&
+									cartScrollSnapshot.type === 'window'
+								) || (
+									isCartAppAdding &&
+									typeof window.__camoRestoreCartAppScrollAnchor === 'function'
+								))
+							) {
+								if (isCartAppAdding && typeof window.__camoRestoreCartAppScrollAnchor === 'function') {
+									window.__camoRestoreCartAppScrollAnchor();
+								} else {
+									restoreCartScrollPosition();
+								}
+								return;
+							}
+							return nativeWindowScrollTo.apply(window, arguments);
+						};
+					}
+				}
+
+				installCartScrollGuard();
+
+				function clearItemUpdating() {
+					document.querySelectorAll('[data-cart-item].camo-cart-item-updating').forEach(function(item) {
+						item.classList.remove('camo-cart-item-updating');
+					});
+				}
+
+				function closestThemeCartItem(target) {
+					if (!target || !target.closest) return null;
+					var item = target.closest('.cart-item-drawer[data-cart-item], .cart-item[data-cart-item], [data-cart-item].cart-item-drawer, [data-cart-item].cart-item');
+					return isThemeCartItem(item) ? item : null;
+				}
+
+				function markQtyChanging(target) {
+					if (qtyChangeTimer) clearTimeout(qtyChangeTimer);
+					document.documentElement.classList.add('is-cart-qty-changing');
+					if (target && target.closest) {
+						captureCartScrollPosition(target);
+						preserveCartAppWidget(target);
+						clearItemUpdating();
+						var item = closestThemeCartItem(target);
+						if (item) item.classList.add('camo-cart-item-updating');
+					}
+					/* Safety net: if a request fails and never emits cart:updated,
+					   make sure the class doesn't linger and suppress preloaders
+					   for unrelated actions. */
+					qtyChangeTimer = setTimeout(function() {
+						qtyChangeTimer = null;
+						restoreCartScrollPosition();
+						document.documentElement.classList.remove('is-cart-qty-changing');
+						clearItemUpdating();
+						releaseCartAppWidgetPreservation();
+						cartScrollSnapshot = null;
+					}, 5000);
+				}
+				function clearQtyChanging(delay) {
+					if (qtyChangeTimer) clearTimeout(qtyChangeTimer);
+					qtyChangeTimer = setTimeout(function() {
+						qtyChangeTimer = null;
+						restoreCartScrollPosition();
+						document.documentElement.classList.remove('is-cart-qty-changing');
+						clearItemUpdating();
+						releaseCartAppWidgetPreservation();
+						cartScrollSnapshot = null;
+					}, delay || 350);
+				}
+
+				document.addEventListener('click', function(event) {
+					var target = event.target;
+					if (!target || !target.closest) return;
+					var removeButton = target.closest('.js-cart-item-remove');
+					if (removeButton) {
+						markQtyChanging(removeButton);
+						return;
+					}
+					var quantityButton = target.closest('[data-quantity-increase], [data-quantity-decrease]');
+					if (quantityButton && closestThemeCartItem(quantityButton)) {
+						markQtyChanging(target);
+					}
+				}, true);
+
+				document.addEventListener('change', function(event) {
+					var target = event.target;
+					if (target && target.matches && target.matches('[data-quantity-input]') && closestThemeCartItem(target)) {
+						markQtyChanging(target);
+					}
+				}, true);
+
+				/* Exposed so external-app bridges (e.g. the cart-drawer Selleasy
+				   wrapper) can route their own /cart/*.js responses through the
+				   same surgical update path. */
+				window.__camoCartPartialUpdate = function(payload) {
+					if (!payload || !payload.sections) return;
+					partialCartUpdate(payload);
+				};
+
+				function shouldUsePartialUpdate(payload) {
+					if (!payload || !payload.sections || typeof payload.sections !== 'object') return false;
+					var action = payload.action;
+					return action === 'changeQuantity'
+						|| action === 'removeItem'
+						|| action === 'addItem'
+						|| action === 'addItems'
+						|| document.documentElement.classList.contains('is-cart-qty-changing');
+				}
+
+				function shouldBlockFullCartRefresh() {
+					var hasPartialUpdate = typeof window.__camoCartPartialUpdate === 'function';
+					return (document.documentElement.classList.contains('is-cart-qty-changing')
+						|| (document.documentElement.classList.contains('is-cart-app-adding') && hasPartialUpdate))
+						&& !document.documentElement.classList.contains('is-cart-merging');
+				}
+
+				function shouldKeepCartAppStable(payload) {
+					if (!document.documentElement.classList.contains('is-cart-qty-changing')) return false;
+					if (!payload || !payload.action) return true;
+					return payload.action === 'changeQuantity' || payload.action === 'removeItem';
+				}
+
+				function maybeAutoOpenDrawer(payload) {
+					if (!payload || (payload.action !== 'addItem' && payload.action !== 'addItems')) return;
+					var settings = window.themeCore && window.themeCore.objects && window.themeCore.objects.settings;
+					var notificationEnabled = false;
+					try { notificationEnabled = !!JSON.parse(settings && settings.show_cart_notification); } catch (e) {}
+					if (notificationEnabled) return;
+					var noOpen = Array.isArray(payload.params) && payload.params.some(function(p) { return p && p.noOpen; });
+					if (noOpen) return;
+					if (window.themeCore && window.themeCore.EventBus) {
+						window.themeCore.EventBus.emit('cart:drawer:open');
+					}
+				}
+
+				function tryInstall() {
+					if (window.__camoCartPartialUpdateInstalled) return true;
+					var EventBus = window.themeCore && window.themeCore.EventBus;
+					if (!EventBus || typeof EventBus.emit !== 'function') return false;
+
+					window.__camoCartPartialUpdateInstalled = true;
+
+					var originalEmit = EventBus.emit;
+					EventBus.emit = function(event, payload) {
+						if (event === 'cart:refresh' && shouldBlockFullCartRefresh()) {
+							restoreCartScrollPosition();
+							return this;
+						}
+
+						if (event === 'cart:updated' && shouldUsePartialUpdate(payload)) {
+							var keepCartAppStable = shouldKeepCartAppStable(payload);
+							if (!Array.isArray(payload.params)) payload.params = [];
+							var alreadyMarked = payload.params.some(function(p) { return p && typeof p === 'object' && p.noRefresh; });
+							if (!alreadyMarked) {
+								payload.params.push({ noRefresh: true });
+							}
+							/* Defer the partial update until after the synchronous
+							   listener fan-out, so theme.onCartUpdated has already
+							   seen the noRefresh flag and bailed. */
+							setTimeout(function() {
+								partialCartUpdate(payload);
+								restoreCartScrollPosition();
+								restoreCartAppWidget();
+								if (keepCartAppStable && payload && typeof payload.item_count === 'number') {
+									originalEmit.call(EventBus, 'header:update-item-count', { item_count: payload.item_count });
+								}
+								/* Theme.onCartUpdated bailed early because of the
+								   noRefresh flag, so we have to take over the
+								   drawer auto-open it would normally handle. */
+								maybeAutoOpenDrawer(payload);
+								/* Give theme's hidePreloaders() its 300ms grace
+								   period before we let the section preloader become
+								   visible again on the next interaction. */
+								clearQtyChanging(keepCartAppStable ? 700 : 350);
+							}, 0);
+							if (keepCartAppStable) {
+								return this;
+							}
+						}
+						return originalEmit.apply(this, arguments);
+					};
+					return true;
+				}
+
+				if (!tryInstall()) {
+					var installAttempts = 0;
+					var installTimer = null;
+
+					function stopInstallRetry() {
+						if (!installTimer) return;
+						clearInterval(installTimer);
+						installTimer = null;
+					}
+
+					function retryInstall() {
+						installAttempts += 1;
+						if (tryInstall() || installAttempts >= 80) {
+							stopInstallRetry();
+						}
+					}
+
+					installTimer = setInterval(retryInstall, 100);
+					document.addEventListener('theme:all:loaded', function() {
+						if (tryInstall()) stopInstallRetry();
+					}, { once: true });
+					window.addEventListener('load', function() {
+						if (tryInstall()) stopInstallRetry();
+					}, { once: true });
+				}
+			})();
+		</script>
+
+		{%- comment -%}
+			Definitive cart-drawer auto-open guard.
+			The drawer must only open from a genuine user action (clicking the cart
+			icon / a real add-to-cart) or right after the cart actually gains items.
+			This vetoes every spontaneous open of an EMPTY cart — no matter what
+			emits the open event (third-party apps, preview tooling, race conditions).
+		{%- endcomment -%}
+		<script>
+			(function() {
+				var INTENT_SELECTOR = '.js-header-cart-toggler, [data-js-toggle="CartDrawer"], .add-to-cart, [name="add"], .js-product-card-quick-view-button, .shopify-payment-button__button';
+				var INTENT_WINDOW_MS = 8000;
+				var lastCartIntentAt = 0;
+
+				function markIntent(e) {
+					var target = e && e.target;
+					if (!target || !target.closest) return;
+					try {
+						if (target.closest(INTENT_SELECTOR)) {
+							lastCartIntentAt = Date.now();
+						}
+					} catch (err) {}
+				}
+				document.addEventListener('pointerdown', markIntent, true);
+				document.addEventListener('click', markIntent, true);
+
+				function cartIsEmpty() {
+					var co = window.themeCore && window.themeCore.cartObject;
+					if (co && typeof co.item_count === 'number') {
+						return co.item_count === 0;
+					}
+					var counter = document.querySelector('[data-cart-count]');
+					var count = counter ? parseInt(counter.getAttribute('data-cart-count'), 10) : 0;
+					return !(count > 0);
+				}
+
+				var OPEN_EVENTS = {
+					'cart:drawer:open': 1,
+					'cart:drawer:refresh-and-open': 1,
+					'cart:drawer:CartDrawer:open': 1
+				};
+
+				function tryInstall() {
+					var EventBus = window.themeCore && window.themeCore.EventBus;
+					if (!EventBus || typeof EventBus.emit !== 'function') return false;
+					if (EventBus.__camoOpenGuardInstalled) return true;
+					EventBus.__camoOpenGuardInstalled = true;
+
+					var underlyingEmit = EventBus.emit;
+					EventBus.emit = function(event, payload) {
+						if (OPEN_EVENTS[event]) {
+							var recentIntent = (Date.now() - lastCartIntentAt) < INTENT_WINDOW_MS;
+							if (cartIsEmpty() && !recentIntent) {
+								/* Spontaneous empty-cart open — block it. */
+								return this;
+							}
+						}
+						return underlyingEmit.apply(this, arguments);
+					};
+					return true;
+				}
+
+				if (!tryInstall()) {
+					var attempts = 0;
+					var timer = setInterval(function() {
+						attempts += 1;
+						if (tryInstall() || attempts >= 100) clearInterval(timer);
+					}, 100);
+					document.addEventListener('theme:all:loaded', function() { tryInstall(); }, { once: true });
+				}
+			})();
+		</script>
+
+		<a href="#MainContent" class="skip-content-link visually-hidden">
+			{{- "general.accessibility.skip_to_content" | t -}}
+		</a>
+
+		{%- sections 'header-group' -%}
+
+		{%- sections 'popup-group' -%}
+
+		{%- if settings.enable_search -%}
+			{%- render 'predictive-search' -%}
+		{%- endif -%}
+
+		<main id="MainContent" class="content" role="main" tabindex="-1">
+			{%- if settings.show_breadcrumbs -%}
+				{%- render "breadcrumbs" -%}
+			{%- endif -%}
+
+			{{ content_for_layout }}
+		</main>
+
+		{%- sections 'footer-group' -%}
+
+		{%- render 'page-preloader' -%}
+
+		{%- render 'js-objects' -%}
+
+		{%- render 'adastra' with '/src/styles/carousel.scss' -%}
+
+		{%- render 'adastra' with '/src/styles/deferred-main.scss' -%}
+
+		{% render 'js-animate-observer' %}
+
+		{%- render 'adastra' with '/src/scripts/main.js' -%}
+
+		{%- if settings.cart_reminder_enable -%}
+			{%- render 'adastra' with '/src/styles/cart-reminder.scss' -%}
+			{%- render 'adastra' with '/src/scripts/component-cart-reminder.js' -%}
+		{%- endif -%}
+
+		{%- render 'adastra' with '/src/scripts/component-ar-model.js' -%}
+
+		{%- render 'mobile-floating-cart' -%}
+		{%- render 'shopify-chat-drag' -%}
+		{%- section 'smart-popup' -%}
+
+		<script>
+			/* Lazy load third-party app images (Judge.me, etc.) via MutationObserver
+			   Intercepts images as they're added to DOM before browser downloads them */
+			(function() {
+				function applyLazy(node) {
+					if (node.nodeType !== 1) return;
+					var imgs = node.tagName === 'IMG' ? [node] : node.querySelectorAll('img');
+					for (var i = 0; i < imgs.length; i++) {
+						var img = imgs[i];
+						if (!img.dataset.lazyDone && !img.hasAttribute('fetchpriority')) {
+							img.loading = 'lazy';
+							img.decoding = 'async';
+							img.dataset.lazyDone = '1';
+						}
+					}
+				}
+
+				var mo = new MutationObserver(function(mutations) {
+					for (var i = 0; i < mutations.length; i++) {
+						var added = mutations[i].addedNodes;
+						for (var j = 0; j < added.length; j++) {
+							applyLazy(added[j]);
+						}
+					}
+				});
+
+				mo.observe(document.body, { childList: true, subtree: true });
+				/* Stop after 30s — all app widgets should be loaded by then */
+				setTimeout(function() { mo.disconnect(); }, 30000);
+			})();
+		</script>
+
+		{%- comment -%} Global Cart Enforcer (Shipping Protection Max 1 & Merge Split Variants) + Auto-apply Discount {%- endcomment -%}
+		<style>
+			html.is-cart-merging .cart-drawer__items,
+			html.is-cart-merging .cart-item,
+			html.is-cart-merging .cart-items {
+				opacity: 0.5 !important;
+				pointer-events: none !important;
+				transition: opacity 0.15s ease;
+			}
+		</style>
+		<script>
+		window.addEventListener('load', function() {
+			setTimeout(function() {
+			(function() {
+				var SP_HANDLE = 'shipping-protection-apparel';
+				var COOLDOWN_MS = 1200;
+				var DEBOUNCE_MS = 220;
+				var BLUR_HIDE_MS = 200;
+				var isEnforcing = false;
+				var lastEnforceAt = 0;
+				var debounceTimer = null;
+				var pendingHint = null;
+
+				function analyzeItems(items) {
+					var updates = {};
+					var needsUpdate = false;
+					var variants = {};
+
+					for (var i = 0; i < items.length; i++) {
+						var item = items[i];
+
+						if (item.handle === SP_HANDLE) {
+							if (item.quantity > 1) {
+								needsUpdate = true;
+								updates[item.key] = 1;
+							}
+							continue;
+						}
+
+						if (variants[item.variant_id]) {
+							needsUpdate = true;
+							variants[item.variant_id].qty += item.quantity;
+							updates[item.key] = 0;
+							updates[variants[item.variant_id].key] = variants[item.variant_id].qty;
+						} else {
+							variants[item.variant_id] = { key: item.key, qty: item.quantity };
+						}
+					}
+
+					return { updates: updates, needsUpdate: needsUpdate };
+				}
+
+				function postCartUpdate(updates, callback) {
+					document.documentElement.classList.add('is-cart-merging');
+					var fix = new XMLHttpRequest();
+					fix.open('POST', '/cart/update.js', true);
+					fix.setRequestHeader('Content-Type', 'application/json');
+					fix.onload = function() {
+						isEnforcing = false;
+						lastEnforceAt = Date.now();
+						if (callback && typeof callback === 'function') {
+							callback();
+						} else if (window.themeCore && window.themeCore.EventBus) {
+							window.themeCore.EventBus.emit("cart:refresh");
+							setTimeout(function() { document.documentElement.classList.remove('is-cart-merging'); }, BLUR_HIDE_MS);
+						} else {
+							window.location.reload();
+						}
+					};
+					fix.onerror = function() {
+						isEnforcing = false;
+						lastEnforceAt = Date.now();
+						document.documentElement.classList.remove('is-cart-merging');
+						if (callback) callback();
+					};
+					fix.send(JSON.stringify({ updates: updates }));
+				}
+
+				function isFullCartPayload(cart) {
+					if (!cart || !Array.isArray(cart.items) || typeof cart.item_count !== 'number') return false;
+
+					var totalQuantity = 0;
+					for (var i = 0; i < cart.items.length; i++) {
+						var item = cart.items[i];
+						if (!item || !item.key || !item.variant_id || typeof item.quantity !== 'number') return false;
+						totalQuantity += item.quantity;
+					}
+
+					return totalQuantity === cart.item_count;
+				}
+
+				function hasShippingProtection(items) {
+					if (!Array.isArray(items)) return false;
+					for (var i = 0; i < items.length; i++) {
+						if (items[i] && items[i].handle === SP_HANDLE) return true;
+					}
+					return false;
+				}
+
+				function hasUnsafeShippingProtection(items) {
+					if (!Array.isArray(items)) return false;
+					for (var i = 0; i < items.length; i++) {
+						if (items[i] && items[i].handle === SP_HANDLE && items[i].quantity > 1) return true;
+					}
+					return false;
+				}
+
+				function enforceCartRules(callback, cartHint) {
+					if (isEnforcing) {
+						if (callback) callback();
+						return;
+					}
+
+					/* Fast path: payload already contains the full cart — analyze without an extra /cart.js fetch. */
+					if (isFullCartPayload(cartHint)) {
+						var result = analyzeItems(cartHint.items);
+						lastEnforceAt = Date.now();
+						if (!result.needsUpdate) {
+							if (callback) callback();
+							return;
+						}
+						isEnforcing = true;
+						postCartUpdate(result.updates, callback);
+						return;
+					}
+
+					/* Skip silent checks during cooldown — checkout-callback path still runs */
+					if (!callback && Date.now() - lastEnforceAt < COOLDOWN_MS) {
+						return;
+					}
+
+					isEnforcing = true;
+					var xhr = new XMLHttpRequest();
+					xhr.open('GET', '/cart.js', true);
+					xhr.setRequestHeader('Content-Type', 'application/json');
+					xhr.onload = function() {
+						if (xhr.status >= 200 && xhr.status < 300) {
+							var cart = JSON.parse(xhr.responseText);
+							var result = analyzeItems(cart.items);
+
+							if (result.needsUpdate) {
+								postCartUpdate(result.updates, callback);
+								return;
+							}
+						}
+						isEnforcing = false;
+						lastEnforceAt = Date.now();
+						document.documentElement.classList.remove('is-cart-merging');
+						if (callback && typeof callback === 'function') callback();
+					};
+					xhr.onerror = function() {
+						isEnforcing = false;
+						lastEnforceAt = Date.now();
+						document.documentElement.classList.remove('is-cart-merging');
+						if (callback) callback();
+					};
+					xhr.send();
+				}
+
+				function scheduleEnforce(cartHint) {
+					pendingHint = cartHint || pendingHint;
+					if (debounceTimer) clearTimeout(debounceTimer);
+					debounceTimer = setTimeout(function() {
+						debounceTimer = null;
+						var hint = pendingHint;
+						pendingHint = null;
+						enforceCartRules(null, hint);
+					}, DEBOUNCE_MS);
+				}
+
+				function hasCartItemsHint() {
+					var counters = document.querySelectorAll('[data-cart-count], .js-header-cart-item-count');
+					if (!counters.length) return true;
+
+					for (var i = 0; i < counters.length; i++) {
+						var rawCount = counters[i].getAttribute('data-cart-count') || counters[i].textContent || '';
+						var count = parseInt(rawCount, 10);
+
+						if (!isNaN(count)) {
+							if (count > 0) return true;
+						} else if (rawCount.trim() !== '') {
+							return true;
+						}
+					}
+
+					return false;
+				}
+
+				function bindCartUpdates() {
+					if (!window.themeCore || !window.themeCore.EventBus) return;
+					window.themeCore.EventBus.listen('cart:updated', function(cart) {
+						if (!cart || !cart.item_count) return;
+						/* For ADD responses, payload.items only contains added line items.
+						   Skip the silent enforce entirely when those added items contain no
+						   shipping-protection — Shopify already merges duplicate variants. */
+						var isAddAction = cart.action === 'addItem' || cart.action === 'addItems';
+						if (isAddAction && Array.isArray(cart.items)) {
+							if (!hasShippingProtection(cart.items)) {
+								lastEnforceAt = Date.now();
+								return;
+							}
+
+							if (cart._camoSkipProtectionEnforce && !hasUnsafeShippingProtection(cart.items)) {
+								lastEnforceAt = Date.now();
+								return;
+							}
+						}
+						scheduleEnforce(cart);
+					});
+				}
+
+				if (window.themeCore && window.themeCore.EventBus) {
+					bindCartUpdates();
+				} else {
+					document.addEventListener('theme:all:loaded', bindCartUpdates, { once: true });
+				}
+
+				/* Check cart on init only when the header confirms a non-empty cart. */
+				if (hasCartItemsHint()) {
+					enforceCartRules();
+				}
+
+				/* Intercept checkout form submission */
+				document.addEventListener('submit', function(e) {
+					var isCheckout = false;
+					if (e.target && e.target.action && e.target.action.indexOf('/cart') !== -1) {
+						if (e.submitter && (e.submitter.name === 'checkout' || e.submitter.value === 'Checkout' || e.submitter.innerText === 'Checkout')) {
+							isCheckout = true;
+						} else if (e.target.querySelector('[name="checkout"]')) {
+							isCheckout = true;
+						}
+					}
+
+					if (isCheckout) {
+						e.preventDefault();
+						var form = e.target;
+						if (debounceTimer) {
+							clearTimeout(debounceTimer);
+							debounceTimer = null;
+							pendingHint = null;
+						}
+						document.documentElement.classList.add('is-cart-merging');
+						enforceCartRules(function() {
+							document.documentElement.classList.remove('is-cart-merging');
+							HTMLFormElement.prototype.submit.call(form);
+						});
+					}
+				});
+
+			})();
+			}, 5000);
+		});
+		</script>
+
+		{%- comment -%} Auto-apply discount code từ Popup Newsletter — chạy độc lập, không chờ Enforcer {%- endcomment -%}
+		<script>
+		window.addEventListener('load', function() {
+			var discountApplied = false;
+			function tryApplyDiscount() {
+				if (discountApplied) return;
+				var code = localStorage.getItem('pending_discount');
+				if (!code) return;
+				discountApplied = true;
+				/* Gọi /discount/CODE — Shopify lưu vào session ngay */
+				fetch('/discount/' + encodeURIComponent(code))
+					.then(function() {
+						localStorage.removeItem('pending_discount');
+						console.log('[CamoSignal] Discount applied:', code);
+						/* Refresh cart drawer nếu đã sẵn sàng */
+						if (window.themeCore && window.themeCore.EventBus) {
+							window.themeCore.EventBus.emit('cart:refresh');
+						}
+					})
+					.catch(function(err) {
+						discountApplied = false;
+						console.warn('[CamoSignal] Discount error:', err);
+					});
+			}
+			/* Chạy sau 1 giây — đủ nhanh để áp dụng trước khi khách mở giỏ hàng */
+			setTimeout(tryApplyDiscount, 1000);
+		});
+		</script>
+
+	</body>
+</html>

@@ -1,0 +1,69 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Article sidebar item
+
+	{%- render
+		'article-sidebar-item',
+		recent_articles: recent_articles,
+		article: article
+	-%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- if recent_articles.id != article.id -%}
+	{%- assign default_image = settings.article_default_image -%}
+	{%- assign image = recent_articles.image | default: default_image -%}
+	{%- assign article_date_example = 'May 25, 2024' -%}
+
+	{%- if recent_articles.image == blank and default_image != blank -%}
+		{%- capture img_focal -%}
+			--img-pos: {{ default_image.presentation.focal_point }};
+		{%- endcapture -%}
+	{%- endif -%}
+
+	<div class="article-sidebar__article">
+		<div class="article-sidebar__article-box-image">
+			<a
+				class="article-sidebar__article-image-link focus-visible-outline"
+				href="{{ recent_articles.url }}"
+			>
+				{%- if image != blank -%}
+					<img
+						class="article-sidebar__article-image"
+						src="{{ image | image_url: width: 120 }}"
+						srcset="{{ image | image_url: width: 120 }} 1x, {{ image | image_url: width: 240 }} 2x"
+						alt="{{ image.alt | escape }}"
+						width="120"
+						height="120"
+						loading="lazy"
+						fetchpriority="low"
+						{% if img_focal != blank %}
+							style="{{ img_focal }}"
+						{% endif %}
+					>
+				{%- else -%}
+					{{- 'image' | placeholder_svg_tag: 'article-sidebar__article-image article-sidebar__article-image--placeholder' -}}
+				{%- endif -%}
+			</a>
+		</div>
+		<div class="article-sidebar__article-content">
+			<ul class="article-sidebar__article-info">
+				<li>
+					<span>
+						{{- 'blogs.article.published_at' | t -}}
+					</span>
+
+					{%- if recent_articles != blank -%}
+						{{- recent_articles.published_at | time_tag: format: 'date' -}}
+					{%- else -%}
+						{{- article_date_example -}}
+					{%- endif -%}
+				</li>
+			</ul>
+
+			<a class="article-sidebar__article-title-link focus-visible-outline" href="{{ recent_articles.url }}">
+				{{ recent_articles.title }}
+			</a>
+		</div>
+	</div>
+{% endif %}

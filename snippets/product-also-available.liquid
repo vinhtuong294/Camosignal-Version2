@@ -1,0 +1,410 @@
+{% doc %}
+Renders products that share the current product's design tag.
+
+@param {product} product - The current product.
+
+@example
+{% render 'product-also-available', product: product %}
+{% enddoc %}
+
+{%- liquid
+	assign design_tag = blank
+	assign design_tag_normalized = blank
+
+	for product_tag in product.tags
+		assign normalized_tag = product_tag | strip | downcase
+		assign tag_prefix = normalized_tag | slice: 0, 7
+
+		if tag_prefix == 'design:'
+			assign design_tag = product_tag | strip
+			assign design_tag_normalized = normalized_tag
+			break
+		endif
+	endfor
+-%}
+
+{%- if design_tag != blank -%}
+	{%- liquid
+		assign design_handle = design_tag_normalized | remove_first: 'design:' | strip | handleize
+		assign design_collection = collections[design_handle]
+		assign related_count = 0
+	-%}
+
+	{%- if design_collection != blank -%}
+		{%- capture related_items -%}
+			{%- for related_product in design_collection.products -%}
+				{%- liquid
+					assign has_matching_design = false
+
+					for related_tag in related_product.tags
+						assign normalized_related_tag = related_tag | strip | downcase
+
+						if normalized_related_tag == design_tag_normalized
+							assign has_matching_design = true
+							break
+						endif
+					endfor
+				-%}
+
+				{%- if related_product.id != product.id and has_matching_design -%}
+					{%- liquid
+						assign related_count = related_count | plus: 1
+						assign product_label = related_product.title
+						assign formatted_price = related_product.price | money
+						assign price_difference = related_product.price | minus: product.price
+
+						if price_difference > 0
+							assign formatted_difference = price_difference | money_without_trailing_zeros
+						endif
+					-%}
+
+					<a
+						href="{{ related_product.url }}"
+						class="also-available__item focus-visible-outline"
+						role="listitem"
+						aria-label="{{ related_product.title | escape }}"
+					>
+						<span class="also-available__media">
+							{%- if related_product.featured_image != blank -%}
+								{{- related_product.featured_image
+									| image_url: width: 240
+									| image_tag:
+										alt: related_product.title,
+										class: 'also-available__image',
+										loading: 'lazy',
+										sizes: '(max-width: 767px) 45vw, 320px',
+										widths: '160, 240, 320, 480, 640'
+								-}}
+							{%- else -%}
+								{{- 'product-1' | placeholder_svg_tag: 'also-available__image placeholder-svg' -}}
+							{%- endif -%}
+
+							{%- if price_difference > 0 -%}
+								<span class="also-available__price-difference">+{{ formatted_difference }}</span>
+							{%- endif -%}
+						</span>
+						<span class="also-available__title">{{ product_label | escape }}</span>
+						<span class="also-available__price">
+							{{- 'products.product.price.from_price_html' | t: price: formatted_price -}}
+						</span>
+					</a>
+				{%- endif -%}
+			{%- endfor -%}
+		{%- endcapture -%}
+
+		{%- if related_count > 0 -%}
+			<also-available-carousel class="also-available" data-design="{{ design_handle | escape }}">
+				<div class="also-available__header">
+					<h2 class="also-available__heading">{{ 'products.product.also_available_as' | t }}</h2>
+					{%- if related_count > 2 -%}
+						<div class="also-available__controls">
+							<button
+								type="button"
+								class="also-available__arrow"
+								data-also-available-previous
+								aria-controls="AlsoAvailableList-{{ product.id }}"
+								aria-label="{{ 'general.accessibility.slider.prev_slide_message' | t }}"
+								hidden
+							>
+								<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+									<path d="M15 18 9 12l6-6" fill="none" stroke="currentColor" stroke-linecap="square" stroke-linejoin="miter" stroke-width="2"/>
+								</svg>
+							</button>
+							<button
+								type="button"
+								class="also-available__arrow"
+								data-also-available-next
+								aria-controls="AlsoAvailableList-{{ product.id }}"
+								aria-label="{{ 'general.accessibility.slider.next_slide_message' | t }}"
+							>
+								<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+									<path d="m9 18 6-6-6-6" fill="none" stroke="currentColor" stroke-linecap="square" stroke-linejoin="miter" stroke-width="2"/>
+								</svg>
+							</button>
+						</div>
+					{%- endif -%}
+				</div>
+				<div
+					id="AlsoAvailableList-{{ product.id }}"
+					class="also-available__list"
+					data-also-available-list
+					role="list"
+					aria-label="{{ 'products.product.also_available_as' | t }}"
+				>
+					{{- related_items -}}
+				</div>
+			</also-available-carousel>
+		{%- endif -%}
+	{%- endif -%}
+{%- endif -%}
+
+{% stylesheet %}
+	.also-available {
+		border-top: 1px dashed var(--color-border-secondary, rgb(0 0 0 / 0.18));
+		display: block;
+		margin-block: 16px 8px;
+		min-width: 0;
+		padding-top: 16px;
+	}
+
+	.also-available__header {
+		align-items: center;
+		display: flex;
+		gap: 12px;
+		justify-content: space-between;
+		margin-bottom: 10px;
+	}
+
+	.also-available__heading {
+		margin: 0;
+		font-size: 14px;
+		font-weight: 700;
+		letter-spacing: 0.04em;
+		line-height: 1.3;
+		text-transform: uppercase;
+	}
+
+	.also-available__controls {
+		display: flex;
+		flex: 0 0 auto;
+		gap: 6px;
+	}
+
+	.also-available__arrow {
+		align-items: center;
+		background: var(--color-background, #fff);
+		border: 1px solid var(--color-border-primary, #263c2d);
+		border-radius: 0;
+		color: var(--color-text-primary, #263c2d);
+		cursor: pointer;
+		display: inline-flex;
+		height: 32px;
+		justify-content: center;
+		padding: 0;
+		transition: background-color 160ms ease, color 160ms ease;
+		width: 32px;
+	}
+
+	.also-available__arrow[hidden] {
+		display: none;
+	}
+
+	.also-available__arrow svg {
+		height: 18px;
+		width: 18px;
+	}
+
+	.also-available__arrow:hover {
+		background: var(--color-text-primary, #263c2d);
+		color: #fff;
+	}
+
+	.also-available__arrow:focus-visible {
+		outline: 2px solid currentColor;
+		outline-offset: 2px;
+	}
+
+	.also-available__list {
+		cursor: grab;
+		display: flex;
+		gap: 8px;
+		overflow-x: auto;
+		overscroll-behavior-inline: contain;
+		scroll-behavior: smooth;
+		scroll-snap-type: x mandatory;
+		scrollbar-width: none;
+	}
+
+	.also-available__list.is-dragging {
+		cursor: grabbing;
+		scroll-behavior: auto;
+		scroll-snap-type: none;
+		user-select: none;
+	}
+
+	.also-available__list::-webkit-scrollbar {
+		display: none;
+	}
+
+	.also-available__item {
+		background: var(--color-background, #fff);
+		border: 1px solid var(--color-border-secondary, rgb(0 0 0 / 0.14));
+		border-radius: 0;
+		color: inherit;
+		display: flex;
+		flex: 0 0 calc((100% - 8px) / 2);
+		min-width: 0;
+		flex-direction: column;
+		padding: 10px;
+		scroll-snap-align: start;
+		scroll-snap-stop: always;
+		text-align: center;
+		text-decoration: none;
+	}
+
+	.also-available__media {
+		background: var(--color-img-placeholder-bg, #f2f0e9);
+		border-radius: 0;
+		display: block;
+		overflow: hidden;
+		position: relative;
+	}
+
+	.also-available__image {
+		display: block;
+		height: auto;
+		object-fit: contain;
+		-webkit-user-drag: none;
+		width: 100%;
+	}
+
+	.also-available__title {
+		font-size: 13px;
+		font-weight: 700;
+		line-height: 1.35;
+		margin-top: 10px;
+	}
+
+	.also-available__price {
+		color: var(--color-text-thirdly, #667066);
+		font-size: 12px;
+		line-height: 1.3;
+		margin-top: 2px;
+	}
+
+	.also-available__price-difference {
+		background: var(--color-text-primary, #263c2d);
+		border-radius: 0;
+		bottom: 6px;
+		color: var(--color-background, #fff);
+		font-size: 10px;
+		font-weight: 700;
+		left: 6px;
+		line-height: 1;
+		padding: 3px 5px;
+		position: absolute;
+	}
+
+	@media (max-width: 767px) {
+		.also-available__item {
+			padding: 6px;
+		}
+
+		.also-available__title {
+			font-size: 12px;
+			margin-top: 8px;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.also-available__list {
+			scroll-behavior: auto;
+		}
+
+	}
+{% endstylesheet %}
+
+{% javascript %}
+	if (!customElements.get('also-available-carousel')) {
+		class AlsoAvailableCarousel extends HTMLElement {
+			connectedCallback() {
+				this.list = this.querySelector('[data-also-available-list]');
+				this.previousButton = this.querySelector('[data-also-available-previous]');
+				this.nextButton = this.querySelector('[data-also-available-next]');
+
+				if (!this.list || !this.previousButton || !this.nextButton) return;
+
+				this.updateControls = this.updateControls.bind(this);
+				this.handleScroll = this.handleScroll.bind(this);
+				this.handlePointerDown = this.handlePointerDown.bind(this);
+				this.handlePointerMove = this.handlePointerMove.bind(this);
+				this.handlePointerEnd = this.handlePointerEnd.bind(this);
+				this.handleClick = this.handleClick.bind(this);
+				this.handleDragStart = this.handleDragStart.bind(this);
+				this.previousButton.addEventListener('click', () => this.scroll(-1));
+				this.nextButton.addEventListener('click', () => this.scroll(1));
+				this.list.addEventListener('scroll', this.handleScroll, { passive: true });
+				this.list.addEventListener('pointerdown', this.handlePointerDown);
+				this.list.addEventListener('pointermove', this.handlePointerMove);
+				this.list.addEventListener('pointerup', this.handlePointerEnd);
+				this.list.addEventListener('pointercancel', this.handlePointerEnd);
+				this.list.addEventListener('click', this.handleClick, true);
+				this.list.addEventListener('dragstart', this.handleDragStart);
+				this.resizeObserver = new ResizeObserver(this.updateControls);
+				this.resizeObserver.observe(this.list);
+				requestAnimationFrame(this.updateControls);
+			}
+
+			disconnectedCallback() {
+				if (this.resizeObserver) this.resizeObserver.disconnect();
+				if (this.list && this.handleScroll) this.list.removeEventListener('scroll', this.handleScroll);
+				if (this.list && this.handlePointerDown) this.list.removeEventListener('pointerdown', this.handlePointerDown);
+				if (this.list && this.handlePointerMove) this.list.removeEventListener('pointermove', this.handlePointerMove);
+				if (this.list && this.handlePointerEnd) {
+					this.list.removeEventListener('pointerup', this.handlePointerEnd);
+					this.list.removeEventListener('pointercancel', this.handlePointerEnd);
+				}
+				if (this.list && this.handleClick) this.list.removeEventListener('click', this.handleClick, true);
+				if (this.list && this.handleDragStart) this.list.removeEventListener('dragstart', this.handleDragStart);
+			}
+
+			scroll(direction) {
+				this.list.scrollBy({ left: direction * this.list.clientWidth, behavior: 'smooth' });
+			}
+
+			handleScroll() {
+				cancelAnimationFrame(this.scrollFrame);
+				this.scrollFrame = requestAnimationFrame(this.updateControls);
+			}
+
+			handlePointerDown(event) {
+				if (event.pointerType !== 'mouse' || event.button !== 0) return;
+
+				this.isDragging = true;
+				this.dragged = false;
+				this.dragStartX = event.clientX;
+				this.dragStartScroll = this.list.scrollLeft;
+				this.list.classList.add('is-dragging');
+				this.list.setPointerCapture(event.pointerId);
+			}
+
+			handlePointerMove(event) {
+				if (!this.isDragging) return;
+
+				const distance = event.clientX - this.dragStartX;
+				if (Math.abs(distance) > 4) this.dragged = true;
+				this.list.scrollLeft = this.dragStartScroll - distance;
+			}
+
+			handlePointerEnd(event) {
+				if (!this.isDragging) return;
+
+				if (this.list.hasPointerCapture(event.pointerId)) this.list.releasePointerCapture(event.pointerId);
+				this.isDragging = false;
+				this.list.classList.remove('is-dragging');
+				if (event.type === 'pointercancel') this.dragged = false;
+				requestAnimationFrame(this.updateControls);
+			}
+
+			handleClick(event) {
+				if (!this.dragged) return;
+
+				event.preventDefault();
+				event.stopPropagation();
+				this.dragged = false;
+			}
+
+			handleDragStart(event) {
+				event.preventDefault();
+			}
+
+			updateControls() {
+				const maximumScroll = Math.max(0, this.list.scrollWidth - this.list.clientWidth);
+				this.previousButton.hidden = this.list.scrollLeft <= 2;
+				this.nextButton.hidden = this.list.scrollLeft >= maximumScroll - 2;
+			}
+		}
+
+		customElements.define('also-available-carousel', AlsoAvailableCarousel);
+	}
+{% endjavascript %}

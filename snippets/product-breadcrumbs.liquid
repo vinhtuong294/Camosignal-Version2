@@ -1,0 +1,49 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Product breadcrumbs
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{%- capture styles -%}
+	--offset-top-desktop: {{ block.settings.offset_top_desktop }}px; {{-  -}}
+	--offset-bottom-desktop: {{ block.settings.offset_bottom_desktop }}px; {{-  -}}
+	--offset-top-mobile: {{ block.settings.offset_top_mobile }}px; {{-  -}}
+	--offset-bottom-mobile: {{ block.settings.offset_bottom_mobile }}px;
+{%- endcapture -%}
+
+{% capture breadcrumb_seperator %}
+	<span aria-hidden="true" class="product-breadcrumbs__separator">·</span>
+{% endcapture %}
+
+<style>
+	@media (max-width: 767.98px) {
+		.product-breadcrumbs { display: none !important; }
+	}
+</style>
+<nav
+	class="product-breadcrumbs"
+	aria-label="{{ 'general.breadcrumbs.title' | t | escape }}"
+	style="{{- styles -}}"
+>
+	<div class="product-breadcrumbs__container">
+		<a
+			class="product-breadcrumbs__link"
+			href="{{ routes.root_url }}"
+			title="{{ 'general.breadcrumbs.home' | t }}"
+		>
+			{{ 'general.breadcrumbs.home' | t }}
+		</a>
+
+		{%- assign parent_collection = product.collections.first -%}
+
+		{% if settings.show_collection_on_pdp == true and parent_collection != blank %}
+			{{ breadcrumb_seperator }}
+
+			{{ parent_collection.title | link_to: parent_collection.url, class: 'product-breadcrumbs__item product-breadcrumbs__link' }}
+		{% endif %}
+
+		{{ breadcrumb_seperator }}
+
+		<span class="product-breadcrumbs__item">{{ product.title }}</span>
+	</div>
+</nav>

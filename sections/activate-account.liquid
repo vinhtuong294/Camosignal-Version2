@@ -1,0 +1,249 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Activate account
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render "adastra" with "/src/styles/account-entrance.scss" -%}
+
+{%- assign color_scheme      	           	= section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance 	= section.settings.enable_color_scheme_inheritance -%}
+
+{%- capture styles -%}
+	--inner-offset-top: {{ section.settings.inner_offset_top_desktop }}px; {{-  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom_desktop }}px; {{-  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px; {{-  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px; {{-  -}}
+{%- endcapture -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+<section class="account-entrance color-{{ color_scheme }}" style="{{ styles }}">
+	<div class="account-entrance__container">
+		{%- form "activate_customer_password", class: "account-entrance__form" -%}
+			<div class="account-entrance__heading-wrapper">
+				<h1 class="h2 account-entrance__heading">
+					{{- "customer.activate_account.title" | t -}}
+				</h1>
+
+				<p class="account-entrance__text">
+					{{- "customer.activate_account.subtext" | t -}}
+				</p>
+
+				{%- if form.errors -%}
+					<h2 class="account-entrance__error-title h3" tabindex="-1" autofocus>
+						<span class="visually-hidden">{{ 'general.accessibility.error' | t }}</span>
+
+						{{ 'general.accessibility.form_error_title' | t }}
+					</h2>
+
+					{{- form.errors | default_errors -}}
+				{%- endif -%}
+			</div>
+
+			<div class="input-wrapper account-entrance__input-wrapper js-show-password-wrapper">
+				<input
+					class="input account-entrance__input account-entrance__input--password js-show-password-input"
+					type="password"
+					value=""
+					name="customer[password]"
+					id="CustomerPassword"
+					aria-label="{{- 'customer.activate_account.password_aria_label' | t | escape -}}"
+					placeholder="{{- 'customer.activate_account.password' | t -}}"
+				/>
+
+				<label class="input-label input-label--required" for="CustomerPassword">
+					{{- "customer.activate_account.password" | t -}}
+				</label>
+
+				<button
+					type="button"
+					class="focus-visible-outline account-entrance__password-icon js-show-password-button"
+					aria-label="{{- 'customer.account.show_password' | t -}}"
+				>
+					{%- render "icons", icon: "password-eye" -%}
+				</button>
+			</div>
+
+			<div class="input-wrapper account-entrance__input-wrapper js-show-password-wrapper">
+				<input
+					class="input account-entrance__input account-entrance__input--password js-show-password-input"
+					type="password"
+					value=""
+					name="customer[password_confirmation]"
+					id="CustomerPasswordConfirmation"
+					aria-label="{{- 'customer.activate_account.password_confirm_aria_label' | t | escape -}}"
+					placeholder="{{- 'customer.activate_account.password_confirm' | t -}}"
+				/>
+
+				<label class="input-label input-label--required" for="CustomerPasswordConfirmation">
+					{{- "customer.activate_account.password_confirm" | t -}}
+				</label>
+
+				<button
+					type="button"
+					class="focus-visible-outline account-entrance__password-icon js-show-password-button"
+					aria-label="{{- 'customer.account.show_password' | t -}}"
+				>
+					{%- render "icons", icon: "password-eye" -%}
+				</button>
+			</div>
+
+			<div class="account-entrance__buttons-container">
+				<button
+					class="button button--secondary account-entrance__button"
+					type="submit"
+					aria-label="{{- 'customer.activate_account.submit_aria_label' | t | escape -}}"
+				>
+					<span data-text="{{- 'customer.activate_account.submit' | t -}}">
+						<span>{{- 'customer.activate_account.submit' | t -}}</span>
+					</span>
+				</button>
+
+				<button
+					class="button button--primary"
+					type="submit"
+					name="decline"
+					aria-label="{{- 'customer.activate_account.cancel_aria_label' | t | escape -}}"
+				>
+					{{- 'customer.activate_account.cancel' | t -}}
+				</button>
+			</div>
+		{%- endform -%}
+	</div>
+</section>
+
+{%- render 'adastra' with '/src/scripts/template-customers-activate.js' -%}
+
+{% schema %}
+{
+	"name": "Activate account template",
+	"settings": [
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset bottom",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset bottom",
+			"default": 0
+		},
+		{
+			"type": "paragraph",
+			"content": "Internal offsets"
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset top",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset bottom",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset top",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset bottom",
+			"default": 32
+		}
+	]
+}
+{%- endschema -%}

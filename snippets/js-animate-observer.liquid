@@ -1,0 +1,67 @@
+<script>
+	initAnimateObserver();
+
+	window.themeCore = window.themeCore || {};
+	window.themeCore.initAnimateObserver = initAnimateObserver;
+
+	function initAnimateObserver() {
+		const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+		const elements = [...document.querySelectorAll(".js-animate:not(.animated)")];
+
+		if (reducedMotion.matches) {
+			elements.forEach((element) => element.classList.add("animated"));
+			return;
+		}
+
+		const pendingElements = new Set();
+		let animationFrame = null;
+
+		const scheduleAnimations = () => {
+			if (animationFrame !== null) return;
+
+			animationFrame = requestAnimationFrame(() => {
+				animationFrame = null;
+				const element = pendingElements.values().next().value;
+
+				if (!element) return;
+
+				pendingElements.delete(element);
+				const animatedTargets = element.matches(".section-animate")
+					? [element]
+					: [...element.querySelectorAll(".section-animate")];
+
+				animatedTargets.forEach((target) => {
+					target.style.willChange = "opacity, transform";
+				});
+
+				requestAnimationFrame(() => {
+					element.classList.add("animated");
+
+					window.setTimeout(() => {
+						animatedTargets.forEach((target) => {
+							target.style.removeProperty("will-change");
+						});
+					}, 1000);
+				});
+
+				if (pendingElements.size > 0) scheduleAnimations();
+			});
+		};
+
+		const intersectionObserver = new IntersectionObserver(
+			(entries, observer) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						pendingElements.add(entry.target);
+						observer.unobserve(entry.target);
+					}
+				});
+
+				scheduleAnimations();
+			},
+			{rootMargin: "-70px"}
+		);
+
+		elements.forEach((element) => intersectionObserver.observe(element));
+	}
+</script>

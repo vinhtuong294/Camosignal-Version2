@@ -1,0 +1,103 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Product gallery image
+	This snippet will output main image on product page
+
+	- image: image object (optional, object),
+	- is_lazy: is lazy load enable (optional, default: true, boolean)
+	- show_play_icon: show play icon on poster (optional, default: true, boolean)
+
+	{%- render "product-gallery-image", image: image, is_lazy: is_lazy, show_play_icon: show_play_icon -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- if image -%}
+	{% comment %}
+		Image width map
+	{% endcomment %}
+	{% assign base375 		  = 63 %}
+	{% assign base375_2x 	  = 126 %}
+	{% assign base420 		  = 72 %}
+	{% assign base420_2x 	  = 144 %}
+	{% assign base575 		  = 103 %}
+	{% assign base575_2x 	  = 206 %}
+	{% assign base767 		  = 142 %}
+	{% assign base767_2x 	  = 284 %}
+	{% assign base1199 		  = 155 %}
+	{% assign base1199_2x 	  = 310 %}
+	{%- if thumbnails_position == 'right' -%}
+		{% assign base1440 		  = 78 %}
+		{% assign base1440_2x 	  = 156 %}
+		{% assign base_default	  = 78 %}
+		{% assign base_default_2x = 156 %}
+	{%- else -%}
+		{% assign base1440 		  = 128 %}
+		{% assign base1440_2x 	  = 256 %}
+		{% assign base_default	  = 182 %}
+		{% assign base_default_2x = 364 %}
+	{%- endif -%}
+
+	<picture>
+		<source
+			srcset="{{- image | image_url: width: base375 }} 1x, {{ image | image_url: width: base375_2x }} 2x"
+			media="(max-width: 375px)"
+			width="{{ base375 }}"
+			height="{{ base375 }}"
+		>
+
+		<source
+			srcset="{{- image | image_url: width: base420 }} 1x, {{ image | image_url: width: base420_2x }} 2x"
+			media="(max-width: 420px)"
+			width="{{ base420 }}"
+			height="{{ base420 }}"
+		>
+
+		<source
+			srcset="{{- image | image_url: width: base575 }} 1x, {{ image | image_url: width: base575_2x }} 2x"
+			media="(max-width: 575px)"
+			width="{{ base575 }}"
+			height="{{ base575 }}"
+		>
+
+		<source
+			srcset="{{- image | image_url: width: base767 }} 1x, {{ image | image_url: width: base767_2x }} 2x"
+			media="(max-width: 767px)"
+			width="{{ base767 }}"
+			height="{{ base767 }}"
+		>
+
+		<source
+			srcset="{{- image | image_url: width: base1199 }} 1x, {{ image | image_url: width: base1199_2x }} 2x"
+			media="(max-width: 1199px)"
+			width="{{ base1199 }}"
+			height="{{ base1199 }}"
+		>
+
+		<source
+			srcset="{{- image | image_url: width: base1440 }} 1x, {{ image | image_url: width: base1440_2x }} 2x"
+			media="(max-width: 1440px)"
+			width="{{ base1440 }}"
+			height="{{ base1440 }}"
+		>
+
+		<img
+			class="product-media__image"
+			srcset="{{- image | image_url: width: base_default }} 1x, {{ image | image_url: width: base_default_2x }} 2x"
+			src="{{- image | image_url: width: base_default }}"
+			{% if is_lazy %}
+				loading="lazy"
+			{% endif %}
+			alt="{{- image.alt -}}"
+			width="{{ base_default }}"
+			height="{{ base_default }}"
+		>
+	</picture>
+
+	<span class="product-media__thumbnail-poster-icon{% if thumbnails_position == 'right' %} product-media__thumbnail-poster-icon--thumbnails-right{% endif %}">
+		{%- if media_type == 'model' -%}
+			{%- render 'icons', icon: 'model' -%}
+		{%- else -%}
+			{%- render 'icons', icon: 'product-play' -%}
+		{%- endif -%}
+	</span>
+{% endif %}

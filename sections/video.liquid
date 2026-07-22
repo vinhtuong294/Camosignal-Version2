@@ -1,0 +1,477 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Video
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/video.scss' -%}
+
+{%- assign image        				= section.settings.image -%}
+{%- assign video_type                 	= section.settings.video_type -%}
+{%- assign html_video_desktop     	  	= section.settings.html_video_desktop -%}
+{%- assign html_video_mobile		  	= section.settings.html_video_mobile | default: html_video_desktop -%}
+{%- assign external_video_url_desktop 	= section.settings.external_video_url_desktop -%}
+{%- assign external_video_url_mobile  	= section.settings.external_video_url_mobile | default: external_video_url_desktop -%}
+{%- assign custom_play_button 			= section.settings.custom_play_button | image_url: width: 80, height: 80 -%}
+{%- assign text_color  					= section.settings.text_color -%}
+{%- assign movement_speed_desktop  		= section.settings.movement_speed_desktop -%}
+{%- assign movement_speed_mobile  		= section.settings.movement_speed_mobile -%}
+{%- assign container 					= section.settings.container_width -%}
+{%- assign close_modal   				= 'general.accessibility.close_modal' | t -%}
+
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else %}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign lazy = false -%}
+
+{%- if section.index > 1 -%}
+	{%- assign lazy = true -%}
+{%- endif -%}
+
+{%- capture img_focal -%}
+	--img-desktop-pos: {{ image.presentation.focal_point }};
+{%- endcapture -%}
+
+{%- capture section_styles -%}
+	--container-width: {{ container_width }}; {{-  -}}
+	--text-color: {{ text_color }}; {{-  -}}
+	--bg-button-color: {{ text_color | hex_to_rgba: 0.2 }}; {{-  -}}
+	{% if custom_play_button != blank %}--custom-play-button: url({{- custom_play_button -}}) 40 40, auto;{% endif %}
+	--movement-speed-desktop: {{ movement_speed_desktop }}s; {{-  -}}
+	--movement-speed-mobile: {{ movement_speed_mobile }}s; {{-  -}}
+{%- endcapture -%}
+
+{%- if html_video_desktop != blank -%}
+	{%- capture html_video -%}
+		<video
+			class="video__player js-video"
+			data-device="desktop"
+			data-type="html"
+			muted
+			controls
+			playsinline
+			preload="none"
+			tabindex="0"
+		>
+			{%- for source in html_video_desktop.sources -%}
+				{%- if source.mime_type == 'video/mp4' -%}
+					<source src="{{- source.url -}}" type="{{- source.mime_type -}}">
+				{%- endif -%}
+			{%- endfor -%}
+		</video>
+
+		<video
+			class="video__player video__player--mobile js-video"
+			data-device="mobile"
+			data-type="html"
+			muted
+			controls
+			playsinline
+			preload="none"
+		>
+			{%- for source in html_video_mobile.sources -%}
+				{%- if source.mime_type == 'video/mp4' -%}
+					<source src="{{- source.url -}}" type="{{- source.mime_type -}}">
+				{%- endif -%}
+			{%- endfor -%}
+		</video>
+	{%- endcapture -%}
+{%- endif -%}
+
+{%- if external_video_url_desktop != nil -%}
+	{%- capture external_video -%}
+		{%- if external_video_url_desktop.type == 'youtube' -%}
+			<div
+				class="video__player js-video"
+				data-device="desktop"
+				data-type="{{- external_video_url_desktop.type -}}"
+				data-lazy
+			>
+				<div
+					class="js-video-youtube"
+					data-video-id="{{- external_video_url_desktop.id -}}"
+				></div>
+			</div>
+		{%- else -%}
+			<div
+				class="video__player js-video"
+				data-device="desktop"
+				data-video-id="{{- external_video_url_desktop.id -}}"
+				data-type="{{- external_video_url_desktop.type -}}"
+				data-lazy
+			></div>
+		{%- endif -%}
+
+		{%- if external_video_url_mobile.type == 'youtube' -%}
+			<div
+				class="video__player video__player--mobile js-video"
+				data-device="mobile"
+				data-type="{{- external_video_url_mobile.type -}}"
+				data-lazy
+			>
+				<div
+					class="js-video-youtube"
+					data-video-id="{{- external_video_url_mobile.id -}}"
+					aria-label="{{- close_modal | escape -}}"
+				></div>
+			</div>
+		{%- else -%}
+			<div
+				class="video__player video__player--mobile js-video"
+				data-device="mobile"
+				data-video-id="{{- external_video_url_mobile.id -}}"
+				data-type="{{- external_video_url_mobile.type -}}"
+				data-lazy
+			></div>
+		{%- endif -%}
+	{%- endcapture -%}
+{%- endif -%}
+
+{%- capture video -%}
+	{%- case video_type -%}
+		{%- when 'html' -%}
+			{{- html_video -}}
+		{%- when 'youtube_vimeo' -%}
+			{{- external_video -}}
+	{%- endcase -%}
+{%- endcapture -%}
+
+<section class="video section-animate js-video-section js-ticker-container js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}" style="{{- section_styles -}}" data-section-id="{{- section.id -}}" data-type="{{- type -}}">
+	<div class="video__bg-image">
+		{%- if image != blank -%}
+			<picture>
+				<source srcset="{{ image | image_url: height: 384 }} 1x, {{ image | image_url: height: 768 }} 2x" media="(max-width: 375px)" />
+				<source srcset="{{ image | image_url: width: 420 }} 1x, {{ image | image_url: width: 840 }} 2x" media="(max-width: 420px)" />
+				<source srcset="{{ image | image_url: width: 575 }} 1x, {{ image | image_url: width: 1150 }} 2x" media="(max-width: 575px)" />
+				<source srcset="{{ image | image_url: width: 767 }} 1x, {{ image | image_url: width: 1534 }} 2x" media="(max-width: 767px)" />
+				<source srcset="{{ image | image_url: width: 991 }} 1x, {{ image | image_url: width: 1982 }} 2x" media="(max-width: 991px)" />
+				<source srcset="{{ image | image_url: width: 1440 }} 1x, {{ image | image_url: width: 2880 }} 2x" media="(max-width: 1440px)" />
+				<source srcset="{{ image | image_url: width: 1600 }} 1x, {{ image | image_url: width: 3200 }} 2x" media="(max-width: 1600px)" />
+
+				<img
+					srcset="{{ image | image_url: width: 1920 }} 1x, {{ image | image_url: width: 3840 }} 2x"
+					src="{{ image | image_url: width: 1920 }}"
+					alt="{{ image.alt | escape }}"
+					class="video__placeholder-image"
+					style="{{ img_focal }}"
+					{% if lazy %}
+						loading="lazy"
+						fetchpriority="low"
+					{% endif %}
+				/>
+			</picture>
+		{%- else -%}
+			{{- "lifestyle-1" | placeholder_svg_tag: 'video__placeholder-image video__placeholder-image--placeholder' -}}
+		{%- endif -%}
+	</div>
+	<div class="video__container">
+		<div class="video__media-wrapper">
+			<div class="video__media-container js-video-container js-video-wrapper">
+				{%- if image != blank -%}
+					<picture class="video__media-wrapper">
+						<source srcset="{{ image | image_url: width: 327 }} 1x, {{ image | image_url: width: 654 }} 2x" media="(max-width: 375px)" />
+						<source srcset="{{ image | image_url: width: 372 }} 1x, {{ image | image_url: width: 744 }} 2x" media="(max-width: 420px)" />
+						<source srcset="{{ image | image_url: width: 527 }} 1x, {{ image | image_url: width: 1054 }} 2x" media="(max-width: 575px)" />
+						<source srcset="{{ image | image_url: width: 719 }} 1x, {{ image | image_url: width: 1438 }} 2x" media="(max-width: 767px)" />
+
+						<img
+							srcset="{{ image | image_url: width: 856 }} 1x, {{ image | image_url: width: 1712 }} 2x"
+							src="{{ image | image_url: width: 856 }}"
+							alt="{{ image.alt | escape }}"
+							class="video__placeholder-image js-video-placeholder"
+							style="{{ img_focal }}"
+							{% if lazy %}
+								loading="lazy"
+								fetchpriority="low"
+							{% endif %}
+						/>
+					</picture>
+				{%- else -%}
+					{{- "lifestyle-1" | placeholder_svg_tag: 'video__placeholder-image video__placeholder-image--placeholder js-video-placeholder' -}}
+				{%- endif -%}
+
+				{{- video -}}
+
+				<div class="video__play-button-wrapper tr-dur-0-5 tr-del-1 js-video-start-button">
+					<button
+						class="video__play-button{% if custom_play_button != blank %} video__play-button--image{% endif %}"
+						aria-label="{{- "general.accessibility.video_play" | t | escape -}}"
+					>
+						{%- if custom_play_button != blank -%}
+							<picture>
+								<source
+									srcset="{{ custom_play_button | image_url: width: 48, height: 48 }} 1x,
+											{{ custom_play_button | image_url: width: 96, height: 96 }} 2x"
+									media="(max-width: 991px)"
+									width="48"
+									height="48"
+								>
+
+								<img
+									class="video__play-icon"
+									src="{{ custom_play_button | image_url: width: 80, height: 80 }}"
+									srcset="{{ custom_play_button | image_url: width: 80, height: 80 }} 1x,
+											{{ custom_play_button | image_url: width: 160, height: 160 }} 2x"
+									alt="{{ custom_play_button.alt | escape }}"
+									width="80"
+									height="80"
+									loading="lazy"
+									fetchpriority="low"
+								>
+							</picture>
+						{%- else -%}
+							{%- render 'icons', icon: "play-filled" -%}
+						{%- endif -%}
+					</button>
+				</div>
+
+				{%- if custom_play_button == blank -%}
+					<div class="video__custom-cursor js-custom-cursor">
+						<div class="video__play-button">
+							{%- render 'icons', icon: "play-filled" -%}
+						</div>
+					</div>
+				{%- endif -%}
+			</div>
+		</div>
+
+		{%- if section.blocks.size > 0 -%}
+			<div class="video__ticker js-video-ticker-container is-loading">
+				<div class="video__ticker-container js-ticker-content-container">
+					{%- for block in section.blocks -%}
+						{%- assign block_text = block.settings.block_text -%}
+
+						<div class="video__ticker-item h2">
+							<span class="video__ticker-item-text">
+								{{- block_text -}}
+							</span>
+						</div>
+					{%- endfor -%}
+				</div>
+			</div>
+		{%- endif -%}
+	</div>
+</section>
+
+{%- render 'adastra' with '/src/scripts/video-section.js' -%}
+
+{%- schema -%}
+	{
+		"name": "Video",
+		"class": "video-wrapper",
+		"disabled_on": {
+			"groups": ["header", "footer", "custom.popup"]
+		},
+		"settings": [
+			{
+				"id": "image",
+				"type": "image_picker",
+				"label": "Image"
+			},
+			{
+				"type": "header",
+				"content": "VIDEO"
+			},
+			{
+				"id": "video_type",
+				"type": "select",
+				"label": "Video type",
+				"options": [
+					{
+						"value": "html",
+						"label": "HTML5"
+					},
+					{
+						"value": "youtube_vimeo",
+						"label": "Youtube/Vimeo"
+					}
+				],
+				"default": "youtube_vimeo"
+			},
+			{
+				"type": "video",
+				"id": "html_video_desktop",
+				"label": "HTML5 desktop video",
+				"info": "Only works with 'HTML5 video' media type"
+			},
+			{
+				"type": "video",
+				"id": "html_video_mobile",
+				"label": "HTML5 mobile video",
+				"info": "Only works with 'HTML5 video' media type"
+			},
+			{
+				"type": "video_url",
+				"accept": [
+					"youtube",
+					"vimeo"
+				],
+				"id": "external_video_url_desktop",
+				"label": "Youtube/Vimeo desktop video url",
+				"default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+				"info": "Only works with 'Youtube/Vimeo' media type"
+			},
+			{
+				"type": "video_url",
+				"accept": [
+					"youtube",
+					"vimeo"
+				],
+				"id": "external_video_url_mobile",
+				"label": "Youtube/Vimeo mobile video url",
+				"default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+				"info": "Only works with 'Youtube/Vimeo' media type"
+			},
+			{
+				"type": "image_picker",
+				"id": "custom_play_button",
+				"label": "Custom play button",
+				"info": "80 x 80px .svg recommended"
+			},
+			{
+				"type": "header",
+				"content": "Ticker"
+			},
+			{
+				"type": "color",
+				"id": "text_color",
+				"label": "Text color",
+				"default": "#000000"
+			},
+			{
+				"type": "range",
+				"id": "movement_speed_desktop",
+				"min": 5,
+				"max": 100,
+				"step": 1,
+				"unit": "s",
+				"label": "Movement speed (desktop) size",
+				"default": 5
+			},
+			{
+				"type": "range",
+				"id": "movement_speed_mobile",
+				"min": 5,
+				"max": 100,
+				"step": 1,
+				"unit": "s",
+				"label": "Movement speed (mobile) size",
+				"default": 5
+			},
+			{
+				"type": "header",
+				"content": "Layout"
+			},
+			{
+				"type": "select",
+				"id": "container_width",
+				"label": "Container width",
+				"options": [
+					{
+						"value": "1808px",
+						"label": "Default - 1680px"
+					},
+					{
+						"value": "2048px",
+						"label": "Large - 1920px"
+					},
+					{
+						"value": "100%",
+						"label": "Full width"
+					},
+					{
+						"value": "inherit",
+						"label": "Inherit of general setting"
+					}
+				],
+				"default": "inherit",
+				"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+			},
+			{
+				"type": "range",
+				"id": "offset_top_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset top",
+				"default": 32
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset bottom",
+				"default": 32
+			},
+			{
+				"type": "range",
+				"id": "offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset top",
+				"default": 32
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset bottom",
+				"default": 32
+			}
+		],
+		"blocks": [
+			{
+				"name": "Ticker content",
+				"type": "ticker_content",
+				"settings": [
+					{
+						"type": "inline_richtext",
+						"id": "block_text",
+						"label": "Text",
+						"default": "Ticker text"
+					}
+				]
+			}
+		],
+		"presets": [
+			{
+				"name": "Video",
+				"settings": {
+					"external_video_url_desktop": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+					"external_video_url_mobile": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+				},
+				"blocks": [
+					{
+						"type": "ticker_content"
+					}
+				]
+			}
+		]
+	}
+{%- endschema -%}

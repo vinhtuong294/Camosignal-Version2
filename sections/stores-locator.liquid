@@ -1,0 +1,559 @@
+{%- render 'adastra' with '/src/styles/stores-locator.scss' -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media (min-width: 786px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign color_scheme      	           = section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+
+{%- assign title 		= section.settings.title -%}
+{%- assign container 	= section.settings.container_width -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- capture styles -%}
+	--container-width: {{- container_width -}}; {{-  -}}
+	--inner-offset-top: {{ section.settings.inner_offset_top -}}px; {{-  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom -}}px; {{-  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile -}}px; {{-  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile -}}px; {{-  -}}
+{%- endcapture -%}
+
+{%- assign is_lazy = true %}
+
+{%- if section.index == 1 -%}
+	{%- assign is_lazy = false -%}
+{%- endif -%}
+
+<section class="stores-locator color-{{- color_scheme }} js-stores-locator js-animate{% if request.visual_preview_mode or section.index == 1 %} animated{% endif %}" style="{{- styles -}}">
+	<div class="stores-locator__container container section-animate">
+		{%- if title != blank -%}
+			<h2 class="stores-locator__heading">
+				{{- title -}}
+			</h2>
+		{%- endif -%}
+
+		{%- if section.blocks.size > 0 -%}
+			<div class="stores-locator__wrapper">
+				<div class="stores-locator__box-map stores-locator__box-map--mobile">
+					{%- assign first_index_check 	= false -%}
+					{%- assign first_index 			= '' -%}
+
+					{%- for block in section.blocks -%}
+						{%- assign block_title 			= block.settings.block_title -%}
+						{%- assign google_map_api_key 	= block.settings.google_map_api_key -%}
+						{%- assign map_query 			= block.settings.map_query -%}
+						{%- assign map_image 			= block.settings.map_image -%}
+						{%- assign map_link 			= block.settings.map_link -%}
+
+						{%- if block_title != blank -%}
+							{%- if first_index_check == false -%}
+								{%- assign first_index_check = true -%}
+								{%- assign first_index = forloop.index -%}
+							{%- endif -%}
+
+							{%- if map_image != blank and map_link != blank -%}
+								<a href="{{ map_link }}" target="_blank" class="stores-locator__map-wrapper stores-locator__map-wrapper--link js-stores-locator-map-wrapper{% if forloop.index == first_index %} is-active{% endif %}" data-index="{{- forloop.index -}}">
+							{%- else -%}
+								<div class="stores-locator__map-wrapper js-stores-locator-map-wrapper{% if forloop.index == first_index %} is-active{% endif %}" data-index="{{- forloop.index -}}">
+							{%- endif -%}
+									{%- if google_map_api_key != blank and map_query != blank -%}
+										<iframe
+											class="stores-locator__map"
+											width="100%"
+											height="100%"
+											frameborder="0"
+											style="border:0"
+											referrerpolicy="no-referrer-when-downgrade"
+											src="https://www.google.com/maps/embed/v1/place?key={{- google_map_api_key -}}&q={{- map_query -}}"
+											allowfullscreen
+										>
+										</iframe>
+									{%- elsif map_image != blank -%}
+										{%- capture img_focal -%}
+											--img-pos: {{ map_image.presentation.focal_point }};
+										{%- endcapture -%}
+
+										<picture>
+											<source
+												srcset="{{ map_image | image_url: width: 343 }} 1x, {{ map_image | image_url: width: 686 }} 2x"
+												media="(max-width: 375px)"
+												width="343"
+												height="280"
+											/>
+
+											<source
+												srcset="{{ map_image | image_url: width: 388 }} 1x, {{ map_image | image_url: width: 776 }} 2x"
+												media="(max-width: 420px)"
+												width="388"
+												height="317"
+											/>
+
+											<source
+												srcset="{{ map_image | image_url: width: 735 }} 1x, {{ map_image | image_url: width: 1470 }} 2x"
+												media="(max-width: 767px)"
+												width="735"
+												height="600"
+											/>
+
+											<img class="stores-locator__map-image"
+												 src="{{- map_image | image_url: width: 959 -}}"
+												 srcset="{{- map_image | image_url: width: 959 -}} 1x, {{- map_image | image_url: width: 1918 -}} 2x"
+												 {% if is_lazy %}
+													fetchpriority="low"
+													loading="lazy"
+												 {% endif %}
+												 alt="{{- map_image.alt | escape -}}"
+												 {% if img_focal %}
+													style="{{ img_focal }}"
+												 {% endif %}
+											/>
+										</picture>
+									{%- else -%}
+										{{- 'lifestyle-1' | placeholder_svg_tag: 'stores-locator__map-image stores-locator__map-image--placeholder' -}}
+									{%- endif -%}
+							{%- if map_image != blank and map_link != blank -%}
+								</a>
+							{%- else -%}
+								</div>
+							{%- endif -%}
+						{%- endif -%}
+					{%- endfor -%}
+				</div>
+
+				<ul class="stores-locator__list">
+					{%- assign first_index_check 	= false -%}
+					{%- assign first_index 			= '' -%}
+
+					{%- for block in section.blocks -%}
+						{%- assign block_image 			= block.settings.block_image -%}
+						{%- assign block_title 			= block.settings.block_title -%}
+						{%- assign block_text 			= block.settings.block_text -%}
+						{%- assign phone_text 			= block.settings.phone_text -%}
+						{%- assign schedule_text 		= block.settings.schedule_text -%}
+
+						{%- if block_title != blank -%}
+							{%- if first_index_check == false -%}
+								{%- assign first_index_check = true -%}
+								{%- assign first_index = forloop.index -%}
+							{%- endif -%}
+
+							<li class="stores-locator__item js-stores-locator-item{% if forloop.index == first_index %} is-active{% endif %}"
+								data-index="{{- forloop.index -}}"
+								aria-controls="content-{{- block.id -}}"
+								{% if forloop.index != first_index %}
+									aria-expanded="false"
+								{% else %}
+									aria-expanded="true"
+								{% endif %}
+							>
+								<button class="stores-locator__item-wrapper js-stores-locator__item-button">
+									<span class="stores-locator__item-box-image">
+										{%- if block_image != blank -%}
+											{%- capture img_focal -%}
+												--img-pos: {{ block_image.presentation.focal_point }};
+											{%- endcapture -%}
+
+											<picture>
+												<img class="stores-locator__item-image"
+													 src="{{ block_image | image_url: width: 110 }}"
+													 srcset="{{ block_image | image_url: width: 110 }} 1x, {{ block_image | image_url: width: 220 }} 2x"
+													 alt="{{- block_image.alt | escape -}}"
+													 width="110"
+													 height="80"
+													 loading="lazy"
+													 fetchpriority="low"
+													{% if img_focal %}
+														style="{{ img_focal }}"
+													{% endif %}
+												/>
+											</picture>
+										{%- else -%}
+											{{- 'image' | placeholder_svg_tag: 'stores-locator__item-image stores-locator__item-image--placeholder' -}}
+										{%- endif -%}
+									</span>
+
+									{%- if block_title != blank or block_text != blank -%}
+										<span class="stores-locator__item-box-text">
+											{%- if block_title != blank -%}
+												<span class="stores-locator__item-title h5">
+													{{- block_title -}}
+												</span>
+											{%- endif -%}
+
+											{%- if block_text != blank -%}
+												<span class="stores-locator__item-text rte js-stores-locator-item-text">
+													{{- block_text -}}
+												</span>
+											{%- endif -%}
+										</span>
+									{%- endif -%}
+								</button>
+
+								{%- if phone_text != blank or schedule_text != blank -%}
+									<div class="stores-locator__item-body js-stores-locator-accordion-body"
+										 aria-labelledby="control-{{- block.id -}}"
+										{% if forloop.index != first_index %}
+											style="height: 0"
+										{% endif %}
+									>
+										{%- if phone_text != blank -%}
+											<div class="stores-locator__item-box-info rte">
+												{{- phone_text -}}
+											</div>
+										{%- endif -%}
+
+										{%- if schedule_text != blank -%}
+											<div class="stores-locator__item-box-info rte">
+												{{- schedule_text -}}
+											</div>
+										{%- endif -%}
+									</div>
+								{%- endif -%}
+							</li>
+						{%- endif -%}
+					{%- endfor -%}
+				</ul>
+
+				<div class="stores-locator__box-map stores-locator__box-map--desktop js-stores-locator-box-map">
+					{%- assign first_index_check 	= false -%}
+					{%- assign first_index 			= '' -%}
+
+					{%- for block in section.blocks -%}
+						{%- assign block_title 			= block.settings.block_title -%}
+						{%- assign google_map_api_key 	= block.settings.google_map_api_key -%}
+						{%- assign map_query 			= block.settings.map_query -%}
+						{%- assign map_image 			= block.settings.map_image -%}
+						{%- assign map_link 			= block.settings.map_link -%}
+
+						{%- if block_title != blank -%}
+							{%- if first_index_check == false -%}
+								{%- assign first_index_check = true -%}
+								{%- assign first_index = forloop.index -%}
+							{%- endif -%}
+
+							{%- if map_image != blank and map_link != blank -%}
+								<a
+									href="{{ map_link }}"
+									target="_blank"
+									class="stores-locator__map-wrapper stores-locator__map-wrapper--link js-stores-locator-map-wrapper{% if forloop.index == first_index %} is-active{% endif %}"
+									data-index="{{- forloop.index -}}"
+									tabindex="-1"
+								>
+							{%- else -%}
+								<div class="stores-locator__map-wrapper js-stores-locator-map-wrapper{% if forloop.index == first_index %} is-active{% endif %}" data-index="{{- forloop.index -}}">
+							{%- endif -%}
+									{%- if google_map_api_key != blank and map_query != blank -%}
+										<iframe
+											class="stores-locator__map"
+											width="100%"
+											height="100%"
+											frameborder="0"
+											style="border:0"
+											referrerpolicy="no-referrer-when-downgrade"
+											src="https://www.google.com/maps/embed/v1/place?key={{- google_map_api_key -}}&q={{- map_query -}}"
+											allowfullscreen
+										>
+										</iframe>
+									{%- elsif map_image != blank -%}
+										{%- capture img_focal -%}
+											--img-pos: {{ map_image.presentation.focal_point }};
+										{%- endcapture -%}
+
+										<picture>
+											<source
+												srcset="{{ map_image | image_url: width: 947 }} 1x, {{ map_image | image_url: width: 1894 }} 2x"
+												media="(max-width: 1500px)"
+												width="947"
+												height="600"
+											/>
+
+											<img class="stores-locator__map-image"
+												 src="{{- map_image | image_url: width: 1160 -}}"
+												 srcset="{{- map_image | image_url: width: 1160 -}} 1x, {{- map_image | image_url: width: 2320 -}} 2x"
+												 {% if is_lazy %}
+													fetchpriority="low"
+													loading="lazy"
+												 {% endif %}
+												 alt="{{- map_image.alt | escape -}}"
+												 {% if img_focal %}
+													style="{{ img_focal }}"
+												 {% endif %}
+											/>
+										</picture>
+									{%- else -%}
+										{{- 'lifestyle-1' | placeholder_svg_tag: 'stores-locator__map-image stores-locator__map-image--placeholder' -}}
+									{%- endif -%}
+							{%- if map_image != blank and map_link != blank -%}
+								</a>
+							{%- else -%}
+								</div>
+							{%- endif -%}
+						{%- endif -%}
+					{%- endfor -%}
+				</div>
+			</div>
+		{%- endif -%}
+	</div>
+</section>
+
+{%- render 'adastra' with '/src/scripts/stores-locator.js' -%}
+
+{% schema %}
+{
+	"name": "Stores locator",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "General"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "title",
+			"label": "Heading",
+			"default": "Our Stores"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1808px",
+					"label": "Default - 1680px"
+				},
+				{
+					"value": "2048px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset bottom",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset bottom",
+			"default": 25
+		},
+		{
+			"type": "paragraph",
+			"content": "Internal offsets"
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset top",
+			"default": 60
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset bottom",
+			"default": 60
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset top",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset bottom",
+			"default": 30
+		}
+	],
+	"blocks": [
+		{
+			"name": "Store",
+			"type": "store",
+			"settings": [
+				{
+					"type": "inline_richtext",
+					"id": "block_title",
+					"label": "Heading",
+					"default": "Store"
+				},
+				{
+					"type": "image_picker",
+					"id": "block_image",
+					"label": "Store image"
+				},
+				{
+					"type": "inline_richtext",
+					"id": "block_text",
+					"label": "Text",
+					"default": "Store <i>text</i>"
+				},
+				{
+					"type": "inline_richtext",
+					"id": "phone_text",
+					"default": "213 443 6364",
+					"label": "Phone text"
+				},
+				{
+					"type": "inline_richtext",
+					"id": "schedule_text",
+					"label": "Schedule text"
+				},
+				{
+					"type": "text",
+					"id": "google_map_api_key",
+					"label": "Google maps API key (text)",
+					"info": "You’ll need to [register a Google Maps API Key](https://utdweb.team/shopify-themes/allure/manual/#section-stores-locator) to display the map."
+				},
+				{
+					"type": "text",
+					"id": "map_query",
+					"label": "Map query",
+					"info": "Specify the query parameter [Learn more](https://utdweb.team/shopify-themes/allure/manual/#section-stores-locator)",
+					"default": "Eiffel+Tower,Paris+France"
+				},
+				{
+					"type": "image_picker",
+					"id": "map_image",
+					"label": "Map image"
+				},
+				{
+					"type": "url",
+					"id": "map_link",
+					"label": "Map link",
+					"info": "Used only for ‘Map image’"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Stores locator",
+			"blocks": [
+				{
+					"type": "store"
+				},
+				{
+					"type": "store"
+				},
+				{
+					"type": "store"
+				},
+				{
+					"type": "store"
+				},
+				{
+					"type": "store"
+				},
+				{
+					"type": "store"
+				}
+			]
+		}
+	]
+}
+{% endschema %}

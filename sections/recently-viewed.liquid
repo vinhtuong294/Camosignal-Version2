@@ -1,0 +1,291 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Featured products
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/carousel.scss' -%}
+{%- render 'adastra' with '/src/styles/recently-viewed.scss' -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+
+	html.no-js #shopify-section-{{- section.id -}} {
+		display: none;
+	}
+{%- endstyle -%}
+
+{%- assign heading      		           	= section.settings.heading -%}
+{%- assign layout       		           	= section.settings.layout -%}
+{%- assign show_arrows						= section.settings.show_arrows -%}
+{%- assign limit							= section.settings.products_to_show -%}
+{%- assign container 			           	= section.settings.container_width -%}
+{%- assign enable_color_scheme_inheritance 	= section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme 				   	= section.settings.color_scheme -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- capture section_styles -%}
+	--container-width: {{- container_width -}}; {{-  -}}
+	--inner-offset-top: {{ section.settings.inner_offset_top }}px; {{-  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom }}px; {{-  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px; {{-  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px; {{-  -}}
+{%- endcapture -%}
+
+{%- render 'adastra' with '/src/styles/product-card.scss' -%}
+
+<section
+	class="recently-viewed recently-viewed--layout-{{- layout }} color-{{ color_scheme.id }}{% if request.visual_preview_mode or section.index == 1 %} animated{% endif %} js-animate is-loading js-recently-viewed"
+	id="{{- section.id -}}"
+	style="{{- section_styles -}}"
+	data-limit="{{- limit -}}"
+>
+	<div class="container section-animate">
+		{%- if heading != blank -%}
+			<div class="recently-viewed__header">
+				<h2>
+					{{- heading -}}
+				</h2>
+
+				{%- if show_arrows -%}
+					<div class="recently-viewed__buttons-wrapper">
+						<button class="swiper-button-prev-new js-recently-viewed-slider-button-prev">
+							{%- render 'icons', icon: 'arrow-left' -%}
+						</button>
+
+						<button class="swiper-button-next-new js-recently-viewed-slider-button-next">
+							{%- render 'icons', icon: 'arrow-right' -%}
+						</button>
+					</div>
+				{%- endif -%}
+			</div>
+		{%- endif -%}
+
+		<div
+			class="recently-viewed__slider swiper js-recently-viewed-slider"
+			data-slides-in-row="{{- layout -}}"
+		>
+			<div class="recently-viewed__row swiper-wrapper js-recently-viewed-content">
+				{%- for i in (1..limit) -%}
+					<div class="recently-viewed__col swiper-slide js-recently-viewed-slide">
+						{%- render 'product-card', product: nil -%}
+
+						<div class="recently-viewed__preloader-wrapper" aria-hidden="true">
+							<div class="recently-viewed__preloader"></div>
+						</div>
+					</div>
+				{%- endfor -%}
+			</div>
+		</div>
+	</div>
+</section>
+
+{%- if product_list.count > 1 or product_list == blank -%}
+	{%- render 'adastra' with '/src/scripts/section-recently-viewed.js' -%}
+{%- endif -%}
+
+{%- schema -%}
+{
+	"name": "Recently viewed",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "General"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "heading",
+			"label": "Heading",
+			"default": "Recently viewed"
+		},
+		{
+			"type": "range",
+			"id": "products_to_show",
+			"min": 4,
+			"max": 12,
+			"step": 1,
+			"default": 4,
+			"label": "Products to show"
+		},
+		{
+			"type": "select",
+			"id": "layout",
+			"label": "Layout",
+			"options": [
+				{
+					"value": "3",
+					"label": "3 products per row"
+				},
+				{
+					"value": "4",
+					"label": "4 products per row"
+				}
+			],
+			"default": "4",
+			"info": "Desktop only"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_arrows",
+			"label": "Show arrows",
+			"default": true,
+			"info": "Available if heading is not empty"
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1808px",
+					"label": "Default - 1680px"
+				},
+				{
+					"value": "2048px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset bottom",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset bottom",
+			"default": 25
+		},
+		{
+			"type": "paragraph",
+			"content": "Internal offsets"
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset top",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset bottom",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset top",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset bottom",
+			"default": 30
+		}
+	]
+}
+{%- endschema -%}

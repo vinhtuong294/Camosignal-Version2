@@ -1,0 +1,130 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Country localization form
+	Render country localization form
+	- class: General class for selectors (required)
+	- id_prefix: Add unuqie prefix to prevent duplicate id
+	- form_id: Add unuqie form id to prevent duplicate id
+	- list_class: Class for localization list
+
+	Usage:
+	{%- render 'country-localization-form', class: class -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/localization-form.scss' -%}
+
+{%- assign form_id          = form_id | default: 'country_form' -%}
+{%- assign form_id_noscript = form_id | append: 'NoScript' -%}
+{%- assign animation_delay = 0 -%}
+
+<div class="{{- class -}}__country-selector">
+	<noscript>
+		{%- form 'localization', id: form_id_noscript -%}
+			<div class="select-wrapper disclosure localization-form__select">
+				<select
+					class="localization-select focus-visible-outline"
+					name="country_code"
+				>
+					{%- for country in localization.available_countries -%}
+						<option
+							class="localization-option"
+							value="{{- country.iso_code -}}"
+							{%- if country.iso_code == localization.country.iso_code %} selected{% endif %}
+						>
+							{{ country.iso_code }} | {{ country.currency.symbol }}
+						</option>
+					{%- endfor -%}
+				</select>
+
+				{%- render 'icons', icon: 'arrow-down' -%}
+			</div>
+
+			<button class="button-link localization-button">
+				<span data-text="{{- 'general.localization.update_country' | t -}}">
+					<span>
+						{{- 'general.localization.update_country' | t -}}
+					</span>
+				</span>
+			</button>
+		{%- endform -%}
+	</noscript>
+
+	<localization-form>
+		{%- form 'localization', id: form_id, class: "no-js-hidden js-localization-form" -%}
+			<div class="disclosure">
+				{%- assign button_label = localization.country.iso_code | append: " | " | append: localization.country.currency.symbol -%}
+
+				<button
+					type="button"
+					class="button-link disclosure__button {{ class -}}__country-button js-disclosure-button"
+					aria-expanded="false"
+					aria-controls="CountryList-{{- id_prefix -}}"
+				>
+					<img
+						class="disclosure__item-flag"
+						src="//cdn.shopify.com/static/images/flags/{{- localization.country.iso_code | downcase -}}.svg?width=20"
+						loading="lazy"
+						fetchpriority="low"
+						decoding="async"
+						alt="{{- localization.country.name | escape -}}"
+					/>
+
+					<span data-text="{{- button_label -}}">
+						<span>
+							{{- button_label -}}
+						</span>
+					</span>
+
+					{%- render 'icons', icon: 'arrow-down' -%}
+				</button>
+
+				<ul
+					id="CountryList-{{- id_prefix -}}"
+					role="list"
+					class="disclosure__list disclosure__list--country {{ class -}}__country-list js-disclosure-list {{ list_class }}"
+					hidden
+				>
+					{%- for country in localization.available_countries -%}
+						{%- assign animation_delay = animation_delay | plus: 0.05 -%}
+
+						<li
+							class="disclosure__item {{ class -}}__country-item"
+							tabindex="-1"
+							style="--animation-delay: {{- animation_delay -}}s"
+						>
+							<a
+								class="button-link disclosure__item-link {{ class -}}__country-item-link js-disclosure-link"
+								href="#"
+								{% if country.iso_code == localization.country.iso_code %}
+									aria-current="true"
+								{% endif %}
+								data-value="{{- country.iso_code -}}"
+								aria-label="{{- language.iso_code -}}"
+							>
+								{%- assign country_label = country.name | append: " | " | append: country.currency.symbol -%}
+
+								<img
+									class="disclosure__item-flag"
+									src="//cdn.shopify.com/static/images/flags/{{ country.iso_code | downcase }}.svg?width=20"
+									loading="lazy"
+									fetchpriority="low"
+									decoding="async"
+									alt="{{- country.iso_code | escape -}}"
+								/>
+
+								<span data-text="{{- country_label -}}">
+									<span>
+										{{- country_label -}}
+									</span>
+								</span>
+							</a>
+						</li>
+					{%- endfor -%}
+				</ul>
+
+				<input type="hidden" name="country_code" value="{{- localization.country.iso_code -}}">
+			</div>
+		{%- endform -%}
+	</localization-form>
+</div>

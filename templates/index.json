@@ -1,0 +1,905 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "camo_hero_slider_ELY97M": {
+      "type": "camo-hero-slider",
+      "blocks": {
+        "slide_jEKzQV": {
+          "type": "slide",
+          "settings": {
+            "image_desktop": "shopify://shop_images/bannerslider2.jpg",
+            "image_mobile": "shopify://shop_images/banner-mobile-4.jpg",
+            "full_slide_link": "shopify://collections/wild-turkey",
+            "eyebrow": "",
+            "heading": "",
+            "accent_text": "",
+            "subheading": "",
+            "button_label": "",
+            "button_link": "shopify://collections/wild-turkey"
+          }
+        },
+        "slide_ryx8LC": {
+          "type": "slide",
+          "settings": {
+            "image_desktop": "shopify://shop_images/banner_3.png",
+            "image_mobile": "shopify://shop_images/banner_3_mobile_ver2.png",
+            "full_slide_link": "shopify://collections/saltwater-fishing-t-shirt",
+            "eyebrow": "",
+            "heading": "",
+            "accent_text": "",
+            "subheading": "",
+            "button_label": "",
+            "button_link": "shopify://collections/saltwater-fishing-t-shirt"
+          }
+        }
+      },
+      "block_order": [
+        "slide_jEKzQV",
+        "slide_ryx8LC"
+      ],
+      "name": "Banner slider",
+      "settings": {
+        "enable_autoplay": true,
+        "show_dots": false,
+        "autoplay_delay": 5,
+        "height_desktop": 620,
+        "height_mobile": 560,
+        "show_content": false,
+        "enable_overlay": false,
+        "overlay_opacity": 0
+      }
+    },
+    "dual_promo_banners": {
+      "type": "dual-promo-banners",
+      "blocks": {
+        "back_to_school_banner": {
+          "type": "banner",
+          "settings": {
+            "external_image_url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/banner_1_bb8d5864-90e6-45ca-b6e7-f26f7c11f8ba.png?v=1783938942",
+            "link": "https://camosignal.com/collections/back-to-school",
+            "alt_text": "Shop Back to School"
+          }
+        },
+        "nfl_banner": {
+          "type": "banner",
+          "settings": {
+            "external_image_url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/banner_2_6a511281-90d3-4f76-8782-eb6040a3713a.png?v=1783939948",
+            "link": "https://camosignal.com/collections/nfl-shirt",
+            "alt_text": "Shop NFL shirts"
+          }
+        }
+      },
+      "block_order": [
+        "back_to_school_banner",
+        "nfl_banner"
+      ],
+      "name": "Dual promotion banners",
+      "settings": {
+        "animate_on_scroll": true,
+        "hover_border_color": "#e4ad00",
+        "max_width": 1550,
+        "gap_desktop": 24,
+        "gap_mobile": 10,
+        "overlap_desktop": 90,
+        "overlap_mobile": 0,
+        "spacing_bottom_desktop": 36,
+        "spacing_top_mobile": 12,
+        "spacing_bottom_mobile": 20
+      }
+    },
+    "banner_HXA8gf": {
+      "type": "banner",
+      "disabled": true,
+      "name": "Banner",
+      "settings": {
+        "desktop_image_height": "auto",
+        "mobile_image_height": "auto",
+        "media_type": "image",
+        "title": "",
+        "text": "",
+        "button_label_1": "",
+        "button_link_1": "https://camosignal.com/collections/all",
+        "button_aria_label_1": "",
+        "button_label_2": "Button label",
+        "button_link_2": "",
+        "button_aria_label_2": "",
+        "banner_link": "https://camosignal.com/collections/all?filter.p.m.custom.seasonal=INDEPENDENCE+DAY&sort_by=best-selling",
+        "image_desktop": "shopify://shop_images/Marlin_fishing_banner.png",
+        "image_mobile": "shopify://shop_images/banner_4th_of_july_mobile2.jpg",
+        "show_breadcrumbs": false,
+        "enable_timer": false,
+        "evergreen_timer": true,
+        "evergreen_reset_hour": 7,
+        "timer_label_days": "DAYS",
+        "timer_label_hours": "HOURS",
+        "timer_label_minutes": "MINUTES",
+        "timer_label_seconds": "SECONDS",
+        "timer_month": "0",
+        "timer_day": "1",
+        "timer_hour": "0",
+        "timer_timezone": "+0",
+        "timer_background": "rgba(255,255,255, 0.12)",
+        "timer_color": "#ffffff",
+        "external_video_url_desktop": "",
+        "external_video_url_mobile": "",
+        "content_alignment": "right",
+        "content_alignment_mobile": "center",
+        "block_alignment": "flex-end",
+        "block_alignment_vertical": "flex-end",
+        "block_alignment_vertical_mob": "flex-end",
+        "custom_margin_left": 50,
+        "custom_margin_right": 5,
+        "custom_width": 45,
+        "custom_font_size": 22,
+        "section_background": "#e7e7e7",
+        "overlay": "rgba(0,0,0, 0)",
+        "text_color": "#faf6ee",
+        "button_background_1": "#faf6ee",
+        "button_color_1": "#2c3d33",
+        "button_border_1": "#faf6ee",
+        "button_background_hover_1": "#2c3d33",
+        "button_color_hover_1": "#faf6ee",
+        "button_border_hover_1": "#faf6ee",
+        "button_background_2": "#faf6ee",
+        "button_color_2": "#2c3d33",
+        "button_border_2": "#faf6ee",
+        "button_background_hover_2": "#2c3d33",
+        "button_color_hover_2": "#faf6ee",
+        "button_border_hover_2": "#faf6ee",
+        "container_width": "100%",
+        "offset_top_desktop": 0,
+        "offset_bottom_desktop": 25,
+        "offset_top_mobile": 0,
+        "offset_bottom_mobile": 15
+      }
+    },
+    "177503541480b98d44": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_ac030ae_GBFG9z": {
+          "type": "ai_gen_block_ac030ae",
+          "settings": {
+            "heading": "Raised Here. Stood Here.",
+            "subheading": "Built for those who hunt, protect, and live by their values — quietly, proudly.",
+            "text": "",
+            "button_text": "",
+            "button_link": "shopify://pages/about-us1",
+            "desktop_width_percent": 100,
+            "content_max_width": 800,
+            "text_alignment": "center",
+            "padding_top": 40,
+            "padding_bottom": 0,
+            "padding_horizontal": 20,
+            "padding_top_mobile": 30,
+            "padding_bottom_mobile": 0,
+            "padding_horizontal_mobile": 15,
+            "heading_font": "oswald_n7",
+            "heading_size": 48,
+            "heading_size_mobile": 32,
+            "heading_color": "#2c3d33",
+            "heading_spacing": 16,
+            "subheading_font": "oswald_n4",
+            "subheading_size": 24,
+            "subheading_size_mobile": 18,
+            "subheading_color": "#535353",
+            "subheading_spacing": 12,
+            "text_size": 16,
+            "text_size_mobile": 14,
+            "text_color": "#535353",
+            "text_spacing": 20,
+            "button_font_size": 16,
+            "button_font_size_mobile": 14,
+            "button_padding_vertical": 12,
+            "button_padding_horizontal": 30,
+            "button_border_radius": 4,
+            "button_border_width": 1,
+            "button_text_color": "#faf6ee",
+            "button_background_color": "#2c3d33",
+            "button_border_color": "#000000",
+            "button_hover_text_color": "#000000",
+            "button_hover_background_color": "rgba(0,0,0,0)",
+            "button_hover_border_color": "#000000"
+          },
+          "blocks": {}
+        },
+        "ai_gen_block_894ae53_pjg7ei": {
+          "type": "ai_gen_block_894ae53",
+          "disabled": true,
+          "settings": {
+            "heading": "<em>Raised Here. Stood Here.</em>",
+            "heading_color": "#000000",
+            "heading_size": 40,
+            "heading_size_mobile": 28,
+            "heading_spacing": 16,
+            "subheading": "",
+            "subheading_color": "#535353",
+            "subheading_size": 24,
+            "subheading_size_mobile": 20,
+            "subheading_spacing": 12,
+            "text": "<p><em>Camo Signal was born in small towns where hunting season is family tradition and camo means patience, not performance. We make apparel for the ones who carry responsibility without asking for recognition. Wear who you are</em></p>",
+            "text_color": "#535353",
+            "text_size": 16,
+            "text_size_mobile": 14,
+            "text_spacing": 24,
+            "paragraph_spacing": 12,
+            "button_text": "Read more",
+            "button_link": "shopify://pages/about",
+            "button_padding_vertical": 14,
+            "button_padding_horizontal": 40,
+            "button_border_radius": 4,
+            "button_border_width": 1,
+            "button_text_size": 16,
+            "button_text_size_mobile": 14,
+            "button_background": "#000000",
+            "button_text_color": "#ffffff",
+            "button_border_color": "#000000",
+            "button_background_hover": "#292929",
+            "button_text_color_hover": "#ffffff",
+            "button_border_color_hover": "#292929",
+            "text_alignment": "center",
+            "desktop_width_percent": 100,
+            "content_max_width": 800,
+            "padding_vertical": 60,
+            "padding_horizontal": 20,
+            "padding_vertical_mobile": 40,
+            "padding_horizontal_mobile": 15,
+            "border_radius": 0,
+            "background_color": "#ffffff"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_ac030ae_GBFG9z",
+        "ai_gen_block_894ae53_pjg7ei"
+      ],
+      "settings": {}
+    },
+    "177493990334c4d3df": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_b6c5838_tgjWzX": {
+          "type": "ai_gen_block_b6c5838",
+          "disabled": true,
+          "settings": {
+            "desktop_width_percent": 100,
+            "section_padding_top": 10,
+            "section_padding_bottom": 0,
+            "column_gap": 10,
+            "mobile_gap": 10,
+            "item_spacing": 5,
+            "text_alignment": "center",
+            "icon_size": 80,
+            "icon_padding": 15,
+            "icon_border_radius": 10,
+            "icon_background_color": "#f2f2f2",
+            "placeholder_bg_color": "#e9e9e9",
+            "heading_size": 18,
+            "heading_weight": "600",
+            "heading_color": "#000000",
+            "description_size": 14,
+            "description_color": "#535353",
+            "heading_1": "Free shipping",
+            "description_1": "On orders over $50",
+            "heading_2": "Secure payment",
+            "description_2": "100% secure transactions",
+            "heading_3": "Easy returns",
+            "description_3": "30-day return policy"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_b6c5838_tgjWzX"
+      ],
+      "settings": {}
+    },
+    "custom_liquid_divider": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div style=\"width: 100%; display: flex; justify-content: center;\"><hr style=\"border: none; height: 1px; background-color: #2c3d33; opacity: 0.3; width: 800px; max-width: 80%; margin: 0;\" /></div>",
+        "offset_top_desktop": 30,
+        "offset_bottom_desktop": 30,
+        "offset_top_mobile": 15,
+        "offset_bottom_mobile": 15
+      }
+    },
+    "best_seller_products_4kf6hh": {
+      "type": "best-seller-products",
+      "name": "Best seller products",
+      "settings": {
+        "enable_color_scheme_inheritance": true,
+        "color_scheme": "",
+        "heading": "BEST SELLERS",
+        "collection": "",
+        "hidden_products": [
+          "world-slam-of-turkey-t-shirt",
+          "deer-wildlife-hunting-t-shirt",
+          "patriotic-moose-hunting-t-shirt-copy"
+        ],
+        "container_width": "inherit",
+        "offset_top_desktop": 30,
+        "offset_bottom_desktop": 30,
+        "offset_top_mobile": 15,
+        "offset_bottom_mobile": 28,
+        "inner_offset_top": 30,
+        "inner_offset_bottom": 0,
+        "inner_offset_top_mobile": 15,
+        "inner_offset_bottom_mobile": 0
+      }
+    },
+    "featured_products": {
+      "type": "featured-products",
+      "disabled": true,
+      "settings": {
+        "enable_color_scheme_inheritance": true,
+        "color_scheme": "",
+        "heading": "Best Sellers",
+        "link_label": "",
+        "link_url": "shopify://collections",
+        "product_list": [
+          "we-the-people-deer-skull-t-shirt",
+          "patriotic-moose-hunting-t-shirt-copy-2",
+          "united-we-stand-deer-skull-t-shirt",
+          "heritage-honor-freedom-deer-skull-t-shirt"
+        ],
+        "collection": "",
+        "layout": "4",
+        "show_arrows": true,
+        "container_width": "2048px",
+        "offset_top_desktop": 30,
+        "offset_bottom_desktop": 30,
+        "offset_top_mobile": 15,
+        "offset_bottom_mobile": 28,
+        "inner_offset_top": 30,
+        "inner_offset_bottom": 0,
+        "inner_offset_top_mobile": 15,
+        "inner_offset_bottom_mobile": 0
+      }
+    },
+    "featured_products_jAK3WU": {
+      "type": "featured-products",
+      "name": "Featured products",
+      "settings": {
+        "enable_color_scheme_inheritance": true,
+        "color_scheme": "scheme-1",
+        "heading": "",
+        "link_label": "Shop all products",
+        "link_url": "",
+        "product_list": [
+          "the-sun-road-expedition-t-shirt",
+          "the-1929-teton-heritage-t-shirt",
+          "yellowstone-explorer-map-t-shirt",
+          "yellowstone-national-park-t-shirt"
+        ],
+        "collection": "",
+        "layout": "4",
+        "show_arrows": true,
+        "container_width": "2048px",
+        "offset_top_desktop": 30,
+        "offset_bottom_desktop": 0,
+        "offset_top_mobile": 0,
+        "offset_bottom_mobile": 0,
+        "inner_offset_top": 0,
+        "inner_offset_bottom": 30,
+        "inner_offset_top_mobile": 0,
+        "inner_offset_bottom_mobile": 0
+      }
+    },
+    "promotion_image_grid": {
+      "type": "hunting-collections",
+      "blocks": {
+        "hunt": {
+          "type": "collection",
+          "settings": {
+            "external_image_url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/2_547614d7-77b9-4b7f-9eb8-081290c42c5d.png?v=1783678906",
+            "alt_text": "T-Shirt collection",
+            "image_position": "inherit",
+            "collection": "best-sellers",
+            "link": "/collections/best-sellers",
+            "title": "T-Shirt",
+            "description": "",
+            "button_label": "",
+            "content_position": "inherit",
+            "text_alignment": "inherit",
+            "use_custom_overlay": false,
+            "overlay_color": "#000000",
+            "overlay_opacity": 25,
+            "overlay_hover_opacity": 40,
+            "use_custom_typography": false,
+            "title_font": "oswald_n4",
+            "title_size_desktop": 30,
+            "title_size_mobile": 18,
+            "title_weight": "400",
+            "title_color": "#ffffff",
+            "description_font": "oswald_n4",
+            "description_size_desktop": 16,
+            "description_size_mobile": 12,
+            "description_color": "#ffffff",
+            "button_background": "#ffffff",
+            "button_color": "#17231c",
+            "button_border": "#ffffff"
+          }
+        },
+        "acclimate": {
+          "type": "collection",
+          "settings": {
+            "external_image_url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/3_8e0d15c8-5790-43e2-add8-0d90bc14ac27.png?v=1783678906",
+            "alt_text": "Long-Sleeve collection",
+            "image_position": "inherit",
+            "collection": "long-sleeve",
+            "link": "/collections/long-sleeve",
+            "title": "Long-Sleeve",
+            "description": "",
+            "button_label": "",
+            "content_position": "inherit",
+            "text_alignment": "inherit",
+            "use_custom_overlay": false,
+            "overlay_color": "#000000",
+            "overlay_opacity": 25,
+            "overlay_hover_opacity": 40,
+            "use_custom_typography": false,
+            "title_font": "oswald_n4",
+            "title_size_desktop": 30,
+            "title_size_mobile": 18,
+            "title_weight": "400",
+            "title_color": "#ffffff",
+            "description_font": "oswald_n4",
+            "description_size_desktop": 16,
+            "description_size_mobile": 12,
+            "description_color": "#ffffff",
+            "button_background": "#ffffff",
+            "button_color": "#17231c",
+            "button_border": "#ffffff"
+          }
+        },
+        "casual": {
+          "type": "collection",
+          "settings": {
+            "external_image_url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/4_6eca0b30-3bda-412b-a41d-9521471edf01.png?v=1783678906",
+            "alt_text": "For Kid collection",
+            "image_position": "inherit",
+            "collection": "back-to-school",
+            "link": "/collections/back-to-school",
+            "title": "For Kid",
+            "description": "",
+            "button_label": "",
+            "content_position": "inherit",
+            "text_alignment": "inherit",
+            "use_custom_overlay": false,
+            "overlay_color": "#000000",
+            "overlay_opacity": 25,
+            "overlay_hover_opacity": 40,
+            "use_custom_typography": false,
+            "title_font": "oswald_n4",
+            "title_size_desktop": 30,
+            "title_size_mobile": 18,
+            "title_weight": "400",
+            "title_color": "#ffffff",
+            "description_font": "oswald_n4",
+            "description_size_desktop": 16,
+            "description_size_mobile": 12,
+            "description_color": "#ffffff",
+            "button_background": "#ffffff",
+            "button_color": "#17231c",
+            "button_border": "#ffffff"
+          }
+        },
+        "base_layers": {
+          "type": "collection",
+          "settings": {
+            "external_image_url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/1_1644edc5-76cf-418f-8f31-eaa6122d47f4.png?v=1783678906",
+            "alt_text": "Hats collection",
+            "image_position": "inherit",
+            "collection": "",
+            "link": "/collections/all?filter.p.product_type=Hat",
+            "title": "Hats",
+            "description": "",
+            "button_label": "",
+            "content_position": "inherit",
+            "text_alignment": "inherit",
+            "use_custom_overlay": false,
+            "overlay_color": "#000000",
+            "overlay_opacity": 25,
+            "overlay_hover_opacity": 40,
+            "use_custom_typography": false,
+            "title_font": "oswald_n4",
+            "title_size_desktop": 30,
+            "title_size_mobile": 18,
+            "title_weight": "400",
+            "title_color": "#ffffff",
+            "description_font": "oswald_n4",
+            "description_size_desktop": 16,
+            "description_size_mobile": 12,
+            "description_color": "#ffffff",
+            "button_background": "#ffffff",
+            "button_color": "#17231c",
+            "button_border": "#ffffff"
+          }
+        }
+      },
+      "block_order": [
+        "hunt",
+        "acclimate",
+        "casual",
+        "base_layers"
+      ],
+      "name": "Promotion image grid",
+      "settings": {
+        "section_heading": "SHOP BY CATEGORIES",
+        "use_theme_heading_style": true,
+        "section_heading_font": "oswald_n4",
+        "section_heading_color": "#2c3d33",
+        "section_heading_size_desktop": 36,
+        "section_heading_size_mobile": 26,
+        "section_heading_weight": "700",
+        "section_heading_alignment": "left",
+        "section_heading_uppercase": true,
+        "section_heading_spacing_desktop": 28,
+        "section_heading_spacing_mobile": 18,
+        "full_width": true,
+        "max_width": 2048,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "gap_desktop": 12,
+        "gap_mobile": 12,
+        "card_radius": 0,
+        "section_background": "#ffffff",
+        "image_ratio": "natural",
+        "image_position": "center center",
+        "hover_scale": 104,
+        "transition_speed": 500,
+        "overlay_style": "solid",
+        "overlay_color": "#000000",
+        "overlay_opacity": 25,
+        "overlay_hover_opacity": 40,
+        "content_behavior": "always",
+        "content_position": "center",
+        "text_alignment": "center",
+        "content_width": 85,
+        "content_padding_desktop": 24,
+        "content_padding_mobile": 12,
+        "content_gap": 10,
+        "title_color": "#ffffff",
+        "title_font": "oswald_n4",
+        "title_size_desktop": 30,
+        "title_size_mobile": 18,
+        "title_weight": "400",
+        "title_uppercase": false,
+        "title_letter_spacing": 0,
+        "description_font": "oswald_n4",
+        "description_color": "#ffffff",
+        "description_size_desktop": 16,
+        "description_size_mobile": 12,
+        "button_font": "oswald_n4",
+        "button_background": "#ffffff",
+        "button_color": "#17231c",
+        "button_border": "#ffffff",
+        "button_radius": 0,
+        "animate_on_scroll": true,
+        "animation_style": "fade_down",
+        "offset_top_desktop": 48,
+        "offset_bottom_desktop": 48,
+        "offset_top_mobile": 28,
+        "offset_bottom_mobile": 32
+      }
+    },
+    "custom_liquid_divider_2": {
+      "type": "custom-liquid",
+      "disabled": true,
+      "settings": {
+        "custom_liquid": "<div style=\"width: 100%; display: flex; justify-content: center;\"><hr style=\"border: none; height: 1px; background-color: #2c3d33; opacity: 0.3; width: 800px; max-width: 80%; margin: 0;\" /></div>",
+        "offset_top_desktop": 30,
+        "offset_bottom_desktop": 30,
+        "offset_top_mobile": 15,
+        "offset_bottom_mobile": 15
+      }
+    },
+    "custom_promo_section_ch7Hd4": {
+      "type": "custom-promo-section",
+      "blocks": {
+        "card_HrTjtR": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/deer_hunting_image.jpg",
+            "title": "Naturally worn in",
+            "text": "<p>Inspired by real American terrain, this piece reflects a connection to land shaped by seasons, weather, and work. It’s designed with a grounded feel - quiet, steady, and familiar, like places that don’t need to introduce themselves.</p>",
+            "meta_1": "",
+            "meta_2": "",
+            "link": "",
+            "custom_width": 480,
+            "custom_width_mobile": 260,
+            "card_bg_color": "",
+            "card_title_color": "",
+            "card_text_color": ""
+          }
+        },
+        "card_eHrGf7": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/duck_hunting_image.jpg",
+            "title": "Built on the ground",
+            "text": "<p>Inspired by real American terrain, this piece reflects a connection to land shaped by seasons, weather, and work. It’s designed with a grounded feel - quiet, steady, and familiar, like places that don’t need to introduce themselves.</p>",
+            "meta_1": "",
+            "meta_2": "",
+            "link": "",
+            "custom_width": 480,
+            "custom_width_mobile": 260,
+            "card_bg_color": "",
+            "card_title_color": "",
+            "card_text_color": ""
+          }
+        }
+      },
+      "block_order": [
+        "card_HrTjtR",
+        "card_eHrGf7"
+      ],
+      "disabled": true,
+      "name": "Custom Promo Banner",
+      "settings": {
+        "section_bg_image": "shopify://shop_images/background-camo_b4a4d157-3814-4e1c-a704-f0da0866d23e.jpg",
+        "section_bg_image_mobile": "shopify://shop_images/background-camo-mobile.jpg",
+        "section_bg_color": "rgba(0,0,0,0)",
+        "banner_title": "HUNTING SPIRIT APPAREL",
+        "banner_title_font": "heading",
+        "banner_title_size": 100,
+        "banner_title_color": "#ffffff",
+        "banner_text": "<p>Exclusive collection of hunting-themed T-shirts<br/></p>",
+        "banner_text_size": 16,
+        "banner_text_color": "#faf6ee",
+        "banner_btn_text": "",
+        "banner_btn_bg": "#e6a822",
+        "banner_btn_text_color": "#000000",
+        "banner_link": "",
+        "enable_arrows": true,
+        "card_width": 320,
+        "card_image_height": 220,
+        "card_padding": 24,
+        "card_bg_color": "#dfdbce",
+        "card_title_font": "heading",
+        "card_title_size": 20,
+        "card_title_color": "#2c3d33",
+        "card_text_font": "oswald",
+        "card_text_size": 14,
+        "card_text_color": "#444444",
+        "banner_title_size_mobile": 36,
+        "banner_text_size_mobile": 15,
+        "card_width_mobile": 260,
+        "card_image_height_mobile": 150,
+        "card_title_size_mobile": 18,
+        "card_text_size_mobile": 13,
+        "enable_color_scheme_inheritance": true,
+        "color_scheme": "",
+        "container_width": "inherit",
+        "offset_top_desktop": 60,
+        "offset_bottom_desktop": 60,
+        "offset_top_mobile": 15,
+        "offset_bottom_mobile": 15,
+        "inner_offset_top": 80,
+        "inner_offset_bottom": 80,
+        "inner_offset_top_mobile": 20,
+        "inner_offset_bottom_mobile": 20
+      }
+    },
+    "hunting_collections": {
+      "type": "hunting-collection-tabs",
+      "blocks": {
+        "deer": {
+          "type": "collection",
+          "settings": {
+            "collection": "deer",
+            "label": "Deer",
+            "icon": "none"
+          }
+        },
+        "turkey": {
+          "type": "collection",
+          "settings": {
+            "collection": "turkey",
+            "label": "Turkey",
+            "icon": "none"
+          }
+        },
+        "saltwater_fishing": {
+          "type": "collection",
+          "settings": {
+            "collection": "saltwater-fishing-t-shirt",
+            "label": "Saltwater Fishing",
+            "icon": "none"
+          }
+        },
+        "freshwater_fishing": {
+          "type": "collection",
+          "settings": {
+            "collection": "fishing-t-shirt",
+            "label": "Freshwater Fishing",
+            "icon": "none"
+          }
+        }
+      },
+      "block_order": [
+        "deer",
+        "turkey",
+        "saltwater_fishing",
+        "freshwater_fishing"
+      ],
+      "settings": {
+        "heading": "",
+        "button_label": "",
+        "button_url": "",
+        "offset_top_desktop": 0,
+        "offset_bottom_desktop": 20,
+        "offset_top_mobile": 0,
+        "offset_bottom_mobile": 15
+      }
+    },
+    "banner_ULEW7k": {
+      "type": "banner",
+      "name": "Banner",
+      "settings": {
+        "desktop_image_height": "600px",
+        "mobile_image_height": "350px",
+        "media_type": "image",
+        "title": "LIMITED CAST",
+        "text": "<p>The sale ends when the clock hits zero.</p>",
+        "button_label_1": "",
+        "button_link_1": "",
+        "button_aria_label_1": "",
+        "button_label_2": "",
+        "button_link_2": "",
+        "button_aria_label_2": "",
+        "banner_link": "",
+        "image_desktop": "shopify://shop_images/banner-cowntdown1.jpg",
+        "image_mobile": "shopify://shop_images/banner-cowntdown-mobile.jpg",
+        "show_breadcrumbs": false,
+        "enable_timer": true,
+        "evergreen_timer": true,
+        "evergreen_reset_hour": 7,
+        "timer_label_days": "DAYS",
+        "timer_label_hours": "HOURS",
+        "timer_label_minutes": "MINUTES",
+        "timer_label_seconds": "SECONDS",
+        "timer_month": "3",
+        "timer_day": "1",
+        "timer_hour": "0",
+        "timer_timezone": "+0",
+        "timer_background": "rgba(255,255,255, 0.12)",
+        "timer_color": "#ffffff",
+        "external_video_url_desktop": "",
+        "external_video_url_mobile": "",
+        "content_alignment": "center",
+        "content_alignment_mobile": "center",
+        "block_alignment": "center",
+        "block_alignment_vertical": "center",
+        "block_alignment_vertical_mob": "center",
+        "custom_margin_left": 50,
+        "custom_margin_right": 5,
+        "custom_width": 45,
+        "custom_font_size": 22,
+        "section_background": "#e7e7e7",
+        "overlay": "rgba(0,0,0, 0.3)",
+        "text_color": "#ffffff",
+        "button_background_1": "#ffffff",
+        "button_color_1": "#000000",
+        "button_border_1": "#ffffff",
+        "button_background_hover_1": "#000000",
+        "button_color_hover_1": "#ffffff",
+        "button_border_hover_1": "#ffffff",
+        "button_background_2": "#ffffff",
+        "button_color_2": "#000000",
+        "button_border_2": "#ffffff",
+        "button_background_hover_2": "#000000",
+        "button_color_hover_2": "#ffffff",
+        "button_border_hover_2": "#ffffff",
+        "container_width": "100%",
+        "offset_top_desktop": 25,
+        "offset_bottom_desktop": 25,
+        "offset_top_mobile": 25,
+        "offset_bottom_mobile": 25
+      }
+    },
+    "featured_products_ENKafe": {
+      "type": "featured-products",
+      "settings": {
+        "enable_color_scheme_inheritance": true,
+        "color_scheme": "",
+        "heading": "ANGLERS ALSO BOUGHT",
+        "link_label": "Shop Freshwater Fishing",
+        "link_url": "https://camosignal.com/collections/national-park",
+        "product_list": [
+          "trout-trifecta-t-shirt",
+          "heavy-hitters-big-bass-t-shirt",
+          "big-bass-challenge-t-shirt",
+          "trophy-largemouth-bass-fishing-t-shirt"
+        ],
+        "collection": "",
+        "layout": "4",
+        "show_arrows": true,
+        "container_width": "2048px",
+        "offset_top_desktop": 30,
+        "offset_bottom_desktop": 0,
+        "offset_top_mobile": 0,
+        "offset_bottom_mobile": 0,
+        "inner_offset_top": 30,
+        "inner_offset_bottom": 0,
+        "inner_offset_top_mobile": 0,
+        "inner_offset_bottom_mobile": 0
+      }
+    },
+    "17755869487c283f8c": {
+      "type": "apps",
+      "disabled": true,
+      "blocks": {
+        "judge_me_reviews_cards_carousel_eYQzDQ": {
+          "type": "shopify://apps/judge-me-reviews/blocks/cards_carousel/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "show_sample_reviews": false,
+            "reviews_selection": "all",
+            "products": [],
+            "star_rating": "all",
+            "show_review_media": true,
+            "display_order": "media_first",
+            "no_image_fallback": "review_text_only",
+            "max_reviews": 20,
+            "review_length": "medium",
+            "text_size": "medium",
+            "image_ratio": "1",
+            "reviews_shown": 4,
+            "show_reviewer_name": true,
+            "show_product_name": true,
+            "hide_arrows_mobile": false,
+            "arrows_position": "sides",
+            "max_width": 1100,
+            "corner_styling": "soft",
+            "header_text_color": "#2c3d33",
+            "text_color": "#2c3d33",
+            "card_color": "#f9f9f9",
+            "stars_color": "",
+            "arrows_color": "#2c3d33",
+            "transition_speed": 5,
+            "header_text": "Customers are saying",
+            "show_average_rating": true,
+            "rating_display": "default"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_cards_carousel_eYQzDQ"
+      ],
+      "settings": {
+        "container_width": "inherit",
+        "offset_top_desktop": 25,
+        "offset_bottom_desktop": 25,
+        "offset_top_mobile": 25,
+        "offset_bottom_mobile": 0
+      }
+    }
+  },
+  "order": [
+    "camo_hero_slider_ELY97M",
+    "dual_promo_banners",
+    "banner_HXA8gf",
+    "177503541480b98d44",
+    "177493990334c4d3df",
+    "custom_liquid_divider",
+    "best_seller_products_4kf6hh",
+    "featured_products",
+    "featured_products_jAK3WU",
+    "promotion_image_grid",
+    "custom_liquid_divider_2",
+    "custom_promo_section_ch7Hd4",
+    "hunting_collections",
+    "banner_ULEW7k",
+    "featured_products_ENKafe",
+    "17755869487c283f8c"
+  ]
+}

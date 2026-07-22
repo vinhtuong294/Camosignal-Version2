@@ -1,0 +1,73 @@
+{% comment %}
+	------------------------------------------------------------------------------
+	Snippet: Cart discount
+	Render discount form for cart
+
+	Usage:
+	{%- render 'cart-discount' -%}
+	------------------------------------------------------------------------------
+{% endcomment %}
+
+{%- if show_discount_form -%}
+	{% liquid
+		assign discount_codes = cart.cart_level_discount_applications | where: 'type', 'discount_code' | map: 'title'
+		for item in cart.items
+			for allocation in item.line_level_discount_allocations
+				if allocation.discount_application.type == 'discount_code'
+					assign discount_codes = item.line_level_discount_allocations | slice: forloop.index0 | map: 'discount_application' | map: 'title' | concat: discount_codes
+				endif
+			endfor
+		endfor
+
+		assign discount_codes = discount_codes | uniq
+	%}
+
+	<div class="js-cart-discount-block cart-discount" style="margin-bottom: 0;">
+		<form class="cart-discount__discount-form js-cart-discount-form" novalidate style="display: flex; gap: 8px;">
+			<div class="input-wrapper cart-discount__discount-form-input-wrapper" style="flex: 1; margin: 0; display: flex;">
+				<label class="visually-hidden" for="cart-discount">
+					{{- "cart.general.discount" | t -}}
+				</label>
+
+				<style>
+					.cart-discount__discount-form-input::placeholder {
+						font-family: 'Oswald', sans-serif !important;
+						text-transform: uppercase;
+						letter-spacing: 0.5px;
+					}
+				</style>
+				<input
+					class="input cart-discount__discount-form-input"
+					type="text"
+					id="cart-discount"
+					name="discount"
+					placeholder="DISCOUNT CODE"
+					style="height: 44px !important; min-height: 44px !important; padding: 0 12px; width: 100%; border: 1px solid #e0dcd2; border-radius: 4px; background: transparent; font-size: 14px; box-sizing: border-box !important; margin: 0; font-family: 'Oswald', sans-serif !important; text-transform: uppercase; letter-spacing: 0.5px;"
+				/>
+			</div>
+
+			<button class="button button--secondary cart-discount__discount-form-button js-cart-discount-apply-button" style="height: 44px !important; min-height: 44px !important; border-radius: 4px !important; font-family: 'Oswald', sans-serif !important; text-transform: uppercase; font-weight: 600; padding: 0 24px; letter-spacing: 0.5px; box-sizing: border-box !important; margin: 0; display: flex; align-items: center; justify-content: center; background-color: #324335 !important; border-color: #324335 !important; color: #ffffff !important;">
+				APPLY
+			</button>
+		</form>
+
+		<div
+			class="cart-discount__discount-form-error js-cart-discount-error is-hidden"
+			role="alert"
+		>
+			<span class="cart-discount__discount-form-error-icon-wrapper">
+				{% render 'icons', icon: 'error' %}
+			</span>
+
+			<span class="cart-discount__discount-form-error-text js-cart-discount-error-code is-hidden">
+				{{ 'cart.general.discount_code_error' | t }}
+			</span>
+
+			<small class="cart-discount__discount-form-error-text js-cart-discount-error-shipping is-hidden">
+				{{ 'cart.general.shipping_discount_error' | t }}
+			</small>
+		</div>
+
+
+	</div>
+{%- endif -%}

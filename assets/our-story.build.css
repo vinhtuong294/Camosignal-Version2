@@ -1,0 +1,98 @@
+.our-story {
+  background-color: var(--color-background);
+  padding-top: var(--inner-offset-top-mobile);
+  padding-bottom: var(--inner-offset-bottom-mobile);
+}
+.our-story .our-story__content {
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: var(--content-align, start);
+  max-width: 720px;
+  width: 100%;
+  position: sticky;
+  top: 41%;
+  margin: 0 auto 40px;
+  text-align: var(--text-align, start);
+  color: var(--color-text-primary);
+  z-index: 1;
+  transition-delay: var(--timing-long);
+}
+.our-story .our-story__button {
+  width: max-content;
+}
+.our-story .our-story__wrapper {
+  margin-top: 55px;
+}
+.our-story .our-story__item {
+  max-width: 106px;
+  transition-property: transform;
+  transition-duration: var(--animate-time);
+}
+.our-story .our-story__item + .our-story__item {
+  margin-top: 350px;
+}
+.our-story .our-story__item:nth-child(2n+1) {
+  margin-inline-start: auto;
+}
+.our-story .our-story__item-inner {
+  position: relative;
+  padding-top: 140.56%;
+}
+.our-story .our-story__item-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--img-pos);
+}
+.our-story .our-story__item-image.our-story__item-image--placeholder {
+  background-color: var(--color-img-placeholder-bg);
+  fill: var(--color-text-primary);
+}
+.our-story .our-story__content.need-animate {
+  opacity: 0;
+  transform: translateY(var(--animate-section-translateY)) scale(var(--animate-section-scale));
+}
+.our-story.animated .our-story__content.need-animate {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition-property: opacity, transform;
+  transition-duration: var(--animate-time);
+  transition-timing-function: var(--cubic-timing-section);
+}
+html.no-js .our-story .our-story__content.need-animate {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+@media (min-width: 576px) {
+  .our-story .our-story__item {
+    max-width: 200px;
+  }
+  .our-story .our-story__item + .our-story__item {
+    margin-top: 70px;
+  }
+}
+@media (min-width: 768px) {
+  .our-story {
+    padding-top: var(--inner-offset-top);
+    padding-bottom: var(--inner-offset-bottom);
+  }
+  .our-story .our-story__content {
+    margin-bottom: 100px;
+  }
+}
+@media (min-width: 992px) {
+  .our-story .our-story__wrapper {
+    margin-top: 74px;
+  }
+  .our-story .our-story__item {
+    max-width: 340px;
+  }
+  .our-story .our-story__item-inner {
+    padding-top: 141.17%;
+  }
+}

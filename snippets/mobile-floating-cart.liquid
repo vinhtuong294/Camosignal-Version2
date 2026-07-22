@@ -1,0 +1,421 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+  Snippet: Mobile Floating Cart Button
+  A fixed, draggable cart icon on mobile.
+  Optimized for thumb reach while scrolling.
+  Shows item count badge when cart has items.
+  Hides when header cart icon is visible (top of page).
+  Users can drag the button to reposition it.
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign cart_type = settings.cart_type -%}
+
+<div class="mobile-floating-cart js-mobile-floating-cart" aria-label="Cart">
+	{%- if cart_type == "drawer" and template != "cart" -%}
+		<button
+			type="button"
+			class="mobile-floating-cart__button js-header-cart-toggler"
+			data-target="CartDrawer"
+			data-js-toggle="CartDrawer"
+			aria-expanded="false"
+			aria-controls="CartDrawer"
+			aria-label="{{ 'layout.header.labels.cart_drawer' | t | escape }}"
+		>
+			<span class="mobile-floating-cart__icon">
+				{%- render 'icons', icon: 'cart' -%}
+			</span>
+
+			<span
+				class="mobile-floating-cart__count js-mobile-floating-cart-count"
+				data-cart-count="{{ cart.item_count }}"
+			>
+				<span class="js-header-cart-item-count">
+					{%- if cart.item_count > 99 -%}
+						99+
+					{%- else -%}
+						{{- cart.item_count -}}
+					{%- endif -%}
+				</span>
+			</span>
+		</button>
+	{%- else -%}
+		<a
+			href="{{ routes.cart_url }}"
+			class="mobile-floating-cart__button"
+			aria-label="{{ 'layout.header.labels.cart' | t | escape }}"
+		>
+			<span class="mobile-floating-cart__icon">
+				{%- render 'icons', icon: 'cart' -%}
+			</span>
+
+			<span
+				class="mobile-floating-cart__count"
+				data-cart-count="{{ cart.item_count }}"
+			>
+				<span class="js-header-cart-item-count">
+					{%- if cart.item_count > 99 -%}
+						99+
+					{%- else -%}
+						{{- cart.item_count -}}
+					{%- endif -%}
+				</span>
+			</span>
+		</a>
+	{%- endif -%}
+</div>
+
+<style>
+	/* ================================================
+	   MOBILE FLOATING CART BUTTON
+	   Fixed, draggable, thumb-optimized
+	   ================================================ */
+	.mobile-floating-cart {
+		display: none;
+	}
+
+	@media (max-width: 1199px) {
+		.mobile-floating-cart {
+			display: block;
+			position: fixed;
+			right: 16px;
+			bottom: 96px;
+			z-index: 18;
+			opacity: 0;
+			visibility: hidden;
+			touch-action: none;
+			user-select: none;
+			-webkit-user-select: none;
+			transition: opacity 0.22s ease, visibility 0.22s ease, transform 0.22s ease;
+			transform: translateY(8px);
+		}
+
+		.mobile-floating-cart.is-visible {
+			opacity: 1;
+			visibility: visible;
+			transform: translateY(0);
+		}
+
+		/* When being dragged, disable transitions so movement is instant */
+		.mobile-floating-cart.is-dragging {
+			transition: none !important;
+		}
+
+		/* Snap animation after drag release */
+		.mobile-floating-cart.is-snapping {
+			transition: right 0.25s ease, left 0.25s ease !important;
+		}
+
+		.mobile-floating-cart__button {
+			-webkit-appearance: none;
+			appearance: none;
+			box-sizing: border-box;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			position: relative;
+			width: 56px;
+			height: 56px;
+			padding: 0;
+			border: 2px solid rgba(255, 255, 255, 0.92);
+			border-radius: 50%;
+			background: #2c3d33;
+			color: #ffffff;
+			cursor: grab;
+			box-shadow: 0 12px 28px rgba(17, 29, 22, 0.3), 0 0 0 4px rgba(44, 61, 51, 0.16);
+			backdrop-filter: blur(8px);
+			-webkit-backdrop-filter: blur(8px);
+			text-decoration: none;
+			-webkit-tap-highlight-color: transparent;
+			transition: transform 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease, border-color 0.16s ease;
+		}
+
+		.mobile-floating-cart.is-dragging .mobile-floating-cart__button {
+			cursor: grabbing;
+			transform: scale(1.08);
+			box-shadow: 0 16px 36px rgba(17, 29, 22, 0.32), 0 0 0 5px rgba(44, 61, 51, 0.16);
+		}
+
+		.mobile-floating-cart__button:active {
+			transform: scale(0.94);
+		}
+
+		.mobile-floating-cart__button:focus-visible {
+			outline: 2px solid #ffffff;
+			outline-offset: 3px;
+		}
+
+		@media (-moz-touch-enabled: 0), (hover: hover), (pointer: fine) {
+			.mobile-floating-cart__button:hover {
+				background: #24342b;
+				border-color: #ffffff;
+				box-shadow: 0 16px 34px rgba(17, 29, 22, 0.36), 0 0 0 5px rgba(44, 61, 51, 0.2);
+				transform: translateY(-1px);
+			}
+		}
+
+		.mobile-floating-cart__icon {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 25px;
+			height: 25px;
+			flex-shrink: 0;
+			pointer-events: none;
+		}
+
+		.mobile-floating-cart__icon .icon {
+			width: 25px;
+			height: 25px;
+		}
+
+		.mobile-floating-cart__count {
+			position: absolute;
+			top: -7px;
+			right: -7px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			min-width: 22px;
+			height: 22px;
+			padding: 0 6px;
+			border-radius: 999px;
+			background-color: #17261e;
+			color: #ffffff;
+			font-size: 11px;
+			font-weight: 700;
+			line-height: 1;
+			border: 2px solid #ffffff;
+			box-shadow: 0 4px 10px rgba(17, 29, 22, 0.22);
+			pointer-events: none;
+		}
+
+		/* Hide badge when cart is empty */
+		.mobile-floating-cart__count[data-cart-count="0"] {
+			display: none;
+		}
+
+		@media (max-width: 767px) {
+			.mobile-floating-cart {
+				right: 16px;
+				bottom: 88px;
+			}
+
+			.mobile-floating-cart__button {
+				width: 56px;
+				height: 56px;
+			}
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			.mobile-floating-cart,
+			.mobile-floating-cart__button {
+				transition: none;
+			}
+		}
+	}
+
+	/* Ensure it doesn't show on desktop */
+	@media (min-width: 1200px) {
+		.mobile-floating-cart {
+			display: none !important;
+		}
+	}
+</style>
+
+<script>
+	(function() {
+		var el = document.querySelector('.js-mobile-floating-cart');
+		if (!el) return;
+
+		/* ---- Scroll show/hide ---- */
+		var showThreshold = 40;
+		var ticking = false;
+		var lastScrollAt = 0;
+		var countBadge = el.querySelector('[data-cart-count]');
+		var currentCount = countBadge ? parseInt(countBadge.getAttribute('data-cart-count'), 10) || 0 : 0;
+
+		function updateVisibility() {
+			if (currentCount > 0 || window.scrollY > showThreshold) {
+				el.classList.add('is-visible');
+			} else {
+				el.classList.remove('is-visible');
+			}
+			ticking = false;
+		}
+
+		window.addEventListener('scroll', function() {
+			lastScrollAt = Date.now();
+			if (!ticking) {
+				window.requestAnimationFrame(updateVisibility);
+				ticking = true;
+			}
+		}, { passive: true });
+
+		updateVisibility();
+
+		/* ---- Drag & Drop (touch) ---- */
+		var isDragging = false;
+		var wasDragged = false;
+		var startX = 0;
+		var startY = 0;
+		var startRight = 0;
+		var startBottom = 0;
+		var dragThreshold = 8; /* px movement before considered a drag */
+		var margin = 16; /* align with the bottom-right chat button */
+
+		/* ---- Accidental-open guard ----
+		   The button sits in the thumb zone and appears the moment you scroll,
+		   so a stray touch while browsing must NOT open the cart. We only open
+		   on a deliberate, clean tap: little movement, short press, and not
+		   immediately after the page was scrolling. */
+		var touchStartTime = 0;
+		var touchMaxMove = 0;
+		var allowTapOpen = false;
+		var TAP_MOVE_MAX = 10;     /* px — more movement means scroll/drag, not a tap */
+		var TAP_TIME_MAX = 600;    /* ms — longer press is not a quick tap */
+		var SCROLL_GUARD_MS = 450; /* ms — ignore taps landing right after a page scroll */
+
+		el.addEventListener('touchstart', function(e) {
+			var touch = e.touches[0];
+			startX = touch.clientX;
+			startY = touch.clientY;
+			wasDragged = false;
+			touchStartTime = Date.now();
+			touchMaxMove = 0;
+			allowTapOpen = false;
+
+			var rect = el.getBoundingClientRect();
+			startRight = window.innerWidth - rect.right;
+			startBottom = window.innerHeight - rect.bottom;
+		}, { passive: true });
+
+		el.addEventListener('touchmove', function(e) {
+			var touch = e.touches[0];
+			var dx = touch.clientX - startX;
+			var dy = touch.clientY - startY;
+
+			var dist = Math.sqrt(dx * dx + dy * dy);
+			if (dist > touchMaxMove) touchMaxMove = dist;
+
+			/* Only start drag after exceeding threshold */
+			if (!isDragging && (Math.abs(dx) > dragThreshold || Math.abs(dy) > dragThreshold)) {
+				isDragging = true;
+				wasDragged = true;
+				el.classList.add('is-dragging');
+			}
+
+			if (isDragging) {
+				e.preventDefault();
+
+				var newRight = startRight - dx;
+				var newBottom = startBottom - dy;
+
+				/* Clamp within viewport */
+				var maxRight = window.innerWidth - el.offsetWidth - margin;
+				var maxBottom = window.innerHeight - el.offsetHeight - margin;
+
+				newRight = Math.max(margin, Math.min(newRight, maxRight));
+				newBottom = Math.max(margin, Math.min(newBottom, maxBottom));
+
+				el.style.right = newRight + 'px';
+				el.style.bottom = newBottom + 'px';
+				el.style.left = 'auto';
+			}
+		}, { passive: false });
+
+		el.addEventListener('touchend', function(e) {
+			if (isDragging) {
+				isDragging = false;
+				el.classList.remove('is-dragging');
+
+				/* Snap to nearest horizontal edge */
+				var rect = el.getBoundingClientRect();
+				var centerX = rect.left + rect.width / 2;
+				var screenMid = window.innerWidth / 2;
+
+				el.classList.add('is-snapping');
+
+				if (centerX < screenMid) {
+					/* Snap to left */
+					el.style.right = 'auto';
+					el.style.left = margin + 'px';
+				} else {
+					/* Snap to right */
+					el.style.left = 'auto';
+					el.style.right = margin + 'px';
+				}
+
+				setTimeout(function() {
+					el.classList.remove('is-snapping');
+				}, 300);
+			}
+
+			/* Decide whether this gesture was a deliberate tap that may open the
+			   cart. Drags, long presses, or taps that land while the page is
+			   still scrolling are treated as accidental and vetoed below. */
+			var duration = Date.now() - touchStartTime;
+			var scrolledRecently = (Date.now() - lastScrollAt) < SCROLL_GUARD_MS;
+			allowTapOpen = !wasDragged
+				&& touchMaxMove <= TAP_MOVE_MAX
+				&& duration <= TAP_TIME_MAX
+				&& !scrolledRecently;
+
+			if (wasDragged) {
+				e.preventDefault();
+			}
+		}, { passive: false });
+
+		/* Mouse clicks can't "scroll-tap" by accident, so always treat them as
+		   deliberate (e.g. a desktop window narrowed below the mobile breakpoint). */
+		el.addEventListener('pointerdown', function(e) {
+			if (e.pointerType === 'mouse') {
+				allowTapOpen = true;
+			}
+		}, true);
+
+		/* Capture-phase gate on the wrapper runs BEFORE the theme's bubble-phase
+		   toggle handler on the button, so it reliably vetoes accidental opens
+		   regardless of listener registration order. */
+		el.addEventListener('click', function(ev) {
+			/* Keyboard / programmatic activation (detail === 0) is always allowed. */
+			if (ev.detail === 0) return;
+			if (!allowTapOpen) {
+				ev.preventDefault();
+				ev.stopImmediatePropagation();
+			}
+			allowTapOpen = false;
+		}, true);
+
+		/* ---- Live cart count update ---- */
+		function updateFloatingCartCount(data) {
+			if (!data || !data.hasOwnProperty('item_count')) return;
+
+			currentCount = parseInt(data.item_count, 10) || 0;
+
+			var countBadges = el.querySelectorAll('[data-cart-count]');
+			var countTexts = el.querySelectorAll('.js-header-cart-item-count');
+
+			countBadges.forEach(function(badge) {
+				badge.setAttribute('data-cart-count', currentCount);
+			});
+
+			countTexts.forEach(function(txt) {
+				txt.innerHTML = currentCount > 99 ? '99+' : currentCount;
+			});
+
+			updateVisibility();
+		}
+
+		/* Wait for theme EventBus to be ready, then listen */
+		function listenForCartUpdates() {
+			if (window.themeCore && window.themeCore.EventBus) {
+				window.themeCore.EventBus.listen(['cart:updated', 'header:update-item-count'], updateFloatingCartCount);
+			} else {
+				/* Retry until EventBus is available */
+				setTimeout(listenForCartUpdates, 500);
+			}
+		}
+		listenForCartUpdates();
+	})();
+</script>

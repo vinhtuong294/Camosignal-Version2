@@ -1,0 +1,372 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Featured blog
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/featured-blog.scss' -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign color_scheme      	           	= section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance 	= section.settings.enable_color_scheme_inheritance -%}
+{%- assign blog 							= section.settings.blog | default: blog -%}
+{%- assign heading 							= section.settings.heading -%}
+{%- assign link_url 						= section.settings.link_url -%}
+{%- assign link_text 						= section.settings.link_text -%}
+{%- assign link_aria_label_text 			= section.settings.link_aria_label_text -%}
+{%- assign button_style 					= section.settings.button_style -%}
+{%- assign container 						= section.settings.container_width -%}
+
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- capture section_styles -%}
+	--inner-offset-top: {{ section.settings.inner_offset_top }}px; {{-  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom }}px; {{-  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px; {{-  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px; {{-  -}}
+	--container-width: {{ container_width }}; {{-  -}}
+{%- endcapture -%}
+
+<section class="featured-blog need-animate color-{{ color_scheme }} js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}"
+		 id="{{- section.id -}}" style="{{ section_styles }}"
+>
+	<div class="container">
+		{%- if heading != blank -%}
+			<h2 class="featured-blog__title">
+				{{- heading -}}
+			</h2>
+		{%- endif -%}
+
+		<div class="featured-blog__row {% if blog.articles.size == 1 %}featured-blog__row--center{% endif %}">
+			<div class="featured-blog__col featured-blog__col--big">
+				{%- if blog.articles.size > 0 -%}
+					{%- if section.index == 1 -%}
+						{%- assign remove_lazy_big_post = true -%}
+					{%- endif -%}
+
+					{%- render 'article-card-overlay', article: blog.articles[0], remove_lazy: remove_lazy_big_post -%}
+				{%- else -%}
+					{%- render 'article-card-overlay', article: blank -%}
+				{%- endif -%}
+			</div>
+
+			<div class="featured-blog__col featured-blog__col--small {% if blog.articles.size == 1 %}is-hidden{% endif %}">
+				{%- if blog.articles.size > 0 -%}
+					<div class="featured-blog__grid">
+						{%- for article in blog.articles limit: 6 offset: 1 -%}
+							{%- assign aspect_ratio     = '86.48%' -%}
+
+							{%- assign size_width_420 	= 120 -%}
+							{%- assign size_height_420 	= 100 -%}
+							{%- assign size_width_575 	= 136 -%}
+							{%- assign size_height_575 	= 114 -%}
+							{%- assign size_width_767 	= 184 -%}
+							{%- assign size_height_767 	= 154 -%}
+							{%- assign size_width_991 	= 240 -%}
+							{%- assign size_height_991 	= 200 -%}
+							{%- assign size_width_1199 	= 274 -%}
+							{%- assign size_height_1199 = 237 -%}
+							{%- assign size_width_1500 	= 325 -%}
+							{%- assign size_height_1500 = 282 -%}
+							{%- assign size_width 		= 430 -%}
+							{%- assign size_height 		= 372 -%}
+
+							{%- case forloop.index -%}
+								{%- when 2 -%}
+									{%- assign aspect_ratio = '132.43%' -%}
+
+									{%- assign size_height_1199 = 363 -%}
+									{%- assign size_height_1500 = 431 -%}
+									{%- assign size_height 		= 570 -%}
+								{%- when 4 -%}
+									{% assign aspect_ratio = '123.24%' -%}
+
+									{%- assign size_height_1199 = 338 -%}
+									{%- assign size_height_1500 = 401 -%}
+									{%- assign size_height 		= 530 -%}
+							{%- endcase -%}
+
+							<div class="featured-blog__grid-col">
+								{%- render 'article-card',
+									article: article,
+									aspect_ratio: aspect_ratio,
+									size_width_420: size_width_420,
+									size_height_420: size_height_420,
+									size_width_575: size_width_575,
+									size_height_575: size_height_575,
+									size_width_767: size_width_767,
+									size_height_767: size_height_767,
+									size_width_991: size_width_991,
+									size_height_991: size_height_991,
+									size_width_1199: size_width_1199,
+									size_height_1199: size_height_1199,
+									size_width_1500: size_width_1500,
+									size_height_1500: size_height_1500,
+									size_width: size_width,
+									size_height: size_height,
+									classes: 'article-card--horizontal-mobile'
+								-%}
+							</div>
+						{%- endfor -%}
+					</div>
+				{%- else -%}
+					<div class="featured-blog__grid">
+						{%- for i in (1..6) -%}
+							{%- assign aspect_ratio     = '86.48%' -%}
+
+							{%- case forloop.index -%}
+								{%- when 2 -%}
+									{%- assign aspect_ratio = '132.43%' -%}
+								{%- when 4 -%}
+									{%- assign aspect_ratio = '123.24%' -%}
+							{%- endcase -%}
+
+							<div class="featured-blog__grid-col">
+								{%- render 'article-card',
+									article: blank,
+									aspect_ratio: aspect_ratio,
+									classes: 'article-card--horizontal-mobile'
+								-%}
+							</div>
+						{%- endfor -%}
+					</div>
+				{%- endif -%}
+			</div>
+		</div>
+
+		{%- if link_text != blank -%}
+			<div class="featured-blog__link-wrapper js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}">
+				<a
+					class="focus-visible-outline button button--{{- button_style }} featured-blog__link"
+					href="{{- blog.url -}}"
+					{% if link_aria_label_text != blank %}
+						aria-label="{{- link_aria_label_text | escape -}}"
+					{% endif %}
+				>
+					{{- link_text -}}
+				</a>
+			</div>
+		{%- endif -%}
+	</div>
+</section>
+
+{%- schema -%}
+{
+	"name": "Blog posts",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "General"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "heading",
+			"label": "Heading",
+			"default": "Blog posts"
+		},
+		{
+			"type": "blog",
+			"id": "blog",
+			"label": "Blog",
+			"info": "Will display the last 7 posts of the selected blog."
+		},
+		{
+			"type": "text",
+			"id": "link_text",
+			"label": "Button label",
+			"default": "See all"
+		},
+		{
+			"type": "text",
+			"id": "link_aria_label_text",
+			"label": "Button aria-label",
+			"info": "Need for good accessibility, e.g. 'All news about sports'."
+		},
+		{
+			"type": "select",
+			"id": "button_style",
+			"label": "Button style",
+			"options": [
+				{
+					"value": "primary",
+					"label": "Primary"
+				},
+				{
+					"value": "secondary",
+					"label": "Secondary"
+				}
+			],
+			"default": "primary"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1808px",
+					"label": "Default - 1680px"
+				},
+				{
+					"value": "2048px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset top",
+			"default": 60
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset bottom",
+			"default": 60
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset top",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset bottom",
+			"default": 30
+		},
+		{
+			"type": "paragraph",
+			"content": "Internal offsets"
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset top",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset bottom",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset top",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset bottom",
+			"default": 30
+		}
+	],
+	"presets": [
+		{
+			"name": "Blog posts",
+			"settings": {
+				"heading": "Heading",
+				"link_text": "Link text",
+				"link_aria_label_text": "Link to blog"
+			}
+		}
+	]
+}
+{%- endschema -%}
+

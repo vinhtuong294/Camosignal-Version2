@@ -1,0 +1,752 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Hunting Collections
+	Tabbed product display with animal icons for Deer, Turkey, Waterfowl, Fishing
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{ section.settings.offset_top_mobile }}px;
+		padding-bottom: {{ section.settings.offset_bottom_mobile }}px;
+	}
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{ section.settings.offset_top_desktop }}px;
+			padding-bottom: {{ section.settings.offset_bottom_desktop }}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign heading = section.settings.heading -%}
+{%- assign button_label = section.settings.button_label -%}
+{%- assign button_url = section.settings.button_url -%}
+
+<section class="hunting-collections" id="hunting-{{ section.id }}">
+	<div class="hunting-collections__container">
+		{%- if heading != blank -%}
+			<h2 class="hunting-collections__heading">{{ heading }}</h2>
+		{%- endif -%}
+
+		<!-- Category Tabs -->
+		{%- assign group_keys = 'hunting,fishing' | split: ',' -%}
+		{%- assign group_titles = 'Hunting,Fishing' | split: ',' -%}
+		<div class="hunting-collections__groups" role="tablist" aria-label="Hunting and fishing collections">
+			{%- for group_key in group_keys -%}
+				<div class="hunting-collections__group" role="presentation">
+					<h3 class="hunting-collections__group-heading"><span>{{ group_titles[forloop.index0] }}</span></h3>
+					<div class="hunting-collections__tabs" role="presentation">
+						{%- for block in section.blocks -%}
+							{%- assign tab_col = block.settings.collection -%}
+							{%- assign handle = tab_col.handle | default: block.id -%}
+							{%- assign block_group = 'hunting' -%}
+							{%- if handle == 'saltwater-fishing-t-shirt' or handle == 'fishing-t-shirt' -%}
+								{%- assign block_group = 'fishing' -%}
+							{%- endif -%}
+							{%- if block_group == group_key -%}
+								{%- assign label = block.settings.label | default: tab_col.title | default: 'Collection' -%}
+								{%- assign is_active = false -%}
+								{%- if group_key == 'hunting' and forloop.first -%}
+									{%- assign is_active = true -%}
+								{%- endif -%}
+								<button
+									class="hunting-collections__tab{% if is_active %} is-active{% endif %}"
+									role="tab"
+									aria-selected="{% if is_active %}true{% else %}false{% endif %}"
+									data-hunting-tab="{{ handle }}"
+									id="hunting-tab-{{ handle }}-{{ section.id }}"
+									aria-controls="hunting-panel-{{ handle }}-{{ section.id }}"
+									type="button"
+									{{ block.shopify_attributes }}
+								>
+									<span class="hunting-collections__tab-icon">
+										{%- if block.settings.icon == 'none' and tab_col.image != blank -%}
+											<img
+												src="{{ tab_col.image | image_url: width: 120 }}"
+												alt="{{ label }}"
+												class="hunting-collections__tab-img"
+												loading="lazy"
+												width="60"
+												height="60"
+											>
+										{%- endif -%}
+									</span>
+									<span class="hunting-collections__tab-label">{{ label }}</span>
+								</button>
+							{%- endif -%}
+						{%- endfor -%}
+					</div>
+				</div>
+			{%- endfor -%}
+		</div>
+
+		<!-- Product Panels -->
+		<div class="hunting-collections__panels">
+			{%- for block in section.blocks -%}
+				{%- assign col = block.settings.collection -%}
+				{%- assign label = block.settings.label | default: col.title | default: 'Collection' -%}
+				{%- assign handle = col.handle | default: block.id -%}
+				<div
+					class="hunting-collections__panel{% if forloop.first %} is-active{% endif %}"
+					role="tabpanel"
+					id="hunting-panel-{{ handle }}-{{ section.id }}"
+					aria-labelledby="hunting-tab-{{ handle }}-{{ section.id }}"
+					data-hunting-panel="{{ handle }}"
+					{% unless forloop.first %}hidden{% endunless %}
+				>
+					{%- if col != blank and col.products_count > 0 -%}
+						<div class="hunting-collections__grid">
+							{%- for product in col.products limit: 4 -%}
+								<div class="hunting-collections__product-col">
+									{%- render 'product-card',
+										product: product,
+										size: 439,
+										tablet_size: 328,
+										mobile_size: 308,
+										is_lazy: true
+									-%}
+								</div>
+							{%- endfor -%}
+						</div>
+					{%- else -%}
+						<div class="hunting-collections__empty">
+							<span class="hunting-collections__empty-icon">
+								<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+							</span>
+							<p class="hunting-collections__empty-title">Coming Soon</p>
+							<p class="hunting-collections__empty-subtitle">{{ label }} products are on the way. Stay tuned!</p>
+						</div>
+					{%- endif -%}
+
+					{%- if col != blank and col.products_count > 0 -%}
+						<div class="hunting-collections__view-all">
+							<a href="{{ col.url }}" class="hunting-collections__view-all-btn">
+								Shop All {{ label }}
+								<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+							</a>
+						</div>
+					{%- endif -%}
+				</div>
+			{%- endfor -%}
+		</div>
+
+		{%- if button_label != blank and button_url != blank -%}
+			<div class="hunting-collections__cta">
+				<a href="{{ button_url }}" class="hunting-collections__cta-btn">{{ button_label }}</a>
+			</div>
+		{%- endif -%}
+	</div>
+</section>
+
+<style>
+/* ============================================
+   HUNTING COLLECTIONS SECTION
+   ============================================ */
+.hunting-collections {
+	width: 100%;
+}
+.hunting-collections__container {
+	max-width: 2048px;
+	margin: 0 auto;
+	padding: 0 64px;
+}
+
+/* Heading */
+.hunting-collections__heading {
+	font-family: 'Oswald', sans-serif;
+	font-weight: 700;
+	font-size: 32px;
+	text-transform: uppercase;
+	letter-spacing: 3px;
+	color: #2c3d33;
+	text-align: center;
+	margin: 0 0 40px 0;
+}
+
+/* ── Tabs ── */
+.hunting-collections__groups {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 0;
+	width: 100%;
+	max-width: 900px;
+	margin: 0 auto 28px;
+	padding-bottom: 8px;
+	position: relative;
+}
+.hunting-collections__groups::before {
+	content: '';
+	position: absolute;
+	top: 12px;
+	left: 0;
+	right: 0;
+	height: 1px;
+	background: rgba(44, 61, 51, 0.2);
+	pointer-events: none;
+}
+
+.hunting-collections__group {
+	min-width: 0;
+}
+
+.hunting-collections__group-heading {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0 0 14px;
+	font-family: 'Oswald', sans-serif;
+	font-size: 20px;
+	font-weight: 700;
+	line-height: 1.2;
+	letter-spacing: 4px;
+	text-align: center;
+	text-transform: uppercase;
+	color: #2c3d33;
+	position: relative;
+	z-index: 1;
+}
+
+.hunting-collections__group-heading span {
+	background: #ffffff;
+	padding: 0 24px;
+}
+
+.hunting-collections__tabs {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	align-items: start;
+	gap: 20px;
+}
+
+.hunting-collections__tab {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 12px 16px;
+	border-radius: 12px;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	position: relative;
+}
+.hunting-collections__tab::after {
+	content: '';
+	position: absolute;
+	bottom: -8px;
+	left: 50%;
+	transform: translateX(-50%) scaleX(0);
+	width: 40px;
+	height: 2px;
+	background: #2c3d33;
+	transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hunting-collections__tab.is-active::after {
+	transform: translateX(-50%) scaleX(1);
+}
+
+.hunting-collections__tab:hover {
+	background: none;
+}
+
+.hunting-collections__tab.is-active {
+	background: none;
+}
+
+.hunting-collections__tab-icon {
+	width: 64px;
+	height: 64px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #2c3d33;
+	transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	overflow: hidden;
+	border-radius: 50%;
+}
+.hunting-collections__tab-icon svg {
+	width: 100%;
+	height: 100%;
+}
+.hunting-collections__tab-img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	border-radius: 0;
+	transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hunting-collections__tab:hover .hunting-collections__tab-icon {
+	transform: scale(1.08);
+}
+.hunting-collections__tab.is-active .hunting-collections__tab-icon {
+	transform: scale(1.12);
+}
+
+.hunting-collections__tab-label {
+	font-family: 'Oswald', sans-serif;
+	font-weight: 500;
+	font-size: 14px;
+	text-transform: uppercase;
+	letter-spacing: 1.5px;
+	color: #7a8a7e;
+	transition: color 0.3s ease;
+}
+.hunting-collections__tab:hover .hunting-collections__tab-label {
+	color: #2c3d33;
+}
+.hunting-collections__tab.is-active .hunting-collections__tab-label {
+	color: #2c3d33;
+	font-weight: 700;
+}
+
+/* ── Panels ── */
+.hunting-collections__panels {
+	position: relative;
+	min-height: 200px;
+}
+
+.hunting-collections__panel {
+	display: none;
+	animation: huntingPanelFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hunting-collections__panel.is-active {
+	display: block;
+}
+
+@keyframes huntingPanelFadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* ── Product Grid ── */
+.hunting-collections__grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 20px;
+	padding-top: 0px;
+}
+
+.hunting-collections__product-col {
+	min-width: 0;
+}
+
+/* Empty state – Coming Soon */
+.hunting-collections__empty {
+	text-align: center;
+	padding: 60px 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 8px;
+}
+.hunting-collections__empty-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 56px;
+	height: 56px;
+	border-radius: 50%;
+	background: rgba(44, 61, 51, 0.06);
+	color: #7a8a7e;
+	margin-bottom: 8px;
+}
+.hunting-collections__empty-title {
+	font-family: 'Oswald', sans-serif;
+	font-weight: 700;
+	font-size: 22px;
+	text-transform: uppercase;
+	letter-spacing: 3px;
+	color: #2c3d33;
+	margin: 0;
+}
+.hunting-collections__empty-subtitle {
+	font-family: var(--base-font-family), system-ui, sans-serif;
+	font-weight: 400;
+	font-size: 14px;
+	color: #7a8a7e;
+	margin: 0;
+	letter-spacing: 0.5px;
+}
+
+/* ── View All per-tab ── */
+.hunting-collections__view-all {
+	display: flex;
+	justify-content: center;
+	margin-top: 30px;
+}
+.hunting-collections__view-all-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-family: 'Oswald', sans-serif;
+	font-weight: 500;
+	font-size: 15px;
+	text-transform: uppercase;
+	letter-spacing: 1.5px;
+	color: #2c3d33;
+	text-decoration: none;
+	padding: 10px 24px;
+	border: 1.5px solid #2c3d33;
+	border-radius: 6px;
+	transition: all 0.3s ease;
+}
+.hunting-collections__view-all-btn:hover {
+	background: #2c3d33;
+	color: #faf6ee;
+}
+.hunting-collections__view-all-btn svg {
+	transition: transform 0.3s ease;
+}
+.hunting-collections__view-all-btn:hover svg {
+	transform: translateX(4px);
+}
+
+/* ── CTA Button ── */
+.hunting-collections__cta {
+	text-align: center;
+	margin-top: 40px;
+}
+.hunting-collections__cta-btn {
+	display: inline-block;
+	font-family: 'Oswald', sans-serif;
+	font-weight: 600;
+	font-size: 14px;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	color: #faf6ee;
+	background: #2c3d33;
+	padding: 14px 40px;
+	border: 2px solid #2c3d33;
+	text-decoration: none;
+	border-radius: 6px;
+	transition: all 0.3s ease;
+}
+.hunting-collections__cta-btn:hover {
+	background: transparent;
+	color: #2c3d33;
+}
+
+/* ============================================
+   TABLET
+   ============================================ */
+@media screen and (max-width: 1024px) {
+	.hunting-collections__grid {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 16px;
+	}
+	.hunting-collections__groups {
+		gap: 0;
+	}
+	.hunting-collections__tabs {
+		gap: 12px;
+	}
+	.hunting-collections__group-heading {
+		font-size: 19px;
+		letter-spacing: 3px;
+	}
+	.hunting-collections__group-heading span {
+		padding-inline: 14px;
+	}
+	.hunting-collections__tab-icon {
+		width: 56px;
+		height: 56px;
+	}
+}
+
+/* ============================================
+   MOBILE
+   ============================================ */
+@media screen and (max-width: 767px) {
+	.hunting-collections__container {
+		padding: 0 15px;
+	}
+	.hunting-collections__heading {
+		font-size: 24px;
+		letter-spacing: 2px;
+		margin-bottom: 24px;
+	}
+
+	.hunting-collections__groups {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0;
+		margin-bottom: 24px;
+		padding-bottom: 12px;
+	}
+	.hunting-collections__group-heading {
+		font-size: 18px;
+		letter-spacing: 3px;
+	}
+	.hunting-collections__group-heading span {
+		padding-inline: 10px;
+	}
+	.hunting-collections__tabs {
+		gap: 8px;
+	}
+
+	.hunting-collections__tab {
+		padding: 10px 2px;
+		gap: 8px;
+		min-width: 0;
+		flex-shrink: 0;
+		border-radius: 10px;
+	}
+	.hunting-collections__tab-icon {
+		width: 48px;
+		height: 48px;
+	}
+	.hunting-collections__tab-label {
+		font-size: 9px;
+		line-height: 1.25;
+		letter-spacing: 0.5px;
+		min-height: 23px;
+	}
+
+	.hunting-collections__grid {
+		grid-template-columns: 1fr 1fr;
+		gap: 12px;
+	}
+
+	/* Truncate product title for mobile grid */
+	.hunting-collections__product-col .product-card__title {
+		display: -webkit-box !important;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		white-space: normal !important;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	/* Soften product card images on mobile */
+	.hunting-collections__product-col .product-card__image img {
+		filter: brightness(1.03) contrast(0.95) saturate(0.92);
+	}
+	.hunting-collections__product-col .product-card__image-wrapper {
+		border-radius: 10px !important;
+		overflow: hidden !important;
+	}
+
+	.hunting-collections__view-all {
+		margin-top: 20px;
+	}
+	.hunting-collections__view-all-btn {
+		font-size: 13px;
+		padding: 10px 20px;
+	}
+
+	.hunting-collections__cta {
+		margin-top: 24px;
+	}
+}
+
+/* ============================================
+   STAGGER ENTRANCE ANIMATION FOR PRODUCT CARDS
+   ============================================ */
+@keyframes huntingCardSlideUp {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.hunting-collections__panel.is-active .hunting-collections__product-col {
+	animation: huntingCardSlideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.hunting-collections__panel.is-active .hunting-collections__product-col:nth-child(1) { animation-delay: 0.05s; }
+.hunting-collections__panel.is-active .hunting-collections__product-col:nth-child(2) { animation-delay: 0.1s; }
+.hunting-collections__panel.is-active .hunting-collections__product-col:nth-child(3) { animation-delay: 0.15s; }
+.hunting-collections__panel.is-active .hunting-collections__product-col:nth-child(4) { animation-delay: 0.2s; }
+</style>
+
+<script>
+(function() {
+	var section = document.getElementById('hunting-{{ section.id }}');
+	if (!section) return;
+
+	var tabs = section.querySelectorAll('[data-hunting-tab]');
+	var panels = section.querySelectorAll('[data-hunting-panel]');
+
+	tabs.forEach(function(tab) {
+		tab.addEventListener('click', function() {
+			var target = tab.getAttribute('data-hunting-tab');
+
+			// Update tabs
+			tabs.forEach(function(t) {
+				t.classList.remove('is-active');
+				t.setAttribute('aria-selected', 'false');
+			});
+			tab.classList.add('is-active');
+			tab.setAttribute('aria-selected', 'true');
+
+			// Update panels
+			panels.forEach(function(panel) {
+				if (panel.getAttribute('data-hunting-panel') === target) {
+					panel.classList.add('is-active');
+					panel.removeAttribute('hidden');
+				} else {
+					panel.classList.remove('is-active');
+					panel.setAttribute('hidden', '');
+				}
+			});
+		});
+	});
+})();
+</script>
+
+{% schema %}
+{
+	"name": "Hunting Collections",
+	"class": "hunting-collections-wrapper",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"blocks": [
+		{
+			"type": "collection",
+			"name": "Collection Tab",
+			"limit": 8,
+			"settings": [
+				{
+					"type": "collection",
+					"id": "collection",
+					"label": "Collection"
+				},
+				{
+					"type": "text",
+					"id": "label",
+					"label": "Tab Label",
+					"info": "Overrides collection title if set."
+				},
+				{
+					"type": "select",
+					"id": "icon",
+					"label": "Icon",
+					"options": [
+						{ "value": "deer", "label": "Deer" },
+						{ "value": "turkey", "label": "Turkey" },
+						{ "value": "waterfowl", "label": "Waterfowl" },
+						{ "value": "fishing", "label": "Fishing" },
+						{ "value": "none", "label": "None (uses collection image)" }
+					],
+					"default": "deer"
+				}
+			]
+		}
+	],
+	"settings": [
+		{
+			"type": "header",
+			"content": "General"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "heading",
+			"label": "Heading",
+			"default": "Hunting"
+		},
+		{
+			"type": "text",
+			"id": "button_label",
+			"label": "CTA button label"
+		},
+		{
+			"type": "url",
+			"id": "button_url",
+			"label": "CTA button URL"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset bottom",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset top",
+			"default": 20
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset bottom",
+			"default": 20
+		}
+	],
+	"presets": [
+		{
+			"name": "Hunting Collections",
+			"blocks": [
+				{
+					"type": "collection",
+					"settings": {
+						"icon": "deer",
+						"label": "Deer"
+					}
+				},
+				{
+					"type": "collection",
+					"settings": {
+						"icon": "turkey",
+						"label": "Turkey"
+					}
+				},
+				{
+					"type": "collection",
+					"settings": {
+						"icon": "none",
+						"label": "Saltwater Fishing"
+					}
+				},
+				{
+					"type": "collection",
+					"settings": {
+						"icon": "none",
+						"label": "Freshwater Fishing"
+					}
+				}
+			]
+		}
+	]
+}
+{% endschema %}

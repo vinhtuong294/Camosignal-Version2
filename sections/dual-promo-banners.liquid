@@ -1,0 +1,431 @@
+{%- liquid
+  assign section_id = 'dual-promo-banners-' | append: section.id
+  assign first_image_loading = 'eager'
+  assign first_image_priority = 'high'
+-%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    position: relative;
+    z-index: 5;
+    margin-top: -{{ section.settings.overlap_mobile }}px;
+    padding-top: {{ section.settings.spacing_top_mobile }}px;
+    padding-bottom: {{ section.settings.spacing_bottom_mobile }}px;
+    background: #ffffff;
+    pointer-events: none;
+  }
+
+  #{{ section_id }} {
+    --dual-promo-gap-desktop: {{ section.settings.gap_desktop }}px;
+    --dual-promo-gap-mobile: {{ section.settings.gap_mobile }}px;
+    --dual-promo-max-width: {{ section.settings.max_width }}px;
+    --dual-promo-hover-border: {{ section.settings.hover_border_color }};
+  }
+
+  @media screen and (min-width: 750px) {
+    #shopify-section-{{ section.id }} {
+      margin-top: -{{ section.settings.overlap_desktop }}px;
+      padding-top: 0;
+      padding-bottom: {{ section.settings.spacing_bottom_desktop }}px;
+    }
+  }
+{%- endstyle -%}
+
+<section
+  id="{{ section_id }}"
+  class="dual-promo-banners{% if section.settings.animate_on_scroll %} dual-promo-banners--animate{% endif %}"
+  aria-label="Featured promotions"
+  data-dual-promo-banners
+>
+  <div class="dual-promo-banners__grid">
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign banner_image = block.settings.image
+        assign external_image_url = block.settings.external_image_url | strip
+        assign banner_link = block.settings.link
+        assign banner_alt = block.settings.alt_text | default: banner_image.alt | default: 'Featured promotion'
+        assign image_loading = 'lazy'
+        assign image_priority = 'auto'
+        if forloop.first
+          assign image_loading = first_image_loading
+          assign image_priority = first_image_priority
+        endif
+      -%}
+
+      <div
+        class="dual-promo-banners__item"
+        style="--dual-promo-index: {{ forloop.index0 }};"
+        {{ block.shopify_attributes }}
+      >
+        {%- if banner_link != blank -%}
+          <a class="dual-promo-banners__card" href="{{ banner_link }}" aria-label="{{ banner_alt | escape }}">
+        {%- else -%}
+          <div class="dual-promo-banners__card">
+        {%- endif -%}
+
+          {%- if banner_image != blank -%}
+            {{
+              banner_image
+              | image_url: width: 1600
+              | image_tag:
+                class: 'dual-promo-banners__image',
+                widths: '480, 720, 960, 1200, 1600',
+                sizes: '(min-width: 750px) 50vw, 100vw',
+                loading: image_loading,
+                fetchpriority: image_priority,
+                alt: banner_alt
+            }}
+          {%- elsif external_image_url != blank -%}
+            <img
+              class="dual-promo-banners__image"
+              src="{{ external_image_url | escape }}"
+              alt="{{ banner_alt | escape }}"
+              width="777"
+              height="315"
+              loading="{{ image_loading }}"
+              fetchpriority="{{ image_priority }}"
+            >
+          {%- else -%}
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'dual-promo-banners__image dual-promo-banners__placeholder' }}
+          {%- endif -%}
+
+        {%- if banner_link != blank -%}
+          </a>
+        {%- else -%}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .dual-promo-banners {
+    box-sizing: border-box;
+    width: 100%;
+    padding-inline: 48px;
+    pointer-events: auto;
+  }
+
+  .dual-promo-banners__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--dual-promo-gap-desktop);
+    width: 100%;
+    max-width: var(--dual-promo-max-width);
+    margin-inline: auto;
+  }
+
+  .dual-promo-banners__item {
+    min-width: 0;
+  }
+
+  .dual-promo-banners__card {
+    position: relative;
+    display: block;
+    aspect-ratio: 777 / 315;
+    overflow: hidden;
+    background: #26362c;
+    color: inherit;
+    text-decoration: none;
+    transform: translateZ(0);
+    transition: transform 180ms ease, box-shadow 180ms ease;
+  }
+
+  .dual-promo-banners__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 480ms cubic-bezier(0.2, 0.7, 0.2, 1), filter 300ms ease;
+  }
+
+  .dual-promo-banners__card::after {
+    content: '';
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    border: 3px solid var(--dual-promo-hover-border);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease;
+  }
+
+  .dual-promo-banners__placeholder {
+    background: #26362c;
+    fill: #d6d0bf;
+  }
+
+  .dual-promo-banners__card[href]:hover,
+  .dual-promo-banners__card[href]:focus-visible {
+    z-index: 1;
+    transform: translateY(-4px);
+    box-shadow: 0 14px 30px rgba(18, 29, 22, 0.2);
+  }
+
+  .dual-promo-banners__card[href]:hover .dual-promo-banners__image,
+  .dual-promo-banners__card[href]:focus-visible .dual-promo-banners__image {
+    transform: scale(1.025);
+    filter: saturate(1.04) contrast(1.02);
+  }
+
+  .dual-promo-banners__card[href]:hover::after,
+  .dual-promo-banners__card[href]:focus-visible::after {
+    opacity: 1;
+  }
+
+  .dual-promo-banners__card[href]:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: -6px;
+  }
+
+  .dual-promo-banners--animate.is-ready:not(.is-visible) .dual-promo-banners__item {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  .dual-promo-banners--animate.is-visible .dual-promo-banners__item {
+    animation: dual-promo-reveal 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--dual-promo-index) * 110ms);
+  }
+
+  @keyframes dual-promo-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .dual-promo-banners {
+      padding-inline: 0;
+    }
+
+    .dual-promo-banners__grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--dual-promo-gap-mobile);
+    }
+
+    .dual-promo-banners__card[href]:hover,
+    .dual-promo-banners__card[href]:focus-visible {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dual-promo-banners--animate.is-ready:not(.is-visible) .dual-promo-banners__item {
+      opacity: 1;
+      transform: none;
+    }
+
+    .dual-promo-banners--animate.is-visible .dual-promo-banners__item {
+      animation: none;
+    }
+
+    .dual-promo-banners__card,
+    .dual-promo-banners__image,
+    .dual-promo-banners__card::after {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (() => {
+    const selector = '[data-dual-promo-banners]';
+
+    const initSection = (section) => {
+      if (!section || section.dataset.dualPromoReady === 'true') return;
+
+      section.dataset.dualPromoReady = 'true';
+      section.classList.add('is-ready');
+
+      if (!section.classList.contains('dual-promo-banners--animate')) {
+        section.classList.add('is-visible');
+        return;
+      }
+
+      if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        section.classList.add('is-visible');
+        return;
+      }
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          section.classList.add('is-visible');
+          observer.disconnect();
+        });
+      }, {
+        rootMargin: '0px 0px -6% 0px',
+        threshold: 0.08
+      });
+
+      observer.observe(section);
+    };
+
+    const initAll = (scope = document) => {
+      scope.querySelectorAll(selector).forEach(initSection);
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => initAll());
+    } else {
+      initAll();
+    }
+
+    document.addEventListener('shopify:section:load', (event) => initAll(event.target));
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Dual promotion banners",
+  "tag": "section",
+  "class": "dual-promo-banners-section",
+  "max_blocks": 2,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "animate_on_scroll",
+      "label": "Enable reveal animation",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "hover_border_color",
+      "label": "Hover border color",
+      "default": "#e4ad00"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum content width",
+      "min": 1000,
+      "max": 1800,
+      "step": 10,
+      "unit": "px",
+      "default": 1550
+    },
+    {
+      "type": "range",
+      "id": "gap_desktop",
+      "label": "Desktop gap",
+      "min": 0,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "gap_mobile",
+      "label": "Mobile gap",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "overlap_desktop",
+      "label": "Desktop hero overlap",
+      "min": 0,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "default": 290
+    },
+    {
+      "type": "range",
+      "id": "overlap_mobile",
+      "label": "Mobile hero overlap",
+      "min": 0,
+      "max": 360,
+      "step": 10,
+      "unit": "px",
+      "default": 270
+    },
+    {
+      "type": "range",
+      "id": "spacing_bottom_desktop",
+      "label": "Desktop bottom spacing",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "spacing_top_mobile",
+      "label": "Mobile top spacing",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "spacing_bottom_mobile",
+      "label": "Mobile bottom spacing",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    }
+  ],
+  "blocks": [
+    {
+      "type": "banner",
+      "name": "Promotion banner",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "external_image_url",
+          "label": "External image URL",
+          "info": "Used when no image is selected above."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Banner link"
+        },
+        {
+          "type": "text",
+          "id": "alt_text",
+          "label": "Accessible label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Dual promotion banners",
+      "blocks": [
+        {
+          "type": "banner"
+        },
+        {
+          "type": "banner"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

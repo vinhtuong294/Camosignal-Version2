@@ -1,0 +1,110 @@
+{%- assign mob_380 					= mob_380 | default: 348 -%}
+{%- assign mob_420 					= mob_420 | default: 388 -%}
+{%- assign mob_480 					= mob_480 | default: 448 -%}
+{%- assign mob_575 					= mob_575 | default: 543 -%}
+{%- assign mob_767 					= mob_767 | default: 735 -%}
+
+{%- assign small_width 				= small_width | default: 959 -%}
+{%- assign medium_width 			= medium_width | default: 1167 -%}
+{%- assign large_width 				= large_width | default: 1468 -%}
+{%- assign extra_large_width 		= extra_large_width | default: 1648 -%}
+{%- assign full_hd_width 			= full_hd_width | default: 1888 -%}
+
+{%- assign mob_380_retina 			= mob_380 | times: 2 -%}
+{%- assign mob_420_retina 			= mob_420 | times: 2 -%}
+{%- assign mob_480_retina 			= mob_480 | times: 2 -%}
+{%- assign mob_575_retina 			= mob_575 | times: 2 -%}
+{%- assign mob_767_retina 			= mob_767 | times: 2 -%}
+
+{%- assign small_width_retina 		= small_width | times: 2 -%}
+{%- assign medium_width_retina 		= medium_width | times: 2 -%}
+{%- assign large_width_retina 		= large_width | times: 2 -%}
+{%- assign extra_large_width_retina = extra_large_width | times: 2 -%}
+{%- assign full_hd_width_retina 	= full_hd_width | times: 2 -%}
+
+{%- assign anim_delay = anim_delay | default: 0 -%}
+
+{%- if image_desktop != blank -%}
+	{% if enable_fetch_priority %}
+		{{ image_mobile | image_url: width: mob_420_retina | image_tag: preload: true, class: 'is-hidden' }}
+	{% endif %}
+
+	<picture class="slideshow__slide-media-wrapper js-need-animate-after-load">
+		<source
+			srcset="{{- image_mobile | image_url: width: mob_380 }} 1x, {{ image_mobile | image_url: width: mob_380_retina }} 2x"
+			media="(max-width: 380px)"
+			width="{{- mob_380 -}}"
+		>
+
+		<source
+			srcset="{{- image_mobile | image_url: width: mob_420 }} 1x, {{ image_mobile | image_url: width: mob_420_retina }} 2x"
+			media="(max-width: 420px)"
+			width="{{- mob_420 -}}"
+		>
+
+		<source
+			srcset="{{- image_mobile | image_url: width: mob_480 }} 1x, {{ image_mobile | image_url: width: mob_480_retina }} 2x"
+			media="(max-width: 480px)"
+			width="{{- mob_480 -}}"
+		>
+
+		<source
+			srcset="{{- image_mobile | image_url: width: mob_575 }} 1x, {{ image_mobile | image_url: width: mob_575_retina }} 2x"
+			media="(max-width: 575px)"
+			width="{{- mob_575 -}}"
+		>
+
+		<source
+			srcset="{{- image_mobile | image_url: width: mob_767 }} 1x, {{ image_mobile | image_url: width: mob_767_retina }} 2x"
+			media="(max-width: 767px)"
+			width="{{- mob_767 -}}"
+		>
+
+		<source
+			srcset="{{- image_desktop | image_url: width: small_width }} 1x, {{ image_desktop | image_url: width: small_width_retina }} 2x"
+			media="(max-width: 991px)"
+			width="{{- small_width -}}"
+		>
+
+		<source
+			srcset="{{- image_desktop | image_url: width: medium_width }} 1x, {{ image_desktop | image_url: width: medium_width_retina }} 2x"
+			media="(max-width: 1199px)"
+			width="{{- medium_width -}}"
+		>
+
+		<source
+			srcset="{{- image_desktop | image_url: width: large_width }} 1x, {{ image_desktop | image_url: width: large_width_retina }} 2x"
+			media="(max-width: 1500px)"
+			width="{{- large_width -}}"
+		>
+
+		<source
+			srcset="{{- image_desktop | image_url: width: extra_large_width }} 1x, {{ image_desktop | image_url: width: extra_large_width_retina }} 2x"
+			media="(max-width: 1680px)"
+			width="{{- extra_large_width -}}"
+		>
+
+		<img
+			class="slideshow__slide-media js-need-animate-after-load"
+			srcset="{{- image_desktop | image_url: width: full_hd_width }} 1x, {{ image_desktop | image_url: width: full_hd_width_retina }} 2x"
+			src="{{- image_desktop | image_url: width: full_hd_width -}}"
+			alt="{{- image_desktop.alt -}}"
+			width="{{- full_hd_width -}}"
+			height="1080"
+			style="--img-desktop-pos: {{ image_desktop.presentation.focal_point }}; --img-mob-pos: {{ image_mobile.presentation.focal_point }}; --anim-delay: {{ anim_delay }}s;"
+			{% if enable_fetch_priority %}
+				fetchpriority="high"
+				loading="eager"
+			{% endif %}
+			{% if enable_lazy_load %}
+				fetchpriority="low"
+				loading="lazy"
+			{% endif %}
+		>
+	</picture>
+{%- else -%}
+	{%- assign placeholder_index = placeholder_index | modulo: 3 | plus: 1 -%}
+	{%- assign placeholer_svg_name = 'hero-apparel-' | append: placeholder_index -%}
+
+	{{- placeholer_svg_name | placeholder_svg_tag: 'slideshow__slide-media' -}}
+{%- endif -%}

@@ -1,0 +1,30 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+  Snippet: Product options minimum
+  --------------------------------
+  Add dropdown component with product variants, when options is hidden
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- liquid
+	assign section_contains_options_block = false
+	for block in blocks
+		if block.type == "options"
+			assign section_contains_options_block = true
+			break
+		endif
+	endfor
+-%}
+
+{%- unless section_contains_options_block -%}
+	<div
+		class="product-variants product-variants--only{% if product.has_only_default_variant %} is-hidden{% endif %}"
+		data-js-product-variant="no-hidden"
+	>
+		<input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+
+		<script type="application/json" data-selected-variant>
+		  {{ product.selected_or_first_available_variant | json }}
+		</script>
+	</div>
+{%- endunless -%}

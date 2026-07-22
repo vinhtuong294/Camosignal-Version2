@@ -1,0 +1,22 @@
+.page-card .page-card__title {
+  width: 100%;
+  font-family: var(--heading-font-family);
+  font-size: calc(var(--body-font-size) * 1.5);
+  line-height: 1.333;
+  color: var(--color-text-primary, #000000);
+  word-break: break-word;
+  text-decoration: unset;
+  transition-duration: var(--timing-base);
+  transition-property: opacity;
+}
+@media (-moz-touch-enabled: 0), (hover: hover), (pointer: fine) {
+  .page-card .page-card__title:hover {
+    opacity: 0.7;
+  }
+}
+@media (min-width: 1200px) {
+  .page-card .page-card__title {
+    font-size: calc(var(--body-font-size) * 1.75);
+    line-height: 1.357;
+  }
+}

@@ -1,0 +1,448 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Register template
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render "adastra" with "/src/styles/account-entrance.scss" -%}
+
+{%- assign color_scheme      	           	= section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance 	= section.settings.enable_color_scheme_inheritance -%}
+{%- assign text 							= section.settings.text -%}
+{%- assign enable_media 					= section.settings.enable_media -%}
+{%- assign scroll_images_direction 			= section.settings.scroll_images_direction -%}
+
+{%- capture styles -%}
+	--inner-offset-top: {{ section.settings.inner_offset_top }}px; {{-  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom }}px; {{-  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px; {{-  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px; {{-  -}}
+	--first-col-animation-duration: {{ section.settings.fist_col_movement_speed }}s; {{-  -}}
+	--second-col-animation-duration: {{ section.settings.second_col_movement_speed }}s; {{-  -}}
+{%- endcapture -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+<section class="account-entrance color-{{ color_scheme }} js-register-template" style="{{ styles }}">
+	{%- if enable_media == true -%}
+	<div class="account-entrance__grid-row">
+		<div class="account-entrance__grid-column">
+	{%- endif -%}
+			<div class="account-entrance__container">
+				{%- form "create_customer", class: "account-entrance__form" -%}
+					<div class="account-entrance__heading-wrapper">
+						<h1 class="h2 account-entrance__heading">
+							{{- "customer.register.title" | t -}}
+						</h1>
+
+						{%- if text != blank -%}
+							<p class="account-entrance__text">
+								{{- text -}}
+							</p>
+						{%- endif -%}
+
+						{%- if form.errors -%}
+							<h2 class="account-entrance__error-title h3" tabindex="-1" autofocus>
+								<span class="visually-hidden">{{ 'general.accessibility.error' | t }}</span>
+
+								{{ 'general.accessibility.form_error_title' | t }}
+							</h2>
+
+							{{- form.errors | default_errors -}}
+						{%- endif -%}
+					</div>
+
+					<div class="input-wrapper account-entrance__input-wrapper">
+						<input
+							class="input account-entrance__input"
+							id="FirstName"
+							name="customer[first_name]"
+							type="text"
+							{%- if form.first_name -%} value="{{- form.first_name -}}" {%- endif %}
+							placeholder="{{- 'customer.register.first_name_placeholder' | t -}}"
+							aria-label="{{- 'customer.register.first_name_aria_label' | t | escape -}}"
+							required
+						/>
+
+						<label class="input-label input-label--required" for="FirstName">
+							{{- "customer.register.first_name" | t -}}
+						</label>
+					</div>
+
+					<div class="input-wrapper account-entrance__input-wrapper">
+						<input
+							class="input account-entrance__input"
+							id="LastName"
+							name="customer[last_name]"
+							type="text"
+							aria-label="{{- 'customer.register.last_name_aria_label' | t | escape -}}"
+							placeholder="{{- 'customer.register.last_name_placeholder' | t -}}"
+							{% if form.last_name %} value="{{- form.last_name -}}" {% endif %}
+						/>
+
+						<label class="input-label" for="LastName">
+							{{- "customer.register.last_name" | t -}}
+						</label>
+					</div>
+
+					<div class="input-wrapper account-entrance__input-wrapper">
+						<input
+							class="input account-entrance__input"
+							id="Email"
+							name="customer[email]"
+							type="email"
+							aria-label="{{- 'customer.register.email_aria_label' | t | escape -}}"
+							{% if form.email %} value="{{- form.email -}}" {% endif %}
+							placeholder="{{- 'customer.register.email_placeholder' | t -}}"
+							autocomplete="off"
+							autocapitalize="off"
+							required
+						/>
+
+						<label class="input-label input-label--required" for="Email">
+							{{- "customer.register.email" | t -}}
+						</label>
+					</div>
+
+					<div class="account-entrance__input-wrapper">
+						<div class="input-wrapper account-entrance__password-wrapper">
+							<input
+								class="input account-entrance__input account-entrance__input--password js-input-password"
+								id="CreatePassword"
+								type="password"
+								name="customer[password]"
+								placeholder="{{- 'customer.register.password_placeholder' | t -}}"
+								aria-label="{{- 'customer.register.password_aria_label' | t | escape -}}"
+								required
+							/>
+
+							<label class="input-label input-label--required" for="CreatePassword">
+								{{- "customer.register.password" | t -}}
+							</label>
+
+							<button
+								type="button"
+								class="focus-visible-outline account-entrance__password-icon js-show-password"
+								aria-label="{{- 'customer.account.show_password' | t -}}"
+							>
+								{%- render "icons", icon: "password-eye" -%}
+							</button>
+						</div>
+					</div>
+
+					<button
+						class="button button--secondary account-entrance__button"
+						type="submit"
+						aria-label="{{- 'customer.register.submit_aria_label' | t | escape -}}"
+					>
+						<span data-text="{{- 'customer.register.submit' | t -}}">
+							<span>{{- 'customer.register.submit' | t -}}</span>
+						</span>
+					</button>
+
+					<div class="account-entrance__create">
+						<span class="account-entrance__new-customer">
+							{{- "customer.register.have_account" | t -}}
+						</span>
+
+						<a
+							class="button-link focus-visible-outline"
+							href="{{- routes.account_login_url -}}"
+							aria-label="{{- 'customer.register.sign_in_aria_label' | t | escape -}}"
+						>
+							<span data-text="{{- "customer.register.sign_in" | t -}}">
+								<span>{{- "customer.register.sign_in" | t -}}</span>
+							</span>
+						</a>
+					</div>
+				{%- endform -%}
+			</div>
+	{%- if enable_media == true -%}
+		</div>
+
+		<div class="account-entrance__grid-column account-entrance__grid-column--media">
+			{%- for j in (1..2) -%}
+				{%- if j == 1 -%}
+					{%- assign type_string = 'first_col_image_' -%}
+					{%- elsif j == 2 -%}
+					{%- assign type_string = 'second_col_image_' -%}
+				{%- endif -%}
+
+				{%- capture images -%}
+					{%- for i in (1..3) -%}
+						{% assign type = type_string | append: i %}
+						{% assign col_image = section.settings[type] %}
+
+						{%- if col_image != blank -%}
+							{%- capture img_focal -%}
+								--img-pos: {{ col_image.presentation.focal_point }};
+							{%- endcapture -%}
+
+							<picture class="account-entrance__grid-column-image-wrapper">
+								<source srcset="{{ col_image | image_url: height: 248 }} 1x, {{ col_image | image_url: height: 496 }} 2x" media="(max-width: 375px)" />
+								<source srcset="{{ col_image | image_url: height: 281 }} 1x, {{ col_image | image_url: height: 562 }} 2x" media="(max-width: 420px)" />
+								<source srcset="{{ col_image | image_url: height: 536 }} 1x, {{ col_image | image_url: height: 1072 }} 2x" media="(max-width: 767px)" />
+								<source srcset="{{ col_image | image_url: height: 626 }} 1x, {{ col_image | image_url: height: 1252 }} 2x" media="(max-width: 991px)" />
+								<source srcset="{{ col_image | image_url: height: 509 }} 1x, {{ col_image | image_url: height: 1018 }} 2x" media="(max-width: 1600px)" />
+
+								<img
+									class="account-entrance__grid-column-image"
+									src="{{ col_image | image_url: height: 627 }}"
+									srcset="{{ col_image | image_url: height: 627 }} 1x, {{ col_image | image_url: height: 1254 }} 2x"
+									{% if is_lazy %}
+										fetchpriority="low"
+										loading="lazy"
+									{% else %}
+										fetchpriority="high"
+										loading="eager"
+									{% endif %}
+									alt="{{- col_image.alt -}}"
+									style="{{- img_focal -}}"
+								/>
+							</picture>
+						{%- else -%}
+							<div class="account-entrance__grid-column-image-wrapper">
+								{{ 'product-apparel-3' | placeholder_svg_tag: 'account-entrance__grid-column-image' }}
+							</div>
+						{%- endif -%}
+					{%- endfor -%}
+				{%- endcapture -%}
+
+				<div class="account-entrance__grid-column-images{% if scroll_images_direction == "bottom" %} account-entrance__grid-column-images--animation-reverse{% endif %}">
+					<div class="account-entrance__grid-column-images-inner">
+						{{- images -}}
+					</div>
+
+					<div class="account-entrance__grid-column-images-inner" aria-hidden="true">
+						{{- images -}}
+					</div>
+				</div>
+			{%- endfor -%}
+			</div>
+	</div>
+	{%- endif -%}
+</section>
+
+{%- render 'adastra' with '/src/scripts/template-customers-register.js' -%}
+
+{% schema %}
+{
+	"name": "Register template",
+	"settings": [
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "General"
+		},
+		{
+			"type": "text",
+			"id": "text",
+			"label": "Text",
+			"default": "We will send you an email to reset your password."
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_media",
+			"label": "Enable media",
+			"default": true
+		},
+		{
+			"type": "select",
+			"id": "scroll_images_direction",
+			"label": "Scroll images direction",
+			"options": [
+				{
+					"value": "top",
+					"label": "Top"
+				},
+				{
+					"value": "bottom",
+					"label": "Bottom"
+				}
+			],
+			"default": "top",
+			"info": "This setting changes the animation direction for all columns to a reverse direction."
+		},
+		{
+			"type": "header",
+			"content": "First column images"
+		},
+		{
+			"type": "range",
+			"id": "fist_col_movement_speed",
+			"label": "Movement speed",
+			"min": 10,
+			"max": 30,
+			"unit": "s",
+			"default": 20
+		},
+		{
+			"type": "image_picker",
+			"id": "first_col_image_1",
+			"label": "First image"
+		},
+		{
+			"type": "image_picker",
+			"id": "first_col_image_2",
+			"label": "Second image"
+		},
+		{
+			"type": "image_picker",
+			"id": "first_col_image_3",
+			"label": "Third image"
+		},
+		{
+			"type": "header",
+			"content": "Second column images"
+		},
+		{
+			"type": "range",
+			"id": "second_col_movement_speed",
+			"label": "Movement speed",
+			"min": 10,
+			"max": 30,
+			"unit": "s",
+			"default": 20
+		},
+		{
+			"type": "image_picker",
+			"id": "second_col_image_1",
+			"label": "First image"
+		},
+		{
+			"type": "image_picker",
+			"id": "second_col_image_2",
+			"label": "Second image"
+		},
+		{
+			"type": "image_picker",
+			"id": "second_col_image_3",
+			"label": "Third image"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset bottom",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset bottom",
+			"default": 0
+		},
+		{
+			"type": "paragraph",
+			"content": "Internal offsets"
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset top",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset bottom",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset top",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset bottom",
+			"default": 32
+		}
+	]
+}
+{%- endschema -%}

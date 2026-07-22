@@ -1,0 +1,33 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+	"sections": {
+		"shipping_policy": {
+			"type": "page-shipping-policy",
+			"settings": {
+				"color_scheme": "scheme-1",
+				"title": "Shipping Policy",
+				"intro": "Learn how CamoSignal ships from the United States, processes orders, provides tracking, and estimates delivery times.",
+				"support_email": "support.camosignal@gmail.com",
+				"business_hours": "Monday-Friday, 8:00 AM-5:00 PM",
+				"response_time": "Within 24 business hours",
+				"tracking_endpoint_url": "https://camosignal-order-tracking.camosignal.workers.dev",
+				"tracking_request_method": "POST",
+				"padding_top_desktop": 64,
+				"padding_bottom_desktop": 72,
+				"padding_top_mobile": 36,
+				"padding_bottom_mobile": 48
+			}
+		}
+	},
+	"order": [
+		"shipping_policy"
+	]
+}

@@ -1,0 +1,176 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Collection card
+	- collection: Collection object (required)
+	- image: image object
+	- is_lazy: boolean,
+	- size_width_373: image size
+	- size_height_373: image size
+	- size_width_420: image size
+	- size_height_420: image size
+	- size_width_575: image size
+	- size_height_575: image size
+	- size_width_767: image size
+	- size_height_767: image size
+	- size_width_991: image size
+	- size_height_991: image size
+	- size_width_1199: image size
+	- size_height_1199: image size
+	- size_width_1500: image size
+	- size_height_1500: image size
+	- size_width: image size
+	- size_height: image size
+	- show_products_count: boolean, show/hide products count
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render "adastra" with "/src/styles/collection-card.scss" -%}
+
+{%- assign size_width 	    = size_width | default: 196 -%}
+{%- assign size_height      = size_height | default: 210 -%}
+{%- assign size_width_1500  = size_width_1500 | default: size_width -%}
+{%- assign size_height_1500 = size_height_1500 | default: size_height -%}
+{%- assign size_width_1199  = size_width_1199 | default: size_width_1500 -%}
+{%- assign size_height_1199 = size_height_1199 | default: size_height_1500 -%}
+{%- assign size_width_991   = size_width_991 | default: size_width_1199 -%}
+{%- assign size_height_991  = size_height_991 | default: size_height_1199 -%}
+{%- assign size_width_767   = size_width_767 | default: size_width_991 -%}
+{%- assign size_height_767  = size_height_767 | default: size_height_991 -%}
+{%- assign size_width_575   = size_width_575 | default: size_width_767 -%}
+{%- assign size_height_575  = size_height_575 | default: size_height_767 -%}
+{%- assign size_width_420   = size_width_420 | default: size_width_575 -%}
+{%- assign size_height_420  = size_height_420 | default: size_height_575 -%}
+{%- assign size_width_373   = size_width_373 | default: size_width_420 -%}
+{%- assign size_height_373  = size_height_373 | default: size_height_420 -%}
+
+{%- assign size_width_2x 	   = size_width | times: 2 -%}
+{%- assign size_height_2x      = size_height | times: 2 -%}
+{%- assign size_width_1500_2x  = size_width_1500 | times: 2 -%}
+{%- assign size_height_1500_2x = size_height_1500 | times: 2 -%}
+{%- assign size_width_1199_2x  = size_width_1199 | times: 2 -%}
+{%- assign size_height_1199_2x = size_height_1199 | times: 2 -%}
+{%- assign size_width_991_2x   = size_width_991 | times: 2 -%}
+{%- assign size_height_991_2x  = size_height_991 | times: 2 -%}
+{%- assign size_width_767_2x   = size_width_767 | times: 2 -%}
+{%- assign size_height_767_2x  = size_height_767 | times: 2 -%}
+{%- assign size_width_575_2x   = size_width_575 | times: 2 -%}
+{%- assign size_height_575_2x  = size_height_575 | times: 2 -%}
+{%- assign size_width_420_2x   = size_width_420 | times: 2 -%}
+{%- assign size_height_420_2x  = size_height_420 | times: 2 -%}
+{%- assign size_width_373_2x   = size_width_373 | times: 2 -%}
+{%- assign size_height_373_2x  = size_height_373 | times: 2 -%}
+
+{%- assign collection_title_placeholder = 'sections.collection_list.card_title' | t -%}
+{%- assign collection_title             = collection.title | default: collection_title_placeholder -%}
+{%- assign collection_url 	            = collection.url | default: '#' -%}
+
+{%- assign min = 1 -%}
+{%- assign max = 6 -%}
+{%- assign diff = max | minus: min -%}
+
+<div class="collection-card">
+	<a
+		class="collection-card__image-wrapper focus-visible-outline"
+		href="{{- collection_url -}}"
+		{% if image == blank %}
+			aria-label="{{ collection_title | escape }}"
+		{% endif %}
+	>
+		{%- if collection != blank -%}
+			{%- if image != blank -%}
+				{%- capture img_focal -%}
+					--img-pos: {{- image.presentation.focal_point -}};
+				{%- endcapture -%}
+
+				<picture>
+					<source
+						srcset="{{ image | image_url: height: size_height_373 }} 1x, {{ image | image_url: height: size_height_373_2x }} 2x"
+						media="(max-width: 373px)"
+						width="{{- size_width_373 -}}"
+						height="{{- size_height_373 -}}"
+					>
+
+					<source
+						srcset="{{ image | image_url: height: size_height_420 }} 1x, {{ image | image_url: height: size_height_420_2x }} 2x"
+						media="(max-width: 420px)"
+						width="{{- size_width_420 -}}"
+						height="{{- size_height_420 -}}"
+					>
+
+					<source
+						srcset="{{ image | image_url: height: size_height_575 }} 1x, {{ image | image_url: height: size_height_575_2x }} 2x"
+						media="(max-width: 575px)"
+						width="{{- size_width_575 -}}"
+						height="{{- size_height_575 -}}"
+					>
+
+					<source
+						srcset="{{ image | image_url: height: size_height_767 }} 1x, {{ image | image_url: height: size_height_767_2x }} 2x"
+						media="(max-width: 767px)"
+						width="{{- size_width_767 -}}"
+						height="{{- size_height_767 -}}"
+					>
+
+					<source
+						srcset="{{ image | image_url: height: size_height_991 }} 1x, {{ image | image_url: height: size_height_991_2x }} 2x"
+						media="(max-width: 991px)"
+						width="{{- size_width_991 -}}"
+						height="{{- size_height_991 -}}"
+					>
+
+					<source
+						srcset="{{ image | image_url: height: size_height_1199 }} 1x, {{ image | image_url: height: size_height_1199_2x }} 2x"
+						media="(max-width: 1199px)"
+						width="{{- size_width_1200 -}}"
+						height="{{- size_height_1200 -}}"
+					>
+
+					<source
+						srcset="{{ image | image_url: height: size_height_1500 }} 1x, {{ image | image_url: height: size_height_1500_2x }} 2x"
+						media="(max-width: 1500px)"
+						width="{{- size_width_1500 -}}"
+						height="{{- size_height_1500 -}}"
+					>
+
+					<img
+						class="collection-card__img"
+						src="{{- image | image_url: height: size_height -}}"
+						srcset="{{ image | image_url: height: size_height }} 1x, {{ image | image_url: height: size_height_2x }} 2x"
+						{% if is_lazy %}
+							fetchpriority="low"
+							loading="lazy"
+						{% else %}
+							fetchpriority="high"
+							loading="eager"
+						{% endif %}
+						width="{{- size_width -}}"
+						height="{{- size_height -}}"
+						alt="{{- image.alt | escape -}}"
+						style="{{- img_focal -}}"
+					>
+				</picture>
+			{%- endif -%}
+		{%- else -%}
+			{%- assign random_number = "now" | date: "%N" | modulo: diff | plus: min -%}
+			{%- assign placeholder_svg_name = 'collection-' | append: random_number -%}
+
+			{{- placeholder_svg_name | placeholder_svg_tag: 'collection-card__img collection-card__img--placeholder' -}}
+		{%- endif -%}
+	</a>
+
+	<a class="collection-card__heading focus-visible-outline" href="{{- collection_url -}}">
+		{{- collection_title -}}
+
+		{%- if show_products_count -%}
+			<span class="collection-card__count">
+				{%- if collection == blank -%}
+					(0)
+				{%- else -%}
+					({{- collection.all_products_count -}})
+				{%- endif -%}
+			</span>
+		{%- endif -%}
+	</a>
+</div>
+
+

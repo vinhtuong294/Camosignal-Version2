@@ -1,0 +1,32 @@
+.filter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.filter-list .filter-list__item {
+  position: relative;
+}
+.filter-list.filter-list--sidebar {
+  gap: 12px;
+  max-height: 250px;
+  overflow-y: auto;
+}
+.filter-list.filter-list--top-bar {
+  display: grid;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  column-gap: 64px;
+  row-gap: 16px;
+}
+.filter-list.filter-list--top-bar .filter-list__item:nth-child(4n+1) {
+  grid-row: 1;
+}
+.filter-list.filter-list--top-bar .filter-list__item:nth-child(4n+2) {
+  grid-row: 2;
+}
+.filter-list.filter-list--top-bar .filter-list__item:nth-child(4n+3) {
+  grid-row: 3;
+}
+.filter-list.filter-list--top-bar .filter-list__item:nth-child(4n+4) {
+  grid-row: 4;
+}

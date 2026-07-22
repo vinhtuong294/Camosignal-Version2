@@ -1,0 +1,602 @@
+{%- if section.settings.enable -%}
+{%- assign font = section.settings.font_family -%}
+{%- if font != blank -%}
+<style>
+  {{ font | font_face: font_display: 'swap' }}
+</style>
+{%- endif -%}
+
+<style>
+.sales-notification-popup {
+    position: fixed;
+    bottom: 20px;
+    {% if section.settings.position == 'right' %}
+    left: auto;
+    right: 20px;
+    {% else %}
+    left: 20px;
+    right: auto;
+    {% endif %}
+    background: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+    border-radius: {{ section.settings.border_radius }}px;
+    border: {{ section.settings.border_width }}px solid {{ section.settings.border_color }};
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    display: flex;
+    flex-direction: column;
+    padding: 14px;
+    width: 300px;
+    z-index: 2147483647 !important;
+    transform: translateY(150%);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+    {%- if font != blank -%}
+    font-family: {{ font.family }}, {{ font.fallback_families }};
+    {%- else -%}
+    font-family: 'Oswald', var(--font-body-family, sans-serif);
+    {%- endif -%}
+    pointer-events: auto !important;
+    touch-action: manipulation;
+}
+
+.sales-notification-popup.is-visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.sales-notification-popup__header {
+    margin-bottom: 8px;
+    padding-right: 42px;
+}
+
+.sales-notification-popup__action {
+    font-size: 13px;
+    color: {{ section.settings.text_color }};
+    opacity: 0.9;
+    margin: 0 0 2px 0;
+    line-height: 1.3;
+}
+
+.sales-notification-popup__action strong {
+    font-weight: 600;
+    opacity: 1;
+}
+
+.sales-notification-popup__time {
+    font-size: 11px;
+    color: {{ section.settings.text_color }};
+    opacity: 0.5;
+}
+
+.sales-notification-popup__body {
+    display: flex;
+    align-items: flex-start;
+    background: rgba(0,0,0,0.02);
+    padding: 8px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.2s ease;
+}
+
+.sales-notification-popup__body:hover {
+    background: rgba(0,0,0,0.05);
+}
+
+.sales-notification-popup__image {
+    width: 60px;
+    height: auto;
+    max-height: 80px;
+    object-fit: contain;
+    border-radius: 4px;
+    margin-right: 12px;
+    border: 1px solid rgba(0,0,0,0.05);
+    flex-shrink: 0;
+}
+
+.sales-notification-popup__content {
+    flex: 1;
+    min-width: 0;
+}
+
+.sales-notification-popup__title {
+    font-size: 13px;
+    color: {{ section.settings.text_color }};
+    margin: 0 0 4px 0;
+    font-weight: 500;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sales-notification-popup__price {
+    font-size: 14px;
+    color: #e53935;
+    font-weight: 700;
+    margin: 0 0 6px 0;
+}
+
+.sales-notification-popup__btn {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: {{ section.settings.btn_text_color }};
+    background-color: {{ section.settings.btn_bg_color }};
+    padding: 5px 12px;
+    border-radius: 4px;
+    transition: opacity 0.2s;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.sales-notification-popup__body:hover .sales-notification-popup__btn {
+    opacity: 0.8;
+}
+
+.sales-notification-popup__close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: rgba(0, 0, 0, 0.06);
+    border: none;
+    border-radius: 50%;
+    font-size: 32px;
+    font-weight: 500;
+    cursor: pointer;
+    color: {{ section.settings.text_color }};
+    opacity: 0.78;
+    line-height: 1;
+    padding: 0;
+    transition: background 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+    pointer-events: auto !important;
+    touch-action: manipulation;
+    z-index: 2;
+}
+.sales-notification-popup__close:hover {
+    background: rgba(0, 0, 0, 0.1);
+    opacity: 1;
+    transform: scale(1.04);
+}
+
+@media screen and (max-width: 767px) {
+    .sales-notification-popup {
+        bottom: 80px;
+        {% if section.settings.mobile_position == 'right' %}
+        left: auto;
+        right: 12px;
+        {% else %}
+        left: 12px;
+        right: auto;
+        {% endif %}
+        transform: translateY(150%);
+        width: 260px;
+        padding: 10px;
+    }
+    .sales-notification-popup__header {
+        margin-bottom: 4px;
+        padding-right: 38px;
+    }
+    .sales-notification-popup__close {
+        top: 5px;
+        right: 5px;
+        width: 34px;
+        height: 34px;
+        font-size: 30px;
+    }
+    .sales-notification-popup__body {
+        padding: 6px;
+    }
+    .sales-notification-popup__image {
+        width: 45px;
+        max-height: 60px;
+        margin-right: 10px;
+    }
+    .sales-notification-popup__title {
+        font-size: 12px;
+        margin: 0 0 2px 0;
+        -webkit-line-clamp: 2;
+    }
+    .sales-notification-popup__price {
+        font-size: 13px;
+        margin: 0;
+    }
+    .sales-notification-popup__btn {
+        display: none !important;
+    }
+    .sales-notification-popup.is-visible {
+        transform: translateY(0);
+    }
+}
+</style>
+
+<div class="sales-notification-popup" id="salesNotificationPopup">
+    <button class="sales-notification-popup__close" id="salesNotificationClose" type="button" aria-label="{{- 'general.accessibility.close' | t | default: 'Close' | escape -}}">&times;</button>
+    
+    <div class="sales-notification-popup__header">
+        <p class="sales-notification-popup__action"><strong id="salesNotificationName"></strong> <span id="salesNotificationActionText"></span></p>
+        <span class="sales-notification-popup__time" id="salesNotificationTime"></span>
+    </div>
+
+    <a href="#" id="salesNotificationLink" class="sales-notification-popup__body">
+        <img src="" alt="" class="sales-notification-popup__image" id="salesNotificationImage">
+        <div class="sales-notification-popup__content">
+            <p class="sales-notification-popup__title" id="salesNotificationTitle"></p>
+            <p class="sales-notification-popup__price" id="salesNotificationPrice"></p>
+            <span class="sales-notification-popup__btn" id="salesNotificationBtnText"></span>
+        </div>
+    </a>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    {% assign col = section.settings.collection %}
+    {% if col == blank %}
+        {% assign products_array = collections.all.products %}
+        {% assign products_count = collections.all.all_products_count %}
+    {% else %}
+        {% assign products_array = col.products %}
+        {% assign products_count = col.all_products_count %}
+    {% endif %}
+
+    {% assign limit = 30 %}
+    {% assign max_offset = products_count | minus: limit %}
+    {% if max_offset < 0 %}{% assign max_offset = 0 %}{% endif %}
+    {% assign random_offset = "now" | date: "%N" | modulo: max_offset | at_least: 0 %}
+
+    const products = [
+        {% for prod in products_array limit: limit offset: random_offset %}
+            {
+                title: {{ prod.title | json }},
+                url: {{ prod.url | json }},
+                image: {{ prod.featured_image | img_url: '150x' | json }},
+                price: {{ prod.price | money | json }}
+            }{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+    ];
+
+    if (products.length === 0) return;
+
+    let namesStr = {{ section.settings.names | json }};
+    let actionsStr = {{ section.settings.actions | json }};
+    const timeSuffix = {{ section.settings.time_suffix | json }} || "minutes ago";
+    const btnText = {{ section.settings.btn_text | json }} || "View product";
+    
+    const names = namesStr ? namesStr.split(',').map(item => item.trim()).filter(Boolean) : ["Customer"];
+    const actions = actionsStr ? actionsStr.split(',').map(item => item.trim()).filter(Boolean) : ["just purchased this product"];
+    
+    const popup = document.getElementById('salesNotificationPopup');
+    const closeBtn = document.getElementById('salesNotificationClose');
+    
+    if (!popup || !closeBtn) return;
+
+    // Di chuyển popup ra body để thoát khỏi shopify-section wrapper
+    // (Cart Drawer gán inert lên wrapper cha, nên popup bên trong bị vô hiệu hóa)
+    document.body.appendChild(popup);
+
+    // Ngăn Cart Drawer vô hiệu hóa notification qua thuộc tính inert
+    // (Cart Drawer dùng data-shadow-root + trapFocus sẽ gán inert lên tất cả con trực tiếp của body)
+    var inertObserver = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        if (mutation.attributeName === 'inert' && popup.hasAttribute('inert')) {
+          popup.removeAttribute('inert');
+        }
+      });
+    });
+    inertObserver.observe(popup, { attributes: true, attributeFilter: ['inert'] });
+
+    document.getElementById('salesNotificationBtnText').innerText = btnText;
+
+    let notificationTimeout;
+    let nextNotificationTimer;
+    
+    const initialDelay = {{ section.settings.initial_delay | times: 1000 }};
+    const showDuration = {{ section.settings.show_time | times: 1000 }};
+    const delayBetween = {{ section.settings.delay_between | times: 1000 }};
+    const shouldRunNotifications = {% if request.page_type == 'product' %}true{% else %}false{% endif %};
+    const mobileCartDrawerMedia = window.matchMedia('(max-width: 767px)');
+
+    function isMobileCartDrawerOpen() {
+        const cartDrawer = document.getElementById('CartDrawer');
+        return mobileCartDrawerMedia.matches && cartDrawer && cartDrawer.classList.contains('is-active');
+    }
+
+    function scheduleNextNotification(delay) {
+        clearTimeout(nextNotificationTimer);
+        nextNotificationTimer = setTimeout(showNotification, delay);
+    }
+
+    function suppressNotificationInMobileCartDrawer() {
+        if (!isMobileCartDrawerOpen()) return;
+
+        clearTimeout(notificationTimeout);
+        popup.classList.remove('is-visible');
+    }
+
+    function handleCartDrawerOpen() {
+        if (!mobileCartDrawerMedia.matches) return;
+
+        clearTimeout(nextNotificationTimer);
+        suppressNotificationInMobileCartDrawer();
+    }
+
+    function handleCartDrawerClose() {
+        if (!mobileCartDrawerMedia.matches || !shouldRunNotifications) return;
+
+        scheduleNextNotification(delayBetween);
+    }
+
+    function showNotification() {
+        if (!shouldRunNotifications) return;
+
+        if (isMobileCartDrawerOpen()) {
+            suppressNotificationInMobileCartDrawer();
+            scheduleNextNotification(delayBetween);
+            return;
+        }
+
+        if (popup.classList.contains('is-visible')) return;
+
+        const randomProduct = products[Math.floor(Math.random() * products.length)];
+        const randomName = names[Math.floor(Math.random() * names.length)];
+        const randomAction = actions[Math.floor(Math.random() * actions.length)];
+        const randomTime = Math.floor(Math.random() * 15) + 1;
+
+        document.getElementById('salesNotificationName').innerText = randomName;
+        document.getElementById('salesNotificationActionText').innerText = randomAction;
+        document.getElementById('salesNotificationTitle').innerText = randomProduct.title;
+        document.getElementById('salesNotificationPrice').innerHTML = randomProduct.price;
+        document.getElementById('salesNotificationTime').innerText = randomTime + " " + timeSuffix;
+        document.getElementById('salesNotificationImage').src = randomProduct.image;
+        document.getElementById('salesNotificationLink').href = randomProduct.url;
+
+        popup.classList.add('is-visible');
+
+        // Set the timestamp for the NEXT allowed notification (Current time + show time + delay between)
+        const nextTime = Date.now() + showDuration + delayBetween;
+        sessionStorage.setItem('salesNotifNextTime', nextTime);
+
+        notificationTimeout = setTimeout(hideNotification, showDuration);
+    }
+
+    function hideNotification() {
+        popup.classList.remove('is-visible');
+        scheduleNextNotification(delayBetween);
+    }
+
+    function bindCartDrawerEvents() {
+        if (!window.themeCore || !window.themeCore.EventBus) return;
+
+        window.themeCore.EventBus.listen('Toggle:CartDrawer:open', handleCartDrawerOpen);
+        window.themeCore.EventBus.listen('Toggle:CartDrawer:close', handleCartDrawerClose);
+    }
+
+    if (window.themeCore && window.themeCore.EventBus) {
+        bindCartDrawerEvents();
+    } else {
+        document.addEventListener('theme:all:loaded', bindCartDrawerEvents, { once: true });
+    }
+
+    if (mobileCartDrawerMedia.addEventListener) {
+        mobileCartDrawerMedia.addEventListener('change', suppressNotificationInMobileCartDrawer);
+    } else if (mobileCartDrawerMedia.addListener) {
+        mobileCartDrawerMedia.addListener(suppressNotificationInMobileCartDrawer);
+    }
+
+    closeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        clearTimeout(notificationTimeout);
+        clearTimeout(nextNotificationTimer);
+        popup.classList.remove('is-visible');
+        
+        // If manually closed, schedule the next one based on delayBetween
+        const nextTime = Date.now() + delayBetween;
+        sessionStorage.setItem('salesNotifNextTime', nextTime);
+        scheduleNextNotification(delayBetween);
+    });
+
+    {% if request.page_type == 'product' %}
+    // Use sessionStorage to persist logic across page navigation within the same session
+    const storedNextTime = sessionStorage.getItem('salesNotifNextTime');
+    
+    if (!storedNextTime) {
+        // First product page visit: Wait initialDelay (e.g., 7s)
+        // If the user navigates away before this triggers, sessionStorage remains empty
+        // and the 7s timer will restart on the next product page!
+        scheduleNextNotification(initialDelay);
+    } else {
+        // A popup has already been shown in this session
+        const nextTime = parseInt(storedNextTime, 10);
+        const now = Date.now();
+        
+        if (now >= nextTime) {
+            // The wait time has already elapsed while navigating.
+            // Show with a tiny 1-second buffer so it doesn't jar the user instantly on load.
+            scheduleNextNotification(1000);
+        } else {
+            // Still waiting for the delayBetween (e.g., 5 mins) to finish.
+            const timeToWait = nextTime - now;
+            scheduleNextNotification(timeToWait);
+        }
+    }
+    {% endif %}
+});
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Sales Notification",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable",
+      "label": "Enable notification",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Content Settings"
+    },
+    {
+      "type": "textarea",
+      "id": "names",
+      "label": "Random Names (comma separated)",
+      "default": "sarah.j, John D., Alex M., A customer, David R., Emma W."
+    },
+    {
+      "type": "textarea",
+      "id": "actions",
+      "label": "Random Actions (comma separated)",
+      "default": "just purchased this product, just added this to their cart, is viewing this product"
+    },
+    {
+      "type": "text",
+      "id": "time_suffix",
+      "label": "Time Suffix",
+      "default": "minutes ago"
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Button Text",
+      "default": "View product"
+    },
+    {
+      "type": "header",
+      "content": "Product Settings"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Select Collection",
+      "info": "Leave empty to randomly use all products in store"
+    },
+    {
+      "type": "header",
+      "content": "Appearance (Colors & Font)"
+    },
+    {
+      "type": "font_picker",
+      "id": "font_family",
+      "label": "Font Family",
+      "default": "oswald_n4"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#222222"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg_color",
+      "label": "Button Background Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "btn_text_color",
+      "label": "Button Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Appearance (Border & Layout)"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border Color",
+      "default": "#eeeeee"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "label": "Border Thickness",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Corner Radius",
+      "default": 10
+    },
+    {
+      "type": "select",
+      "id": "position",
+      "label": "Desktop Position",
+      "options": [
+        { "value": "left", "label": "Bottom Left" },
+        { "value": "right", "label": "Bottom Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "mobile_position",
+      "label": "Mobile Position",
+      "options": [
+        { "value": "left", "label": "Bottom Left" },
+        { "value": "right", "label": "Bottom Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Timing (Seconds)"
+    },
+    {
+      "type": "number",
+      "id": "initial_delay",
+      "label": "Initial delay (seconds)",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "show_time",
+      "min": 3,
+      "max": 20,
+      "step": 1,
+      "label": "Display duration (seconds)",
+      "default": 6
+    },
+    {
+      "type": "number",
+      "id": "delay_between",
+      "label": "Delay between popups (seconds)",
+      "default": 10,
+      "info": "Enter time in seconds (e.g., 900 for 15 minutes)."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sales Notification"
+    }
+  ]
+}
+{% endschema %}

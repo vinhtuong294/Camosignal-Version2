@@ -1,0 +1,192 @@
+{%- assign color_scheme      	           = section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+
+{%- assign age_check_cookie_time 	= section.settings.age_check_time -%}
+{%- assign title 					= section.settings.age_check_title -%}
+{%- assign text 					= section.settings.age_check_text -%}
+{%- assign button_label 			= section.settings.age_check_button_label | default: "Yes" -%}
+{%- assign age_check_button_style 	= section.settings.age_check_button_style -%}
+{%- assign button_close_label 		= section.settings.age_check_button_close_label -%}
+{%- assign redirect_url 			= section.settings.age_check_redirect_url | default: "https://www.bing.com/" -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- render 'adastra' with '/src/styles/age-check-popup.scss' -%}
+{%- render 'adastra' with '/src/scripts/section-age-check-popup.js' -%}
+
+<div id="age-check-popup"
+	 class="popup age-check-popup need-animate color-{{ color_scheme }} js-scroll-lock-container"
+	 data-cookie-time="{{ age_check_cookie_time }}"
+	 data-redirect-url="{{ redirect_url }}"
+	 role="dialog"
+	{% if title != blank %}
+		aria-labelledby="age-check-popup-title"
+	{% endif %}
+>
+	<div class="age-check-popup__col-text">
+		<div class="age-check-popup__content">
+			{%- if title != blank -%}
+				<h2 id="age-check-popup-title" class="h3">{{- title -}}</h2>
+			{%- endif -%}
+
+			{%- if text != blank -%}
+				<div class="age-check-popup__text rte">{{- text -}}</div>
+			{%- endif -%}
+
+			{%- if button_label != blank -%}
+				<div class="age-check-popup__buttons">
+					<button
+						class="button button--{{- age_check_button_style }} button--full-width age-check-popup__confirm-button js-age-check-popup-confirm"
+						type="button"
+					>
+						{%- if age_check_button_style == 'primary' -%}
+							{{- button_label -}}
+						{%- else -%}
+							<span data-text="{{- button_label -}}">
+										<span>{{- button_label -}}</span>
+									</span>
+						{%- endif -%}
+					</button>
+
+					{%- if button_close_label != blank -%}
+						<button
+							type="button"
+							class="button-link age-check-popup__close-button focus-visible-outline"
+							data-target="age-check-popup"
+							data-js-toggle="AgeCheckPopupToggle"
+						>
+								<span data-text="{{- button_close_label -}}">
+									<span>{{- button_close_label -}}</span>
+								</span>
+						</button>
+					{%- endif -%}
+				</div>
+			{%- endif -%}
+
+			<div class="is-hidden">
+				<a href="{{- redirect_url -}}" class="js-age-check-popup-redirect-link">{{- button_close_label -}}</a>
+			</div>
+		</div>
+	</div>
+
+	<button type="button"
+			class="age-check-popup__close-icon-button age-check-popup__close-icon-button--desktop focus-visible-outline popup-close-icon-button"
+			aria-label="{{- 'general.accessibility.close_modal' | t | escape -}}"
+			data-target="age-check-popup"
+			data-js-toggle="AgeCheckPopupToggle"
+	>
+		{%- render 'icons', icon: 'menu-close' -%}
+	</button>
+</div>
+
+{% schema %}
+{
+	"name": "Age check popup",
+	"limit": 1,
+	"enabled_on": {
+		"groups": ["custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "General"
+		},
+		{
+			"type": "select",
+			"id": "age_check_time",
+			"label": "Cookie time",
+			"options": [
+				{
+					"value": "1",
+					"label": "1 day"
+				},
+				{
+					"value": "7",
+					"label": "1 week"
+				},
+				{
+					"value": "30",
+					"label": "1 month"
+				},
+				{
+					"value": "90",
+					"label": "3 months"
+				},
+				{
+					"value": "360",
+					"label": "1 year"
+				}
+			]
+		},
+		{
+			"type": "inline_richtext",
+			"id": "age_check_title",
+			"label": "Heading",
+			"default": "Access to the store"
+		},
+		{
+			"type": "richtext",
+			"id": "age_check_text",
+			"label": "Text",
+			"default": "<p>Are you 18 years old?</p>"
+		},
+		{
+			"type": "text",
+			"id": "age_check_button_label",
+			"label": "Button label",
+			"default": "Yes, I am 18 or older"
+		},
+		{
+			"type": "select",
+			"id": "age_check_button_style",
+			"label": "Button style",
+			"options": [
+				{
+					"value": "primary",
+					"label": "Primary"
+				},
+				{
+					"value": "secondary",
+					"label": "Secondary"
+				}
+			],
+			"default": "secondary"
+		},
+		{
+			"type": "text",
+			"id": "age_check_button_close_label",
+			"label": "Button close label",
+			"default": "No Thanks"
+		},
+		{
+			"type": "url",
+			"id": "age_check_redirect_url",
+			"label": "Redirect link"
+		}
+	],
+	"presets": [
+		{
+			"name": "Age check popup"
+		}
+	]
+}
+{% endschema %}

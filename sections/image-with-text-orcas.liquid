@@ -1,0 +1,771 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Image with text
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign color_scheme      	           	= section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance 	= section.settings.enable_color_scheme_inheritance -%}
+{%- assign images_layout          			= section.settings.images_layout -%}
+{%- assign enable_images_animation          = section.settings.enable_images_animation -%}
+{%- assign scroll_images_direction        	= section.settings.scroll_images_direction -%}
+{%- assign image_position        	  		= section.settings.image_position -%}
+{%- assign text_alignment        	  		= section.settings.text_alignment -%}
+{%- assign label                 	  		= section.settings.label -%}
+{%- assign heading                 	  		= section.settings.heading -%}
+{%- assign text_content               		= section.settings.text_content -%}
+{%- assign button_label            	  		= section.settings.button_label -%}
+{%- assign button_aria_label       	  		= section.settings.button_aria_label -%}
+{%- assign button_url              	  		= section.settings.button_url -%}
+{%- assign button_style            	  		= section.settings.button_style -%}
+{%- assign container 			           	= section.settings.container_width -%}
+
+{%- assign first_col_image_1 				= section.settings.first_col_image_1 -%}
+{%- assign first_col_image_2 				= section.settings.first_col_image_2 -%}
+{%- assign first_col_image_3 				= section.settings.first_col_image_3 -%}
+{%- assign second_col_image_1 				= section.settings.second_col_image_1 -%}
+{%- assign second_col_image_2 				= section.settings.second_col_image_2 -%}
+{%- assign second_col_image_3 				= section.settings.second_col_image_3 -%}
+
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- assign is_lazy = true -%}
+
+{%- capture section_styles -%}
+	--text-alignment: {{ text_alignment | replace: 'left', 'start' | replace: 'right', 'end' }};
+	--inner-offset-top: {{ section.settings.inner_offset_top }}px; {{-  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom }}px; {{-  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px; {{-  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px; {{-  -}}
+	--container-width: {{ container_width }};
+	--first-col-animation-duration: {{ section.settings.fist_col_movement_speed }}s;
+	--second-col-animation-duration: {{ section.settings.second_col_movement_speed }}s;
+{%- endcapture -%}
+
+{%- render 'adastra' with '/src/styles/image-with-text.scss' -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	#shopify-section-{{- section.id -}} .image-with-text-image,
+	#shopify-section-{{- section.id -}} .image-with-text__image-col-inner,
+	#shopify-section-{{- section.id -}} .image-with-text__image-container--multi .image-with-text-image {
+		border-radius: {{ section.settings.image_border_radius }}px;
+		overflow: hidden;
+	}
+
+	{% if section.settings.image_aspect_ratio != 'auto' %}
+		{% assign active_aspect_ratio = section.settings.image_aspect_ratio %}
+	{% else %}
+		{% assign active_aspect_ratio = section.settings.first_col_image_1.aspect_ratio | default: '1 / 1' %}
+	{% endif %}
+
+	#shopify-section-{{ section.id }} .image-with-text .image-with-text__image-wrapper {
+		aspect-ratio: {{ active_aspect_ratio }} !important;
+		padding-top: 0 !important;
+		padding-bottom: 0 !important;
+		height: auto !important;
+		display: block !important;
+		position: relative !important;
+	}
+
+	#shopify-section-{{ section.id }} .image-with-text .image-with-text__image {
+		aspect-ratio: {{ active_aspect_ratio }} !important;
+		object-fit: cover !important;
+		width: 100% !important;
+		height: auto !important;
+		position: relative !important;
+		top: auto !important;
+		left: auto !important;
+	}
+
+	#shopify-section-{{- section.id -}} .image-with-text__heading {
+		font-size: {{ section.settings.heading_font_size_mobile }}px !important;
+	}
+
+	#shopify-section-{{- section.id -}} .image-with-text__text-content p,
+	#shopify-section-{{- section.id -}} .image-with-text__text-content {
+		font-size: {{ section.settings.text_font_size_mobile }}px !important;
+	}
+
+	@media screen and (min-width: 992px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+
+		#shopify-section-{{- section.id -}} .image-with-text__container {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		#shopify-section-{{- section.id -}} .image-with-text__image-container {
+			width: {{ section.settings.image_width_desktop }}%;
+			flex: 0 0 {{ section.settings.image_width_desktop }}%;
+			max-width: {{ section.settings.image_width_desktop }}%;
+		}
+
+		#shopify-section-{{- section.id -}} .image-with-text__content-wrapper {
+			width: calc({{ 100 | minus: section.settings.image_width_desktop }}% - 40px);
+			flex: 0 0 calc({{ 100 | minus: section.settings.image_width_desktop }}% - 40px);
+			max-width: calc({{ 100 | minus: section.settings.image_width_desktop }}% - 40px);
+		}
+
+		#shopify-section-{{- section.id -}} .image-with-text__heading {
+			font-size: {{ section.settings.heading_font_size_desktop }}px !important;
+		}
+
+		#shopify-section-{{- section.id -}} .image-with-text__text-content p,
+		#shopify-section-{{- section.id -}} .image-with-text__text-content {
+			font-size: {{ section.settings.text_font_size_desktop }}px !important;
+		}
+	}
+{%- endstyle -%}
+
+{%- capture content -%}
+	<div class="image-with-text__content-wrapper">
+		<div class="image-with-text__content">
+			{%- if label != blank -%}
+				<p class="image-with-text__label">{{ label }}</p>
+			{%- endif -%}
+
+			{%- if heading != blank -%}
+				<h2 class="image-with-text__heading">
+					{{- heading -}}
+				</h2>
+			{%- endif -%}
+
+			{%- if text_content != blank -%}
+				<div class="image-with-text__text-content rte">
+					{{- text_content -}}
+				</div>
+			{%- endif -%}
+
+			{%- if button_label != blank and button_url != blank -%}
+				<a
+					href="{{- button_url -}}"
+					{%- if button_aria_label != blank -%}aria-label="{{- button_aria_label | escape -}}"{%- endif -%}
+					class="image-with-text__button button button--{{- button_style -}}"
+				>
+					{{- button_label -}}
+				</a>
+			{%- endif -%}
+		</div>
+	</div>
+{%- endcapture -%}
+
+{%- capture first_column_images -%}
+	{%- if section.index == 1 -%}
+		{%- assign is_lazy = false -%}
+	{%- endif -%}
+
+	{%- render 'image-with-text-image',
+		desktop_image: first_col_image_1,
+		lazy: is_lazy,
+		width: 430,
+		width_1600: 350,
+		width_991: 230,
+		width_767: 370,
+		width_420: 191,
+		width_375: 170
+	-%}
+
+	{%- render 'image-with-text-image',
+		desktop_image: first_col_image_2,
+		lazy: true,
+		width: 430,
+		width_1600: 350,
+		width_991: 230,
+		width_767: 370,
+		width_420: 191,
+		width_375: 170
+	-%}
+
+	{%- render 'image-with-text-image',
+		desktop_image: first_col_image_3,
+		lazy: true,
+		width: 430,
+		width_1600: 350,
+		width_991: 230,
+		width_767: 370,
+		width_420: 191,
+		width_375: 170
+	-%}
+{%- endcapture -%}
+
+{%- capture second_column_images -%}
+	{%- render 'image-with-text-image',
+		desktop_image: second_col_image_1,
+		lazy: true,
+		width: 430,
+		width_1600: 350,
+		width_991: 230,
+		width_767: 370,
+		width_420: 191,
+		width_375: 170
+	-%}
+
+	{%- render 'image-with-text-image',
+		desktop_image: second_col_image_2,
+		lazy: true,
+		width: 430,
+		width_1600: 350,
+		width_991: 230,
+		width_767: 370,
+		width_420: 191,
+		width_375: 170
+	-%}
+
+	{%- render 'image-with-text-image',
+		desktop_image: second_col_image_3,
+		lazy: true,
+		width: 430,
+		width_1600: 350,
+		width_991: 230,
+		width_767: 370,
+		width_420: 191,
+		width_375: 170
+	-%}
+{%- endcapture -%}
+
+{%- capture images -%}
+	{%- if images_layout == 'one_image' -%}
+		{%- if section.index == 1 -%}
+			{%- assign is_lazy = false -%}
+		{%- endif -%}
+
+		{%- render 'image-with-text-image',
+			desktop_image: first_col_image_1,
+			lazy: is_lazy,
+			width: 860,
+			width_1600: 700,
+			width_991: 460,
+			width_767: 720,
+			width_420: 372,
+			width_375: 327
+		-%}
+	{%- else -%}
+	{%- capture image_animation_classes -%}
+		{% if scroll_images_direction == 'bottom' %}
+			image-with-text__image-col-inner--animation-reverse
+		{% endif %}
+	{%- endcapture -%}
+
+	<div class="image-with-text__image-col">
+		<div
+			class="image-with-text__image-col-inner {% if enable_images_animation %}image-with-text__image-col-inner--first {{ image_animation_classes }}{% endif %}">
+			{{- first_column_images -}}
+		</div>
+
+		{%- if enable_images_animation -%}
+			<div
+				class="image-with-text__image-col-inner {% if enable_images_animation %}image-with-text__image-col-inner--first {{ image_animation_classes }}{% endif %}">
+				{{- first_column_images -}}
+			</div>
+
+			<div
+				class="image-with-text__image-col-inner {% if enable_images_animation %}image-with-text__image-col-inner--first {{ image_animation_classes }}{% endif %}">
+				{{- first_column_images -}}
+			</div>
+		{%- endif -%}
+	</div>
+
+	<div class="image-with-text__image-col image-with-text__image-col--last">
+		<div
+			class="image-with-text__image-col-inner {% if enable_images_animation %}image-with-text__image-col-inner--last {{ image_animation_classes }}{% endif %}">
+			{{- second_column_images -}}
+		</div>
+
+		{%- if enable_images_animation -%}
+			<div
+				class="image-with-text__image-col-inner {% if enable_images_animation %}image-with-text__image-col-inner--last {{ image_animation_classes }}{% endif %}">
+				{{- second_column_images -}}
+			</div>
+
+			<div
+				class="image-with-text__image-col-inner {% if enable_images_animation %}image-with-text__image-col-inner--last {{ image_animation_classes }}{% endif %}">
+				{{- second_column_images -}}
+			</div>
+		{%- endif -%}
+	</div>
+	{%- endif -%}
+{%- endcapture -%}
+
+{%- if images_layout == 'multiply_images' -%}
+	{%- assign multi_images_class = 'image-with-text__image-container--multi' -%}
+{%- endif -%}
+
+<section class="image-with-text color-{{ color_scheme }} js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}" style="{{ section_styles }}">
+	<div class="image-with-text__container section-animate container">
+		{%- if image_position == 'left' -%}
+			<div class="image-with-text__image-container {{ multi_images_class }}">
+				{{- images -}}
+			</div>
+
+			{{- content -}}
+		{%- else -%}
+			<div class="image-with-text__image-container image-with-text__image-container--mobile {{ multi_images_class }}">
+				{{- images -}}
+			</div>
+
+			{{- content -}}
+
+			<div class="image-with-text__image-container image-with-text__image-container--desktop {{ multi_images_class }}">
+				{{- images -}}
+			</div>
+		{%- endif -%}
+	</div>
+</section>
+
+
+{%- schema -%}
+	{
+		"name": "Ảnh kèm vùng chữ (Orcas)",
+		"disabled_on": {
+			"groups": ["header", "footer", "custom.popup"]
+		},
+		"settings": [
+			{
+				"type": "header",
+				"content": "Màu sắc (Colors)"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_color_scheme_inheritance",
+				"label": "Kế thừa bảng màu sắc chung",
+				"default": true
+			},
+			{
+				"type": "color_scheme",
+				"id": "color_scheme",
+				"label": "Bảng màu",
+				"default": "scheme-1"
+			},
+			{
+				"type": "header",
+				"content": "Bố cục chung (General)"
+			},
+			{
+				"id": "images_layout",
+				"type": "select",
+				"label": "Bố cục ảnh",
+				"options": [
+					{
+						"value": "one_image",
+						"label": "Một ảnh lớn"
+					},
+					{
+						"value": "multiply_images",
+						"label": "Nhiều ảnh xếp lớp"
+					}
+				],
+				"default": "multiply_images"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_images_animation",
+				"label": "Bật hiệu ứng nổi bọt ảnh",
+				"default": true,
+				"info": "Chỉ hoạt động khi chọn 'Nhiều ảnh xếp lớp'."
+			},
+			{
+				"type": "select",
+				"id": "scroll_images_direction",
+				"label": "Hướng cuộn ảnh",
+				"options": [
+					{
+						"value": "top",
+						"label": "Hướng lên"
+					},
+					{
+						"value": "bottom",
+						"label": "Hướng xuống"
+					}
+				],
+				"default": "top"
+			},
+			{
+				"id": "image_position",
+				"type": "select",
+				"label": "Vị trí cột ảnh",
+				"options": [
+					{
+						"value": "left",
+						"label": "Trái"
+					},
+					{
+						"value": "right",
+						"label": "Phải"
+					}
+				],
+				"default": "left"
+			},
+			{
+				"id": "text_alignment",
+				"type": "select",
+				"label": "Căn lề khu vực chữ",
+				"options": [
+					{
+						"value": "left",
+						"label": "Trái"
+					},
+					{
+						"value": "center",
+						"label": "Giữa"
+					},
+					{
+						"value": "right",
+						"label": "Phải"
+					}
+				],
+				"default": "center"
+			},
+			{
+				"type": "header",
+				"content": "Kích thước Tùy chỉnh (Đặc biệt)"
+			},
+			{
+				"type": "range",
+				"id": "image_width_desktop",
+				"min": 30,
+				"max": 70,
+				"step": 1,
+				"unit": "%",
+				"label": "Độ rộng cột ảnh (Desktop)",
+				"default": 50
+			},
+			{
+				"type": "select",
+				"id": "image_aspect_ratio",
+				"label": "Tỉ lệ ảnh (Aspect Ratio)",
+				"options": [
+					{
+						"value": "auto",
+						"label": "Tự nhiên (Ảnh gốc)"
+					},
+					{
+						"value": "1 / 1",
+						"label": "1:1 (Vuông)"
+					},
+					{
+						"value": "4 / 3",
+						"label": "4:3 (Ngang tiêu chuẩn)"
+					},
+					{
+						"value": "3 / 2",
+						"label": "3:2 (Ngang truyền thống)"
+					},
+					{
+						"value": "16 / 9",
+						"label": "16:9 (Chữ nhật ngang phim)"
+					},
+					{
+						"value": "2 / 1",
+						"label": "2:1 (Ngang rộng - thấp gấp đôi chiều dọc)"
+					},
+					{
+						"value": "2.5 / 1",
+						"label": "2.5:1 (Siêu ngang)"
+					}
+				],
+				"default": "2 / 1"
+			},
+			{
+				"type": "range",
+				"id": "image_border_radius",
+				"min": 0,
+				"max": 50,
+				"step": 1,
+				"unit": "px",
+				"label": "Độ bo góc ảnh (Border Radius)",
+				"default": 0
+			},
+			{
+				"type": "range",
+				"id": "heading_font_size_desktop",
+				"min": 20,
+				"max": 80,
+				"step": 1,
+				"unit": "px",
+				"label": "Cỡ chữ Tiêu đề (Desktop)",
+				"default": 40
+			},
+			{
+				"type": "range",
+				"id": "heading_font_size_mobile",
+				"min": 16,
+				"max": 50,
+				"step": 1,
+				"unit": "px",
+				"label": "Cỡ chữ Tiêu đề (Mobile)",
+				"default": 28
+			},
+			{
+				"type": "range",
+				"id": "text_font_size_desktop",
+				"min": 12,
+				"max": 30,
+				"step": 1,
+				"unit": "px",
+				"label": "Cỡ chữ Đoạn văn (Desktop)",
+				"default": 16
+			},
+			{
+				"type": "range",
+				"id": "text_font_size_mobile",
+				"min": 10,
+				"max": 24,
+				"step": 1,
+				"unit": "px",
+				"label": "Cỡ chữ Đoạn văn (Mobile)",
+				"default": 14
+			},
+			{
+				"type": "header",
+				"content": "Nội dung"
+			},
+			{
+				"id": "label",
+				"type": "text",
+				"label": "Nhãn phụ (Subheading)",
+				"default": "Camo Signal Story"
+			},
+			{
+				"id": "heading",
+				"type": "inline_richtext",
+				"label": "Tiêu đề (Heading)",
+				"default": "Câu chuyện thương hiệu"
+			},
+			{
+				"id": "text_content",
+				"type": "richtext",
+				"label": "Đoạn văn chi tiết"
+			},
+			{
+				"id": "button_label",
+				"type": "text",
+				"label": "Ký tự nút bấm",
+				"default": "Xem thêm"
+			},
+			{
+				"id": "button_aria_label",
+				"type": "text",
+				"label": "Văn bản hỗ trợ nút (Aria label)"
+			},
+			{
+				"id": "button_url",
+				"type": "url",
+				"label": "Đường dẫn nút (Link)"
+			},
+			{
+				"id": "button_style",
+				"type": "select",
+				"label": "Kiểu thiết kế nút",
+				"options": [
+					{
+						"value": "primary",
+						"label": "Chính (Primary)"
+					},
+					{
+						"value": "secondary",
+						"label": "Phụ (Secondary)"
+					}
+				],
+				"default": "primary"
+			},
+			{
+				"type": "header",
+				"content": "Dữ liệu Cột Ảnh Thứ Nhất"
+			},
+			{
+				"type": "range",
+				"id": "fist_col_movement_speed",
+				"label": "Tốc độ cuộn ảnh",
+				"min": 10,
+				"max": 30,
+				"unit": "s",
+				"default": 20
+			},
+			{
+				"type": "image_picker",
+				"id": "first_col_image_1",
+				"label": "Ảnh chính 1",
+				"info": "Ảnh hiển thị nếu chọn layout 'Một ảnh lớn'"
+			},
+			{
+				"type": "image_picker",
+				"id": "first_col_image_2",
+				"label": "Ảnh chính 2"
+			},
+			{
+				"type": "image_picker",
+				"id": "first_col_image_3",
+				"label": "Ảnh chính 3"
+			},
+			{
+				"type": "header",
+				"content": "Dữ liệu Cột Ảnh Thứ Hai"
+			},
+			{
+				"type": "range",
+				"id": "second_col_movement_speed",
+				"label": "Tốc độ cuộn ảnh cột 2",
+				"min": 10,
+				"max": 30,
+				"unit": "s",
+				"default": 20
+			},
+			{
+				"type": "image_picker",
+				"id": "second_col_image_1",
+				"label": "Ảnh phụ 1"
+			},
+			{
+				"type": "image_picker",
+				"id": "second_col_image_2",
+				"label": "Ảnh phụ 2"
+			},
+			{
+				"type": "image_picker",
+				"id": "second_col_image_3",
+				"label": "Ảnh phụ 3"
+			},
+			{
+				"type": "header",
+				"content": "Căn lề không gian (Layout)"
+			},
+			{
+				"type": "select",
+				"id": "container_width",
+				"label": "Độ rộng vùng an toàn",
+				"options": [
+					{
+						"value": "1808px",
+						"label": "Mặc định - 1680px"
+					},
+					{
+						"value": "2048px",
+						"label": "Lớn - 1920px"
+					},
+					{
+						"value": "100%",
+						"label": "Toàn màn hình"
+					},
+					{
+						"value": "inherit",
+						"label": "Theo cài đặt chung Theme"
+					}
+				],
+				"default": "inherit"
+			},
+			{
+				"type": "paragraph",
+				"content": "Viền ngoài (Margin)"
+			},
+			{
+				"type": "range",
+				"id": "offset_top_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Khoảng cách trên (Desktop)",
+				"default": 50
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Khoảng cách dưới (Desktop)",
+				"default": 50
+			},
+			{
+				"type": "range",
+				"id": "offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Khoảng cách trên (Mobile)",
+				"default": 25
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Khoảng cách dưới (Mobile)",
+				"default": 25
+			},
+			{
+				"type": "paragraph",
+				"content": "Viền trong (Padding)"
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Đệm trên (Desktop)",
+				"default": 30
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Đệm dưới (Desktop)",
+				"default": 30
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Đệm trên (Mobile)",
+				"default": 30
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Đệm dưới (Mobile)",
+				"default": 30
+			}
+		],
+		"presets": [
+			{
+				"name": "Ảnh kèm vùng chữ (Orcas Custom)",
+				"settings": {
+					"text_content": "<p>Kết hợp ảnh với nội dung chữ để tôn bật sản phẩm hoặc tin tức bạn muốn truyền tải đến khách hàng.</p>"
+				}
+			}
+		]
+	}
+{%- endschema -%}

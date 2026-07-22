@@ -1,0 +1,55 @@
+{%- assign is_button = false -%}
+
+{%- if button_text != blank and button_link != blank -%}
+	{%- assign is_button = true -%}
+{%- endif -%}
+
+{%- if heading != blank or description != blank or is_button != blank -%}
+	<div class="slideshow__slide-content {% if index == 1 %}js-need-animate-after-load{% else %}need-animate{% endif %}">
+		<div class="slideshow__slide-content-inner">
+			{%- if heading != blank -%}
+				<h2
+					class="h1 slideshow__slide-heading"
+					{%- if enable_parallax -%}
+						data-swiper-parallax="-400"
+					{%- endif -%}
+				>
+					{{- heading -}}
+				</h2>
+			{%- endif -%}
+
+			{%- if description != blank -%}
+				<div
+					class="slideshow__slide-description rte"
+					{%- if enable_parallax -%}
+						data-swiper-parallax="-300"
+					{%- endif -%}
+				>
+					{{- description -}}
+				</div>
+			{%- endif -%}
+
+			{%- if is_button -%}
+				<div class="slideshow__slide-button-wrapper"
+					{% if enable_parallax %}
+					data-swiper-parallax="-200"
+					{% endif %}
+				>
+					<a
+						class="button button--primary slideshow__slide-button js-button"
+						href="{{- button_link -}}"
+						{% if button_aria_label != blank %}
+							aria-label="{{- button_aria_label | escape -}}"
+						{% endif %}
+						{% if open_in_new_tab %}
+							target="_blank"
+							rel="nofollow"
+						{% endif %}
+					>
+						{{- button_text -}}
+					</a>
+				</div>
+			{%- endif -%}
+		</div>
+	</div>
+{%- endif -%}

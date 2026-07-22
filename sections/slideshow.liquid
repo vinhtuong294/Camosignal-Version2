@@ -1,0 +1,1589 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Slideshow
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign color_scheme      	  = section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign show_pagination 		  = section.settings.show_pagination -%}
+{%- assign show_slide_preview 	  = section.settings.show_slide_preview -%}
+{%- assign enable_loop 			  = section.settings.enable_loop -%}
+{%- assign enable_autoplay 		  = section.settings.enable_autoplay -%}
+{%- assign autoplay_speed 		  = section.settings.autoplay_speed | times: 1000 -%}
+{%- assign animation_speed 		  = section.settings.animation_speed | times: 1000 -%}
+{%- assign animation_type 		  = section.settings.animation_type -%}
+{%- assign effect 				  = animation_type -%}
+{%- assign blocks                 = section.blocks -%}
+{%- assign parallax 			  = false -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- if effect == 'parallax' -%}
+	{%- assign effect 	= 'slide' -%}
+	{%- assign parallax = true -%}
+{%- endif -%}
+
+{%- assign height_desktop 			= section.settings.height_desktop | append: "vh" -%}
+{%- assign height_mobile 			= section.settings.height_mobile | append: "vh"  -%}
+{%- assign subtract_header_height	= section.settings.subtract_header_height -%}
+{%- assign pagination_color			= section.settings.pagination_color -%}
+{%- assign progress_bar_color 		= section.settings.progress_bar_color -%}
+{%- assign progress_bar_fill_color 	= section.settings.progress_bar_fill_color -%}
+
+{%- assign container 				= section.settings.container_width -%}
+
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- if subtract_header_height -%}
+	{%- assign height_desktop	= "calc(" | append: height_desktop | append: " - var(--header-height-static, calc(40px + ((var(--body-font-size, 16px) * 1.25 / 1.5) * 2) + (var(--body-font-size, 16px) * 1.15))) - var(--header-offset-top-static, calc(28px + (var(--body-font-size) * 0.875 * 1.6))))" -%}
+	{%- assign height_mobile	= "calc(" | append: height_mobile | append: " - var(--header-height-static, calc(40px + ((var(--body-font-size, 16px) * 1.25 / 1.5) * 2) + (var(--body-font-size, 16px) * 1.15))) - var(--header-offset-top-static, calc(28px + (var(--body-font-size) * 0.875 * 1.6))))" -%}
+{%- endif -%}
+
+{%- capture button_sound -%}
+	<button class="slideshow__slide-media-btn focus-visible-outline js-slideshow-slide-btn-sound" aria-label="{{- "general.accessibility.video_sound" | t | escape -}}">
+		{% render "icons", icon: "muted", class: "icon--muted"  %}
+
+		{% render "icons", icon: "sound", class: "icon--sound"  %}
+	</button>
+{%- endcapture -%}
+
+{%- capture slider_settings -%}
+	{
+		"slidesPerView": 1,
+		"grabCursor": true,
+		"loop": {{ enable_loop -}},
+		"speed": {{ animation_speed -}},
+		"effect": "{{- effect -}}",
+		"parallax": {{ parallax -}},
+		"spaceBetween": 16,
+		{%- if effect == "creative" %}
+		"creativeEffect": {
+			"prev": {
+				"shadow": true,
+				"translate": ["-20%", 0, -1]
+			},
+			"next": {
+				"translate": ["100%", 0, 0]
+			}
+		},
+		{%- endif -%}
+		{% if show_pagination -%}
+		"pagination": {
+			"el": ".swiper-pagination",
+			"clickable": true,
+			{% if blocks.size > 4 -%}
+				"dynamicBullets": true,
+			{%- endif %}
+			"bulletElement": "button"
+		},
+		{%- endif -%}
+		{% if enable_autoplay -%}
+		"autoplay": {
+			"delay": {{- autoplay_speed -}},
+			"disableOnInteraction": false
+			},
+		{%- else -%}
+		"autoplay": false,
+		{%- endif %}
+		"a11y": {
+			"prevSlideMessage": {{ "general.accessibility.slider.prev_slide_message" | t  | json -}},
+			"nextSlideMessage": {{ "general.accessibility.slider.next_slide_message" | t | json -}},
+			"firstSlideMessage": {{ "general.accessibility.slider.first_slide_message" | t | json -}},
+			"lastSlideMessage": {{ "general.accessibility.slider.last_slide_message" | t | json -}},
+			"slideLabelMessage": {{ "general.accessibility.slider.slide_label_message" | t | json -}},
+			"paginationBulletMessage": {{ "general.accessibility.slider.pagination_bullet_message" | t | json }}
+		}
+	}
+{%- endcapture -%}
+
+{%- capture section_styles  -%}
+	--height-desktop: {{ height_desktop -}}; {{-  -}}
+	--height-mobile: {{ height_mobile -}}; {{-  -}}
+	--progress-bar-color: {{ progress_bar_color -}}; {{-  -}}
+	--progress-bar-body-color: {{ progress_bar_color | color_modify: 'alpha', 0.3  -}}; {{-  -}}
+	--progress-bar-fill-color: {{ progress_bar_fill_color  -}}; {{-  -}}
+	--pagination-color: {{ pagination_color -}}; {{-  -}}
+	--slide-speed: {{ animation_speed }}ms;{{-  -}}
+	--container-width: {{- container_width -}};{{-  -}}
+	--iframe-container-width: {%- if container_width == "100%" -%}100vw{%- else -%}{{- container_width -}}{%- endif -%};{{-  -}}
+
+	--offset-top-mobile-internal: {{- section.settings.offset_top_mobile_internal -}}px;{{-  -}}
+	--offset-bottom-mobile-internal: {{- section.settings.offset_bottom_mobile_internal -}}px;{{-  -}}
+	--offset-top-desktop-internal: {{- section.settings.offset_top_desktop_internal -}}px;{{-  -}}
+	--offset-bottom-desktop-internal: {{- section.settings.offset_bottom_desktop_internal -}}px;{{-  -}}
+{%- endcapture -%}
+
+{%- assign slider_classes = 'slideshow__slider' -%}
+
+{% if blocks.size > 1 %}
+	{%- assign slider_classes = slider_classes | append: ' swiper' -%}
+{%- endif %}
+
+{%- assign slider_classes = slider_classes | append: ' js-slider' -%}
+
+{%- if blocks.size > 0 -%}
+	{%- render 'adastra' with '/src/styles/carousel.scss' -%}
+	{%- render 'adastra' with '/src/styles/slideshow.scss' -%}
+
+	{%- style -%}
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_mobile_external -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_mobile_external -}}px;
+		}
+
+		@media screen and (min-width: 768px) {
+			#shopify-section-{{- section.id -}} {
+				padding-top: {{- section.settings.offset_top_desktop_external -}}px;
+				padding-bottom: {{- section.settings.offset_bottom_desktop_external -}}px;
+			}
+		}
+	{%- endstyle -%}
+
+	<section
+		class="slideshow{% if container_width == "100%" %} slideshow--max-width{% endif %} container color-{{ color_scheme }} section-animate js-slideshow js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}"
+		id="{{- section.id -}}"
+		style="{{- section_styles -}}"
+	>
+		<div class="slideshow__container">
+			<div class="{{- slider_classes -}}">
+				<div class="slideshow__slider-wrapper {% if blocks.size > 1 %} swiper-wrapper{%- endif -%}">
+					{%- for block in blocks -%}
+						{%- assign heading 			 		   = block.settings.heading -%}
+						{%- assign heading_size				   = block.settings.heading_size -%}
+						{%- assign description 		 		   = block.settings.description -%}
+						{%- assign button_text 		 		   = block.settings.button_text -%}
+						{%- assign button_aria_label 		   = block.settings.button_aria_label -%}
+						{%- assign button_link 		 		   = block.settings.button_link -%}
+						{%- assign open_in_new_tab 	 		   = block.settings.open_in_new_tab -%}
+						{%- assign make_link_full_slide 	   = block.settings.make_link_full_slide -%}
+						{%- assign text_alignment_inside_block = block.settings.text_alignment_inside_block -%}
+						{%- assign content_alignment 		   = block.settings.content_alignment -%}
+						{%- assign vertical_content_alignment  = block.settings.vertical_content_alignment -%}
+
+						{%- assign enable_parallax = false -%}
+
+						{%- if parallax -%}
+							{%- assign enable_parallax = true -%}
+						{%- endif -%}
+
+						{%- assign poster_desktop = block.settings.poster_desktop -%}
+						{%- assign poster_mobile  = block.settings.poster_mobile | default: poster_desktop -%}
+
+						{%- assign enable_lazy_load = true -%}
+						{%- assign enable_fetch_priority = false -%}
+
+						{%- if section.index == 1 and forloop.index == 1 -%}
+							{%- assign enable_lazy_load = false -%}
+							{%- assign enable_fetch_priority = true -%}
+						{%- endif %}
+
+						{%- capture css_variables -%}
+							--heading-size: {{- heading_size -}}px;
+							--text-alignment: {{- text_alignment_inside_block -}};
+							--vertical-content-alignment: {{- vertical_content_alignment -}};
+							--color-background: {{- block.settings.color_background -}};
+							--color-overlay: {{- block.settings.color_overlay -}};
+							--color-heading: {{- block.settings.color_heading -}};
+							--color-text-primary: {{- block.settings.color_text -}};
+							--button-text-color-primary: {{- block.settings.button_text_color_primary -}};
+							--button-background-color-primary: {{- block.settings.button_background_color_primary -}};
+							--button-border-color-primary: {{- block.settings.button_border_color_primary -}};
+							--button-text-color-primary-hover: {{- block.settings.button_text_color_primary_hover -}};
+							--button-background-color-primary-hover: {{- block.settings.button_background_color_primary_hover -}};
+							--button-border-color-primary-hover: {{- block.settings.button_border_color_primary_hover -}};
+						{%- endcapture -%}
+						{%- assign css_variables = css_variables | strip_new_lines -%}
+
+						<div
+							class="slideshow__slide swiper-slide {{ content_alignment }}"
+							data-slide-index="{{ forloop.index0 }}"
+							style="{{- css_variables -}}"
+							{{ block.shopify_attributes }}
+						>
+							{%- if effect == 'flip' -%}
+								<div class="swiper-slide-shadow-right"></div>
+								<div class="swiper-slide-shadow-left"></div>
+							{%- elsif effect == 'creative' -%}
+								<div class="swiper-slide-shadow"></div>
+							{%- endif -%}
+
+							{%- if poster_desktop != blank -%}
+								<div class="slideshow__slide-poster slideshow__slide-poster--mobile js-video-poster-mobile">
+									{%- render "slideshow-slide-image",
+										image_mobile: poster_mobile,
+										image_desktop: poster_mobile,
+										placeholder_index: forloop.index0,
+										enable_lazy_load: enable_lazy_load,
+										enable_fetch_priority: enable_fetch_priority
+									-%}
+								</div>
+
+								<div class="slideshow__slide-poster slideshow__slide-poster--desktop js-video-poster-desktop">
+									{%- render "slideshow-slide-image",
+										image_mobile: poster_desktop,
+										image_desktop: poster_desktop,
+										placeholder_index: forloop.index0,
+										enable_lazy_load: enable_lazy_load,
+										enable_fetch_priority: enable_fetch_priority
+									-%}
+								</div>
+							{%- endif -%}
+
+							{%- case block.type  -%}
+								{% when "image" -%}
+									{%- assign image_desktop 	= block.settings.image_desktop -%}
+									{%- assign image_mobile 	= block.settings.image_mobile | default: image_desktop-%}
+
+									{% if button_link != blank and make_link_full_slide %}
+										<a href="{{ button_link }}"
+										   class="slideshow__link-full"
+										   aria-label="{{ button_aria_label }}"
+											{% if open_in_new_tab %}
+												target="_blank"
+												rel="nofollow"
+											{% endif %}
+										></a>
+									{% endif %}
+
+									{%- render "slideshow-slide-image",
+										image_mobile: image_mobile,
+										image_desktop: image_desktop,
+										placeholder_index: forloop.index0,
+										enable_lazy_load: enable_lazy_load,
+										enable_fetch_priority: enable_fetch_priority
+									-%}
+
+									<div class="slideshow__slide-media-overlay"></div>
+
+									<div class="slideshow__slide-box">
+										{%- render 'slideshow-slide-content',
+											enable_parallax: enable_parallax,
+											heading: heading,
+											description: description,
+											button_text: button_text,
+											button_link: button_link,
+											button_aria_label: button_aria_label,
+											open_in_new_tab: open_in_new_tab,
+											index: forloop.index
+										-%}
+									</div>
+								{% when "html_video" -%}
+									{%- assign video_desktop		= block.settings.video_desktop -%}
+									{%- assign video_mobile			= block.settings.video_mobile | default: video_desktop -%}
+									{%- assign poster_desktop 		= block.settings.poster_desktop -%}
+									{%- assign poster_mobile 		= block.settings.poster_mobile | default: poster_desktop -%}
+									{%- assign play_type 			= block.settings.autoplay -%}
+									{%- assign show_sound_button 	= block.settings.show_sound_button -%}
+									{%- assign show_button 			= true -%}
+									{%- assign autoplay 			= true -%}
+
+									{%- if play_type == "autoplay"  -%}
+										{%- assign show_button	= false -%}
+									{%- endif -%}
+
+									{%- if play_type == "button"  -%}
+										{%- assign autoplay	= false -%}
+									{%- endif -%}
+
+									{% if button_link != blank and make_link_full_slide %}
+										<a href="{{ button_link }}"
+										   class="slideshow__link-full"
+										   aria-label="{{ button_aria_label }}"
+											{% if open_in_new_tab %}
+												target="_blank"
+												rel="nofollow"
+											{% endif %}
+										></a>
+									{% endif %}
+
+									{%- if show_sound_button -%}
+										{{- button_sound -}}
+									{%- endif -%}
+
+									{%- if video_desktop != blank -%}
+										<div class="slideshow__slide-videos need-animate js-videos" data-show-button="{{- show_button -}}">
+											<video
+												class="slideshow__slide-media slideshow__slide-media--desktop js-video"
+												data-device="desktop"
+												data-type="html"
+												loop
+												muted
+												playsinline
+												tabindex="-1"
+												aria-hidden="true"
+												data-autoplay="{{- autoplay -}}"
+											>
+												{%- for source in video_desktop.sources -%}
+													{%- if source.mime_type == 'video/mp4' -%}
+														<source src="{{- source.url -}}" type="{{- source.mime_type -}}">
+													{%- endif -%}
+												{%- endfor -%}
+											</video>
+
+											<video
+												class="slideshow__slide-media slideshow__slide-media--mobile js-video"
+												data-device="mobile"
+												data-type="html"
+												loop
+												muted
+												playsinline
+												tabindex="-1"
+												aria-hidden="true"
+												data-autoplay="{{- autoplay -}}"
+											>
+												{%- for source in video_mobile.sources -%}
+													{%- if source.mime_type == 'video/mp4' -%}
+														<source src="{{- source.url -}}" type="{{- source.mime_type -}}">
+													{%- endif -%}
+												{%- endfor -%}
+											</video>
+										</div>
+									{%- else -%}
+										{%- assign placeholder_index = forloop.index0 | modulo: 3 | plus: 1 -%}
+										{%- assign placeholer_svg_name = 'hero-apparel-' | append: placeholder_index -%}
+
+										{{- placeholer_svg_name | placeholder_svg_tag: 'slideshow__slide-media  slideshow__slide-media--placeholder' -}}
+									{%- endif -%}
+
+									<div class="slideshow__slide-media-overlay"></div>
+
+									<div class="slideshow__slide-box">
+										{%- render 'slideshow-slide-content',
+											enable_parallax: enable_parallax,
+											heading: heading,
+											description: description,
+											button_text: button_text,
+											button_link: button_link,
+											button_aria_label: button_aria_label,
+											open_in_new_tab: open_in_new_tab,
+											index: forloop.index
+										-%}
+									</div>
+
+								{% when "external_video" -%}
+									{%- assign video_url_desktop 	= block.settings.video_url_desktop -%}
+									{%- assign video_url_mobile 	= block.settings.video_url_mobile | default: video_url_desktop -%}
+									{%- assign play_type 			= block.settings.autoplay -%}
+									{%- assign show_sound_button 	= block.settings.show_sound_button -%}
+									{%- assign show_button 			= true -%}
+									{%- assign autoplay 			= true -%}
+
+									{%- if play_type == "autoplay"  -%}
+										{%- assign show_button	= false -%}
+									{%- endif -%}
+
+									{%- if play_type == "button"  -%}
+										{%- assign autoplay	= false -%}
+									{%- endif -%}
+
+									{% if button_link != blank and make_link_full_slide %}
+										<a href="{{ button_link }}"
+										   class="slideshow__link-full"
+										   aria-label="{{ button_aria_label }}"
+											{% if open_in_new_tab %}
+												target="_blank"
+												rel="nofollow"
+											{% endif %}
+										></a>
+									{% endif %}
+
+									{%- if show_sound_button -%}
+										{{- button_sound -}}
+									{%- endif -%}
+
+									{%- if video_url_desktop != blank -%}
+										<div class="slideshow__slide-videos need-animate js-videos" data-show-button="{{- show_button -}}">
+											{%- if video_url_desktop.type == 'youtube' -%}
+												<div
+													class="slideshow__slide-media slideshow__slide-media--desktop js-video"
+													data-device="desktop"
+													data-type="{{- video_url_desktop.type -}}"
+													data-autoplay="{{- autoplay -}}"
+												>
+													<div
+														class="js-video-youtube"
+														data-video-id="{{- video_url_desktop.id -}}"
+														tabindex="-1"
+														aria-hidden="true"
+													></div>
+												</div>
+											{%- else -%}
+												<div
+													class="slideshow__slide-media slideshow__slide-media--desktop js-video"
+													data-device="desktop"
+													data-video-id="{{- video_url_desktop.id -}}"
+													data-type="{{- video_url_desktop.type -}}"
+													aria-hidden="true"
+													data-autoplay="{{- autoplay -}}"
+												></div>
+											{%- endif -%}
+
+											{%- if video_url_mobile.type == 'youtube' -%}
+												<div
+													class="slideshow__slide-media slideshow__slide-media--mobile js-video"
+													data-device="mobile"
+													data-type="{{- video_url_mobile.type -}}"
+													data-autoplay="{{- autoplay -}}"
+												>
+													<div
+														class="js-video-youtube"
+														data-video-id="{{- video_url_mobile.id -}}"
+														tabindex="-1"
+														aria-hidden="true"
+													></div>
+												</div>
+											{%- else -%}
+												<div
+													class="slideshow__slide-media slideshow__slide-media--mobile js-video"
+													data-device="mobile"
+													data-video-id="{{- video_url_mobile.id -}}"
+													data-type="{{- video_url_mobile.type -}}"
+													aria-hidden="true"
+													data-autoplay="{{- autoplay -}}"
+												></div>
+											{%- endif -%}
+										</div>
+									{%- elsif poster_desktop == blank -%}
+										{%- assign placeholder_index = forloop.index0 | modulo: 3 | plus: 1 -%}
+										{%- assign placeholer_svg_name = 'hero-apparel-' | append: placeholder_index -%}
+
+										{{- placeholer_svg_name | placeholder_svg_tag: 'slideshow__slide-media slideshow__slide-media--placeholder' -}}
+									{%- endif -%}
+
+									<div class="slideshow__slide-media-overlay"></div>
+
+									<div class="slideshow__slide-box">
+										{%- render 'slideshow-slide-content',
+											enable_parallax: enable_parallax,
+											heading: heading,
+											description: description,
+											button_text: button_text,
+											button_link: button_link,
+											button_aria_label: button_aria_label,
+											open_in_new_tab: open_in_new_tab,
+											index: forloop.index
+										-%}
+									</div>
+							{%- endcase -%}
+						</div>
+					{%- endfor -%}
+				</div>
+
+				{%- if enable_autoplay and blocks.size > 1 -%}
+					<div
+						class="slideshow__slider-progress-bar-wrapper {% if show_slide_preview %} slideshow__slider-progress-bar-wrapper--preview-position{% endif %}"
+						aria-hidden="true"
+					>
+						<div
+							class="slideshow__slider-progress-bar"
+							style="--width: 0%;"
+						>
+							<span class="slideshow__slider-progress-bar-content js-progressbar">
+							</span>
+						</div>
+					</div>
+				{%- endif -%}
+
+				<div class="slideshow__slider-video-button-wrapper {% if show_slide_preview %} slideshow__slider-video-button-wrapper--with-preview{% endif %}">
+					<button class="focus-visible-outline slideshow__slider-video-button slideshow__slider-video-button--play js-video-button-play" aria-label="{{- "general.accessibility.video_play" | t | escape -}}">
+						{%- render "icons", icon: "play" -%}
+					</button>
+
+					<button class="focus-visible-outline slideshow__slider-video-button slideshow__slider-video-button--pause js-video-button-pause"  aria-label="{{- "general.accessibility.video_pause" | t | escape -}}">
+						{%- render "icons", icon: "pause-round" -%}
+					</button>
+				</div>
+
+				{%- if blocks.size > 1 and show_pagination -%}
+					<div class="swiper-pagination slideshow__pagination">
+					</div>
+				{%- endif -%}
+
+				{%- if blocks.size > 1 and show_slide_preview -%}
+					<div class="slideshow__preview js-slideshow-preview">
+						{%- for block in blocks -%}
+							{%- assign is_preview_hidden = false -%}
+							{%- assign source_block = blank -%}
+
+							{%- if forloop.first -%}
+								{%- assign source_block = blocks | last -%}
+							{%- else -%}
+								{%- assign prev_index = forloop.index0 | minus: 1 -%}
+								{%- assign source_block = blocks | slice: prev_index, 1 | first -%}
+							{%- endif -%}
+
+							{%- if source_block and source_block.settings.content_alignment == 'slideshow__slide-content--right' and source_block.settings.vertical_content_alignment == 'end' -%}
+								{%- assign is_preview_hidden = true -%}
+							{%- endif -%}
+
+							<div data-index="{{- forloop.index -}}"
+								 class="slideshow__slide-preview {% if is_preview_hidden %}slideshow__slide-preview--hidden{% endif %}">
+								{%- case block.type -%}
+									{%- when 'image' -%}
+										{%- assign image_desktop = block.settings.image_desktop -%}
+										{%- assign image_mobile  = block.settings.image_mobile | default: image_desktop-%}
+
+										{%- render "slideshow-slide-image",
+											image_mobile: image_mobile,
+											image_desktop: image_desktop,
+											placeholder_index: forloop.index0,
+											enable_lazy_load: true,
+											enable_fetch_priority: false,
+											mob_380: 10,
+											mob_420: 10,
+											mob_480: 10,
+											mob_575: 10,
+											mob_767: 10,
+											small_width: 208,
+											medium_width: 208,
+											large_width: 208,
+											extra_large_width: 208,
+											full_hd_width: 208
+										-%}
+									{%- when 'html_video' or 'external_video' -%}
+										{%- assign poster_desktop = block.settings.poster_desktop -%}
+										{%- assign poster_mobile  = block.settings.poster_mobile | default: poster_desktop -%}
+
+										{%- render "slideshow-slide-image",
+											image_mobile: poster_mobile,
+											image_desktop: poster_desktop,
+											placeholder_index: forloop.index0,
+											enable_lazy_load: true,
+											enable_fetch_priority: false,
+											mob_380: 10,
+											mob_420: 10,
+											mob_480: 10,
+											mob_575: 10,
+											mob_767: 10,
+											small_width: 208,
+											medium_width: 208,
+											large_width: 208,
+											extra_large_width: 208,
+											full_hd_width: 208
+										-%}
+								{%- endcase -%}
+							</div>
+						{%- endfor -%}
+					</div>
+				{% endif %}
+			</div>
+
+			{%- if blocks.size > 1 -%}
+				<script class="js-slider-settings" type="application/json">
+					{{- slider_settings -}}
+				</script>
+			{%- endif -%}
+		</div>
+	</section>
+
+	{%- render 'adastra' with '/src/scripts/component-swiper-modules.js' -%}
+	{%- render 'adastra' with '/src/scripts/section-slideshow.js' -%}
+{%- endif -%}
+
+{%- schema -%}
+{
+	"name": "Slideshow",
+	"class": "slideshow-wrapper",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "Color scheme"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Slideshow settings"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_pagination",
+			"label": "Show pagination",
+			"default": true
+		},
+		{
+			"type": "checkbox",
+			"id": "show_slide_preview",
+			"label": "Show slide preview",
+			"info": "Not visible when the slide’s content alignment is set to bottom right. In other cases, the preview is visible.",
+			"default": true
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_loop",
+			"label": "Enable loop",
+			"default": true
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_autoplay",
+			"label": "Enable autoplay",
+			"default": true
+		},
+		{
+			"type": "range",
+			"id": "autoplay_speed",
+			"label": "Autoplay speed",
+			"unit": "s",
+			"min": 3,
+			"max": 15,
+			"step": 1,
+			"info": "Works only with enabled autoplay",
+			"default": 5
+		},
+		{
+			"type": "range",
+			"id": "animation_speed",
+			"label": "Animation speed",
+			"unit": "s",
+			"min": 0.1,
+			"max": 3,
+			"step": 0.1,
+			"default": 0.5
+		},
+		{
+			"type": "select",
+			"id": "animation_type",
+			"label": "Animation type",
+			"options": [
+				{
+					"value": "fade",
+					"label": "Fade"
+				},
+				{
+					"value": "slide",
+					"label": "Slide"
+				},
+				{
+					"value": "flip",
+					"label": "Flip"
+				},
+				{
+					"value": "creative",
+					"label": "Creative"
+				},
+				{
+					"value": "parallax",
+					"label": "Parallax"
+				}
+			],
+			"default": "creative"
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "color",
+			"id": "progress_bar_color",
+			"label": "Progress bar",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "color",
+			"id": "progress_bar_fill_color",
+			"label": "Progress bar fill",
+			"default": "#000000"
+		},
+		{
+			"type": "color",
+			"id": "pagination_color",
+			"label": "Pagination",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "range",
+			"id": "height_desktop",
+			"label": "Desktop section height",
+			"unit": "%",
+			"min": 30,
+			"max": 100,
+			"step": 1,
+			"default": 100
+		},
+		{
+			"type": "range",
+			"id": "height_mobile",
+			"label": "Mobile section height",
+			"unit": "%",
+			"min": 30,
+			"max": 100,
+			"step": 1,
+			"default": 100
+		},
+		{
+			"type": "checkbox",
+			"id": "subtract_header_height",
+			"label": "Subtract header height",
+			"default": false
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1808px",
+					"label": "Default - 1680px"
+				},
+				{
+					"value": "2048px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "100%",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop_external",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop_external",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset bottom",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile_external",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile_external",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset bottom",
+			"default": 0
+		},
+		{
+			"type": "paragraph",
+			"content": "Internal offsets"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop_internal",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop_internal",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset bottom",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile_internal",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile_internal",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset bottom",
+			"default": 0
+		}
+	],
+	"blocks": [
+		{
+			"type": "image",
+			"name": "Image",
+			"settings": [
+				{
+					"type": "header",
+					"content": "Image settings"
+				},
+				{
+					"type": "image_picker",
+					"id": "image_desktop",
+					"label": "Image (desktop)"
+				},
+				{
+					"type": "image_picker",
+					"id": "image_mobile",
+					"label": "Image (mobile)"
+				},
+				{
+					"type": "inline_richtext",
+					"id": "heading",
+					"label": "Heading",
+					"default": "Heading"
+				},
+				{
+					"type": "range",
+					"id": "heading_size",
+					"min": 32,
+					"max": 200,
+					"step": 2,
+					"default": 80,
+					"unit": "px",
+					"label": "Heading size"
+				},
+				{
+					"type": "richtext",
+					"id": "description",
+					"label": "Text",
+					"default": "<p>Text that describe content of slide</p>"
+				},
+				{
+					"type": "text",
+					"id": "button_text",
+					"label": "Button label",
+					"default": "Button label"
+				},
+				{
+					"type": "text",
+					"id": "button_aria_label",
+					"label": "Button aria-label",
+					"info": "Need for good accessibility, e.g. 'All news about...'. [Learn more](https://utdweb.team/shopify-themes/allure/manual/#section-slideshow)"
+				},
+				{
+					"type": "url",
+					"id": "button_link",
+					"label": "Button link",
+					"default": "/"
+				},
+				{
+					"type": "checkbox",
+					"id": "open_in_new_tab",
+					"label": "Open link in a new tab",
+					"default": false
+				},
+				{
+					"type": "checkbox",
+					"id": "make_link_full_slide",
+					"label": "Make link clickable on the entire slide",
+					"default": false
+				},
+				{
+					"type": "header",
+					"content": "Alignment"
+				},
+				{
+					"type": "select",
+					"id": "text_alignment_inside_block",
+					"label": "Text alignment inside the block",
+					"options": [
+						{
+							"value": "start",
+							"label": "Left"
+						},
+						{
+							"value": "center",
+							"label": "Center"
+						},
+						{
+							"value": "end",
+							"label": "Right"
+						}
+					],
+					"default": "start"
+				},
+				{
+					"type": "select",
+					"id": "content_alignment",
+					"label": "Content alignment",
+					"options": [
+						{
+							"value": "slideshow__slide-content--left",
+							"label": "Left"
+						},
+						{
+							"value": "slideshow__slide-content--center",
+							"label": "Center"
+						},
+						{
+							"value": "slideshow__slide-content--right",
+							"label": "Right"
+						}
+					],
+					"default": "slideshow__slide-content--left"
+				},
+				{
+					"type": "select",
+					"id": "vertical_content_alignment",
+					"label": "Vertical content alignment",
+					"options": [
+						{
+							"value": "start",
+							"label": "Top"
+						},
+						{
+							"value": "center",
+							"label": "Middle"
+						},
+						{
+							"value": "end",
+							"label": "Bottom"
+						}
+					],
+					"default": "center"
+				},
+				{
+					"type": "header",
+					"content": "Colors"
+				},
+				{
+					"type": "color",
+					"id": "color_background",
+					"label": "Background",
+					"default": "#ffffff"
+				},
+				{
+					"type": "color_background",
+					"id": "color_overlay",
+					"label": "Overlay",
+					"default": "linear-gradient(rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%)"
+				},
+				{
+					"type": "color",
+					"id": "color_heading",
+					"label": "Heading",
+					"default": "#ffffff"
+				},
+				{
+					"type": "color",
+					"id": "color_text",
+					"label": "Text",
+					"default": "#ffffff"
+				},
+				{
+					"type": "color",
+					"id": "button_text_color_primary",
+					"label": "Button text",
+					"default": "#000000"
+				},
+				{
+					"type": "color",
+					"id": "button_background_color_primary",
+					"label": "Button background",
+					"default": "#ffffff"
+				},
+				{
+					"type": "color",
+					"id": "button_border_color_primary",
+					"label": "Button border",
+					"default": "#E9E9E9"
+				},
+				{
+					"type": "color",
+					"id": "button_text_color_primary_hover",
+					"label": "Text (hover)",
+					"default": "#ffffff"
+				},
+				{
+					"type": "color",
+					"id": "button_background_color_primary_hover",
+					"label": "Background (hover)",
+					"default": "#000000"
+				},
+				{
+					"type": "color",
+					"id": "button_border_color_primary_hover",
+					"label": "Border (hover)",
+					"default": "#000000"
+				}
+			]
+		},
+		{
+			"type": "html_video",
+			"name": "HTML video",
+			"settings": [
+				{
+					"type": "header",
+					"content": "Content settings"
+				},
+				{
+					"type": "video",
+					"id": "video_desktop",
+					"label": "Video (desktop)"
+				},
+				{
+					"type": "video",
+					"id": "video_mobile",
+					"label": "Video (mobile)",
+					"info": "If the mobile video is blank, the desktop video will be used as the default"
+				},
+				{
+					"type": "image_picker",
+					"id": "poster_desktop",
+					"label": "Preview image (desktop)",
+					"info": "Set preview image for a video if it is played by a button. Set preview image for slide preview feature."
+				},
+				{
+					"type": "image_picker",
+					"id": "poster_mobile",
+					"label": "Preview image (mobile)",
+					"info": "Set preview image for a video if it is played by a button. Set preview image for slide preview feature."
+				},
+				{
+					"type": "inline_richtext",
+					"id": "heading",
+					"label": "Heading",
+					"default": "Heading"
+				},
+				{
+					"type": "range",
+					"id": "heading_size",
+					"min": 32,
+					"max": 200,
+					"step": 2,
+					"default": 80,
+					"unit": "px",
+					"label": "Heading size"
+				},
+				{
+					"type": "richtext",
+					"id": "description",
+					"label": "Text",
+					"default": "<p>Text that describe content of slide</p>"
+				},
+				{
+					"type": "text",
+					"id": "button_text",
+					"label": "Button label",
+					"default": "Button label"
+				},
+				{
+					"type": "text",
+					"id": "button_aria_label",
+					"label": "Button aria-label",
+					"info": "Need for good accessibility, e.g. 'All news about...'. [Learn more](https://utdweb.team/shopify-themes/allure/manual/#section-slideshow)"
+				},
+				{
+					"type": "url",
+					"id": "button_link",
+					"label": "Button link",
+					"default": "/"
+				},
+				{
+					"type": "checkbox",
+					"id": "open_in_new_tab",
+					"label": "Open link in a new tab",
+					"default": false
+				},
+				{
+					"type": "checkbox",
+					"id": "make_link_full_slide",
+					"label": "Make link clickable on the entire slide",
+					"default": false
+				},
+				{
+					"type": "header",
+					"content": "Video Settings"
+				},
+				{
+					"type": "select",
+					"id": "autoplay",
+					"label": "Play type",
+					"options": [
+						{
+							"value": "autoplay",
+							"label": "Autoplay"
+						},
+						{
+							"value": "button",
+							"label": "Play by а button"
+						},
+						{
+							"value": "autoplay_with_button",
+							"label": "Autoplay with а button"
+						}
+					]
+				},
+				{
+					"type": "checkbox",
+					"id": "show_sound_button",
+					"label": "Show sound button",
+					"default": false
+				},
+				{
+					"type": "header",
+					"content": "Alignment"
+				},
+				{
+					"type": "select",
+					"id": "text_alignment_inside_block",
+					"label": "Text alignment inside the block",
+					"options": [
+						{
+							"value": "start",
+							"label": "Left"
+						},
+						{
+							"value": "center",
+							"label": "Center"
+						},
+						{
+							"value": "end",
+							"label": "Right"
+						}
+					],
+					"default": "start"
+				},
+				{
+					"type": "select",
+					"id": "content_alignment",
+					"label": "Content alignment",
+					"options": [
+						{
+							"value": "slideshow__slide-content--left",
+							"label": "Left"
+						},
+						{
+							"value": "slideshow__slide-content--center",
+							"label": "Center"
+						},
+						{
+							"value": "slideshow__slide-content--right",
+							"label": "Right"
+						}
+					],
+					"default": "slideshow__slide-content--left"
+				},
+				{
+					"type": "select",
+					"id": "vertical_content_alignment",
+					"label": "Vertical content alignment",
+					"options": [
+						{
+							"value": "start",
+							"label": "Top"
+						},
+						{
+							"value": "center",
+							"label": "Middle"
+						},
+						{
+							"value": "end",
+							"label": "Bottom"
+						}
+					],
+					"default": "center"
+				},
+				{
+					"type": "header",
+					"content": "Colors"
+				},
+				{
+					"type": "color",
+					"id": "color_background",
+					"label": "Background",
+					"default": "#ffffff"
+				},
+				{
+					"type": "color_background",
+					"id": "color_overlay",
+					"label": "Overlay",
+					"default": "linear-gradient(rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%)"
+				},
+				{
+					"type": "color",
+					"id": "color_heading",
+					"label": "Heading",
+					"default": "#ffffff"
+				},
+				{
+					"type": "color",
+					"id": "color_text",
+					"label": "Text",
+					"default": "#ffffff"
+				},
+				{
+					"type": "color",
+					"id": "button_text_color_primary",
+					"label": "Button text",
+					"default": "#000000"
+				},
+				{
+					"type": "color",
+					"id": "button_background_color_primary",
+					"label": "Button background",
+					"default": "#ffffff"
+				},
+				{
+					"type": "color",
+					"id": "button_border_color_primary",
+					"label": "Button border",
+					"default": "#E9E9E9"
+				},
+				{
+					"type": "color",
+					"id": "button_text_color_primary_hover",
+					"label": "Text (hover)",
+					"default": "#ffffff"
+				},
+				{
+					"type": "color",
+					"id": "button_background_color_primary_hover",
+					"label": "Background (hover)",
+					"default": "#000000"
+				},
+				{
+					"type": "color",
+					"id": "button_border_color_primary_hover",
+					"label": "Border (hover)",
+					"default": "#000000"
+				}
+			]
+		},
+		{
+			"type": "external_video",
+			"name": "Vimeo/YouTube video",
+			"settings": [
+				{
+					"type": "header",
+					"content": "Content settings"
+				},
+				{
+					"type": "video_url",
+					"id": "video_url_desktop",
+					"label": "Video url (desktop)",
+					"accept": [
+						"youtube",
+						"vimeo"
+					]
+				},
+				{
+					"type": "video_url",
+					"id": "video_url_mobile",
+					"label": "Video url (mobile)",
+					"accept": [
+						"youtube",
+						"vimeo"
+					],
+					"info": "If the mobile video is blank, the desktop video will be used as the default"
+				},
+				{
+					"type": "image_picker",
+					"id": "poster_desktop",
+					"label": "Preview image (desktop)",
+					"info": "Set preview image for a video if it is played by a button. Set preview image for slide preview feature."
+				},
+				{
+					"type": "image_picker",
+					"id": "poster_mobile",
+					"label": "Preview image (mobile)",
+					"info": "Set preview image for a video if it is played by a button. Set preview image for slide preview feature."
+				},
+				{
+					"type": "inline_richtext",
+					"id": "heading",
+					"label": "Heading",
+					"default": "Heading"
+				},
+				{
+					"type": "range",
+					"id": "heading_size",
+					"min": 32,
+					"max": 200,
+					"step": 2,
+					"default": 80,
+					"unit": "px",
+					"label": "Heading size"
+				},
+				{
+					"type": "richtext",
+					"id": "description",
+					"label": "Text",
+					"default": "<p>Text that describe content of slide</p>"
+				},
+				{
+					"type": "text",
+					"id": "button_text",
+					"label": "Button label",
+					"default": "Button label"
+				},
+				{
+					"type": "text",
+					"id": "button_aria_label",
+					"label": "Button aria-label",
+					"info": "Need for good accessibility, e.g. 'All news about...'. [Learn more](https://utdweb.team/shopify-themes/allure/manual/#section-slideshow)"
+				},
+				{
+					"type": "url",
+					"id": "button_link",
+					"label": "Button link",
+					"default": "/"
+				},
+				{
+					"type": "checkbox",
+					"id": "open_in_new_tab",
+					"label": "Open link in a new tab",
+					"default": false
+				},
+				{
+					"type": "checkbox",
+					"id": "make_link_full_slide",
+					"label": "Make link clickable on the entire slide",
+					"default": false
+				},
+				{
+					"type": "header",
+					"content": "Video Settings"
+				},
+				{
+					"type": "select",
+					"id": "autoplay",
+					"label": "Play type",
+					"options": [
+						{
+							"value": "autoplay",
+							"label": "Autoplay"
+						},
+						{
+							"value": "button",
+							"label": "Play by а button"
+						},
+						{
+							"value": "autoplay_with_button",
+							"label": "Autoplay with а button"
+						}
+					]
+				},
+				{
+					"type": "checkbox",
+					"id": "show_sound_button",
+					"label": "Show sound button",
+					"default": false
+				},
+				{
+					"type": "header",
+					"content": "Alignment"
+				},
+				{
+					"type": "select",
+					"id": "text_alignment_inside_block",
+					"label": "Text alignment inside the block",
+					"options": [
+						{
+							"value": "start",
+							"label": "Left"
+						},
+						{
+							"value": "center",
+							"label": "Center"
+						},
+						{
+							"value": "end",
+							"label": "Right"
+						}
+					],
+					"default": "start"
+				},
+				{
+					"type": "select",
+					"id": "content_alignment",
+					"label": "Content alignment",
+					"options": [
+						{
+							"value": "slideshow__slide-content--left",
+							"label": "Left"
+						},
+						{
+							"value": "slideshow__slide-content--center",
+							"label": "Center"
+						},
+						{
+							"value": "slideshow__slide-content--right",
+							"label": "Right"
+						}
+					],
+					"default": "slideshow__slide-content--left"
+				},
+				{
+					"type": "select",
+					"id": "vertical_content_alignment",
+					"label": "Vertical content alignment",
+					"options": [
+						{
+							"value": "start",
+							"label": "Top"
+						},
+						{
+							"value": "center",
+							"label": "Middle"
+						},
+						{
+							"value": "end",
+							"label": "Bottom"
+						}
+					],
+					"default": "center"
+				},
+				{
+					"type": "header",
+					"content": "Colors"
+				},
+				{
+					"type": "color",
+					"id": "color_background",
+					"label": "Background",
+					"default": "#ffffff"
+				},
+				{
+					"type": "color_background",
+					"id": "color_overlay",
+					"label": "Overlay",
+					"default": "linear-gradient(rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%)"
+				},
+				{
+					"type": "color",
+					"id": "color_heading",
+					"label": "Heading",
+					"default": "#ffffff"
+				},
+				{
+					"type": "color",
+					"id": "color_text",
+					"label": "Text",
+					"default": "#ffffff"
+				},
+				{
+					"type": "color",
+					"id": "button_text_color_primary",
+					"label": "Button text",
+					"default": "#000000"
+				},
+				{
+					"type": "color",
+					"id": "button_background_color_primary",
+					"label": "Button background",
+					"default": "#ffffff"
+				},
+				{
+					"type": "color",
+					"id": "button_border_color_primary",
+					"label": "Button border",
+					"default": "#E9E9E9"
+				},
+				{
+					"type": "color",
+					"id": "button_text_color_primary_hover",
+					"label": "Text (hover)",
+					"default": "#ffffff"
+				},
+				{
+					"type": "color",
+					"id": "button_background_color_primary_hover",
+					"label": "Background (hover)",
+					"default": "#000000"
+				},
+				{
+					"type": "color",
+					"id": "button_border_color_primary_hover",
+					"label": "Border (hover)",
+					"default": "#000000"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Slideshow",
+			"settings": {},
+			"blocks": [
+				{
+					"type": "image",
+					"settings": {
+						"heading": "Heading",
+						"description": "<p>Text that describe content of slide 1</p>",
+						"button_text": "Button label",
+						"button_link": "/"
+					}
+				},
+				{
+					"type": "image",
+					"settings": {
+						"heading": "Heading",
+						"description": "<p>Text that describe content of slide 2</p>",
+						"button_text": "Button label",
+						"button_link": "/"
+					}
+				},
+				{
+					"type": "image",
+					"settings": {
+						"heading": "Heading",
+						"description": "<p>Text that describe content of slide 2</p>",
+						"button_text": "Button label",
+						"button_link": "/"
+					}
+				}
+			]
+		}
+	]
+}
+{%- endschema -%}

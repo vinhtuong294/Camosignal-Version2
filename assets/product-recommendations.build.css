@@ -1,0 +1,146 @@
+.product-recommendations {
+  overflow: hidden;
+  background-color: var(--color-background);
+  padding-top: var(--product-recommendations-inner-offset-top-mobile);
+  padding-bottom: var(--product-recommendations-inner-offset-bottom-mobile);
+}
+.product-recommendations .product-recommendations__header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 32px;
+  margin-bottom: 40px;
+}
+.product-recommendations .product-recommendations__buttons-wrapper {
+  display: flex;
+  align-items: center;
+}
+.product-recommendations .product-recommendations__buttons-wrapper:has(.swiper-button-lock) {
+  display: none;
+}
+.product-recommendations:not(.is-initialized) .product-recommendations__buttons-wrapper {
+  display: none;
+}
+.product-recommendations .product-recommendations__content {
+  padding: 0 10px;
+}
+.product-recommendations .product-recommendations__row.swiper-wrapper {
+  align-items: unset;
+}
+.product-recommendations .product-recommendations__col {
+  position: relative;
+  height: auto;
+}
+.product-recommendations .product-recommendations__row-wrapper:not(.is-active) {
+  display: none;
+}
+.product-recommendations .product-recommendations__slider {
+  overflow: visible;
+  cursor: grab;
+}
+.product-recommendations .product-recommendations__row-wrapper:not(.swiper-initialized) {
+  overflow-x: auto;
+}
+.product-recommendations .product-recommendations__row-wrapper:not(.swiper-initialized) .product-recommendations__row {
+  display: flex;
+  padding-bottom: 16px;
+}
+.product-recommendations .product-recommendations__row-wrapper:not(.swiper-initialized) .product-recommendations__col {
+  width: 80%;
+  padding: 0 8px;
+}
+.product-recommendations .product-recommendations__row-wrapper:not(.swiper-initialized)::-webkit-scrollbar {
+  height: 7px;
+}
+.product-recommendations .product-recommendations__row-wrapper:not(.swiper-initialized)::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.product-recommendations .product-recommendations__row-wrapper:not(.swiper-initialized)::-webkit-scrollbar-thumb {
+  background-color: rgba(48, 93, 112, 0.3);
+}
+.product-recommendations .product-recommendations__preloader-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: none;
+  width: 100%;
+  height: 100%;
+  transform: translate(-50%, -50%);
+}
+.product-recommendations .product-recommendations__preloader {
+  width: 40px;
+  height: 40px;
+  margin: auto;
+  border: 4px solid var(--color-preloader-primary);
+  border-radius: 50%;
+  border-top-color: var(--color-preloader-secondary);
+  animation: spin var(--timing-long) var(--easing-ease-in-out) infinite;
+}
+.product-recommendations .swiper-pagination-bullets {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+.product-recommendations.is-loading .product-card {
+  filter: blur(10px);
+}
+.product-recommendations.is-loading .product-recommendations__preloader-wrapper {
+  display: flex;
+}
+@media (min-width: 768px) {
+  .product-recommendations {
+    padding-top: var(--product-recommendations-inner-offset-top);
+    padding-bottom: var(--product-recommendations-inner-offset-bottom);
+  }
+  .product-recommendations .product-recommendations__col {
+    width: 100%;
+  }
+  .product-recommendations .product-recommendations__row.product-recommendations__row--indent {
+    column-gap: 10px;
+  }
+  .product-recommendations .product-recommendations__row-wrapper:not(.swiper-initialized) .product-recommendations__col {
+    flex: 0 0 33.333333%;
+    aspect-ratio: unset;
+  }
+  .product-recommendations .product-recommendations__row-wrapper:not(.swiper-initialized) .product-recommendations__row.product-recommendations__row--indent .product-recommendations__col {
+    flex-basis: calc(33.33333% - 6.6666666667px);
+  }
+}
+@media (min-width: 992px) {
+  .product-recommendations .product-recommendations__row-wrapper:not(.swiper-initialized) .product-recommendations__col {
+    flex: 0 0 25%;
+  }
+  .product-recommendations .product-recommendations__row-wrapper:not(.swiper-initialized) .product-recommendations__row.product-recommendations__row--indent .product-recommendations__col {
+    flex-basis: calc(25% - 7.5px);
+  }
+}
+@media (min-width: 1921px) {
+  .product-recommendations .product-recommendations__row-wrapper {
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 767px) {
+  .product-recommendations .js-product-recommendations-content {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden !important;
+    overflow-x: hidden !important;
+    clip-path: inset(0);
+    contain: paint;
+  }
+  .product-recommendations .product-recommendations__slider,
+  .product-recommendations .product-recommendations__row-wrapper {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden !important;
+    overflow-x: hidden !important;
+    clip-path: inset(0);
+  }
+  .product-recommendations .product-recommendations__col.swiper-slide {
+    box-sizing: border-box;
+    width: calc((100% - 12px) / 2) !important;
+    max-width: calc((100% - 12px) / 2) !important;
+    overflow: hidden;
+  }
+}

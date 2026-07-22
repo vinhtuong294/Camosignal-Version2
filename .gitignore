@@ -1,0 +1,16 @@
+.agents/
+.design-qa/
+.theme-*/
+.codex-*/
+test-results/
+tmp/
+node_modules/
+.shopify/
+
+design-qa*.png
+design-qa*.md
+
+instafeed-proxy/.vercel/
+instafeed-proxy/.env
+instafeed-proxy/.env.*
+!instafeed-proxy/.env.example

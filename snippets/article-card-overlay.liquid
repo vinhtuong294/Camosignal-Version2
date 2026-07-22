@@ -1,0 +1,142 @@
+{% comment %}
+	------------------------------------------------------------------------------
+	Snippet: Article card overlay
+	- article: Article object (optional)
+
+	{%- render 'article-card-overlay',
+		article: article,
+		remove_lazy: boolean
+	-%}
+	------------------------------------------------------------------------------
+{% endcomment %}
+
+{%- assign show_date 		   		= settings.show_date -%}
+{%- assign read_more_text 			= settings.article_read_more_label %}
+{%- assign is_strip_title      		= settings.is_strip_title -%}
+{%- assign is_strip_content    		= settings.is_strip_content -%}
+
+{%- assign article_title 			= article.title | default: 'Article title' -%}
+{%- assign article_url 				= article.url | default: '#' -%}
+{%- assign article_image 			= article.image | default: settings.article_default_image -%}
+
+{%- if article.image == blank and settings.article_default_image != blank -%}
+	{%- capture img_focal -%}
+		--img-desktop-pos: {{ settings.article_default_image.presentation.focal_point }};
+	{%- endcapture -%}
+{%- endif -%}
+
+{%- if article == blank -%}
+	{%- capture article_description_exmaple -%}
+		An example of a blog post description. An example of a blog post description. An example of a blog post description. An example of a blog post description. An example of a blog post description. An example of a blog post description. An example of a blog post description. An example of a blog post description. An example of a blog post description. An example of a blog post description.
+	{%- endcapture -%}
+
+	{%- assign article_date_example 			= 'May 25, 2024' -%}
+	{%- assign article_author_example 			= 'Article author' -%}
+{%- endif-%}
+
+{%- render 'adastra' with '/src/styles/article-card-overlay.scss' -%}
+
+<article class="article-card-overlay">
+	{%- if article != blank -%}
+		{%- assign w420    = 388 -%}
+		{%- assign w420_2x = 776 -%}
+		{%- assign h420    = 590 -%}
+		{%- assign h420_2x = 1180 -%}
+
+		{%- assign w767    = 735 -%}
+		{%- assign w767_2x = 1470 -%}
+		{%- assign h767    = 1115 -%}
+		{%- assign h767_2x = 2230 -%}
+
+		{%- assign w991    = 960 -%}
+		{%- assign w991_2x = 1920 -%}
+
+		{%- assign w1199 	= 572 -%}
+		{%- assign w1199_2x = 1144 -%}
+
+		{%- assign w1600 	= 725 -%}
+		{%- assign w1600_2x = 1450 -%}
+
+		{%- assign w_default 	= 900 -%}
+		{%- assign w_default_2x = 1800 -%}
+
+		<a href="{{ article_url }}" class="article-card-overlay__image-wrapper focus-visible-outline">
+			{% if article_image != blank %}
+				<picture>
+					<source srcset="{{ article_image | image_url: height: h420  }} 1x, {{ article_image | image_url: height: h420_2x  }} 2x" media="(max-width: 420px)">
+					<source srcset="{{ article_image | image_url: height: h767  }} 1x, {{ article_image | image_url: height: h767_2x  }} 2x" media="(max-width: 767px)">
+					<source srcset="{{ article_image | image_url: width: w991  }} 1x, {{ article_image | image_url: width: w991_2x  }} 2x" media="(max-width: 991px)">
+					<source srcset="{{ article_image | image_url: width: w1199  }} 1x, {{ article_image | image_url: width: w1199_2x  }} 2x" media="(max-width: 1199px)">
+					<source srcset="{{ article_image | image_url: width: w1600  }} 1x, {{ article_image | image_url: width: w1600_2x  }} 2x" media="(max-width: 1600px)">
+
+					<img
+						class="article-card-overlay__image"
+						src="{{- article_image | image_url: width: w_default -}}"
+						srcset="{{- article_image | image_url: width: w_default }} 1x, {{ article_image | image_url: width: w_default_2x }} 2x"
+						{% if remove_lazy %}
+							loading="eager"
+							fetchpriority="high"
+						{% else %}
+							loading="lazy"
+							fetchpriority="low"
+						{% endif %}
+						alt="{{- article_image.alt | escape -}}"
+						{% if img_focal != blank %}
+							style="{{ img_focal }}"
+						{% endif %}
+					>
+				</picture>
+			{%- else -%}
+				{{- 'image' | placeholder_svg_tag: 'article-card-overlay__image article-card-overlay__image--placeholder' -}}
+			{%- endif -%}
+		</a>
+	{%- else -%}
+		<div class="article-card-overlay__image-wrapper">
+			{{- 'image' | placeholder_svg_tag: 'article-card-overlay__image article-card-overlay__image--placeholder' -}}
+		</div>
+	{%- endif -%}
+
+	<div class="article-card-overlay__content">
+		{%- if show_date -%}
+			<ul class="article-card-overlay__info">
+				<li>
+					<span>
+						{{- 'blogs.article.published_at' | t -}}
+					</span>
+
+					{%- if article != blank -%}
+						{{- article.published_at | time_tag: format: 'date' -}}
+					{%- else -%}
+						{{- article_date_example -}}
+					{%- endif -%}
+				</li>
+			</ul>
+		{%- endif -%}
+
+		<div class="article-card-overlay__title h3{% if is_strip_title %} article-card-overlay__title--clipped{%- endif -%}">
+			{{- article_title -}}
+		</div>
+
+		{%- capture article_description_classes -%}
+			article-card-overlay__description {% if is_strip_content %} article-card-overlay__description--clipped {%- endif -%}
+		{%- endcapture -%}
+
+		{%- if article.excerpt_or_content != blank or article == blank -%}
+			<div class="{{- article_description_classes | strip_newlines -}}">
+				{%- if article.excerpt_or_content != blank -%}
+					{{- article.excerpt_or_content | strip_html -}}
+				{%- elsif article == blank -%}
+					{{- article_description_exmaple -}}
+				{%- endif -%}
+			</div>
+		{%- endif -%}
+
+		{%- if read_more_text != blank -%}
+			<a href="{{ article_url }}" class="article-card-overlay__read-more button-link">
+				<span data-text="{{ read_more_text }}">
+					<span>{{ read_more_text }}</span>
+				</span>
+			</a>
+		{%- endif -%}
+	</div>
+</article>

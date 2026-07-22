@@ -1,0 +1,92 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "blocks_EtCrdm": {
+      "type": "_blocks",
+      "name": "Business icons",
+      "settings": {}
+    },
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "newsletter": {
+          "type": "newsletter",
+          "settings": {
+            "heading": "Newsletter",
+            "text": "Subscribe to our newsletter for exclusive updates, style tips, and special offers - straight to your inbox.",
+            "input_placeholder": "Enter email address...",
+            "button_label": "Subscribe",
+            "success_message": "Thanks for subscribing"
+          }
+        },
+        "menu": {
+          "type": "menu",
+          "settings": {
+            "menu_heading": "Support",
+            "menu": "footer"
+          }
+        },
+        "menu_dXAxfc": {
+          "type": "menu",
+          "settings": {
+            "menu_heading": "Collections",
+            "menu": "footer"
+          }
+        },
+        "contact_6cUjxD": {
+          "type": "contact",
+          "settings": {
+            "show_socials": true,
+            "heading": "Contact",
+            "email_text": "<a href=\"mailto:support@store.com\" title=\"mailto:support@store.com\">support@store.com</a>",
+            "phone_text": "<a href=\"tel:+13072273117\" title=\"tel:+1 307-227-3117\">+1 307-227-3117</a>",
+            "additional_text": "Monday - Friday, 9 am - 9 pm"
+          }
+        }
+      },
+      "block_order": [
+        "newsletter",
+        "menu",
+        "menu_dXAxfc",
+        "contact_6cUjxD"
+      ],
+      "settings": {
+        "logo_image": "shopify://shop_images/LOGO_FINAL_WEBSITE.png",
+        "logo_image_width": 150,
+        "brand_heading": "CAMO SIGNAL",
+        "manifesto_subheading": "Raised here. Stood Here.",
+        "manifesto_text": "<p><em>Built for those who hunt, protect, and live by their<br/>values — quietly, proudly.</em></p>",
+        "info_heading": "CAMO SIGNAL INFO",
+        "info_phone": "+1 (307) 227-3117",
+        "info_email": "support.camosignal@gmail.com",
+        "info_address": "30 N Gould St Ste N, Sheridan, WY, 82801, US",
+        "newsletter_heading": "SUBSCRIBE TO OUR EMAIL",
+        "newsletter_text": "<p>Subscribe to get special offers, giveaways, and exclusive deals</p>",
+        "sub_footer_menu": "",
+        "copyright_text": "Copyright © %date%.",
+        "is_show_payment_methods": true,
+        "show_back_to_top_button": true,
+        "show_store_policies_in_footer": false,
+        "is_show_country_selector": true,
+        "is_show_language_selector": true,
+        "enable_follow_on_shop": true,
+        "enable_color_scheme_inheritance": true,
+        "color_scheme": ""
+      }
+    }
+  },
+  "order": [
+    "blocks_EtCrdm",
+    "footer"
+  ]
+}

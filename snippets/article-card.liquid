@@ -1,0 +1,172 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Article card
+	- article: Article object (optional)
+
+	{%- render 'article-card',
+		article: article,
+		remove_lazy: boolean,
+		aspect_ratio: string [example, padding-top: 100%]
+	-%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/article-card.scss' -%}
+
+{%- assign size_width 	    = size_width | default: 430 -%}
+{%- assign size_height      = size_height | default: 372 -%}
+{%- assign size_width_1500  = size_width_1500 | default: size_width -%}
+{%- assign size_height_1500 = size_height_1500 | default: size_height -%}
+{%- assign size_width_1199  = size_width_1199 | default: size_width_1500 -%}
+{%- assign size_height_1199 = size_height_1199 | default: size_height_1500 -%}
+{%- assign size_width_991   = size_width_991 | default: size_width_1199 -%}
+{%- assign size_height_991  = size_height_991 | default: size_height_1199 -%}
+{%- assign size_width_767   = size_width_767 | default: size_width_991 -%}
+{%- assign size_height_767  = size_height_767 | default: size_height_991 -%}
+{%- assign size_width_575   = size_width_575 | default: size_width_767 -%}
+{%- assign size_height_575  = size_height_575 | default: size_height_767 -%}
+{%- assign size_width_420   = size_width_420 | default: size_width_575 -%}
+{%- assign size_height_420  = size_height_420 | default: size_height_575 -%}
+{%- assign size_width_375   = size_width_375 | default: size_width_420 -%}
+{%- assign size_height_375  = size_height_375 | default: size_height_420 -%}
+
+{%- assign size_width_2x 	   = size_width | times: 2 -%}
+{%- assign size_height_2x      = size_height | times: 2 -%}
+{%- assign size_width_1500_2x  = size_width_1500 | times: 2 -%}
+{%- assign size_height_1500_2x = size_height_1500 | times: 2 -%}
+{%- assign size_width_1199_2x  = size_width_1199 | times: 2 -%}
+{%- assign size_height_1199_2x = size_height_1199 | times: 2 -%}
+{%- assign size_width_991_2x   = size_width_991 | times: 2 -%}
+{%- assign size_height_991_2x  = size_height_991 | times: 2 -%}
+{%- assign size_width_767_2x   = size_width_767 | times: 2 -%}
+{%- assign size_height_767_2x  = size_height_767 | times: 2 -%}
+{%- assign size_width_575_2x   = size_width_575 | times: 2 -%}
+{%- assign size_height_575_2x  = size_height_575 | times: 2 -%}
+{%- assign size_width_420_2x   = size_width_420 | times: 2 -%}
+{%- assign size_height_420_2x  = size_height_420 | times: 2 -%}
+{%- assign size_width_375_2x   = size_width_375 | times: 2 -%}
+{%- assign size_height_375_2x  = size_height_375 | times: 2 -%}
+
+{%- assign show_date 		= settings.show_date -%}
+{%- assign show_content 	= settings.show_article_card_content -%}
+{%- assign is_strip_title   = settings.is_strip_title -%}
+{%- assign is_strip_content	= settings.is_strip_content -%}
+
+{%- assign article_title = article.title | default: 'Article title' -%}
+{%- assign article_url 	 = article.url | default: '#' -%}
+{%- assign article_image = article.image | default: settings.article_default_image -%}
+
+{%- if article.image == blank and settings.article_default_image != blank -%}
+	{%- capture img_focal -%}
+		--img-desktop-pos: {{ settings.article_default_image.presentation.focal_point }};
+	{%- endcapture -%}
+{%- endif -%}
+
+{%- if article == blank -%}
+	{%- assign article_description_example = 'An example of a blog post description. An example of a blog post description. An example of a blog post description. An example of a blog post description. An example of a blog post description. An example of a blog post description. An example of a blog post description. An example of a blog post description. An example of a blog post description. An example of a blog post description.' -%}
+	{%- assign article_date_example 	   = 'May 25, 2024' -%}
+	{%- assign article_author_example 	   = 'Article author' -%}
+{%- endif-%}
+
+<article class="article-card {{ classes }}">
+	<a
+		class="article-card__link-image-wrapper focus-visible-outline"
+		href="{{- article_url -}}"
+		aria-label="{{ article_title | escape }}"
+		{% if aspect_ratio != blank %}
+			style="--article-img-aspect: {{ aspect_ratio }};"
+		{% endif %}
+	>
+		{%- if article_image != blank -%}
+			<picture>
+				<source
+					srcset="{{ article_image | image_url: width: size_width_375 }} 1x, {{ article_image | image_url: width: size_width_375_2x }} 2x"
+					media="(max-width: 375px)"
+				>
+
+				<source
+					srcset="{{ article_image | image_url: width: size_width_420 }} 1x, {{ article_image | image_url: width: size_width_420_2x }} 2x"
+					media="(max-width: 420px)"
+				>
+
+				<source
+					srcset="{{ article_image | image_url: width: size_width_575 }} 1x, {{ article_image | image_url: width: size_width_575_2x }} 2x"
+					media="(max-width: 575px)"
+				>
+
+				<source
+					srcset="{{ article_image | image_url: width: size_width_767 }} 1x, {{ article_image | image_url: width: size_width_767_2x }} 2x"
+					media="(max-width: 767px)"
+				>
+
+				<source
+					srcset="{{ article_image | image_url: width: size_width_991 }} 1x, {{ article_image | image_url: width: size_width_991_2x }} 2x"
+					media="(max-width: 991px)"
+				>
+
+				<source
+					srcset="{{ article_image | image_url: width: size_width_1199 }} 1x, {{ article_image | image_url: width: size_width_1199_2x }} 2x"
+					media="(max-width: 1199px)"
+				>
+
+				<source
+					srcset="{{ article_image | image_url: width: size_width_1500 }} 1x, {{ article_image | image_url: width: size_width_1500_2x }} 2x"
+					media="(max-width: 1500px)"
+				>
+
+				<img
+					class="article-card__image"
+					src="{{- article_image | image_url: width: size_width -}}"
+					srcset="{{ article_image | image_url: width: size_width }} 1x, {{ article_image | image_url: width: size_width_2x }} 2x"
+					{% if remove_lazy %}
+						fetchpriority="high"
+						loading="eager"
+					{% else %}
+						fetchpriority="low"
+						loading="lazy"
+					{% endif %}
+					alt="{{- article_image.alt | escape -}}"
+					{% if img_focal != blank %}
+						style="{{ img_focal }}"
+					{% endif %}
+				/>
+			</picture>
+		{% else %}
+			{{- 'image' | placeholder_svg_tag: 'article-card__image article-card__image--placeholder' -}}
+		{% endif %}
+	</a>
+
+	<div class="article-card__content">
+		{%- if show_date -%}
+			<ul class="article-card__info">
+				<li>
+					<span>
+						{{- 'blogs.article.published_at' | t -}}
+					</span>
+
+					{%- if article != blank -%}
+						{{- article.published_at | time_tag: format: 'date' -}}
+					{%- else -%}
+						{{- article_date_example -}}
+					{%- endif -%}
+				</li>
+			</ul>
+		{%- endif -%}
+
+		<div class="article-card__title h4{% if is_strip_title %} article-card__title--clipped{% endif %}">
+			<a href="{{ article_url }}" class="article-card__title-link">{{- article_title -}}</a>
+		</div>
+
+		{% if show_content %}
+			{%- if article.excerpt_or_content != blank or article == blank -%}
+				<div class="article-card__description{% if is_strip_content %} article-card__description--clipped{% endif %}">
+					{%- if article.excerpt_or_content != blank -%}
+						{{- article.excerpt_or_content | strip_html -}}
+					{%- elsif article == blank -%}
+						{{- article_description_example -}}
+					{%- endif -%}
+				</div>
+			{%- endif -%}
+		{% endif %}
+	</div>
+</article>

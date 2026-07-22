@@ -1,0 +1,409 @@
+{{ 'about-editorial.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+	assign container = section.settings.container_width
+
+	if container == 'inherit'
+		assign container_width = settings.container_width
+	else
+		assign container_width = container
+	endif
+-%}
+
+<section
+	class="about-editorial-section about-editorial-structure"
+	style="
+		--ae-container: {{ container_width }};
+		--ae-bg: {{ section.settings.background_color }};
+		--ae-ink: {{ section.settings.ink_color }};
+		--ae-ink-light: {{ section.settings.ink_light_color }};
+		--ae-ink-faint: {{ section.settings.ink_faint_color }};
+		--ae-bark: {{ section.settings.bark_color }};
+		--ae-earth: {{ section.settings.earth_color }};
+		--ae-pad-top-desktop: {{ section.settings.padding_top_desktop }}px;
+		--ae-pad-bottom-desktop: {{ section.settings.padding_bottom_desktop }}px;
+		--ae-pad-top-mobile: {{ section.settings.padding_top_mobile }}px;
+		--ae-pad-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px;
+	"
+>
+	<div class="about-editorial-section__inner container">
+		{%- if section.settings.label != blank -%}
+			<p class="about-editorial-label">{{ section.settings.label }}</p>
+		{%- endif -%}
+
+		<div class="about-editorial-structure__header">
+			<h2 class="about-editorial-heading about-editorial-structure__heading">
+				{{ section.settings.heading | escape | newline_to_br }}
+				{%- if section.settings.heading_accent != blank -%}
+					<br><em>{{ section.settings.heading_accent | escape }}</em>
+				{%- endif -%}
+			</h2>
+
+			{%- if section.settings.tagline != blank -%}
+				<p class="about-editorial-structure__tagline">{{ section.settings.tagline }}</p>
+			{%- endif -%}
+		</div>
+
+		<hr class="about-editorial-structure__divider">
+
+		{%- if section.blocks.size > 0 -%}
+			<div class="about-editorial-structure__cards">
+				{%- for block in section.blocks -%}
+					{%- assign card_num = forloop.index -%}
+					{%- if card_num < 10 -%}
+						{%- assign card_num = card_num | prepend: '0' -%}
+					{%- endif -%}
+
+					{%- assign has_subsections = false -%}
+					{%- if block.settings.subtitle_1 != blank -%}
+						{%- assign has_subsections = true -%}
+					{%- endif -%}
+
+					<div class="about-editorial-structure__card" {{ block.shopify_attributes }}>
+						<div class="about-editorial-structure__card-meta">
+							<span class="about-editorial-structure__card-num">{{ card_num }}</span>
+							{%- if block.settings.row_label != blank -%}
+								<span class="about-editorial-structure__card-label">{{ block.settings.row_label }}</span>
+							{%- endif -%}
+						</div>
+
+						{%- if block.settings.title_1 != blank -%}
+							<h3 class="about-editorial-structure__card-title">{{ block.settings.title_1 }}</h3>
+						{%- endif -%}
+
+						{%- if has_subsections -%}
+							{%- comment -%} Sub-section layout for Card 2 (Collections) {%- endcomment -%}
+							<div class="about-editorial-structure__sub">
+								{%- if block.settings.subtitle_1 != blank -%}
+									<p class="about-editorial-structure__sub-label">{{ block.settings.subtitle_1 }}</p>
+								{%- endif -%}
+
+								{%- if block.settings.text_1 != blank -%}
+									<div class="about-editorial-structure__card-text rte">{{ block.settings.text_1 }}</div>
+								{%- endif -%}
+
+								{%- if block.settings.pills_1 != blank -%}
+									{%- assign pills_1 = block.settings.pills_1 | split: ',' -%}
+									<div class="about-editorial-pills">
+										{%- for pill in pills_1 -%}
+											{%- assign pill_text = pill | strip -%}
+											{%- if pill_text != blank -%}
+												{%- assign pill_parts = pill_text | split: '|' -%}
+												{%- assign pill_label = pill_parts[0] | strip -%}
+												{%- assign pill_url = pill_parts[1] | strip -%}
+												{%- if pill_url != blank -%}
+													<a class="about-editorial-pill" href="{{ pill_url }}">{{ pill_label }}</a>
+												{%- else -%}
+													<span class="about-editorial-pill">{{ pill_label }}</span>
+												{%- endif -%}
+											{%- endif -%}
+										{%- endfor -%}
+									</div>
+								{%- endif -%}
+							</div>
+
+							{%- if block.settings.title_2 != blank or block.settings.text_2 != blank or block.settings.pills_2 != blank -%}
+								<div class="about-editorial-structure__sub about-editorial-structure__sub--divided">
+									{%- if block.settings.title_2 != blank -%}
+										<p class="about-editorial-structure__sub-label">{{ block.settings.title_2 }}</p>
+									{%- endif -%}
+
+									{%- if block.settings.text_2 != blank -%}
+										<div class="about-editorial-structure__card-text rte">{{ block.settings.text_2 }}</div>
+									{%- endif -%}
+
+									{%- if block.settings.pills_2 != blank -%}
+										{%- assign pills_2 = block.settings.pills_2 | split: ',' -%}
+										<div class="about-editorial-pills">
+											{%- for pill in pills_2 -%}
+												{%- assign pill_text = pill | strip -%}
+												{%- if pill_text != blank -%}
+													{%- assign pill_parts = pill_text | split: '|' -%}
+													{%- assign pill_label = pill_parts[0] | strip -%}
+													{%- assign pill_url = pill_parts[1] | strip -%}
+													{%- if pill_url != blank -%}
+														<a class="about-editorial-pill" href="{{ pill_url }}">{{ pill_label }}</a>
+													{%- else -%}
+														<span class="about-editorial-pill">{{ pill_label }}</span>
+													{%- endif -%}
+												{%- endif -%}
+											{%- endfor -%}
+										</div>
+									{%- endif -%}
+								</div>
+							{%- endif -%}
+						{%- else -%}
+							{%- comment -%} Single-body layout for Cards 1 & 3 {%- endcomment -%}
+							{%- if block.settings.text_1 != blank -%}
+								<div class="about-editorial-structure__card-text rte">{{ block.settings.text_1 }}</div>
+							{%- endif -%}
+
+							{%- if block.settings.quote != blank or block.settings.pills_1 != blank -%}
+								<div class="about-editorial-structure__card-bottom">
+									{%- if block.settings.quote != blank -%}
+										<blockquote class="about-editorial-structure__card-quote">{{ block.settings.quote }}</blockquote>
+									{%- endif -%}
+
+									{%- if block.settings.pills_1 != blank -%}
+										{%- assign pills_1 = block.settings.pills_1 | split: ',' -%}
+										<div class="about-editorial-pills">
+											{%- for pill in pills_1 -%}
+												{%- assign pill_text = pill | strip -%}
+												{%- if pill_text != blank -%}
+													{%- assign pill_parts = pill_text | split: '|' -%}
+													{%- assign pill_label = pill_parts[0] | strip -%}
+													{%- assign pill_url = pill_parts[1] | strip -%}
+													{%- if pill_url != blank -%}
+														<a class="about-editorial-pill" href="{{ pill_url }}">{{ pill_label }}</a>
+													{%- else -%}
+														<span class="about-editorial-pill">{{ pill_label }}</span>
+													{%- endif -%}
+												{%- endif -%}
+											{%- endfor -%}
+										</div>
+									{%- endif -%}
+								</div>
+							{%- endif -%}
+						{%- endif -%}
+					</div>
+				{%- endfor -%}
+			</div>
+		{%- endif -%}
+
+		{%- if section.settings.footer_quote != blank or section.settings.footer_cta != blank -%}
+			<div class="about-editorial-structure__footer">
+				<div class="about-editorial-structure__footer-rule"></div>
+				<div class="about-editorial-structure__footer-text">
+					{%- if section.settings.footer_quote != blank -%}
+						<div class="about-editorial-structure__footer-quote rte">{{ section.settings.footer_quote }}</div>
+					{%- endif -%}
+
+					{%- if section.settings.footer_cta != blank -%}
+						<p class="about-editorial-structure__footer-cta">{{ section.settings.footer_cta }}</p>
+					{%- endif -%}
+				</div>
+				<div class="about-editorial-structure__footer-rule"></div>
+			</div>
+		{%- endif -%}
+	</div>
+</section>
+
+{% schema %}
+{
+	"name": "About editorial structure",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "Content"
+		},
+		{
+			"type": "text",
+			"id": "label",
+			"label": "Label",
+			"default": "03 - How we operate"
+		},
+		{
+			"type": "textarea",
+			"id": "heading",
+			"label": "Heading",
+			"default": "Our Business"
+		},
+		{
+			"type": "text",
+			"id": "heading_accent",
+			"label": "Accent text",
+			"default": "Structure."
+		},
+		{
+			"type": "text",
+			"id": "tagline",
+			"label": "Header tagline (right side, italic)"
+		},
+		{
+			"type": "header",
+			"content": "Footer"
+		},
+		{
+			"type": "richtext",
+			"id": "footer_quote",
+			"label": "Footer quote (italic)"
+		},
+		{
+			"type": "text",
+			"id": "footer_cta",
+			"label": "Footer CTA (bold uppercase)"
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "color",
+			"id": "background_color",
+			"label": "Background",
+			"default": "#EDE6D8"
+		},
+		{
+			"type": "color",
+			"id": "ink_color",
+			"label": "Text",
+			"default": "#2C3D33"
+		},
+		{
+			"type": "color",
+			"id": "ink_light_color",
+			"label": "Body text",
+			"default": "#4A6156"
+		},
+		{
+			"type": "color",
+			"id": "ink_faint_color",
+			"label": "Row label",
+			"default": "#7A9080"
+		},
+		{
+			"type": "color",
+			"id": "bark_color",
+			"label": "Heading accent",
+			"default": "#8B6F4E"
+		},
+		{
+			"type": "color",
+			"id": "earth_color",
+			"label": "Lines",
+			"default": "#C4B89A"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{ "value": "1808px", "label": "Default - 1680px" },
+				{ "value": "2048px", "label": "Large - 1920px" },
+				{ "value": "1200px", "label": "Editorial - 1100px" },
+				{ "value": "100%", "label": "Full width" },
+				{ "value": "inherit", "label": "Inherit of general setting" }
+			],
+			"default": "100%"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_desktop",
+			"min": 40,
+			"max": 160,
+			"step": 4,
+			"unit": "px",
+			"label": "Padding top - desktop",
+			"default": 120
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_desktop",
+			"min": 40,
+			"max": 160,
+			"step": 4,
+			"unit": "px",
+			"label": "Padding bottom - desktop",
+			"default": 120
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 40,
+			"max": 120,
+			"step": 4,
+			"unit": "px",
+			"label": "Padding top - mobile",
+			"default": 80
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 40,
+			"max": 120,
+			"step": 4,
+			"unit": "px",
+			"label": "Padding bottom - mobile",
+			"default": 80
+		}
+	],
+	"blocks": [
+		{
+			"type": "row",
+			"name": "Business row",
+			"limit": 8,
+			"settings": [
+				{
+					"type": "text",
+					"id": "row_label",
+					"label": "Card label (small uppercase)",
+					"default": "Sales Model"
+				},
+				{
+					"type": "text",
+					"id": "title_1",
+					"label": "Card title",
+					"default": "Direct-to-Customer (DTC)"
+				},
+				{
+					"type": "richtext",
+					"id": "text_1",
+					"label": "Body text (or first sub-section body)",
+					"default": "<p>We sell through our own online store. This lets us maintain control over product quality, design integrity, and the buying experience.</p>"
+				},
+				{
+					"type": "text",
+					"id": "pills_1",
+					"label": "Pills (bottom or first sub-section)",
+					"info": "Comma-separated. Add a link with 'Label|/collections/handle'."
+				},
+				{
+					"type": "richtext",
+					"id": "quote",
+					"label": "Quote box (optional)",
+					"info": "Italic quote shown above bottom pills."
+				},
+				{
+					"type": "text",
+					"id": "subtitle_1",
+					"label": "Sub-section 1 label",
+					"info": "Enable sub-section layout. Uses text_1 + pills_1 as sub-section 1 content."
+				},
+				{
+					"type": "text",
+					"id": "title_2",
+					"label": "Sub-section 2 label"
+				},
+				{
+					"type": "richtext",
+					"id": "text_2",
+					"label": "Sub-section 2 body"
+				},
+				{
+					"type": "text",
+					"id": "pills_2",
+					"label": "Sub-section 2 pills",
+					"info": "Comma-separated. Add a link with 'Label|/collections/handle'."
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "About editorial structure",
+			"blocks": [
+				{ "type": "row" },
+				{ "type": "row" },
+				{ "type": "row" }
+			]
+		}
+	]
+}
+{% endschema %}

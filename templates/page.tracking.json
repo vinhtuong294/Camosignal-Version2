@@ -1,0 +1,55 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "tracking": {
+      "type": "page-tracking",
+      "settings": {
+        "heading": "Track Your Order",
+        "subheading": "Enter the email used at checkout and your order number to see your shipment tracking.",
+        "lookup_mode": "split_lookup",
+        "email_placeholder": "Please enter your email",
+        "order_placeholder": "Please enter your order number",
+        "placeholder": "Please enter your tracking number",
+        "button_label": "Track",
+        "tracking_mode": "backend",
+        "endpoint_url": "https://camosignal-order-tracking.camosignal.workers.dev",
+        "request_method": "POST",
+        "bg_color": "#ffffff",
+        "text_color": "#2c3d33",
+        "accent_color": "#2c3d33"
+      }
+    },
+    "best_sellers": {
+      "type": "best-seller-products",
+      "name": "Best Sellers",
+      "settings": {
+        "enable_color_scheme_inheritance": true,
+        "color_scheme": "",
+        "heading": "BEST SELLERS",
+        "collection": "",
+        "hidden_products": [],
+        "container_width": "inherit",
+        "offset_top_desktop": 30,
+        "offset_bottom_desktop": 40,
+        "offset_top_mobile": 18,
+        "offset_bottom_mobile": 28,
+        "inner_offset_top": 20,
+        "inner_offset_bottom": 0,
+        "inner_offset_top_mobile": 12,
+        "inner_offset_bottom_mobile": 0
+      }
+    }
+  },
+  "order": [
+    "tracking",
+    "best_sellers"
+  ]
+}

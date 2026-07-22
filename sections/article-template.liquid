@@ -1,0 +1,471 @@
+{% comment %}
+	------------------------------------------------------------------------------
+	Section: Article template
+	------------------------------------------------------------------------------
+{% endcomment %}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign container 					  = section.settings.container_width -%}
+{%- assign sidebar_heading 				  = section.settings.sidebar_heading -%}
+{%- assign product_list 					  = section.settings.product_list -%}
+{%- assign quick_view_enabled 			  = settings.is_quick_view_enabled -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme 					  = section.settings.color_scheme -%}
+{%- assign article_image 		     	  = article.image | default: settings.article_default_image -%}
+{%- assign article_date_example            = 'May 25, 2024' -%}
+
+{%- if container == 'inherit' %}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- assign min = 1 -%}
+{%- assign max = 6 -%}
+{%- assign diff = max | minus: min -%}
+
+{%- assign is_visible_sidebar = false -%}
+
+{%- for i in (1..4) -%}
+	{%- assign article_key = 'article_' | append: i -%}
+
+	{%- if section.settings[article_key] != blank and section.settings[article_key].id != article.id -%}
+		{%- assign is_visible_sidebar = true -%}
+		{%- break -%}
+	{%- endif -%}
+{%- endfor -%}
+
+{%- render 'adastra' with '/src/styles/article.scss' -%}
+
+{%- capture styles -%}
+	--container-width: {{ container_width }}; {{-  -}}
+	--inner-offset-top: {{- section.settings.inner_offset_top -}}px; {{-  -}}
+	--inner-offset-bottom: {{- section.settings.inner_offset_bottom -}}px; {{-  -}}
+	--inner-offset-top-mobile: {{- section.settings.inner_offset_top_mobile -}}px; {{-  -}}
+	--inner-offset-bottom-mobile: {{- section.settings.inner_offset_bottom_mobile -}}px; {{-  -}}
+{%- endcapture -%}
+
+<article class="article color-{{ color_scheme }}" style="{{ styles }}">
+	<section class="article-banner container">
+		<div
+			class="article-banner__heading-block js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}">
+			<div class="article-banner__subheading">
+				<ul>
+					<li>
+						<span>
+							{{- 'blogs.article.published_at' | t -}}
+						</span>
+
+						{%- if article != blank -%}
+							{{- article.published_at | time_tag: format: 'date' -}}
+						{%- else -%}
+							{{- article_date_example -}}
+						{%- endif -%}
+					</li>
+				</ul>
+			</div>
+
+			<h1 class="h2">
+				{{ article.title }}
+			</h1>
+		</div>
+
+		{%- if article_image != blank -%}
+			<div class="article-banner__image-container">
+				<picture>
+					<source
+						srcset="{{ article_image | image_url: width: 343, height: 314 }} 1x,
+								{{ article_image | image_url: width: 686, height: 628 }} 2x"
+						media="(max-width: 375px)"
+						width="343"
+						height="314"
+					/>
+
+					<source
+						srcset="{{ article_image | image_url: width: 388, height: 355 }} 1x,
+								{{ article_image | image_url: width: 776, height: 710 }} 2x"
+						media="(max-width: 420px)"
+						width="388"
+						height="355"
+					/>
+
+					<source
+						srcset="{{ article_image | image_url: width: 543, height: 496 }} 1x,
+								{{ article_image | image_url: width: 1086, height: 992 }} 2x"
+						media="(max-width: 575px)"
+						width="543"
+						height="496"
+					/>
+
+					<source
+						srcset="{{ article_image | image_url: width: 735, height: 672 }} 1x,
+								{{ article_image | image_url: width: 1470, height: 1344 }} 2x"
+						media="(max-width: 767px)"
+						width="735"
+						height="672"
+					/>
+
+					<source
+						srcset="{{ article_image | image_url: width: 959, height: 877 }} 1x,
+								{{ article_image | image_url: width: 2688, height: 1754 }} 2x"
+						media="(max-width: 991px)"
+						width="959"
+						height="877"
+					/>
+
+					<img
+						src="{{ article_image | img_url: "10px" }}"
+						srcset="{{ article_image | image_url: width: 864, height: 790 }} 1x,
+								{{ article_image | image_url: width: 1728, height: 1580 }} 2x"
+						alt="{{ article_image.alt }}"
+						class="article-banner__image js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}"
+						width="864"
+						height="790"
+						loading="eager"
+						fetchpriority="high"
+					/>
+				</picture>
+			</div>
+		{%- endif -%}
+	</section>
+
+	<div class="article__divider"></div>
+
+	<div class="article__content container">
+		<div class="article__inner{% if is_visible_sidebar == false %} article__inner--full-width{% endif %}">
+			<section class="article-main">
+				{%- if article.content != blank -%}
+					<div class="article-main__rte">
+						<div class="rte">
+							{{- article.content -}}
+						</div>
+					</div>
+				{%- endif -%}
+
+				{%- if product_list != blank -%}
+					<div class="article__products-swiper swiper js-article-products-swiper"
+						 data-products-size="{{ product_list.count }}">
+						<div class="article__swiper-heading-wrapper">
+							<h4>{{- 'blogs.article.products_from_this_article' | t -}}</h4>
+
+							<div class="article__swiper-buttons">
+								<button class="swiper-button-prev-new js-article-swiper-button-prev">
+									{%- render 'icons', icon: 'arrow-left' -%}
+								</button>
+
+								<button class="swiper-button-next-new js-article-swiper-button-next">
+									{%- render 'icons', icon: 'arrow-right' -%}
+								</button>
+							</div>
+						</div>
+
+						<div class="article__products-swiper-wrapper swiper-wrapper">
+							{%- for product in product_list -%}
+								{%- assign image = product.featured_image -%}
+
+								<div
+									class="article__product swiper-slide js-product-card" {%- if product != blank %} data-existing-product{% endif %}>
+									{%- render 'product-card-mini', product: product, is_bordered: true -%}
+								</div>
+							{%- endfor -%}
+						</div>
+					</div>
+				{% endif %}
+
+				<div class="article__share-buttons">
+					<p>{{- 'blogs.article.share' | t -}}</p>
+
+					<div class="article__socials">
+						{%- render 'share-button', social: "facebook", product: article -%}
+						{%- render 'share-button', social: "twitter", product: article -%}
+						{%- render 'share-button', social: "pinterest", product: article -%}
+					</div>
+				</div>
+			</section>
+
+			{%- render 'comment-form' -%}
+		</div>
+
+		{%- if is_visible_sidebar -%}
+			<aside class="article-sidebar">
+				<div class="article-sidebar__articles">
+					{%- if sidebar_heading != blank -%}
+						<h4 class="article-sidebar__title">
+							{{- sidebar_heading -}}
+						</h4>
+					{%- endif -%}
+
+					{%- assign limit_articles = 1 -%}
+
+					{%- for i in (1..4) -%}
+						{%- assign article_key     = 'article_' | append: i -%}
+						{%- assign recent_articles = section.settings[article_key] -%}
+
+						{%- if recent_articles != blank -%}
+							{%- render "article-sidebar-item",
+								article: article,
+								recent_articles: recent_articles
+							-%}
+						{%- endif -%}
+					{%- endfor -%}
+				</div>
+			</aside>
+		{%- endif -%}
+	</div>
+
+	{%- if blog.articles_count > 1 -%}
+		<section class="article-read-also container">
+			<div class="article-read-also__slider swiper js-article-read-also-swiper" data-articles-size="{{ blog.articles.size }}">
+				<div class="article__swiper-heading-wrapper">
+					<h2>{{ "blogs.article.read_also" | t }}</h2>
+
+					<div class="article-read-also__buttons">
+						<a href="{{ blog.url }}" class="button-link focus-visible-outline">
+							<span data-text="{{ "blogs.article.see_all" | t: title: blog.title | escape }}">
+								<span>{{ "blogs.article.see_all" | t: title: blog.title | escape }}</span>
+							</span>
+						</a>
+
+						<div class="article__swiper-buttons">
+							<button class="swiper-button-prev-new js-article-swiper-button-prev">
+								{%- render 'icons', icon: 'arrow-left' -%}
+							</button>
+
+							<button class="swiper-button-next-new js-article-swiper-button-next">
+								{%- render 'icons', icon: 'arrow-right' -%}
+							</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="article-read-also__slider-wrapper swiper-wrapper">
+					{%- for blog_article in blog.articles -%}
+						{%- if article.id != blog_article.id -%}
+							<div class="article-read-also__slide swiper-slide">
+								{%- render 'article-card',
+									article: blog_article,
+									aspect_ratio: '86.49%',
+									size_width_420: 333,
+									size_height_420: 333,
+									size_width_575: 457,
+									size_height_575: 457,
+									size_width_767: 610,
+									size_height_767: 610,
+									size_width_991: 320,
+									size_height_991: 320,
+									size_width_1199: 378,
+									size_height_1199: 327,
+									size_width_1500: 325,
+									size_height_1500: 281,
+									size_width: 430,
+									size_height: 372
+								-%}
+							</div>
+						{%- endif -%}
+					{%- endfor -%}
+				</div>
+			</div>
+		</section>
+	{%- endif -%}
+</article>
+
+<script type="application/ld+json">
+  {{ article | structured_data }}
+</script>
+
+{%- render 'adastra' with '/src/scripts/article-template.js' -%}
+
+{% schema %}
+{
+	"name": "Article main",
+	"settings": [
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Sidebar"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "sidebar_heading",
+			"label": "Heading",
+			"default": "Popular News"
+		},
+		{
+			"type": "article",
+			"id": "article_1",
+			"label": "First article"
+		},
+		{
+			"type": "article",
+			"id": "article_2",
+			"label": "Second article"
+		},
+		{
+			"type": "article",
+			"id": "article_3",
+			"label": "Third article"
+		},
+		{
+			"type": "article",
+			"id": "article_4",
+			"label": "Fourth article"
+		},
+		{
+			"type": "header",
+			"content": "Products from article"
+		},
+		{
+			"type": "product_list",
+			"id": "product_list",
+			"label": "Products",
+			"limit": 8
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1808px",
+					"label": "Default - 1680px"
+				},
+				{
+					"value": "2048px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset bottom",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset bottom",
+			"default": 25
+		},
+		{
+			"type": "paragraph",
+			"content": "Internal offsets"
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset bottom",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset bottom",
+			"default": 25
+		}
+	]
+}
+{% endschema %}

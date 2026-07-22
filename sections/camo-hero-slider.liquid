@@ -1,0 +1,880 @@
+{%- liquid
+	assign section_id = 'camo-hero-slider-' | append: section.id
+	assign enable_autoplay = true
+	if section.settings.enable_autoplay == false
+		assign enable_autoplay = false
+	endif
+	assign autoplay_delay_seconds = section.settings.autoplay_delay | default: 5
+	assign autoplay_delay = autoplay_delay_seconds | times: 1000
+	assign slide_count = section.blocks.size
+	assign show_content = section.settings.show_content
+	assign enable_overlay = section.settings.enable_overlay
+	assign offset_top_mobile = section.settings.offset_top_mobile | default: 0
+	assign offset_bottom_mobile = section.settings.offset_bottom_mobile | default: 0
+	assign offset_top_desktop = section.settings.offset_top_desktop | default: 0
+	assign offset_bottom_desktop = section.settings.offset_bottom_desktop | default: 0
+	assign accessibility_label = section.settings.accessibility_label | default: 'Homepage banner slider'
+	assign content_width = section.settings.content_width | default: 760
+	assign text_color = section.settings.text_color | default: '#ffffff'
+	assign accent_color = section.settings.accent_color | default: '#d84b2a'
+	assign button_text_color = section.settings.button_text_color | default: '#ffffff'
+	assign button_background = section.settings.button_background | default: 'rgba(0,0,0,0)'
+	assign button_border = section.settings.button_border | default: '#ffffff'
+-%}
+
+{%- if slide_count > 0 -%}
+	{%- style -%}
+		#shopify-section-{{ section.id }} {
+			padding-top: {{ offset_top_mobile }}px;
+			padding-bottom: {{ offset_bottom_mobile }}px;
+		}
+
+		#{{ section_id }} {
+			--camo-hero-height-desktop: {{ section.settings.height_desktop }}px;
+			--camo-hero-height-mobile: {{ section.settings.height_mobile }}px;
+			--camo-hero-content-width: {{ content_width }}px;
+			--camo-hero-overlay: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+			--camo-hero-accent: {{ accent_color }};
+			--camo-hero-text: {{ text_color }};
+			--camo-hero-button-text: {{ button_text_color }};
+			--camo-hero-button-bg: {{ button_background }};
+			--camo-hero-button-border: {{ button_border }};
+		}
+
+		@media screen and (min-width: 768px) {
+			#shopify-section-{{ section.id }} {
+				padding-top: {{ offset_top_desktop }}px;
+				padding-bottom: {{ offset_bottom_desktop }}px;
+			}
+		}
+	{%- endstyle -%}
+
+	<section
+		id="{{ section_id }}"
+		class="camo-hero-slider"
+		data-camo-hero-slider
+		data-autoplay="{{ enable_autoplay }}"
+		data-delay="{{ autoplay_delay }}"
+		aria-roledescription="carousel"
+		aria-label="{{ accessibility_label | escape }}"
+	>
+		<div class="camo-hero-slider__track" data-camo-hero-track>
+			{%- for block in section.blocks -%}
+				{%- liquid
+					assign image_desktop = block.settings.image_desktop
+					assign image_mobile = block.settings.image_mobile
+					if image_desktop == blank
+						assign image_desktop = image_mobile
+					endif
+					if image_mobile == blank
+						assign image_mobile = image_desktop
+					endif
+					assign heading = block.settings.heading
+					assign image_alt = image_desktop.alt | default: heading
+					assign slide_link = block.settings.full_slide_link | default: block.settings.button_link
+					assign content_position = block.settings.content_position | default: 'center'
+					assign desktop_image_position = block.settings.desktop_image_position | default: 'center center'
+					assign mobile_image_position = block.settings.mobile_image_position | default: 'center center'
+					assign desktop_aspect = '16 / 9'
+					assign mobile_aspect = desktop_aspect
+					if image_desktop != blank and image_desktop.width > 0 and image_desktop.height > 0
+						assign desktop_aspect = image_desktop.width | append: ' / ' | append: image_desktop.height
+					endif
+					if image_mobile != blank and image_mobile.width > 0 and image_mobile.height > 0
+						assign mobile_aspect = image_mobile.width | append: ' / ' | append: image_mobile.height
+					else
+						assign mobile_aspect = desktop_aspect
+					endif
+					assign is_active = false
+					if forloop.first
+						assign is_active = true
+					endif
+				-%}
+
+				<article
+					class="camo-hero-slider__slide{% if is_active %} is-active{% endif %} camo-hero-slider__slide--{{ content_position }}"
+					data-camo-hero-slide
+					data-slide-index="{{ forloop.index0 }}"
+					data-slide-link="{{ slide_link | escape }}"
+					aria-hidden="{% if is_active %}false{% else %}true{% endif %}"
+					{{ block.shopify_attributes }}
+					style="--camo-hero-desktop-position: {{ desktop_image_position }}; --camo-hero-mobile-position: {{ mobile_image_position }}; --camo-hero-aspect-desktop: {{ desktop_aspect }}; --camo-hero-aspect-mobile: {{ mobile_aspect }};"
+				>
+					<div class="camo-hero-slider__media">
+						{%- if image_desktop != blank -%}
+							<picture>
+								<source
+									media="(max-width: 767px)"
+									srcset="
+										{{ image_mobile | image_url: width: 390 }} 390w,
+										{{ image_mobile | image_url: width: 780 }} 780w,
+										{{ image_mobile | image_url: width: 1100 }} 1100w
+									"
+									sizes="100vw"
+								>
+								<img
+									src="{{ image_desktop | image_url: width: 1920 }}"
+									srcset="
+										{{ image_desktop | image_url: width: 960 }} 960w,
+										{{ image_desktop | image_url: width: 1440 }} 1440w,
+										{{ image_desktop | image_url: width: 1920 }} 1920w,
+										{{ image_desktop | image_url: width: 2400 }} 2400w
+									"
+									sizes="100vw"
+									alt="{{ image_alt | escape }}"
+									width="{{ image_desktop.width }}"
+									height="{{ image_desktop.height }}"
+									loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+									fetchpriority="{% if forloop.first %}high{% else %}low{% endif %}"
+									draggable="false"
+								>
+							</picture>
+						{%- else -%}
+							{{ 'hero-apparel-1' | placeholder_svg_tag: 'camo-hero-slider__placeholder' }}
+						{%- endif -%}
+					</div>
+
+					{%- if enable_overlay and section.settings.overlay_opacity > 0 -%}
+						<div class="camo-hero-slider__shade"></div>
+					{%- endif -%}
+
+					{%- if show_content -%}
+						<div class="camo-hero-slider__content">
+							<div class="camo-hero-slider__content-inner">
+								{%- if block.settings.eyebrow != blank -%}
+									<p class="camo-hero-slider__eyebrow">{{ block.settings.eyebrow }}</p>
+								{%- endif -%}
+
+								{%- if heading != blank -%}
+									<h2 class="camo-hero-slider__heading">{{ heading }}</h2>
+								{%- endif -%}
+
+								{%- if block.settings.accent_text != blank -%}
+									<p class="camo-hero-slider__accent">{{ block.settings.accent_text }}</p>
+								{%- endif -%}
+
+								{%- if block.settings.subheading != blank -%}
+									<div class="camo-hero-slider__subheading rte">{{ block.settings.subheading }}</div>
+								{%- endif -%}
+
+								{%- if block.settings.button_label != blank and slide_link != blank -%}
+									<a class="camo-hero-slider__button" href="{{ slide_link }}">
+										<span>{{ block.settings.button_label }}</span>
+										<span aria-hidden="true">&#8599;</span>
+									</a>
+								{%- endif -%}
+							</div>
+						</div>
+					{%- endif -%}
+				</article>
+			{%- endfor -%}
+		</div>
+
+		{%- if slide_count > 1 and section.settings.show_dots -%}
+			<div class="camo-hero-slider__controls">
+				<div class="camo-hero-slider__dots" role="tablist" aria-label="Choose slide">
+					{%- for block in section.blocks -%}
+						<button
+							class="camo-hero-slider__dot{% if forloop.first %} is-active{% endif %}"
+							type="button"
+							data-camo-hero-dot
+							data-slide-index="{{ forloop.index0 }}"
+							aria-label="Go to slide {{ forloop.index }}"
+							aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+						></button>
+					{%- endfor -%}
+				</div>
+			</div>
+		{%- endif -%}
+	</section>
+{%- endif -%}
+
+{% stylesheet %}
+	.camo-hero-slider {
+		position: relative;
+		overflow: hidden;
+		min-height: 0;
+		aspect-ratio: var(--camo-hero-aspect-mobile, 16 / 9);
+		background: #10110e;
+		color: var(--camo-hero-text);
+		cursor: grab;
+		touch-action: pan-y;
+		user-select: none;
+	}
+
+	.camo-hero-slider.is-dragging {
+		cursor: grabbing;
+	}
+
+	.camo-hero-slider__slide[data-slide-link]:not([data-slide-link=""]) {
+		cursor: pointer;
+	}
+
+	.camo-hero-slider__track,
+	.camo-hero-slider__slide,
+	.camo-hero-slider__media,
+	.camo-hero-slider__media picture,
+	.camo-hero-slider__media img,
+	.camo-hero-slider__placeholder {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	.camo-hero-slider__slide {
+		opacity: 0;
+		visibility: hidden;
+		transition: opacity 680ms ease, visibility 680ms ease;
+	}
+
+	.camo-hero-slider__slide.is-active {
+		opacity: 1;
+		visibility: visible;
+		z-index: 1;
+	}
+
+	.camo-hero-slider.is-swipe-next .camo-hero-slider__slide,
+	.camo-hero-slider.is-swipe-prev .camo-hero-slider__slide {
+		visibility: hidden;
+		opacity: 0;
+		transition: none;
+	}
+
+	.camo-hero-slider.is-swipe-next .camo-hero-slider__slide.is-swipe-from,
+	.camo-hero-slider.is-swipe-prev .camo-hero-slider__slide.is-swipe-from,
+	.camo-hero-slider.is-swipe-next .camo-hero-slider__slide.is-swipe-to,
+	.camo-hero-slider.is-swipe-prev .camo-hero-slider__slide.is-swipe-to {
+		visibility: visible;
+		opacity: 1;
+		z-index: 2;
+	}
+
+	.camo-hero-slider.is-swipe-next .camo-hero-slider__slide.is-swipe-from {
+		animation: camoHeroSlideOutLeft 420ms ease forwards;
+	}
+
+	.camo-hero-slider.is-swipe-next .camo-hero-slider__slide.is-swipe-to {
+		animation: camoHeroSlideInRight 420ms ease forwards;
+	}
+
+	.camo-hero-slider.is-swipe-prev .camo-hero-slider__slide.is-swipe-from {
+		animation: camoHeroSlideOutRight 420ms ease forwards;
+	}
+
+	.camo-hero-slider.is-swipe-prev .camo-hero-slider__slide.is-swipe-to {
+		animation: camoHeroSlideInLeft 420ms ease forwards;
+	}
+
+	@keyframes camoHeroSlideInRight {
+		from { transform: translateX(100%); }
+		to { transform: translateX(0); }
+	}
+
+	@keyframes camoHeroSlideOutLeft {
+		from { transform: translateX(0); }
+		to { transform: translateX(-100%); }
+	}
+
+	@keyframes camoHeroSlideInLeft {
+		from { transform: translateX(-100%); }
+		to { transform: translateX(0); }
+	}
+
+	@keyframes camoHeroSlideOutRight {
+		from { transform: translateX(0); }
+		to { transform: translateX(100%); }
+	}
+
+	.camo-hero-slider__media img,
+	.camo-hero-slider__placeholder {
+		display: block;
+		object-fit: contain;
+		object-position: var(--camo-hero-mobile-position);
+		transform: none;
+	}
+
+	.camo-hero-slider__shade {
+		position: absolute;
+		inset: 0;
+		z-index: 2;
+		background: rgba(0, 0, 0, var(--camo-hero-overlay));
+		pointer-events: none;
+	}
+
+	.camo-hero-slider__content {
+		position: relative;
+		z-index: 4;
+		display: flex;
+		align-items: center;
+		min-height: min(var(--camo-hero-height-mobile), 100vw);
+		padding: 86px 24px 96px;
+		pointer-events: none;
+	}
+
+	.camo-hero-slider__content-inner {
+		width: min(100%, var(--camo-hero-content-width));
+		margin: 0 auto;
+		text-align: center;
+		pointer-events: none;
+	}
+
+	.camo-hero-slider__slide--left .camo-hero-slider__content-inner {
+		margin-inline: 0 auto;
+		text-align: left;
+	}
+
+	.camo-hero-slider__slide--right .camo-hero-slider__content-inner {
+		margin-inline: auto 0;
+		text-align: right;
+	}
+
+	.camo-hero-slider__eyebrow,
+	.camo-hero-slider__subheading,
+	.camo-hero-slider__button {
+		font-family: var(--base-font-family, inherit);
+	}
+
+	.camo-hero-slider__eyebrow {
+		margin: 0 0 14px;
+		font-size: 12px;
+		font-weight: 700;
+		letter-spacing: 0;
+		line-height: 1.4;
+		text-transform: uppercase;
+	}
+
+	.camo-hero-slider__heading {
+		margin: 0;
+		color: inherit;
+		font-size: clamp(42px, 12vw, 74px);
+		font-weight: 800;
+		letter-spacing: 0;
+		line-height: 0.95;
+		text-transform: uppercase;
+		text-wrap: balance;
+	}
+
+	.camo-hero-slider__accent {
+		margin: 8px 0 0;
+		color: var(--camo-hero-accent);
+		font-size: clamp(27px, 8vw, 48px);
+		font-style: italic;
+		font-weight: 900;
+		letter-spacing: 0;
+		line-height: 0.9;
+		text-transform: uppercase;
+		text-wrap: balance;
+	}
+
+	.camo-hero-slider__subheading {
+		max-width: 620px;
+		margin: 24px auto 0;
+		font-size: 14px;
+		font-weight: 600;
+		letter-spacing: 0;
+		line-height: 1.7;
+		text-transform: uppercase;
+	}
+
+	.camo-hero-slider__slide--left .camo-hero-slider__subheading {
+		margin-inline: 0 auto;
+	}
+
+	.camo-hero-slider__slide--right .camo-hero-slider__subheading {
+		margin-inline: auto 0;
+	}
+
+	.camo-hero-slider__button {
+		position: relative;
+		z-index: 5;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
+		min-width: 174px;
+		min-height: 56px;
+		margin-top: 28px;
+		padding: 15px 28px;
+		border: 2px solid var(--camo-hero-button-border);
+		background: var(--camo-hero-button-bg);
+		color: var(--camo-hero-button-text);
+		font-size: 14px;
+		font-weight: 800;
+		line-height: 1;
+		text-decoration: none;
+		text-transform: uppercase;
+		pointer-events: auto;
+		transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+	}
+
+	.camo-hero-slider__button:hover,
+	.camo-hero-slider__button:focus-visible {
+		background: var(--camo-hero-button-text);
+		border-color: var(--camo-hero-button-text);
+		color: #10110e;
+	}
+
+	.camo-hero-slider__controls {
+		position: absolute;
+		inset: 0;
+		z-index: 6;
+		pointer-events: none;
+	}
+
+	.camo-hero-slider__dot {
+		pointer-events: auto;
+	}
+
+	.camo-hero-slider__dots {
+		position: absolute;
+		right: 24px;
+		bottom: 34px;
+		left: 24px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
+	}
+
+	.camo-hero-slider__dot {
+		width: 8px;
+		height: 8px;
+		padding: 0;
+		border: 0;
+		border-radius: 999px;
+		background: rgba(255, 255, 255, 0.34);
+		cursor: pointer;
+		transition: background-color 180ms ease, transform 180ms ease;
+	}
+
+	.camo-hero-slider__dot.is-active {
+		background: #fff;
+		transform: scale(1.15);
+	}
+
+	@media screen and (max-width: 767px) {
+		.camo-hero-slider__slide--left .camo-hero-slider__content-inner,
+		.camo-hero-slider__slide--right .camo-hero-slider__content-inner {
+			margin-inline: auto;
+			text-align: center;
+		}
+
+		.camo-hero-slider__slide--left .camo-hero-slider__subheading,
+		.camo-hero-slider__slide--right .camo-hero-slider__subheading {
+			margin-inline: auto;
+		}
+		.camo-hero-slider__dots {
+			bottom: 24px;
+		}
+	}
+
+	@media screen and (min-width: 768px) {
+		.camo-hero-slider {
+			aspect-ratio: var(--camo-hero-aspect-desktop, 16 / 9);
+		}
+
+		.camo-hero-slider__media img,
+		.camo-hero-slider__placeholder {
+			object-position: var(--camo-hero-desktop-position);
+		}
+
+		.camo-hero-slider__content {
+			min-height: min(var(--camo-hero-height-desktop), 56.25vw);
+			padding: 112px 72px 104px;
+		}
+
+		.camo-hero-slider__heading {
+			font-size: clamp(68px, 7.2vw, 122px);
+		}
+
+		.camo-hero-slider__accent {
+			font-size: clamp(42px, 4.8vw, 78px);
+		}
+
+		.camo-hero-slider__subheading {
+			font-size: 15px;
+		}
+
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.camo-hero-slider__slide,
+		.camo-hero-slider__button,
+		.camo-hero-slider__dot {
+			transition: none;
+		}
+	}
+{% endstylesheet %}
+
+{% javascript %}
+	(() => {
+		const selectors = {
+			root: '[data-camo-hero-slider]',
+			slide: '[data-camo-hero-slide]',
+			dot: '[data-camo-hero-dot]'
+		};
+
+		const initSlider = (root) => {
+			if (root.dataset.camoHeroReady === 'true') return;
+
+			const slides = Array.from(root.querySelectorAll(selectors.slide));
+			const dots = Array.from(root.querySelectorAll(selectors.dot));
+			const autoplay = root.dataset.autoplay === 'true';
+			const delay = Number(root.dataset.delay) || 5000;
+			let activeIndex = Math.max(0, slides.findIndex((slide) => slide.classList.contains('is-active')));
+			let timer = null;
+			let pointerStart = null;
+			let pointerStartY = null;
+			let pointerCurrent = null;
+			let pointerCurrentY = null;
+			let preventClick = false;
+
+			const setActive = (index) => {
+				if (slides.length === 0) return;
+
+				activeIndex = (index + slides.length) % slides.length;
+
+				slides.forEach((slide, slideIndex) => {
+					const isActive = slideIndex === activeIndex;
+					slide.classList.toggle('is-active', isActive);
+					slide.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+
+					if (isActive) {
+						const desktopAspect = slide.style.getPropertyValue('--camo-hero-aspect-desktop');
+						const mobileAspect = slide.style.getPropertyValue('--camo-hero-aspect-mobile');
+						if (desktopAspect) root.style.setProperty('--camo-hero-aspect-desktop', desktopAspect);
+						if (mobileAspect) root.style.setProperty('--camo-hero-aspect-mobile', mobileAspect);
+					}
+				});
+
+				dots.forEach((dot, dotIndex) => {
+					const isActive = dotIndex === activeIndex;
+					dot.classList.toggle('is-active', isActive);
+					dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
+				});
+			};
+
+			const clearSwipeClasses = () => {
+				root.classList.remove('is-swipe-next', 'is-swipe-prev');
+				slides.forEach((slide) => {
+					slide.classList.remove('is-swipe-from', 'is-swipe-to');
+				});
+			};
+
+			const slideTo = (index, direction) => {
+				if (slides.length <= 1) return;
+
+				const fromIndex = activeIndex;
+				const toIndex = (index + slides.length) % slides.length;
+				if (fromIndex === toIndex) return;
+
+				clearSwipeClasses();
+				root.classList.add(direction === 'prev' ? 'is-swipe-prev' : 'is-swipe-next');
+				slides[fromIndex].classList.add('is-swipe-from');
+				slides[toIndex].classList.add('is-swipe-to');
+				slides[toIndex].setAttribute('aria-hidden', 'false');
+				activeIndex = toIndex;
+
+				dots.forEach((dot, dotIndex) => {
+					const isActive = dotIndex === activeIndex;
+					dot.classList.toggle('is-active', isActive);
+					dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
+				});
+
+				const desktopAspect = slides[toIndex].style.getPropertyValue('--camo-hero-aspect-desktop');
+				const mobileAspect = slides[toIndex].style.getPropertyValue('--camo-hero-aspect-mobile');
+				if (desktopAspect) root.style.setProperty('--camo-hero-aspect-desktop', desktopAspect);
+				if (mobileAspect) root.style.setProperty('--camo-hero-aspect-mobile', mobileAspect);
+
+				window.setTimeout(() => {
+					clearSwipeClasses();
+					setActive(toIndex);
+				}, 430);
+			};
+
+			const stop = () => {
+				if (timer) window.clearInterval(timer);
+				timer = null;
+			};
+
+			const start = () => {
+				stop();
+				if (autoplay && slides.length > 1 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+					timer = window.setInterval(() => setActive(activeIndex + 1), delay);
+				}
+			};
+
+			const goTo = (index) => {
+				setActive(index);
+				start();
+			};
+
+			dots.forEach((dot) => {
+				dot.addEventListener('click', () => goTo(Number(dot.dataset.slideIndex)));
+			});
+
+			root.addEventListener('pointerdown', (event) => {
+				if (!event.isPrimary) return;
+				pointerStart = event.clientX;
+				pointerStartY = event.clientY;
+				pointerCurrent = event.clientX;
+				pointerCurrentY = event.clientY;
+				preventClick = false;
+				root.classList.add('is-dragging');
+			});
+
+			root.addEventListener('pointermove', (event) => {
+				if (pointerStart === null || !event.isPrimary) return;
+				pointerCurrent = event.clientX;
+				pointerCurrentY = event.clientY;
+				const distance = pointerCurrent - pointerStart;
+				const verticalDistance = Math.abs(pointerCurrentY - pointerStartY);
+				const horizontalDistance = Math.abs(distance);
+				if (horizontalDistance > 10 && horizontalDistance > verticalDistance) {
+					event.preventDefault();
+				}
+			});
+
+			root.addEventListener('pointerup', (event) => {
+				if (pointerStart === null) return;
+				const distance = (pointerCurrent || event.clientX) - pointerStart;
+				const verticalDistance = Math.abs((pointerCurrentY || event.clientY) - pointerStartY);
+				const horizontalDistance = Math.abs(distance);
+				pointerStart = null;
+				pointerStartY = null;
+				pointerCurrent = null;
+				pointerCurrentY = null;
+				root.classList.remove('is-dragging');
+
+				if (horizontalDistance > 32 && horizontalDistance > verticalDistance) {
+					preventClick = true;
+					stop();
+					if (distance < 0) {
+						slideTo(activeIndex + 1, 'next');
+					} else {
+						slideTo(activeIndex - 1, 'prev');
+					}
+					start();
+					window.setTimeout(() => {
+						preventClick = false;
+					}, 300);
+				}
+			});
+
+			root.addEventListener('pointercancel', () => {
+				pointerStart = null;
+				pointerStartY = null;
+				pointerCurrent = null;
+				pointerCurrentY = null;
+				root.classList.remove('is-dragging');
+			});
+
+			root.addEventListener('click', (event) => {
+				if (event.target.closest('[data-camo-hero-dot], .camo-hero-slider__button')) return;
+
+				if (preventClick) {
+					event.preventDefault();
+					event.stopPropagation();
+					return;
+				}
+
+				const activeSlide = slides[activeIndex];
+				const slideLink = activeSlide ? activeSlide.dataset.slideLink : '';
+				if (!slideLink) return;
+
+				event.preventDefault();
+				window.location.href = slideLink;
+			}, true);
+
+			root.addEventListener('dragstart', (event) => {
+				event.preventDefault();
+			});
+
+			document.addEventListener('shopify:block:select', (event) => {
+				if (!root.contains(event.target)) return;
+				const selectedSlide = event.target.closest(selectors.slide);
+				if (!selectedSlide) return;
+				stop();
+				setActive(Number(selectedSlide.dataset.slideIndex));
+			});
+
+			root.dataset.camoHeroReady = 'true';
+			setActive(activeIndex);
+			start();
+		};
+
+		const initAllSliders = () => {
+			document.querySelectorAll(selectors.root).forEach(initSlider);
+		};
+
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', initAllSliders);
+		} else {
+			initAllSliders();
+		}
+
+		window.addEventListener('load', initAllSliders);
+
+		document.addEventListener('shopify:section:load', (event) => {
+			const loadedRoot = event.target.querySelector(selectors.root);
+			if (loadedRoot) initSlider(loadedRoot);
+		});
+	})();
+{% endjavascript %}
+
+{% schema %}
+{
+	"name": "Banner slider",
+	"class": "camo-hero-slider-section",
+	"tag": "section",
+	"settings": [
+		{
+			"type": "header",
+			"content": "Slider"
+		},
+		{
+			"type": "paragraph",
+			"content": "Add one Slide block for each banner image. Use desktop and mobile images for the best crop."
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_autoplay",
+			"label": "Enable autoplay",
+			"default": true
+		},
+		{
+			"type": "checkbox",
+			"id": "show_dots",
+			"label": "Show slide dots",
+			"default": false
+		},
+		{
+			"type": "range",
+			"id": "autoplay_delay",
+			"label": "Autoplay delay",
+			"min": 3,
+			"max": 12,
+			"step": 1,
+			"unit": "s",
+			"default": 5
+		},
+		{
+			"type": "range",
+			"id": "height_desktop",
+			"label": "Desktop height",
+			"min": 420,
+			"max": 820,
+			"step": 20,
+			"unit": "px",
+			"default": 620
+		},
+		{
+			"type": "range",
+			"id": "height_mobile",
+			"label": "Mobile height",
+			"min": 420,
+			"max": 720,
+			"step": 20,
+			"unit": "px",
+			"default": 560
+		},
+		{
+			"type": "header",
+			"content": "Text"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_content",
+			"label": "Show text content",
+			"default": false
+		},
+		{
+			"type": "header",
+			"content": "Style"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_overlay",
+			"label": "Enable image overlay",
+			"default": false
+		},
+		{
+			"type": "range",
+			"id": "overlay_opacity",
+			"label": "Overlay strength",
+			"min": 0,
+			"max": 70,
+			"step": 5,
+			"unit": "%",
+			"default": 0
+		}
+	],
+	"blocks": [
+		{
+			"type": "slide",
+			"name": "Slide",
+			"settings": [
+				{
+					"type": "image_picker",
+					"id": "image_desktop",
+					"label": "Desktop image"
+				},
+				{
+					"type": "image_picker",
+					"id": "image_mobile",
+					"label": "Mobile image"
+				},
+				{
+					"type": "url",
+					"id": "full_slide_link",
+					"label": "Image click link"
+				},
+				{
+					"type": "text",
+					"id": "eyebrow",
+					"label": "Small text"
+				},
+				{
+					"type": "text",
+					"id": "heading",
+					"label": "Heading"
+				},
+				{
+					"type": "text",
+					"id": "accent_text",
+					"label": "Red highlight text"
+				},
+				{
+					"type": "richtext",
+					"id": "subheading",
+					"label": "Subheading"
+				},
+				{
+					"type": "text",
+					"id": "button_label",
+					"label": "Button label"
+				},
+				{
+					"type": "url",
+					"id": "button_link",
+					"label": "Button link (optional fallback)"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Banner slider",
+			"blocks": [
+				{
+					"type": "slide"
+				},
+				{
+					"type": "slide"
+				}
+			]
+		}
+	]
+}
+{% endschema %}

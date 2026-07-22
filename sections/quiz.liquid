@@ -1,0 +1,1357 @@
+{%- assign color_scheme      	           	= section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance 	= section.settings.enable_color_scheme_inheritance -%}
+{%- assign collection 		= section.settings.collection -%}
+{%- assign tags_logic 		= section.settings.tags_logic -%}
+{%- assign back_button_text = section.settings.back_button_text -%}
+{%- assign container 		= section.settings.container_width -%}
+
+{% if container == 'inherit' %}
+	{% assign container_width = settings.container_width %}
+{% else %}
+	{% assign container_width = container %}
+{% endif %}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+		}
+
+		@media screen and (min-width: 992px) {
+			#shopify-section-{{- section.id -}} {
+				padding-top: {{- section.settings.offset_top_desktop -}}px;
+				padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+			}
+		}
+{%- endstyle -%}
+
+{%- render 'adastra' with '/src/styles/quiz.scss' -%}
+
+{%- capture styles -%}
+	--container-width: {{ container_width }}; {{-  -}}
+	--inner-offset-top: {{ section.settings.inner_offset_top }}px; {{-  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom }}px; {{-  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px; {{-  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px; {{-  -}}
+{%- endcapture -%}
+
+<section class="quiz color-{{ color_scheme }} js-quiz-section"
+		 data-tags-logic="{{ tags_logic }}"
+		 data-collection="{{ collection.url | default: '/collections/all' }}"
+		 style="{{ styles }}"
+>
+	<div class="container">
+		<div class="quiz__back-button-wrapper js-quiz-prev-step-button-wrapper is-hidden">
+			<button class="quiz__back-button focus-visible-outline js-quiz-prev-step-button">
+				<span class="quiz__back-button__arrow">{%- render 'icons', icon: 'slider-arrow-left' -%}</span>
+				{% if back_button_text != blank %}{{- back_button_text -}}{% endif %}
+			</button>
+		</div>
+
+		{% assign start_screen_block = section.blocks | where: 'type', 'start_screen' %}
+
+		{% for block in section.blocks %}
+			{% case block.type %}
+				{% when 'start_screen' %}
+					<div class="quiz__step is-active" data-step="{{ block.type }}">
+						{% assign label 		= block.settings.label %}
+						{% assign title 		= block.settings.title %}
+						{% assign text 			= block.settings.text %}
+						{% assign button_text 	= block.settings.button_text %}
+						{% assign image 		= block.settings.image %}
+
+						<div class="quiz__start">
+							{% if image != blank %}
+								<div class="quiz__start-img-col">
+									<picture class="quiz__start-image-wrapper">
+										<source
+											srcset="{{ image | image_url: width: 390 }} 1x, {{ image | image_url: width: 780 }} 2x"
+											media="(max-width: 420px)">
+
+										<source
+											srcset="{{ image | image_url: width: 740 }} 1x, {{ image | image_url: width: 1580 }} 2x"
+											media="(max-width: 767px)">
+
+										<source
+											srcset="{{ image | image_url: width: 970 }} 1x, {{ image | image_url: width: 1940 }} 2x"
+											media="(max-width: 991px)">
+
+										<source
+											srcset="{{ image | image_url: width: 750 }} 1x, {{ image | image_url: width: 1500 }} 2x"
+											media="(max-width: 1500px)">
+
+										<img
+											class="quiz__start-image"
+											src="{{ image | image_url: width: 900 }}"
+											srcset="{{ image | image_url: width: 950 }} 1x, {{ image | image_url: width: 1900 }} 2x"
+											{% if section.index > 1 %}loading="lazy" {% endif %}
+											alt="{{ image.alt | escape }}">
+									</picture>
+								</div>
+							{% endif %}
+
+							<div class="quiz__start-content">
+								{% if label != blank %}
+									<div class="quiz__text-label">{{ label }}</div>
+								{% endif %}
+
+								{% if title != blank %}
+									<h2>{{ title }}</h2>
+								{% endif %}
+
+								{% if text != blank %}
+									<div class="quiz__text-content rte">{{ text }}</div>
+								{% endif %}
+
+								{% if button_text != blank %}
+									<div class="quiz__button-wrapper">
+										<button class="button button--primary js-quiz-next-step-button">{{ button_text }}</button>
+									</div>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+				{% when 'personalize' %}
+					<div class="quiz__step {% if start_screen_block.size == 0 and forloop.first %}is-active{% endif %}" data-step="{{ block.type }}">
+						{% assign label 		= block.settings.label %}
+						{% assign title 		= block.settings.title %}
+						{% assign text 			= block.settings.text %}
+						{% assign name_preview 	= block.settings.name_preview | default: 'Name here' %}
+						{% assign input_label 	= block.settings.input_label %}
+						{% assign button_text 	= block.settings.button_text %}
+
+						<div class="quiz__personalize">
+							{% if label != blank %}
+								<div class="quiz__text-label">{{ label }}</div>
+							{% endif %}
+
+							{% if title != blank %}
+								<h2>{{ title }}</h2>
+							{% endif %}
+
+							{% if text != blank %}
+								<div class="quiz__text-content rte">{{ text }}</div>
+							{% endif %}
+
+							<div class="quiz__personalize-name-preview js-quiz-name-preview"
+								 data-default="{{ name_preview }}">
+								{{- name_preview -}}
+							</div>
+
+							<div class="quiz__personalize-input-wrapper input-wrapper">
+								<input class="input js-quiz-name-input"
+									   id="{{ section.id }}-{{ block.id }}-name"
+									   type="text"
+									   name="name"
+									   placeholder="{{ input_label }}"
+								>
+
+								{% if input_label != blank %}
+									<label for="{{ section.id }}-{{ block.id }}-name" class="input-label">{{ input_label }}</label>
+								{% endif %}
+							</div>
+
+							{% if button_text != blank %}
+								<div class="quiz__button-wrapper">
+									<button class="button button--primary js-quiz-next-step-button">{{ button_text }}</button>
+								</div>
+							{% endif %}
+						</div>
+					</div>
+				{% when 'question' %}
+					<div class="quiz__step {% if start_screen_block.size == 0 and forloop.first %}is-active{% endif %}" data-step="{{ block.type }}">
+						{% assign title 				= block.settings.title %}
+						{% assign text 					= block.settings.text %}
+						{% assign button_text 			= block.settings.button_text %}
+						{% assign is_multiple_choice 	= block.settings.is_multiple_choice %}
+
+						<div class="quiz__question">
+							{% if title != blank %}
+								<h2>{{ title }}</h2>
+							{% endif %}
+
+							{% if text != blank %}
+								<div class="quiz__text-content rte">{{ text }}</div>
+							{% endif %}
+
+							<div class="quiz__answers">
+								{% for i in (1..8) %}
+									{% assign enable_answer_key 		= 'enable_answer_' | append: i %}
+									{% assign text_answer_key 			= 'text_answer_' | append: i %}
+									{% assign small_text_answer_key 	= 'small_text_answer_' | append: i %}
+									{% assign image_answer_key 			= 'image_answer_' | append: i %}
+									{% assign aspect_ratio_answer_key 	= 'aspect_ratio_answer_' | append: i %}
+									{% assign object_fit_answer_key 	= 'object_fit_answer_' | append: i %}
+									{% assign tags_answer_key 			= 'tags_answer_' | append: i %}
+
+									{% assign enable_answer = block.settings[enable_answer_key] %}
+									{% assign text_answer = block.settings[text_answer_key] %}
+									{% assign small_text_answer = block.settings[small_text_answer_key] %}
+									{% assign image_answer = block.settings[image_answer_key] %}
+									{% assign aspect_ratio_answer = block.settings[aspect_ratio_answer_key] %}
+									{% assign object_fit_answer = block.settings[object_fit_answer_key] %}
+									{% assign tags_answer = block.settings[tags_answer_key] %}
+
+									{% if enable_answer == false %}
+										{% continue %}
+									{% endif %}
+
+									<div class="quiz-answer">
+										<input type="{% if is_multiple_choice %}checkbox{% else %}radio{% endif %}"
+											   id="{{ section.id }}-{{ block.id }}-{{ i }}"
+											   class="quiz-answer__checkbox visually-hidden js-quiz-answer-input"
+											   value="{{- tags_answer | handle -}}"
+											   name="{{ section.id }}-{{ block.id }}"
+										>
+
+										<label class="quiz-answer__label"
+											   for="{{ section.id }}-{{ block.id }}-{{ i }}"
+										><span class="visually-hidden">{{ text_answer }}</span></label>
+
+										{% if image_answer != blank %}
+											<picture class="quiz-answer__image-wrapper quiz-answer__image-wrapper--{{ aspect_ratio_answer }}">
+												<source srcset="{{ image_answer | image_url: width: 190 }} 1x,
+																	{{ image_answer | image_url: width: 380 }} 2x"
+														media="(max-width: 420px)">
+
+												<img class="quiz-answer__image"
+													 style="--object-fit: {{ object_fit_answer }};"
+													 loading="lazy"
+													 src="{{ image_answer | image_url: width: 460 }}"
+													 srcset="{{ image_answer | image_url: width: 460 }} 1x,
+															{{ image_answer | image_url: width: 920 }} 2x"
+													 alt="{{ image_answer.alt | escape }}">
+											</picture>
+										{% endif %}
+
+										<div class="quiz-answer__content">
+											{% if text_answer != blank %}
+												<div class="quiz-answer__title h4">{{ text_answer }}</div>
+											{% endif %}
+
+											{% if small_text_answer != blank %}
+												<div class="quiz-answer__caption">{{ small_text_answer }}</div>
+											{% endif %}
+										</div>
+									</div>
+								{% endfor %}
+							</div>
+
+							{% if button_text != blank %}
+								<div class="quiz__button-wrapper">
+									<button class="button button--primary js-quiz-next-step-button" disabled>{{ button_text }}</button>
+								</div>
+							{% endif %}
+						</div>
+					</div>
+				{% when 'submit' %}
+					<div class="quiz__step" data-step="{{ block.type }}">
+						{% assign title 				= block.settings.title %}
+						{% assign text 					= block.settings.text %}
+						{% assign button_text 			= block.settings.button_text %}
+						{% assign image 				= block.settings.image %}
+						{% assign image_max_width 		= block.settings.image_max_width %}
+						{% assign img_desk_2x 			= image_max_width | times: 2 %}
+						{% assign aspect_ratio 			= block.settings.aspect_ratio %}
+						{% assign custom_aspect_ratio 	= image.aspect_ratio | round: 2 %}
+
+						{% case aspect_ratio %}
+							{% when 'square' %}
+								{% assign custom_aspect_ratio = 1 %}
+							{% when 'landscape' %}
+								{% assign custom_aspect_ratio = 1.75 %}
+							{% when 'portrait' %}
+								{% assign custom_aspect_ratio = 0.75 %}
+						{% endcase %}
+
+						<div class="quiz__submit">
+							{% if title != blank %}
+								<h2>{{ title }}</h2>
+							{% endif %}
+
+							{% if text != blank %}
+								<div class="quiz__text-content rte">{{ text }}</div>
+							{% endif %}
+
+							{% if image != blank %}
+								<picture class="quiz__submit-image-wrapper"
+										 style="--aspect-ratio: {{ custom_aspect_ratio }}; --max-width: {{ image_max_width }}px;"
+								>
+									{% if image_max_width > 420 %}
+										<source srcset="{{ image | image_url: width: 420 }} 1x,
+															{{ image | image_url: width: 840 }} 2x"
+												media="(max-width: 420px)">
+									{% endif %}
+
+									{% if image_max_width > 730 %}
+										<source srcset="{{ image | image_url: width: 767 }} 1x,
+															{{ image | image_url: width: 1534 }} 2x"
+												media="(max-width: 767px)">
+									{% endif %}
+
+
+									<img class="quiz__submit-image"
+										 loading="lazy"
+										 src="{{ image | image_url: width: image_max_width }}"
+										 srcset="{{ image | image_url: width: image_max_width }} 1x,
+													{{ image | image_url: width: img_desk_2x }} 2x"
+										 alt="{{ image.alt | escape }}">
+								</picture>
+							{% endif %}
+
+							{% if button_text != blank %}
+								<div class="quiz__button-wrapper">
+									<button class="button button--primary js-quiz-submit-button">{{ button_text }}</button>
+								</div>
+							{% endif %}
+						</div>
+					</div>
+				{% when 'results' %}
+					<div class="quiz__step" data-step="{{ block.type }}">
+						{% assign title = block.settings.title %}
+						{% assign text = block.settings.text %}
+						{% assign button_text = block.settings.button_text %}
+						{% assign no_results_text = block.settings.no_results_text | default: 'No results were found.' %}
+
+						<div class="quiz__results">
+
+							{% if title != blank %}
+								<h2>{{ title | replace: '[name]', '<span class="js-quiz-results-name"></span>' }}</h2>
+							{% endif %}
+
+							{% if text != blank %}
+								<div class="quiz__text-content rte">{{ text }}</div>
+							{% endif %}
+
+							<div class="quiz__results-content">
+								<div class="quiz__results-message js-quiz-no-results-text is-hidden">{{ no_results_text }}</div>
+
+								<div class="quiz__results-products js-quiz-results-products is-hidden"></div>
+							</div>
+
+							{% if button_text != blank %}
+								<div class="quiz__button-wrapper">
+									<button class="button button--primary js-quiz-retry-button">{{ button_text }}</button>
+								</div>
+							{% endif %}
+						</div>
+					</div>
+			{% endcase %}
+		{% endfor %}
+	</div>
+</section>
+
+{%- render 'adastra' with '/src/scripts/section-quiz.js' -%}
+
+{% schema %}
+	{
+		"name": "Quiz",
+		"disabled_on": {
+			"groups": ["header", "footer", "custom.popup"]
+		},
+		"settings": [
+		{
+				"type": "header",
+				"content": "Colors"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_color_scheme_inheritance",
+				"label": "Enable color scheme inheritance",
+				"default": true,
+				"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+			},
+			{
+				"type": "color_scheme",
+				"id": "color_scheme",
+				"label": "Color scheme",
+				"default": "scheme-1"
+			},
+			{
+				"type": "paragraph",
+				"content": "Each quiz requires a 'Collection' and at least one 'Question', one 'Submit' and 'Results' block in order to function correctly. The 'Start screen', 'Personalize' blocks are optional."
+			},
+			{
+				"type": "collection",
+				"id": "collection",
+				"label": "Collection",
+				"info": "Restrict results to products within this collection. Defaults to the 'all' collection when unset."
+			},
+			{
+				"type": "select",
+				"id": "tags_logic",
+				"label": "Logic",
+				"options": [
+					{
+						"value": "and",
+						"label": "AND"
+					},
+					{
+						"value": "or",
+						"label": "OR"
+					}
+				],
+				"info": "AND displays results that match all selected answers. OR displays results that match at least one selected answer."
+			},
+			{
+				"type": "text",
+				"id": "back_button_text",
+				"label": "Back button label",
+				"default": "Back"
+			},
+			{
+				"type": "header",
+				"content": "Layout"
+			},
+			{
+				"type": "select",
+				"id": "container_width",
+				"label": "Container width",
+				"options": [
+					{
+						"value": "1808px",
+						"label": "Default - 1680px"
+					},
+					{
+						"value": "2048px",
+						"label": "Large - 1920px"
+					},
+					{
+						"value": "100%",
+						"label": "Full width"
+					},
+					{
+						"value": "inherit",
+						"label": "Inherit of general setting"
+					}
+				],
+				"default": "inherit",
+				"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+			},
+			{
+				"type": "paragraph",
+				"content": "External offsets"
+			},
+			{
+				"type": "range",
+				"id": "offset_top_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop external offset top",
+				"default": 50
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop external offset bottom",
+				"default": 50
+			},
+			{
+				"type": "range",
+				"id": "offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile external offset top",
+				"default": 25
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile external offset bottom",
+				"default": 25
+			},
+			{
+				"type": "paragraph",
+				"content": "Internal offsets"
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop internal offset top",
+				"default": 30
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop internal offset bottom",
+				"default": 30
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile internal offset top",
+				"default": 30
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile internal offset bottom",
+				"default": 30
+			}
+		],
+		"blocks": [
+			{
+				"name": "Start screen",
+				"type": "start_screen",
+				"limit": 1,
+				"settings": [
+					{
+						"type": "text",
+						"id": "label",
+						"label": "Label"
+					},
+					{
+						"type": "text",
+						"id": "title",
+						"label": "Heading",
+						"default": "Quiz"
+					},
+					{
+						"type": "richtext",
+						"id": "text",
+						"label": "Text",
+						"default": "<p>Text description about the quiz.</p>"
+					},
+					{
+						"type": "text",
+						"id": "button_text",
+						"label": "Button label",
+						"default": "Start quiz"
+					},
+					{
+						"type": "image_picker",
+						"id": "image",
+						"label": "Image",
+						"info": "Use a square image for best results."
+					}
+				]
+			},
+			{
+				"name": "Personalize",
+				"type": "personalize",
+				"limit": 1,
+				"settings": [
+					{
+						"type": "text",
+						"id": "label",
+						"label": "Label"
+					},
+					{
+						"type": "text",
+						"id": "title",
+						"label": "Heading",
+						"default": "Personalize"
+					},
+					{
+						"type": "richtext",
+						"id": "text",
+						"label": "Text"
+					},
+					{
+						"type": "text",
+						"id": "name_preview",
+						"label": "Customer name preview",
+						"default": "Name here"
+					},
+					{
+						"type": "text",
+						"id": "input_label",
+						"label": "Input label",
+						"default": "Name"
+					},
+					{
+						"type": "text",
+						"id": "button_text",
+						"label": "Button label",
+						"default": "Next"
+					}
+				]
+			},
+			{
+				"name": "Question",
+				"type": "question",
+				"limit": 10,
+				"settings": [
+					{
+						"type": "text",
+						"id": "title",
+						"label": "Heading",
+						"default": "Question 1"
+					},
+					{
+						"type": "textarea",
+						"id": "text",
+						"label": "Text"
+					},
+					{
+						"type": "text",
+						"id": "button_text",
+						"label": "Button label",
+						"default": "Next"
+					},
+					{
+						"type": "checkbox",
+						"id": "is_multiple_choice",
+						"label": "Multiple choice",
+						"default": true,
+						"info": "Allow users to select more than one answer. If using AND logic, then product must contain all tags from all selected answers."
+					},
+					{
+						"type": "header",
+						"content": "Answers",
+						"info": "Each answer must include a 'Text', 'Small text' or 'Image' to be displayed. Additionally, 'Tags' is required in order to function correctly."
+					},
+					{
+						"type": "header",
+						"content": "Answer 1"
+					},
+					{
+						"type": "checkbox",
+						"id": "enable_answer_1",
+						"label": "Enable Answer 1",
+						"default": true
+					},
+					{
+						"type": "text",
+						"id": "text_answer_1",
+						"label": "Text",
+						"default": "Answer 1",
+						"visible_if":  "{{ block.settings.enable_answer_1 == true }}"
+					},
+					{
+						"type": "text",
+						"id": "small_text_answer_1",
+						"label": "Small text",
+						"visible_if":  "{{ block.settings.enable_answer_1 == true }}"
+					},
+					{
+						"type": "image_picker",
+						"id": "image_answer_1",
+						"label": "Image",
+						"visible_if":  "{{ block.settings.enable_answer_1 == true }}"
+					},
+					{
+						"type": "select",
+						"id": "aspect_ratio_answer_1",
+						"label": "Image aspect ratio",
+						"options": [
+							{
+								"value": "square",
+								"label": "Square"
+							},
+							{
+								"value": "landscape",
+								"label": "Landscape"
+							},
+							{
+								"value": "portrait",
+								"label": "Portrait"
+							}
+						],
+						"default": "square",
+						"visible_if":  "{{ block.settings.enable_answer_1 == true }}"
+					},
+					{
+						"type": "select",
+						"id": "object_fit_answer_1",
+						"label": "Image object fit",
+						"options": [
+							{
+								"value": "cover",
+								"label": "Cover"
+							},
+							{
+								"value": "contain",
+								"label": "Contain"
+							}
+						],
+						"default": "cover",
+						"visible_if":  "{{ block.settings.enable_answer_1 == true }}"
+					},
+					{
+						"type": "text",
+						"id": "tags_answer_1",
+						"label": "Tags",
+						"info" :"Enter a one tag to apply when selecting this answer. If using multiple tags and AND logic, then product must contain all tags. Tags are not case sensitive.",
+						"visible_if":  "{{ block.settings.enable_answer_1 == true }}"
+					},
+					{
+						"type": "header",
+						"content": "Answer 2"
+					},
+					{
+						"type": "checkbox",
+						"id": "enable_answer_2",
+						"label": "Enable Answer 2",
+						"default": true
+					},
+					{
+						"type": "text",
+						"id": "text_answer_2",
+						"label": "Text",
+						"default": "Answer 2",
+						"visible_if":  "{{ block.settings.enable_answer_2 == true }}"
+					},
+					{
+						"type": "text",
+						"id": "small_text_answer_2",
+						"label": "Small text",
+						"visible_if":  "{{ block.settings.enable_answer_2 == true }}"
+					},
+					{
+						"type": "image_picker",
+						"id": "image_answer_2",
+						"label": "Image",
+						"visible_if":  "{{ block.settings.enable_answer_2 == true }}"
+					},
+					{
+						"type": "select",
+						"id": "aspect_ratio_answer_2",
+						"label": "Image aspect ratio",
+						"options": [
+							{
+								"value": "square",
+								"label": "Square"
+							},
+							{
+								"value": "landscape",
+								"label": "Landscape"
+							},
+							{
+								"value": "portrait",
+								"label": "Portrait"
+							}
+						],
+						"default": "square",
+						"visible_if":  "{{ block.settings.enable_answer_2 == true }}"
+					},
+					{
+						"type": "select",
+						"id": "object_fit_answer_2",
+						"label": "Image object fit",
+						"options": [
+							{
+								"value": "cover",
+								"label": "Cover"
+							},
+							{
+								"value": "contain",
+								"label": "Contain"
+							}
+						],
+						"default": "cover",
+						"visible_if":  "{{ block.settings.enable_answer_2 == true }}"
+					},
+					{
+						"type": "text",
+						"id": "tags_answer_2",
+						"label": "Tags",
+						"info" :"Enter a one tag to apply when selecting this answer. If using multiple tags and AND logic, then product must contain all tags. Tags are not case sensitive.",
+						"visible_if":  "{{ block.settings.enable_answer_2 == true }}"
+					},
+					{
+						"type": "header",
+						"content": "Answer 3"
+					},
+					{
+						"type": "checkbox",
+						"id": "enable_answer_3",
+						"label": "Enable Answer 3",
+						"default": true
+					},
+					{
+						"type": "text",
+						"id": "text_answer_3",
+						"label": "Text",
+						"default": "Answer 3",
+						"visible_if":  "{{ block.settings.enable_answer_3 == true }}"
+					},
+					{
+						"type": "text",
+						"id": "small_text_answer_3",
+						"label": "Small text",
+						"visible_if":  "{{ block.settings.enable_answer_3 == true }}"
+					},
+					{
+						"type": "image_picker",
+						"id": "image_answer_3",
+						"label": "Image",
+						"visible_if":  "{{ block.settings.enable_answer_3 == true }}"
+					},
+					{
+						"type": "select",
+						"id": "aspect_ratio_answer_3",
+						"label": "Image aspect ratio",
+						"options": [
+							{
+								"value": "square",
+								"label": "Square"
+							},
+							{
+								"value": "landscape",
+								"label": "Landscape"
+							},
+							{
+								"value": "portrait",
+								"label": "Portrait"
+							}
+						],
+						"default": "square",
+						"visible_if":  "{{ block.settings.enable_answer_3 == true }}"
+					},
+					{
+						"type": "select",
+						"id": "object_fit_answer_3",
+						"label": "Image object fit",
+						"options": [
+							{
+								"value": "cover",
+								"label": "Cover"
+							},
+							{
+								"value": "contain",
+								"label": "Contain"
+							}
+						],
+						"default": "cover",
+						"visible_if":  "{{ block.settings.enable_answer_3 == true }}"
+					},
+					{
+						"type": "text",
+						"id": "tags_answer_3",
+						"label": "Tags",
+						"info" :"Enter a one tag to apply when selecting this answer. If using multiple tags and AND logic, then product must contain all tags. Tags are not case sensitive.",
+						"visible_if":  "{{ block.settings.enable_answer_3 == true }}"
+					},
+					{
+						"type": "header",
+						"content": "Answer 4"
+					},
+					{
+						"type": "checkbox",
+						"id": "enable_answer_4",
+						"label": "Enable Answer 4",
+						"default": true
+					},
+					{
+						"type": "text",
+						"id": "text_answer_4",
+						"label": "Text",
+						"default": "Answer 4",
+						"visible_if":  "{{ block.settings.enable_answer_4 == true }}"
+					},
+					{
+						"type": "text",
+						"id": "small_text_answer_4",
+						"label": "Small text",
+						"visible_if":  "{{ block.settings.enable_answer_4 == true }}"
+					},
+					{
+						"type": "image_picker",
+						"id": "image_answer_4",
+						"label": "Image",
+						"visible_if":  "{{ block.settings.enable_answer_4 == true }}"
+					},
+					{
+						"type": "select",
+						"id": "aspect_ratio_answer_4",
+						"label": "Image aspect ratio",
+						"options": [
+							{
+								"value": "square",
+								"label": "Square"
+							},
+							{
+								"value": "landscape",
+								"label": "Landscape"
+							},
+							{
+								"value": "portrait",
+								"label": "Portrait"
+							}
+						],
+						"default": "square",
+						"visible_if":  "{{ block.settings.enable_answer_4 == true }}"
+					},
+					{
+						"type": "select",
+						"id": "object_fit_answer_4",
+						"label": "Image object fit",
+						"options": [
+							{
+								"value": "cover",
+								"label": "Cover"
+							},
+							{
+								"value": "contain",
+								"label": "Contain"
+							}
+						],
+						"default": "cover",
+						"visible_if":  "{{ block.settings.enable_answer_4 == true }}"
+					},
+					{
+						"type": "text",
+						"id": "tags_answer_4",
+						"label": "Tags",
+						"info" :"Enter a one tag to apply when selecting this answer. If using multiple tags and AND logic, then product must contain all tags. Tags are not case sensitive.",
+						"visible_if":  "{{ block.settings.enable_answer_4 == true }}"
+					},
+					{
+						"type": "header",
+						"content": "Answer 5"
+					},
+					{
+						"type": "checkbox",
+						"id": "enable_answer_5",
+						"label": "Enable Answer 5",
+						"default": false
+					},
+					{
+						"type": "text",
+						"id": "text_answer_5",
+						"label": "Text",
+						"default": "Answer 5",
+						"visible_if":  "{{ block.settings.enable_answer_5 == true }}"
+					},
+					{
+						"type": "text",
+						"id": "small_text_answer_5",
+						"label": "Small text",
+						"visible_if":  "{{ block.settings.enable_answer_5 == true }}"
+					},
+					{
+						"type": "image_picker",
+						"id": "image_answer_5",
+						"label": "Image",
+						"visible_if":  "{{ block.settings.enable_answer_5 == true }}"
+					},
+					{
+						"type": "select",
+						"id": "aspect_ratio_answer_5",
+						"label": "Image aspect ratio",
+						"options": [
+							{
+								"value": "square",
+								"label": "Square"
+							},
+							{
+								"value": "landscape",
+								"label": "Landscape"
+							},
+							{
+								"value": "portrait",
+								"label": "Portrait"
+							}
+						],
+						"default": "square",
+						"visible_if":  "{{ block.settings.enable_answer_5 == true }}"
+					},
+					{
+						"type": "select",
+						"id": "object_fit_answer_5",
+						"label": "Image object fit",
+						"options": [
+							{
+								"value": "cover",
+								"label": "Cover"
+							},
+							{
+								"value": "contain",
+								"label": "Contain"
+							}
+						],
+						"default": "cover",
+						"visible_if":  "{{ block.settings.enable_answer_5 == true }}"
+					},
+					{
+						"type": "text",
+						"id": "tags_answer_5",
+						"label": "Tags",
+						"info" :"Enter a one tag to apply when selecting this answer. If using multiple tags and AND logic, then product must contain all tags. Tags are not case sensitive.",
+						"visible_if":  "{{ block.settings.enable_answer_5 == true }}"
+					},
+					{
+						"type": "header",
+						"content": "Answer 6"
+					},
+					{
+						"type": "checkbox",
+						"id": "enable_answer_6",
+						"label": "Enable Answer 6",
+						"default": false
+					},
+					{
+						"type": "text",
+						"id": "text_answer_6",
+						"label": "Text",
+						"default": "Answer 6",
+						"visible_if":  "{{ block.settings.enable_answer_6 == true }}"
+					},
+					{
+						"type": "text",
+						"id": "small_text_answer_6",
+						"label": "Small text",
+						"visible_if":  "{{ block.settings.enable_answer_6 == true }}"
+					},
+					{
+						"type": "image_picker",
+						"id": "image_answer_6",
+						"label": "Image",
+						"visible_if":  "{{ block.settings.enable_answer_6 == true }}"
+					},
+					{
+						"type": "select",
+						"id": "aspect_ratio_answer_6",
+						"label": "Image aspect ratio",
+						"options": [
+							{
+								"value": "square",
+								"label": "Square"
+							},
+							{
+								"value": "landscape",
+								"label": "Landscape"
+							},
+							{
+								"value": "portrait",
+								"label": "Portrait"
+							}
+						],
+						"default": "square",
+						"visible_if":  "{{ block.settings.enable_answer_6 == true }}"
+					},
+					{
+						"type": "select",
+						"id": "object_fit_answer_6",
+						"label": "Image object fit",
+						"options": [
+							{
+								"value": "cover",
+								"label": "Cover"
+							},
+							{
+								"value": "contain",
+								"label": "Contain"
+							}
+						],
+						"default": "cover",
+						"visible_if":  "{{ block.settings.enable_answer_6 == true }}"
+					},
+					{
+						"type": "text",
+						"id": "tags_answer_6",
+						"label": "Tags",
+						"info" :"Enter a one tag to apply when selecting this answer. If using multiple tags and AND logic, then product must contain all tags. Tags are not case sensitive.",
+						"visible_if":  "{{ block.settings.enable_answer_6 == true }}"
+					},
+					{
+						"type": "header",
+						"content": "Answer 7"
+					},
+					{
+						"type": "checkbox",
+						"id": "enable_answer_7",
+						"label": "Enable Answer 7",
+						"default": false
+					},
+					{
+						"type": "text",
+						"id": "text_answer_7",
+						"label": "Text",
+						"default": "Answer 7",
+						"visible_if":  "{{ block.settings.enable_answer_7 == true }}"
+					},
+					{
+						"type": "text",
+						"id": "small_text_answer_7",
+						"label": "Small text",
+						"visible_if":  "{{ block.settings.enable_answer_7 == true }}"
+					},
+					{
+						"type": "image_picker",
+						"id": "image_answer_7",
+						"label": "Image",
+						"visible_if":  "{{ block.settings.enable_answer_7 == true }}"
+					},
+					{
+						"type": "select",
+						"id": "aspect_ratio_answer_7",
+						"label": "Image aspect ratio",
+						"options": [
+							{
+								"value": "square",
+								"label": "Square"
+							},
+							{
+								"value": "landscape",
+								"label": "Landscape"
+							},
+							{
+								"value": "portrait",
+								"label": "Portrait"
+							}
+						],
+						"default": "square",
+						"visible_if":  "{{ block.settings.enable_answer_7 == true }}"
+					},
+					{
+						"type": "select",
+						"id": "object_fit_answer_7",
+						"label": "Image object fit",
+						"options": [
+							{
+								"value": "cover",
+								"label": "Cover"
+							},
+							{
+								"value": "contain",
+								"label": "Contain"
+							}
+						],
+						"default": "cover",
+						"visible_if":  "{{ block.settings.enable_answer_7 == true }}"
+					},
+					{
+						"type": "text",
+						"id": "tags_answer_7",
+						"label": "Tags",
+						"info" :"Enter a one tag to apply when selecting this answer. If using multiple tags and AND logic, then product must contain all tags. Tags are not case sensitive.",
+						"visible_if":  "{{ block.settings.enable_answer_7 == true }}"
+					},
+					{
+						"type": "header",
+						"content": "Answer 8"
+					},
+					{
+						"type": "checkbox",
+						"id": "enable_answer_8",
+						"label": "Enable Answer 8",
+						"default": false
+					},
+					{
+						"type": "text",
+						"id": "text_answer_8",
+						"label": "Text",
+						"default": "Answer 8",
+						"visible_if":  "{{ block.settings.enable_answer_8 == true }}"
+					},
+					{
+						"type": "text",
+						"id": "small_text_answer_8",
+						"label": "Small text",
+						"visible_if":  "{{ block.settings.enable_answer_8 == true }}"
+					},
+					{
+						"type": "image_picker",
+						"id": "image_answer_8",
+						"label": "Image",
+						"visible_if":  "{{ block.settings.enable_answer_8 == true }}"
+					},
+					{
+						"type": "select",
+						"id": "aspect_ratio_answer_8",
+						"label": "Image aspect ratio",
+						"options": [
+							{
+								"value": "square",
+								"label": "Square"
+							},
+							{
+								"value": "landscape",
+								"label": "Landscape"
+							},
+							{
+								"value": "portrait",
+								"label": "Portrait"
+							}
+						],
+						"default": "square",
+						"visible_if":  "{{ block.settings.enable_answer_8 == true }}"
+					},
+					{
+						"type": "select",
+						"id": "object_fit_answer_8",
+						"label": "Image object fit",
+						"options": [
+							{
+								"value": "cover",
+								"label": "Cover"
+							},
+							{
+								"value": "contain",
+								"label": "Contain"
+							}
+						],
+						"default": "cover",
+						"visible_if":  "{{ block.settings.enable_answer_8 == true }}"
+					},
+					{
+						"type": "text",
+						"id": "tags_answer_8",
+						"label": "Tags",
+						"info" :"Enter a one tag to apply when selecting this answer. If using multiple tags and AND logic, then product must contain all tags. Tags are not case sensitive.",
+						"visible_if":  "{{ block.settings.enable_answer_8 == true }}"
+					}
+
+				]
+			},
+			{
+				"name": "Submit",
+				"type": "submit",
+				"limit": 1,
+				"settings": [
+					{
+						"type": "text",
+						"id": "title",
+						"label": "Heading",
+						"default": "Submit"
+					},
+					{
+						"type": "richtext",
+						"id": "text",
+						"label": "Text"
+					},
+					{
+						"type": "text",
+						"id": "button_text",
+						"label": "Button label",
+						"default": "Submit"
+					},
+					{
+						"type": "header",
+						"content": "Image"
+					},
+					{
+						"type": "image_picker",
+						"id": "image",
+						"label": "Image"
+					},
+					{
+						"type": "range",
+						"id": "image_max_width",
+						"label": "Maximum image width",
+						"default": 600,
+						"min": 100,
+						"max": 1000,
+						"step": 10
+					},
+					{
+						"type": "select",
+						"id": "aspect_ratio",
+						"label": "Image aspect ratio",
+						"options": [
+							{
+								"value": "square",
+								"label": "Square"
+							},
+							{
+								"value": "landscape",
+								"label": "Landscape"
+							},
+							{
+								"value": "portrait",
+								"label": "Portrait"
+							},
+							{
+								"value": "native",
+								"label": "Native"
+							}
+						],
+						"default": "native"
+					},
+				]
+			},
+			{
+				"name": "Results",
+				"type": "results",
+				"limit": 1,
+				"settings": [
+					{
+						"type": "text",
+						"id": "title",
+						"label": "Heading",
+						"default": "Based on your results, we suggest:",
+						"info": "Add [name] to display customers name if Personalize screen has been added."
+					},
+					{
+						"type": "richtext",
+						"id": "text",
+						"label": "Text"
+					},
+					{
+						"type": "text",
+						"id": "button_text",
+						"label": "Button label",
+						"default": "Retry"
+					},
+					{
+						"type": "header",
+						"content": "No results"
+					},
+					{
+						"type": "richtext",
+						"id": "no_results_text",
+						"label": "Text",
+						"default": "<p>No results were found.</p>"
+					}
+				]
+			}
+		],
+		"presets": [
+			{
+				"name": "Quiz",
+				"blocks": [
+					{
+						"type": "start_screen"
+					},
+					{
+						"type": "personalize"
+					},
+					{
+						"type": "question"
+					},
+					{
+						"type": "submit"
+					},
+					{
+						"type": "results"
+					}
+				]
+			}
+		]
+	}
+{% endschema %}

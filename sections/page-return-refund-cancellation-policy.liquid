@@ -1,0 +1,690 @@
+{%- liquid
+	assign title = section.settings.title | default: 'Return, Refund & Cancellation Policy'
+	assign intro = section.settings.intro | default: 'Review CamoSignal return eligibility, refund timing, buyer change-of-mind rules, seller-error support, and order cancellation conditions.'
+	assign support_email = section.settings.support_email | default: 'support.camosignal@gmail.com'
+	assign business_hours = section.settings.business_hours | default: 'Monday-Friday, 8:00 AM-5:00 PM'
+	assign response_time = section.settings.response_time | default: 'Within 24 business hours'
+	assign color_scheme = section.settings.color_scheme
+-%}
+
+{%- style -%}
+	.shipping-policy-modern {
+		background: var(--color-background);
+		color: var(--color-text-primary);
+		font-family: var(--base-font-family), sans-serif;
+		line-height: 1.6;
+	}
+
+	.shipping-policy-modern *, .shipping-policy-modern *::before, .shipping-policy-modern *::after {
+		box-sizing: border-box;
+	}
+
+	.shipping-policy-modern__container {
+		max-width: var(--page-width, 1200px);
+		margin: 0 auto;
+		padding: 0 20px;
+	}
+
+	/* Header */
+	.shipping-policy-modern__header {
+		text-align: center;
+		margin-bottom: 48px;
+	}
+
+	.shipping-policy-modern__title {
+		font-family: var(--heading-font-family), sans-serif;
+		font-size: 40px;
+		line-height: 1.12;
+		margin: 0 0 16px;
+		text-transform: uppercase;
+		overflow-wrap: anywhere;
+	}
+
+	.shipping-policy-modern__intro {
+		color: var(--color-text-secondary);
+		max-width: 600px;
+		margin: 0 auto;
+		font-size: 16px;
+	}
+
+	/* Summary Cards */
+	.shipping-policy-modern__summary {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 24px;
+		margin-bottom: 60px;
+	}
+
+	.shipping-policy-modern__summary-card {
+		display: block;
+		background: var(--color-background);
+		border: 1px solid var(--color-border-secondary, #e9e9e9);
+		border-radius: 12px;
+		padding: 24px;
+		text-align: center;
+		color: inherit;
+		text-decoration: none;
+		cursor: pointer;
+		transition: transform 0.3s ease, box-shadow 0.3s ease;
+	}
+
+	.shipping-policy-modern__summary-card:hover,
+	.shipping-policy-modern__summary-card:focus-visible {
+		transform: translateY(-5px);
+		box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+		border-color: var(--color-text-primary);
+	}
+
+	.shipping-policy-modern__summary-card:focus-visible {
+		outline: 2px solid var(--color-text-primary);
+		outline-offset: 3px;
+	}
+
+	.shipping-policy-modern__summary-icon {
+		width: 48px;
+		height: 48px;
+		margin: 0 auto 16px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: var(--color-background-secondary, #f9f9f9);
+		border-radius: 50%;
+		color: var(--color-text-primary);
+	}
+
+	.shipping-policy-modern__summary-icon svg {
+		width: 24px;
+		height: 24px;
+	}
+
+	.shipping-policy-modern__summary-label {
+		font-size: 13px;
+		text-transform: uppercase;
+		font-weight: 700;
+		color: var(--color-text-thirdly);
+		margin-bottom: 8px;
+		letter-spacing: 0.5px;
+	}
+
+	.shipping-policy-modern__summary-value {
+		font-size: 18px;
+		font-weight: 700;
+		color: var(--color-text-primary);
+	}
+
+	/* Main Layout: TOC + Content */
+	.shipping-policy-modern__layout {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		gap: 40px;
+		align-items: start;
+	}
+
+	/* Sticky TOC */
+	.shipping-policy-modern__toc-wrap {
+		position: sticky;
+		top: 100px;
+		background: var(--color-background);
+		border: 1px solid var(--color-border-secondary, #e9e9e9);
+		border-radius: 12px;
+		padding: 24px;
+	}
+
+	.shipping-policy-modern__toc-title {
+		font-family: var(--base-font-family), sans-serif;
+		font-size: 16px;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		margin: 0 0 16px;
+		padding-bottom: 12px;
+		border-bottom: 1px solid var(--color-border-secondary, #e9e9e9);
+	}
+
+	.shipping-policy-modern__toc-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+
+	.shipping-policy-modern__toc-link {
+		text-decoration: none;
+		color: var(--color-text-secondary);
+		font-size: 16px;
+		transition: color 0.2s ease;
+		display: block;
+	}
+
+	.shipping-policy-modern__toc-link:hover {
+		color: var(--color-text-primary);
+		font-weight: 600;
+	}
+
+	/* Content Sections */
+	.shipping-policy-modern__content {
+		display: flex;
+		flex-direction: column;
+		gap: 48px;
+		min-width: 0;
+	}
+
+	.shipping-policy-modern__section {
+		scroll-margin-top: 100px;
+		min-width: 0;
+	}
+
+	.shipping-policy-modern__section-title {
+		font-family: var(--heading-font-family), sans-serif;
+		font-size: 28px;
+		text-transform: uppercase;
+		margin: 0 0 20px;
+		padding-bottom: 12px;
+		border-bottom: 2px solid var(--color-text-primary);
+		display: inline-block;
+		word-break: break-word;
+	}
+
+	.shipping-policy-modern__subheading {
+		font-family: var(--base-font-family), sans-serif;
+		font-size: 18px;
+		font-weight: 600;
+		margin: 24px 0 12px;
+	}
+
+	.shipping-policy-modern__text {
+		color: var(--color-text-secondary);
+		margin: 0 0 16px;
+	}
+
+	.shipping-policy-modern__list {
+		padding-left: 20px;
+		margin: 0 0 16px;
+		color: var(--color-text-secondary);
+	}
+
+	.shipping-policy-modern__list li {
+		margin-bottom: 8px;
+	}
+
+	.shipping-policy-modern__inline-link {
+		color: var(--color-text-primary);
+		font-weight: 700;
+		text-decoration: underline;
+		text-underline-offset: 4px;
+	}
+
+	.shipping-policy-modern__inline-link:hover,
+	.shipping-policy-modern__inline-link:focus-visible {
+		color: var(--color-text-primary);
+		text-decoration-thickness: 2px;
+	}
+
+	/* Tables */
+	.shipping-policy-modern__table-wrap {
+		overflow-x: auto;
+		border: 1px solid var(--color-border-secondary, #e9e9e9);
+		border-radius: 8px;
+		margin: 24px 0;
+	}
+
+	.shipping-policy-modern__table {
+		width: 100%;
+		border-collapse: collapse;
+	}
+
+	.shipping-policy-modern__table th {
+		font-family: var(--base-font-family), sans-serif;
+		background: var(--color-background-secondary, #f9f9f9);
+		text-align: left;
+		padding: 16px;
+		font-size: 13px;
+		text-transform: uppercase;
+		font-weight: 600;
+		letter-spacing: 0.5px;
+		border-bottom: 1px solid var(--color-border-secondary, #e9e9e9);
+	}
+
+	.shipping-policy-modern__table td {
+		padding: 16px;
+		border-bottom: 1px solid var(--color-border-secondary, #e9e9e9);
+		color: var(--color-text-secondary);
+		font-size: 15px;
+	}
+
+	.shipping-policy-modern__table tr:last-child td {
+		border-bottom: none;
+	}
+
+	/* Highlight Notes */
+	.shipping-policy-modern__note {
+		background: #f4f4f4;
+		color: #243029;
+		padding: 16px 20px;
+		border-left: 4px solid #243029;
+		border-radius: 0 8px 8px 0;
+		margin: 24px 0;
+		font-size: 14px;
+	}
+
+	.shipping-policy-modern__note--info {
+		background: #f4f4f4;
+		color: #243029;
+	}
+
+	/* Grid Blocks */
+	.shipping-policy-modern__grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 24px;
+		margin: 24px 0;
+	}
+
+	.shipping-policy-modern__block {
+		background: var(--color-background);
+		border: 1px solid var(--color-border-secondary, #e9e9e9);
+		border-radius: 8px;
+		padding: 24px;
+	}
+
+	.shipping-policy-modern__block-title {
+		font-family: var(--base-font-family), sans-serif;
+		font-weight: 600;
+		font-size: 15px;
+		letter-spacing: 0.5px;
+		margin: 0 0 12px;
+		text-transform: uppercase;
+	}
+
+	/* Responsive */
+	@media screen and (min-width: 990px) {
+		#shopify-section-{{ section.id }} {
+			padding-top: {{ section.settings.padding_top_desktop }}px;
+			padding-bottom: {{ section.settings.padding_bottom_desktop }}px;
+		}
+
+		.shipping-policy-modern__layout {
+			grid-template-columns: 280px minmax(0, 1fr);
+			gap: 60px;
+		}
+	}
+
+	@media screen and (max-width: 989px) {
+		#shopify-section-{{ section.id }} {
+			padding-top: {{ section.settings.padding_top_mobile }}px;
+			padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+		}
+		
+		.shipping-policy-modern__layout {
+			gap: 24px;
+		}
+
+		.shipping-policy-modern__toc-wrap {
+			position: static;
+			margin-bottom: 0;
+		}
+	}
+
+	@media screen and (max-width: 767px) {
+		.shipping-policy-modern__content {
+			gap: 32px;
+		}
+
+		.shipping-policy-modern__summary {
+			grid-template-columns: repeat(2, 1fr);
+			gap: 12px;
+		}
+
+		.shipping-policy-modern__summary-card {
+			padding: 16px;
+		}
+
+		.shipping-policy-modern__summary-value {
+			font-size: 15px;
+		}
+
+		.shipping-policy-modern__title {
+			font-size: 32px;
+			line-height: 1.14;
+		}
+
+		.shipping-policy-modern__section-title {
+			font-size: 22px;
+			margin: 0 0 16px;
+		}
+
+		.shipping-policy-modern__subheading {
+			margin: 20px 0 12px;
+		}
+
+		.shipping-policy-modern__table-wrap,
+		.shipping-policy-modern__grid,
+		.shipping-policy-modern__note {
+			margin: 16px 0;
+		}
+
+		.shipping-policy-modern__grid {
+			gap: 16px;
+		}
+		
+		.shipping-policy-modern__table th {
+			padding: 12px 8px;
+			font-size: 12px;
+		}
+
+		.shipping-policy-modern__table td {
+			padding: 12px 8px;
+			font-size: 14px;
+		}
+	}
+{%- endstyle -%}
+
+<section class="shipping-policy-modern color-{{ color_scheme }}">
+	<div class="shipping-policy-modern__container">
+		
+		<header class="shipping-policy-modern__header">
+			<h1 class="shipping-policy-modern__title">{{ title | escape }}</h1>
+			<p class="shipping-policy-modern__intro">{{ intro | escape }}</p>
+		</header>
+
+		<div class="shipping-policy-modern__summary">
+			<a class="shipping-policy-modern__summary-card" href="#return-eligibility" aria-label="View return eligibility details">
+				<div class="shipping-policy-modern__summary-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
+				</div>
+				<div class="shipping-policy-modern__summary-label">Return Window</div>
+				<div class="shipping-policy-modern__summary-value">7 days</div>
+			</a>
+			<a class="shipping-policy-modern__summary-card" href="#return-seller-error" aria-label="View review time details">
+				<div class="shipping-policy-modern__summary-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+				</div>
+				<div class="shipping-policy-modern__summary-label">Review Time</div>
+				<div class="shipping-policy-modern__summary-value">1-2 business days</div>
+			</a>
+			<a class="shipping-policy-modern__summary-card" href="#return-buyer-error" aria-label="View return fee details">
+				<div class="shipping-policy-modern__summary-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+				</div>
+				<div class="shipping-policy-modern__summary-label">Return Fee</div>
+				<div class="shipping-policy-modern__summary-value">See more</div>
+			</a>
+			<a class="shipping-policy-modern__summary-card" href="#return-refunds" aria-label="View refund time details">
+				<div class="shipping-policy-modern__summary-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z" /></svg>
+				</div>
+				<div class="shipping-policy-modern__summary-label">Refund Time</div>
+				<div class="shipping-policy-modern__summary-value">3-7 business days</div>
+			</a>
+		</div>
+
+		<div class="shipping-policy-modern__layout">
+			<aside class="shipping-policy-modern__toc-wrap">
+				<h4 class="shipping-policy-modern__toc-title">On this page</h4>
+				<ul class="shipping-policy-modern__toc-list">
+					<li><a class="shipping-policy-modern__toc-link" href="#return-eligibility">Eligibility</a></li>
+					<li><a class="shipping-policy-modern__toc-link" href="#return-exclusions">Non-Returnable Cases</a></li>
+					<li><a class="shipping-policy-modern__toc-link" href="#return-buyer-error">Buyer Error / Change of Mind</a></li>
+					<li><a class="shipping-policy-modern__toc-link" href="#return-seller-error">Seller Error</a></li>
+					<li><a class="shipping-policy-modern__toc-link" href="#return-cancellation">Order Cancellation</a></li>
+					<li><a class="shipping-policy-modern__toc-link" href="#return-refunds">Refunds</a></li>
+					<li><a class="shipping-policy-modern__toc-link" href="#return-contact">Contact Support</a></li>
+				</ul>
+			</aside>
+
+			<div class="shipping-policy-modern__content">
+				
+				<article id="return-eligibility" class="shipping-policy-modern__section">
+					<h2 class="shipping-policy-modern__section-title">Return / Refund Eligibility</h2>
+					<p class="shipping-policy-modern__text">To be eligible for a return or refund, your request must meet all of the following conditions:</p>
+					<ol class="shipping-policy-modern__list" style="list-style-type: decimal;">
+						<li>The request must be submitted within <strong>7 days</strong> from the date the order is marked as delivered.</li>
+						<li>The product must be intact, unused, and free from damage caused by the buyer.</li>
+						<li>Original packaging, labels, accessories, and included gifts, if any, must be kept.</li>
+						<li>The buyer must provide the order number and relevant proof, such as product photos / videos, invoice, etc.</li>
+						<li>The product must not fall under the <a class="shipping-policy-modern__inline-link" href="#return-exclusions">Non-Returnable Cases listed below</a>.</li>
+					</ol>
+					<div class="shipping-policy-modern__note">Requests that do not meet the above conditions may be rejected.</div>
+				</article>
+
+				<article id="return-exclusions" class="shipping-policy-modern__section">
+					<h2 class="shipping-policy-modern__section-title">Non-Returnable Cases</h2>
+					<ol class="shipping-policy-modern__list" style="list-style-type: decimal;">
+						<li>The request is submitted more than 7 days after delivery.</li>
+						<li>The product has been used, damaged, scratched, or is missing accessories due to buyer fault.</li>
+						<li>Valid proof cannot be provided for seller-error claims.</li>
+						<li>The product has no invoice, order number, or verification information.</li>
+						<li>The product is a special promotional item or personalized product, if stated on the product page.</li>
+						<li>The buyer sends the item back without official confirmation from us.</li>
+					</ol>
+				</article>
+
+				<article id="return-buyer-error" class="shipping-policy-modern__section">
+					<h2 class="shipping-policy-modern__section-title">Buyer Error / Change of Mind</h2>
+					<p class="shipping-policy-modern__text">This applies when the buyer voluntarily requests a return for personal reasons, such as ordering the wrong product / size / color, changing their mind, no longer needing the product, etc.</p>
+					<p class="shipping-policy-modern__text">For buyer-error or change-of-mind returns, the buyer is responsible for both the original shipping fee used to deliver the first order and the return shipping fee used to send the item back.</p>
+					
+					<div class="shipping-policy-modern__table-wrap">
+						<table class="shipping-policy-modern__table">
+							<thead>
+								<tr>
+									<th>Shipping direction</th>
+									<th>Fee</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Original shipping fee: Seller to buyer</td>
+									<td>$5.45</td>
+								</tr>
+								<tr>
+									<td>Return shipping fee: Buyer to seller</td>
+									<td>$5.45</td>
+								</tr>
+								<tr>
+									<td><strong>Total shipping fee</strong></td>
+									<td><strong>$10.90</strong></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<p class="shipping-policy-modern__text">The total shipping fee above will be deducted directly from the refund. The remaining balance will be refunded after the process is completed.</p>
+					
+					<h3 class="shipping-policy-modern__subheading">Return process</h3>
+					<ol class="shipping-policy-modern__list" style="list-style-type: decimal;">
+						<li>Contact us with your order number and reason for the return.</li>
+						<li>Wait for confirmation and packing / return instructions from our support team.</li>
+						<li>Send the product back to the provided return address.</li>
+						<li>After the returned item is inspected, we will process the refund, minus shipping fees, within 3-7 business days.</li>
+					</ol>
+				</article>
+
+				<article id="return-seller-error" class="shipping-policy-modern__section">
+					<h2 class="shipping-policy-modern__section-title">Seller Error</h2>
+					<p class="shipping-policy-modern__text">This applies when the product received has an issue caused by the seller, such as the wrong product, wrong size / color, technical defect, damage during shipping, product not matching the description, etc.</p>
+					
+					<h3 class="shipping-policy-modern__subheading">Buyer Benefits</h3>
+					<ul class="shipping-policy-modern__list">
+						<li>The buyer will <strong>not be responsible</strong> for any costs related to the return.</li>
+						<li>The buyer may choose either a replacement or a refund.</li>
+					</ul>
+
+					<div class="shipping-policy-modern__grid">
+						<div class="shipping-policy-modern__block">
+							<h3 class="shipping-policy-modern__block-title">Replacement</h3>
+							<p class="shipping-policy-modern__text">The seller will cover all shipping costs for the replacement order. The buyer does not need to pay any additional fees. The replacement product will be shipped according to the standard shipping timeframe from the date the request is confirmed.</p>
+						</div>
+						<div class="shipping-policy-modern__block">
+							<h3 class="shipping-policy-modern__block-title">Refund</h3>
+							<p class="shipping-policy-modern__text">The buyer will receive a 100% refund of the amount paid for the order. No shipping fees or other fees will be deducted.</p>
+						</div>
+					</div>
+
+					<h3 class="shipping-policy-modern__subheading">Process</h3>
+					<ol class="shipping-policy-modern__list" style="list-style-type: decimal;">
+						<li>Take clear photos / videos showing the product issue.</li>
+						<li>Contact us within 7 days from the date of receiving the item, including proof and your order number.</li>
+						<li>Our support team will review and respond within 1-2 business days.</li>
+						<li>Once the request is approved, choose your preferred resolution: replacement or refund.</li>
+						<li>Follow the instructions provided by our support team.</li>
+					</ol>
+				</article>
+				
+				<article id="return-cancellation" class="shipping-policy-modern__section">
+					<h2 class="shipping-policy-modern__section-title">Order Cancellation</h2>
+					<p class="shipping-policy-modern__text">Cancellation requests are only accepted if the order has not yet been processed, packed, or handed over to the shipping carrier, and all cancellations require official approval from the seller.</p>
+					
+					<h3 class="shipping-policy-modern__subheading">Process</h3>
+					<ol class="shipping-policy-modern__list" style="list-style-type: decimal;">
+						<li>Contact us as soon as possible after placing your order.</li>
+						<li>Provide your order number and reason for cancellation.</li>
+						<li>Wait for official approval and confirmation from our support team.</li>
+						<li>If approved, the order will be canceled and payment will be refunded within 3-7 business days.</li>
+					</ol>
+					<div class="shipping-policy-modern__note">Orders that have already been processed or are in transit cannot be canceled. In that case, the return/refund policy will apply depending on the situation.</div>
+				</article>
+				
+				<article id="return-refunds" class="shipping-policy-modern__section">
+					<h2 class="shipping-policy-modern__section-title">Refunds</h2>
+					<div class="shipping-policy-modern__grid">
+						<div class="shipping-policy-modern__block">
+							<h3 class="shipping-policy-modern__block-title">Refund Method</h3>
+							<p class="shipping-policy-modern__text">Refunds will be issued to the original payment method used for the order.</p>
+						</div>
+						<div class="shipping-policy-modern__block">
+							<h3 class="shipping-policy-modern__block-title">Refund Time</h3>
+							<p class="shipping-policy-modern__text">Refunds are processed within <strong>3-7 business days</strong> after the request is approved and the returned item, if applicable, has been inspected.</p>
+						</div>
+					</div>
+					<div class="shipping-policy-modern__note--info shipping-policy-modern__note">Actual timing may depend on the bank or payment provider.</div>
+				</article>
+
+				<article id="return-contact" class="shipping-policy-modern__section">
+					<h2 class="shipping-policy-modern__section-title">Contact Support</h2>
+					<p class="shipping-policy-modern__text">For any inquiries, please contact us:</p>
+					<div class="shipping-policy-modern__grid">
+						<div class="shipping-policy-modern__block">
+							<h3 class="shipping-policy-modern__block-title">Email</h3>
+							<p class="shipping-policy-modern__text"><strong><a href="mailto:{{ support_email | escape }}">{{ support_email | escape }}</a></strong></p>
+						</div>
+						<div class="shipping-policy-modern__block">
+							<h3 class="shipping-policy-modern__block-title">Business Hours</h3>
+							<p class="shipping-policy-modern__text">{{ business_hours | escape }}</p>
+						</div>
+						<div class="shipping-policy-modern__block">
+							<h3 class="shipping-policy-modern__block-title">Response Time</h3>
+							<p class="shipping-policy-modern__text">{{ response_time | escape }}</p>
+						</div>
+					</div>
+				</article>
+				
+				<p class="shipping-policy-modern__text" style="font-size: 13px; border-top: 1px solid var(--color-border-secondary, #e9e9e9); padding-top: 20px;">
+					<em>This policy may be updated over time without prior notice. The latest version will always be published on our official website. In the event of a dispute, the final decision belongs to the seller based on the terms published at the time the order was placed.<br>Last updated: May 2026</em>
+				</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+{% schema %}
+{
+	"name": "Return Refund Policy",
+	"settings": [
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Content"
+		},
+		{
+			"type": "text",
+			"id": "title",
+			"label": "Heading",
+			"default": "Return, Refund & Cancellation Policy"
+		},
+		{
+			"type": "textarea",
+			"id": "intro",
+			"label": "Intro",
+			"default": "Review CamoSignal return eligibility, refund timing, buyer change-of-mind rules, seller-error support, and order cancellation conditions."
+		},
+		{
+			"type": "text",
+			"id": "support_email",
+			"label": "Support email",
+			"default": "support.camosignal@gmail.com"
+		},
+		{
+			"type": "text",
+			"id": "business_hours",
+			"label": "Business hours",
+			"default": "Monday-Friday, 8:00 AM-5:00 PM"
+		},
+		{
+			"type": "text",
+			"id": "response_time",
+			"label": "Response time",
+			"default": "Within 24 business hours"
+		},
+		{
+			"type": "header",
+			"content": "Spacing"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_desktop",
+			"min": 0,
+			"max": 120,
+			"step": 4,
+			"unit": "px",
+			"label": "Padding top - desktop",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_desktop",
+			"min": 0,
+			"max": 120,
+			"step": 4,
+			"unit": "px",
+			"label": "Padding bottom - desktop",
+			"default": 72
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 4,
+			"unit": "px",
+			"label": "Padding top - mobile",
+			"default": 36
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 4,
+			"unit": "px",
+			"label": "Padding bottom - mobile",
+			"default": 48
+		}
+	],
+	"presets": [
+		{
+			"name": "Return Refund Policy"
+		}
+	]
+}
+{% endschema %}

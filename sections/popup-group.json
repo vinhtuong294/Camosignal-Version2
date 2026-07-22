@@ -1,0 +1,57 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "custom.popup",
+  "name": "Popups group",
+  "sections": {
+    "177497946522d86e28": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_8d57ea8_MMJMB4": {
+          "type": "ai_gen_block_8d57ea8",
+          "disabled": true,
+          "settings": {
+            "desktop_image": "shopify://shop_images/Gemini_Generated_Image_g784aug784aug784.jpg",
+            "desktop_height": 500,
+            "mobile_image": "shopify://shop_images/Gemini_Generated_Image_e1t5o1e1t5o1e1t5.jpg",
+            "mobile_height": 400,
+            "show_content": true,
+            "heading": "",
+            "heading_size": 48,
+            "subheading": "",
+            "subheading_size": 18,
+            "text_color": "#ffffff",
+            "button_text": "Mua ngay",
+            "button_link": "",
+            "button_font_size": 16,
+            "button_background": "#000000",
+            "button_text_color": "#ffffff",
+            "button_background_hover": "#333333",
+            "button_text_color_hover": "#ffffff",
+            "button_border_radius": 4,
+            "show_overlay": true,
+            "overlay_color": "#000000",
+            "overlay_opacity": 30,
+            "desktop_width_percent": 100,
+            "border_radius": 0
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_8d57ea8_MMJMB4"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "177497946522d86e28"
+  ]
+}

@@ -1,0 +1,722 @@
+{% doc %}
+  @prompt
+    Create a new theme section that displays products in a grid layout with 2 rows and 4 product cards per row (8 products total per page). The section should have a collection picker setting so the merchant can choose which collection to display products from. If the selected collection has more than 8 products, show pagination controls to navigate to the next/previous pages of products. Each product card should display the product image, title, price, and an add-to-cart or view product button., hãy lấy product card của theme hiện tại mà làm
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% liquid
+  assign products_per_page = 8
+  assign current_page = 1
+  
+  if block.settings.collection != blank
+    assign collection = block.settings.collection
+    assign total_products = collection.products_count
+    assign total_pages = total_products | divided_by: products_per_page | ceil
+    
+    if request.path contains '?page='
+      assign page_param = request.path | split: '?page=' | last | split: '&' | first | plus: 0
+      if page_param > 0
+        assign current_page = page_param
+      endif
+    endif
+    
+    assign offset = current_page | minus: 1 | times: products_per_page
+  endif
+
+  assign scheme = block.settings.color_scheme
+  assign color_text = scheme.settings.color_text_primary
+  assign color_background = scheme.settings.color_background
+  assign color_border = scheme.settings.color_border_secondary
+  assign color_link = scheme.settings.color_link
+  assign sale_price_color = scheme.settings.product_sale_price
+  
+  assign button_bg = scheme.settings.button_background_color_secondary
+  assign button_text = scheme.settings.button_text_color_secondary
+  assign button_border = scheme.settings.button_border_color_secondary
+  assign button_bg_hover = scheme.settings.button_background_color_secondary_hover
+  assign button_text_hover = scheme.settings.button_text_color_secondary_hover
+  assign button_border_hover = scheme.settings.button_border_color_secondary_hover
+%}
+
+{% style %}
+  .ai-product-grid-{{ ai_gen_id }} {
+    width: 100%;
+    display: block;
+    padding: {{ block.settings.section_padding_top }}px 0 {{ block.settings.section_padding_bottom }}px;
+    background-color: {{ color_background }};
+  }
+
+  .ai-product-grid-container-{{ ai_gen_id }} {
+    max-width: 1680px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .ai-product-grid-header-{{ ai_gen_id }} {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .ai-product-grid-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.heading_size }}px;
+    color: {{ scheme.settings.color_text_heading }};
+    margin: 0 0 12px;
+    font-family: {{ settings.heading_font.family }}, {{ settings.heading_font.fallback_families }};
+    font-weight: {{ settings.heading_font.weight }};
+    {% if settings.uppercase %}
+      text-transform: uppercase;
+    {% endif %}
+  }
+
+  .ai-product-grid-description-{{ ai_gen_id }} {
+    font-size: 16px;
+    color: {{ scheme.settings.color_text_secondary }};
+    margin: 0;
+  }
+
+  .ai-product-grid-wrapper-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: {{ block.settings.grid_gap }}px;
+    margin-bottom: 40px;
+  }
+
+  .ai-product-card-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    background-color: {{ color_background }};
+    border: 1px solid {{ color_border }};
+    border-radius: 0;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+  }
+
+  .ai-product-card-{{ ai_gen_id }}:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .ai-product-card-image-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    padding-bottom: 125%;
+    overflow: hidden;
+    background-color: {{ scheme.settings.color_background_secondary }};
+  }
+
+  .ai-product-card-image-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.3s ease;
+  }
+
+  .ai-product-card-image-hover-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .ai-product-card-{{ ai_gen_id }}:hover .ai-product-card-image-hover-{{ ai_gen_id }} {
+    opacity: 1;
+  }
+
+  .ai-product-card-{{ ai_gen_id }}:hover .ai-product-card-image-{{ ai_gen_id }} {
+    opacity: 0;
+  }
+
+  .ai-product-card-placeholder-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: {{ scheme.settings.color_background_secondary }};
+  }
+
+  .ai-product-card-placeholder-{{ ai_gen_id }} svg {
+    width: 50%;
+    height: 50%;
+    opacity: 0.2;
+  }
+
+  .ai-product-card-labels-{{ ai_gen_id }} {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .ai-product-card-label-{{ ai_gen_id }} {
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .ai-product-card-label-sale-{{ ai_gen_id }} {
+    background-color: {{ settings.color_label_sale_percentage_background }};
+    color: {{ settings.color_label_sale_percentage }};
+    opacity: {{ settings.color_label_sale_percentage_opacity | divided_by: 100.0 }};
+  }
+
+  .ai-product-card-label-sold-out-{{ ai_gen_id }} {
+    background-color: {{ settings.color_label_sold_out_background }};
+    color: {{ settings.color_label_sold_out }};
+    border: 1px solid {{ settings.color_label_sold_out_border }};
+    opacity: {{ settings.color_label_sold_out_opacity | divided_by: 100.0 }};
+  }
+
+  .ai-product-card-content-{{ ai_gen_id }} {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .ai-product-card-vendor-{{ ai_gen_id }} {
+    font-size: 12px;
+    color: {{ scheme.settings.color_text_secondary }};
+    margin: 0 0 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .ai-product-card-title-{{ ai_gen_id }} {
+    font-size: 16px;
+    color: {{ color_text }};
+    margin: 0 0 10px;
+    font-weight: 500;
+    line-height: 1.4;
+    min-height: 44px;
+    font-family: {{ settings.base_font.family }}, {{ settings.base_font.fallback_families }};
+  }
+
+  .ai-product-card-title-link-{{ ai_gen_id }} {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .ai-product-card-title-link-{{ ai_gen_id }}:hover {
+    color: {{ color_link }};
+  }
+
+  .ai-product-card-price-{{ ai_gen_id }} {
+    font-size: 16px;
+    color: {{ color_text }};
+    margin: 0 0 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ai-product-card-price-compare-{{ ai_gen_id }} {
+    text-decoration: line-through;
+    color: {{ scheme.settings.color_text_secondary }};
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .ai-product-card-price-sale-{{ ai_gen_id }} {
+    color: {{ sale_price_color }};
+  }
+
+  .ai-product-card-button-{{ ai_gen_id }} {
+    width: 100%;
+    padding: 12px 20px;
+    background-color: {{ button_bg }};
+    color: {{ button_text }};
+    border: 1px solid {{ button_border }};
+    border-radius: 0;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    margin-top: auto;
+    font-family: {{ settings.button_font_family.family }}, {{ settings.button_font_family.fallback_families }};
+    {% if settings.button_font_uppercase %}
+      text-transform: uppercase;
+    {% endif %}
+  }
+
+  .ai-product-card-button-{{ ai_gen_id }}:hover {
+    background-color: {{ button_bg_hover }};
+    color: {{ button_text_hover }};
+    border-color: {{ button_border_hover }};
+  }
+
+  .ai-product-card-sold-out-{{ ai_gen_id }} {
+    background-color: {{ scheme.settings.color_background_secondary }};
+    color: {{ scheme.settings.color_text_secondary }};
+    border-color: {{ color_border }};
+    cursor: not-allowed;
+  }
+
+  .ai-product-card-sold-out-{{ ai_gen_id }}:hover {
+    background-color: {{ scheme.settings.color_background_secondary }};
+    color: {{ scheme.settings.color_text_secondary }};
+    border-color: {{ color_border }};
+  }
+
+  .ai-pagination-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 40px;
+  }
+
+  .ai-pagination-button-{{ ai_gen_id }} {
+    padding: 10px 20px;
+    background-color: {{ button_bg }};
+    color: {{ button_text }};
+    border: 1px solid {{ button_border }};
+    border-radius: 0;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    font-family: {{ settings.button_font_family.family }}, {{ settings.button_font_family.fallback_families }};
+    {% if settings.button_font_uppercase %}
+      text-transform: uppercase;
+    {% endif %}
+  }
+
+  .ai-pagination-button-{{ ai_gen_id }}:hover:not(.ai-pagination-button-disabled-{{ ai_gen_id }}) {
+    background-color: {{ button_bg_hover }};
+    color: {{ button_text_hover }};
+    border-color: {{ button_border_hover }};
+  }
+
+  .ai-pagination-button-disabled-{{ ai_gen_id }} {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .ai-pagination-info-{{ ai_gen_id }} {
+    font-size: 14px;
+    color: {{ color_text }};
+  }
+
+  .ai-empty-state-{{ ai_gen_id }} {
+    text-align: center;
+    padding: 60px 20px;
+  }
+
+  .ai-empty-state-title-{{ ai_gen_id }} {
+    font-size: 24px;
+    color: {{ color_text }};
+    margin: 0 0 12px;
+    font-family: {{ settings.heading_font.family }}, {{ settings.heading_font.fallback_families }};
+  }
+
+  .ai-empty-state-text-{{ ai_gen_id }} {
+    font-size: 16px;
+    color: {{ scheme.settings.color_text_secondary }};
+  }
+
+  @media screen and (max-width: 989px) {
+    .ai-product-grid-wrapper-{{ ai_gen_id }} {
+      grid-template-columns: repeat(3, 1fr);
+      gap: {{ block.settings.grid_gap | times: 0.75 }}px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-product-grid-wrapper-{{ ai_gen_id }} {
+      grid-template-columns: repeat(2, 1fr);
+      gap: {{ block.settings.grid_gap | times: 0.5 }}px;
+    }
+
+    .ai-product-grid-{{ ai_gen_id }} {
+      padding: {{ block.settings.section_padding_top | times: 0.6 }}px 0 {{ block.settings.section_padding_bottom | times: 0.6 }}px;
+    }
+
+    .ai-product-grid-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.heading_size | times: 0.7 }}px;
+    }
+
+    .ai-product-card-content-{{ ai_gen_id }} {
+      padding: 12px;
+    }
+
+    .ai-product-card-title-{{ ai_gen_id }} {
+      font-size: 14px;
+      min-height: auto;
+    }
+
+    .ai-product-card-price-{{ ai_gen_id }} {
+      font-size: 14px;
+    }
+
+    .ai-product-card-labels-{{ ai_gen_id }} {
+      top: 8px;
+      left: 8px;
+    }
+
+    .ai-product-card-label-{{ ai_gen_id }} {
+      font-size: 10px;
+      padding: 3px 8px;
+    }
+  }
+{% endstyle %}
+
+<product-grid-{{ ai_gen_id }} class="ai-product-grid-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-product-grid-container-{{ ai_gen_id }}">
+    {% if block.settings.heading != blank or block.settings.description != blank %}
+      <div class="ai-product-grid-header-{{ ai_gen_id }}">
+        {% if block.settings.heading != blank %}
+          <h2 class="ai-product-grid-title-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
+        {% endif %}
+        {% if block.settings.description != blank %}
+          <div class="ai-product-grid-description-{{ ai_gen_id }}">{{ block.settings.description }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if block.settings.collection != blank %}
+      {% liquid
+        assign paginated_products = collection.products | offset: offset | limit: products_per_page
+      %}
+
+      {% if paginated_products.size > 0 %}
+        <div class="ai-product-grid-wrapper-{{ ai_gen_id }}">
+          {% for product in paginated_products %}
+            <div class="ai-product-card-{{ ai_gen_id }}">
+              <div class="ai-product-card-image-wrapper-{{ ai_gen_id }}">
+                {% if product.featured_image %}
+                  <img
+                    src="{{ product.featured_image | image_url: width: 600 }}"
+                    alt="{{ product.featured_image.alt | escape }}"
+                    class="ai-product-card-image-{{ ai_gen_id }}"
+                    loading="lazy"
+                    width="600"
+                    height="750"
+                  >
+                  {% if product.media[1] and settings.is_image_on_hover_enabled %}
+                    <img
+                      src="{{ product.media[1] | image_url: width: 600 }}"
+                      alt="{{ product.media[1].alt | escape }}"
+                      class="ai-product-card-image-hover-{{ ai_gen_id }}"
+                      loading="lazy"
+                      width="600"
+                      height="750"
+                    >
+                  {% endif %}
+                {% else %}
+                  <div class="ai-product-card-placeholder-{{ ai_gen_id }}">
+                    {{ 'product-1' | placeholder_svg_tag }}
+                  </div>
+                {% endif %}
+
+                {% if settings.is_labels_enabled %}
+                  <div class="ai-product-card-labels-{{ ai_gen_id }}">
+                    {% if product.available == false %}
+                      <span class="ai-product-card-label-{{ ai_gen_id }} ai-product-card-label-sold-out-{{ ai_gen_id }}">
+                        Sold out
+                      </span>
+                    {% elsif product.compare_at_price > product.price and settings.is_sale_percentage_label_enabled %}
+                      {% assign discount = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price %}
+                      <span class="ai-product-card-label-{{ ai_gen_id }} ai-product-card-label-sale-{{ ai_gen_id }}">
+                        -{{ discount }}%
+                      </span>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              </div>
+
+              <div class="ai-product-card-content-{{ ai_gen_id }}">
+                {% if settings.is_show_vendor and product.vendor != blank %}
+                  <div class="ai-product-card-vendor-{{ ai_gen_id }}">
+                    {{ product.vendor }}
+                  </div>
+                {% endif %}
+
+                <h3 class="ai-product-card-title-{{ ai_gen_id }}">
+                  <a href="{{ product.url }}" class="ai-product-card-title-link-{{ ai_gen_id }}">
+                    {{ product.title }}
+                  </a>
+                </h3>
+
+                <div class="ai-product-card-price-{{ ai_gen_id }}">
+                  {% if product.compare_at_price > product.price %}
+                    <span class="ai-product-card-price-compare-{{ ai_gen_id }}">
+                      {{ product.compare_at_price | money }}
+                    </span>
+                    <span class="ai-product-card-price-sale-{{ ai_gen_id }}">
+                      {{ product.price | money }}
+                    </span>
+                  {% else %}
+                    {{ product.price | money }}
+                  {% endif %}
+                </div>
+
+                {% if product.available %}
+                  <a
+                    href="{{ product.url }}"
+                    class="ai-product-card-button-{{ ai_gen_id }}"
+                  >
+                    {{ block.settings.button_text }}
+                  </a>
+                {% else %}
+                  <button
+                    class="ai-product-card-button-{{ ai_gen_id }} ai-product-card-sold-out-{{ ai_gen_id }}"
+                    disabled
+                  >
+                    {{ block.settings.sold_out_text }}
+                  </button>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        {% if total_pages > 1 %}
+          <div class="ai-pagination-{{ ai_gen_id }}">
+            {% if current_page > 1 %}
+              <a
+                href="?page={{ current_page | minus: 1 }}"
+                class="ai-pagination-button-{{ ai_gen_id }}"
+              >
+                {{ block.settings.previous_text }}
+              </a>
+            {% else %}
+              <span class="ai-pagination-button-{{ ai_gen_id }} ai-pagination-button-disabled-{{ ai_gen_id }}">
+                {{ block.settings.previous_text }}
+              </span>
+            {% endif %}
+
+            <span class="ai-pagination-info-{{ ai_gen_id }}">
+              Trang {{ current_page }} / {{ total_pages }}
+            </span>
+
+            {% if current_page < total_pages %}
+              <a
+                href="?page={{ current_page | plus: 1 }}"
+                class="ai-pagination-button-{{ ai_gen_id }}"
+              >
+                {{ block.settings.next_text }}
+              </a>
+            {% else %}
+              <span class="ai-pagination-button-{{ ai_gen_id }} ai-pagination-button-disabled-{{ ai_gen_id }}">
+                {{ block.settings.next_text }}
+              </span>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% else %}
+        <div class="ai-empty-state-{{ ai_gen_id }}">
+          <h3 class="ai-empty-state-title-{{ ai_gen_id }}">Không tìm thấy sản phẩm</h3>
+          <p class="ai-empty-state-text-{{ ai_gen_id }}">Bộ sưu tập này chưa có sản phẩm nào.</p>
+        </div>
+      {% endif %}
+    {% else %}
+      <div class="ai-empty-state-{{ ai_gen_id }}">
+        <h3 class="ai-empty-state-title-{{ ai_gen_id }}">Chọn bộ sưu tập</h3>
+        <p class="ai-empty-state-text-{{ ai_gen_id }}">Chọn một bộ sưu tập từ trình chỉnh sửa theme để hiển thị sản phẩm.</p>
+      </div>
+    {% endif %}
+  </div>
+</product-grid-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ProductGrid{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.initializePagination();
+      }
+
+      initializePagination() {
+        const paginationLinks = this.querySelectorAll('.ai-pagination-button-{{ ai_gen_id }}:not(.ai-pagination-button-disabled-{{ ai_gen_id }})');
+        
+        paginationLinks.forEach(link => {
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const url = new URL(link.href);
+            const page = url.searchParams.get('page');
+            
+            window.history.pushState({}, '', url);
+            
+            window.scrollTo({
+              top: this.offsetTop - 100,
+              behavior: 'smooth'
+            });
+            
+            this.loadPage(page);
+          });
+        });
+      }
+
+      loadPage(page) {
+        const currentUrl = new URL(window.location);
+        currentUrl.searchParams.set('page', page);
+        
+        fetch(currentUrl)
+          .then(response => response.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newContent = doc.querySelector('product-grid-{{ ai_gen_id }}');
+            
+            if (newContent) {
+              this.innerHTML = newContent.innerHTML;
+              this.initializePagination();
+            }
+          })
+          .catch(error => {
+            console.error('Error loading page:', error);
+          });
+      }
+    }
+
+    customElements.define('product-grid-{{ ai_gen_id }}', ProductGrid{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Lưới sản phẩm",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Bộ sưu tập"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Bộ sưu tập"
+    },
+    {
+      "type": "header",
+      "content": "Nội dung"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Tiêu đề",
+      "default": "Sản phẩm nổi bật"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "description",
+      "label": "Mô tả",
+      "default": "Khám phá bộ sưu tập mới nhất của chúng tôi"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Kích thước tiêu đề",
+      "default": 36
+    },
+    {
+      "type": "header",
+      "content": "Nhãn nút"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Nút xem sản phẩm",
+      "default": "Xem sản phẩm"
+    },
+    {
+      "type": "text",
+      "id": "sold_out_text",
+      "label": "Nút hết hàng",
+      "default": "Hết hàng"
+    },
+    {
+      "type": "text",
+      "id": "previous_text",
+      "label": "Nút trang trước",
+      "default": "Trước"
+    },
+    {
+      "type": "text",
+      "id": "next_text",
+      "label": "Nút trang sau",
+      "default": "Sau"
+    },
+    {
+      "type": "header",
+      "content": "Bố cục"
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Khoảng cách lưới",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Khoảng cách trên",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Khoảng cách dưới",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Màu sắc"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Bảng màu",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Lưới sản phẩm"
+    }
+  ]
+}
+{% endschema %}

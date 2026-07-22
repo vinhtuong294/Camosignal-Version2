@@ -1,0 +1,1795 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+  Snippet: Product Drawers → Now renders as Inline Accordions
+  Accordion items expand/collapse in-place (no side drawer)
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- comment -%}
+	Product details content
+	For T-Shirt products, tag-specific details win. Other product types use type-only details.
+{%- endcomment -%}
+{%- assign product_details_type = product.type | downcase | strip -%}
+{%- assign product_details_profile = blank -%}
+{%- assign product_details_is_tshirt = false -%}
+{%- assign product_details_is_tshirt_family = false -%}
+{%- assign product_details_has_bella = false -%}
+{%- assign product_details_has_vneck = false -%}
+{%- assign product_details_has_wash = false -%}
+{%- assign product_details_has_tanktop = false -%}
+{%- assign product_details_has_comfort_1745 = false -%}
+{%- assign product_details_has_comfort_1717 = false -%}
+
+{%- if product_details_type == 't-shirt' or product_details_type == 'tshirt' or product_details_type == 't shirt' -%}
+	{%- assign product_details_is_tshirt = true -%}
+	{%- assign product_details_is_tshirt_family = true -%}
+{%- elsif product_details_type == 'type1' or product_details_type contains 't-shirt' or product_details_type contains 'tshirt' -%}
+	{%- assign product_details_is_tshirt_family = true -%}
+{%- endif -%}
+
+{%- if product_details_is_tshirt -%}
+	{%- for tag in product.tags -%}
+		{%- assign product_details_tag = tag | handleize -%}
+		{%- if product_details_tag contains 'bella' -%}
+			{%- assign product_details_has_bella = true -%}
+		{%- endif -%}
+		{%- if product_details_tag contains 'vneck' or product_details_tag contains 'v-neck' -%}
+			{%- assign product_details_has_vneck = true -%}
+		{%- endif -%}
+		{%- if product_details_tag contains 'wash' -%}
+			{%- assign product_details_has_wash = true -%}
+		{%- endif -%}
+		{%- if product_details_tag contains 'tanktop' or product_details_tag contains 'tank-top' -%}
+			{%- assign product_details_has_tanktop = true -%}
+		{%- endif -%}
+		{%- if product_details_tag contains '1745' or product_details_tag contains 'colorblast' or product_details_tag contains 'color-blast' -%}
+			{%- assign product_details_has_comfort_1745 = true -%}
+		{%- endif -%}
+		{%- if product_details_tag contains '1717' or product_details_tag contains 'comfort' -%}
+			{%- assign product_details_has_comfort_1717 = true -%}
+		{%- endif -%}
+	{%- endfor -%}
+
+	{%- if product_details_has_vneck -%}
+		{%- assign product_details_profile = 'vneck' -%}
+	{%- elsif product_details_has_wash -%}
+		{%- assign product_details_profile = 'wash' -%}
+	{%- elsif product_details_has_tanktop -%}
+		{%- assign product_details_profile = 'tanktop' -%}
+	{%- elsif product_details_has_comfort_1745 -%}
+		{%- assign product_details_profile = 'comfort-1745' -%}
+	{%- elsif product_details_has_comfort_1717 -%}
+		{%- assign product_details_profile = 'comfort-1717' -%}
+	{%- elsif product_details_has_bella -%}
+		{%- assign product_details_profile = 'bella' -%}
+	{%- else -%}
+		{%- assign product_details_profile = 'tshirt-default' -%}
+	{%- endif -%}
+{%- elsif product_details_type contains 'hoodie' -%}
+	{%- assign product_details_profile = 'hoodie' -%}
+{%- elsif product_details_type contains 'sweatshirt' or product_details_type contains 'sweater' -%}
+	{%- assign product_details_profile = 'sweatshirt' -%}
+{%- elsif product_details_type contains 'long' and product_details_type contains 'sleeve' -%}
+	{%- assign product_details_profile = 'long-sleeve' -%}
+{%- elsif product_details_type contains 'hat' or product_details_type contains 'cap' -%}
+	{%- assign product_details_profile = 'hat' -%}
+{%- elsif product_details_is_tshirt_family -%}
+	{%- assign product_details_profile = 'tshirt-default' -%}
+{%- endif -%}
+
+{%- capture product_details_content -%}
+	{%- case product_details_profile -%}
+		{%- when 'bella' -%}
+			<p><strong>Base Item:</strong> Bella+Canvas 3001.</p>
+			<p><strong>Sizes:</strong> S to 4XL.</p>
+			<p><strong>Colors:</strong> Select via color swatches</p>
+			<p><strong>Print Method:</strong> Premium Direct-to-Garment (DTG) printing for realistic, vintage, lasting designs.</p>
+			<p><strong>Style:</strong> Modern retail fit, classic crew neck, and true unisex sizing.</p>
+			<p><strong>Premium Feel:</strong> Crafted from Airlume combed and ring-spun cotton - ultra-soft and lightweight.</p>
+			<p><strong>Material:</strong> Solid Colors: 100% Cotton (Lightweight 4.2 oz/yd&sup2;); Ash &amp; Heather Prism Natural: 99% Cotton/ 1% Polyester; Athletic &amp; Black Heather: 90% Cotton/ 10% Polyester; Other Heathers: 52% Cotton/ 48% Polyester.</p>
+			<p><strong>Origin:</strong> Proudly Made in the USA.</p>
+		{%- when 'comfort-1745' -%}
+			<p><strong>Material:</strong> 100% Ring-Spun Cotton.</p>
+			<p><strong>Base Item:</strong> Comfort Colors 1745.</p>
+			<p><strong>Sizes:</strong> S to 3XL.</p>
+			<p><strong>Colors:</strong> Amethyst, Citrine, Clay, Fern, Ocean, Smoke</p>
+			<p><strong>Style:</strong> Relaxed unisex fit with a cool, effortless vintage look.</p>
+			<p><strong>Print Method:</strong> Premium Direct-to-Garment (DTG) printing for realistic, vintage, lasting designs.</p>
+			<p><strong>Unique Aesthetic:</strong> &quot;Colorblast&quot; pigment-dye process creates a one-of-a-kind, lived-in fading effect for every single shirt.</p>
+			<p><strong>Premium Heavyweight:</strong> Crafted from ultra-durable 100% ring-spun cotton (6.1 oz./yd&sup2;).</p>
+			<p><strong>Built to Last:</strong> Garment-dyed for minimal shrinkage, featuring a topstitched rib collar and shoulder-to-shoulder twill tape.</p>
+			<p><strong>Origin:</strong> Proudly Made in the USA.</p>
+		{%- when 'vneck' -%}
+			<p><strong>Base Item:</strong> Bella Canvas 3005.</p>
+			<p><strong>Sizes:</strong> S to 3XL.</p>
+			<p><strong>Colors:</strong> Select via color swatches</p>
+			<p><strong>Style:</strong> Modern retail fit with a classic V-neck and true unisex sizing.</p>
+			<p><strong>Print Method:</strong> Premium Direct-to-Garment (DTG) printing for realistic, vintage, lasting designs.</p>
+			<p><strong>Premium Feel:</strong> Crafted from Airlume combed and ring-spun cotton - ultra-soft and lightweight.</p>
+			<p><strong>Material:</strong> Solid Colors: 100% Cotton (Lightweight 4.2 oz/yd&sup2;); Ash &amp; Heather Prism Natural: 99% Cotton/ 1% Polyester; Athletic &amp; Black Heather: 90% Cotton/ 10% Polyester; Other Heathers: 52% Cotton/ 48% Polyester.</p>
+			<p><strong>Origin:</strong> Proudly Made in the USA.</p>
+		{%- when 'wash' -%}
+			<p><strong>Sizes:</strong> S to 4XL.</p>
+			<p><strong>Colors:</strong> Select via color swatches</p>
+			<p><strong>Material:</strong> 100% Cotton (Premium 16-Count Snowflake-Washed Fabric).</p>
+			<p><strong>Print Method:</strong> Premium Direct-to-Garment (DTG) printing for realistic, vintage, lasting designs.</p>
+			<p><strong>Style &amp; Fit:</strong> Relaxed oversized fit featuring a unique vintage &quot;snowflake&quot; wash that looks even better wash after wash.</p>
+			<p><strong>Origin:</strong> Proudly Made in the USA.</p>
+		{%- when 'tanktop' -%}
+			<p><strong>Base Item:</strong> Gildan 2200.</p>
+			<p><strong>Sizes:</strong> S to 3XL (True to size).</p>
+			<p><strong>Colors:</strong> Select via color swatches</p>
+			<p><strong>Print Method:</strong> Premium Direct-to-Garment (DTG) printing for realistic, vintage, lasting designs.</p>
+			<p><strong>Style &amp; Fit:</strong> Classic fit that perfectly balances relaxed comfort with a flattering silhouette for all body types.</p>
+			<p><strong>Material:</strong> Premium 100% American-grown cotton (Heavyweight 6 oz/yd&sup2;, 18 Singles).</p>
+			<p><strong>Versatility:</strong> Highly breathable and comfortable</p>
+			<p><strong>Origin:</strong> Proudly Made in the USA.</p>
+		{%- when 'comfort-1717' -%}
+			<p><strong>Base Item:</strong> Comfort Colors 1717.</p>
+			<p><strong>Sizes:</strong> S to 4XL.</p>
+			<p><strong>Colors:</strong> Select via color swatches</p>
+			<p><strong>Material:</strong> 100% Ring Spun US Cotton.</p>
+			<p><strong>Style &amp; Fit:</strong> Relaxed unisex fit, casual style.</p>
+			<p><strong>Print Method:</strong> Premium Direct-to-Garment (DTG) printing for realistic, vintage, lasting designs.</p>
+			<p><strong>Premium Quality:</strong> Made from 100% Ring Spun US Cotton (6.1 oz/yd&sup2;) for a superior, heavyweight feel.</p>
+			<p><strong>Origin:</strong> Proudly Made in the USA.</p>
+		{%- when 'hoodie' -%}
+			<p><strong>Base Item:</strong> Gildan 18500.</p>
+			<p><strong>Sizes:</strong> S to 5XL.</p>
+			<p><strong>Colors:</strong> Select via color swatches.</p>
+			<p><strong>Style &amp; Comfort:</strong> Versatile, heavyweight, and ultra-soft.</p>
+			<p><strong>Print Method:</strong> Premium Direct-to-Garment (DTG) printing for realistic, vintage, lasting designs.</p>
+			<p><strong>Material:</strong> Heavyweight fabric (8 oz/yd&sup2;). Heather Sport Dark Navy: 60% Polyester/ 40% Cotton. All Other Colors: 50% Cotton/ 50% Polyester.</p>
+			<p><strong>Fabric Features:</strong> Sweat-absorbent, highly breathable, and cozy.</p>
+			<p><strong>Origin:</strong> Proudly Made in the USA.</p>
+		{%- when 'sweatshirt' -%}
+			<p><strong>Base Item:</strong> Gildan 18000.</p>
+			<p><strong>Sizes:</strong> S to 5XL.</p>
+			<p><strong>Colors:</strong> Select via color swatches.</p>
+			<p><strong>Material:</strong> Heavyweight fabric (8 oz/yd&sup2;). Heather Sport Royal: 60% Polyester/ 40% Cotton. All Other Colors: 50% Cotton/ 50% Polyester.</p>
+			<p><strong>Print Method:</strong> Premium Direct-to-Garment (DTG) printing for realistic, vintage, lasting designs.</p>
+			<p><strong>Style &amp; Comfort:</strong> Incredibly soft, breathable, and built to last.</p>
+			<p><strong>Origin:</strong> Proudly Made in the USA.</p>
+		{%- when 'long-sleeve' -%}
+			<p><strong>Base Item:</strong> Gildan 5400.</p>
+			<p><strong>Sizes:</strong> S to 3XL (True to size).</p>
+			<p><strong>Colors:</strong> Select via color swatches</p>
+			<p><strong>Style:</strong> Relaxed unisex fit, classic crew neck with comfortable rib cuffs.</p>
+			<p><strong>Print Method:</strong> Premium Direct-to-Garment (DTG) printing for realistic, vintage, lasting designs.</p>
+			<p><strong>Material:</strong> 100% Cotton (5.3 oz/yd&sup2;) with Solid Colors; Sport Grey: 90% Cotton/ 10% Polyester; Graphite Heather &amp; Dark Heather: 50% Cotton/ 50% Polyester.</p>
+			<p><strong>Origin:</strong> Proudly Made in the USA.</p>
+		{%- when 'hat' -%}
+			<p><strong>Material:</strong></p>
+			<p><strong>Front Panels:</strong> 60% cotton/ 40% polyester - structured and sturdy for a polished look.</p>
+			<p><strong>Mesh Back:</strong> 100% polyester - breathable and lightweight for everyday comfort.</p>
+			<p><strong>Patch:</strong> High-quality faux leather - designed to hold fine engraving with lasting clarity.</p>
+			<p><strong>Engraved Faux Leather Patch:</strong> Add a premium touch with laser-engraved detailing that brings your logo or design to life with crisp, high-end precision. Each patch is engraved and then carefully applied to the cap for a professional finish.</p>
+			<p><strong>Patch Shapes:</strong> Oval, Rectangle</p>
+			<p><strong>Patch Colors:</strong> Rustic Dark Brown, Rustic Light Brown, Gray - choose rustic or classic vibes to match your style.</p>
+			<p><strong>Cap Colors:</strong> Select via color swatches</p>
+			<p><strong>Origin:</strong> Proudly Made in the USA.</p>
+		{%- when 'tshirt-default' -%}
+			<p><strong>Base Item:</strong> Premium Gildan 5000.</p>
+			<p><strong>Sizes:</strong> S to 5XL (True to size).</p>
+			<p><strong>Colors:</strong> Select via color swatches</p>
+			<p><strong>Style:</strong> Classic unisex fit, comfy crew neck, and short sleeves.</p>
+			<p><strong>Durability:</strong> Heavyweight cotton fabric with double-needle stitched sleeves and hem.</p>
+			<p><strong>Material:</strong> 100% Cotton (5.3 oz/yd&sup2;) with Solid Colors; Ash: 99% Cotton / 1% Polyester; Sport Gray &amp; Antique Colors: 90% Cotton / 10% Polyester.</p>
+			<p><strong>Heathers &amp; Tweed:</strong> 50% Cotton / 50% Polyester.</p>
+			<p><strong>Print Method:</strong> Premium Direct-to-Garment (DTG) printing for realistic, vintage, lasting designs.</p>
+			<p><strong>Origin:</strong> Proudly Made in the USA.</p>
+	{%- endcase -%}
+{%- endcapture -%}
+{%- assign product_details_content = product_details_content | strip -%}
+
+{%- comment -%}
+	Description variables
+{%- endcomment -%}
+{%- assign description_show         = block.settings.show_description -%}
+{%- assign description_toggle_text  = block.settings.description_toggle_text -%}
+{%- assign description_drawer_title = block.settings.description_drawer_title -%}
+{%- assign show_description         = false -%}
+
+{%- if description_show and description_toggle_text != blank and product_details_content != blank and description_drawer_title != blank -%}
+	{%- assign show_description = true -%}
+{%- endif -%}
+
+{%- comment -%}
+	Drawer 1 variables
+{%- endcomment -%}
+{%- assign drawer_page_1 		= block.settings.drawer_page_1 -%}
+{%- assign drawer_toggle_text_1 	= block.settings.drawer_toggle_text_1 -%}
+{%- assign drawer_title_1 		= block.settings.drawer_title_1 | default: drawer_page_1.title -%}
+{%- assign show_drawer_1 		= false -%}
+
+{%- if drawer_page_1 != blank and drawer_page_1.content != blank and drawer_toggle_text_1 != blank -%}
+	{%- assign show_drawer_1 = true -%}
+{%- endif -%}
+
+{%- assign drawer_toggle_text_1_normalized = drawer_toggle_text_1 | downcase | strip -%}
+{%- if drawer_toggle_text_1_normalized == 'size guide'
+	or drawer_toggle_text_1_normalized == 'size guild'
+	or drawer_toggle_text_1_normalized == 'care instructions'
+-%}
+	{%- assign show_drawer_1 = false -%}
+{%- endif -%}
+
+{%- comment -%}
+	Drawer 2 variables
+{%- endcomment -%}
+{%- assign drawer_page_2 		= block.settings.drawer_page_2 -%}
+{%- assign drawer_toggle_text_2 	= block.settings.drawer_toggle_text_2 -%}
+{%- assign drawer_title_2 		= block.settings.drawer_title_2 | default: drawer_page_2.title -%}
+{%- assign show_drawer_2 		= false -%}
+
+{%- if drawer_page_2 != blank and drawer_page_2.content != blank and drawer_toggle_text_2 != blank -%}
+	{%- assign show_drawer_2 = true -%}
+{%- endif -%}
+
+{%- comment -%}
+	Drawer 3 variables
+{%- endcomment -%}
+{%- assign drawer_page_3 	   = block.settings.drawer_page_3 -%}
+{%- assign drawer_toggle_text_3 = block.settings.drawer_toggle_text_3 -%}
+{%- assign drawer_title_3 	   = block.settings.drawer_title_3 | default: drawer_page_3.title -%}
+{%- assign show_drawer_3 	   = false -%}
+
+{%- if drawer_page_3 != blank and drawer_page_3.content != blank and drawer_toggle_text_3 != blank -%}
+	{%- assign show_drawer_3 = true -%}
+{%- endif -%}
+
+{%- comment -%}
+	Size guide variables
+{%- endcomment -%}
+{%- assign show_size_guide 				  = false -%}
+{%- assign size_guide_page 				  = section.settings.size_guide_page -%}
+{%- assign size_guide_button_placement 		  = section.settings.size_guide_button_placement -%}
+{%- assign size_guide_button_text_translation = "products.drawers.size_guide" | t -%}
+{%- assign size_guide_button_text			  = section.settings.size_guide_button_text | default: size_guide_button_text_translation -%}
+{%- assign size_chart_product_type = product.type | downcase | strip -%}
+{%- assign size_chart_mode = 'all' -%}
+
+{%- if size_chart_product_type == 'hat' -%}
+	{%- assign size_chart_mode = 'all' -%}
+{%- elsif size_chart_product_type contains 'long' and size_chart_product_type contains 'sleeve' -%}
+	{%- assign size_chart_mode = 'longsleeve' -%}
+{%- elsif size_chart_product_type contains 'hoodie' or size_chart_product_type contains 'sweatshirt' -%}
+	{%- assign size_chart_mode = 'hoodie' -%}
+{%- elsif size_chart_product_type == 'type1' or size_chart_product_type contains 't-shirt' or size_chart_product_type contains 'tshirt' -%}
+	{%- assign size_chart_mode = 'tshirt' -%}
+{%- endif -%}
+
+{%- if section.settings.show_size_guide
+	and size_guide_page != blank
+	and size_guide_page.content != blank
+	and size_guide_button_placement == 'drawer'
+-%}
+	{%- assign show_size_guide = true -%}
+{%- endif -%}
+
+{%- assign has_any_accordion = false -%}
+{%- assign show_care_instructions = true -%}
+{%- if show_description or show_care_instructions or show_drawer_1 or show_drawer_2 or show_drawer_3 or show_size_guide -%}
+	{%- assign has_any_accordion = true -%}
+{%- endif -%}
+
+{%- comment -%} Always show Description accordion using generated product details even if drawer description is off {%- endcomment -%}
+{%- if has_any_accordion or product_details_content != blank -%}
+	{%- capture styles -%}
+		--offset-top-desktop: {{ block.settings.offset_top_desktop }}px; {{-  -}}
+		--offset-bottom-desktop: {{ block.settings.offset_bottom_desktop }}px; {{-  -}}
+		--offset-top-mobile: {{ block.settings.offset_top_mobile }}px; {{-  -}}
+		--offset-bottom-mobile: {{ block.settings.offset_bottom_mobile }}px;
+	{%- endcapture -%}
+
+	<style>
+		/* ============================================
+		   Product Accordion Styles
+		   ============================================ */
+		.product-accordion {
+			padding-top: var(--offset-top-mobile);
+			padding-bottom: var(--offset-bottom-mobile);
+			width: 100%;
+		}
+		@media (min-width: 1200px) {
+			.product-accordion {
+				padding-top: var(--offset-top-desktop);
+				padding-bottom: var(--offset-bottom-desktop);
+			}
+		}
+		.product-accordion__item {
+			border-top: 1px solid var(--color-border-thirdly, #e5e5e5);
+			transition: border-color var(--timing-short, 0.2s) ease;
+		}
+		.product-accordion__item:last-child {
+			border-bottom: 1px solid var(--color-border-thirdly, #e5e5e5);
+		}
+		.product-accordion__trigger {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			width: 100%;
+			gap: 18px;
+			padding: 16px 0;
+			background: none;
+			border: none;
+			cursor: pointer;
+			color: var(--color-text-primary, #000);
+			font-size: calc(var(--body-font-size, 14px) * 0.875);
+			font-weight: 600;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			text-align: left;
+			line-height: 1.4;
+			transition: color var(--timing-short, 0.2s), opacity var(--timing-short, 0.2s);
+			font-family: 'Oswald', sans-serif !important;
+		}
+		.product-accordion__trigger-text,
+		.product-accordion__trigger > span:first-child {
+			min-width: 0;
+		}
+		.product-accordion__trigger:hover {
+			color: #31513f;
+			opacity: 1;
+		}
+		.product-accordion__trigger:focus-visible {
+			outline: 2px solid var(--color-text-primary, #000);
+			outline-offset: 2px;
+		}
+		.product-accordion__trigger-icon {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			position: relative;
+			width: 26px;
+			height: 26px;
+			flex-shrink: 0;
+			border: 0;
+			border-radius: 0;
+			background: transparent;
+			color: var(--color-text-primary, #203224);
+			transition: color var(--timing-short, 0.2s);
+		}
+		.product-accordion__trigger-icon svg {
+			display: none;
+		}
+		.product-accordion__trigger-icon::before,
+		.product-accordion__trigger-icon::after {
+			content: '';
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			width: 10px;
+			height: 1.5px;
+			border-radius: 999px;
+			background: currentColor;
+			transform: translate(-50%, -50%);
+			transition: opacity var(--timing-short, 0.2s), transform var(--timing-short, 0.2s);
+		}
+		.product-accordion__trigger-icon::after {
+			transform: translate(-50%, -50%) rotate(90deg);
+		}
+		.product-accordion__trigger:hover .product-accordion__trigger-icon {
+			background: transparent;
+		}
+		.product-accordion__trigger[aria-expanded="true"] .product-accordion__trigger-icon {
+			background: transparent;
+			color: var(--color-text-primary, #203224);
+		}
+		.product-accordion__trigger[aria-expanded="true"] .product-accordion__trigger-icon::after {
+			opacity: 0;
+			transform: translate(-50%, -50%) rotate(90deg) scaleX(0);
+		}
+		.product-accordion__content {
+			overflow: hidden;
+			max-height: 0;
+			opacity: 0;
+			transition: max-height var(--timing-base, 0.4s) ease, opacity var(--timing-short, 0.2s) ease, padding var(--timing-short, 0.2s) ease;
+			padding: 0 18px;
+		}
+		.product-accordion__content.is-open {
+			max-height: 2000px;
+			opacity: 1;
+			padding-bottom: 18px;
+		}
+		.product-accordion__content[hidden] {
+			display: block !important;
+			max-height: 0;
+			opacity: 0;
+			padding: 0;
+			overflow: hidden;
+		}
+		.product-accordion__content-inner {
+			font-size: calc(var(--body-font-size, 14px) * 0.875);
+			line-height: 1.7;
+			color: var(--color-text-secondary, #666);
+			font-family: 'Oswald', sans-serif !important;
+			padding: 18px 20px;
+			border: 1px solid rgba(32, 50, 36, 0.1);
+			border-radius: 6px;
+			background: #fbfaf6;
+			box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+		}
+		.product-accordion__content-inner p {
+			margin: 0;
+			padding: 11px 0;
+			border-top: 1px solid rgba(32, 50, 36, 0.1);
+		}
+		.product-accordion__content-inner p:first-child {
+			padding-top: 0;
+			border-top: 0;
+		}
+		.product-accordion__content-inner p:last-child {
+			padding-bottom: 0;
+		}
+		.product-accordion__content-inner strong {
+			color: var(--color-text-primary, #203224);
+			font-weight: 700;
+		}
+		.product-accordion__table-wrapper {
+			width: 100%;
+			overflow-x: auto;
+			-webkit-overflow-scrolling: touch;
+			margin: 16px auto;
+		}
+		.product-accordion__table {
+			width: 100% !important;
+			max-width: 600px !important;
+			margin: 0 auto !important;
+			border-collapse: collapse;
+			text-align: center;
+			font-size: 14px;
+		}
+		.product-accordion__table th,
+		.product-accordion__table td {
+			padding: 14px 16px;
+			border: 1px solid var(--color-border-thirdly, #e5e5e5);
+			white-space: nowrap !important;
+			text-align: center !important;
+			color: var(--color-text-primary, #203224) !important;
+		}
+		.product-accordion__table th {
+			background-color: var(--color-text-primary, #203224) !important;
+			color: #faf6ee !important;
+			font-weight: 600 !important;
+			text-transform: uppercase !important;
+		}
+		.product-accordion__content-inner img {
+			max-width: 100%;
+			height: auto;
+		}
+
+		/* Mobile optimizations */
+		@media (max-width: 767.98px) {
+			.product-accordion__trigger {
+				padding: 14px 0;
+				font-size: calc(var(--body-font-size, 14px) * 0.85);
+			}
+			.product-accordion__content-inner {
+				font-size: calc(var(--body-font-size, 14px) * 0.9);
+			}
+			.product-accordion__table th,
+			.product-accordion__table td {
+				padding: 12px 10px;
+				font-size: 14px; /* Fix "too small text" */
+			}
+		}
+
+		/* Keep typography compact only in the product-page "People also bought" widget. */
+		form.product-form > lb-upsell-widget.lb-widget .lb-card-title,
+		form.product-form > lb-upsell-widget.lb-widget .lb-variant-picker,
+		form.product-form > lb-upsell-widget.lb-widget .lb-button,
+		form.product-form > lb-upsell-widget.lb-widget .lb-price-sale-price,
+		form.product-form > lb-upsell-widget.lb-widget .lb-price-discount,
+		form.product-form > lb-upsell-widget.lb-widget .lb-price-compare-price {
+			font-family: 'Oswald', sans-serif !important;
+			letter-spacing: 0 !important;
+		}
+
+		form.product-form > lb-upsell-widget.lb-widget .lb-card-title {
+			font-size: 14px !important;
+			line-height: 1.25 !important;
+		}
+
+		form.product-form > lb-upsell-widget.lb-widget .lb-variant-picker {
+			font-size: 13px !important;
+			line-height: 1.2 !important;
+		}
+
+		form.product-form > lb-upsell-widget.lb-widget .lb-button,
+		form.product-form > lb-upsell-widget.lb-widget .lb-price-sale-price {
+			font-size: 14px !important;
+			line-height: 1.25 !important;
+		}
+
+		form.product-form > lb-upsell-widget.lb-widget .lb-price-discount {
+			font-size: 10px !important;
+		}
+
+		form.product-form > lb-upsell-widget.lb-widget .lb-price-compare-price {
+			font-size: 12px !important;
+		}
+	</style>
+
+	<div class="product-accordion" style="{{ styles }}" data-product-accordion>
+		{%- comment -%} DESCRIPTION - Full Page Overlay Trigger {%- endcomment -%}
+		{%- if product_details_content != blank -%}
+			{%- assign desc_content = product_details_content -%}
+
+			<div class="product-accordion__item">
+				<button
+					class="product-accordion__trigger"
+					type="button"
+					aria-expanded="false"
+					onclick="document.getElementById('description-overlay').classList.add('is-active'); document.body.style.overflow='hidden';"
+				>
+					<span>PRODUCT DETAILS</span>
+					<span class="product-accordion__trigger-icon" aria-hidden="true"></span>
+				</button>
+			</div>
+
+			{%- comment -%} DESCRIPTION OVERLAY MOVED TO BOTTOM {%- endcomment -%}
+		{%- endif -%}
+
+		{%- comment -%} SHIPPING & DELIVERY - Full Page Overlay Trigger {%- endcomment -%}
+		<div class="product-accordion__item">
+			<button
+				class="product-accordion__trigger"
+				type="button"
+				aria-expanded="false"
+				onclick="document.getElementById('shipping-overlay').classList.add('is-active'); document.body.style.overflow='hidden';"
+			>
+				<span>SHIPPING &amp; DELIVERY</span>
+				<span class="product-accordion__trigger-icon" aria-hidden="true"></span>
+			</button>
+		</div>
+
+		{%- comment -%} CARE INSTRUCTIONS - Full Page Overlay Trigger {%- endcomment -%}
+		<div class="product-accordion__item">
+			<button
+				class="product-accordion__trigger"
+				type="button"
+				aria-expanded="false"
+				onclick="document.getElementById('care-instructions-overlay').classList.add('is-active'); document.body.style.overflow='hidden';"
+			>
+				<span>CARE INSTRUCTIONS</span>
+				<span class="product-accordion__trigger-icon" aria-hidden="true"></span>
+			</button>
+		</div>
+
+		{%- comment -%} CARE INSTRUCTIONS OVERLAY {%- endcomment -%}
+		<div id="care-instructions-overlay" class="size-chart-overlay">
+			<div class="size-chart-overlay__backdrop" onclick="document.getElementById('care-instructions-overlay').classList.remove('is-active'); document.body.style.overflow='';"></div>
+			<div class="size-chart-overlay__panel">
+				<div class="size-chart-overlay__header">
+					<h2 class="size-chart-overlay__title">CARE INSTRUCTIONS</h2>
+					<button class="size-chart-overlay__close" type="button" onclick="document.getElementById('care-instructions-overlay').classList.remove('is-active'); document.body.style.overflow='';" aria-label="Close">
+						<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<line x1="2" y1="2" x2="18" y2="18" stroke="currentColor" stroke-width="2"/>
+							<line x1="18" y1="2" x2="2" y2="18" stroke="currentColor" stroke-width="2"/>
+						</svg>
+					</button>
+				</div>
+				<div class="size-chart-overlay__content" style="display:block; padding-top: 10px; text-align: left;">
+					<div class="rte" style="color: var(--color-text-primary, #203224);">
+						<p><strong>Washing Instructions:</strong><br>
+						Turn inside out.<br>
+						Hand wash cold (preferred) or machine wash cold on a gentle cycle.<br>
+						Use mild detergent. Do not bleach.<br>
+						Wash dark and light colors separately.</p>
+
+						<p><strong>Drying Instructions:</strong><br>
+						Hang to air dry in shade (avoid direct sunlight).<br>
+						Tumble dry on low heat or a delicate cycle.</p>
+
+						<p><strong>Ironing Instructions:</strong><br>
+						Iron inside out on low heat.<br>
+						Never iron directly on the print (use a pressing cloth).</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{%- comment -%} SIZE CHART OVERLAY {%- endcomment -%}
+		<div id="size-chart-overlay" class="size-chart-overlay">
+			<div class="size-chart-overlay__backdrop" onclick="document.getElementById('size-chart-overlay').classList.remove('is-active'); document.body.style.overflow='';"></div>
+				<button
+					class="size-chart-overlay__close-btn"
+					type="button"
+					onclick="document.getElementById('size-chart-overlay').classList.remove('is-active'); document.body.style.overflow='';"
+					aria-label="Close"
+				>&#10005;</button>
+			<div class="size-chart-overlay__panel">
+				{%- comment -%} Tabs {%- endcomment -%}
+				<div class="size-chart-overlay__tabs{% unless size_chart_mode == 'all' %} size-chart-overlay__tabs--single{% endunless %}">
+					{%- if size_chart_mode == 'all' or size_chart_mode == 'tshirt' -%}
+						<button class="size-chart-overlay__tab is-active" data-tab="tshirt" type="button" onclick="switchSizeTab(this, 'tshirt')">T-Shirt</button>
+					{%- endif -%}
+					{%- if size_chart_mode == 'all' or size_chart_mode == 'hoodie' -%}
+						<button class="size-chart-overlay__tab{% if size_chart_mode == 'hoodie' %} is-active{% endif %}" data-tab="hoodie" type="button" onclick="switchSizeTab(this, 'hoodie')">Hoodie & Sweatshirt</button>
+					{%- endif -%}
+					{%- if size_chart_mode == 'all' or size_chart_mode == 'longsleeve' -%}
+						<button class="size-chart-overlay__tab{% if size_chart_mode == 'longsleeve' %} is-active{% endif %}" data-tab="longsleeve" type="button" onclick="switchSizeTab(this, 'longsleeve')">Long Sleeve</button>
+					{%- endif -%}
+				</div>
+
+				{%- comment -%} T-Shirt Size Chart {%- endcomment -%}
+				<div class="size-chart-overlay__content" id="size-tab-tshirt"{% unless size_chart_mode == 'all' or size_chart_mode == 'tshirt' %} style="display:none;"{% endunless %}>
+					<div class="size-chart-overlay__unit-tabs" role="tablist" aria-label="T-Shirt measurement unit">
+						<button class="size-chart-overlay__unit-tab is-active" type="button" onclick="switchSizeUnit(this, 'in')">In</button>
+						<button class="size-chart-overlay__unit-tab" type="button" onclick="switchSizeUnit(this, 'cm')">Cm</button>
+					</div>
+
+					<div class="size-chart-overlay__unit-panel is-active" data-unit-panel="in">
+					<h3 class="size-chart-overlay__subtitle">Adult T-Shirt Size Chart</h3>
+					<p class="size-chart-overlay__note">Adult measurements are in <strong>inches</strong>. Sizes may vary slightly (&plusmn;0.5") due to the manufacturing process.</p>
+					<div class="size-chart-overlay__table-wrap">
+						<table class="size-chart-overlay__table">
+							<thead>
+								<tr>
+									<th>Size</th>
+									<th>Width (in)</th>
+									<th>Length (in)</th>
+									<th>Sleeve Length (in)</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr><td>S</td><td>18</td><td>28</td><td>15.125</td></tr>
+								<tr><td>M</td><td>20</td><td>29</td><td>16.5</td></tr>
+								<tr><td>L</td><td>22</td><td>30</td><td>18</td></tr>
+								<tr><td>XL</td><td>24</td><td>31</td><td>19.5</td></tr>
+								<tr><td>2XL</td><td>26</td><td>32</td><td>21</td></tr>
+								<tr><td>3XL</td><td>28</td><td>33</td><td>22.375</td></tr>
+								<tr><td>4XL</td><td>30</td><td>34</td><td>23.675</td></tr>
+								<tr><td>5XL</td><td>32</td><td>35</td><td>25</td></tr>
+							</tbody>
+						</table>
+					</div>
+					</div>
+
+					<div class="size-chart-overlay__unit-panel" data-unit-panel="cm">
+					<h3 class="size-chart-overlay__subtitle">Adult T-Shirt Size Chart</h3>
+					<div class="size-chart-overlay__table-wrap">
+						<p class="size-chart-overlay__note">Adult measurements in <strong>centimeters (cm)</strong>.</p>
+						<table class="size-chart-overlay__table">
+							<thead>
+								<tr>
+									<th>Size</th>
+									<th>Width (cm)</th>
+									<th>Length (cm)</th>
+									<th>Sleeve Length (cm)</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr><td>S</td><td>45.7</td><td>71.1</td><td>38.4</td></tr>
+								<tr><td>M</td><td>50.8</td><td>73.7</td><td>41.9</td></tr>
+								<tr><td>L</td><td>55.9</td><td>76.2</td><td>45.7</td></tr>
+								<tr><td>XL</td><td>61.0</td><td>78.7</td><td>49.5</td></tr>
+								<tr><td>2XL</td><td>66.0</td><td>81.3</td><td>53.3</td></tr>
+								<tr><td>3XL</td><td>71.1</td><td>83.8</td><td>56.8</td></tr>
+								<tr><td>4XL</td><td>76.2</td><td>86.4</td><td>60.1</td></tr>
+								<tr><td>5XL</td><td>81.3</td><td>88.9</td><td>63.5</td></tr>
+							</tbody>
+						</table>
+					</div>
+					</div>
+
+					<div class="size-chart-overlay__unit-panel is-active" data-unit-panel="in">
+					<h3 class="size-chart-overlay__subtitle size-chart-overlay__subtitle--section">Kids T-Shirt Size Chart</h3>
+					<p class="size-chart-overlay__note">Kids measurements are in <strong>inches</strong>. Sizes may vary slightly (&plusmn;0.5") due to the manufacturing process.</p>
+					<div class="size-chart-overlay__table-wrap">
+						<table class="size-chart-overlay__table">
+							<thead>
+								<tr>
+									<th>Size</th>
+									<th>Width (in)</th>
+									<th>Length (in)</th>
+									<th>Sleeve Length (in)</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr><td>XS</td><td>16</td><td>20.5</td><td>13.25</td></tr>
+								<tr><td>S</td><td>17</td><td>22</td><td>14.25</td></tr>
+								<tr><td>M</td><td>18</td><td>23.5</td><td>15.25</td></tr>
+								<tr><td>L</td><td>19</td><td>25</td><td>16.25</td></tr>
+								<tr><td>XL</td><td>20</td><td>26.5</td><td>17.25</td></tr>
+							</tbody>
+						</table>
+					</div>
+					</div>
+
+					<div class="size-chart-overlay__unit-panel" data-unit-panel="cm">
+					<h3 class="size-chart-overlay__subtitle size-chart-overlay__subtitle--section">Kids T-Shirt Size Chart</h3>
+					<div class="size-chart-overlay__table-wrap">
+						<p class="size-chart-overlay__note">Kids measurements in <strong>centimeters (cm)</strong>.</p>
+						<table class="size-chart-overlay__table">
+							<thead>
+								<tr>
+									<th>Size</th>
+									<th>Width (cm)</th>
+									<th>Length (cm)</th>
+									<th>Sleeve Length (cm)</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr><td>XS</td><td>40.6</td><td>52.1</td><td>33.7</td></tr>
+								<tr><td>S</td><td>43.2</td><td>55.9</td><td>36.2</td></tr>
+								<tr><td>M</td><td>45.7</td><td>59.7</td><td>38.7</td></tr>
+								<tr><td>L</td><td>48.3</td><td>63.5</td><td>41.3</td></tr>
+								<tr><td>XL</td><td>50.8</td><td>67.3</td><td>43.8</td></tr>
+							</tbody>
+						</table>
+					</div>
+					</div>
+				</div>
+
+				{%- comment -%} Hoodie & Sweatshirt Size Chart {%- endcomment -%}
+				<div class="size-chart-overlay__content" id="size-tab-hoodie"{% unless size_chart_mode == 'hoodie' %} style="display:none;"{% endunless %}>
+					<div class="size-chart-overlay__unit-tabs" role="tablist" aria-label="Hoodie and Sweatshirt measurement unit">
+						<button class="size-chart-overlay__unit-tab is-active" type="button" onclick="switchSizeUnit(this, 'in')">In</button>
+						<button class="size-chart-overlay__unit-tab" type="button" onclick="switchSizeUnit(this, 'cm')">Cm</button>
+					</div>
+
+					<div class="size-chart-overlay__unit-panel is-active" data-unit-panel="in">
+					<p class="size-chart-overlay__note">All measurements are in <strong>inches</strong>. Sizes may vary slightly (±0.5") due to the manufacturing process.</p>
+					<div class="size-chart-overlay__table-wrap">
+						<table class="size-chart-overlay__table">
+							<thead>
+								<tr>
+									<th>Size</th>
+									<th>Chest (in)</th>
+									<th>Length (in)</th>
+									<th>Sleeve (in)</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr><td>S</td><td>20</td><td>27</td><td>33.5</td></tr>
+								<tr><td>M</td><td>22</td><td>28</td><td>34.5</td></tr>
+								<tr><td>L</td><td>24</td><td>29</td><td>35.5</td></tr>
+								<tr><td>XL</td><td>26</td><td>30</td><td>36.5</td></tr>
+								<tr><td>2XL</td><td>28</td><td>31</td><td>37.5</td></tr>
+								<tr><td>3XL</td><td>30</td><td>32</td><td>38.5</td></tr>
+								<tr><td>4XL</td><td>32</td><td>33</td><td>39.5</td></tr>
+								<tr><td>5XL</td><td>34</td><td>34</td><td>40.5</td></tr>
+							</tbody>
+						</table>
+					</div>
+					</div>
+
+					<div class="size-chart-overlay__unit-panel" data-unit-panel="cm">
+					<div class="size-chart-overlay__table-wrap">
+						<p class="size-chart-overlay__note">Measurements in <strong>centimeters (cm)</strong>.</p>
+						<table class="size-chart-overlay__table">
+							<thead>
+								<tr>
+									<th>Size</th>
+									<th>Chest (cm)</th>
+									<th>Length (cm)</th>
+									<th>Sleeve (cm)</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr><td>S</td><td>50.8</td><td>68.6</td><td>85.1</td></tr>
+								<tr><td>M</td><td>55.9</td><td>71.1</td><td>87.6</td></tr>
+								<tr><td>L</td><td>61.0</td><td>73.7</td><td>90.2</td></tr>
+								<tr><td>XL</td><td>66.0</td><td>76.2</td><td>92.7</td></tr>
+								<tr><td>2XL</td><td>71.1</td><td>78.7</td><td>95.3</td></tr>
+								<tr><td>3XL</td><td>76.2</td><td>81.3</td><td>97.8</td></tr>
+								<tr><td>4XL</td><td>81.3</td><td>83.8</td><td>100.3</td></tr>
+								<tr><td>5XL</td><td>86.4</td><td>86.4</td><td>102.9</td></tr>
+							</tbody>
+						</table>
+					</div>
+					</div>
+				</div>
+
+			{%- comment -%} Long Sleeve Size Chart {%- endcomment -%}
+			<div class="size-chart-overlay__content" id="size-tab-longsleeve"{% unless size_chart_mode == 'longsleeve' %} style="display:none;"{% endunless %}>
+				<div class="size-chart-overlay__unit-tabs" role="tablist" aria-label="Long Sleeve measurement unit">
+					<button class="size-chart-overlay__unit-tab is-active" type="button" onclick="switchSizeUnit(this, 'in')">In</button>
+					<button class="size-chart-overlay__unit-tab" type="button" onclick="switchSizeUnit(this, 'cm')">Cm</button>
+				</div>
+
+				<div class="size-chart-overlay__unit-panel is-active" data-unit-panel="in">
+					<h3 class="size-chart-overlay__subtitle">Long Sleeve 3D Size Chart</h3>
+					<p class="size-chart-overlay__note">Measurements are in <strong>inches</strong>. Sizes may vary slightly (&plusmn;0.5") due to the manufacturing process.</p>
+					<div class="size-chart-overlay__table-wrap">
+						<table class="size-chart-overlay__table">
+							<thead>
+								<tr>
+									<th>Size</th>
+									<th>Length (in)</th>
+									<th>Sleeve (in)</th>
+									<th>Shoulder (in)</th>
+									<th>Chest (in)</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr><td>XS</td><td>27 1/2</td><td>33</td><td>14 3/4</td><td>34</td></tr>
+								<tr><td>S</td><td>28</td><td>34</td><td>16</td><td>37</td></tr>
+								<tr><td>M</td><td>28 3/4</td><td>35</td><td>17 1/4</td><td>40</td></tr>
+								<tr><td>L</td><td>29 1/2</td><td>36</td><td>18 1/2</td><td>43</td></tr>
+								<tr><td>XL</td><td>30 1/4</td><td>37</td><td>19 3/4</td><td>46</td></tr>
+								<tr><td>2XL</td><td>30 3/4</td><td>38</td><td>21</td><td>49</td></tr>
+								<tr><td>3XL</td><td>31 1/2</td><td>39</td><td>22 1/4</td><td>52</td></tr>
+								<tr><td>4XL</td><td>32 1/4</td><td>40</td><td>23 1/2</td><td>55</td></tr>
+								<tr><td>5XL</td><td>33</td><td>41</td><td>24 3/4</td><td>58</td></tr>
+							</tbody>
+						</table>
+					</div>
+
+					<h3 class="size-chart-overlay__subtitle size-chart-overlay__subtitle--section">Long Sleeve Size Chart</h3>
+					<p class="size-chart-overlay__note">Measurements are in <strong>inches</strong>. Sizes may vary slightly due to the manufacturing process.</p>
+					<div class="size-chart-overlay__table-wrap">
+						<table class="size-chart-overlay__table">
+							<thead>
+								<tr>
+									<th>Size</th>
+									<th>Length (in)</th>
+									<th>Chest (in)</th>
+									<th>Sleeve (in)</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr><td>S</td><td>28</td><td>18</td><td>32.5</td></tr>
+								<tr><td>M</td><td>29</td><td>20</td><td>34</td></tr>
+								<tr><td>L</td><td>30</td><td>22</td><td>35.5</td></tr>
+								<tr><td>XL</td><td>31</td><td>24</td><td>37</td></tr>
+								<tr><td>2XL</td><td>32</td><td>26</td><td>38.5</td></tr>
+								<tr><td>3XL</td><td>33</td><td>28</td><td>38.5</td></tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div class="size-chart-overlay__unit-panel" data-unit-panel="cm">
+					<h3 class="size-chart-overlay__subtitle">Long Sleeve 3D Size Chart</h3>
+					<p class="size-chart-overlay__note">Measurements are in <strong>centimeters (cm)</strong>.</p>
+					<div class="size-chart-overlay__table-wrap">
+						<table class="size-chart-overlay__table">
+							<thead>
+								<tr>
+									<th>Size</th>
+									<th>Length (cm)</th>
+									<th>Sleeve (cm)</th>
+									<th>Shoulder (cm)</th>
+									<th>Chest (cm)</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr><td>XS</td><td>69.9</td><td>83.8</td><td>37.5</td><td>86.4</td></tr>
+								<tr><td>S</td><td>71.1</td><td>86.4</td><td>40.6</td><td>94.0</td></tr>
+								<tr><td>M</td><td>73.0</td><td>88.9</td><td>43.8</td><td>101.6</td></tr>
+								<tr><td>L</td><td>74.9</td><td>91.4</td><td>47.0</td><td>109.2</td></tr>
+								<tr><td>XL</td><td>76.8</td><td>94.0</td><td>50.2</td><td>116.8</td></tr>
+								<tr><td>2XL</td><td>78.1</td><td>96.5</td><td>53.3</td><td>124.5</td></tr>
+								<tr><td>3XL</td><td>80.0</td><td>99.1</td><td>56.5</td><td>132.1</td></tr>
+								<tr><td>4XL</td><td>81.9</td><td>101.6</td><td>59.7</td><td>139.7</td></tr>
+								<tr><td>5XL</td><td>83.8</td><td>104.1</td><td>62.9</td><td>147.3</td></tr>
+							</tbody>
+						</table>
+					</div>
+
+					<h3 class="size-chart-overlay__subtitle size-chart-overlay__subtitle--section">Long Sleeve Size Chart</h3>
+					<p class="size-chart-overlay__note">Measurements are in <strong>centimeters (cm)</strong>. Sizes may vary slightly due to the manufacturing process.</p>
+					<div class="size-chart-overlay__table-wrap">
+						<table class="size-chart-overlay__table">
+							<thead>
+								<tr>
+									<th>Size</th>
+									<th>Length (cm)</th>
+									<th>Chest (cm)</th>
+									<th>Sleeve (cm)</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr><td>S</td><td>71.1</td><td>45.7</td><td>82.55</td></tr>
+								<tr><td>M</td><td>73.6</td><td>50.8</td><td>86.36</td></tr>
+								<tr><td>L</td><td>76.2</td><td>55.9</td><td>90.17</td></tr>
+								<tr><td>XL</td><td>78.7</td><td>60.9</td><td>94</td></tr>
+								<tr><td>2XL</td><td>81.3</td><td>66.0</td><td>97.8</td></tr>
+								<tr><td>3XL</td><td>83.8</td><td>71.1</td><td>97.8</td></tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+								<p class="size-chart-overlay__disclaimer">
+					<em>* Measurements are taken from the garment laid flat. Actual fit may vary slightly depending on body shape and personal preference. We recommend measuring a similar garment you already own for the best fit.</em>
+				</p>
+			</div>
+		</div>
+
+		<style>
+			/* ============================================
+			   Size Chart Overlay Styles
+			   ============================================ */
+			.size-chart-overlay {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				z-index: 999998;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				pointer-events: none;
+				opacity: 0;
+				transition: opacity 0.3s ease;
+			}
+			.size-chart-overlay.is-active {
+				pointer-events: auto;
+				opacity: 1;
+			}
+			body:has(.size-chart-overlay.is-active) .sales-notification-popup,
+			body:has(.size-chart-overlay.is-active) .mobile-floating-cart,
+			body:has(.size-chart-overlay.is-active) .mobile-sticky-atc,
+			body:has(.size-chart-overlay.is-active) #ShopifyChat,
+			body:has(.size-chart-overlay.is-active) #shopify-chat,
+			body:has(.size-chart-overlay.is-active) [id*="shopify-chat"],
+			body:has(.size-chart-overlay.is-active) [class*="shopify-chat"],
+			body:has(.size-chart-overlay.is-active) iframe#dummy-chat-button-iframe,
+			body:has(.size-chart-overlay.is-active) iframe[title*="chat" i],
+			body:has(.size-chart-overlay.is-active) iframe[src*="shopifychat" i],
+			body:has(.size-chart-overlay.is-active) iframe[src*="inbox.shopify" i],
+			body:has(.size-chart-overlay.is-active) iframe[src*="chat" i] {
+				z-index: 1 !important;
+				opacity: 0 !important;
+				visibility: hidden !important;
+				pointer-events: none !important;
+				transform: translateY(120%) !important;
+			}
+			.size-chart-overlay__backdrop {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: rgba(0, 0, 0, 0.6);
+				backdrop-filter: blur(4px);
+				-webkit-backdrop-filter: blur(4px);
+			}
+			.size-chart-overlay__panel {
+				position: relative;
+				z-index: 1;
+				background: #ffffff;
+				width: 94%;
+				max-width: 560px;
+				max-height: calc(100vh - 80px);
+				overflow-y: auto;
+				border-radius: 0;
+				padding: 32px 28px;
+				transform: translateY(20px);
+				transition: transform 0.3s ease;
+				margin-top: 70px;
+				margin-bottom: 10px;
+			}
+			@media (min-width: 768px) {
+				.size-chart-overlay__panel {
+					max-width: 860px;
+					width: 88%;
+					padding: 40px 48px;
+					max-height: calc(100vh - 100px);
+					margin-top: 80px;
+				}
+			}
+			.size-chart-overlay.is-active .size-chart-overlay__panel {
+				transform: translateY(0);
+			}
+			.size-chart-overlay__header {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				margin-bottom: 24px;
+				padding-bottom: 16px;
+				border-bottom: 2px solid var(--color-text-primary, #203224);
+			}
+			/* X button cho size chart overlay — fixed để luôn hiện dù scroll */
+			.size-chart-overlay__close-btn {
+				position: fixed;
+				top: 70px;
+				right: 16px;
+				background: rgba(255,255,255,0.9) !important;
+				border: none !important;
+				border-radius: 50%;
+				padding: 0 !important;
+				margin: 0 !important;
+				min-width: 0 !important;
+				min-height: 0 !important;
+				width: 36px !important;
+				height: 36px !important;
+				font-size: 18px;
+				line-height: 1;
+				color: #203224 !important;
+				cursor: pointer;
+				display: none;
+				align-items: center;
+				justify-content: center;
+				z-index: 999999;
+				box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+				transition: opacity 0.2s;
+			}
+			.size-chart-overlay.is-active .size-chart-overlay__close-btn {
+				display: flex !important;
+			}
+			.size-chart-overlay__close-btn::before,
+			.size-chart-overlay__close-btn::after { display: none !important; }
+			.size-chart-overlay__close-btn:hover { opacity: 0.8; }
+			/* Giữ lại style cũ cho description/shipping overlay vẫn dùng __close */
+			.size-chart-overlay__close {
+				background: none !important;
+				border: none !important;
+				cursor: pointer;
+				padding: 8px !important;
+				color: #203224 !important;
+				display: flex !important;
+				align-items: center;
+				justify-content: center;
+				min-width: 0 !important;
+				min-height: 0 !important;
+				width: 36px !important;
+				height: 36px !important;
+				opacity: 1 !important;
+			}
+			.size-chart-overlay__close::before,
+			.size-chart-overlay__close::after { display: none !important; }
+			.size-chart-overlay__close svg line { stroke: #203224 !important; }
+			.size-chart-overlay__close:hover { opacity: 0.6; }
+
+			/* Tabs */
+			.size-chart-overlay__tabs {
+				display: flex;
+				align-items: center;
+				gap: 4px;
+				width: fit-content;
+				max-width: 100%;
+				margin: 0 auto 28px;
+				padding: 4px;
+				overflow-x: auto;
+				border: 1px solid #d7dfd6;
+				border-radius: 999px;
+				background: #f7faf6;
+				box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+				scrollbar-width: none;
+			}
+			.size-chart-overlay__tabs::-webkit-scrollbar {
+				display: none;
+			}
+			.size-chart-overlay__tabs--single {
+				display: none;
+			}
+			.size-chart-overlay__tab {
+				flex: 0 0 auto;
+				background: none;
+				border: none;
+				border-radius: 999px;
+				padding: 10px 22px;
+				font-family: 'Oswald', sans-serif;
+				font-size: 11px;
+				font-weight: 600;
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+				color: #31513f;
+				cursor: pointer;
+				position: relative;
+				transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+			}
+			.size-chart-overlay__tab + .size-chart-overlay__tab::before {
+				content: '';
+				position: absolute;
+				top: 50%;
+				left: -2px;
+				width: 1px;
+				height: 22px;
+				background: #d2dbd1;
+				transform: translateY(-50%);
+				pointer-events: none;
+			}
+			.size-chart-overlay__tab::after {
+				display: none;
+			}
+			.size-chart-overlay__tab.is-active {
+				background: var(--color-text-primary, #203224);
+				color: #ffffff;
+				box-shadow: 0 8px 18px rgba(32, 50, 36, 0.24);
+			}
+			.size-chart-overlay__tab:hover { color: var(--color-text-primary, #203224); }
+			.size-chart-overlay__tab.is-active:hover {
+				background: var(--color-text-primary, #203224);
+				color: #ffffff;
+			}
+			.size-chart-overlay__unit-tabs {
+				display: flex;
+				align-items: center;
+				gap: 0;
+				width: fit-content;
+				margin: 0 auto 28px;
+				padding: 0;
+				overflow: hidden;
+				border: 1px solid var(--color-text-primary, #203224);
+				border-radius: 999px;
+				background: #ffffff;
+			}
+			.size-chart-overlay__unit-tab {
+				min-width: 60px;
+				padding: 9px 18px;
+				background: transparent;
+				border: none;
+				border-radius: 0;
+				color: var(--color-text-primary, #203224);
+				cursor: pointer;
+				font-family: 'Oswald', sans-serif;
+				font-size: 10px;
+				font-weight: 600;
+				letter-spacing: 0.14em;
+				line-height: 1;
+				text-transform: uppercase;
+				transition: background 0.2s, color 0.2s;
+			}
+			.size-chart-overlay__unit-tab.is-active {
+				background: var(--color-text-primary, #203224);
+				color: #ffffff;
+			}
+			.size-chart-overlay__unit-panel {
+				display: none;
+			}
+			.size-chart-overlay__unit-panel.is-active {
+				display: block;
+			}
+
+			/* Content */
+			.size-chart-overlay__subtitle {
+				font-family: 'Oswald', sans-serif;
+				font-size: 18px;
+				font-weight: 600;
+				letter-spacing: 0;
+				color: var(--color-text-primary, #203224);
+				margin: 0 0 8px;
+			}
+			.size-chart-overlay__subtitle--section {
+				margin-top: 38px;
+				padding-top: 28px;
+				border-top: 1px solid #d8ded7;
+			}
+			.size-chart-overlay__note {
+				font-size: 13px;
+				color: var(--color-text-secondary, #666);
+				margin: 0 0 16px;
+				line-height: 1.5;
+			}
+			.size-chart-overlay__table-wrap {
+				width: 100%;
+				overflow-x: auto;
+				-webkit-overflow-scrolling: touch;
+			}
+			.size-chart-overlay__table {
+				width: 100%;
+				border-collapse: separate;
+				border-spacing: 0;
+				font-size: 14px;
+				text-align: left;
+			}
+			.size-chart-overlay__table th,
+			.size-chart-overlay__table td {
+				padding: 12px 18px;
+				border: none;
+				white-space: nowrap;
+				color: var(--color-text-primary, #203224);
+			}
+			.size-chart-overlay__table th {
+				background: var(--color-text-primary, #203224);
+				color: #faf6ee;
+				font-family: 'Oswald', sans-serif;
+				font-weight: 600;
+				text-transform: uppercase;
+				font-size: 13px;
+				letter-spacing: 0.06em;
+			}
+			.size-chart-overlay__table th:first-child {
+				border-top-left-radius: 6px;
+				border-bottom-left-radius: 6px;
+			}
+			.size-chart-overlay__table th:last-child {
+				border-top-right-radius: 6px;
+				border-bottom-right-radius: 6px;
+			}
+			.size-chart-overlay__table td {
+				border-bottom: 1px solid #d8ded7;
+			}
+			.size-chart-overlay__table tbody tr:nth-child(even) {
+				background: transparent;
+			}
+			.size-chart-overlay__table tbody tr:hover {
+				background: transparent;
+			}
+			.size-chart-overlay__disclaimer {
+				font-size: 12px;
+				color: var(--color-text-secondary, #888);
+				line-height: 1.6;
+				margin-top: 20px;
+				padding-top: 16px;
+				border-top: 1px solid #e5e5e5;
+			}
+
+			#description-overlay,
+			#care-instructions-overlay,
+			#shipping-overlay {
+				align-items: center;
+				box-sizing: border-box;
+				overflow-y: auto;
+				padding: 32px 24px;
+			}
+			#description-overlay .size-chart-overlay__backdrop,
+			#care-instructions-overlay .size-chart-overlay__backdrop,
+			#shipping-overlay .size-chart-overlay__backdrop {
+				background: rgba(23, 33, 27, 0.52);
+			}
+			#description-overlay .size-chart-overlay__panel,
+			#care-instructions-overlay .size-chart-overlay__panel,
+			#shipping-overlay .size-chart-overlay__panel {
+				width: min(calc(100% - 48px), 540px);
+				max-width: 540px;
+				height: auto;
+				min-height: 0;
+				max-height: calc(100vh - 64px);
+				max-height: calc(100dvh - 64px);
+				margin: 0;
+				padding: 26px 28px 30px;
+				overflow-y: auto;
+				border: 1px solid rgba(32, 50, 36, 0.12);
+				border-radius: 6px;
+				background: #ffffff;
+				box-shadow: 0 22px 56px rgba(15, 24, 18, 0.24);
+			}
+			#description-overlay .size-chart-overlay__panel,
+			#shipping-overlay .size-chart-overlay__panel {
+				width: min(calc(100% - 48px), 580px);
+				max-width: 580px;
+			}
+			#description-overlay .size-chart-overlay__header,
+			#care-instructions-overlay .size-chart-overlay__header,
+			#shipping-overlay .size-chart-overlay__header {
+				gap: 18px;
+				margin-bottom: 18px;
+				padding-bottom: 14px;
+				border-bottom: 1px solid rgba(32, 50, 36, 0.16);
+			}
+			#description-overlay .size-chart-overlay__title,
+			#care-instructions-overlay .size-chart-overlay__title,
+			#shipping-overlay .size-chart-overlay__title {
+				margin: 0;
+				color: var(--color-text-primary, #203224);
+				font-family: 'Oswald', sans-serif;
+				font-size: 18px;
+				font-weight: 600;
+				letter-spacing: 0.04em;
+				line-height: 1.2;
+				text-transform: uppercase;
+			}
+			#description-overlay .size-chart-overlay__close,
+			#care-instructions-overlay .size-chart-overlay__close,
+			#shipping-overlay .size-chart-overlay__close {
+				flex: 0 0 auto;
+				width: 36px !important;
+				height: 36px !important;
+				padding: 8px !important;
+				border: 0 !important;
+				border-radius: 0;
+				background: transparent !important;
+				box-shadow: none;
+				transition: opacity 0.2s ease;
+			}
+			#description-overlay .size-chart-overlay__close:hover,
+			#care-instructions-overlay .size-chart-overlay__close:hover,
+			#shipping-overlay .size-chart-overlay__close:hover {
+				background: transparent !important;
+				opacity: 1;
+			}
+			#description-overlay .size-chart-overlay__content,
+			#care-instructions-overlay .size-chart-overlay__content,
+			#shipping-overlay .size-chart-overlay__content {
+				padding-top: 0 !important;
+				text-align: left !important;
+			}
+			#description-overlay .rte,
+			#care-instructions-overlay .rte,
+			#shipping-overlay .rte {
+				color: #3d4c42 !important;
+				font-family: 'Oswald', sans-serif !important;
+			}
+			#description-overlay .rte p,
+			#care-instructions-overlay .rte p,
+			#shipping-overlay .rte p {
+				margin: 0;
+				padding: 13px 0;
+				border-top: 1px solid rgba(32, 50, 36, 0.1);
+				color: #3d4c42;
+				font-size: 14px;
+				line-height: 1.58;
+			}
+			#description-overlay .rte p:first-child,
+			#care-instructions-overlay .rte p:first-child,
+			#shipping-overlay .rte p:first-child {
+				padding-top: 0;
+				border-top: 0;
+			}
+			#description-overlay .rte p:last-child,
+			#care-instructions-overlay .rte p:last-child,
+			#shipping-overlay .rte p:last-child {
+				padding-bottom: 0;
+			}
+			#description-overlay .rte strong,
+			#care-instructions-overlay .rte strong,
+			#shipping-overlay .rte strong {
+				color: var(--color-text-primary, #203224);
+				font-weight: 700;
+			}
+			#description-overlay .rte ul,
+			#description-overlay .rte ol,
+			#care-instructions-overlay .rte ul,
+			#care-instructions-overlay .rte ol,
+			#shipping-overlay .rte ul,
+			#shipping-overlay .rte ol {
+				margin: 0;
+				padding-left: 18px;
+			}
+			#description-overlay .rte li + li,
+			#care-instructions-overlay .rte li + li,
+			#shipping-overlay .rte li + li {
+				margin-top: 8px;
+			}
+
+			/* Mobile */
+			@media (max-width: 767.98px) {
+				.size-chart-overlay__panel {
+					width: 100%;
+					max-width: 100%;
+					height: 100%;
+					max-height: 100%;
+					padding: 20px 16px 28px;
+					overflow-y: auto;
+				}
+				#description-overlay,
+				#care-instructions-overlay,
+				#shipping-overlay {
+					align-items: center;
+					box-sizing: border-box;
+					overflow-y: auto;
+					padding: 18px 0;
+				}
+				#description-overlay .size-chart-overlay__backdrop,
+				#care-instructions-overlay .size-chart-overlay__backdrop,
+				#shipping-overlay .size-chart-overlay__backdrop {
+					background: rgba(23, 33, 27, 0.52);
+				}
+				#description-overlay .size-chart-overlay__panel,
+				#care-instructions-overlay .size-chart-overlay__panel,
+				#shipping-overlay .size-chart-overlay__panel {
+					width: calc(100% - 32px);
+					max-width: 430px;
+					height: auto;
+					min-height: 0;
+					max-height: calc(100vh - 36px);
+					max-height: calc(100dvh - 36px);
+					margin: 0;
+					padding: 22px 16px 24px;
+					border: 1px solid rgba(32, 50, 36, 0.12);
+					border-radius: 6px;
+					box-shadow: 0 18px 48px rgba(15, 24, 18, 0.24);
+				}
+				#description-overlay .size-chart-overlay__header,
+				#care-instructions-overlay .size-chart-overlay__header,
+				#shipping-overlay .size-chart-overlay__header {
+					margin-bottom: 18px;
+					padding-bottom: 14px;
+					border-bottom-width: 1px;
+					gap: 16px;
+				}
+				#description-overlay .size-chart-overlay__title,
+				#care-instructions-overlay .size-chart-overlay__title,
+				#shipping-overlay .size-chart-overlay__title {
+					font-size: 16px;
+					letter-spacing: 0;
+				}
+				#description-overlay .size-chart-overlay__close,
+				#care-instructions-overlay .size-chart-overlay__close,
+				#shipping-overlay .size-chart-overlay__close {
+					flex: 0 0 auto;
+					width: 34px !important;
+					height: 34px !important;
+					padding: 7px !important;
+					border: 0 !important;
+					border-radius: 0;
+					background: transparent !important;
+					box-shadow: none;
+				}
+				#description-overlay .size-chart-overlay__content,
+				#care-instructions-overlay .size-chart-overlay__content,
+				#shipping-overlay .size-chart-overlay__content {
+					padding-top: 0 !important;
+				}
+				#description-overlay .rte p,
+				#care-instructions-overlay .rte p,
+				#shipping-overlay .rte p {
+					margin: 0 0 18px;
+					padding: 0;
+					border-top: 0;
+					line-height: 1.55;
+				}
+				#description-overlay .rte p:last-child,
+				#care-instructions-overlay .rte p:last-child,
+				#shipping-overlay .rte p:last-child {
+					margin-bottom: 0;
+				}
+				.size-chart-overlay__title { font-size: 18px; }
+				.size-chart-overlay__tabs {
+					display: grid;
+					grid-template-columns: repeat(3, minmax(0, 1fr));
+					gap: 4px;
+					width: 100%;
+					max-width: none;
+					margin-bottom: 24px;
+					margin-left: auto;
+					margin-right: auto;
+					overflow: visible;
+					border-radius: 18px;
+				}
+				.size-chart-overlay__tabs--single {
+					display: none;
+				}
+				.size-chart-overlay__tab {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					min-height: 40px;
+					padding: 8px 4px;
+					font-size: 10px;
+					line-height: 1.2;
+					text-align: center;
+					white-space: normal;
+				}
+				.size-chart-overlay__tab + .size-chart-overlay__tab::before {
+					left: -3px;
+					height: 24px;
+				}
+				.size-chart-overlay__unit-tabs {
+					display: flex;
+					width: min(100%, 160px);
+					margin-bottom: 24px;
+				}
+				.size-chart-overlay__unit-tab { flex: 1; min-width: 0; }
+				.size-chart-overlay__subtitle { font-size: 17px; }
+				.size-chart-overlay__table {
+					min-width: 0;
+					table-layout: fixed;
+					text-align: center;
+				}
+				.size-chart-overlay__table th:first-child,
+				.size-chart-overlay__table td:first-child {
+					width: 22%;
+				}
+				.size-chart-overlay__table th,
+				.size-chart-overlay__table td {
+					padding: 10px 8px;
+					font-size: 12px;
+					white-space: normal;
+					word-break: normal;
+				}
+				.size-chart-overlay__table th {
+					font-size: 10px;
+					line-height: 1.25;
+				}
+				.size-chart-overlay__note,
+				.size-chart-overlay__disclaimer {
+					text-align: left;
+				}
+			}
+		</style>
+
+		<script>
+			function switchSizeTab(btn, tab) {
+				/* Deactivate all tabs & hide all content */
+				var allTabs = btn.parentElement.querySelectorAll('.size-chart-overlay__tab');
+				allTabs.forEach(function(t) { t.classList.remove('is-active'); });
+				btn.classList.add('is-active');
+
+				var overlay = document.getElementById('size-chart-overlay');
+				var allContent = overlay.querySelectorAll('.size-chart-overlay__content');
+				allContent.forEach(function(c) { c.style.display = 'none'; });
+
+				document.getElementById('size-tab-' + tab).style.display = 'block';
+			}
+
+			function switchSizeUnit(btn, unit) {
+				var content = btn.closest('.size-chart-overlay__content');
+				if (!content) return;
+
+				var allUnitTabs = content.querySelectorAll('.size-chart-overlay__unit-tab');
+				allUnitTabs.forEach(function(tab) { tab.classList.remove('is-active'); });
+				btn.classList.add('is-active');
+
+				var panels = content.querySelectorAll('.size-chart-overlay__unit-panel');
+				panels.forEach(function(panel) {
+					panel.classList.toggle('is-active', panel.getAttribute('data-unit-panel') === unit);
+				});
+			}
+
+			(function() {
+				var overlayIds = ['size-chart-overlay', 'care-instructions-overlay', 'shipping-overlay', 'description-overlay'];
+				var bodyClass = 'is-product-info-overlay-open';
+
+				function getInfoOverlays() {
+					return overlayIds.map(function(overlayId) {
+						return document.getElementById(overlayId);
+					}).filter(Boolean);
+				}
+
+				function syncInfoOverlayState() {
+					var isOpen = getInfoOverlays().some(function(overlay) {
+						return overlay.classList.contains('is-active');
+					});
+
+					document.body.classList.toggle(bodyClass, isOpen);
+				}
+
+				function queueInfoOverlaySync() {
+					window.setTimeout(function() {
+						initInfoOverlays();
+						syncInfoOverlayState();
+					}, 0);
+				}
+
+				function closeInfoOverlay(overlay) {
+					if (!overlay) return;
+
+					overlay.classList.remove('is-active');
+					document.body.style.overflow = '';
+					syncInfoOverlayState();
+				}
+
+				function initInfoOverlays() {
+					getInfoOverlays().forEach(function(overlay) {
+						if (overlay.parentNode !== document.body) {
+							document.body.appendChild(overlay);
+						}
+
+						if (overlay.dataset.productInfoOverlayObserved === 'true') {
+							return;
+						}
+
+						overlay.dataset.productInfoOverlayObserved = 'true';
+						new MutationObserver(syncInfoOverlayState).observe(overlay, {
+							attributes: true,
+							attributeFilter: ['class']
+						});
+					});
+
+					syncInfoOverlayState();
+				}
+
+				window.CamoProductInfoOverlays = {
+					init: initInfoOverlays,
+					sync: syncInfoOverlayState,
+					close: function(overlayId) {
+						closeInfoOverlay(document.getElementById(overlayId));
+					}
+				};
+
+				/* Close on ESC key */
+				document.addEventListener('keydown', function(e) {
+					if (e.key === 'Escape') {
+						getInfoOverlays().forEach(function(overlay) {
+							if (overlay.classList.contains('is-active')) {
+								overlay.classList.remove('is-active');
+								document.body.style.overflow = '';
+							}
+						});
+						syncInfoOverlayState();
+					}
+				});
+
+				document.addEventListener('click', function(event) {
+					var target = event.target;
+					if (!target || !target.closest) return;
+
+					var closeControl = target.closest('.size-chart-overlay__close, .size-chart-overlay__close-btn');
+					var backdrop = target.classList && target.classList.contains('size-chart-overlay__backdrop') ? target : null;
+
+					if (closeControl || backdrop) {
+						var overlay = target.closest('.size-chart-overlay') || (backdrop && backdrop.closest('.size-chart-overlay'));
+						event.preventDefault();
+						event.stopPropagation();
+						closeInfoOverlay(overlay);
+						return;
+					}
+
+					if (target.closest('.size-chart-overlay') || target.closest('[onclick*="overlay"]')) {
+						queueInfoOverlaySync();
+					}
+				}, true);
+
+				if (document.readyState === 'loading') {
+					document.addEventListener('DOMContentLoaded', initInfoOverlays);
+				} else {
+					initInfoOverlays();
+				}
+
+				document.addEventListener('shopify:section:load', initInfoOverlays);
+			})();
+		</script>
+
+		{%- comment -%} SHIPPING & DELIVERY OVERLAY {%- endcomment -%}
+		<div id="shipping-overlay" class="size-chart-overlay">
+			<div class="size-chart-overlay__backdrop" onclick="document.getElementById('shipping-overlay').classList.remove('is-active'); document.body.style.overflow='';"></div>
+			<div class="size-chart-overlay__panel">
+				<div class="size-chart-overlay__header">
+					<h2 class="size-chart-overlay__title">SHIPPING &amp; DELIVERY</h2>
+					<button class="size-chart-overlay__close" type="button" onclick="document.getElementById('shipping-overlay').classList.remove('is-active'); document.body.style.overflow='';" aria-label="Close">
+						<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<line x1="2" y1="2" x2="18" y2="18" stroke="currentColor" stroke-width="2"/>
+							<line x1="18" y1="2" x2="2" y2="18" stroke="currentColor" stroke-width="2"/>
+						</svg>
+					</button>
+				</div>
+
+				<div class="size-chart-overlay__content shipping-tab-content" style="padding-top: 10px; text-align: left;">
+					<div class="rte" style="color: var(--color-text-primary, #203224);">
+						<p><strong>Shipping Origin:</strong> Shipped directly from the United States.</p>
+						<p><strong>Processing Time:</strong> 1 &ndash; 3 business days (excluding weekends and holidays).</p>
+						<p><strong>Standard Shipping:</strong> 5 &ndash; 7 business days.</p>
+						<p><strong>Express Shipping:</strong> 3 &ndash; 5 business days.</p>
+						<p><strong>Tracking:</strong> You will receive a confirmation email with tracking information as soon as your order ships.</p>
+						<p><strong>Multiple Packages:</strong> Items with separate locations may arrive in multiple packages with individual tracking numbers.</p>
+
+						<p><strong>Order Cancellations:</strong><br>
+						Only accepted if the order has not been processed (not yet packed or handed over to the carrier) and requires official approval from the seller.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			document.addEventListener('keydown', function(e) {
+				if (e.key === 'Escape') {
+					var overlay = document.getElementById('shipping-overlay');
+					if (overlay && overlay.classList.contains('is-active')) {
+						overlay.classList.remove('is-active');
+						document.body.style.overflow = '';
+					}
+				}
+			});
+		</script>
+
+		{%- comment -%} Drawer 1 (Specifications / custom) {%- endcomment -%}
+		{%- if show_drawer_1 -%}
+			{%- assign d1_id = 'drawer1-' | append: section.id -%}
+			{%- assign d1_content = drawer_page_1.content | replace: '<img', '<img loading="lazy"' -%}
+			{%- render 'product-accordion',
+				title: drawer_toggle_text_1,
+				content: d1_content,
+				accordion_id: d1_id,
+				open: false
+			-%}
+		{%- endif -%}
+
+		{%- comment -%} Drawer 2 (Shipping & Delivery / custom) {%- endcomment -%}
+		{%- if show_drawer_2 -%}
+			{%- assign d2_id = 'drawer2-' | append: section.id -%}
+			{%- assign d2_content = drawer_page_2.content | replace: '<img', '<img loading="lazy"' -%}
+			{%- render 'product-accordion',
+				title: drawer_toggle_text_2,
+				content: d2_content,
+				accordion_id: d2_id,
+				open: false
+			-%}
+		{%- endif -%}
+
+		{%- comment -%} Drawer 3 (custom) {%- endcomment -%}
+		{%- if show_drawer_3 -%}
+			{%- assign d3_id = 'drawer3-' | append: section.id -%}
+			{%- assign d3_content = drawer_page_3.content | replace: '<img', '<img loading="lazy"' -%}
+			{%- render 'product-accordion',
+				title: drawer_toggle_text_3,
+				content: d3_content,
+				accordion_id: d3_id,
+				open: false
+			-%}
+		{%- endif -%}
+
+		{%- comment -%} Size Guide Accordion {%- endcomment -%}
+		{%- if show_size_guide -%}
+			{%- assign sg_id = 'sizeguide-' | append: section.id -%}
+			{%- assign sg_content = size_guide_page.content | replace: '<img', '<img loading="lazy"' -%}
+			{%- render 'product-accordion',
+				title: size_guide_button_text,
+				content: sg_content,
+				accordion_id: sg_id,
+				open: false
+			-%}
+		{%- endif -%}
+	</div>
+
+	{%- if product_details_content != blank -%}
+		{%- capture description_overlay_html -%}
+			{%- comment -%} DESCRIPTION OVERLAY MOVED TO BOTTOM TO PREVENT HTML INJECTION BREAKAGE {%- endcomment -%}
+			<div id="description-overlay" class="size-chart-overlay">
+				<div class="size-chart-overlay__backdrop" onclick="document.getElementById('description-overlay').classList.remove('is-active'); document.body.style.overflow='';"></div>
+				<div class="size-chart-overlay__panel">
+					<div class="size-chart-overlay__header">
+						<h2 class="size-chart-overlay__title">PRODUCT DETAILS</h2>
+						<button class="size-chart-overlay__close" type="button" onclick="document.getElementById('description-overlay').classList.remove('is-active'); document.body.style.overflow='';" aria-label="Close">
+							<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<line x1="2" y1="2" x2="18" y2="18" stroke="currentColor" stroke-width="2"/>
+								<line x1="18" y1="2" x2="2" y2="18" stroke="currentColor" stroke-width="2"/>
+							</svg>
+						</button>
+					</div>
+					<div class="size-chart-overlay__content" style="display:block;">
+						<div class="product-desc-overlay__body rte">
+							{{ desc_content }}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<script>
+				document.addEventListener('keydown', function(e) {
+					if (e.key === 'Escape') {
+						var overlay = document.getElementById('description-overlay');
+						if (overlay && overlay.classList.contains('is-active')) {
+							overlay.classList.remove('is-active');
+							document.body.style.overflow = '';
+						}
+					}
+				});
+			</script>
+		{%- endcapture -%}
+		{{- description_overlay_html -}}
+	{%- endif -%}
+
+	<script>
+		/* Product Accordion Toggle Logic */
+		(function() {
+			document.addEventListener('DOMContentLoaded', function() {
+				initProductAccordions();
+			});
+
+			/* Re-init on Shopify section events */
+			document.addEventListener('shopify:section:load', function() {
+				initProductAccordions();
+			});
+
+			function initProductAccordions() {
+				var containers = document.querySelectorAll('[data-product-accordion]');
+				containers.forEach(function(container) {
+					var triggers = container.querySelectorAll('[data-accordion-trigger]');
+					triggers.forEach(function(trigger) {
+						/* Remove old listeners by cloning */
+						var newTrigger = trigger.cloneNode(true);
+						trigger.parentNode.replaceChild(newTrigger, trigger);
+
+						newTrigger.addEventListener('click', function() {
+							var expanded = this.getAttribute('aria-expanded') === 'true';
+							var contentId = this.getAttribute('aria-controls');
+							var content = document.getElementById(contentId);
+
+							if (expanded) {
+								/* Close */
+								this.setAttribute('aria-expanded', 'false');
+								content.classList.remove('is-open');
+								content.setAttribute('hidden', '');
+							} else {
+								/* Open */
+								this.setAttribute('aria-expanded', 'true');
+								content.classList.add('is-open');
+								content.removeAttribute('hidden');
+							}
+						});
+					});
+				});
+			}
+		})();
+	</script>
+{%- endif -%}

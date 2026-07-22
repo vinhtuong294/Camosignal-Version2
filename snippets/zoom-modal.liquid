@@ -1,0 +1,229 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Zoom Modal
+	Render modal for zoom
+	- id: Unique modal id (required)
+	- medias: Array of images, videos, etc. (required)
+
+	Usage:
+	{%- render 'zoom-modal', id: 'ZoomMediaModal', medias: product.media -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- if id != blank and medias != blank -%}
+	<div
+		id="{{- id -}}"
+		class="modal modal__card modal__card--full"
+		data-zoom-modal
+		aria-modal="true"
+		role="dialog"
+	>
+		<div class="modal__body modal__body--gutter-auto js-scroll-lock-container">
+			<div class="swiper zoom-slider" data-zoom-slider>
+				<button class="swiper-button-next-new zoom-slider__button zoom-slider__button--next js-zoom-slider-next-button">
+					{%- render 'icons', icon: 'arrow-right' -%}
+				</button>
+
+				<button class="swiper-button-prev-new zoom-slider__button zoom-slider__button--prev js-zoom-slider-prev-button">
+					{%- render 'icons', icon: 'arrow-left' -%}
+				</button>
+
+				<div class="swiper-wrapper zoom-slider__wrapper" data-zoom-content>
+					{%- for media in medias -%}
+						{%- capture content -%}
+							{%- case media.media_type -%}
+								{%- when 'image' -%}
+									<picture>
+										<source
+											srcset="{{- media | image_url: width: 960 }} 1x, {{ media | image_url: width: 1920 }} 2x"
+											media="(max-width: 480px)"
+											width="960"
+											height="960"
+										/>
+
+										<source
+											srcset="{{- media | image_url: width: 1600 }} 1x, {{ media | image_url: width: 3200 }} 2x"
+											media="(max-width: 800px)"
+											width="1600"
+											height="1600"
+										/>
+
+										<source
+											srcset="{{- media | image_url: width: 2880 }} 1x, {{ media | image_url: width: 5760 }} 2x"
+											media="(max-width: 1440px)"
+											width="2880"
+											height="2880"
+										/>
+
+										<img
+											class="zoom-slider__media zoom-slider__media--image js-zoom-slide-image"
+											srcset="{{- media | image_url: width: 3200 }} 1x, {{ media | image_url: width: 6400 }} 2x"
+											src="{{- media | image_url: width: 3200 -}}"
+											alt="{{- media.alt -}}"
+											width="3200"
+											height="3200"
+											loading="lazy"
+											fetchpriority="low"
+											decoding="async"
+											draggable="false"
+										/>
+									</picture>
+								{%- when 'video' -%}
+									<video
+										class="zoom-slider__media zoom-slider__media--video js-video"
+										data-device="desktop"
+										data-type="html"
+										tabindex="-1"
+										aria-hidden="true"
+										controls
+									>
+										{%- for source in media.sources  -%}
+											{%- if source.mime_type == 'video/mp4' -%}
+												<source src="{{- source.url -}}#t=0.001" type="{{- source.mime_type -}}">
+											{%- endif -%}
+										{%- endfor -%}
+									</video>
+								{%- when 'external_video' -%}
+									{%- if media.host == 'youtube' -%}
+										{% if media.preview_image != nil %}
+											<div class="zoom-slider__placeholder js-product-gallery-video-placeholder">
+												<picture>
+													<source
+														srcset="{{ media.preview_image | image_url: width: 420 }} 1x, {{ media.preview_image | image_url: width: 840 }} 2x"
+														media="(max-width: 420px)"
+													>
+
+													<source
+														srcset="{{ media.preview_image | image_url: width: 767 }} 1x, {{ media.preview_image | image_url: width: 1534 }} 2x"
+														media="(max-width: 767px)"
+													>
+
+													<source
+														srcset="{{ media.preview_image | image_url: width: 991 }} 1x, {{ media.preview_image | image_url: width: 1982 }} 2x"
+														media="(max-width: 991px)"
+													>
+
+													<source
+														srcset="{{ media.preview_image | image_url: width: 1500 }} 1x, {{ media.preview_image | image_url: width: 3000 }} 2x"
+														media="(max-width: 1500px)"
+													>
+													<img class="zoom-slider__placeholder-img"
+														 src="{{ media.preview_image | image_url: width: 2000 }}"
+														 alt="{{ media.preview_image.alt | escape }}"
+														 loading="lazy"
+														 draggable="false"
+													>
+
+												</picture>
+
+
+												<span class="zoom-slider__placeholder-btn focus-visible-outline" aria-label="{{ 'general.accessibility.video_play' | t }}">
+													{%- render 'icons', icon: "play-filled" -%}
+												</span>
+											</div>
+										{% endif %}
+
+										<div
+											class="zoom-slider__media zoom-slider__media--video js-video"
+											data-device="desktop"
+											data-type="{{- media.host -}}"
+											{% if media.preview_image != nil %}data-lazy{% endif %}
+										>
+											<div
+												class="js-video-youtube"
+												data-video-id="{{- media.external_id -}}"
+												tabindex="-1"
+												aria-hidden="true"
+											></div>
+										</div>
+									{%- else -%}
+										{% if media.preview_image != nil %}
+											<div class="zoom-slider__placeholder js-product-gallery-video-placeholder">
+												<picture>
+													<source
+														srcset="{{ media.preview_image | image_url: width: 420 }} 1x, {{ media.preview_image | image_url: width: 840 }} 2x"
+														media="(max-width: 420px)"
+													>
+
+													<source
+														srcset="{{ media.preview_image | image_url: width: 767 }} 1x, {{ media.preview_image | image_url: width: 1534 }} 2x"
+														media="(max-width: 767px)"
+													>
+
+													<source
+														srcset="{{ media.preview_image | image_url: width: 991 }} 1x, {{ media.preview_image | image_url: width: 1982 }} 2x"
+														media="(max-width: 991px)"
+													>
+
+													<source
+														srcset="{{ media.preview_image | image_url: width: 1500 }} 1x, {{ media.preview_image | image_url: width: 3000 }} 2x"
+														media="(max-width: 1500px)"
+													>
+
+													<img class="zoom-slider__placeholder-img"
+														 src="{{ media.preview_image | image_url: width: 2000 }}"
+														 alt="{{ media.preview_image.alt | escape }}"
+														 loading="lazy"
+														 draggable="false"
+													>
+												</picture>
+
+
+												<span class="zoom-slider__placeholder-btn focus-visible-outline" aria-label="{{ 'general.accessibility.video_play' | t }}">
+													{%- render 'icons', icon: "play-filled" -%}
+												</span>
+											</div>
+										{% endif %}
+
+										<div
+											class="zoom-slider__media zoom-slider__media--video js-video"
+											data-device="desktop"
+											data-video-id="{{- media.external_id -}}"
+											data-type="{{- media.host -}}"
+											aria-hidden="true"
+											{% if media.preview_image != nil %}data-lazy{% endif %}
+										></div>
+									{%- endif -%}
+								{%- when 'model' -%}
+									{{ media | model_viewer_tag }}
+
+									<button
+										class="zoom-slider__model-button"
+										data-shopify-xr
+										aria-label="{{ 'products.product.xr_button_label' | t }}"
+										data-shopify-model3d-id="{{- media.id -}}"
+										data-shopify-title="{{- product.title | escape -}}"
+										data-shopify-xr-hidden
+									>
+										{%- render 'icons', icon: 'model' -%}
+
+										{{- 'products.product.xr_button' | t -}}
+									</button>
+							{%- endcase -%}
+						{%- endcapture -%}
+
+						<div
+							class="swiper-slide zoom-slider__slide{% if media.media_type == 'image' %} zoom-slider__slide--image{% endif %} is-loading"
+							data-zoom-slide="{{- media.id -}}"
+						>
+							<div class="zoom-slider__slide-container {% if media.media_type == 'image'  %}swiper-zoom-container{%- endif -%}">
+								<div class="zoom-slider__slide-target {% if media.media_type == 'external_video' %}js-video-wrapper is-paused-video js-paused-video{% endif %} {% if media.media_type == 'image' %}swiper-zoom-target{%- endif -%}">
+									{{- content -}}
+								</div>
+							</div>
+						</div>
+					{%- endfor -%}
+				</div>
+			</div>
+		</div>
+
+		<button
+			class="modal__close"
+			data-target="{{- id -}}"
+			data-js-toggle="{{- id -}}"
+			data-zoom-modal-toggle
+		>
+			{%- render 'icons', icon: 'menu-close' -%}
+		</button>
+	</div>
+{%- endif -%}

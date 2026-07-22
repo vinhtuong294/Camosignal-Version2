@@ -1,0 +1,297 @@
+{{ 'about-page.css' | asset_url | stylesheet_tag }}
+{%- comment -%}
+------------------------------------------------------------------------------
+  Section: About Signal
+  "camo isn't used to hide. It's a signal." — Signal pillars section
+  Shows 3+ pillars/features in a clean grid with customizable blocks.
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign color_scheme                    = section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign section_number                  = section.settings.section_number -%}
+{%- assign section_label                   = section.settings.section_label -%}
+{%- assign heading                         = section.settings.heading -%}
+{%- assign subtext                         = section.settings.subtext -%}
+{%- assign container                       = section.settings.container_width -%}
+{%- assign columns_desktop                 = section.settings.columns_desktop -%}
+{%- assign text_alignment                  = section.settings.text_alignment -%}
+{%- assign enable_card_borders             = section.settings.enable_card_borders -%}
+{%- assign blocks                          = section.blocks -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- style -%}
+	#shopify-section-{{ section.id }} {
+		padding-top: {{ section.settings.offset_top_mobile }}px;
+		padding-bottom: {{ section.settings.offset_bottom_mobile }}px;
+	}
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{ section.id }} {
+			padding-top: {{ section.settings.offset_top_desktop }}px;
+			padding-bottom: {{ section.settings.offset_bottom_desktop }}px;
+		}
+	}
+	#shopify-section-{{ section.id }} .about-signal__grid {
+		--columns-desktop: {{ columns_desktop }};
+	}
+{%- endstyle -%}
+
+<section
+	class="about-signal color-{{ color_scheme }}"
+	style="--container-width: {{ container_width }}; --text-align: {{ text_alignment }};"
+>
+	<div class="about-signal__container container">
+		{%- comment -%} Header {%- endcomment -%}
+		<div class="about-signal__header">
+			{%- if section_number != blank or section_label != blank -%}
+				<div class="about-signal__label-row">
+					{%- if section_number != blank -%}
+						<span class="about-signal__number">{{ section_number }}</span>
+					{%- endif -%}
+					{%- if section_label != blank -%}
+						<span class="about-signal__label">/ {{ section_label }}</span>
+					{%- endif -%}
+				</div>
+			{%- endif -%}
+
+			{%- if heading != blank -%}
+				<h2 class="about-signal__heading">{{ heading }}</h2>
+			{%- endif -%}
+
+			{%- if subtext != blank -%}
+				<div class="about-signal__subtext rte">{{ subtext }}</div>
+			{%- endif -%}
+		</div>
+
+		{%- comment -%} Pillars Grid {%- endcomment -%}
+		{%- if blocks.size > 0 -%}
+			<div class="about-signal__grid {% if enable_card_borders %}about-signal__grid--bordered{% endif %}">
+				{%- for block in blocks -%}
+					<div class="about-signal__card" {{ block.shopify_attributes }}>
+						{%- if block.settings.icon_image != blank -%}
+							<div class="about-signal__card-icon">
+								<img
+									src="{{ block.settings.icon_image | image_url: width: 80 }}"
+									alt="{{ block.settings.icon_image.alt | escape }}"
+									width="40"
+									height="40"
+									loading="lazy"
+								>
+							</div>
+						{%- endif -%}
+
+						{%- if block.settings.card_title != blank -%}
+							<h3 class="about-signal__card-title">{{ block.settings.card_title }}</h3>
+						{%- endif -%}
+
+						{%- if block.settings.card_text != blank -%}
+							<div class="about-signal__card-text rte">{{ block.settings.card_text }}</div>
+						{%- endif -%}
+
+						{%- if block.settings.card_footnote != blank -%}
+							<div class="about-signal__card-footnote">
+								{{ block.settings.card_footnote }}
+							</div>
+						{%- endif -%}
+					</div>
+				{%- endfor -%}
+			</div>
+		{%- endif -%}
+	</div>
+</section>
+
+{% schema %}
+{
+	"name": "About Signal",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": false
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Section Label"
+		},
+		{
+			"id": "section_number",
+			"type": "text",
+			"label": "Section number"
+		},
+		{
+			"id": "section_label",
+			"type": "text",
+			"label": "Section label"
+		},
+		{
+			"type": "header",
+			"content": "Content"
+		},
+		{
+			"id": "heading",
+			"type": "textarea",
+			"label": "Heading",
+			"default": "Camo isn't used to hide. It's a signal."
+		},
+		{
+			"id": "subtext",
+			"type": "richtext",
+			"label": "Subtext",
+			"default": "<p>A signal to those who understand the terrain, the seasons, and the signs left behind.</p>"
+		},
+		{
+			"type": "header",
+			"content": "Grid Settings"
+		},
+		{
+			"type": "range",
+			"id": "columns_desktop",
+			"min": 2,
+			"max": 4,
+			"step": 1,
+			"label": "Columns on desktop",
+			"default": 3
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_card_borders",
+			"label": "Show card borders",
+			"default": true
+		},
+		{
+			"type": "select",
+			"id": "text_alignment",
+			"label": "Text alignment",
+			"options": [
+				{ "value": "left", "label": "Left" },
+				{ "value": "center", "label": "Center" }
+			],
+			"default": "left"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{ "value": "1808px", "label": "Default - 1680px" },
+				{ "value": "2048px", "label": "Large - 1920px" },
+				{ "value": "100%", "label": "Full width" },
+				{ "value": "inherit", "label": "Inherit of general setting" }
+			],
+			"default": "inherit"
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range", "id": "offset_top_desktop",
+			"min": 0, "max": 100, "step": 1, "unit": "px",
+			"label": "Desktop offset top", "default": 50
+		},
+		{
+			"type": "range", "id": "offset_bottom_desktop",
+			"min": 0, "max": 100, "step": 1, "unit": "px",
+			"label": "Desktop offset bottom", "default": 50
+		},
+		{
+			"type": "range", "id": "offset_top_mobile",
+			"min": 0, "max": 100, "step": 1, "unit": "px",
+			"label": "Mobile offset top", "default": 32
+		},
+		{
+			"type": "range", "id": "offset_bottom_mobile",
+			"min": 0, "max": 100, "step": 1, "unit": "px",
+			"label": "Mobile offset bottom", "default": 32
+		}
+	],
+	"blocks": [
+		{
+			"name": "Signal Pillar",
+			"type": "signal_pillar",
+			"limit": 6,
+			"settings": [
+				{
+					"type": "image_picker",
+					"id": "icon_image",
+					"label": "Icon image",
+					"info": "Optional 64x64 icon"
+				},
+				{
+					"id": "card_title",
+					"type": "text",
+					"label": "Title",
+					"default": "THE TERRAIN"
+				},
+				{
+					"id": "card_text",
+					"type": "richtext",
+					"label": "Description",
+					"default": "<p>We design for people who recognize footprints before animals, silence before motion, and place before self.</p>"
+				},
+				{
+					"id": "card_footnote",
+					"type": "text",
+					"label": "Footnote / Spec",
+					"info": "Optional small text at the bottom of the card"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "About Signal",
+			"blocks": [
+				{
+					"type": "signal_pillar",
+					"settings": {
+						"card_title": "THE TERRAIN",
+						"card_text": "<p>We design for people who recognize footprints before animals, silence before motion, and place before self.</p>"
+					}
+				},
+				{
+					"type": "signal_pillar",
+					"settings": {
+						"card_title": "THE SEASONS",
+						"card_text": "<p>Our products are inspired by real hunting grounds — Forest & Hardwood regions, Midwest edges, places shaped by generations.</p>"
+					}
+				},
+				{
+					"type": "signal_pillar",
+					"settings": {
+						"card_title": "THE SIGNS",
+						"card_text": "<p>Hunters who stayed, learned, and passed on knowledge rather than trophies. That's who we design for.</p>"
+					}
+				}
+			]
+		}
+	]
+}
+{% endschema %}

@@ -1,0 +1,425 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Announcement bar
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign layout 							= section.settings.layout -%}
+{%- assign autoplay_speed 		  			= section.settings.autoplay_speed | times: 1000 -%}
+{%- assign enable_autoplay 		  			= section.settings.enable_autoplay -%}
+{%- assign text_content 			        = section.settings.text_content -%}
+{%- assign discount_code 			        = section.settings.discount_code -%}
+{%- assign discount_label 			        = section.settings.discount_label -%}
+
+{%- assign ticker_hide_bullets 				= section.settings.ticker_hide_bullets -%}
+{%- assign ticker_text 						= section.settings.ticker_text -%}
+{%- assign ticker_desktop_movement_speed 	= section.settings.desktop_movement_speed -%}
+{%- assign ticker_mobile_movement_speed 	= section.settings.mobile_movement_speed -%}
+
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme 					= section.settings.color_scheme -%}
+{%- assign discount_text_color 				= section.settings.discount_text_color -%}
+{%- assign discount_background_color 		= section.settings.discount_background_color -%}
+{%- assign discount_border_color 			= section.settings.discount_border_color -%}
+
+{% assign use_slider 						= false %}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{% if section.blocks.size < 2 %}
+	{%- assign enable_autoplay 		  		= false -%}
+{% endif %}
+
+{% if section.blocks.size > 0 %}
+	{% assign use_slider = true %}
+{% endif %}
+
+{%- capture section_styles -%}
+	--desktop-movement-speed: {{- ticker_desktop_movement_speed -}}s; {{-  -}}
+	--mobile-movement-speed: {{- ticker_mobile_movement_speed -}}s; {{-  -}}
+	--discount-text-color: {{- discount_text_color -}}; {{-  -}}
+	--discount-background-color: {{- discount_background_color -}}; {{-  -}}
+	--discount-border-color: {{- discount_border_color -}}; {{-  -}}
+{%- endcapture -%}
+
+{%- capture announcement_bar_simple_text -%}
+	{%- if text_content != blank -%}
+		<div class="announcement-bar__text rte">
+			{{- text_content -}}
+		</div>
+	{%- endif -%}
+{%- endcapture -%}
+
+{%- capture ticker_content -%}
+	{% if ticker_text != blank %}
+		<div class="announcement-bar__ticker js-announcement-bar-ticker-container is-loading">
+			<div class="announcement-bar__text announcement-bar__ticker-item {% if ticker_hide_bullets %}announcement-bar__ticker-item--hide-bullets{% endif %} rte js-ticker-content-container">
+				{{- ticker_text -}}
+			</div>
+		</div>
+	{% endif %}
+{%- endcapture -%}
+
+{%- if use_slider -%}
+	{%- capture slider_content -%}
+		<div class="announcement-bar__slider-wrapper">
+			{% if section.blocks.size > 1 %}
+				<button class="swiper-button-prev-new js-announcement-swiper-button-prev">
+					{%- render 'icons', icon: 'arrow-left' -%}
+				</button>
+			{% endif %}
+
+			<div class="announcement-bar__slider swiper js-announcement-bar-slider"
+				 data-autoplay="{{ enable_autoplay }}"
+				 data-autoplay-speed="{{ autoplay_speed }}"
+			>
+				<div class="swiper-wrapper announcement-bar__slider-wrapper">
+					{%- for block in section.blocks -%}
+						{%- assign text_slider 	  = block.settings.text_slider -%}
+						{%- assign discount_code  = block.settings.discount_code -%}
+						{%- assign discount_label = block.settings.discount_label -%}
+
+						<div class="swiper-slide announcement-bar__slide">
+							<div class="announcement-bar__slide-container js-announcement-bar-slide-content">
+								<div class="announcement-bar__text rte">
+									{{- text_slider -}}
+								</div>
+
+								{%- if discount_code != blank and discount_label != blank -%}
+									<div class="announcement-bar__discount">
+										<span class="announcement-bar__discount-text js-announcement-bar-discount-text">
+											{{- discount_code -}}
+										</span>
+
+										<button
+											class="button-link announcement-bar__discount-button js-announcement-bar-copy-code"
+											data-code="{{- discount_code -}}"
+										>
+											<span class="announcement-bar__copy js-announcement-bar-copy">
+												{%- render 'icons', icon: 'copy-3' -%}
+
+												<span data-text="{{- discount_label -}}">
+													<span>{{- discount_label -}}</span>
+												</span>
+											</span>
+
+											<span class="announcement-bar__copied is-hidden js-announcement-bar-copied">
+												{%- render 'icons', icon: 'check' -%}
+
+												<span data-text="{{ 'sections.announcement_bar.discount_copied' | t }}">
+													<span>{{ 'sections.announcement_bar.discount_copied' | t }}</span>
+												</span>
+											</span>
+										</button>
+									</div>
+								{%- endif -%}
+							</div>
+						</div>
+					{%- endfor -%}
+				</div>
+			</div>
+
+			{%- if section.blocks.size > 1 -%}
+				<button class="swiper-button-next-new js-announcement-swiper-button-next">
+					{%- render 'icons', icon: 'arrow-right' -%}
+				</button>
+			{%- endif -%}
+		</div>
+	{%- endcapture -%}
+{%- endif -%}
+
+{%- capture announcement_bar -%}
+	{%- case layout -%}
+		{%- when 'slideshow' -%}
+			{%- if announcement_bar_simple_text != blank -%}
+				{{- announcement_bar_simple_text -}}
+			{%- endif -%}
+			{%- if discount_code != blank and discount_label != blank -%}
+				<div class="announcement-bar__discount">
+					<span class="announcement-bar__discount-text">{{- discount_code -}}</span>
+
+					<button
+						class="button-link announcement-bar__discount-button js-announcement-bar-copy-code"
+						data-code="{{- discount_code -}}"
+					>
+						<span class="announcement-bar__copy js-announcement-bar-copy">
+							{%- render 'icons', icon: 'copy-3' -%}
+
+							<span data-text="{{- discount_label -}}">
+								<span>{{- discount_label -}}</span>
+							</span>
+						</span>
+
+						<span class="announcement-bar__copied is-hidden js-announcement-bar-copied">
+							{%- render 'icons', icon: 'check' -%}
+
+							<span data-text="{{ 'sections.announcement_bar.discount_copied' | t }}">
+								<span>{{ 'sections.announcement_bar.discount_copied' | t }}</span>
+							</span>
+						</span>
+					</button>
+				</div>
+			{%- endif -%}
+		{%- when 'ticker' -%}
+			{%- if ticker_content != blank -%}
+				{{ ticker_content }}
+			{%- endif -%}
+	{%- endcase -%}
+{%- endcapture -%}
+
+{%- if announcement_bar != blank or slider_content != blank -%}
+	{%- comment -%}Critical css{%- endcomment -%}
+	{%- render 'critical-announcement-bar-build' -%}
+
+	<section class="announcement-bar js-announcement-bar color-{{ color_scheme.id }}" style="{{- section_styles | strip_newlines -}}">
+		<div class="announcement-bar__container">
+			<div class="announcement-bar__content {% if layout == 'ticker' and section.blocks.size < 1 %} announcement-bar__content--no-offsets{% else %} container{% endif %}">
+				{%- if use_slider -%}
+					<div class="announcement-bar__column">
+						{{- slider_content -}}
+					</div>
+				{%- else -%}
+					<div class="announcement-bar__column">
+						{{- announcement_bar -}}
+					</div>
+				{%- endif -%}
+			</div>
+		</div>
+	</section>
+
+	<script>
+		(function() {
+			const section = document.querySelector(".js-announcement-bar");
+			const ticker = section.querySelector(".js-announcement-bar-ticker-container");
+			const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+			let tickerIsVisible = true;
+
+			const observer = new IntersectionObserver((entries) => {
+				for (const entry of entries) {
+					const bounds = entry.boundingClientRect;
+
+					changeCssVariable('--announcement-bar-height', ` ${bounds.height}px`);
+				}
+
+				observer.disconnect();
+			});
+
+			observer.observe(section);
+
+			if (ticker) {
+				const updateTickerState = () => {
+					section.classList.toggle(
+						"is-ticker-paused",
+						document.hidden || reducedMotion.matches || !tickerIsVisible
+					);
+				};
+
+				const tickerObserver = new IntersectionObserver((entries) => {
+					for (const entry of entries) {
+						tickerIsVisible = entry.isIntersecting;
+						updateTickerState();
+					}
+				});
+
+				tickerObserver.observe(section);
+				document.addEventListener("visibilitychange", updateTickerState);
+
+				if (reducedMotion.addEventListener) {
+					reducedMotion.addEventListener("change", updateTickerState);
+				} else {
+					reducedMotion.addListener(updateTickerState);
+				}
+
+				updateTickerState();
+			}
+
+			function changeCssVariable(variable, value) {
+				requestAnimationFrame(() => {
+					document.documentElement.style.setProperty(variable, value);
+				});
+			}
+		})();
+	</script>
+
+	{%- if section.blocks.size > 1 -%}
+		{%- render 'adastra' with '/src/scripts/component-swiper-modules.js' -%}
+	{%- endif -%}
+
+	{%- render 'adastra' with '/src/scripts/section-announcement-bar.js' -%}
+{%- endif -%}
+
+{%- schema -%}
+{
+	"name": "Announcement bar",
+	"settings": [
+		{
+			"type": "header",
+			"content": "General",
+			"info": "If you want to show the carousel in the announcement bar - add blocks to the section."
+		},
+		{
+			"type": "select",
+			"id": "layout",
+			"label": "Layout",
+			"options": [
+				{
+					"value": "slideshow",
+					"label": "Slideshow"
+				},
+				{
+					"value": "ticker",
+					"label": "Ticker"
+				}
+			],
+			"default": "slideshow"
+		},
+		{
+			"type": "header",
+			"content": "Slideshow",
+			"info": "The slideshow will work if 'Text slide' blocks are added to the section."
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_autoplay",
+			"label": "Enable autoplay",
+			"default": true
+		},
+		{
+			"type": "range",
+			"id": "autoplay_speed",
+			"label": "Autoplay speed",
+			"unit": "s",
+			"min": 3,
+			"max": 10,
+			"step": 1,
+			"info": "Works only with enabled autoplay",
+			"default": 5
+		},
+		{
+			"type": "header",
+			"content": "Simple text"
+		},
+		{
+			"type": "richtext",
+			"id": "text_content",
+			"label": "Text",
+			"default": "<p>Announcement bar text</p>"
+		},
+		{
+			"type": "header",
+			"content": "Ticker"
+		},
+		{
+			"type": "checkbox",
+			"id": "ticker_hide_bullets",
+			"label": "Hide bullets",
+			"default": false
+		},
+		{
+			"type": "richtext",
+			"id": "ticker_text",
+			"label": "Text",
+			"default": "<p>Announcement bar text</p><p>Announcement bar text</p><p>Announcement bar text</p>"
+		},
+		{
+			"type": "range",
+			"id": "desktop_movement_speed",
+			"label": "Movement speed (desktop)",
+			"min": 5,
+			"max": 100,
+			"unit": "s",
+			"default": 20
+		},
+		{
+			"type": "range",
+			"id": "mobile_movement_speed",
+			"label": "Movement speed (mobile)",
+			"min": 5,
+			"max": 100,
+			"unit": "s",
+			"default": 35
+		},
+		{
+			"type": "header",
+			"content": "Discount"
+		},
+		{
+			"type": "paragraph",
+			"content": "Works only with Layout: Slideshow"
+		},
+		{
+			"type": "text",
+			"id": "discount_code",
+			"label": "Discount code"
+		},
+		{
+			"type": "text",
+			"id": "discount_label",
+			"label": "Discount label",
+			"default": "Copy"
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "color",
+			"id": "discount_text_color",
+			"label": "Discount text color",
+			"default": "#000000"
+		},
+		{
+			"type": "color",
+			"id": "discount_background_color",
+			"label": "Discount background color",
+			"default": "#ffffff"
+		},
+		{
+			"type": "color",
+			"id": "discount_border_color",
+			"label": "Discount border color",
+			"default": "#E9E9E9"
+		}
+	],
+	"blocks": [
+		{
+			"type": "text_slide",
+			"name": "Text slide",
+			"settings": [
+				{
+					"type": "richtext",
+					"id": "text_slider",
+					"label": "Text desktop",
+					"default": "<p>Announcement bar text</p>"
+				},
+				{
+					"type": "text",
+					"id": "discount_code",
+					"label": "Discount code"
+				},
+				{
+					"type": "text",
+					"id": "discount_label",
+					"label": "Discount label",
+					"default": "Copy"
+				}
+			]
+		}
+	]
+}
+{%- endschema -%}

@@ -1,0 +1,129 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Product notify me popup
+------------------------------------------------------------------------------
+{% endcomment %}
+
+
+{%- assign back_in_stock_alert_button_label = block.settings.back_in_stock_alert_button_label -%}
+{%- assign back_in_stock_alert_button_icon = block.settings.back_in_stock_alert_button_icon -%}
+{%- assign back_in_stock_alert_button_icon_alt = block.settings.back_in_stock_alert_button_icon.alt -%}
+{%- assign back_in_stock_alert_form_heading = block.settings.back_in_stock_alert_form_heading -%}
+{%- assign back_in_stock_alert_form_email_placeholder = block.settings.back_in_stock_alert_form_email_placeholder -%}
+{%- assign back_in_stock_alert_form_submit_button_label = block.settings.back_in_stock_alert_form_submit_button_label -%}
+{%- assign back_in_stock_alert_form_success_message = block.settings.back_in_stock_alert_form_success_message -%}
+{%- assign close_modal = 'general.accessibility.close_modal' | t -%}
+{%- assign product_back_in_stock_alert_message = 'products.product.product_back_in_stock_alert_message' | t -%}
+{%- assign id = section.id -%}
+
+{%- if back_in_stock_alert_button_label != blank and
+back_in_stock_alert_form_email_placeholder != blank and
+back_in_stock_alert_form_submit_button_label != blank and
+back_in_stock_alert_form_success_message != blank and
+back_in_stock_alert_form_heading != blank and
+product_back_in_stock_alert_message != blank
+-%}
+
+	<div class="popup back-in-stock-alert-popup js-back-in-stock-alert-popup"
+		 id="ProductNotifyMePopup-{{- id -}}"
+		 role="dialog"
+		 aria-labelledby="ProductNotifyMePopupTitle-{{- id -}}"
+	>
+		<div class="back-in-stock-alert-popup__container">
+
+			<div class="back-in-stock-alert-popup__content">
+				<h2 class="h3"
+					id="ProductNotifyMePopupTitle-{{- id -}}"
+				>
+					{{- back_in_stock_alert_form_heading -}}
+				</h2>
+
+				{%- assign contact_form_id = 'ProductBackInStockAlertContactForm--' | append: id -%}
+				{%- assign form_class = 'back-in-stock-alert-contact-form js-back-in-stock-alert-form' -%}
+
+				{%- form "contact", class: form_class, id: contact_form_id -%}
+					<div class="js-back-in-stock-alert-form-status" hidden data-form-status="{%- if form.errors or form.posted_successfully? -%}posted{%- endif -%}"></div>
+
+					<div class="back-in-stock-alert-contact-form__message-container">
+						{% if form.errors %}
+							<small
+								class="back-in-stock-alert-contact-form__message back-in-stock-alert-contact-form__message--error"
+								tabindex="-1"
+							>
+								{% render 'icons', icon: 'close' %}
+
+								{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
+							</small>
+						{% endif %}
+
+						{% if form.posted_successfully? %}
+							<h3
+								class="back-in-stock-alert-contact-form__message back-in-stock-alert-contact-form__message--success text"
+								tabindex="-1"
+							>
+								{% render 'icons', icon: 'check' %}
+
+								{{- back_in_stock_alert_form_success_message -}}
+							</h3>
+						{% endif %}
+					</div>
+
+					<div class="back-in-stock-alert-contact-form__field">
+						<label hidden for="ProductBackInStockAlertContactFormMessageTextarea--{{- id -}}"></label>
+						<textarea name="contact[message]"
+								  data-back-in-stock-alert-message="{{- product_back_in_stock_alert_message -}}"
+								  hidden
+								  readonly
+								  id="ProductBackInStockAlertContactFormMessageTextarea--{{- id -}}"
+						></textarea>
+
+						<label hidden for="ProductBackInStockAlertContactFormProductUrlTextarea--{{- id -}}"></label>
+
+						<textarea name="contact[ProductURL]"
+								  data-notify-me-message="{{- product_back_in_stock_alert_message -}}"
+								  hidden
+								  readonly
+								  id="ProductBackInStockAlertContactFormProductUrlTextarea--{{- id -}}"
+						></textarea>
+
+						<div class="input-wrapper back-in-stock-alert-contact-form__input-wrapper">
+							<input
+								id="ProductBackInStockAlertContactFormEmailInput--{{- id -}}"
+								type="email"
+								name="contact[email]"
+								class="input back-in-stock-alert-contact-form__input js-back-in-stock-alert-input"
+								value="{{- form.email -}}"
+								aria-required="true"
+								autocapitalize="off"
+								autocomplete="email"
+								placeholder="{{- back_in_stock_alert_form_email_placeholder -}}"
+								required
+							/>
+
+							<label class="input-label back-in-stock-alert-contact-form__label"
+								   for="ProductBackInStockAlertContactFormEmailInput--{{- id -}}">
+								{{- back_in_stock_alert_form_email_placeholder -}}
+							</label>
+						</div>
+
+						<button
+							type="submit"
+							class="button button--secondary button--text-uppercase back-in-stock-alert-contact-form__button"
+						>
+							{{- back_in_stock_alert_form_submit_button_label -}}
+						</button>
+					</div>
+				{%- endform -%}
+			</div>
+
+			<button type="button"
+					class="popup-close-icon-button"
+					aria-label="{{- close_modal | escape -}}"
+					data-target="ProductNotifyMePopup-{{- id -}}"
+					data-js-toggle="ProductNotifyMePopup-{{- id -}}"
+			>
+				{% render 'icons', icon: 'close' %}
+			</button>
+		</div>
+	</div>
+{%- endif -%}

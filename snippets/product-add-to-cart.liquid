@@ -1,0 +1,475 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Product add to cart
+------------------------------------------------------------------------------
+{% endcomment %}
+{% render 'product-options-minimum',
+	block: block,
+	blocks: blocks,
+	product: product
+%}
+
+{% assign button_type 			= block.settings.button_type %}
+{% assign button_buy_it_type 	= block.settings.button_buy_it_type %}
+
+{%- capture button_buy_it_type_styles -%}
+	{%- case button_buy_it_type -%}
+		{%- when 'primary' -%}
+			--button-color: var(--button-text-color-primary); {{-  -}}
+			--button-background: var(--button-background-color-primary); {{-  -}}
+			--button-border-color: var(--button-border-color-primary); {{-  -}}
+			--button-color-hover: var(--button-text-color-primary-hover); {{-  -}}
+			--button-background-color-hover: var(--button-background-color-primary-hover); {{-  -}}
+			--button-border-color-hover: var(--button-border-color-primary-hover); {{-  -}}
+		{%- when 'secondary' -%}
+			--button-color: var(--button-text-color-secondary); {{-  -}}
+			--button-background: var(--button-background-color-secondary); {{-  -}}
+			--button-border-color: var(--button-border-color-secondary); {{-  -}}
+			--button-color-hover: var(--button-text-color-secondary-hover); {{-  -}}
+			--button-background-color-hover: var(--button-background-color-secondary-hover); {{-  -}}
+			--button-border-color-hover: var(--button-border-color-secondary-hover); {{-  -}}
+	{%- endcase -%}
+{%- endcapture -%}
+
+{% liquid
+	assign section_contains_quantity_block = false
+	assign gift_card_recipient_feature_active = false
+
+	if product.gift_card? and block.settings.show_gift_card_recipient
+		assign gift_card_recipient_feature_active = true
+	endif
+
+	for block in blocks
+		if block.type == "quantity"
+			assign section_contains_quantity_block = true
+			break
+		endif
+	endfor
+%}
+
+{%- if product.selected_or_first_available_variant == null -%}
+	{%- assign button_add_to_cart_text = 'products.product.unavailable' | t -%}
+{%- elsif product.selected_or_first_available_variant.available  -%}
+	{% if product.template_suffix == 'pre-order' %}
+		{%- assign button_add_to_cart_text = 'products.product.pre_order' | t -%}
+	{% else %}
+		{%- assign button_add_to_cart_text = 'products.product.add_to_cart' | t -%}
+	{% endif %}
+{%- else -%}
+	{%- assign button_add_to_cart_text = 'products.product.sold_out' | t -%}
+{%- endif -%}
+
+{%- capture styles -%}
+	{{- button_buy_it_type_styles -}} {{-  -}}
+	--offset-top-desktop: {{ block.settings.offset_top_desktop }}px; {{-  -}}
+	--offset-bottom-desktop: {{ block.settings.offset_bottom_desktop }}px; {{-  -}}
+	--offset-top-mobile: {{ block.settings.offset_top_mobile }}px; {{-  -}}
+	--offset-bottom-mobile: {{ block.settings.offset_bottom_mobile }}px;
+{%- endcapture -%}
+
+<div class="product-add-to-cart" style="{{- styles -}}">
+	{% unless section_contains_quantity_block %}
+		<div class="product-add-to-cart__error" id="ProductQuantityError-{{- product.id -}}" role="alert">
+			<small class="js-product-quantity-error"></small>
+		</div>
+	{% endunless %}
+
+	{% if gift_card_recipient_feature_active %}
+		{%- assign gift_card_recipient_control_flag = 'properties[__shopify_send_gift_card_to_recipient]' -%}
+
+		<div class="recipient-form">
+			<div class="recipient-form__checkbox-field">
+				<input
+					id="Recipient-checkbox-{{ section.id }}"
+					class="visually-hidden checkbox__input js-recipient-form-checkbox"
+					type="checkbox"
+					name="{{ gift_card_recipient_control_flag }}"
+					disabled
+				>
+
+				<label for="Recipient-checkbox-{{ section.id }}" class="checkbox__label">
+					{{ 'products.product.recipient.form.checkbox' | t }}
+				</label>
+			</div>
+
+			<div class="recipient-form__fields is-hidden js-recipient-form-fields">
+				<div class="input-wrapper recipient-form__field">
+					<input
+						class="input{% if form.errors contains 'email' %} error{% endif %} js-recipient-form-field"
+						id="Recipient-email-{{ section.id }}"
+						type="email"
+						placeholder="{{ 'products.product.recipient.form.email' | t }}"
+						name="properties[Recipient email]"
+						value="{{ form.email }}"
+						{% if form.errors contains 'email' %}
+							aria-invalid="true"
+							aria-describedby="RecipientForm-email-error-{{ section.id }}"
+						{% endif %}
+					>
+
+					<label class="input-label" for="Recipient-email-{{ section.id }}">
+						{{ 'products.product.recipient.form.email_label' | t }}
+					</label>
+
+					<div
+						id="RecipientForm-email-error-{{ section.id }}"
+						class="error js-form-error{% unless form.errors contains 'email' %} is-hidden{% endunless %}"
+					>
+						{%- if form.errors contains 'email' -%}
+							{{ form.errors.messages.email }}.
+						{%- endif -%}
+					</div>
+				</div>
+
+				<div class="input-wrapper recipient-form__field">
+					<input
+						class="input{% if form.errors contains 'name' %} error{% endif %} js-recipient-form-field"
+						autocomplete="name"
+						type="text"
+						id="Recipient-name-{{ section.id }}"
+						name="properties[Recipient name]"
+						placeholder="{{ 'products.product.recipient.form.name' | t }}"
+						value="{{ form.name }}"
+						{% if form.errors contains 'name' %}
+							aria-invalid="true"
+							aria-describedby="RecipientForm-name-error-{{ section.id }}"
+						{% endif %}
+					>
+
+					<label class="input-label" for="Recipient-name-{{ section.id }}">
+						{{- 'products.product.recipient.form.name_label' | t -}}
+					</label>
+
+					<div
+						id="RecipientForm-name-error-{{ section.id }}"
+						class="error js-form-error {% unless form.errors contains 'name' %} is-hidden{% endunless %}"
+					>
+						{%- if form.errors contains 'name' -%}
+							{{ form.errors.messages.name }}.
+						{%- endif -%}
+					</div>
+				</div>
+
+				<div class="textarea-wrapper recipient-form__field">
+					<textarea
+						rows="10"
+						id="Recipient-message-{{ section.id }}"
+						class="recipient-form__textarea textarea{% if form.errors contains 'message' %} error{% endif %} js-recipient-form-field"
+						name="properties[Message]"
+						placeholder="{{ 'products.product.recipient.form.message' | t }}"
+						{% if form.errors contains 'message' %}
+							aria-invalid="true"
+							aria-describedby="RecipientForm-message-error-{{ section.id }}"
+						{% endif %}
+					>
+						{{- form.message -}}
+					</textarea>
+
+					<label class="textarea-label" for="Recipient-message-{{ section.id }}">
+						{{- 'products.product.recipient.form.message_label' | t -}}
+					</label>
+
+					<div
+						id="RecipientForm-message-error-{{ section.id }}"
+						class="error js-form-error{% unless form.errors contains 'message' %} is-hidden{% endunless %}"
+					>
+						{%- if form.errors contains 'message' -%}
+							{{ form.errors.messages.message }}.
+						{%- endif -%}
+					</div>
+				</div>
+
+				<div class="input-wrapper recipient-form__field recipient-form__field--date">
+					<input
+						class="input{% if form.errors contains 'send_on' %} error{% endif %} js-recipient-form-field"
+						autocomplete="off"
+						type="date"
+						id="Recipient-send_on-{{ section.id }}"
+						name="properties[Send on]"
+						pattern="\d{4}-\d{2}-\d{2}"
+						value="{{ form.send_on }}"
+						{% if form.errors contains 'send_on' %}
+							aria-invalid="true"
+							aria-describedby="RecipientForm-send_on-error-{{ section.id }}"
+						{% endif %}
+					>
+
+					<label class="input-label" for="Recipient-send_on-{{ section.id }}">
+						{{ 'products.product.recipient.form.send_on_label' | t }}
+					</label>
+
+					<div
+						id="RecipientForm-send_on-error-{{ section.id }}"
+						class="error js-form-error {% unless form.errors contains 'send_on' %} is-hidden{% endunless %}"
+					>
+						{%- if form.errors contains 'send_on' -%}
+							{{ form.errors.messages.send_on }}.
+						{%- endif -%}
+					</div>
+
+					{%- render 'icons', icon: 'calendar' -%}
+				</div>
+			</div>
+
+			<input
+				type="hidden"
+				name="{{ gift_card_recipient_control_flag }}"
+				value="if_present"
+				id="Recipient-control-{{ section.id }}"
+				class="js-recipient-form-no-js-control"
+			>
+
+			<input
+				type="hidden"
+				name="properties[__shopify_offset]"
+				value=""
+				id="Recipient-timezone-offset-{{ section.id }}"
+				class="js-recipient-form-timezone-offset"
+			>
+		</div>
+	{% endif %}
+
+	{%- for b in blocks -%}
+		{%- if b.type == 'upsell_product_block' -%}
+			{%- render 'product-upsell', block: b -%}
+		{%- endif -%}
+	{%- endfor -%}
+
+	<button
+		type="submit"
+		class="add-to-cart button button--block button--{{- button_type }} {% unless product.first_available_variant.available %}disabled{% endunless %}"
+		{% if product.template_suffix == 'pre-order' %}
+			data-preorder
+		{% endif %}
+		{% unless product.first_available_variant.available %}
+			disabled
+		{% endunless %}
+		data-type="{{- button_type -}}"
+	>
+		{%- if button_type == 'primary' -%}
+			<span data-loading>{{- button_add_to_cart_text -}}</span>
+		{%- else -%}
+			<span data-text="{{- button_add_to_cart_text -}}">
+				<span>{{- button_add_to_cart_text -}}</span>
+			</span>
+		{%- endif -%}
+
+		{%- render 'icons', icon: 'loader' -%}
+	</button>
+
+	<div class="product-custom-banner-wrapper" style="order: 17; width: 100%; margin-top: 16px; margin-bottom: -10px;">
+		{%- assign is_hat = false -%}
+		{%- assign current_type = product.type | downcase -%}
+		{%- if current_type == 'hat' -%}
+			{%- assign is_hat = true -%}
+		{%- endif -%}
+		{%- for collection in product.collections -%}
+			{%- assign coll_title = collection.title | downcase -%}
+			{%- if coll_title == 'graphic tee' or collection.handle == 'graphic-tee' -%}
+				{%- assign is_hat = true -%}
+			{%- endif -%}
+		{%- endfor -%}
+
+		<picture>
+			{%- if is_hat -%}
+				<source media="(max-width: 767px)" srcset="https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Shipping-Mo1_b4238c92-15d6-448a-9a49-e812c6490d7a.jpg?v=1776857116">
+				<img src="https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Shipping-1item.jpg?v=1776857186" alt="Promo Banner" style="width: 100%; height: auto; border-radius: 6px 6px 0 0; display: block;">
+			{%- else -%}
+				<source media="(max-width: 767px)" srcset="https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Shipping-Mo.jpg?v=1776858319">
+				<img src="https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Shipping-2item.jpg?v=1776857227" alt="Promo Banner" style="width: 100%; height: auto; border-radius: 6px 6px 0 0; display: block;">
+			{%- endif -%}
+		</picture>
+	</div>
+
+	<div class="product-promo-banner-wrapper" style="order: 18; width: 100%;">
+		<style>
+			.product-add-to-cart .product-promo-banner-wrapper .product-promo-banner,
+			.product-add-to-cart .product-promo-banner-wrapper .product-promo-banner__img {
+				border-radius: 0 0 6px 6px !important;
+			}
+		</style>
+		{%- render 'product-promo-banner' -%}
+	</div>
+
+	{% if block.settings.show_additional_buttons %}
+		<div class="product-add-to-cart__additional-buttons product-add-to-cart__additional-buttons--{{ button_buy_it_type }}">
+			{{ form | payment_button }}
+		</div>
+	{% endif %}
+</div>
+
+{%- if show_sticky_add_to_cart -%}
+	<div class="mobile-sticky-atc js-mobile-sticky-atc" id="mobile-sticky-atc">
+		<button
+			type="button"
+			class="mobile-sticky-atc__btn js-mobile-sticky-atc-btn"
+			{% unless product.first_available_variant.available %}disabled{% endunless %}
+		>
+			{{- button_add_to_cart_text -}}
+		</button>
+	</div>
+
+	<style>
+		.product-add-to-cart .add-to-cart,
+		.product-add-to-cart__additional-buttons .shopify-payment-button__button,
+		.product-add-to-cart__additional-buttons .shopify-payment-button__button--branded,
+		.product-add-to-cart__additional-buttons .shopify-payment-button__button--unbranded {
+			border-radius: 8px !important;
+			background-color: var(--color-text-primary, #203224) !important;
+			color: #faf6ee !important;
+			font-family: 'Oswald', sans-serif !important;
+			font-size: 15px !important;
+			font-weight: 600 !important;
+			text-transform: uppercase !important;
+			letter-spacing: 0.08em !important;
+		}
+
+		/* Force flex layout on product-add-to-cart to easily reorder dynamically injected Apps */
+		.product-add-to-cart {
+			display: flex;
+			flex-direction: column;
+		}
+		
+		.product-add-to-cart > .add-to-cart {
+			order: 15; /* Put button below upsell */
+		}
+		
+		.product-add-to-cart > .product-add-to-cart__additional-buttons {
+			order: 20; /* Keep alternative payments at the bottom */
+		}
+		
+		/* Target any div injected by the BMSM app directly, force its styling to match Tactical Minimal */
+		.product-add-to-cart > div[class*="x1ghz6dp"], 
+		.product-add-to-cart > div:not(.product-upsell-block):not(.add-to-cart):not(.product-add-to-cart__additional-buttons):not(.product-add-to-cart__error):not(.recipient-form):not(.product-promo-banner-wrapper):not(.product-custom-banner-wrapper) {
+			order: 19; /* App block appears BELOW promo banner */
+			margin-bottom: 0px !important; /* reduce gap! */
+			margin-top: 16px !important;
+		}
+		.product-add-to-cart > div:not(.product-upsell-block):not(.add-to-cart):not(.product-add-to-cart__additional-buttons):not(.product-add-to-cart__error):not(.recipient-form):not(.product-promo-banner-wrapper):not(.product-custom-banner-wrapper) * {
+			border-radius: 0px !important;
+		}
+
+		.product-add-to-cart__additional-buttons,
+		.product-add-to-cart__additional-buttons .shopify-payment-button__button,
+		.product-add-to-cart__additional-buttons .shopify-payment-button__button--unbranded {
+			border-radius: 8px !important;
+		}
+
+		/* Ẩn nút "Buy with Shop" trên mobile */
+		@media screen and (max-width: 767px) {
+			.product-add-to-cart__additional-buttons {
+				display: none !important;
+			}
+		}
+
+		.mobile-sticky-atc {
+			display: none !important;
+		}
+		/* Mobile Layout (Sticky Footer) */
+		@media (max-width: 767.98px) {
+			.mobile-sticky-atc {
+				display: none !important;
+				position: fixed !important;
+				bottom: 0 !important;
+				left: 0 !important;
+				right: 0 !important;
+				z-index: 9999 !important;
+				background: transparent !important;
+				padding: 12px 16px !important;
+				padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important;
+				box-shadow: none !important;
+				transform: translateY(0) !important;
+				transition: transform 0.3s ease !important;
+				border: none !important;
+				margin: 0 !important;
+			}
+			.mobile-sticky-atc.is-hidden {
+				transform: translateY(150%) !important;
+			}
+			.mobile-sticky-atc__btn {
+				display: block !important;
+				width: 100% !important;
+				background: var(--color-text-primary, #203224) !important;
+				color: var(--color-background, #faf6ee) !important;
+				border: none !important;
+				padding: 15px 20px !important;
+				font-family: 'Oswald', sans-serif !important;
+				font-size: 14px !important;
+				font-weight: 600 !important;
+				text-transform: uppercase !important;
+				letter-spacing: 0.08em !important;
+				text-align: center !important;
+				cursor: pointer !important;
+				transition: opacity 0.2s !important;
+				line-height: 1.2 !important;
+				border-radius: 8px !important;
+				-webkit-appearance: none !important;
+				appearance: none !important;
+			}
+			.mobile-sticky-atc__btn:hover {
+				opacity: 0.85 !important;
+			}
+			.mobile-sticky-atc__btn:disabled {
+				opacity: 0.5 !important;
+				cursor: not-allowed !important;
+			}
+			html .footer {
+				padding-bottom: 70px;
+			}
+		}
+	</style>
+
+	<script>
+		(function() {
+			function initMobileStickyATC() {
+				var bar = document.getElementById('mobile-sticky-atc');
+				var realBtn = document.querySelector('.product-add-to-cart .add-to-cart');
+				if (!bar || !realBtn) return;
+
+				if (window.innerWidth > 767) {
+					bar.classList.add('is-hidden');
+					return;
+				}
+
+				bar.classList.remove('is-hidden');
+
+				var observer = new IntersectionObserver(function(entries) {
+					entries.forEach(function(entry) {
+						if (entry.isIntersecting) {
+							bar.classList.add('is-hidden');
+						} else {
+							// Show sticky bar ONLY if we haven't reached the real button yet (top of page)
+							if (entry.boundingClientRect.top > 0) {
+								bar.classList.remove('is-hidden');
+							} else {
+								bar.classList.add('is-hidden');
+							}
+						}
+					});
+				}, { threshold: 0 });
+
+				observer.observe(realBtn);
+
+				bar.querySelector('.js-mobile-sticky-atc-btn').addEventListener('click', function(e) {
+					e.preventDefault();
+					// Check if Customix App button exists and is visible
+					var customixBtn = document.querySelector('#cm-options button, [class*="customix"] button[type="submit"], [class*="customix"] button, [class*="cx-"] button');
+					if (customixBtn && customixBtn.offsetParent !== null) {
+						// Scroll up to the Customix form if user hasn't filled it out (Optional optimization)
+						// For now, just trigger Customix's own validation/add logic
+						customixBtn.click();
+					} else {
+						realBtn.click();
+					}
+				});
+			}
+
+			if (document.readyState === 'loading') {
+				document.addEventListener('DOMContentLoaded', initMobileStickyATC);
+			} else {
+				initMobileStickyATC();
+			}
+			document.addEventListener('shopify:section:load', initMobileStickyATC);
+		})();
+	</script>
+{%- endif -%}

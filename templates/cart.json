@@ -1,0 +1,63 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "cart-template": {
+      "type": "cart-template",
+      "settings": {
+        "enable_color_scheme_inheritance": true,
+        "color_scheme": "",
+        "heading": "Shopping cart",
+        "offset_top_desktop": 0,
+        "offset_bottom_desktop": 0,
+        "offset_top_mobile": 0,
+        "offset_bottom_mobile": 0,
+        "inner_offset_top": 64,
+        "inner_offset_bottom": 64,
+        "inner_offset_top_mobile": 32,
+        "inner_offset_bottom_mobile": 32
+      }
+    },
+    "1776833122e4c1950f": {
+      "type": "apps",
+      "blocks": {
+        "selleasy_lb_upsell_widget_icuc_Lr8VNA": {
+          "type": "shopify://apps/selleasy/blocks/lb-upsell-widget-icuc/790c1a03-a71f-4bc1-9869-00dad526d3c2",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "selleasy_lb_upsell_widget_icuc_Lr8VNA"
+      ],
+      "settings": {
+        "container_width": "inherit",
+        "offset_top_desktop": 25,
+        "offset_bottom_desktop": 25,
+        "offset_top_mobile": 25,
+        "offset_bottom_mobile": 25
+      }
+    },
+    "177683308375e8b19e": {
+      "type": "apps",
+      "settings": {
+        "container_width": "inherit",
+        "offset_top_desktop": 25,
+        "offset_bottom_desktop": 25,
+        "offset_top_mobile": 25,
+        "offset_bottom_mobile": 25
+      }
+    }
+  },
+  "order": [
+    "cart-template",
+    "1776833122e4c1950f",
+    "177683308375e8b19e"
+  ]
+}

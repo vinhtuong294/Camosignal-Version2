@@ -1,0 +1,292 @@
+{%- assign color_scheme      	           	= section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance 	= section.settings.enable_color_scheme_inheritance -%}
+
+{%- assign layout							= section.settings.product_promo_layout -%}
+{%- assign cookie_time						= section.settings.product_promo_cookie_time -%}
+
+{%- assign image_desktop 					= section.settings.product_promo_image_desktop -%}
+{%- assign image_mobile						= section.settings.product_promo_image_mobile | default: image_desktop -%}
+{%- assign heading 							= section.settings.product_promo_heading -%}
+{%- assign text 							= section.settings.product_promo_text -%}
+{%- assign product_promo_link_label 		= section.settings.product_promo_link_label -%}
+{%- assign product_promo_link_url 			= section.settings.product_promo_link_url -%}
+
+{%- assign product							= section.settings.product_promo_product -%}
+
+{%- assign product_promo_variant_count = product.variants.size -%}
+{%- if product.metafields.custom.enable_name.value or product.metafields.custom.enable_number.value -%}
+	{%- assign product_promo_variant_count = 2 -%}
+{%- endif -%}
+
+{%- assign image 							= product.featured_image | default: settings.product_default_image -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+<div
+	class="product-promo product-promo--{{- layout }} js-product-promo is-hidden color-{{- color_scheme }}{% if image == blank and layout == 'product' %} product-promo--no-image{% endif %}"
+	style="{{- style -}}"
+	data-cookie-time="{{- cookie_time -}}"
+	data-handle="{{- product.handle -}}"
+	data-variant-id="{{- product.first_available_variant.id -}}"
+	data-variant-count="{{- product_promo_variant_count -}}"
+>
+	{%- render 'adastra' with '/src/styles/product-promo.scss' -%}
+
+	{%- if layout == "text" -%}
+		{%- capture img_focal -%}
+			--img-desktop-pos: {{ image_desktop.presentation.focal_point }}; --img-mob-pos: {{ image_mobile.presentation.focal_point }};
+		{%- endcapture -%}
+
+			{%- if image_desktop != blank -%}
+				<div class="product-promo__col-image">
+					<picture class="product-promo__image-wrapper">
+						<source srcset="{{ image_mobile | image_url: height: 178 }} 1x, {{ image_mobile | image_url: height: 356 }} 2x" media="(max-width: 360px)" />
+						<source srcset="{{ image_mobile | image_url: height: 199 }} 1x, {{ image_mobile | image_url: height: 398 }} 2x" media="(max-width: 420px)" />
+						<source srcset="{{ image_mobile | image_url: height: 227 }} 1x, {{ image_mobile | image_url: height: 454 }} 2x" media="(max-width: 480px)" />
+						<source srcset="{{ image_mobile | image_url: height: 272 }} 1x, {{ image_mobile | image_url: height: 544 }} 2x" media="(max-width: 575px)" />
+						<source srcset="{{ image_desktop | image_url: height: 198 }} 1x, {{ image_desktop | image_url: height: 396 }} 2x" media="(max-width: 767px)" />
+
+						<img
+							class="product-promo__image"
+							src="{{- image_desktop | image_url: height: 202 -}}"
+							srcset="{{ image_desktop | image_url: height: 202 }} 1x, {{ image_desktop | image_url: height: 404 }} 2x"
+							alt="{{- image_desktop.alt -}}"
+							style="{{ img_focal }}"
+							loading="lazy"
+							fetchpriority="low"
+						/>
+					</picture>
+				</div>
+			{%- endif -%}
+
+		<div class="product-promo__content{% if image_desktop == blank %} product-promo__content--no-image{% endif %}">
+			<div class="product-promo__header">
+				<div class="product-promo__heading-container">
+					{%- if heading != blank -%}
+						<h2 class="h4 product-promo__heading">
+							{{- heading -}}
+						</h2>
+					{%- endif -%}
+				</div>
+
+				<button
+					class="product-promo__close focus-visible-outline js-product-promo-quick-view-button-close"
+					aria-label="{{- "general.accessibility.close" | t -}}"
+				>
+					{%- render 'icons', icon: 'menu-close' -%}
+				</button>
+			</div>
+
+			{%- if text != blank -%}
+				<p class="product-promo__text">
+					{{- text -}}
+				</p>
+			{%- endif -%}
+
+			{%- if product_promo_link_label != blank and product_promo_link_url != blank -%}
+				<a
+					class="button-link product-promo__button-link"
+					href="{{- product_promo_link_url -}}"
+				>
+					<span data-text="{{- product_promo_link_label -}}">
+						<span>{{- product_promo_link_label -}}</span>
+					</span>
+				</a>
+			{%- endif -%}
+		</div>
+	{%- else -%}
+		{%- capture img_focal -%}
+			--img-desktop-pos: {{ image.presentation.focal_point }};
+		{%- endcapture -%}
+
+		<div class="product-promo__media">
+			<a href="{{- product.url -}}" class="focus-visible-outline product-promo__link">
+				<span class="visually-hidden">
+				   {{- product.title -}}
+				</span>
+			</a>
+
+				{%- if image != blank -%}
+					<div class="product-promo__image-wrapper">
+						{%- if product != blank -%}
+							<img
+								class="product-promo__image"
+								src="{{ image | image_url: height: 94 }}"
+								srcset="{{ image | image_url: height: 94  }} 1x, {{ image | image_url: height: 188 }} 2x"
+								width="69"
+								height="94"
+								alt="{{- image.alt | escape -}}"
+								loading="lazy"
+								fetchpriority="low"
+								{% if img_focal != blank %}
+									style="{{ img_focal }}"
+								{% endif %}
+							/>
+						{%- else -%}
+							{{- 'product-1' | placeholder_svg_tag: 'product-promo__image' -}}
+						{%- endif -%}
+					</div>
+				{%- endif -%}
+			</div>
+
+		<div class="product-promo__content">
+			<a class="focus-visible-outline product-promo__title" href="{{- product.url -}}">
+				{%- if product != blank -%}
+					{{- product.title -}}
+				{%- else -%}
+					{{- 'products.product_card.product_title' | t -}}
+				{%- endif -%}
+			</a>
+
+			<div class="product-promo__price">
+				{%- render 'price', product: product -%}
+			</div>
+		</div>
+
+		<button
+			class="button button--secondary product-promo__button js-product-promo-quick-view-button focus-visible-outline"
+			aria-label="{{- 'product_promo.button_aria' | t: product_title: product.title | escape -}}"
+			{%- unless product.available -%}disabled{%- endunless -%}
+		>
+			{%- render 'icons', icon: 'cart' -%}
+		</button>
+
+		<button
+			class="product-promo__close focus-visible-outline js-product-promo-quick-view-button-close"
+			aria-label="{{- "general.accessibility.close" | t -}}"
+		>
+			{%- render 'icons', icon: 'menu-close' -%}
+		</button>
+	{%- endif -%}
+
+	{%- render 'adastra' with '/src/scripts/section-product-promo.js' -%}
+</div>
+
+{%- schema -%}
+{
+	"name": "Product promo",
+	"limit": 1,
+	"enabled_on": {
+		"groups": ["custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "General"
+		},
+		{
+			"type": "select",
+			"id": "product_promo_layout",
+			"label": "Layout",
+			"options": [
+				{
+					"value": "text",
+					"label": "Text"
+				},
+				{
+					"value": "product",
+					"label": "Product"
+				}
+			],
+			"default": "product"
+		},
+		{
+			"type": "select",
+			"id": "product_promo_cookie_time",
+			"label": "Cookie time",
+			"options": [
+				{
+					"value": "1",
+					"label": "1 day"
+				},
+				{
+					"value": "7",
+					"label": "1 week"
+				},
+				{
+					"value": "30",
+					"label": "1 month"
+				},
+				{
+					"value": "90",
+					"label": "3 months"
+				},
+				{
+					"value": "360",
+					"label": "1 year"
+				}
+			],
+			"default": "1"
+		},
+		{
+			"type": "header",
+			"content": "Text"
+		},
+		{
+			"type": "image_picker",
+			"id": "product_promo_image_desktop",
+			"label": "Image desktop"
+		},
+		{
+			"type": "image_picker",
+			"id": "product_promo_image_mobile",
+			"label": "Image mobile"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "product_promo_heading",
+			"label": "Heading",
+			"default": "Get 10% off"
+		},
+		{
+			"type": "textarea",
+			"id": "product_promo_text",
+			"label": "Text"
+		},
+		{
+			"type": "text",
+			"id": "product_promo_link_label",
+			"label": "Link label",
+			"default": "Learn More"
+		},
+		{
+			"type": "url",
+			"id": "product_promo_link_url",
+			"label": "Link url"
+		},
+		{
+			"type": "header",
+			"content": "Product"
+		},
+		{
+			"type": "product",
+			"id": "product_promo_product",
+			"label": "Product"
+		}
+	],
+	"presets": [
+		{
+			"name": "Product promo"
+		}
+	]
+}
+{%- endschema -%}

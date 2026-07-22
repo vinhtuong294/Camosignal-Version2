@@ -1,0 +1,212 @@
+.newsletter-popup {
+  padding-top: 56px;
+  padding-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+.newsletter-popup:not(.is-active) .newsletter-popup__image {
+  display: none;
+}
+.newsletter-popup .newsletter-popup__column {
+  display: block;
+  width: 100%;
+}
+.newsletter-popup .newsletter-popup__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  padding: 24px 16px;
+}
+.newsletter-popup .newsletter-popup__text {
+  margin-top: 16px;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+.newsletter-popup .newsletter-popup__box-text {
+  width: 100%;
+}
+.newsletter-popup .newsletter-popup__images-row {
+  display: flex;
+  width: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
+  column-gap: 11px;
+  min-height: 312px;
+  max-height: 312px;
+  overflow: hidden;
+}
+.newsletter-popup .newsletter-popup__image-col {
+  display: flex;
+  flex-direction: column;
+  width: 33.3333%;
+  max-height: max-content;
+}
+.newsletter-popup .newsletter-popup__image-col-inner {
+  display: flex;
+  flex-direction: column;
+  row-gap: 11px;
+  padding-bottom: 11px;
+}
+.newsletter-popup .newsletter-popup__image-col-inner.newsletter-popup__image-col-inner--animated {
+  will-change: transform;
+  animation-direction: normal;
+  animation-duration: var(--mobile-movement-speed);
+  animation-timing-function: linear;
+  animation-delay: var(--timing-base);
+  animation-iteration-count: infinite;
+  height: max-content;
+}
+.newsletter-popup .newsletter-popup__image-col:nth-child(1) .newsletter-popup__image-col-inner, .newsletter-popup .newsletter-popup__image-col:nth-child(3) .newsletter-popup__image-col-inner {
+  animation-name: animateImageColUp;
+}
+.newsletter-popup .newsletter-popup__image-col:nth-child(2) .newsletter-popup__image-col-inner {
+  animation-name: animateImageColBottom;
+}
+.newsletter-popup .newsletter-popup__image-col.newsletter-popup__image-col--animation-reverse:nth-child(1) .newsletter-popup__image-col-inner, .newsletter-popup .newsletter-popup__image-col.newsletter-popup__image-col--animation-reverse:nth-child(3) .newsletter-popup__image-col-inner {
+  animation-name: animateImageColBottom;
+}
+.newsletter-popup .newsletter-popup__image-col.newsletter-popup__image-col--animation-reverse:nth-child(2) .newsletter-popup__image-col-inner {
+  animation-name: animateImageColUp;
+}
+.newsletter-popup .newsletter-popup__image-col.newsletter-popup__image-col--static:nth-child(1) {
+  transform: translateY(-18%);
+}
+.newsletter-popup .newsletter-popup__image-col.newsletter-popup__image-col--static:nth-child(2) {
+  transform: translateY(0.1%);
+}
+.newsletter-popup .newsletter-popup__image-col.newsletter-popup__image-col--static:nth-child(3) {
+  transform: translateY(-27.5%);
+}
+.newsletter-popup .newsletter-popup__image-wrapper {
+  position: relative;
+  padding-top: 151.1%;
+}
+.newsletter-popup .newsletter-popup__image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition-property: transform;
+  transition-duration: var(--timing-base);
+  transition-timing-function: var(--easing-ease-out);
+  object-fit: cover;
+  object-position: var(--img-pos);
+}
+.newsletter-popup .newsletter-popup__image.newsletter-popup__image--placeholder {
+  background-color: var(--color-img-placeholder-bg);
+  fill: var(--color-text-primary);
+}
+.newsletter-popup .social-links {
+  margin-top: 24px;
+}
+.newsletter-popup .social-links .social-links__list {
+  gap: 12px;
+}
+.newsletter-popup.is-current .newsletter-popup-form__message {
+  display: flex;
+}
+@media (min-width: 768px) {
+  .newsletter-popup {
+    max-width: 600px;
+  }
+  .newsletter-popup .newsletter-popup__images-row {
+    min-height: 400px;
+    max-height: 400px;
+  }
+}
+@media (min-width: 992px) {
+  .newsletter-popup {
+    max-width: 950px;
+    justify-content: flex-end;
+    flex-direction: row;
+    padding-top: 0;
+  }
+  .newsletter-popup.newsletter-popup--no-image {
+    max-width: 540px;
+  }
+  .newsletter-popup.newsletter-popup--no-image .newsletter-popup__box-text {
+    width: 100%;
+  }
+  .newsletter-popup .newsletter-popup__image-col-inner {
+    row-gap: 21px;
+    padding-bottom: 21px;
+  }
+  .newsletter-popup .newsletter-popup__image-col-inner.newsletter-popup__image-col-inner--animated {
+    animation-duration: var(--desktop-movement-speed);
+  }
+  .newsletter-popup .newsletter-popup__box-text {
+    width: 45%;
+  }
+  .newsletter-popup .newsletter-popup__images-row {
+    position: absolute;
+    inset-inline-start: 0;
+    top: 0;
+    column-gap: 21px;
+    width: 55%;
+    min-height: 100%;
+    max-height: 100%;
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+  .newsletter-popup .newsletter-popup__content {
+    padding: 110px 32px;
+  }
+}
+@media (min-width: 1501px) {
+  .newsletter-popup {
+    max-width: 1200px;
+  }
+}
+.newsletter-popup-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 24px;
+}
+.newsletter-popup-form .newsletter-popup-form__field {
+  position: relative;
+  width: 100%;
+  margin-bottom: 32px;
+}
+.newsletter-popup-form .newsletter-popup-form__button {
+  width: 100%;
+  margin-bottom: 16px;
+}
+.newsletter-popup-form .newsletter-popup-form__message {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  font-weight: normal;
+}
+.newsletter-popup-form .newsletter-popup-form__message.newsletter-popup-form__message--error {
+  color: var(--color-text-attention);
+}
+.newsletter-popup-form .newsletter-popup-form__message.newsletter-popup-form__message--success {
+  color: var(--color-text-success);
+}
+.newsletter-popup-form .newsletter-popup-form__message .icon {
+  width: 24px;
+  height: 24px;
+  margin-inline-end: 10px;
+  transform: scale(1.3);
+}
+@media (min-width: 768px) {
+  .newsletter-popup-form .newsletter-popup-form__message {
+    justify-content: flex-start;
+  }
+}
+@media (min-width: 1200px) {
+  .newsletter-popup-form {
+    margin-top: 24px;
+  }
+}
+html.no-js .newsletter-popup-form__message {
+  display: flex;
+}

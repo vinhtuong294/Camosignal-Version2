@@ -1,0 +1,396 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Best seller products
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/carousel.scss' -%}
+{%- render 'adastra' with '/src/styles/featured-products.scss' -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	/* Mobile: 1-line truncation for product titles */
+	@media screen and (max-width: 767px) {
+		#shopify-section-{{- section.id -}} .product-card .product-card__title {
+			min-height: auto !important;
+			line-height: 1.4 !important;
+			display: block !important;
+			white-space: nowrap !important;
+			overflow: hidden !important;
+			text-overflow: ellipsis !important;
+			word-break: normal !important;
+			overflow-wrap: normal !important;
+			-webkit-line-clamp: unset !important;
+			-webkit-box-orient: unset !important;
+			font-weight: 500 !important;
+			text-transform: capitalize !important;
+			font-size: 13px !important;
+		}
+		#shopify-section-{{- section.id -}} .product-card__footer {
+			padding: 0 !important;
+			margin-top: 5px !important;
+		}
+		#shopify-section-{{- section.id -}} .product-card__custom-quick-add {
+			display: none !important;
+		}
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign heading = section.settings.heading -%}
+{%- assign collection = section.settings.collection -%}
+{%- assign hidden_products = section.settings.hidden_products -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme = section.settings.color_scheme -%}
+{%- assign container = section.settings.container_width -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- capture section_styles -%}
+	--container-width: {{- container_width -}};
+	--inner-offset-top: {{ section.settings.inner_offset_top }}px;
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom }}px;
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px;
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px;
+{%- endcapture -%}
+
+{%- assign products_source = collections['all'].products -%}
+{%- if collection != blank -%}
+	{%- assign products_source = collection.products -%}
+{%- endif -%}
+
+<section
+	class="featured-products section-animate featured-products--layout-4 color-{{ color_scheme.id }} js-animate js-featured-products"
+	id="{{- section.id -}}"
+	style="{{- section_styles -}}"
+>
+	<div class="container">
+		{%- if heading != blank -%}
+			<div class="featured-products__header">
+				<h2>
+					{{- heading -}}
+				</h2>
+			</div>
+		{%- endif -%}
+
+		<div class="featured-products__slider swiper js-featured-products-slider" data-slides-in-row="4">
+			<div class="featured-products__row swiper-wrapper">
+				{%- assign display_count = 0 -%}
+				{%- assign hidden_handles = "," -%}
+				
+				{%- if hidden_products != blank -%}
+					{%- for hidden_prod in hidden_products -%}
+						{%- assign hidden_handles = hidden_handles | append: hidden_prod.handle | append: "," -%}
+					{%- endfor -%}
+				{%- endif -%}
+
+				{%- for product in products_source -%}
+					{%- if display_count >= 4 -%}
+						{%- break -%}
+					{%- endif -%}
+
+					{%- unless product.selected_or_first_available_variant.requires_shipping -%}
+						{%- continue -%}
+					{%- endunless -%}
+
+					{%- assign is_hidden = false -%}
+					{%- assign target_handle = "," | append: product.handle | append: "," -%}
+					{%- if hidden_handles contains target_handle -%}
+						{%- assign is_hidden = true -%}
+					{%- endif -%}
+
+					{%- if is_hidden == false -%}
+						{%- assign display_count = display_count | plus: 1 -%}
+						
+						<div class="featured-products__col swiper-slide js-featured-products-slide">
+							{% assign is_lazy = true %}
+							{% if section.index == 1 and display_count == 1 %}
+								{% assign is_lazy = false %}
+							{% endif %}
+
+							{%- render 'product-card',
+								product: product,
+								size: 439,
+								tablet_size: 328,
+								mobile_size: 308,
+								is_lazy: is_lazy
+							-%}
+						</div>
+					{%- endif -%}
+				{%- endfor -%}
+
+				{%- if display_count == 0 -%}
+					{%- for i in (1..4) -%}
+						<div class="featured-products__col swiper-slide js-featured-products-slide">
+							{%- render 'product-card' -%}
+						</div>
+					{%- endfor -%}
+				{%- endif -%}
+			</div>
+		</div>
+	</div>
+</section>
+
+{%- comment -%} Mobile-only: Featured products grid layout {%- endcomment -%}
+<style>
+	@media screen and (max-width: 767px) {
+		#shopify-section-{{ section.id }} .featured-products__slider {
+			overflow: visible !important;
+			cursor: default !important;
+			padding-bottom: 0 !important;
+			margin-bottom: 0 !important;
+		}
+		/* Ensure container padding is respected */
+		#shopify-section-{{ section.id }} .container {
+			padding-left: 16px !important;
+			padding-right: 16px !important;
+		}
+		#shopify-section-{{ section.id }} .featured-products__row {
+			display: grid !important;
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+			gap: 24px 12px !important;
+			transform: none !important;
+			transition: none !important;
+			flex-wrap: unset !important;
+			overflow: visible !important;
+			margin-bottom: 0 !important;
+			padding-bottom: 0 !important;
+		}
+		#shopify-section-{{ section.id }} .featured-products__col {
+			width: 100% !important;
+			margin: 0 !important;
+			flex-shrink: unset !important;
+		}
+		/* Truncate product title to 1 line with ellipsis on mobile */
+		#shopify-section-{{ section.id }} .product-card__title {
+			display: block !important;
+			white-space: nowrap !important;
+			overflow: hidden !important;
+			text-overflow: ellipsis !important;
+			-webkit-line-clamp: unset !important;
+			-webkit-box-orient: unset !important;
+			word-break: normal !important;
+			overflow-wrap: normal !important;
+			min-height: auto !important;
+			font-weight: 500 !important;
+			text-transform: capitalize !important;
+			font-size: 13px !important;
+		}
+		/* Override any swiper pagination/scrollbar */
+		#shopify-section-{{ section.id }} .swiper-pagination,
+		#shopify-section-{{ section.id }} .swiper-scrollbar {
+			display: none !important;
+		}
+		/* Soften product card images on mobile */
+		#shopify-section-{{ section.id }} .product-card__image img {
+			filter: brightness(1.03) contrast(0.95) saturate(0.92);
+		}
+		#shopify-section-{{ section.id }} .product-card__image {
+			border-radius: 10px;
+			overflow: hidden;
+		}
+	}
+</style>
+<script>
+	/* On mobile: prevent swiper from initializing by removing trigger class */
+	(function() {
+		if (window.matchMedia('(max-width: 767px)').matches) {
+			var section = document.getElementById('{{ section.id }}');
+			if (section) {
+				section.classList.remove('js-featured-products');
+			}
+		}
+	})();
+</script>
+
+{%- render 'adastra' with '/src/scripts/section-featured-products.js' -%}
+
+{%- schema -%}
+{
+	"name": "Best seller products",
+	"class": "featured-products-wrapper",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "General"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "heading",
+			"label": "Heading",
+			"default": "Best seller products"
+		},
+		{
+			"type": "collection",
+			"id": "collection",
+			"label": "Source Collection",
+			"info": "If empty, will use 'All' products collection. Ensure your collection is sorted by 'Best Selling' in Shopify Admin."
+		},
+		{
+			"type": "product_list",
+			"id": "hidden_products",
+			"label": "Products to hide",
+			"info": "Select products to exclude from the best sellers list. The next best seller will automatically be pushed up to replace them."
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1808px",
+					"label": "Default - 1680px"
+				},
+				{
+					"value": "2048px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit"
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset top",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset bottom",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset top",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset bottom",
+			"default": 30
+		},
+		{
+			"type": "paragraph",
+			"content": "Internal offsets"
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset top",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset bottom",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset top",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset bottom",
+			"default": 30
+		}
+	],
+	"presets": [
+		{
+			"name": "Best seller products"
+		}
+	]
+}
+{%- endschema -%}

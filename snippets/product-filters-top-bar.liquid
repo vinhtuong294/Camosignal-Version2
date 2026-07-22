@@ -1,0 +1,110 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Product filters top bar
+	- product_list: Collection or Search object (required)
+	- filter_type: filter type (sidebar/top-bar/drawer) (required)
+	- show_swatches: boolean. Set true to show swatches instead of checkbox
+
+	Usage:
+
+	{%- render 'product-filters-top-bar', product_list: product_list, filter_type: 'top-bar' -%}
+	or
+	{%- render 'product-filters-top-bar', product_list: product_list, filter_type: 'top-bar' -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/collapse.scss' -%}
+
+{%- if template.name == 'collection' -%}
+	{%- assign count = product_list.products_count -%}
+{%- elsif template.name == 'search' -%}
+	{%- assign count = product_list.results_count -%}
+{%- endif -%}
+
+{%- assign id = filter_type -%}
+
+
+{%- if product_list != blank -%}
+	<div class="product-filters">
+		<form class="product-filters__form js-form">
+			<div class="product-filters__form-body">
+				<div
+					class="collapse product-filters__form-collapse-container js-collapse-container js-filters-container"
+					id="filters-container-{{ section.id }}-{{ filter.param_name | escape }}-{{- id -}}"
+				>
+					{%- assign filterListIndex = 1 -%}
+
+					{%- for filter in product_list.filters -%}
+						{%- if filter.type == 'list' and filter.values.size == 0 or filter.type == 'boolean' and filter.values.size == 0 -%}
+							{%- continue -%}
+						{%- endif -%}
+
+						{%- assign downcased_label = filter.label | downcase -%}
+						{%- assign downcased_param = filter.param_name | downcase -%}
+						{%- if downcased_param contains 'terrain' or downcased_label contains 'terrain' -%}
+							{%- continue -%}
+						{%- endif -%}
+						{%- if filter.param_name contains 'availab' or downcased_label contains 'availab' or downcased_label contains 'tình trạng' or filter.type == 'boolean' -%}
+							{%- continue -%}
+						{%- endif -%}
+
+						<div
+							id="filter-{{ section.id }}-{{ filter.param_name | escape }}-{{- id -}}"
+							class="collapse__item product-filters__form-collapse-item js-collapse-item  js-filter-item"
+						>
+							<button
+								class="focus-visible-outline collapse__control product-filters__form-collapse-item-control js-collapse-control"
+								type="button"
+								id="Filter-collapse-{{ section.id }}-{{- filterListIndex -}}-{{- id -}}"
+								aria-controls="filter-list-{{ section.id }}-{{- filterListIndex -}}-{{- id -}}"
+								aria-expanded="false"
+							>
+								<span typeof="product-filters__form-collapse-item-title">
+									{{- filter.label -}}
+
+									<span class="js-filter-item-counter">
+										{%- if filter.active_values.size > 0 and filter.type != 'price_range' -%}
+											&nbsp;({{- filter.active_values.size -}})
+										{%- endif -%}
+									</span>
+								</span>
+
+								{%- render 'icons', icon: 'arrow-down' -%}
+							</button>
+
+							<div
+								class="collapse__modal product-filters__form-collapse-item-modal js-collapse-modal"
+								id="filter-list-{{ section.id }}-{{- filterListIndex -}}-{{- id -}}"
+								aria-labelledby="Filter-collapse-{{ section.id }}-{{- filterListIndex -}}-{{- id -}}"
+								role="dialog"
+								aria-modal="true"
+								style="height: 0;"
+							>
+								<div class="collapse__content product-filters__form-collapse-item-content js-collapse-content">
+									<div class="collapse__content-inner">
+										<div class="collapse__content-wrapper">
+											{%- case filter.type -%}
+												{%- when 'list' or 'boolean' -%}
+													{% if filter.operator == "AND" %}
+														<span class="product-filters__form-helptext">
+															{{- 'general.filters.filter_and_operator_subtitle' | t -}}
+														</span>
+													{% endif %}
+
+													{%- render 'filter-list', filter: filter, show_swatches: show_swatches, filter_type: 'top-bar', id: 'top-bar' -%}
+												{%- when 'price_range' -%}
+													{%- render 'filter-price', filter: filter, id: 'top-bar' -%}
+											{%- endcase -%}
+										</div>
+									</div>
+								</div>
+							</div>
+
+							{%- assign filterListIndex = filterListIndex | plus: 1 -%}
+						</div>
+					{%- endfor -%}
+				</div>
+			</div>
+		</form>
+	</div>
+{%- endif -%}

@@ -1,0 +1,768 @@
+{%- render 'adastra' with '/src/styles/product-card.scss' -%}
+
+{%- liquid
+	assign special_collection_handles = ',world-turkey-slam,grand-slam-subspecies,'
+	assign excluded_related_collection_handles = ',all,best-seller,best-sellers,graphictee,graphic-tee,'
+	assign excluded_trending_collection_handles = ',all,best-seller,best-sellers,new-arrival,new-arrivals,graphictee,graphic-tee,'
+	assign selected_entries = ''
+	assign selected_handles = ','
+	assign selected_entries_count = 0
+	assign exception_collection = blank
+
+	for product_collection in product.collections
+		assign wrapped_handle = ',' | append: product_collection.handle | append: ','
+
+		if special_collection_handles contains wrapped_handle
+			assign exception_collection = product_collection
+			break
+		endif
+	endfor
+
+	if exception_collection != blank
+		assign selected_entries_count = 0
+	else
+		assign related_collections = product.collections | sort: 'all_products_count'
+		assign product_collection_count = 0
+
+		for product_collection in related_collections
+			assign wrapped_handle = ',' | append: product_collection.handle | append: ','
+
+			if special_collection_handles contains wrapped_handle
+				continue
+			endif
+
+			if excluded_related_collection_handles contains wrapped_handle
+				continue
+			endif
+
+			if selected_handles contains wrapped_handle
+				continue
+			endif
+
+			if product_collection.all_products_count <= 1
+				continue
+			endif
+
+			assign selected_entries = selected_entries | append: product_collection.handle | append: '::product||'
+			assign selected_handles = selected_handles | append: product_collection.handle | append: ','
+			assign product_collection_count = product_collection_count | plus: 1
+			assign selected_entries_count = selected_entries_count | plus: 1
+
+			if product_collection_count >= 2
+				break
+			endif
+		endfor
+
+		if product_collection_count < 2
+			assign new_arrivals_collection = collections['new-arrivals']
+
+			if new_arrivals_collection == blank
+				assign new_arrivals_collection = collections['new-arrival']
+			endif
+
+			if new_arrivals_collection != blank
+				assign wrapped_handle = ',' | append: new_arrivals_collection.handle | append: ','
+
+				unless selected_handles contains wrapped_handle
+					assign selected_entries = selected_entries | append: new_arrivals_collection.handle | append: '::product||'
+					assign selected_handles = selected_handles | append: new_arrivals_collection.handle | append: ','
+					assign product_collection_count = product_collection_count | plus: 1
+					assign selected_entries_count = selected_entries_count | plus: 1
+				endunless
+			endif
+		endif
+
+		assign weekly_trending_collections_metafield = shop.metafields.sidekick.weekly_trending_collections
+		assign weekly_trending_collections_count = 0
+
+		if weekly_trending_collections_metafield != blank
+			for weekly_trending_collection in weekly_trending_collections_metafield.value limit: 10
+				if weekly_trending_collection == blank
+					continue
+				endif
+
+				assign wrapped_handle = ',' | append: weekly_trending_collection.handle | append: ','
+
+				if special_collection_handles contains wrapped_handle
+					continue
+				endif
+
+				if excluded_trending_collection_handles contains wrapped_handle
+					continue
+				endif
+
+				if selected_handles contains wrapped_handle
+					continue
+				endif
+
+				assign selected_entries = selected_entries | append: weekly_trending_collection.handle | append: '::weekly-trending||'
+				assign selected_handles = selected_handles | append: weekly_trending_collection.handle | append: ','
+				assign weekly_trending_collections_count = weekly_trending_collections_count | plus: 1
+				assign selected_entries_count = selected_entries_count | plus: 1
+
+				if weekly_trending_collections_count >= 2
+					break
+				endif
+			endfor
+		endif
+
+		if weekly_trending_collections_count < 2
+			assign best_seller_collection_1 = section.settings.best_seller_collection_1
+			assign best_seller_collection_2 = section.settings.best_seller_collection_2
+
+			if best_seller_collection_1 != blank
+				assign wrapped_handle = ',' | append: best_seller_collection_1.handle | append: ','
+
+				unless excluded_trending_collection_handles contains wrapped_handle
+					unless selected_handles contains wrapped_handle
+						assign selected_entries = selected_entries | append: best_seller_collection_1.handle | append: '::weekly-trending||'
+						assign selected_handles = selected_handles | append: best_seller_collection_1.handle | append: ','
+						assign weekly_trending_collections_count = weekly_trending_collections_count | plus: 1
+						assign selected_entries_count = selected_entries_count | plus: 1
+					endunless
+				endunless
+			endif
+
+			if weekly_trending_collections_count < 2 and best_seller_collection_2 != blank
+				assign wrapped_handle = ',' | append: best_seller_collection_2.handle | append: ','
+
+				unless excluded_trending_collection_handles contains wrapped_handle
+					unless selected_handles contains wrapped_handle
+						assign selected_entries = selected_entries | append: best_seller_collection_2.handle | append: '::weekly-trending||'
+						assign selected_handles = selected_handles | append: best_seller_collection_2.handle | append: ','
+						assign weekly_trending_collections_count = weekly_trending_collections_count | plus: 1
+						assign selected_entries_count = selected_entries_count | plus: 1
+					endunless
+				endunless
+			endif
+		endif
+	endif
+
+	assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance
+	assign color_scheme = section.settings.color_scheme
+
+	if enable_color_scheme_inheritance
+		assign color_scheme = settings.main_color_scheme
+	endif
+
+	assign container = section.settings.container_width
+
+	if container == 'inherit'
+		assign container_width = settings.container_width
+	else
+		assign container_width = container
+	endif
+-%}
+
+{%- capture section_styles -%}
+	--container-width: {{- container_width -}};
+	--inner-offset-top: {{- section.settings.inner_offset_top -}}px;
+	--inner-offset-bottom: {{- section.settings.inner_offset_bottom -}}px;
+	--inner-offset-top-mobile: {{- section.settings.inner_offset_top_mobile -}}px;
+	--inner-offset-bottom-mobile: {{- section.settings.inner_offset_bottom_mobile -}}px;
+	--product-collections-heading-size-desktop: {{- section.settings.heading_font_size_desktop | default: 34 -}}px;
+	--product-collections-heading-size-mobile: {{- section.settings.heading_font_size_mobile | default: 24 -}}px;
+{%- endcapture -%}
+
+{%- assign selected_entry_list = selected_entries | split: '||' -%}
+{%- assign rendered_exception_product_count = 0 -%}
+{%- assign rendered_collection_count = 0 -%}
+{%- assign rendered_collection_handles = ',' -%}
+
+{%- capture exception_product_cards_markup -%}
+	{%- if exception_collection != blank -%}
+		{%- for exception_product in exception_collection.products limit: 6 -%}
+			{%- assign rendered_exception_product_count = rendered_exception_product_count | plus: 1 -%}
+			<div class="product-collections-showcase__product-item{% if rendered_exception_product_count > 4 %} product-collections-showcase__product-item--desktop-hidden{% endif %}">
+				{%- render 'product-card',
+					product: exception_product,
+					collection: exception_collection,
+					size: 360,
+					tablet_size: 328,
+					mobile_size: 308,
+					is_lazy: true
+				-%}
+			</div>
+		{%- endfor -%}
+	{%- endif -%}
+{%- endcapture -%}
+
+{%- capture collection_cards_markup -%}
+	{%- for selected_entry in selected_entry_list -%}
+		{%- assign selected_entry = selected_entry | strip -%}
+
+		{%- if selected_entry == blank -%}
+			{%- continue -%}
+		{%- endif -%}
+
+		{%- assign entry_parts = selected_entry | split: '::' -%}
+		{%- assign collection_handle = entry_parts[0] | strip -%}
+		{%- assign active_collection = collections[collection_handle] -%}
+
+		{%- if active_collection == blank -%}
+			{%- continue -%}
+		{%- endif -%}
+
+		{%- assign rendered_wrapped_handle = ',' | append: collection_handle | append: ',' -%}
+
+		{%- if rendered_collection_handles contains rendered_wrapped_handle -%}
+			{%- continue -%}
+		{%- endif -%}
+
+		{%- assign rendered_collection_handles = rendered_collection_handles | append: collection_handle | append: ',' -%}
+		{%- assign rendered_collection_count = rendered_collection_count | plus: 1 -%}
+
+		<div class="product-collections-showcase__item">
+			<a
+				class="product-collections-showcase__card"
+				href="{{- active_collection.url -}}"
+				aria-label="{{- active_collection.title | escape -}}"
+			>
+				<span class="product-collections-showcase__media product-collections-showcase__media--mobile">
+					{%- assign mobile_product_image = blank -%}
+					{%- assign mobile_product_title = active_collection.title -%}
+
+					{%- for collection_product in active_collection.products limit: 12 -%}
+						{%- if collection_product.featured_image == blank -%}
+							{%- continue -%}
+						{%- endif -%}
+
+						{%- assign mobile_product_image = collection_product.featured_image -%}
+						{%- assign mobile_product_title = collection_product.title -%}
+						{%- break -%}
+					{%- endfor -%}
+
+					{%- assign mobile_product_image = mobile_product_image | default: active_collection.featured_image | default: settings.product_default_image -%}
+
+					{%- if mobile_product_image != blank -%}
+						{{-
+							mobile_product_image
+							| image_url: width: 520
+							| image_tag:
+								class: 'product-collections-showcase__image',
+								loading: 'lazy',
+								alt: mobile_product_title
+						-}}
+					{%- else -%}
+						{{- 'product-1' | placeholder_svg_tag: 'product-collections-showcase__image product-collections-showcase__image--placeholder' -}}
+					{%- endif -%}
+				</span>
+
+				<span class="product-collections-showcase__media product-collections-showcase__media--desktop">
+					{%- assign rendered_media_count = 0 -%}
+
+					{%- for collection_product in active_collection.products limit: 12 -%}
+						{%- if rendered_media_count >= 4 -%}
+							{%- break -%}
+						{%- endif -%}
+
+						{%- assign product_image = collection_product.featured_image -%}
+
+						{%- if product_image == blank -%}
+							{%- continue -%}
+						{%- endif -%}
+
+						{%- assign rendered_media_count = rendered_media_count | plus: 1 -%}
+
+						<span class="product-collections-showcase__media-tile">
+							{{-
+								product_image
+								| image_url: width: 360
+								| image_tag:
+									class: 'product-collections-showcase__image',
+									loading: 'lazy',
+									alt: collection_product.title
+							-}}
+						</span>
+					{%- endfor -%}
+
+					{%- if rendered_media_count < 4 -%}
+						{%- for supplemental_product in active_collection.products limit: 12 -%}
+							{%- for supplemental_image in supplemental_product.images offset: 1 limit: 4 -%}
+								{%- if rendered_media_count >= 4 -%}
+									{%- break -%}
+								{%- endif -%}
+
+								{%- assign rendered_media_count = rendered_media_count | plus: 1 -%}
+
+								<span class="product-collections-showcase__media-tile">
+									{{-
+										supplemental_image
+										| image_url: width: 360
+										| image_tag:
+											class: 'product-collections-showcase__image',
+											loading: 'lazy',
+											alt: supplemental_product.title
+									-}}
+								</span>
+							{%- endfor -%}
+
+							{%- if rendered_media_count >= 4 -%}
+								{%- break -%}
+							{%- endif -%}
+						{%- endfor -%}
+					{%- endif -%}
+
+					{%- if rendered_media_count == 0 -%}
+						<span class="product-collections-showcase__media-tile product-collections-showcase__media-tile--full">
+							{{- 'product-1' | placeholder_svg_tag: 'product-collections-showcase__image product-collections-showcase__image--placeholder' -}}
+						</span>
+					{%- endif -%}
+
+				</span>
+
+				<span class="product-collections-showcase__content">
+					<span class="product-collections-showcase__text">
+						<span class="product-collections-showcase__title">
+							{{- active_collection.title -}}
+						</span>
+					</span>
+
+					<span class="product-collections-showcase__arrow" aria-hidden="true"></span>
+				</span>
+			</a>
+		</div>
+	{%- endfor -%}
+{%- endcapture -%}
+
+{%- if rendered_collection_count > 0 or rendered_exception_product_count > 0 -%}
+	{%- style -%}
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_mobile -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+		}
+
+		@media screen and (min-width: 768px) {
+			#shopify-section-{{- section.id -}} {
+				padding-top: {{- section.settings.offset_top_desktop -}}px;
+				padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+			}
+		}
+	{%- endstyle -%}
+
+	<section
+		class="product-collections-showcase color-{{ color_scheme.id | default: color_scheme }} js-animate{% if request.visual_preview_mode or section.index == 1 %} animated{% endif %}"
+		style="{{- section_styles -}}"
+	>
+		<div class="container product-collections-showcase__container section-animate">
+			{%- if section.settings.heading != blank -%}
+				<div class="product-collections-showcase__header">
+					<h2>{{- section.settings.heading -}}</h2>
+				</div>
+			{%- endif -%}
+
+			<div class="product-collections-showcase__grid">
+				{%- if rendered_exception_product_count > 0 -%}
+					{{- exception_product_cards_markup -}}
+				{%- else -%}
+					{{- collection_cards_markup -}}
+				{%- endif -%}
+			</div>
+		</div>
+	</section>
+
+	<style>
+		#shopify-section-{{ section.id }} .product-collections-showcase {
+			overflow-x: hidden;
+		}
+
+		#shopify-section-{{ section.id }} .product-collections-showcase__container {
+			padding-top: var(--inner-offset-top-mobile);
+			padding-bottom: var(--inner-offset-bottom-mobile);
+		}
+
+		#shopify-section-{{ section.id }} .product-collections-showcase__header {
+			margin-bottom: 14px;
+		}
+
+		#shopify-section-{{ section.id }} .product-collections-showcase__header h2 {
+			margin: 0;
+			color: #2c3d33;
+			font-family: "Oswald", sans-serif;
+			font-size: var(--product-collections-heading-size-mobile);
+			font-weight: 700;
+			line-height: 1.1;
+			text-transform: uppercase;
+		}
+
+		#shopify-section-{{ section.id }} .product-collections-showcase__grid {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+			gap: 14px 10px;
+			align-items: start;
+		}
+
+		#shopify-section-{{ section.id }} .product-collections-showcase__item {
+			min-width: 0;
+		}
+
+		#shopify-section-{{ section.id }} .product-collections-showcase__product-item {
+			min-width: 0;
+		}
+
+		#shopify-section-{{ section.id }} .product-collections-showcase__card {
+			display: flex;
+			flex-direction: column;
+			height: 100%;
+			min-width: 0;
+			border: 1px solid rgba(44, 61, 51, 0.14);
+			border-radius: 8px;
+			background: #fff;
+			box-shadow: 0 8px 18px rgba(44, 61, 51, 0.06);
+			color: #2c3d33;
+			overflow: hidden;
+			text-decoration: none;
+		}
+
+		#shopify-section-{{ section.id }} .product-collections-showcase__media {
+			position: relative;
+			width: 100%;
+			border-bottom: 1px solid rgba(44, 61, 51, 0.08);
+			background: #fff;
+			overflow: hidden;
+		}
+
+		#shopify-section-{{ section.id }} .product-collections-showcase__media--mobile {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			aspect-ratio: 0.76 / 1;
+			padding: 8px;
+		}
+
+		#shopify-section-{{ section.id }} .product-collections-showcase__media--desktop {
+			display: none;
+		}
+
+		#shopify-section-{{ section.id }} .product-collections-showcase__media--desktop {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			grid-template-rows: repeat(2, minmax(0, 1fr));
+			aspect-ratio: 1 / 1;
+		}
+
+		#shopify-section-{{ section.id }} .product-collections-showcase__media-tile {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			min-width: 0;
+			min-height: 0;
+			padding: 3px;
+			background: #fff;
+		}
+
+		#shopify-section-{{ section.id }} .product-collections-showcase__media-tile:nth-child(odd) {
+			border-right: 1px solid rgba(44, 61, 51, 0.07);
+		}
+
+		#shopify-section-{{ section.id }} .product-collections-showcase__media-tile:nth-child(-n+2) {
+			border-bottom: 1px solid rgba(44, 61, 51, 0.07);
+		}
+
+		#shopify-section-{{ section.id }} .product-collections-showcase__media-tile--full {
+			grid-column: 1 / -1;
+			grid-row: 1 / -1;
+			border: 0;
+		}
+
+		#shopify-section-{{ section.id }} .product-collections-showcase__image {
+			display: block;
+			width: 100%;
+			height: 100%;
+			object-fit: contain;
+			object-position: center;
+		}
+
+		#shopify-section-{{ section.id }} .product-collections-showcase__image--placeholder {
+			aspect-ratio: 1 / 1;
+			background: #f3eee5;
+		}
+
+		#shopify-section-{{ section.id }} .product-collections-showcase__content {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 12px;
+			min-height: 50px;
+			padding: 11px 12px;
+			border-top: 0;
+			background: #2c3d33;
+		}
+
+		#shopify-section-{{ section.id }} .product-collections-showcase__text {
+			display: block;
+			flex: 1 1 auto;
+			min-width: 0;
+		}
+
+		#shopify-section-{{ section.id }} .product-collections-showcase__title {
+			display: -webkit-box;
+			margin: 0;
+			overflow: hidden;
+			color: #fff;
+			font-family: "Oswald", sans-serif;
+			font-size: 12px;
+			font-weight: 700;
+			letter-spacing: 0;
+			line-height: 1.15;
+			text-transform: uppercase;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 1;
+		}
+
+		#shopify-section-{{ section.id }} .product-collections-showcase__arrow {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			position: relative;
+			flex: 0 0 auto;
+			width: 24px;
+			height: 24px;
+			border: 1px solid rgba(255, 255, 255, 0.34);
+			border-radius: 50%;
+			background: rgba(255, 255, 255, 0.08);
+			color: #fff;
+		}
+
+		#shopify-section-{{ section.id }} .product-collections-showcase__arrow::before {
+			content: "";
+			display: block;
+			width: 7px;
+			height: 7px;
+			border-top: 2px solid currentColor;
+			border-right: 2px solid currentColor;
+			transform: translateX(-1px) rotate(45deg);
+		}
+
+		@media screen and (min-width: 768px) {
+			#shopify-section-{{ section.id }} .product-collections-showcase__container {
+				padding-top: var(--inner-offset-top);
+				padding-bottom: var(--inner-offset-bottom);
+			}
+
+			#shopify-section-{{ section.id }} .product-collections-showcase__header {
+				margin-bottom: 22px;
+			}
+
+			#shopify-section-{{ section.id }} .product-collections-showcase__header h2 {
+				font-size: var(--product-collections-heading-size-desktop);
+			}
+
+			#shopify-section-{{ section.id }} .product-collections-showcase__grid {
+				grid-template-columns: repeat(4, minmax(0, 1fr));
+				column-gap: 16px;
+				row-gap: 34px;
+			}
+
+			#shopify-section-{{ section.id }} .product-collections-showcase__product-item--desktop-hidden {
+				display: none;
+			}
+
+			#shopify-section-{{ section.id }} .product-collections-showcase__media--mobile {
+				display: none;
+			}
+
+			#shopify-section-{{ section.id }} .product-collections-showcase__media--desktop {
+				display: grid;
+			}
+
+			#shopify-section-{{ section.id }} .product-collections-showcase__media-tile {
+				padding: 4px;
+			}
+
+			#shopify-section-{{ section.id }} .product-collections-showcase__content {
+				min-height: 52px;
+				padding: 12px 13px;
+			}
+
+			#shopify-section-{{ section.id }} .product-collections-showcase__title {
+				font-size: 13px;
+				line-height: 1.15;
+			}
+
+		}
+	</style>
+{%- endif -%}
+
+{%- schema -%}
+{
+	"name": "Product collections",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "heading",
+			"label": "Heading",
+			"default": "Explore more collections"
+		},
+		{
+			"type": "range",
+			"id": "heading_font_size_desktop",
+			"min": 18,
+			"max": 64,
+			"step": 1,
+			"unit": "px",
+			"label": "Heading font size desktop",
+			"default": 34
+		},
+		{
+			"type": "range",
+			"id": "heading_font_size_mobile",
+			"min": 14,
+			"max": 40,
+			"step": 1,
+			"unit": "px",
+			"label": "Heading font size mobile",
+			"default": 24
+		},
+		{
+			"type": "collection",
+			"id": "best_seller_collection_1",
+			"label": "Weekly trending collection 1",
+			"info": "Fallback if the weekly trending app has not written sidekick.weekly_trending_collections yet. All, Best Sellers, New Arrivals, and Graphic Tee are ignored."
+		},
+		{
+			"type": "collection",
+			"id": "best_seller_collection_2",
+			"label": "Weekly trending collection 2",
+			"info": "Fallback if the weekly trending app has not written sidekick.weekly_trending_collections yet. All, Best Sellers, New Arrivals, and Graphic Tee are ignored."
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1808px",
+					"label": "Default - 1680px"
+				},
+				{
+					"value": "2048px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset top",
+			"default": 15
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset bottom",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset top",
+			"default": 10
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset bottom",
+			"default": 20
+		},
+		{
+			"type": "paragraph",
+			"content": "Internal offsets"
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset top",
+			"default": 15
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset bottom",
+			"default": 10
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset top",
+			"default": 10
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset bottom",
+			"default": 10
+		}
+	],
+	"presets": [
+		{
+			"name": "Product collections"
+		}
+	]
+}
+{%- endschema -%}

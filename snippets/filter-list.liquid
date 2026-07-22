@@ -1,0 +1,229 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Filter list
+	- filter: filter object (required)
+	- id: id (required)
+	- filter_type: filter type (sidebar/top-bar/drawer)
+	- show_swatches: boolean. Set true to show swatches instead of checkbox
+
+	Usage:
+
+	{%- render 'filter-list', filter: filter -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/filter-list.scss' -%}
+
+<style>
+.filter-list--swatch {
+	display: grid !important;
+	grid-template-columns: repeat(7, 32px) !important;
+	gap: 14px clamp(8px, calc((100% - 224px) / 6), 16px) !important;
+	justify-content: start !important;
+	align-items: center !important;
+	padding: 6px 0 4px !important;
+	overflow: visible !important;
+}
+
+ul.filter-list--swatch > li.filter-list__item {
+	margin: 0 !important;
+	width: 32px !important;
+	height: 32px !important;
+	min-width: 0 !important;
+	max-width: none !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+}
+
+ul.filter-list.filter-list--top-bar.filter-list--swatch > li.filter-list__item:nth-child(n) {
+	grid-row: auto !important;
+	order: 0 !important;
+	width: 32px !important;
+}
+
+.custom-color-swatch {
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	width: 32px !important;
+	height: 32px !important;
+	min-width: 32px !important;
+	min-height: 32px !important;
+	border-radius: 50% !important;
+	border: 0 !important;
+	position: relative !important;
+	cursor: pointer;
+	padding: 0 !important;
+	margin: 0 !important;
+	box-sizing: border-box !important;
+	box-shadow: none !important;
+	overflow: visible !important;
+	transition: none !important;
+}
+
+.custom-color-swatch::before,
+.custom-color-swatch::after {
+	display: none !important;
+	content: none !important;
+}
+
+.custom-color-swatch__fill {
+	position: relative;
+	display: block;
+	width: 28px;
+	height: 28px;
+	border-radius: 50% !important;
+	background-color: var(--swatch-color, #fff);
+	background-image: var(--swatch-image, none);
+	background-size: cover;
+	background-position: center;
+	border: 1px solid rgba(0,0,0,0.1) !important;
+	box-sizing: border-box !important;
+}
+
+.custom-color-swatch__fill::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	display: none;
+	width: 12px;
+	height: 12px;
+	transform: translate(-50%, -50%);
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+	background-size: contain;
+	background-repeat: no-repeat;
+	filter: drop-shadow(0 1px 1px rgba(0,0,0,0.65));
+	z-index: 2;
+}
+
+.custom-color-swatch:hover .custom-color-swatch__fill {
+	box-shadow: inset 0 0 0 1px #2c3d33 !important;
+}
+
+input.filter-list__checkbox:checked + .custom-color-swatch {
+	box-shadow: none !important;
+}
+
+input.filter-list__checkbox:checked + .custom-color-swatch .custom-color-swatch__fill {
+	box-shadow: inset 0 0 0 2px #2c3d33 !important;
+}
+
+input.filter-list__checkbox:checked + .custom-color-swatch .custom-color-swatch__fill::after {
+	display: block;
+}
+</style>
+
+{%- assign sorted_values = filter.values -%}
+{%- assign swatch_option = settings.color_swatches_option | default: 'Color' | downcase -%}
+{%- assign swatches 	 = swatch_option | split: ',' -%}
+{%- assign filter_label  = filter.label | downcase -%}
+
+{%- if filter.operator == "AND" -%}
+	{% comment %} Keep the selected values grouped together when operator is AND {% endcomment %}
+
+	{%- assign active_filter_values = filter.values | where: 'active', true -%}
+	{%- assign inactive_filter_values = filter.values | where: 'active', false -%}
+	{%- assign sorted_values = active_filter_values | concat: inactive_filter_values -%}
+{%- endif -%}
+
+{%- if filter_type == 'top-bar' -%}
+	{%- assign filter_list_class = 'filter-list--top-bar' -%}
+{%- endif -%}
+
+{%- if filter_type == 'sidebar' -%}
+	{%- assign filter_list_class = 'filter-list--sidebar' -%}
+{%- endif -%}
+
+{%- assign swatch_list_class = '' -%}
+{%- if filter.presentation == "swatch" -%}
+	{%- assign swatch_list_class = 'filter-list--swatch' -%}
+{%- endif -%}
+
+<ul class="filter-list {{ filter_list_class }} {{ swatch_list_class }} js-filter-list">
+	{%- for filter_value in sorted_values -%}
+		<li class="filter-list__item">
+			{%- capture filter_active -%}
+				{%- if filter_value.active -%}
+					checked
+				{%- endif -%}
+			{%- endcapture -%}
+
+			{%- capture filter_disable -%}
+				{%- if filter_value.count == 0 and filter_value.active == false -%}
+					disabled
+				{%- endif -%}
+			{%- endcapture -%}
+
+			<input
+				class="checkbox__input visually-hidden filter-list__checkbox"
+				id="Filter-{{ section.id }}-{{- filter.param_name | escape -}}-{{- forloop.index -}}-{{- id -}}"
+				type="checkbox"
+				name="{{- filter_value.param_name -}}"
+				value="{{- filter_value.value -}}"
+				{{ filter_active | strip_newlines }}
+				{{ filter_disable | strip_newlines }}
+			>
+
+			{%- assign filter_value_label = filter_value.label -%}
+			{%- assign tech_tag = filter_value_label | slice: 0, 7 -%}
+
+			{%- if tech_tag contains 'label__' -%}
+				{%- assign filter_value_label = filter_value_label
+					| remove_first: 'label__'
+					| remove_first: ':primary'
+					| remove_first: ':secondary'
+				-%}
+			{%- endif -%}
+
+			{%- if filter.presentation == "swatch" -%}
+				{%- capture swatch_style -%}
+					{%- if filter_value.swatch.image -%}
+						--swatch-image: url('{{ filter_value.swatch.image | image_url: width: 60 }}'); --swatch-color: transparent;
+					{%- elsif filter_value.swatch.color -%}
+						--swatch-color: {{ filter_value.swatch.color }};
+					{%- endif -%}
+				{%- endcapture -%}
+				<label
+					class="checkbox__label checkbox__label--swatch custom-color-swatch"
+					for="Filter-{{ section.id }}-{{- filter.param_name | escape -}}-{{- forloop.index -}}-{{- id -}}"
+					style="{{ swatch_style }}"
+					title="{{ filter_value_label | escape }}"
+				>
+					<span class="custom-color-swatch__fill" aria-hidden="true"></span>
+					<span class="visually-hidden">{{- filter_value_label | escape }} ({{- filter_value.count -}})</span>
+				</label>
+			{%- elsif filter.presentation == "image" -%}
+				<label
+					class="checkbox__label checkbox__label--swatch"
+					for="Filter-{{ section.id }}-{{- filter.param_name | escape -}}-{{- forloop.index -}}-{{- id -}}"
+				>
+					{%- if filter_value.image -%}
+						<img
+							src="{{- filter_value.image | image_url: width: 60 -}}"
+							class="checkbox__label-image"
+							aria-hidden="true"
+							fetchpriority="low"
+							loading="lazy"
+							decoding="async"
+							width="20"
+							height="20"
+							alt=""
+						/>
+					{%- endif -%}
+
+					{{- filter_value_label | escape }} ({{- filter_value.count -}})
+				</label>
+			{%- else -%}
+				<label
+					class="checkbox__label"
+					for="Filter-{{ section.id }}-{{- filter.param_name | escape -}}-{{- forloop.index -}}-{{- id -}}"
+				>
+
+					{{- filter_value_label | escape }} ({{- filter_value.count -}})
+				</label>
+			{%- endif -%}
+		</li>
+	{%- endfor -%}
+</ul>

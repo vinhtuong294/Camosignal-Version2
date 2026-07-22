@@ -1,0 +1,526 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+  Snippet: Product Title
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+<style>
+	@media (max-width: 767px) {
+		/* Product title: Wrap text fully, smaller font */
+		.product-title {
+			white-space: normal;
+			display: block;
+			font-size: 22px !important;
+			line-height: 1.25 !important;
+		}
+
+		/* Product price: Base sizes on mobile */
+		.product-price .price-item--regular:not(.price-item--sale) {
+			font-size: 20px !important;
+			font-weight: 700 !important;
+		}
+		.product-price .price-item--sale {
+			font-size: 24px !important;
+			font-weight: 700 !important;
+		}
+		.product-price .price--on-sale .price-item--regular {
+			font-size: 24px !important;
+			font-weight: 500 !important;
+		}
+
+		/* Short description under title */
+		.product-short-description,
+		.product-short-description .rte {
+			font-size: 13px !important;
+			line-height: 1.5 !important;
+		}
+
+		/* Variant option labels (Color, Size, etc.) */
+		.product-option__title,
+		.product-variant-picker__label,
+		.product-form__label,
+		.product-option .label {
+			font-size: 12px !important;
+		}
+
+		/* Variant option values / swatch labels */
+		.product-option__value,
+		.product-variant-picker__option-value {
+			font-size: 12px !important;
+		}
+
+		/* Quantity selector */
+		.product-quantity__label {
+			font-size: 12px !important;
+		}
+
+		/* Add to cart button */
+		.product-form__submit,
+		.product-form .button--primary {
+			font-size: 13px !important;
+			padding: 14px 20px !important;
+		}
+
+		/* Product description / accordion text */
+		.product-drawers .rte,
+		.product-drawer__content .rte,
+		.product-description .rte {
+			font-size: 13px !important;
+			line-height: 1.55 !important;
+		}
+
+		/* Accordion / drawer headers */
+		.product-drawer__title,
+		.product-drawers__title {
+			font-size: 13px !important;
+		}
+
+		/* Vendor */
+		.product-vendor {
+			font-size: 11px !important;
+		}
+
+		/* Product info wrapper - tighter spacing */
+		.product-title-wrapper {
+			margin-bottom: 4px;
+			padding-top: 0 !important;
+			margin-top: -8px;
+		}
+
+		/* Color swatches nhỏ lại trên mobile */
+		.radio-option-swatch {
+			width: 28px !important;
+			height: 32px !important;
+		}
+		.radio-option-swatch .radio-option-swatch__label {
+			width: 28px !important;
+			height: 28px !important;
+		}
+
+		/* Đẩy nội dung sát ảnh */
+		.product-form {
+			padding-top: 4px !important;
+		}
+	}
+
+	/* Ẩn Pickup Availability + Sales Points (cả desktop & mobile) */
+	.product-pickup-availability,
+	.product-sales-point {
+		display: none !important;
+	}
+
+	/* ============================================
+	   PRICE: make text sharp & clear everywhere
+	   ============================================ */
+
+	/* Sale price — RED, bold, and large */
+	.product-price .price-item--sale {
+		color: #d33636 !important; /* Update to match pill color */
+		opacity: 1 !important;
+		font-weight: 700 !important;
+		font-size: 28px !important;
+		line-height: 1 !important;
+		margin: 0 !important;
+	}
+
+	/* Compare-at / regular price — smaller, NOT bold, with strikethrough */
+	.product-price.price--on-sale .price-item--regular {
+		color: #999999 !important;
+		opacity: 1 !important;
+		font-weight: 400 !important;
+		font-size: 18px !important;
+		text-decoration: line-through !important;
+		line-height: 1 !important;
+		margin: 0 !important;
+	}
+
+	/* Product-page prices use the compact active-currency symbol (for example,
+	   $24.95) while keeping variant updates free of duplicated symbols. */
+	.product-price-container .price-item[data-currency-symbol]::before {
+		content: attr(data-currency-symbol);
+	}
+
+	@media (max-width: 767px) {
+		/* Mobile Order Reversal: Flash Sale/Price above Title */
+		.product-form {
+			display: flex !important;
+			flex-direction: column !important;
+		}
+		.product-form > * {
+			order: 4;
+		}
+		/* Ensure hidden inputs/scripts don't break flex layout */
+		.product-form > script,
+		.product-form > input[type="hidden"] {
+			display: none !important;
+		}
+		/* Keep breadcrumbs, vendor, sku at the very top if they exist */
+		.product-form .product-breadcrumbs,
+		.product-form .product-sku,
+		.product-form .product-vendor {
+			order: 0 !important;
+		}
+		/* Move Price + Flash Sale to top */
+		.product-form .product-flashsale-and-price-group {
+			order: 1 !important;
+			margin-top: -24px !important;
+			margin-bottom: 8px !important;
+		}
+		/* Title immediately below price */
+		.product-form .product-title-wrapper {
+			order: 2 !important;
+			margin-top: 0 !important;
+			margin-bottom: -4px !important; /* Reduced to pull color selector up */
+		}
+
+		.product-price .price-item--sale {
+			font-size: 20px !important;
+			white-space: nowrap !important;
+		}
+		.product-price.price--on-sale .price-item--regular {
+			font-size: 18px !important;
+			font-weight: 400 !important;
+			white-space: nowrap !important;
+		}
+		.product-price .price__sale {
+			gap: 6px !important;
+			flex-wrap: nowrap !important;
+		}
+		.product-title-wrapper {
+			padding-bottom: 0px !important;
+			margin-bottom: -12px !important; /* Pull up tightly to counter line-height for NO REVIEW items */
+		}
+		/* Stretch price+flash group to phone edges */
+		.product-form .product-flashsale-and-price-group {
+			flex-wrap: wrap !important;
+			column-gap: 8px !important;
+			row-gap: 6px !important;
+			width: 100% !important;
+			justify-content: space-between !important;
+			margin-top: 0px !important;
+			margin-bottom: 0px !important;
+		}
+		/* Keep the price text at its natural width so it cannot bleed into the
+		   countdown. On narrow phones, the countdown moves to its own row. */
+		.product-flashsale-and-price-group > .product-price-and-review-wrapper,
+		.product-flashsale-and-price-group > .product-price-and-review-wrapper > .product-price-container {
+			flex: 0 0 auto !important;
+			max-width: 100% !important;
+		}
+		.product-flashsale-and-price-group > .product-countdown-container {
+			flex: 0 0 auto !important;
+			max-width: 100% !important;
+			margin-left: 0 !important;
+		}
+		@media (max-width: 363px) {
+			/* When Flash Sale wraps below the price, leave breathing room before
+			   the product title without changing the single-row layout. */
+			.product-form .product-flashsale-and-price-group {
+				margin-bottom: 8px !important;
+			}
+		}
+		
+		/* Aggressively pull up Variant Picker Color block */
+		.product-form .product-options,
+		.product-form .product-combination {
+			margin-top: 0px !important;
+			padding-top: 0px !important;
+		}
+		/* Removed gap, using margins on review container instead */
+		.product-title-and-fomo {
+			gap: 0px !important;
+		}
+		.injected-review-container {
+			margin-top: 8px !important; /* Space from Title */
+			margin-bottom: 18px !important; /* Counters the -12px wrapper margin and adds breathing room before Price */
+		}
+		/* Reset margins when review is inline with Sold count */
+		.product-reviews-and-sold .injected-review-container {
+			margin-top: 0 !important;
+			margin-bottom: 0 !important;
+		}
+		.injected-review-container:empty {
+			display: none !important;
+		}
+		.injected-review-container > .shopify-app-block,
+		.injected-review-container > div {
+			margin-top: 0 !important;
+			margin-bottom: 0 !important;
+		}
+	}
+
+	/* Align the two prices on the same row */
+	.product-price .price__sale {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+
+	/* Regular price (non-sale) — sharp */
+	.price:not(.price--on-sale) .price-item--regular {
+		color: #2c3d33 !important;
+		opacity: 1 !important;
+		font-weight: 700 !important;
+	}
+
+	/* ============================================
+	   PRODUCT CARD: price sharp & clear
+	   ============================================ */
+	.product-card .price,
+	.product-card .price-item,
+	.product-card__price,
+	.product-card__price .price-item {
+		opacity: 1 !important;
+		color: #2c3d33 !important;
+		font-weight: 600 !important;
+	}
+
+	.product-card .price--on-sale .price-item--sale,
+	.product-card__price .price-item--sale {
+		color: #c0392b !important;
+		opacity: 1 !important;
+		font-weight: 700 !important;
+	}
+
+	.product-card .price--on-sale .price-item--regular,
+	.product-card__price .price-item--regular {
+		color: #666666 !important;
+		opacity: 1 !important;
+	}
+
+	@media (min-width: 768px) {
+		.product .product-short-description {
+			display: none !important;
+		}
+	}
+</style>
+{%- assign preset_title = 'Product title' -%}
+{%- assign title 		= product.title -%}
+
+{%- if is_preset -%}
+	{%- assign title = preset_title -%}
+{%- endif -%}
+
+{%- capture styles -%}
+	--offset-top-desktop: {{ block.settings.offset_top_desktop }}px; {{-  -}}
+	--offset-bottom-desktop: {{ block.settings.offset_bottom_desktop }}px; {{-  -}}
+	--offset-top-mobile: {{ block.settings.offset_top_mobile }}px; {{-  -}}
+	--offset-bottom-mobile: {{ block.settings.offset_bottom_mobile }}px;
+{%- endcapture -%}
+
+<div class="product-title-wrapper" style="{{ styles }}">
+	<div class="product-title-and-fomo" style="display: flex; flex-direction: column; align-items: flex-start; gap: 8px;">
+		<div class="product-title-container" style="width: 100%;">
+			{%- if template.name == 'product' -%}
+				<h1 class="product-title h3" style="margin: 0;">
+					{{- title -}}
+				</h1>
+			{%- else -%}
+				<a class="product-title h3 focus-visible-outline" href="{{- product.url -}}" style="margin: 0;">
+					{{- title -}}
+				</a>
+			{%- endif -%}
+		</div>
+
+		{%- comment -%} Custom Product Badges from Metafield {%- endcomment -%}
+		{%- assign badges_meta = product.metafields.custom.product_badges -%}
+		{%- if badges_meta != blank -%}
+			<div class="product-badges-container" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; margin-bottom: 4px; width: 100%;">
+				{%- assign badges_array = badges_meta.value -%}
+				{%- if badges_meta.type contains 'list' -%}
+					{%- assign badges_array = badges_meta.value -%}
+				{%- else -%}
+					{%- if badges_meta.value contains '•' -%}
+						{%- assign badges_array = badges_meta.value | split: '•' -%}
+					{%- else -%}
+						{%- assign badges_array = badges_meta.value | split: ',' -%}
+					{%- endif -%}
+				{%- endif -%}
+
+				{%- for badge in badges_array -%}
+					{%- assign clean_badge = badge | strip -%}
+					{%- if clean_badge != blank -%}
+						{%- assign badge_upcase = clean_badge | upcase -%}
+						{%- assign badge_icon = '' -%}
+						{%- assign display_text = clean_badge | downcase | capitalize -%}
+						
+						{%- if badge_upcase contains '3-5 DAYS' -%}
+							{%- assign badge_icon = 'https://cdn.shopify.com/s/files/1/0741/7987/0911/files/2c3d33_3.png?v=1777361764' -%}
+							{%- assign display_text = '3 - 5 days' -%}
+						{%- elsif badge_upcase contains '5-13' or badge_upcase contains '5 - 13' or badge_upcase contains '5 -13' -%}
+							{%- assign badge_icon = 'https://cdn.shopify.com/s/files/1/0741/7987/0911/files/2c3d33_3.png?v=1777361764' -%}
+							{%- assign display_text = '5 - 13 days' -%}
+						{%- elsif badge_upcase contains 'SCREEN PRINT' -%}
+							{%- assign badge_icon = 'https://cdn.shopify.com/s/files/1/0741/7987/0911/files/2c3d33.png?v=1777361765' -%}
+							{%- assign display_text = 'Screen print' -%}
+						{%- elsif badge_upcase contains '100% COTTON' -%}
+							{%- assign badge_icon = 'https://cdn.shopify.com/s/files/1/0741/7987/0911/files/2c3d33_4.png?v=1777361765' -%}
+							{%- assign display_text = '100% cotton' -%}
+						{%- elsif badge_upcase contains 'FREE RETURN' -%}
+							{%- assign badge_icon = 'https://cdn.shopify.com/s/files/1/0741/7987/0911/files/2c3d33_5.png?v=1777364332' -%}
+							{%- assign display_text = 'Free returns' -%}
+						{%- endif -%}
+
+						<div class="product-badge-pill" style="display: inline-flex; align-items: center; border: 1px solid rgba(44,61,51,0.6); border-radius: 24px; padding: 4px 12px; font-size: 13px; font-weight: 500; color: #2c3d33; white-space: nowrap; line-height: 1.2;">
+							{%- if badge_icon != blank -%}
+								<img src="{{ badge_icon }}" alt="{{ clean_badge }}" style="display: block; width: 18px; height: 18px; object-fit: contain; margin-right: 6px;">
+							{%- endif -%}
+							<span style="display: block; transform: translateY(1px);">{{ display_text }}</span>
+						</div>
+					{%- endif -%}
+				{%- endfor -%}
+			</div>
+		{%- endif -%}
+		
+		<style>
+			.product-reviews-and-sold {
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				margin-top: 4px;
+			}
+			.product-sold-wrapper {
+				display: flex;
+				align-items: center;
+				position: relative;
+				top: 2px;
+			}
+			.product-sold-count {
+				font-family: var(--font-heading-family), 'Oswald', sans-serif;
+				font-size: 15px;
+				color: #2c3d33;
+				font-weight: 500;
+				letter-spacing: 0.5px;
+			}
+			.product-sold-separator {
+				color: #2c3d33;
+				font-size: 18px;
+				font-weight: 300;
+				margin-left: 6px;
+				line-height: 1;
+				position: relative;
+				top: -2px;
+			}
+			/* Fix Judge.me badge margins causing vertical misalignment */
+			.injected-review-container .jdgm-preview-badge,
+			.injected-review-container .jdgm-widget {
+				margin-bottom: 0 !important;
+				margin-top: 0 !important;
+				line-height: 1 !important;
+				display: flex !important;
+				align-items: center !important;
+			}
+			@media screen and (max-width: 767px) {
+				.product-reviews-and-sold {
+					margin-bottom: 12px;
+				}
+				.product-sold-count {
+					font-size: 14px;
+				}
+				.product-sold-separator {
+					font-size: 13px;
+				}
+			}
+		</style>
+		<div class="product-reviews-and-sold">
+			{%- assign sold_count = product.metafields.custom.sold_base -%}
+			{%- if sold_count != blank -%}
+				<div class="product-sold-wrapper">
+					<span class="product-sold-count">Sold: {{ sold_count }}</span>
+					<span class="product-sold-separator">|</span>
+				</div>
+			{%- endif -%}
+			
+			<div class="injected-review-container" id="injected-review-container-{{ section.id }}" style="display: flex; align-items: center;"></div>
+		</div>
+	</div>
+
+	<script>
+		(function() {
+			function moveReviewInline() {
+				var wrapper = document.getElementById('injected-review-container-{{ section.id }}');
+				if (!wrapper) return;
+				
+				// Try to find common review widgets inside the product form
+				var form = wrapper.closest('.product-form');
+				if (!form) return;
+				
+				var reviewWidgets = form.querySelectorAll('.loox-rating, .jdgm-preview-badge, .spr-badge, .yotpo.bottomLine, .okeReviews-reviewsSummary, [data-stamped-product-reviews-badge]');
+				for (var i = 0; i < reviewWidgets.length; i++) {
+					var widget = reviewWidgets[i];
+					var block = widget.closest('.shopify-app-block');
+					
+					// If it's inside a shopify app block wrapper, move the whole wrapper
+					if (block && block.parentNode !== wrapper && !wrapper.contains(block)) {
+						wrapper.appendChild(block);
+						break;
+					} else if (widget && widget.parentNode !== wrapper && !wrapper.contains(widget)) {
+						wrapper.appendChild(widget);
+						break;
+					}
+				}
+			}
+
+			// Run immediately
+			moveReviewInline();
+			
+			// Wait for DOM
+			if (document.readyState === 'loading') {
+				document.addEventListener('DOMContentLoaded', moveReviewInline);
+			} else {
+				moveReviewInline();
+			}
+			
+			// Check again in case apps load asynchronously
+			window.addEventListener('load', moveReviewInline);
+			
+			// Observer to catch slow apps like judge.me or loox injecting elements
+			var observer = new MutationObserver(function(mutations) {
+				var wrapper = document.getElementById('injected-review-container-{{ section.id }}');
+				if (wrapper && wrapper.children.length === 0) {
+					moveReviewInline();
+				}
+			});
+			observer.observe(document.body, { childList: true, subtree: true });
+		})();
+	</script>
+
+	{%- comment -%} Short description: extract intro text before DESIGN & MATERIAL (desktop only) {%- endcomment -%}
+	{%- if template.name == 'product' and product.description != blank -%}
+		{%- liquid
+			assign full_desc = product.description
+			assign split_marker = 'DESIGN &amp; MATERIAL'
+			assign has_marker = full_desc | split: split_marker
+			if has_marker.size > 1
+				assign before_design = has_marker | first
+			else
+				assign split_marker_alt = 'DESIGN & MATERIAL'
+				assign has_marker_alt = full_desc | split: split_marker_alt
+				if has_marker_alt.size > 1
+					assign before_design = has_marker_alt | first
+				else
+					assign before_design = ''
+				endif
+			endif
+		-%}
+		{%- if before_design != blank -%}
+			{%- comment -%} Remove the product title line (first strong/bold text) from the intro {%- endcomment -%}
+			{%- assign title_lower = product.title | downcase -%}
+			{%- assign desc_parts = before_design | split: product.title -%}
+			{%- if desc_parts.size > 1 -%}
+				{%- assign short_desc_raw = desc_parts | last -%}
+			{%- else -%}
+				{%- assign short_desc_raw = before_design -%}
+			{%- endif -%}
+			{%- assign short_desc_stripped = short_desc_raw | strip_html | strip | truncate: 500 -%}
+			{%- if short_desc_stripped != blank -%}
+				<div class="product-short-description desktop-only">
+					<div class="product-short-description__content rte">
+						{{- short_desc_raw -}}
+					</div>
+				</div>
+			{%- endif -%}
+		{%- endif -%}
+	{%- endif -%}
+</div>

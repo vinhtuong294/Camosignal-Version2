@@ -1,0 +1,112 @@
+.collapse {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 24px;
+  row-gap: 12px;
+}
+.collapse .collapse__item.change-transition .collapse__modal {
+  transition-property: height;
+  transition-duration: 0.5s;
+}
+.collapse .collapse__item.initial-transition .collapse__modal {
+  transition-property: height, opacity, visibility;
+  transition-duration: 0.5s;
+}
+.collapse .collapse__item:not(.is-active) .collapse__modal img {
+  display: none;
+}
+.collapse .collapse__item:not(.is-active) .collapse__content img {
+  display: none;
+}
+.collapse .collapse__item.is-active .collapse__control::after {
+  width: 100%;
+}
+.collapse .collapse__item.is-active .collapse__control .icon {
+  transform: rotateZ(180deg);
+}
+.collapse .collapse__item.is-active .collapse__modal {
+  opacity: 1;
+  visibility: visible;
+}
+.collapse .collapse__item.is-active .collapse__content {
+  opacity: 1;
+  visibility: visible;
+}
+.collapse .collapse__control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 0;
+  font-family: var(--base-font-family);
+  font-size: calc(var(--body-font-size) * 0.875);
+  font-weight: 500;
+  line-height: 1.667;
+  text-align: start;
+  word-break: break-word;
+  color: var(--color-text-primary);
+  transition: color 0.5s;
+}
+.collapse .collapse__control .icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  transition: transform 0.5s;
+}
+.collapse .collapse__control::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: block;
+  width: 0;
+  height: 1px;
+  background-color: currentColor;
+  transition-property: width;
+  transition-duration: var(--timing-base);
+}
+@media (-moz-touch-enabled: 0), (hover: hover), (pointer: fine) {
+  .collapse .collapse__control:hover::after {
+    width: 100%;
+  }
+}
+.collapse .collapse__modal {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: calc(100% + 1px);
+  left: 0;
+  right: 0;
+  width: 100%;
+  visibility: hidden;
+  opacity: 0;
+  overflow: hidden;
+  background-color: var(--color-background);
+  z-index: 10;
+  box-shadow: 0 1px var(--color-border-secondary);
+}
+.collapse .collapse__content {
+  display: flex;
+  width: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition-duration: 0.5s;
+  transition-property: opacity, visibility;
+}
+.collapse .collapse__content-inner {
+  display: flex;
+  width: 100%;
+  max-width: var(--container-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding: 32px 64px;
+  overflow-x: auto;
+}
+.collapse .collapse__content-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.collapse-wrapper {
+  position: relative;
+}

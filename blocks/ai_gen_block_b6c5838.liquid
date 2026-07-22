@@ -1,0 +1,407 @@
+{% doc %}
+  @prompt
+    Create a business icons section that displays 3 icons with titles and short descriptions below each icon. Each icon block should be customizable with an image/icon, a heading, and a short description text. The section should have a clean, professional layout with the 3 icons displayed in a row (3 columns on desktop, stacked on mobile). Allow merchants to customize the icons, headings, and descriptions for each of the 3 blocks.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-business-icons-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    padding: {{ block.settings.section_padding_top }}px 0 {{ block.settings.section_padding_bottom }}px;
+  }
+
+  .ai-business-icons__container-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: {{ block.settings.column_gap }}px;
+    width: 100%;
+  }
+
+  .ai-business-icons__item-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    align-items: {{ block.settings.text_alignment }};
+    text-align: {{ block.settings.text_alignment }};
+    gap: {{ block.settings.item_spacing }}px;
+  }
+
+  .ai-business-icons__icon-wrapper-{{ ai_gen_id }} {
+    width: {{ block.settings.icon_size }}px;
+    height: {{ block.settings.icon_size }}px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: {{ block.settings.icon_background_color }};
+    border-radius: {{ block.settings.icon_border_radius }}px;
+    padding: {{ block.settings.icon_padding }}px;
+  }
+
+  .ai-business-icons__icon-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .ai-business-icons__icon-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: {{ block.settings.placeholder_bg_color }};
+    border-radius: {{ block.settings.icon_border_radius }}px;
+  }
+
+  .ai-business-icons__icon-placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  .ai-business-icons__heading-{{ ai_gen_id }} {
+    margin: 0;
+    font-size: {{ block.settings.heading_size }}px;
+    font-weight: {{ block.settings.heading_weight }};
+    color: {{ block.settings.heading_color }};
+    line-height: 1.3;
+  }
+
+  .ai-business-icons__description-{{ ai_gen_id }} {
+    margin: 0;
+    font-size: {{ block.settings.description_size }}px;
+    color: {{ block.settings.description_color }};
+    line-height: 1.5;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-business-icons__container-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: {{ block.settings.mobile_gap }}px;
+    }
+
+    .ai-business-icons__item-{{ ai_gen_id }} {
+      align-items: center;
+      text-align: center;
+    }
+
+    .ai-business-icons-{{ ai_gen_id }} {
+      padding: {{ block.settings.section_padding_top | times: 0.6 }}px 0 {{ block.settings.section_padding_bottom | times: 0.6 }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-business-icons-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-business-icons__container-{{ ai_gen_id }}">
+    {% for i in (1..3) %}
+      {% liquid
+        assign icon_key = 'icon_' | append: i
+        assign heading_key = 'heading_' | append: i
+        assign description_key = 'description_' | append: i
+        
+        assign icon = block.settings[icon_key]
+        assign heading = block.settings[heading_key]
+        assign description = block.settings[description_key]
+      %}
+      
+      <div class="ai-business-icons__item-{{ ai_gen_id }}">
+        <div class="ai-business-icons__icon-wrapper-{{ ai_gen_id }}">
+          {% if icon %}
+            <img
+              src="{{ icon | image_url: width: 200 }}"
+              alt="{{ heading | escape }}"
+              class="ai-business-icons__icon-{{ ai_gen_id }}"
+              loading="lazy"
+              width="200"
+              height="200"
+            >
+          {% else %}
+            <div class="ai-business-icons__icon-placeholder-{{ ai_gen_id }}">
+              {{ 'image' | placeholder_svg_tag }}
+            </div>
+          {% endif %}
+        </div>
+        
+        {% if heading != blank %}
+          <h3 class="ai-business-icons__heading-{{ ai_gen_id }}">{{ heading }}</h3>
+        {% endif %}
+        
+        {% if description != blank %}
+          <p class="ai-business-icons__description-{{ ai_gen_id }}">{{ description }}</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Business icons",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "column_gap",
+      "label": "Column gap",
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "mobile_gap",
+      "label": "Mobile gap",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "item_spacing",
+      "label": "Item spacing",
+      "min": 5,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Icon style"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size",
+      "min": 40,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "icon_padding",
+      "label": "Icon padding",
+      "min": 0,
+      "max": 30,
+      "step": 5,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "icon_border_radius",
+      "label": "Icon border radius",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "color",
+      "id": "icon_background_color",
+      "label": "Icon background",
+      "default": "#f2f2f2"
+    },
+    {
+      "type": "color",
+      "id": "placeholder_bg_color",
+      "label": "Placeholder background",
+      "default": "#e9e9e9"
+    },
+    {
+      "type": "header",
+      "content": "Heading style"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Description style"
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "label": "Description size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description color",
+      "default": "#535353"
+    },
+    {
+      "type": "header",
+      "content": "Icon 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_1",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "heading_1",
+      "label": "Heading",
+      "default": "Free shipping"
+    },
+    {
+      "type": "textarea",
+      "id": "description_1",
+      "label": "Description",
+      "default": "On orders over $50"
+    },
+    {
+      "type": "header",
+      "content": "Icon 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_2",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "heading_2",
+      "label": "Heading",
+      "default": "Secure payment"
+    },
+    {
+      "type": "textarea",
+      "id": "description_2",
+      "label": "Description",
+      "default": "100% secure transactions"
+    },
+    {
+      "type": "header",
+      "content": "Icon 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_3",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "heading_3",
+      "label": "Heading",
+      "default": "Easy returns"
+    },
+    {
+      "type": "textarea",
+      "id": "description_3",
+      "label": "Description",
+      "default": "30-day return policy"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Business icons"
+    }
+  ]
+}
+{% endschema %}

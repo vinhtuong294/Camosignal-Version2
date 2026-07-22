@@ -1,0 +1,247 @@
+{{ 'about-editorial.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+	assign container = section.settings.container_width
+	assign bg_image = section.settings.bg_image
+	assign bg_image_mobile = section.settings.bg_image_mobile | default: bg_image
+	assign bg_image_url = section.settings.bg_image_url
+	assign bg_image_url_mobile = section.settings.bg_image_url_mobile | default: bg_image_url
+
+	if container == 'inherit'
+		assign container_width = settings.container_width
+	else
+		assign container_width = container
+	endif
+-%}
+
+<section
+	class="about-editorial-hero"
+	style="
+		--ae-container: {{ container_width }};
+		--ae-cream: {{ section.settings.cream_color }};
+		--ae-earth: {{ section.settings.earth_color }};
+		--ae-moss: {{ section.settings.moss_color }};
+		--ae-overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+		--ae-min-height-desktop: {{ section.settings.min_height_desktop }}px;
+		--ae-min-height-mobile: {{ section.settings.min_height_mobile }}px;
+	"
+>
+	{%- if bg_image != blank -%}
+		<div class="about-editorial-hero__image">
+			<picture>
+				{%- if bg_image_mobile != blank -%}
+					<source
+						media="(max-width: 749px)"
+						srcset="{{ bg_image_mobile | image_url: width: 750 }} 750w, {{ bg_image_mobile | image_url: width: 1100 }} 1100w"
+						sizes="100vw"
+					>
+				{%- endif -%}
+
+				<img
+					src="{{ bg_image | image_url: width: 2000 }}"
+					srcset="{{ bg_image | image_url: width: 900 }} 900w, {{ bg_image | image_url: width: 1400 }} 1400w, {{ bg_image | image_url: width: 2000 }} 2000w"
+					sizes="100vw"
+					alt="{{ bg_image.alt | default: section.settings.heading_line_1 | escape }}"
+					width="{{ bg_image.width }}"
+					height="{{ bg_image.height }}"
+					loading="eager"
+					fetchpriority="high"
+				>
+			</picture>
+		</div>
+	{%- elsif bg_image_url != blank -%}
+		<div class="about-editorial-hero__image">
+			<picture>
+				{%- if bg_image_url_mobile != blank -%}
+					<source media="(max-width: 749px)" srcset="{{ bg_image_url_mobile }}" sizes="100vw">
+				{%- endif -%}
+				<img
+					src="{{ bg_image_url }}"
+					sizes="100vw"
+					alt="{{ section.settings.heading_line_1 | escape }}"
+					loading="eager"
+					fetchpriority="high"
+				>
+			</picture>
+		</div>
+	{%- endif -%}
+
+	<div class="about-editorial-hero__content container">
+		{%- if section.settings.eyebrow != blank -%}
+			<p class="about-editorial-eyebrow">{{ section.settings.eyebrow }}</p>
+		{%- endif -%}
+
+		<h1 class="about-editorial-hero__title">
+			{{ section.settings.heading_line_1 | escape }}<br>
+			{{ section.settings.heading_line_2 | escape }}
+			{%- if section.settings.heading_accent != blank -%}
+				<span>{{ section.settings.heading_accent | escape }}</span>
+			{%- endif -%}
+		</h1>
+
+		{%- if section.settings.description != blank -%}
+			<div class="about-editorial-hero__desc rte">{{ section.settings.description }}</div>
+		{%- endif -%}
+	</div>
+
+	{%- if section.settings.show_scroll_label and section.settings.scroll_label != blank -%}
+		<div class="about-editorial-hero__scroll">{{ section.settings.scroll_label }}</div>
+	{%- endif -%}
+</section>
+
+{% schema %}
+{
+	"name": "About editorial hero",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "Content"
+		},
+		{
+			"type": "text",
+			"id": "eyebrow",
+			"label": "Eyebrow",
+			"default": "Camo Signal - About Us"
+		},
+		{
+			"type": "text",
+			"id": "heading_line_1",
+			"label": "Heading line 1",
+			"default": "Raised"
+		},
+		{
+			"type": "text",
+			"id": "heading_line_2",
+			"label": "Heading line 2",
+			"default": "here."
+		},
+		{
+			"type": "text",
+			"id": "heading_accent",
+			"label": "Accent line",
+			"default": "Built here."
+		},
+		{
+			"type": "richtext",
+			"id": "description",
+			"label": "Description",
+			"default": "<p>For those who live hunting culture - not perform it. The land is not a backdrop. It is the beginning of everything.</p>"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_scroll_label",
+			"label": "Show scroll label",
+			"default": true
+		},
+		{
+			"type": "text",
+			"id": "scroll_label",
+			"label": "Scroll label",
+			"default": "Scroll"
+		},
+		{
+			"type": "header",
+			"content": "Background"
+		},
+		{
+			"type": "image_picker",
+			"id": "bg_image",
+			"label": "Background image"
+		},
+		{
+			"type": "image_picker",
+			"id": "bg_image_mobile",
+			"label": "Background image - mobile"
+		},
+		{
+			"type": "text",
+			"id": "bg_image_url",
+			"label": "Background image URL (fallback)",
+			"info": "Paste a direct image URL. Used only if Background image above is empty."
+		},
+		{
+			"type": "text",
+			"id": "bg_image_url_mobile",
+			"label": "Background image URL - mobile (fallback)",
+			"info": "Used only if Background image - mobile is empty."
+		},
+		{
+			"type": "range",
+			"id": "overlay_opacity",
+			"min": 40,
+			"max": 100,
+			"step": 5,
+			"unit": "%",
+			"label": "Overlay strength",
+			"default": 85
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "color",
+			"id": "cream_color",
+			"label": "Light text",
+			"default": "#F5F0E8"
+		},
+		{
+			"type": "color",
+			"id": "earth_color",
+			"label": "Accent",
+			"default": "#C4B89A"
+		},
+		{
+			"type": "color",
+			"id": "moss_color",
+			"label": "Background",
+			"default": "#1E2E24"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{ "value": "1808px", "label": "Default - 1680px" },
+				{ "value": "2048px", "label": "Large - 1920px" },
+				{ "value": "1200px", "label": "Editorial - 1100px" },
+				{ "value": "100%", "label": "Full width" },
+				{ "value": "inherit", "label": "Inherit of general setting" }
+			],
+			"default": "100%"
+		},
+		{
+			"type": "range",
+			"id": "min_height_desktop",
+			"min": 520,
+			"max": 900,
+			"step": 20,
+			"unit": "px",
+			"label": "Minimum height - desktop",
+			"default": 760
+		},
+		{
+			"type": "range",
+			"id": "min_height_mobile",
+			"min": 420,
+			"max": 760,
+			"step": 20,
+			"unit": "px",
+			"label": "Minimum height - mobile",
+			"default": 620
+		}
+	],
+	"presets": [
+		{
+			"name": "About editorial hero"
+		}
+	]
+}
+{% endschema %}

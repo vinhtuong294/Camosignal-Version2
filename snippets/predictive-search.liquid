@@ -1,0 +1,432 @@
+{%- render 'adastra' with '/src/scripts/component-predictive-search.js' -%}
+
+<style>
+	/* Search Bar Aesthetics Update */
+	.predictive-search__input-wrapper {
+		border-radius: 6px !important;
+		overflow: hidden;
+	}
+
+	.predictive-search__input {
+		border-radius: 6px !important;
+	}
+
+	.predictive-search__submit {
+		border-radius: 6px !important;
+		font-family: 'Oswald', sans-serif !important;
+		text-transform: uppercase !important;
+		font-weight: 700 !important;
+		letter-spacing: 0.5px !important;
+		background-color: var(--color-heading) !important;
+		color: #fff !important;
+		border-color: var(--color-heading) !important;
+	}
+	
+	.predictive-search__submit span {
+		font-family: 'Oswald', sans-serif !important;
+		text-transform: uppercase !important;
+		font-weight: 700 !important;
+		color: #fff !important;
+	}
+
+	.predictive-search__submit svg {
+		color: #fff !important;
+		fill: none !important;
+	}
+	
+	.predictive-search__submit svg path {
+		stroke: #fff;
+	}
+</style>
+
+<style>
+	/* BRUTALIST PREDICTIVE SEARCH REDESIGN */
+	.predictive-search__tabs-wrapper,
+	.predictive-search__trending,
+	.js-predictive-search-promo-products,
+	.predictive-search__promo {
+		display: none !important;
+	}
+
+
+
+	/* Hide default focus rings if needed to keep it brutal */
+	.predictive-search__input:focus {
+		outline: none !important;
+		box-shadow: none !important;
+	}
+
+	/* SEARCH RESULTS BRUTALIST STYLING */
+	.predictive-search__product-card {
+		border: 1px solid var(--color-heading) !important;
+		border-radius: 6px !important;
+		display: flex;
+		align-items: center;
+		padding: 8px 12px !important;
+		background: #fff;
+		box-shadow: 2px 2px 0 0 var(--color-heading); /* Subtle brutalist drop shadow */
+		transition: transform 0.2s, box-shadow 0.2s;
+		font-family: 'Oswald', sans-serif !important;
+	}
+
+	.predictive-search__product-card:hover {
+		transform: translate(-2px, -2px);
+		box-shadow: 4px 4px 0 0 var(--color-heading);
+	}
+
+	.predictive-search__product-card-image-container {
+		border-radius: 6px !important;
+		border: 1px solid var(--color-heading);
+		overflow: hidden;
+		flex-shrink: 0;
+	}
+
+	.predictive-search__product-card-heading {
+		font-family: 'Oswald', sans-serif !important;
+		font-weight: 700 !important;
+		font-size: 14px !important;
+		text-transform: uppercase !important;
+		color: var(--color-heading) !important;
+		letter-spacing: 0.5px;
+		margin-bottom: 4px !important;
+	}
+
+	.predictive-search__result-row {
+		gap: 16px !important;
+	}
+
+	/* FORCE ALL RESULTS TO SHOW WITHOUT TABS */
+	.js-predictive-search-result-wrapper {
+		display: block !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		clip: auto !important;
+		margin-top: 24px;
+	}
+
+	#search-products::before {
+		content: "PRODUCTS";
+		display: block;
+		font-family: 'Oswald', sans-serif;
+		font-weight: 700;
+		color: var(--color-heading);
+		margin-bottom: 12px;
+		font-size: 16px;
+		letter-spacing: 0.5px;
+	}
+	
+	#search-pages::before {
+		content: "PAGES (POLICIES, ETC)";
+		display: block;
+		font-family: 'Oswald', sans-serif;
+		font-weight: 700;
+		color: var(--color-heading);
+		margin-bottom: 12px;
+		font-size: 16px;
+		letter-spacing: 0.5px;
+	}
+
+	#search-articles::before {
+		content: "ARTICLES";
+		display: block;
+		font-family: 'Oswald', sans-serif;
+		font-weight: 700;
+		color: var(--color-heading);
+		margin-bottom: 12px;
+		font-size: 16px;
+		letter-spacing: 0.5px;
+	}
+
+	/* PAGE AND ARTICLE BRUTALIST CARD STYLING */
+	.predictive-search__page-card,
+	.predictive-search__article-card-heading {
+		border: 1px solid var(--color-heading) !important;
+		border-radius: 6px !important;
+		padding: 12px 16px !important;
+		display: block;
+		font-family: 'Oswald', sans-serif !important;
+		font-weight: 700 !important;
+		font-size: 14px !important;
+		text-transform: uppercase !important;
+		color: var(--color-heading) !important;
+		text-decoration: none !important;
+		box-shadow: 2px 2px 0 0 var(--color-heading);
+		transition: transform 0.2s, box-shadow 0.2s;
+		background: #fff;
+	}
+
+	.predictive-search__page-card:hover,
+	.predictive-search__article-card-heading:hover {
+		transform: translate(-2px, -2px);
+		box-shadow: 4px 4px 0 0 var(--color-heading);
+	}
+
+	/* CSS for the "See all results" footer */
+	.predictive-search__footer {
+		margin-top: 24px;
+		display: flex;
+		justify-content: flex-start;
+	}
+
+	.predictive-search__apply {
+		font-family: 'Oswald', sans-serif !important;
+		font-weight: 700 !important;
+		text-transform: uppercase !important;
+		border: 2px solid var(--color-heading) !important;
+		border-radius: 6px !important;
+		background: #fff !important;
+		color: var(--color-heading) !important;
+		padding: 12px 24px !important;
+		box-shadow: 4px 4px 0 0 var(--color-heading) !important;
+		transition: transform 0.1s, box-shadow 0.1s !important;
+	}
+
+	.predictive-search__apply:hover {
+		transform: translate(2px, 2px) !important;
+		box-shadow: 2px 2px 0 0 var(--color-heading) !important;
+		color: #fff !important;
+		background: var(--color-heading) !important;
+	}
+</style>
+{%- assign heading           = "general.predictive_search.title" | t -%}
+{%- assign default_no_result = "general.predictive_search.no_results" | t -%}
+
+{%- assign search_articles                  = settings.predictive_search_articles -%}
+{%- assign search_pages                     = settings.predictive_search_pages -%}
+{%- assign no_result                        = settings.predictive_search_no_result | default: default_no_result -%}
+{%- assign predictive_search_trending_terms = settings.predictive_search_trending_terms -%}
+{%- assign predictive_search_promo_products = settings.predictive_search_promo_products -%}
+
+{%- assign enable_color_scheme_inheritance = settings.predictive_search_enable_color_scheme_inheritance -%}
+{%- assign color_scheme 				   = settings.predictive_search_color_scheme -%}
+
+{%- assign min  = 1 -%}
+{%- assign max  = 6 -%}
+{%- assign diff = max | minus: min -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- assign predictive_supported = "af,sq,hy,bs,bg,ca,hr,cs,da,nl,en,et,fo,fi,fr,ga,de,el,hu,is,id,it,la,lv,lt,mk,ro,no,nb,nn,pl,pt-BR,pt-PT,ro,ru,sr,sh,sk,sl,es,sv,tr,uk,vi,cy" | split: "," -%}
+{%- assign current_lang = localization.language.iso_code | split: '-' | first -%}
+
+{%- capture search_type_values -%}
+	product
+	{%- if search_articles -%},article{%- endif -%}
+	{%- if search_pages -%},page{%- endif -%}
+{%- endcapture -%}
+
+<div
+	class="predictive-search color-{{ color_scheme.id }} js-predictive-search"
+	id="headerDrawerSearch"
+	role="dialog"
+	aria-labelledby="headerDrawerSearchTitle"
+	{% if predictive_supported contains current_lang %}
+		data-predictive-supported
+	{% endif %}
+>
+	<h2 class="visually-hidden" id="headerDrawerSearchTitle">
+		{{- heading -}}
+	</h2>
+
+	<form
+		class="predictive-search__form js-predictive-search-form js-scroll-lock-container"
+		action="{{- routes.predictive_search_url -}}"
+		method="get"
+		role="search"
+	>
+		<div class="predictive-search__search">
+			<div class="predictive-search__input-wrapper">
+				<label class="visually-hidden" for="predictive-search-input">
+					{{- 'general.predictive_search.placeholder_aria_label' | t | escape -}}
+				</label>
+
+				<input
+					id="predictive-search-input"
+					class="input predictive-search__input js-predictive-search-input"
+					type="text"
+					name="q"
+					placeholder="{{- 'general.predictive_search.placeholder' | t -}}"
+					autocomplete="off"
+					autocapitalize="off"
+					spellcheck="false"
+					required
+				/>
+			</div>
+
+			<button
+				class="predictive-search__submit button button--secondary button--with-icon"
+				type="submit"
+				aria-label="{{- 'general.predictive_search.submit_query_aria_label' | t | escape -}}"
+			>
+				{%- render 'icons', icon: 'search' -%}
+
+				<span data-text="{{- 'general.predictive_search.submit_query' | t | escape -}}">
+					<span>
+						{{- 'general.predictive_search.submit_query' | t | escape -}}
+					</span>
+				</span>
+			</button>
+		</div>
+
+		<div class="predictive-search__tabs-wrapper">
+			<ul class="predictive-search__tabs js-predictive-search-tabs-wrapper">
+				<li>
+					<button
+						class="predictive-search__tabs-button button-link {% comment %}is-active{% endcomment %} js-predictive-search-tabs-button"
+						type="button"
+						aria-controls="search-products"
+						aria-expanded="false"
+						data-id="product"
+						disabled
+					>
+						<span data-text="{{- "general.predictive_search.products" | t -}}">
+							<span>
+								{{- "general.predictive_search.products" | t -}}
+							</span>
+						</span>
+					</button>
+				</li>
+
+				<li>
+					<button
+						class="predictive-search__tabs-button button-link js-predictive-search-tabs-button"
+						type="button"
+						aria-controls="search-articles"
+						aria-expanded="false"
+						data-id="article"
+						disabled
+					>
+						<span data-text="{{- "general.predictive_search.articles" | t -}}">
+							<span>
+								{{- "general.predictive_search.articles" | t -}}
+							</span>
+						</span>
+					</button>
+				</li>
+
+				<li>
+					<button
+						class="predictive-search__tabs-button button-link js-predictive-search-tabs-button"
+						type="button"
+						aria-controls="search-pages"
+						aria-expanded="false"
+						data-id="page"
+						disabled
+					>
+						<span data-text="{{- "general.predictive_search.pages" | t -}}">
+							<span>
+								{{- "general.predictive_search.pages" | t -}}
+							</span>
+						</span>
+					</button>
+				</li>
+			</ul>
+		</div>
+
+		{%- if predictive_search_trending_terms != blank -%}
+			{%- assign predictive_search_trending_terms_array = predictive_search_trending_terms | split: "," -%}
+
+			<div class="predictive-search__trending">
+				<div class="predictive-search__trending-heading">
+					{{- 'general.predictive_search.trending_search_terms' | t | escape -}}
+				</div>
+
+				<div class="predictive-search__trending-terms">
+					{%- for term in predictive_search_trending_terms_array -%}
+						<a
+							class="predictive-search__trending-term focus-visible-outline"
+							href="{{- routes.search_url -}}?q={{- term | handleize -}}"
+						>
+							{{- term | escape -}}
+						</a>
+					{%- endfor -%}
+				</div>
+			</div>
+		{%- endif -%}
+
+		{%- if predictive_search_promo_products.count > 0 -%}
+			<div class="predictive-search__promo js-predictive-search-promo-products">
+				<div class="predictive-search__promo-heading">
+					{{- 'general.predictive_search.promo_products' | t | escape -}}
+				</div>
+
+				<ul class="predictive-search__promo-list">
+					{%- for product in predictive_search_promo_products -%}
+						{%- assign product_image = product.featured_image | default: settings.product_default_image -%}
+
+						{%- capture img_focal -%}
+							--img-pos: {{ product_image.presentation.focal_point }};
+						{%- endcapture -%}
+
+						<li class="predictive-search__promo-item">
+							<div class="predictive-search__product-card">
+								<a
+									class="predictive-search__product-card-image-container focus-visible-outline"
+									href="{{- product.url -}}"
+									{% unless product_image.alt != blank %}
+										aria-label="{{- product.title -}}"
+									{% endunless %}
+								>
+									{%- if product_image != blank -%}
+										<picture>
+											<img
+												class="predictive-search__product-card-image"
+												src="{{- product_image | image_url: width: 96, height: 120 -}}"
+												srcset="{{ product_image | image_url: width: 96, height: 120 }} 1x,
+														{{ product_image | image_url: width: 192, height: 240 }} 2x"
+												width="96"
+												height="120"
+												loading="lazy"
+												fetchpriority="low"
+												decoding="async"
+												alt="{{- product_image.alt | escape -}}"
+												style="{{ img_focal }}"
+											/>
+										</picture>
+									{%- else -%}
+										{%- assign random_number        = "now" | date: "%N" | modulo: diff | plus: min -%}
+										{%- assign placeholder_svg_name = 'product-' | append: random_number -%}
+
+										{{- placeholder_svg_name | placeholder_svg_tag: 'predictive-search__product-card-image predictive-search__product-card-image--placeholder' -}}
+									{%- endif -%}
+								</a>
+
+								<div class="predictive-search__product-card-info">
+									<a
+										class="predictive-search__product-card-heading focus-visible-outline"
+										href="{{- product.url -}}"
+									>
+										{{- product.title -}}
+									</a>
+
+									<div class="predictive-search__product-card-price">
+										{% render 'price', product: product %}
+									</div>
+								</div>
+							</div>
+						</li>
+					{%- endfor -%}
+				</ul>
+			</div>
+		{%- endif -%}
+
+		<div class="predictive-search__result is-hidden js-predictive-search-result"></div>
+
+		<div class="predictive-search__footer is-hidden js-predictive-search-footer">
+			<button
+				class="button button--primary predictive-search__apply"
+				type="submit"
+				aria-label="{{- 'general.predictive_search.submit_query_aria_label' | t | escape -}}"
+			>
+				{{- 'general.predictive_search.submit' | t -}}
+			</button>
+		</div>
+
+		<input type="hidden" name="type" value="{{- search_type_values -}}" />
+	</form>
+
+	{%- render "preloader" -%}
+</div>

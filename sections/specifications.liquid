@@ -1,0 +1,338 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Specifications
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign color_scheme      	           	= section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance	= section.settings.enable_color_scheme_inheritance -%}
+{%- assign container						= section.settings.container_width -%}
+{%- assign blocks							= section.blocks -%}
+{%- assign heading      		           	= section.settings.heading -%}
+{%- assign image							= section.settings.image -%}
+{%- assign is_lazy 							= true -%}
+
+{%- if section.index == 1 -%}
+	{%- assign is_lazy = false -%}
+{%- endif -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- capture styles -%}
+	--container-width: {{ container_width }}; {{-  -}}
+{%- endcapture -%}
+
+{%- capture accordions -%}
+	{%- for block in blocks -%}
+		{%- assign item_heading	= block.settings.heading -%}
+		{%- assign item_text	= block.settings.text -%}
+
+		{%- if item_heading != blank and item_text != blank -%}
+			<div class="accordion__item specifications__item js-accordion-item">
+				<h4 class="accordion__title specifications__item-title">
+					<button
+						id="control-{{- block.id -}}"
+						class="accordion__control specifications__item-control focus-visible-outline js-accordion-control"
+						aria-controls="content-{{- block.id -}}"
+						aria-expanded="false"
+					>
+						<span class="specifications__item-title-text">
+							{{- item_heading -}}
+						</span>
+
+						<span class="specifications__item-control-icon specifications__item-control-icon--plus">
+							{% render 'icons', icon: 'plus' %}
+						</span>
+
+						<span class="specifications__item-control-icon specifications__item-control-icon--minus">
+							{% render 'icons', icon: 'minus' %}
+						</span>
+					</button>
+				</h4>
+
+				<div
+					id="content-{{- block.id -}}"
+					class="accordion__content accordion__content--animate specifications__item-content js-accordion-content"
+					style="height: 0;"
+					role="region"
+					aria-labelledby="control-{{- block.id -}}"
+				>
+					<div class="specifications__item-inner js-accordion-inner rte">
+						{{- item_text -}}
+					</div>
+				</div>
+			</div>
+		{%- endif -%}
+	{%- endfor -%}
+{%- endcapture -%}
+
+{%- if blocks.size > 0 and accordions != blank -%}
+	{%- render 'adastra' with '/src/styles/specifications.scss' -%}
+
+	{%- style -%}
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_mobile -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+		}
+
+		@media screen and (min-width: 768px) {
+			#shopify-section-{{- section.id -}} {
+				padding-top: {{- section.settings.offset_top_desktop -}}px;
+				padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+			}
+		}
+	{%- endstyle -%}
+
+	{%- capture container_classes -%}
+		container {{  -}}
+		specifications__container section-animate {{  -}}
+		{% if container_width == "100%" -%}
+			specifications__container--max-width
+		{%- endif -%}
+	{%- endcapture -%}
+
+	<section class="specifications color-{{ color_scheme }} js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}" style="{{ styles }}">
+		<div class="{{- container_classes -}}">
+			<div class="specifications__row">
+				<div class="specifications__col">
+					<div class="specifications__image-wrapper">
+						{%- if image != blank -%}
+							{%- capture img_focal -%}
+								--img-focal: {{ image.presentation.focal_point }};
+							{%- endcapture -%}
+
+							<picture>
+								<source
+									srcset="{{ image | image_url: width: 375 }} 1x, {{ image | image_url: width: 750 }} 2x"
+									media="(max-width: 375px)"
+									width="375"
+									height="280"
+								>
+
+								<source
+									srcset="{{ image | image_url: width: 420 }} 1x, {{ image | image_url: width: 840 }} 2x"
+									media="(max-width: 420px)"
+									width="420"
+									height="314"
+								>
+
+								<source
+									srcset="{{ image | image_url: width: 991 }} 1x, {{ image | image_url: width: 1982 }} 2x"
+									media="(max-width: 991px)"
+									width="991"
+									height="645"
+								>
+
+								<img
+									class="specifications__image"
+									src="{{ image | image_url: width: 960 }}"
+									srcset="{{ image | image_url: width: 960 }} 1x, {{ image | image_url: width: size_image_2x }} 2x"
+									{% if is_lazy %}
+										fetchpriority="low"
+										loading="lazy"
+									{% else %}
+										fetchpriority="high"
+										loading="eager"
+									{% endif %}
+									style="{{ img_focal }}"
+									alt="{{ image.alt | escape }}"
+									width="960"
+									height="717"
+								>
+							</picture>
+						{%- else -%}
+							{{ 'image' | placeholder_svg_tag: 'specifications__image specifications__image--placeholder' }}
+						{%- endif -%}
+					</div>
+				</div>
+
+				<div class="specifications__col specifications__col--text">
+					{%- if heading != blank -%}
+						<h2 class="h2 specifications__heading">
+							{{- heading -}}
+						</h2>
+					{%- endif -%}
+
+					<div class="accordion specifications__accordion js-accordion-container">
+						{{- accordions -}}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{%- endif -%}
+
+{% schema %}
+{
+	"name": "Specifications",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "General"
+		},
+		{
+			"type": "image_picker",
+			"id": "image",
+			"label": "Image"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "heading",
+			"label": "Heading",
+			"default": "Specifications"
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1808px",
+					"label": "Default - 1680px"
+				},
+				{
+					"value": "2048px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset bottom",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset bottom",
+			"default": 0
+		}
+	],
+	"blocks": [
+		{
+			"type": "toggle_content",
+			"name": "Toggle content",
+			"settings": [
+				{
+					"type": "text",
+					"id": "heading",
+					"label": "Heading",
+					"default": "<p>Accordion heading.</p>"
+				},
+				{
+					"type": "richtext",
+					"id": "text",
+					"label": "Text",
+					"default": "<p>Accordion content.</p>"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Specifications",
+			"blocks": [
+				{
+					"type": "toggle_content",
+					"settings": {
+						"heading": "Accordion heading",
+						"text": "<p>Accordion content.</p>"
+					}
+				},
+				{
+					"type": "toggle_content",
+					"settings": {
+						"heading": "Accordion heading",
+						"text": "<p>Accordion content.</p>"
+					}
+				},
+				{
+					"type": "toggle_content",
+					"settings": {
+						"heading": "Accordion heading",
+						"text": "<p>Accordion content.</p>"
+					}
+				},
+				{
+					"type": "toggle_content",
+					"settings": {
+						"heading": "Accordion heading",
+						"text": "<p>Accordion content.</p>"
+					}
+				}
+			]
+		}
+	]
+}
+{% endschema %}

@@ -1,0 +1,92 @@
+.product-grid-controls {
+  display: flex;
+  align-items: center;
+  column-gap: 12px;
+  opacity: 1;
+  visibility: visible;
+  transition-property: opacity, visibility;
+  transition-duration: var(--timing-base);
+  transition-timing-function: ease-in-out;
+}
+.product-grid-controls.is-loading {
+  opacity: 0;
+  visibility: hidden;
+}
+.product-grid-controls .product-grid-controls__group {
+  align-items: center;
+  column-gap: 12px;
+}
+.product-grid-controls .product-grid-controls__group.product-grid-controls__group--mobile {
+  display: flex;
+}
+.product-grid-controls .product-grid-controls__group.product-grid-controls__group--tablet {
+  display: none;
+}
+.product-grid-controls .product-grid-controls__group.product-grid-controls__group--desktop {
+  display: none;
+}
+.product-grid-controls .product-grid-controls__label {
+  flex-shrink: 0;
+  font-size: calc(var(--body-font-size) * 0.875);
+  line-height: 1.667;
+  font-weight: 500;
+  color: var(--color-text-thirdly);
+}
+.product-grid-controls .product-grid-controls__control-label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 0;
+  font-size: calc(var(--body-font-size) * 0.875);
+  line-height: 1.667;
+  font-weight: 500;
+  color: var(--color-text-thirdly);
+  transition-property: opacity;
+  transition-duration: var(--timing-base);
+  transition-timing-function: ease-in-out;
+  cursor: pointer;
+}
+.product-grid-controls .product-grid-controls__control-label::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: block;
+  width: 0;
+  height: 1px;
+  background-color: currentColor;
+  transition-property: width;
+  transition-duration: var(--timing-base);
+}
+@media (-moz-touch-enabled: 0), (hover: hover), (pointer: fine) {
+  .product-grid-controls .product-grid-controls__control-label:hover::after {
+    width: 100%;
+  }
+}
+.product-grid-controls .product-grid-controls__control-input:focus-visible + .product-grid-controls__control-label {
+  outline: 2px solid currentColor;
+}
+.product-grid-controls .product-grid-controls__control-input:checked + .product-grid-controls__control-label {
+  color: var(--color-text-primary);
+  cursor: default;
+}
+.product-grid-controls .product-grid-controls__control-input:checked + .product-grid-controls__control-label::after {
+  width: 100%;
+}
+@media (min-width: 576px) {
+  .product-grid-controls .product-grid-controls__group.product-grid-controls__group--mobile {
+    display: none;
+  }
+  .product-grid-controls .product-grid-controls__group.product-grid-controls__group--tablet {
+    display: flex;
+  }
+}
+@media (min-width: 768px) {
+  .product-grid-controls .product-grid-controls__group.product-grid-controls__group--tablet {
+    display: none;
+  }
+  .product-grid-controls .product-grid-controls__group.product-grid-controls__group--desktop {
+    display: flex;
+  }
+}

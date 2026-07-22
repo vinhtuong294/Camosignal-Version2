@@ -1,0 +1,1584 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: Featured Product
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{%- render 'adastra' with '/src/styles/carousel.scss' -%}
+{%- render 'adastra' with '/src/styles/product.scss' -%}
+
+{%- assign product						   = section.settings.product -%}
+{%- assign container 					   = section.settings.container_width -%}
+{%- assign color_scheme      	           = section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign blocks                          = section.blocks -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- assign container_width = container -%}
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- endif -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- capture section_styles -%}
+	--color-button-bg: {{- color_scheme.settings.color_text_primary | color_modify: 'alpha', 0.2 | default: '#000000' -}};
+	--image-object-fit: {{- section.settings.image_object_fit -}}; {{-  -}}
+	--container-width: {{- container_width -}}; {{-  -}}
+	--inner-offset-top: {{ section.settings.inner_offset_top }}px; {{-  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom }}px; {{-  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px; {{-  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px; {{-  -}}
+{%- endcapture -%}
+
+{%- assign is_preset = false -%}
+
+{%- if product == blank -%}
+	{%- assign is_preset = true -%}
+{%- endif -%}
+
+<section
+	class="product color-{{ color_scheme }} js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}"
+	style="{{ section_styles }}"
+	data-section-type="product"
+	data-is-preset="{{- is_preset -}}"
+	data-section-id="{{- section.id -}}"
+	data-url="{{- product.url -}}"
+>
+	<div class="product__container container need-animate">
+		{%- include 'product-media', media_height: section.settings.media_height -%}
+		{%- include 'product-form', blocks: blocks -%}
+		{%- render 'product-drawers-content', product: product, section: section, blocks: blocks -%}
+	</div>
+</section>
+
+{%- render 'adastra' with '/src/scripts/section-featured-product.js' -%}
+
+{% schema %}
+{
+	"name": "Featured product",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "General"
+		},
+		{
+			"type": "product",
+			"id": "product",
+			"label": "Product"
+		},
+		{
+			"type": "header",
+			"content": "Media"
+		},
+		{
+			"type": "select",
+			"id": "media_layout",
+			"label": "Media layout",
+			"options": [
+				{
+					"value": "carousel",
+					"label": "Carousel"
+				},
+				{
+					"value": "stacked",
+					"label": "Stacked"
+				},
+				{
+					"value": "stacked_2_col",
+					"label": "Stacked 2 columns"
+				}
+			],
+			"default": "stacked_2_col"
+		},
+		{
+			"type": "select",
+			"id": "thumbnails_position",
+			"label": "Thumbnails position",
+			"options": [
+				{
+					"value": "bottom",
+					"label": "Bottom"
+				},
+				{
+					"value": "left",
+					"label": "Left (vertical thumbnails)"
+				},
+				{
+					"value": "right",
+					"label": "Right (vertical thumbnails)"
+				}
+			],
+			"default": "bottom",
+			"info": "Only applies when Media layout is Carousel."
+		},
+		{
+			"type": "checkbox",
+			"id": "show_thumbnails_mobile",
+			"label": "Enable thumbnails on mobile",
+			"default": false
+		},
+		{
+			"type": "select",
+			"id": "media_height",
+			"label": "Media height",
+			"options": [
+				{
+					"value": "square",
+					"label": "Square"
+				},
+				{
+					"value": "full_size",
+					"label": "Full size"
+				}
+			],
+			"info": "On desktop used for additional media (exclude big image). On mobile used for all media.",
+			"default": "full_size"
+		},
+		{
+			"type": "select",
+			"id": "image_object_fit",
+			"label": "Image object fit",
+			"options": [
+				{
+					"value": "cover",
+					"label": "Cover"
+				},
+				{
+					"value": "contain",
+					"label": "Contain"
+				}
+			],
+			"default": "cover"
+		},
+		{
+			"type": "header",
+			"content": "General"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_taxes_included",
+			"label": "Show message of taxes included",
+			"default": true
+		},
+		{
+			"type": "checkbox",
+			"id": "show_pay_installments",
+			"label": "Show pay installments",
+			"default": true
+		},
+		{
+			"type": "header",
+			"content": "Size guide"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_size_guide",
+			"label": "Show size guide",
+			"default": true
+		},
+		{
+			"type": "select",
+			"id": "size_guide_button_placement",
+			"label": "Button placement",
+			"options": [
+				{
+					"value": "under-options",
+					"label": "Under product options"
+				},
+				{
+					"value": "drawer",
+					"label": "Drawer"
+				}
+			],
+			"default": "under-options"
+		},
+		{
+			"type": "page",
+			"id": "size_guide_page",
+			"label": "Page",
+			"info": "Select a page with size guide content. You can use dynamic source to use metafield for each product with different size guides."
+		},
+		{
+			"type": "text",
+			"id": "size_guide_button_text",
+			"label": "Button label",
+			"default": "Size guide"
+		},
+		{
+			"type": "image_picker",
+			"id": "size_guide_button_icon",
+			"label": "Button icon",
+			"info": "24 x 24px .svg recommended"
+		},
+		{
+			"type": "text",
+			"id": "size_guide_drawer_title",
+			"label": "Drawer heading",
+			"default": "Size guide"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1808px",
+					"label": "Default - 1680px"
+				},
+				{
+					"value": "2048px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset top",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset bottom",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset top",
+			"default": 16
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset bottom",
+			"default": 16
+		},
+		{
+			"type": "paragraph",
+			"content": "Internal offsets"
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset top",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset bottom",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset top",
+			"default": 16
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset bottom",
+			"default": 16
+		}
+	],
+	"blocks": [
+		{
+			"name": "SKU",
+			"type": "sku",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "text",
+					"id": "sku_text",
+					"label": "SKU text",
+					"default": "SKU: {SKU}",
+					"info": "Use {SKU} to insert SKU into text"
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Vendor",
+			"type": "vendor",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "checkbox",
+					"id": "make_vendor_link",
+					"label": "Make vendor link to collection",
+					"default": true
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Title",
+			"type": "title",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Description",
+			"type": "description",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Options",
+			"type": "options",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "select",
+					"id": "variant_picker",
+					"label": "Variant picker",
+					"options": [
+						{
+							"value": "radio",
+							"label": "Buttons"
+						},
+						{
+							"value": "select",
+							"label": "Dropdown"
+						}
+					],
+					"default": "radio"
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Price",
+			"type": "price",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Product combination",
+			"type": "product_combination",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "paragraph",
+					"content": "Link products of different colors using swatches. [Learn more](https://utdweb.team/shopify-themes/allure/manual/#section-product-template)"
+				},
+				{
+					"type": "text",
+					"id": "option_name",
+					"label": "Option name",
+					"info": "Example: Color, Style..."
+				},
+				{
+					"type": "text",
+					"id": "option_value_metafield",
+					"label": "Option value metafield",
+					"info": "Enter namespace and key of the metafield holding the value. Eg.: custom.color"
+				},
+				{
+					"type": "product_list",
+					"id": "product_list",
+					"label": "Products",
+					"info": "Select all the variations (including the product itself)."
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 32,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 16
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 32,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 16
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 32,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 32,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Quantity",
+			"type": "quantity",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Add to cart",
+			"type": "add_to_cart",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "select",
+					"id": "button_type",
+					"label": "Button style",
+					"options": [
+						{
+							"value": "primary",
+							"label": "Primary"
+						},
+						{
+							"value": "secondary",
+							"label": "Secondary"
+						}
+					],
+					"default": "secondary"
+				},
+				{
+					"type": "select",
+					"id": "button_buy_it_type",
+					"label": "Button 'Buy it now' style",
+					"options": [
+						{
+							"value": "primary",
+							"label": "Primary"
+						},
+						{
+							"value": "secondary",
+							"label": "Secondary"
+						}
+					],
+					"default": "primary"
+				},
+				{
+					"type": "checkbox",
+					"id": "show_additional_buttons",
+					"label": "Show additional payment buttons",
+					"default": true
+				},
+				{
+					"type": "checkbox",
+					"id": "show_gift_card_recipient",
+					"label": "Show recipient information form for gift cards",
+					"default": true,
+					"info": "Allows buyers to send gift cards on a scheduled date along with a personal message. [Learn more](https://help.shopify.com/manual/online-store/themes/customizing-themes/add-gift-card-recipient-fields)"
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Pickup availability",
+			"type": "pickup_availability",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Drawers",
+			"type": "drawers",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "header",
+					"content": "Description"
+				},
+				{
+					"type": "checkbox",
+					"id": "show_description",
+					"label": "Show description",
+					"default": false
+				},
+				{
+					"type": "text",
+					"id": "description_toggle_text",
+					"label": "Button label",
+					"default": "Description"
+				},
+				{
+					"type": "text",
+					"id": "description_drawer_title",
+					"label": "Drawer heading",
+					"default": "Description"
+				},
+				{
+					"type": "header",
+					"content": "Custom drawer 1"
+				},
+				{
+					"type": "page",
+					"id": "drawer_page_1",
+					"label": "Page",
+					"info": "Page must not be empty. The page content will be shown in a drawer"
+				},
+				{
+					"type": "text",
+					"id": "drawer_toggle_text_1",
+					"label": "Button label",
+					"default": "Drawer 1"
+				},
+				{
+					"type": "text",
+					"id": "drawer_title_1",
+					"label": "Drawer heading",
+					"default": "Drawer 1"
+				},
+				{
+					"type": "header",
+					"content": "Custom drawer 2"
+				},
+				{
+					"type": "page",
+					"id": "drawer_page_2",
+					"label": "Page",
+					"info": "Page must not be empty. The page content will be shown in a drawer"
+				},
+				{
+					"type": "text",
+					"id": "drawer_toggle_text_2",
+					"label": "Button label",
+					"default": "Drawer 2"
+				},
+				{
+					"type": "text",
+					"id": "drawer_title_2",
+					"label": "Drawer heading",
+					"default": "Drawer 2"
+				},
+				{
+					"type": "header",
+					"content": "Custom drawer 3"
+				},
+				{
+					"type": "page",
+					"id": "drawer_page_3",
+					"label": "Page",
+					"info": "Page must not be empty. The page content will be shown in a drawer"
+				},
+				{
+					"type": "text",
+					"id": "drawer_toggle_text_3",
+					"label": "Button label",
+					"default": "Drawer 3"
+				},
+				{
+					"type": "text",
+					"id": "drawer_title_3",
+					"label": "Drawer heading",
+					"default": "Drawer 3"
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Complementary products",
+			"type": "complementary",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "paragraph",
+					"content": "To select complementary products, add the Search & Discovery app. [Learn more](https://help.shopify.com/manual/online-store/search-and-discovery/product-recommendations)"
+				},
+				{
+					"type": "text",
+					"id": "heading",
+					"label": "Heading",
+					"default": "You May Also Like"
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Text",
+			"type": "text",
+			"settings": [
+				{
+					"type": "richtext",
+					"id": "text",
+					"label": "Text"
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Inventory status",
+			"type": "inventory_status",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Sales point",
+			"type": "sales_point",
+			"settings": [
+				{
+					"type": "image_picker",
+					"id": "sales_point_icon",
+					"label": "Icon",
+					"info": "20 x 20px .svg recommended"
+				},
+				{
+					"type": "inline_richtext",
+					"id": "sales_point_text",
+					"label": "Text"
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+					{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+
+		{
+			"name": "Gift product",
+			"type": "gift_product_block",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "paragraph",
+					"content": "[Learn more](https://utdweb.team/shopify-themes/allure/manual/#section-product-template) in the theme doc."
+				},
+				{
+					"type": "product",
+					"id": "gift_product",
+					"label": "Product"
+				},
+				{
+					"type": "text",
+					"id": "gift_button_label",
+					"label": "Button label",
+					"default": "Add gift-box"
+				},
+				{
+					"type": "image_picker",
+					"id": "gift_button_icon",
+					"label": "Button icon",
+					"info": "24 x 24px .svg recommended"
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 10
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 10
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 10
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 10
+				}
+			]
+		},
+		{
+			"name": "Socials",
+			"type": "socials",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "checkbox",
+					"id": "show_facebook",
+					"label": "Show Facebook",
+					"default": true
+				},
+				{
+					"type": "checkbox",
+					"id": "show_twitter",
+					"label": "Show X (Twitter)",
+					"default": true
+				},
+				{
+					"type": "checkbox",
+					"id": "show_pinterest",
+					"label": "Show Pinterest",
+					"default": true
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"type": "@app"
+		},
+		{
+			"name": "Custom liquid",
+			"type": "custom_liquid",
+			"settings": [
+				{
+					"type": "liquid",
+					"id": "custom_liquid",
+					"label": "Custom liquid",
+					"info": "Simple custom liquid"
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Featured product",
+			"blocks": [
+				{
+					"type": "vendor"
+				},
+				{
+					"type": "title"
+				},
+				{
+					"type": "sku"
+				},
+				{
+					"type": "description"
+				},
+				{
+					"type": "options",
+					"settings": {}
+				},
+				{
+					"type": "price",
+					"settings": {}
+				},
+				{
+					"type": "quantity"
+				},
+				{
+					"type": "add_to_cart",
+					"settings": {}
+				},
+				{
+					"type": "pickup_availability",
+					"settings": {}
+				},
+				{
+					"type": "drawers",
+					"settings": {}
+				},
+				{
+					"type": "complementary",
+					"settings": {}
+				}
+			]
+		}
+	]
+}
+{% endschema %}

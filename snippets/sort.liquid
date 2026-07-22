@@ -1,0 +1,46 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Sort
+	- id: id (required)
+	- product_list: Collection or Search object (required)
+	- sort_type: Sort type (primary/secondary)
+	- external: Is outside the form layout (true / false)
+
+	Usage:
+
+	{%- render 'sort', product_list: collection -%}
+	or
+	{%- render 'sort', product_list: search -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/sort.scss' -%}
+
+{%- assign sort_by = product_list.sort_by | default: product_list.default_sort_by -%}
+
+{%- if sort_type == 'secondary' %}
+	{%- assign sort_class = 'sort--secondary' -%}
+{%- else -%}
+	{%- assign sort_class = 'sort--primary' -%}
+{%- endif -%}
+
+<div class="sort {{ sort_class }} js-filter-sort {% if external -%}js-filter-sort-external{%- endif -%}">
+	<label class="sort__label" for="Sort-{{ section.id }}-{{- id -}}">
+		{{- 'collections.sorting.title' | t -}}
+	</label>
+
+	<div class="sort__select-wrapper select-wrapper">
+		<select
+			class="sort__select  {% if external -%}js-sort-select-external{%- endif -%}"
+			id="Sort-{{ section.id }}-{{- id -}}"
+			name="sort_by"
+			aria-label="{{- 'collections.sorting.title' | t | escape -}}"
+		>
+			{%- for option in product_list.sort_options -%}
+				<option value="{{- option.value | escape -}}" {% if option.value == sort_by %} selected{%- endif -%}>
+					{{- option.name | escape -}}
+				</option>
+			{%- endfor -%}
+		</select>
+	</div>
+</div>

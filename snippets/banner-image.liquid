@@ -1,0 +1,110 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Banner image
+	This snippet will output banner image
+
+	- image_desktop: image to be shown on Desktop
+	- image_mobile: image to be shown on Mobile
+	- enable_lazy_load: condition that determines whether lazy loading will be applied
+
+	{%- render
+		'banner-image',
+		image_desktop: image_desktop,
+		image_mobile: image_mobile,
+		enable_lazy_load: enable_lazy_load
+	-%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- capture img_focal -%}
+	--img-desktop-pos: {{ image_desktop.presentation.focal_point }}; --img-mob-pos: {{ image_mobile.presentation.focal_point }};
+{%- endcapture -%}
+
+{%- if image_desktop != blank -%}
+	<picture>
+		<source
+			srcset="{{ image_mobile | image_url: width: 380 }} 1x, {{ image_mobile | image_url: width: 760 }} 2x"
+			media="(max-width: 380px)"
+			width="380"
+			height="570"
+		>
+
+		<source
+			srcset="{{ image_mobile | image_url: width: 420 }} 1x, {{ image_mobile | image_url: width: 840 }} 2x"
+			media="(max-width: 420px)"
+			width="388"
+			height="500"
+		>
+
+		<source
+			srcset="{{ image_mobile | image_url: width: 480 }} 1x, {{ image_mobile | image_url: width: 960 }} 2x"
+			media="(max-width: 480px)"
+			width="480"
+			height="768"
+		>
+
+		<source
+			srcset="{{ image_mobile | image_url: width: 575 }} 1x, {{ image_mobile | image_url: width: 1150 }} 2x"
+			media="(max-width: 575px)"
+			width="575"
+			height="690"
+		>
+
+		<source
+			srcset="{{ image_mobile | image_url: width: 767 }} 1x, {{ image_mobile | image_url: width: 1534 }} 2x"
+			media="(max-width: 767px)"
+			width="767"
+			height="345"
+		>
+
+		<source
+			srcset="{{ image_desktop | image_url: width: 991 }} 1x, {{ image_desktop | image_url: width: 1982 }} 2x"
+			media="(max-width: 991px)"
+			width="991"
+			height="595"
+		>
+
+		<source
+			srcset="{{ image_desktop | image_url: width: 1199 }} 1x, {{ image_desktop | image_url: width: 2398 }} 2x"
+			media="(max-width: 1199px)"
+			width="1199"
+			height="400"
+		>
+
+		<source
+			srcset="{{ image_desktop | image_url: width: 1500 }} 1x, {{ image_desktop | image_url: width: 3000 }} 2x"
+			media="(max-width: 1500px)"
+			width="1500"
+			height="500"
+		>
+
+		<source
+			srcset="{{ image_desktop | image_url: width: 1680 }} 1x, {{ image_desktop | image_url: width: 3360 }} 2x"
+			media="(max-width: 1680px)"
+			width="1680"
+			height="560"
+		>
+
+		<img
+			class="banner__media"
+			srcset="{{ image_desktop | image_url: width: 1920 }} 1x, {{ image_desktop | image_url: width: 3840 }} 2x"
+			src="{{- image_desktop | image_url: width: 1920  -}}"
+			alt="{{- image_desktop.alt | escape -}}"
+			width="1920"
+			height="640"
+			{% if enable_lazy_load %}
+				fetchpriority="high"
+				loading="lazy"
+			{% else %}
+				fetchpriority="high"
+				loading="eager"
+			{% endif %}
+			style="{{ img_focal }}"
+		>
+	</picture>
+{%- else -%}
+	{%- assign random_number = "now" | date: "%N" | modulo: 3 | plus: 1 -%}
+	{%- assign placeholer_svg_name = 'hero-apparel-' | append: random_number -%}
+
+	{{- placeholer_svg_name | placeholder_svg_tag: 'banner__media' -}}
+{%- endif -%}

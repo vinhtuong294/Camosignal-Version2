@@ -1,0 +1,274 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Ticker
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile_external -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile_external -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop_external -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop_external -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign lazy = false -%}
+
+{%- if section.index > 1 -%}
+	{%- assign lazy = true -%}
+{%- endif -%}
+
+{%- assign hide_divider			    = section.settings.hide_divider -%}
+{%- assign text                     = section.settings.text -%}
+{%- assign text_color               = section.settings.text_color -%}
+{%- assign main_image               = section.settings.main_image -%}
+{%- assign background_image_desktop = section.settings.background_image_desktop | default: main_image -%}
+{%- assign background_image_mobile  = section.settings.background_image_mobile | default: background_image_desktop -%}
+{%- assign desktop_movement_speed   = section.settings.desktop_movement_speed -%}
+{%- assign mobile_movement_speed    = section.settings.mobile_movement_speed -%}
+{%- assign container 				= section.settings.container_width -%}
+
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- capture ticker_styles -%}
+	--container-width: {{- container_width -}}; {{-  -}}
+	--desktop-movement-speed: {{ desktop_movement_speed -}}s; {{-  -}}
+	--mobile-movement-speed: {{ mobile_movement_speed -}}s; {{-  -}}
+	--display-divider: {% if hide_divider %}none{% else %}inline-block{% endif %}; {{-  -}}
+	--text-color: {{ text_color }}; {{-  -}}
+{%- endcapture -%}
+
+{%- render 'adastra' with '/src/styles/ticker.scss' -%}
+
+{%- capture placeholder_image -%}
+	{%- assign random_number       = "now" | date: "%N" | modulo: 3 | plus: 1 -%}
+	{%- assign placeholer_svg_name = 'hero-apparel-' | append: random_number -%}
+
+	{{- placeholer_svg_name | placeholder_svg_tag: 'ticker__image' -}}
+{%- endcapture -%}
+
+<section
+	class="ticker container section-animate js-ticker-container js-animate is-loading {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}"
+	style="{{- ticker_styles -}}"
+>
+	<div class="ticker__background-image">
+		{%- if background_image_desktop != blank -%}
+			{%- capture img_focal -%}
+				--img-desktop-pos: {{ background_image_desktop.presentation.focal_point }};
+				--img-mobile-pos: {{ background_image_mobile.presentation.focal_point }};
+			{%- endcapture -%}
+
+			<picture>
+				<source srcset="{{ background_image_mobile | image_url: width: 375 }} 1x, {{ background_image_mobile | image_url: width: 750 }} 2x" media="(max-width: 375px)" />
+				<source srcset="{{ background_image_mobile | image_url: width: 420 }} 1x, {{ background_image_mobile | image_url: width: 840 }} 2x" media="(max-width: 420px)" />
+				<source srcset="{{ background_image_mobile | image_url: width: 575 }} 1x, {{ background_image_mobile | image_url: width: 1150 }} 2x" media="(max-width: 575px)" />
+				<source srcset="{{ background_image_mobile | image_url: width: 767 }} 1x, {{ background_image_mobile | image_url: width: 1534 }} 2x" media="(max-width: 767px)"/>
+				<source srcset="{{ background_image_desktop | image_url: width: 991 }} 1x, {{ background_image_desktop | image_url: width: 1982 }} 2x" media="(max-width: 991px)" />
+				<source srcset="{{ background_image_desktop | image_url: width: 1440 }} 1x, {{ background_image_desktop | image_url: width: 2880 }} 2x" media="(max-width: 1440px)" />
+				<source srcset="{{ background_image_desktop | image_url: width: 1600 }} 1x, {{ background_image_desktop | image_url: width: 3200 }} 2x"media="(max-width: 1600px)" />
+
+				<img
+					srcset="{{ background_image_desktop | image_url: width: 1920 }} 1x, {{ background_image_desktop | image_url: width: 3840 }} 2x"
+					src="{{ background_image_desktop | image_url: width: 1920 }}"
+					class="ticker__image"
+					alt="{{ background_image_desktop.alt | escape }}"
+					style="{{ img_focal }}"
+					{% if lazy %}
+						loading="lazy"
+						fetchpriority="low"
+					{% endif %}
+				>
+			</picture>
+		{%- else -%}
+				{{- placeholder_image -}}
+		{%- endif -%}
+	</div>
+
+	<div class="ticker__main-image-wrapper">
+		{%- if main_image != blank -%}
+			{%- capture img_focal -%}
+				--img-desktop-pos: {{ main_image.presentation.focal_point }};
+				--img-mobile-pos: {{ main_image.presentation.focal_point }};
+			{%- endcapture -%}
+
+			<picture>
+				<source srcset="{{ main_image | image_url: width: 200 }} 1x, {{ main_image | image_url: width: 400 }} 2x" media="(max-width: 375px)" />
+				<source srcset="{{ main_image | image_url: width: 224 }} 1x, {{ main_image | image_url: width: 448 }} 2x" media="(max-width: 420px)" />
+				<source srcset="{{ main_image | image_url: width: 307 }} 1x, {{ main_image | image_url: width: 614 }} 2x" media="(max-width: 575px)"/>
+				<source srcset="{{ main_image | image_url: width: 410 }} 1x, {{ main_image | image_url: width: 820 }} 2x" media="(max-width: 767px)" />
+
+				<img
+					srcset="{{ main_image | image_url: width: 320 }} 1x, {{ main_image | image_url: width: 640 }} 2x"
+					src="{{ main_image | image_url: width: 320 }}"
+					class="ticker__image"
+					alt="{{ main_image.alt | escape }}"
+					style="{{ img_focal }}"
+					{% if lazy %}
+						loading="lazy"
+						fetchpriority="low"
+					{% endif %}
+				>
+			</picture>
+		{%- else -%}
+			{{- placeholder_image -}}
+		{%- endif -%}
+	</div>
+
+	<div class="ticker__items js-ticker-content-container">
+		{{- text -}}
+	</div>
+</section>
+
+{%- render 'adastra' with '/src/scripts/section-ticker.js' -%}
+
+{% schema %}
+	{
+		"name": "Ticker",
+		"class": "ticker-wrapper",
+		"disabled_on": {
+			"groups": ["header", "footer", "custom.popup"]
+		},
+		"settings": [
+			{
+				"type": "checkbox",
+				"id": "hide_divider",
+				"label": "Hide divider",
+				"default": false
+			},
+			{
+				"type": "richtext",
+				"id": "text",
+				"label": "Text",
+				"default": "<p>Place the ticker text here</p>",
+				"info": "Use Enter to split text into sentences."
+			},
+			{
+				"type": "range",
+				"id": "desktop_movement_speed",
+				"label": "Movement speed (desktop)",
+				"min": 4,
+				"max": 100,
+				"unit": "s",
+				"default": 20
+			},
+			{
+				"type": "range",
+				"id": "mobile_movement_speed",
+				"label": "Movement speed (mobile)",
+				"min": 4,
+				"max": 100,
+				"unit": "s",
+				"default": 35
+			},
+			{
+				"type": "image_picker",
+				"id": "main_image",
+				"label": "Main image"
+			},
+			{
+				"type": "image_picker",
+				"id": "background_image_desktop",
+				"label": "Background image desktop"
+			},
+			{
+				"type": "image_picker",
+				"id": "background_image_mobile",
+				"label": "Background image mobile"
+			},
+			{
+				"type": "header",
+				"content": "Colors"
+			},
+			{
+				"type": "color",
+				"id": "text_color",
+				"label": "Text color",
+				"default": "#ffffff"
+			},
+			{
+				"type": "header",
+				"content": "Layout"
+			},
+			{
+				"type": "select",
+				"id": "container_width",
+				"label": "Container width",
+				"options": [
+					{
+						"value": "1808px",
+						"label": "Default - 1680px"
+					},
+					{
+						"value": "2048px",
+						"label": "Large - 1920px"
+					},
+					{
+						"value": "100%",
+						"label": "Full width"
+					},
+					{
+						"value": "inherit",
+						"label": "Inherit of general setting"
+					}
+				],
+				"default": "inherit",
+				"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+			},
+			{
+				"type": "range",
+				"id": "offset_top_desktop_external",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset top",
+				"default": 0
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_desktop_external",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset bottom",
+				"default": 0
+			},
+			{
+				"type": "range",
+				"id": "offset_top_mobile_external",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset top",
+				"default": 0
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_mobile_external",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset bottom",
+				"default": 0
+			}
+		],
+		"presets": [
+			{
+				"name": "Ticker"
+			}
+		]
+	}
+{% endschema %}

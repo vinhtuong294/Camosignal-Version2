@@ -1,0 +1,105 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+	"sections": {
+		"product-template": {
+			"type": "product-template",
+			"blocks": {
+				"breadcrumbs": {
+					"type": "breadcrumbs",
+					"settings": {}
+				},
+				"vendor": {
+					"type": "vendor",
+					"settings": {}
+				},
+				"sku": {
+					"type": "sku",
+					"settings": {}
+				},
+				"title": {
+					"type": "title",
+					"settings": {}
+				},
+				"description": {
+					"type": "description",
+					"settings": {}
+				},
+				"options": {
+					"type": "options",
+					"settings": {}
+				},
+				"inventory_status": {
+					"type": "inventory_status",
+					"settings": {}
+				},
+				"price": {
+					"type": "price",
+					"settings": {}
+				},
+				"quantity": {
+					"type": "quantity",
+					"settings": {}
+				},
+				"add_to_cart": {
+					"type": "add_to_cart",
+					"settings": {}
+				},
+				"pickup_availability": {
+					"type": "pickup_availability",
+					"settings": {}
+				},
+				"drawers": {
+					"type": "drawers",
+					"settings": {}
+				},
+				"socials": {
+					"type": "socials",
+					"disabled": true,
+					"settings": {}
+				},
+				"complementary": {
+					"type": "complementary",
+					"settings": {}
+				}
+			},
+			"block_order": [
+				"breadcrumbs",
+				"vendor",
+				"title",
+				"sku",
+				"description",
+				"options",
+				"inventory_status",
+				"price",
+				"quantity",
+				"add_to_cart",
+				"pickup_availability",
+				"drawers",
+				"socials",
+				"complementary"
+			],
+			"settings": {}
+		},
+		"product-recommendations": {
+			"type": "product-recommendations",
+			"settings": {}
+		},
+		"recently-viewed": {
+			"type": "recently-viewed",
+			"settings": {}
+		}
+	},
+	"order": [
+		"product-template",
+		"product-recommendations",
+		"recently-viewed"
+	]
+}

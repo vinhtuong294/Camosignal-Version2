@@ -1,0 +1,1231 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Header mobile - with accordion dropdowns for collections
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign burger_menu          = section.settings.burger_menu -%}
+{%- assign additional_menu      = section.settings.additional_menu -%}
+{%- assign animation_delay      = 0 -%}
+{%- assign shipping_policy_page_url = '/pages/shipping-policy' -%}
+{%- assign refund_policy_page_url = '/pages/refund-policy' -%}
+
+{%- for i in (1..3) -%}
+	{%- assign image_key   = 'media_image_' | append: i -%}
+	{%- assign media_image = section.settings[image_key] -%}
+	{%- if media_image != blank -%}
+		{%- assign mega_menu_images_count = mega_menu_images_count | plus: 1 -%}
+	{%- endif -%}
+{%- endfor -%}
+
+<div
+	id="headerDrawerMenu"
+	class="drawer drawer--left header-mobile color-{{ color_scheme }}"
+	data-menu-type="main"
+	role="dialog"
+	aria-labelledby="headerDrawerMenuTitle"
+>
+	<p class="visually-hidden" id="headerDrawerMenuTitle">
+		{{- "layout.navigation.drawer_menu" | t | escape -}}
+	</p>
+
+	{%- comment -%} Close button for mobile nav drawer {%- endcomment -%}
+	<button
+		class="header-mobile__close focus-visible-outline"
+		type="button"
+		aria-label="Close menu"
+		onclick="document.querySelector('.js-mobile-header-main-toggler').click();"
+	>
+		{% render 'icons', icon: 'menu-close' %}
+	</button>
+
+	<style>
+		.header-mobile__close {
+			position: absolute;
+			top: 4px;
+			right: 4px;
+			z-index: 100;
+			background: none;
+			border: none;
+			padding: 0;
+			cursor: pointer;
+			color: #2c3d33;
+			opacity: 0.95;
+			transition: opacity 0.2s ease;
+			width: 44px !important;
+			height: 44px !important;
+			min-width: 44px !important;
+			min-height: 44px !important;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.header-mobile__close:hover { opacity: 1; }
+		.header-mobile__close::before { display: none !important; }
+		.header-mobile__close svg {
+			width: 34px !important;
+			height: 34px !important;
+		}
+		.header-mobile__close svg path {
+			stroke-width: 2 !important;
+		}
+	</style>
+
+	<div class="drawer__body header-mobile__body js-mobile-header-main-menu js-scroll-lock-container">
+		{%- if menu.links != blank or burger_menu.links != blank or additional_menu.links != blank -%}
+			<nav
+				class="header-mobile__menu-wrapper"
+				aria-label="{{ "layout.navigation.drawer_menu" | t | escape }}"
+			>
+				{%- if mobile_top_menu.links != blank -%}
+					<ul class="header-mobile__menu-top">
+						{%- for link in mobile_top_menu.links limit: 3 -%}
+							{%- assign mobile_top_link_url = link.url -%}
+							{%- if mobile_top_link_url contains 'shipping-policy' -%}
+								{%- assign mobile_top_link_url = shipping_policy_page_url -%}
+							{%- endif -%}
+							{%- if mobile_top_link_url contains 'refund-policy' -%}
+								{%- assign mobile_top_link_url = refund_policy_page_url -%}
+							{%- endif -%}
+							<li class="header-mobile__menu-top-item">
+								<a href="{{ mobile_top_link_url }}" class="button-link">
+									<span data-text="{{ link.title }}">
+										<span>{{ link.title }}</span>
+									</span>
+								</a>
+							</li>
+						{%- endfor -%}
+					</ul>
+				{%- endif -%}
+
+				<ul class="header-mobile__menu">
+					{%- if menu.links != blank -%}
+						{%- for first_level_link in menu.links -%}
+							{%- assign link_title_down = first_level_link.title | downcase -%}
+							{%- if link_title_down == 'national park' or link_title_down == 'nation park' -%}
+								{%- continue -%}
+							{%- endif -%}
+
+							{%- if forloop.first -%}
+								{%- assign animation_delay_start = 0.2 -%}
+							{%- else -%}
+								{%- assign animation_delay_start = 0 -%}
+							{%- endif -%}
+
+							{%- assign animation_delay = animation_delay | plus: animation_delay_start | plus: 0.05 -%}
+
+							<li class="header-mobile__menu-item-wrapper" style="--animation-delay: {{ animation_delay }}s">
+
+								{%- assign mobile_display_title = first_level_link.title -%}
+								{%- assign dest_url = first_level_link.url -%}
+								{%- if dest_url contains 'shipping-policy' -%}
+									{%- assign dest_url = shipping_policy_page_url -%}
+								{%- endif -%}
+								{%- if dest_url contains 'refund-policy' -%}
+									{%- assign dest_url = refund_policy_page_url -%}
+								{%- endif -%}
+								{%- if link_title_down == 'new arrivals' -%}
+									{%- assign dest_url = routes.collections_url | append: '/new-arrivals' -%}
+								{%- endif -%}
+								{%- if link_title_down == 'best sellers' -%}
+									{%- assign mobile_display_title = 'Best Sellers' -%}
+								{%- elsif link_title_down == 'contact us' or link_title_down == 'contact' -%}
+									{%- assign mobile_display_title = 'Contact Us' -%}
+									{%- assign dest_url = '/pages/contact' -%}
+								{%- endif -%}
+
+								{%- assign is_hunting_link = false -%}
+								{%- if link_title_down == 'hunting' or link_title_down == 'turkey' or link_title_down == 'wild turkey' -%}
+									{%- assign is_hunting_link = true -%}
+									{%- assign mobile_display_title = 'Hunting' -%}
+									{%- assign dest_url = routes.collections_url | append: '/hunting-spirit' -%}
+								{%- endif -%}
+
+								{%- assign is_shop_link = false -%}
+								{%- if link_title_down == 'home' or link_title_down contains 'shop' -%}
+									{%- assign is_shop_link = true -%}
+									{%- assign mobile_display_title = 'SHOP' -%}
+									{%- assign dest_url = routes.all_products_collection_url -%}
+								{%- endif -%}
+
+								{%- assign is_collection_link = false -%}
+								{%- if link_title_down contains 'collection' or is_shop_link -%}
+									{%- assign is_collection_link = true -%}
+								{%- endif -%}
+								{%- assign is_more_collections_link = false -%}
+								{%- if link_title_down contains 'collection' and is_shop_link == false -%}
+									{%- assign is_more_collections_link = true -%}
+									{%- assign mobile_display_title = 'More Collections' -%}
+									{%- assign dest_url = routes.all_products_collection_url -%}
+								{%- endif -%}
+								{%- assign is_support_link = false -%}
+								{%- if link_title_down == 'support' -%}
+									{%- assign is_support_link = true -%}
+								{%- endif -%}
+								{%- assign is_fishing_link = false -%}
+								{%- if link_title_down == 'fishing' -%}
+									{%- assign is_fishing_link = true -%}
+									{%- assign mobile_display_title = 'Fishing' -%}
+									{%- assign dest_url = routes.collections_url | append: '/fishing' -%}
+								{%- endif -%}
+
+								{%- if first_level_link.links != blank or is_collection_link or is_support_link or is_fishing_link or is_hunting_link -%}
+									{%- comment -%} ==========================================
+									   Menu nesting → accordion (split link and toggle)
+									========================================== {%- endcomment -%}
+									{%- if is_collection_link and dest_url == routes.collections_url -%}
+										{%- assign dest_url = routes.all_products_collection_url -%}
+									{%- endif -%}
+
+									<div class="header-mobile__menu-item-row" style="display: flex; align-items: center; justify-content: flex-start; gap: 6px; width: 100%;">
+										<a
+											class="button-link header-mobile__menu-item header-mobile__menu-item--main{% if is_shop_link or is_fishing_link or is_hunting_link or is_more_collections_link %} js-mobile-dropdown-text-toggle{% endif %}"
+											href="{%- if is_shop_link or is_fishing_link or is_hunting_link or is_more_collections_link -%}#{%- else -%}{{- dest_url -}}{%- endif -%}"
+											style="white-space: nowrap; flex: 0 1 auto; text-align: left;"
+											{% if first_level_link.current and is_shop_link == false and is_fishing_link == false and is_hunting_link == false and is_more_collections_link == false %}aria-current="page"{% endif %}
+											{% if is_shop_link or is_fishing_link or is_hunting_link or is_more_collections_link %}onclick="event.preventDefault(); event.stopPropagation(); var btn = this.parentElement.querySelector('.js-mobile-dropdown-toggle'); if (btn) { btn.click(); }"{% endif %}
+										>
+											<span data-text="{{- mobile_display_title | escape -}}">
+												<span>{{- mobile_display_title | escape -}}</span>
+											</span>
+										</a>
+										<button
+											class="button-link header-mobile__menu-item header-mobile__menu-item--main js-mobile-dropdown-toggle"
+											type="button"
+											aria-expanded="false"
+											aria-label="Toggle dropdown"
+											style="display: inline-flex; width: auto !important; min-width: 24px; flex: 0 0 auto; align-items: center; justify-content: center; padding-left: 0; padding-right: 4px;"
+											onclick="event.preventDefault(); event.stopPropagation(); var content = this.parentElement.nextElementSibling; if (content &amp;&amp; content.classList.contains('header-mobile__dropdown-content')) { var isOpen = this.getAttribute('aria-expanded') === 'true'; this.setAttribute('aria-expanded', !isOpen); content.classList.toggle('is-open', !isOpen); }"
+										>
+											<svg class="icon header-mobile__dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+										</button>
+									</div>
+
+									<div class="header-mobile__dropdown-content">
+										<ul class="header-mobile__dropdown-list">
+											{%- if is_shop_link -%}
+												<li class="header-mobile__dropdown-item">
+													<a class="header-mobile__dropdown-link" href="{{ routes.all_products_collection_url }}"><span>For Men</span></a>
+												</li>
+												<li class="header-mobile__dropdown-item">
+													{%- assign mob_shop_womens_col = collections['independence-day-womens'] -%}
+													{%- if mob_shop_womens_col == blank -%}
+														{%- assign mob_shop_womens_col = collections['independence-day-women-s'] -%}
+													{%- endif -%}
+													{%- assign mob_shop_womens_url = routes.collections_url | append: '/independence-day-womens' -%}
+													{%- if mob_shop_womens_col != blank -%}
+														{%- assign mob_shop_womens_url = mob_shop_womens_col.url -%}
+													{%- endif -%}
+													<a class="header-mobile__dropdown-link" href="{{ mob_shop_womens_url }}"><span>For Women</span></a>
+												</li>
+												<li class="header-mobile__dropdown-item">
+													<a class="header-mobile__dropdown-link" href="{{ routes.all_products_collection_url }}?filter.p.product_type=Type1&filter.p.product_type=3D+Tshirt&filter.p.product_type=T-Shirt"><span>T-Shirts</span></a>
+												</li>
+												<li class="header-mobile__dropdown-item">
+													<a class="header-mobile__dropdown-link" href="{{ routes.all_products_collection_url }}?filter.p.product_type=Long-sleeve"><span>Long-Sleeve</span></a>
+												</li>
+												<li class="header-mobile__dropdown-item">
+													<a class="header-mobile__dropdown-link" href="{{ routes.all_products_collection_url }}?filter.p.product_type=Hat"><span>Hats</span></a>
+												</li>
+										{%- elsif is_hunting_link -%}
+											{%- assign mobile_hunting_handles = 'turkey,deer,hunting-spirit' | split: ',' -%}
+											{%- assign mobile_hunting_labels = 'Turkey,Deer,All Hunting' | split: ',' -%}
+											{%- for mobile_hunting_handle in mobile_hunting_handles -%}
+												{%- assign mobile_hunting_col = collections[mobile_hunting_handle] -%}
+												{%- assign mobile_hunting_url = routes.collections_url | append: '/' | append: mobile_hunting_handle -%}
+												{%- if mobile_hunting_col != blank -%}
+													{%- assign mobile_hunting_url = mobile_hunting_col.url -%}
+												{%- endif -%}
+												<li class="header-mobile__dropdown-item">
+													<a class="header-mobile__dropdown-link" href="{{ mobile_hunting_url }}">
+														<span>{{ mobile_hunting_labels[forloop.index0] | escape }}</span>
+													</a>
+												</li>
+											{%- endfor -%}
+										{%- elsif is_fishing_link -%}
+											{%- assign mobile_all_fishing_col = collections['fishing'] -%}
+												{%- assign mobile_all_fishing_url = dest_url -%}
+												{%- if mobile_all_fishing_url == blank or mobile_all_fishing_url == '#' -%}
+													{%- assign mobile_all_fishing_url = routes.collections_url | append: '/fishing' -%}
+													{%- if mobile_all_fishing_col != blank -%}
+														{%- assign mobile_all_fishing_url = mobile_all_fishing_col.url -%}
+													{%- endif -%}
+												{%- endif -%}
+												{%- assign mobile_freshwater_col = collections['fishing-t-shirt'] -%}
+												{%- assign mobile_freshwater_url = routes.collections_url | append: '/fishing-t-shirt' -%}
+												{%- if mobile_freshwater_col != blank -%}
+													{%- assign mobile_freshwater_url = mobile_freshwater_col.url -%}
+												{%- endif -%}
+												{%- assign mobile_saltwater_col = collections['saltwater-fishing'] -%}
+												{%- if mobile_saltwater_col == blank -%}
+													{%- assign mobile_saltwater_col = collections['saltwater-fishing-t-shirt'] -%}
+												{%- endif -%}
+											{%- assign mobile_saltwater_url = routes.collections_url | append: '/saltwater-fishing-t-shirt' -%}
+											{%- if mobile_saltwater_col != blank -%}
+												{%- assign mobile_saltwater_url = mobile_saltwater_col.url -%}
+											{%- endif -%}
+											<li class="header-mobile__dropdown-item">
+												<a class="header-mobile__dropdown-link" href="{{ mobile_saltwater_url }}"><span>Saltwater Fishing</span></a>
+											</li>
+											<li class="header-mobile__dropdown-item">
+												<a class="header-mobile__dropdown-link" href="{{ mobile_freshwater_url }}"><span>Fresh Water Fishing</span></a>
+											</li>
+											<li class="header-mobile__dropdown-item">
+												<a class="header-mobile__dropdown-link" href="{{ mobile_all_fishing_url }}"><span>All Fishing</span></a>
+											</li>
+										{%- elsif is_more_collections_link -%}
+											<li class="header-mobile__mega-group">
+												<button class="header-mobile__mega-toggle" type="button" aria-expanded="false" onclick="event.preventDefault(); event.stopPropagation(); var content = this.nextElementSibling; if (content &amp;&amp; content.classList.contains('header-mobile__mega-panel')) { var isOpen = this.getAttribute('aria-expanded') === 'true'; this.setAttribute('aria-expanded', !isOpen); content.classList.toggle('is-open', !isOpen); }">
+													<span>American Outdoors</span>
+													<span class="header-mobile__mega-plus" aria-hidden="true"></span>
+												</button>
+												<ul class="header-mobile__mega-panel">
+													{%- assign mobile_outdoors_handles = 'national-park,faith-outdoors' | split: ',' -%}
+													{%- assign mobile_outdoors_labels = 'National Park,Faith & Outdoors' | split: ',' -%}
+													{%- for mobile_outdoors_handle in mobile_outdoors_handles -%}
+														{%- assign mobile_outdoors_col = collections[mobile_outdoors_handle] -%}
+														{%- assign mobile_outdoors_url = routes.collections_url | append: '/' | append: mobile_outdoors_handle -%}
+														{%- if mobile_outdoors_col != blank -%}
+															{%- assign mobile_outdoors_url = mobile_outdoors_col.url -%}
+														{%- endif -%}
+														<li class="header-mobile__dropdown-item"><a class="header-mobile__dropdown-link" href="{{ mobile_outdoors_url }}"><span>{{ mobile_outdoors_labels[forloop.index0] | escape }}</span></a></li>
+													{%- endfor -%}
+												</ul>
+											</li>
+
+											<li class="header-mobile__mega-group">
+												<button class="header-mobile__mega-toggle" type="button" aria-expanded="false" onclick="event.preventDefault(); event.stopPropagation(); var content = this.nextElementSibling; if (content &amp;&amp; content.classList.contains('header-mobile__mega-panel')) { var isOpen = this.getAttribute('aria-expanded') === 'true'; this.setAttribute('aria-expanded', !isOpen); content.classList.toggle('is-open', !isOpen); }">
+													<span>Shop by Occasion</span>
+													<span class="header-mobile__mega-plus" aria-hidden="true"></span>
+												</button>
+												<ul class="header-mobile__mega-panel">
+													{%- assign mobile_occasion_handles = 'nfl-shirt,back-to-school,usa' | split: ',' -%}
+													{%- assign mobile_occasion_labels = 'Game Day,Back to School,Independence Day' | split: ',' -%}
+													{%- for mobile_occasion_handle in mobile_occasion_handles -%}
+														{%- assign mobile_occasion_col = collections[mobile_occasion_handle] -%}
+														{%- assign mobile_occasion_url = routes.collections_url | append: '/' | append: mobile_occasion_handle -%}
+														{%- if mobile_occasion_col != blank -%}
+															{%- assign mobile_occasion_url = mobile_occasion_col.url -%}
+														{%- endif -%}
+														<li class="header-mobile__dropdown-item"><a class="header-mobile__dropdown-link" href="{{ mobile_occasion_url }}"><span>{{ mobile_occasion_labels[forloop.index0] | escape }}</span></a></li>
+													{%- endfor -%}
+												</ul>
+											</li>
+										{%- elsif is_collection_link -%}
+												{%- assign mob_nation_park_col = collections['nation-park'] -%}
+												{%- if mob_nation_park_col == blank -%}
+													{%- assign mob_nation_park_col = collections['national-park'] -%}
+												{%- endif -%}
+												{%- assign mob_nation_park_url = routes.collections_url | append: '/nation-park' -%}
+												{%- if mob_nation_park_col != blank -%}
+													{%- assign mob_nation_park_url = mob_nation_park_col.url -%}
+												{%- endif -%}
+												{%- assign mob_world_turkey_slam_col = collections['world-turkey-slam'] -%}
+												{%- assign mob_world_turkey_slam_url = routes.collections_url | append: '/world-turkey-slam' -%}
+												{%- if mob_world_turkey_slam_col != blank -%}
+													{%- assign mob_world_turkey_slam_url = mob_world_turkey_slam_col.url -%}
+												{%- endif -%}
+												{%- assign mob_grand_slam_col = collections['grand-slam-subspecies'] -%}
+												{%- assign mob_grand_slam_url = routes.collections_url | append: '/grand-slam-subspecies' -%}
+												{%- if mob_grand_slam_col != blank -%}
+													{%- assign mob_grand_slam_url = mob_grand_slam_col.url -%}
+												{%- endif -%}
+												{%- assign mob_nfl_col = collections['nfl-shirt'] -%}
+												{%- assign mob_nfl_url = routes.collections_url | append: '/nfl-shirt' -%}
+												{%- if mob_nfl_col != blank -%}
+													{%- assign mob_nfl_url = mob_nfl_col.url -%}
+												{%- endif -%}
+												{%- assign mob_back_to_school_col = collections['back-to-school'] -%}
+												{%- assign mob_back_to_school_url = routes.collections_url | append: '/back-to-school' -%}
+												{%- if mob_back_to_school_col != blank -%}
+													{%- assign mob_back_to_school_url = mob_back_to_school_col.url -%}
+												{%- endif -%}
+												{%- comment -%} ── FEATURED ── {%- endcomment -%}
+												<li class="header-mobile__mega-group">
+													<button class="header-mobile__mega-toggle" type="button" aria-expanded="false" onclick="event.preventDefault(); event.stopPropagation(); var content = this.nextElementSibling; if (content &amp;&amp; content.classList.contains('header-mobile__mega-panel')) { var isOpen = this.getAttribute('aria-expanded') === 'true'; this.setAttribute('aria-expanded', !isOpen); content.classList.toggle('is-open', !isOpen); }">
+														<span>Featured</span>
+														<span class="header-mobile__mega-plus" aria-hidden="true"></span>
+													</button>
+													<ul class="header-mobile__mega-panel">
+								{% comment %}<li class="header-mobile__dropdown-item"><a class="header-mobile__dropdown-link" href="/collections/all?filter.p.product_type=Sweatshirt"><span>Sweatshirts</span></a></li>{% endcomment %}
+								{% comment %}<li class="header-mobile__dropdown-item"><a class="header-mobile__dropdown-link" href="/collections/all?filter.p.product_type=Hoodie"><span>Hoodies</span></a></li>{% endcomment %}
+								<li class="header-mobile__dropdown-item"><a class="header-mobile__dropdown-link" href="{{ mob_nfl_url }}"><span>GAME DAY</span></a></li>
+								<li class="header-mobile__dropdown-item"><a class="header-mobile__dropdown-link" href="{{ mob_back_to_school_url }}"><span>Back to School</span></a></li>
+								<li class="header-mobile__dropdown-item"><a class="header-mobile__dropdown-link" href="{{ mob_nation_park_url }}"><span>National Park</span></a></li>
+								<li class="header-mobile__dropdown-item"><a class="header-mobile__dropdown-link" href="{{ mob_world_turkey_slam_url }}"><span>World Turkey Slam</span></a></li>
+								<li class="header-mobile__dropdown-item"><a class="header-mobile__dropdown-link" href="{{ mob_grand_slam_url }}"><span>Grand Slam Subspecies</span></a></li>
+								<li class="header-mobile__dropdown-item"><a class="header-mobile__dropdown-link" href="{{ routes.collections_url }}/new-arrivals"><span>New Arrivals</span></a></li>
+													</ul>
+												</li>
+
+												{%- comment -%} ── TERRAIN (image + name, vertical) ── {%- endcomment -%}
+								<li class="header-mobile__mega-group">
+									<button class="header-mobile__mega-toggle" type="button" aria-expanded="false" onclick="event.preventDefault(); event.stopPropagation(); var content = this.nextElementSibling; if (content &amp;&amp; content.classList.contains('header-mobile__mega-panel')) { var isOpen = this.getAttribute('aria-expanded') === 'true'; this.setAttribute('aria-expanded', !isOpen); content.classList.toggle('is-open', !isOpen); }">
+										<span>Independence Day</span>
+										<span class="header-mobile__mega-plus" aria-hidden="true"></span>
+									</button>
+									<ul class="header-mobile__mega-panel">
+								{%- assign mob_terrain_handles = "dog-250,deer-250,eagle-250,liberty-250,independence-day-womens" | split: "," -%}
+								{%- assign mob_terrain_labels = "DOG 250,Deer 250,Eagle 250,Liberty 250,Women's" | split: "," -%}
+								{%- for mth in mob_terrain_handles -%}
+									{%- assign mt_c = collections[mth] -%}
+									{%- assign mt_url = '' -%}
+									{%- assign mt_label = mob_terrain_labels[forloop.index0] -%}
+									{%- assign mt_empty = false -%}
+									{%- if mth == 'dog-250' -%}
+										{%- assign mt_dog_250_col = collections['dog-250'] -%}
+										{%- assign mt_url = routes.collections_url | append: '/dog-250' -%}
+										{%- if mt_dog_250_col != blank -%}
+											{%- assign mt_c = mt_dog_250_col -%}
+											{%- assign mt_url = mt_dog_250_col.url -%}
+										{%- endif -%}
+										{%- assign mt_empty = true -%}
+										{%- if mt_dog_250_col != blank and mt_dog_250_col.products_count > 0 -%}
+											{%- assign mt_empty = false -%}
+										{%- endif -%}
+									{%- elsif mth == 'independence-day-womens' -%}
+										{%- assign mt_womens_col = collections['independence-day-womens'] -%}
+										{%- if mt_womens_col == blank -%}
+											{%- assign mt_womens_col = collections['independence-day-women-s'] -%}
+										{%- endif -%}
+										{%- assign mt_url = routes.collections_url | append: '/independence-day-womens' -%}
+										{%- if mt_womens_col != blank -%}
+											{%- assign mt_c = mt_womens_col -%}
+											{%- assign mt_url = mt_womens_col.url -%}
+										{%- endif -%}
+										{%- if mt_womens_col == blank or mt_womens_col.products_count == 0 -%}
+											{%- assign mt_empty = true -%}
+										{%- endif -%}
+									{%- else -%}
+										{%- if mt_c != blank -%}
+											{%- assign mt_url = mt_c.url -%}
+										{%- else -%}
+											{%- assign mt_url = routes.collections_url | append: '/' | append: mth -%}
+										{%- endif -%}
+										{%- if mt_c == blank or mt_c.products_count == 0 -%}
+											{%- assign mt_empty = true -%}
+										{%- endif -%}
+									{%- endif -%}
+									{%- if mt_c != blank -%}
+										{%- assign mt_label = mt_c.title -%}
+									{%- endif -%}
+									<li class="header-mobile__dropdown-item">
+										<a class="header-mobile__dropdown-link{% if mt_empty %} header-mobile__dropdown-link--disabled{% endif %}" href="{{ mt_url }}">
+											<span>{{ mt_label }}{%- if mt_empty -%}<em class="header-mobile__coming-soon"> — Coming Soon</em>{%- endif -%}</span>
+										</a>
+									</li>
+								{%- endfor -%}
+									</ul>
+								</li>
+
+												{%- comment -%} ── HUNTING ── {%- endcomment -%}
+												<li class="header-mobile__mega-group">
+													<button class="header-mobile__mega-toggle" type="button" aria-expanded="false" onclick="event.preventDefault(); event.stopPropagation(); var content = this.nextElementSibling; if (content &amp;&amp; content.classList.contains('header-mobile__mega-panel')) { var isOpen = this.getAttribute('aria-expanded') === 'true'; this.setAttribute('aria-expanded', !isOpen); content.classList.toggle('is-open', !isOpen); }">
+														<span>Hunting</span>
+														<span class="header-mobile__mega-plus" aria-hidden="true"></span>
+													</button>
+													<ul class="header-mobile__mega-panel">
+												{%- assign mob_hunt_handles = "turkey,deer,waterfowl" | split: "," -%}
+												{%- assign mob_hunt_labels = "Turkey,Deer,Waterfowl" | split: "," -%}
+												{%- for mh in mob_hunt_handles -%}
+													{%- assign mh_col = collections[mh] -%}
+													{%- assign mh_label = mob_hunt_labels[forloop.index0] -%}
+													{%- assign mh_empty = false -%}
+													{%- if mh_col == blank or mh_col.products_count == 0 -%}
+														{%- assign mh_empty = true -%}
+													{%- endif -%}
+													<li class="header-mobile__dropdown-item">
+														<a class="header-mobile__dropdown-link header-mobile__hunt-link{% if mh_empty %} header-mobile__dropdown-link--disabled{% endif %}" href="{{ routes.collections_url }}/{{ mh }}">
+															{%- if mh_col.image != blank -%}
+												<img src="{{ mh_col.image | image_url: width: 80, height: 80, crop: 'center' }}" alt="{{ mh_label }}" width="80" height="80" loading="lazy" class="header-mobile__hunt-icon header-mobile__hunt-icon--{{ mh | handleize }}">
+															{%- endif -%}
+															<span>{{ mh_label }}{%- if mh_empty -%}<em class="header-mobile__coming-soon"> — Coming Soon</em>{%- endif -%}</span>
+														</a>
+													</li>
+												{%- endfor -%}
+													</ul>
+												</li>
+
+								{%- comment -%} FISHING {%- endcomment -%}
+								<li class="header-mobile__mega-group">
+									<button class="header-mobile__mega-toggle" type="button" aria-expanded="false" onclick="event.preventDefault(); event.stopPropagation(); var content = this.nextElementSibling; if (content &amp;&amp; content.classList.contains('header-mobile__mega-panel')) { var isOpen = this.getAttribute('aria-expanded') === 'true'; this.setAttribute('aria-expanded', !isOpen); content.classList.toggle('is-open', !isOpen); }">
+										<span>Fishing</span>
+										<span class="header-mobile__mega-plus" aria-hidden="true"></span>
+									</button>
+									<ul class="header-mobile__mega-panel">
+								{%- assign mob_fishing_handles = "fishing,fishing-t-shirt,saltwater-fishing" | split: "," -%}
+								{%- assign mob_fishing_fallback_handles = "fishing,fishing-t-shirt,saltwater-fishing-t-shirt" | split: "," -%}
+								{%- assign mob_fishing_labels = "All Fishing,Freshwater Fishing,Saltwater Fishing" | split: "," -%}
+								{%- assign mob_fishing_icon_fallbacks = "https://cdn.shopify.com/s/files/1/0741/7987/0911/collections/icon_bass.jpg?v=1780569828,https://cdn.shopify.com/s/files/1/0741/7987/0911/collections/icon_bass.jpg?v=1780569828,https://cdn.shopify.com/s/files/1/0741/7987/0911/collections/icon_swordfish.jpg?v=1780569816" | split: "," -%}
+								{%- for mf in mob_fishing_handles -%}
+									{%- assign mf_col = collections[mf] -%}
+									{%- if mf_col == blank -%}
+										{%- assign mf_fallback_handle = mob_fishing_fallback_handles[forloop.index0] -%}
+										{%- assign mf_col = collections[mf_fallback_handle] -%}
+									{%- endif -%}
+									{%- assign mf_label = mob_fishing_labels[forloop.index0] -%}
+									{%- if mf_col != blank -%}
+										{%- assign mf_url = mf_col.url -%}
+									{%- else -%}
+										{%- assign mf_url = routes.collections_url | append: '/' | append: mf -%}
+									{%- endif -%}
+									{%- assign mf_fallback_icon = mob_fishing_icon_fallbacks[forloop.index0] -%}
+									<li class="header-mobile__dropdown-item">
+										<a class="header-mobile__dropdown-link header-mobile__hunt-link" href="{{ mf_url }}">
+											{%- if mf_col.image != blank -%}
+												<img src="{{ mf_col.image | image_url: width: 80, height: 80, crop: 'center' }}" alt="{{ mf_label | escape }}" width="80" height="80" loading="lazy" class="header-mobile__hunt-icon header-mobile__hunt-icon--{{ mf | handleize }}">
+											{%- elsif mf_fallback_icon != blank -%}
+												<img src="{{ mf_fallback_icon }}" alt="{{ mf_label | escape }}" width="80" height="80" loading="lazy" class="header-mobile__hunt-icon header-mobile__hunt-icon--{{ mf | handleize }}">
+											{%- endif -%}
+											<span>{{ mf_label | escape }}</span>
+										</a>
+									</li>
+								{%- endfor -%}
+									</ul>
+								</li>
+								{%- if false -%}
+								{%- assign mob_womens_col = collections['independence-day-womens'] -%}
+								{%- if mob_womens_col == blank -%}
+									{%- assign mob_womens_col = collections['independence-day-women-s'] -%}
+								{%- endif -%}
+								{%- assign mob_has_seasonal = false -%}
+								{%- for link in first_level_link.links -%}
+									{%- assign ms_lower = link.title | downcase -%}
+									{%- if ms_lower contains 'independence' or ms_lower contains 'signature' -%}
+										{%- assign mob_has_seasonal = true -%}
+										{%- assign mob_seasonal_title = link.title -%}
+										{%- assign mob_seasonal_url = link.url -%}
+										{%- if ms_lower contains 'signature' -%}
+											{%- assign mob_seasonal_title = "Independence Day Women's" -%}
+											{%- if mob_womens_col != blank -%}
+												{%- assign mob_seasonal_url = mob_womens_col.url -%}
+											{%- else -%}
+												{%- assign mob_seasonal_url = routes.collections_url | append: '/independence-day-womens' -%}
+											{%- endif -%}
+										{%- endif -%}
+										<li class="header-mobile__dropdown-item">
+											<a class="header-mobile__dropdown-link" href="{{ mob_seasonal_url }}"><span>{{ mob_seasonal_title }}</span></a>
+										</li>
+									{%- endif -%}
+								{%- endfor -%}
+								{%- unless mob_has_seasonal -%}
+									{%- assign m_ind_col = collections['usa'] -%}
+									{%- if m_ind_col != blank -%}
+										{%- assign m_ind_empty = false -%}
+										{%- if m_ind_col.products_count == 0 -%}{%- assign m_ind_empty = true -%}{%- endif -%}
+										<li class="header-mobile__dropdown-item">
+											<a class="header-mobile__dropdown-link{% if m_ind_empty %} header-mobile__dropdown-link--disabled{% endif %}" href="{{ m_ind_col.url }}"><span>Independence Day{%- if m_ind_empty -%}<em class="header-mobile__coming-soon"> — Coming Soon</em>{%- endif -%}</span></a>
+										</li>
+									{%- endif -%}
+									{%- assign m_womens_url = routes.collections_url | append: '/independence-day-womens' -%}
+									{%- assign m_womens_empty = false -%}
+									{%- if mob_womens_col != blank -%}
+										{%- assign m_womens_url = mob_womens_col.url -%}
+										{%- if mob_womens_col.products_count == 0 -%}{%- assign m_womens_empty = true -%}{%- endif -%}
+									{%- endif -%}
+									<li class="header-mobile__dropdown-item">
+										<a class="header-mobile__dropdown-link{% if m_womens_empty %} header-mobile__dropdown-link--disabled{% endif %}" href="{{ m_womens_url }}"><span>Independence Day Women's{%- if m_womens_empty -%}<em class="header-mobile__coming-soon"> — Coming Soon</em>{%- endif -%}</span></a>
+									</li>
+									{%- assign mob_has_seasonal = true -%}
+								{%- endunless -%}
+								{%- endif -%}
+
+											{%- elsif is_support_link -%}
+												{%- comment -%} Custom order: Contact, Shipping, Refund, Privacy, Terms {%- endcomment -%}
+												{%- for policy in shop.policies -%}
+													{%- if policy.url contains 'contact-information' -%}
+														{%- assign m_contact = policy -%}
+													{%- elsif policy.url contains 'shipping-policy' -%}
+														{%- assign m_shipping = policy -%}
+													{%- elsif policy.url contains 'refund-policy' -%}
+														{%- assign m_refund = policy -%}
+													{%- elsif policy.url contains 'privacy-policy' -%}
+														{%- assign m_privacy = policy -%}
+													{%- elsif policy.url contains 'terms-of-service' -%}
+														{%- assign m_terms = policy -%}
+													{%- endif -%}
+												{%- endfor -%}
+												{%- if m_contact -%}
+												<li class="header-mobile__dropdown-item">
+													<a class="header-mobile__dropdown-link" href="/pages/contact"><span>Contact Information</span></a>
+												</li>
+												{%- endif -%}
+												{%- if m_shipping -%}
+												<li class="header-mobile__dropdown-item">
+													<a class="header-mobile__dropdown-link" href="{{ shipping_policy_page_url }}"><span>{{ m_shipping.title | escape }}</span></a>
+												</li>
+												{%- endif -%}
+												{%- if m_refund -%}
+												<li class="header-mobile__dropdown-item">
+													<a class="header-mobile__dropdown-link" href="{{ refund_policy_page_url }}"><span>{{ m_refund.title | escape }}</span></a>
+												</li>
+												{%- endif -%}
+												{%- if m_privacy -%}
+												<li class="header-mobile__dropdown-item">
+													<a class="header-mobile__dropdown-link" href="{{ m_privacy.url }}"><span>{{ m_privacy.title | escape }}</span></a>
+												</li>
+												{%- endif -%}
+												{%- if m_terms -%}
+												<li class="header-mobile__dropdown-item">
+													<a class="header-mobile__dropdown-link" href="{{ m_terms.url }}"><span>{{ m_terms.title | escape }}</span></a>
+												</li>
+												{%- endif -%}
+											{%- elsif first_level_link.links != blank -%}
+												{%- for second_level_link in first_level_link.links -%}
+													{%- assign mobile_second_level_url = second_level_link.url -%}
+													{%- if mobile_second_level_url contains 'shipping-policy' -%}
+														{%- assign mobile_second_level_url = shipping_policy_page_url -%}
+													{%- endif -%}
+													{%- if mobile_second_level_url contains 'refund-policy' -%}
+														{%- assign mobile_second_level_url = refund_policy_page_url -%}
+													{%- endif -%}
+													<li class="header-mobile__dropdown-item">
+														<a class="header-mobile__dropdown-link" href="{{- mobile_second_level_url -}}">
+															<span>{{ second_level_link.title | escape }}</span>
+														</a>
+													</li>
+												{%- endfor -%}
+											{%- endif -%}
+										</ul>
+									</div>
+								{%- else -%}
+									{%- comment -%} ==========================================
+									   Simple link (no children, not a collection)
+									========================================== {%- endcomment -%}
+									<a
+										class="button-link header-mobile__menu-item header-mobile__menu-item--main"
+										href="{{- dest_url -}}"
+										{% if first_level_link.current %}aria-current="page"{% endif %}
+									>
+										<span data-text="{{- mobile_display_title | escape -}}">
+											<span>{{- mobile_display_title | escape -}}</span>
+										</span>
+									</a>
+								{%- endif -%}
+							</li>
+						{%- endfor -%}
+					{%- endif -%}
+
+					{%- if additional_menu.links != blank -%}
+						{%- for main_link in additional_menu.links -%}
+							{%- assign animation_delay = animation_delay | plus: 0.05 -%}
+							{%- assign additional_link_url = main_link.url -%}
+							{%- if additional_link_url contains 'shipping-policy' -%}
+								{%- assign additional_link_url = shipping_policy_page_url -%}
+							{%- endif -%}
+							{%- if additional_link_url contains 'refund-policy' -%}
+								{%- assign additional_link_url = refund_policy_page_url -%}
+							{%- endif -%}
+							<li class="header-mobile__menu-item-wrapper" style="--animation-delay: {{ animation_delay }}s">
+								<a
+									class="button-link header-mobile__menu-item header-mobile__menu-item--additional"
+									href="{{- additional_link_url -}}"
+									{% if main_link.current %}aria-current="page"{% endif %}
+								>
+									<span data-text="{{- main_link.title | escape -}}">
+										<span>{{- main_link.title | escape -}}</span>
+									</span>
+								</a>
+							</li>
+						{%- endfor -%}
+					{%- endif -%}
+				</ul>
+			</nav>
+		{%- endif -%}
+
+		<div class="header-mobile__info">
+
+			{%- comment -%} Social icons hidden on mobile header per request {%- endcomment -%}
+
+			{%- if is_language_selector_enabled or is_country_selector_enabled -%}
+				{%- assign animation_delay = animation_delay | plus: 0.05 -%}
+				<div class="header-mobile__localization-wrapper" style="--animation-delay: {{ animation_delay }}s">
+					{%- if is_language_selector_enabled -%}
+						{%- render 'language-localization-form', class: 'header-mobile', list_class: 'js-scroll-lock-ignore', id_prefix: 'header-mobile', form_id: 'header-mobile-localization-form' -%}
+					{%- endif -%}
+					{%- if is_country_selector_enabled -%}
+						{%- render 'country-localization-form', class: 'header-mobile', list_class: 'js-scroll-lock-ignore', id_prefix: 'header-mobile', form_id: 'header-mobile-county-form' -%}
+					{%- endif -%}
+				</div>
+			{%- endif -%}
+
+			{%- if shop.customer_accounts_enabled -%}
+				{%- assign animation_delay = animation_delay | plus: 0.05 -%}
+				<div class="header-mobile__account" style="--animation-delay: {{ animation_delay }}s">
+					{%- if customer -%}
+						{%- assign customer_label = 'customer.account.title' | t -%}
+					{%- else -%}
+						{%- assign customer_label = 'customer.login.title' | t -%}
+					{%- endif -%}
+
+					<a
+						href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+						class="button button--secondary button--with-icon header-mobile__login-link"
+					>
+						{%- render 'icons', icon: 'account' -%}
+						<span data-text="{{- customer_label -}}">
+							<span>{{- customer_label -}}</span>
+						</span>
+					</a>
+
+					{%- unless customer -%}
+						<div class="header-mobile__signup">
+							<span class="header-mobile__new-customer">
+								{{- "customer.login.new_customer" | t -}}
+							</span>
+							<a href="{{- routes.account_register_url -}}" class="button-link header-mobile__signup-link">
+								<span data-text="{{- "customer.login.signup" | t -}}">
+									<span>{{- "customer.login.signup" | t -}}</span>
+								</span>
+							</a>
+						</div>
+					{%- endunless -%}
+				</div>
+			{%- endif -%}
+		</div>
+	</div>
+</div>
+
+<style>
+/* Override default spacing to push info section up closer to menu */
+.header-mobile__body {
+	justify-content: flex-start !important;
+}
+
+@media (max-width: 767.98px) {
+	#headerDrawerMenu.header-mobile {
+		width: min(90vw, 380px) !important;
+		max-width: calc(100vw - 36px) !important;
+		border-right: 1px solid rgba(44, 61, 51, 0.12);
+		box-shadow: none;
+		overflow: hidden;
+	}
+
+	#headerDrawerMenu.header-mobile .header-mobile__body {
+		padding: 18px 16px 24px;
+	}
+
+	#headerDrawerMenu.header-mobile .header-mobile__close {
+		top: 10px;
+		right: 10px;
+	}
+
+	.window-overlay[data-js-overlay="headerToggleMenuDrawer"] {
+		background: rgba(18, 28, 22, 0.44) !important;
+		backdrop-filter: blur(1.5px);
+		-webkit-backdrop-filter: blur(1.5px);
+	}
+}
+
+/* Adjust spacing between menu and bottom info */
+.header-mobile__info {
+	margin-top: 40px !important;
+}
+
+/* Style store info (phone, schedule) */
+.header-mobile__store-info,
+.header-mobile__store-info a {
+	font-family: 'Oswald', sans-serif !important;
+	font-size: 16px !important;
+	font-weight: 500 !important;
+	color: #2C3D33 !important;
+	text-decoration: none !important;
+	letter-spacing: 0.05em;
+	margin-bottom: 8px;
+}
+
+/* Redesign Login Button from black block to clean outline */
+.header-mobile__login-link {
+	background-color: transparent !important;
+	color: #2C3D33 !important;
+	border: 1.5px solid #2C3D33 !important;
+	font-family: 'Oswald', sans-serif !important;
+	font-size: 16px !important;
+	font-weight: 600 !important;
+	text-transform: uppercase !important;
+	border-radius: 4px !important;
+	margin-top: 16px;
+}
+.header-mobile__login-link:hover {
+	background-color: #2C3D33 !important;
+	color: #faf6ee !important;
+}
+
+/* Mobile menu: reduce font size and weight */
+.header-mobile .header-mobile__menu-item.header-mobile__menu-item--main {
+	font-size: calc(var(--body-font-size) * 1.35) !important;
+	font-weight: 400 !important;
+	letter-spacing: 0.04em;
+}
+.header-mobile .header-mobile__menu-item {
+	font-size: calc(var(--body-font-size) * 1.15) !important;
+	font-weight: 400 !important;
+}
+
+.header-mobile__menu-item-row {
+	box-sizing: border-box;
+}
+
+.header-mobile__menu > .header-mobile__menu-item-wrapper:first-child .header-mobile__menu-item-row {
+	padding-right: 56px;
+}
+
+/* Divider lines between top-level mobile menu items */
+.header-mobile__menu {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.header-mobile__menu > .header-mobile__menu-item-wrapper {
+	position: relative;
+	border-bottom: 1px solid rgba(44, 61, 51, 0.15);
+}
+/* When dropdown is open, shrink the bottom divider to match the shorter ones above */
+.header-mobile__menu > .header-mobile__menu-item-wrapper:has(.header-mobile__dropdown-content.is-open) {
+	border-bottom-color: transparent;
+}
+.header-mobile__menu > .header-mobile__menu-item-wrapper:has(.header-mobile__dropdown-content.is-open)::after {
+	content: "";
+	position: absolute;
+	left: 16px;
+	right: 16px;
+	bottom: 0;
+	height: 1px;
+	background: rgba(0, 0, 0, 0.08);
+}
+.header-mobile__menu > .header-mobile__menu-item-wrapper > .header-mobile__menu-item--main,
+.header-mobile__menu > .header-mobile__menu-item-wrapper > .header-mobile__menu-item-row {
+	padding-top: 14px;
+	padding-bottom: 14px;
+}
+
+/* === Accordion Dropdown === */
+.header-mobile__dropdown-arrow {
+	width: 16px;
+	height: 16px;
+	flex-shrink: 0;
+	transition: transform 0.3s ease;
+}
+.js-mobile-dropdown-toggle[aria-expanded="true"] > .header-mobile__dropdown-arrow {
+	transform: rotate(180deg);
+}
+.header-mobile__dropdown-content {
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.header-mobile__dropdown-content.is-open {
+	max-height: 3200px;
+	transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.header-mobile__dropdown-list {
+	list-style: none;
+	padding: 4px 0 8px 16px;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+.header-mobile__dropdown-item {
+	border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.header-mobile__dropdown-item:last-child {
+	border-bottom: none;
+}
+.header-mobile__dropdown-sub-toggle {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	padding: 10px 0;
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-family: var(--heading-font-family);
+	font-size: calc(var(--body-font-size) * 1.05);
+	font-weight: 400;
+	color: var(--color-text-primary);
+	text-align: left;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+}
+.header-mobile__dropdown-link {
+	display: block;
+	padding: 10px 0;
+	font-family: var(--heading-font-family);
+	font-size: calc(var(--body-font-size) * 1.05);
+	font-weight: 400;
+	color: var(--color-text-primary);
+	text-decoration: none;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+}
+.header-mobile__dropdown-products {
+	list-style: none;
+	padding: 4px 0 8px 8px;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+}
+.header-mobile__dropdown-product-link {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 8px 4px;
+	font-family: var(--base-font-family);
+	font-size: calc(var(--body-font-size) * 0.85);
+	font-weight: 400;
+	color: var(--color-text-primary);
+	text-decoration: none;
+	transition: opacity 0.2s ease;
+	border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+.header-mobile__dropdown-product-link:last-child {
+	border-bottom: none;
+}
+.header-mobile__dropdown-product-link:active {
+	opacity: 0.6;
+}
+.header-mobile__dropdown-product-img {
+	width: 30px;
+	height: 30px;
+	object-fit: cover;
+	border-radius: 2px;
+	flex-shrink: 0;
+}
+.header-mobile__dropdown-view-all {
+	display: block;
+	padding: 10px 4px;
+	font-family: var(--heading-font-family);
+	font-size: calc(var(--body-font-size) * 0.85);
+	font-weight: 600;
+	color: var(--color-text-primary);
+	text-decoration: none;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+/* Mobile Collection Items */
+.header-mobile__col-link {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 10px 0;
+	text-decoration: none;
+}
+.header-mobile__col-img {
+	width: 50px;
+	height: 50px;
+	object-fit: cover;
+	border-radius: 4px;
+	flex-shrink: 0;
+	background: #f4f4f4;
+}
+.header-mobile__col-info {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+.header-mobile__col-title {
+	font-family: 'Oswald', sans-serif;
+	font-size: 14px;
+	color: #2c3d33;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	font-weight: 700;
+}
+.header-mobile__col-description {
+	font-family: var(--base-font-family);
+	font-size: 12px;
+	color: #666;
+	line-height: 1.3;
+}
+
+/* ── Mobile Mega Menu: 4-Block Structure ── */
+.header-mobile__mega-heading {
+	list-style: none;
+	font-family: 'Oswald', sans-serif !important;
+	font-weight: 600 !important;
+	font-size: 20px !important;
+	text-transform: uppercase !important;
+	letter-spacing: 0.05em !important;
+	color: #2C3D33 !important;
+	padding: 10px 0 !important;
+	margin-top: 8px !important;
+	border-bottom: 1.5px solid #2C3D33 !important;
+}
+.header-mobile__mega-heading:first-child {
+	margin-top: 0;
+	padding-top: 8px;
+}
+
+.header-mobile__mega-group {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.header-mobile__mega-toggle {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	gap: 16px;
+	padding: 14px 0 10px !important;
+	margin-top: 8px !important;
+	background: none;
+	border: 0;
+	font-family: 'Oswald', sans-serif !important;
+	font-weight: 600 !important;
+	font-size: 19px !important;
+	text-transform: uppercase !important;
+	letter-spacing: 0.05em !important;
+	line-height: 1.2;
+	color: #2C3D33 !important;
+	text-align: left;
+	cursor: pointer;
+}
+
+.header-mobile__mega-group:first-child .header-mobile__mega-toggle {
+	margin-top: 0 !important;
+}
+
+.header-mobile__mega-panel {
+	list-style: none;
+	max-height: 0;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+	transition: max-height 0.28s ease;
+}
+
+.header-mobile__mega-panel.is-open {
+	max-height: 1200px;
+}
+
+.header-mobile__mega-plus {
+	position: relative;
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	flex: 0 0 16px;
+	margin-right: 3px;
+}
+
+.header-mobile__mega-plus::before,
+.header-mobile__mega-plus::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 1px;
+	width: 14px;
+	height: 1.5px;
+	background: #2C3D33;
+	transform: translateY(-50%);
+	transition: opacity 0.2s ease;
+}
+
+.header-mobile__mega-plus::after {
+	transform: translateY(-50%) rotate(90deg);
+}
+
+.header-mobile__mega-toggle[aria-expanded="true"] .header-mobile__mega-plus::after {
+	opacity: 0;
+}
+.header-mobile__dropdown-list::-webkit-scrollbar { display: none; }
+.header-mobile__dropdown-item .header-mobile__dropdown-link,
+.header-mobile__dropdown-item .header-mobile__dropdown-link span {
+	font-family: 'Oswald', sans-serif !important;
+	font-size: 16px !important;
+	font-weight: 400 !important;
+	text-transform: uppercase !important;
+	letter-spacing: 0.02em !important;
+	color: #2C3D33 !important;
+}
+.header-mobile__dropdown-link.is-active,
+.header-mobile__dropdown-link.is-active span {
+	font-weight: 600 !important;
+}
+.header-mobile__dropdown-link--disabled {
+	opacity: 0.45;
+	cursor: default;
+	pointer-events: none;
+}
+.header-mobile__coming-soon {
+	font-size: 10px;
+	font-style: italic;
+	font-weight: 400;
+	color: #8a9a8e;
+	margin-left: 4px;
+}
+
+.header-mobile__gender-row {
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 8px;
+	padding: 8px 0 4px !important;
+	margin: 0 !important;
+}
+
+.header-mobile__gender-title {
+	display: inline-flex;
+	font-family: 'Oswald', sans-serif !important;
+	font-size: 12px !important;
+	font-weight: 500 !important;
+	text-transform: uppercase !important;
+	letter-spacing: 0.06em !important;
+	color: #2C3D33 !important;
+	text-decoration: none;
+	margin-bottom: 0;
+}
+
+.header-mobile__shop-clothing-row {
+	list-style: none;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px 18px;
+	padding: 8px 0 10px !important;
+	margin: 0 !important;
+	border-bottom: 1px solid rgba(44,61,51,0.12);
+}
+
+.header-mobile__shop-clothing-row .header-mobile__dropdown-link {
+	display: inline-flex !important;
+	padding: 0 !important;
+	font-size: 14px !important;
+	line-height: 1.4 !important;
+}
+
+.header-mobile__shop-products {
+	list-style: none;
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 10px;
+	padding: 10px 0 4px !important;
+	margin: 0 !important;
+}
+
+.header-mobile__shop-product {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-decoration: none;
+	color: #2C3D33;
+	min-height: 96px;
+}
+
+.header-mobile__shop-product-image {
+	width: 100%;
+	max-width: 96px;
+	height: 96px;
+	object-fit: contain;
+	border-radius: 0;
+	background: transparent;
+}
+
+/* Hunting links with icons */
+.header-mobile__hunt-link {
+	display: grid !important;
+	grid-template-columns: 36px minmax(0, 1fr);
+	align-items: center;
+	column-gap: 12px;
+}
+.header-mobile__hunt-icon {
+	width: 32px;
+	height: 32px;
+	object-fit: contain;
+	justify-self: center;
+	align-self: center;
+	flex-shrink: 0;
+}
+.header-mobile__hunt-icon--turkey {
+	width: 32px;
+	height: 32px;
+}
+.header-mobile__hunt-icon--deer {
+	width: 34px;
+	height: 34px;
+}
+.header-mobile__hunt-icon--waterfowl {
+	width: 36px;
+	height: 28px;
+}
+.header-mobile__hunt-icon--fishing-t-shirt {
+	width: 31px;
+	height: 31px;
+}
+.header-mobile__hunt-icon--saltwater-fishing-t-shirt {
+	width: 34px;
+	height: 34px;
+	transform: translate(2px, -2px);
+}
+
+.header-mobile__seasonal-item,
+.header-mobile__father-item {
+	border-bottom: none !important;
+}
+
+.header-mobile__seasonal-link,
+.header-mobile__father-link {
+	display: flex !important;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 8px;
+	padding: 12px 0 14px !important;
+}
+
+.header-mobile__seasonal-image-wrap {
+	width: 76%;
+	aspect-ratio: 4 / 3;
+	display: block;
+	overflow: hidden;
+	border-radius: 6px;
+	background: #f7f4ef;
+}
+
+.header-mobile__seasonal-image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+/* Terrain row: horizontal image grid */
+.header-mobile__terrain-row {
+	display: flex !important;
+	flex-wrap: wrap;
+	gap: 8px;
+	padding: 10px 0 !important;
+	border-bottom: none !important;
+}
+.header-mobile__terrain-thumb {
+	display: block;
+	width: 56px;
+	height: 56px;
+	overflow: hidden;
+	border-radius: 6px;
+	flex-shrink: 0;
+}
+.header-mobile__terrain-thumb img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+.header-mobile__terrain-ph {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #e8e4dc;
+	font-family: 'Oswald', sans-serif;
+	font-size: 11px;
+	font-weight: 700;
+	color: #999;
+	text-transform: uppercase;
+}
+</style>

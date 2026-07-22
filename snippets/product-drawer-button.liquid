@@ -1,0 +1,21 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Product drawer button
+
+	- target: string,
+	- text: string
+
+	{%- render "product-drawer-button", target: target, text: text -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+<button
+	type="button"
+	class="product-drawers__item"
+	data-target="{{ target }}"
+	data-js-toggle="{{ target }}"
+>
+	{{- text -}}
+
+	{%- render 'icons', icon: 'arrow-right' -%}
+</button>

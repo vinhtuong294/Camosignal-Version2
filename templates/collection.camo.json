@@ -1,0 +1,142 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "plp-banner": {
+      "type": "collection-banner",
+      "settings": {
+        "show_eyebrow": true,
+        "show_description": true,
+        "background_color": "#2c3d33",
+        "text_color": "#ffffff",
+        "desktop_height": 160,
+        "mobile_height": 120
+      }
+    },
+    "collection_list": {
+      "type": "collection-list",
+      "blocks": {
+        "collection_ntwCJT": {
+          "type": "collection",
+          "settings": {
+            "collection": ""
+          }
+        },
+        "collection_bFUfRr": {
+          "type": "collection",
+          "settings": {
+            "collection": ""
+          }
+        },
+        "collection_R63heV": {
+          "type": "collection",
+          "settings": {
+            "collection": ""
+          }
+        },
+        "collection_hiP8Nr": {
+          "type": "collection",
+          "settings": {
+            "collection": ""
+          }
+        },
+        "collection_metiGy": {
+          "type": "collection",
+          "settings": {
+            "collection": ""
+          }
+        },
+        "collection_JbQ4Lq": {
+          "type": "collection",
+          "settings": {
+            "collection": ""
+          }
+        },
+        "collection_4E7MR4": {
+          "type": "collection",
+          "settings": {
+            "collection": ""
+          }
+        },
+        "collection_VGF9CD": {
+          "type": "collection",
+          "settings": {
+            "collection": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_ntwCJT",
+        "collection_bFUfRr",
+        "collection_R63heV",
+        "collection_hiP8Nr",
+        "collection_metiGy",
+        "collection_JbQ4Lq",
+        "collection_4E7MR4",
+        "collection_VGF9CD"
+      ],
+      "disabled": true,
+      "settings": {
+        "enable_color_scheme_inheritance": true,
+        "color_scheme": "",
+        "heading": "",
+        "show_products_count": true,
+        "container_width": "inherit",
+        "offset_top_desktop": 0,
+        "offset_bottom_desktop": 0,
+        "offset_top_mobile": 25,
+        "offset_bottom_mobile": 25,
+        "inner_offset_top_desktop": 20,
+        "inner_offset_bottom_desktop": 0,
+        "inner_offset_top_mobile": 0,
+        "inner_offset_bottom_mobile": 32
+      }
+    },
+    "plp-template": {
+      "type": "page-collection-camo",
+      "settings": {
+        "enable_color_scheme_inheritance": true,
+        "color_scheme": "",
+        "filters_type": "sidebar",
+        "show_grid_selector": true,
+        "mobile_grid": "2",
+        "show_color_swatch_in_filters": true,
+        "paginate_by": 12,
+        "pagination_type": "pagination",
+        "load_more_style": "secondary",
+        "container_width": "inherit",
+        "offset_top_desktop": 0,
+        "offset_bottom_desktop": 0,
+        "offset_top_mobile": 0,
+        "offset_bottom_mobile": 0,
+        "inner_offset_top_desktop": 64,
+        "inner_offset_bottom_desktop": 64,
+        "inner_offset_top_mobile": 0,
+        "inner_offset_bottom_mobile": 32
+      }
+    },
+    "custom_title": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "{% render 'custom-collection-header' %}",
+        "offset_top_desktop": 0,
+        "offset_bottom_desktop": 0,
+        "offset_top_mobile": 0,
+        "offset_bottom_mobile": 0
+      }
+    }
+  },
+  "order": [
+    "plp-banner",
+    "custom_title",
+    "collection_list",
+    "plp-template"
+  ]
+}

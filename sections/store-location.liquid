@@ -1,0 +1,341 @@
+{%- assign heading							= section.settings.heading -%}
+{%- assign description						= section.settings.description -%}
+{%- assign container						= section.settings.container_width -%}
+{%- assign color_scheme						= section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance 	= section.settings.enable_color_scheme_inheritance -%}
+{%- assign blocks							= section.blocks -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- capture items -%}
+	{%- for block in blocks -%}
+		{%- assign item_icon	= block.settings.item_icon -%}
+		{%- assign item_heading	= block.settings.item_heading -%}
+		{%- assign item_text	= block.settings.item_text -%}
+
+		{%- capture item_text_content -%}
+			{%- if item_heading != blank -%}
+				<div class="store-location__item-heading rte">
+					{{- item_heading -}}
+				</div>
+			{%- endif -%}
+
+			{%- if item_text != blank -%}
+				<div class="store-location__item-text rte">
+					{{- item_text -}}
+				</div>
+			{%- endif -%}
+		{%- endcapture -%}
+
+		{%- if item_text_content != blank -%}
+			<div class="store-location__item">
+				{%- if item_icon != blank -%}
+					<div class="store-location__item-icon">
+						<img
+							src="{{- item_icon.src | image_url: width: 64, height: 64 -}}"
+							alt="{{- item_icon.alt | escape -}}"
+							loading="lazy"
+							fetchpriority="low"
+						>
+					</div>
+				{%- endif -%}
+
+				<div class="store-location__item-text-content">
+					{{- item_text_content -}}
+				</div>
+			</div>
+		{%- endif -%}
+	{%- endfor -%}
+{%- endcapture -%}
+
+{%- if items != blank -%}
+	{%- render 'adastra' with '/src/styles/store-location.scss' -%}
+
+	{%- style -%}
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_mobile -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+		}
+
+		@media screen and (min-width: 768px) {
+			#shopify-section-{{- section.id -}} {
+				padding-top: {{- section.settings.offset_top_desktop -}}px;
+				padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+			}
+		}
+	{%- endstyle -%}
+
+	{%- if container == 'inherit' -%}
+		{%- assign container_width = settings.container_width -%}
+	{%- else -%}
+		{%- assign container_width = container -%}
+	{%- endif -%}
+
+	{%- capture styles -%}
+		--container-width: {{- container_width -}}; {{  -}}
+		--inner-offset-top: {{ section.settings.inner_offset_top -}}px; {{  -}}
+		--inner-offset-bottom: {{ section.settings.inner_offset_bottom -}}px; {{  -}}
+		--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile -}}px; {{  -}}
+		--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile -}}px; {{  -}}
+	{%- endcapture -%}
+
+	<section
+		class="store-location color-{{ color_scheme }} js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}"
+		style="{{- styles -}}"
+	>
+		<div class="container store-location__container section-animate">
+			{%- capture header -%}
+				{%- if heading != blank -%}
+					<h2 class="store-location__heading">
+						{{- heading -}}
+					</h2>
+				{%- endif -%}
+
+				{%- if description != blank -%}
+					<div class="rte store-location__description">
+						{{- description -}}
+					</div>
+				{%- endif -%}
+			{%- endcapture -%}
+
+			{%- if header != blank -%}
+				<div class="store-location__header">
+					{{- header -}}
+				</div>
+			{%- endif -%}
+
+			<div class="store-location__items">
+				{{- items -}}
+			</div>
+		</div>
+	</section>
+{%- endif -%}
+
+{% schema %}
+{
+	"name": "Store location",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "General"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "heading",
+			"label": "Heading",
+			"default": "Contact Us"
+		},
+		{
+			"type": "richtext",
+			"id": "description",
+			"label": "Description",
+			"default": "<p>To live inspired, is to live a life true to your values, a life that’s meaningful, and a life of purpose.</p>"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1808px",
+					"label": "Default - 1680px"
+				},
+				{
+					"value": "2048px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset bottom",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset bottom",
+			"default": 25
+		},
+		{
+			"type": "paragraph",
+			"content": "Internal offsets"
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset bottom",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset bottom",
+			"default": 25
+		}
+	],
+	"blocks": [
+		{
+			"type": "contact_info",
+			"name": "Contact info",
+			"limit": 8,
+			"settings": [
+				{
+					"type": "image_picker",
+					"id": "item_icon",
+					"label": "Icon",
+					"info": "64 x 64px .svg recommended"
+				},
+				{
+					"type": "inline_richtext",
+					"id": "item_heading",
+					"label": "Heading",
+					"default": "Heading:"
+				},
+				{
+					"type": "inline_richtext",
+					"id": "item_text",
+					"label": "Text",
+					"default": "Text"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Store location",
+			"settings": {
+				"heading": "Contact Us",
+				"description": "<p>To live inspired, is to live a life true to your values, a life that’s meaningful, and a life of purpose. </p>"
+			},
+			"blocks": [
+				{
+					"type": "contact_info",
+					"settings": {
+						"item_heading": "Address:",
+						"item_text": "2205 Rosewood Lane"
+					}
+				},
+				{
+					"type": "contact_info",
+					"settings": {
+						"item_heading": "Phone:",
+						"item_text": "213 443 6364"
+					}
+				},
+				{
+					"type": "contact_info",
+					"settings": {
+						"item_heading": "Write to us",
+						"item_text": "hello@revellabel.com"
+					}
+				},
+				{
+					"type": "contact_info",
+					"settings": {
+						"item_heading": "Work schedule",
+						"item_text": "Mn - Fr. 8:00-17:00"
+					}
+				}
+			]
+		}
+	]
+}
+{% endschema %}

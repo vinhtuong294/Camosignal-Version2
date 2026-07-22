@@ -1,0 +1,60 @@
+.text-section {
+  overflow: hidden;
+  padding-top: var(--inner-offset-top-mobile);
+  padding-bottom: var(--inner-offset-bottom-mobile);
+  text-align: var(--text-align, center);
+  word-break: break-word;
+  background-color: var(--color-background);
+}
+.text-section .text-section__content {
+  color: var(--color-text-secondary);
+}
+.text-section .text-section__content.text-section__content--cut-off {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+}
+.text-section .text-section__heading,
+.text-section .text-section__label,
+.text-section .text-section__read-more-button {
+  color: var(--color-text-primary);
+}
+.text-section .text-section__heading {
+  margin-bottom: 24px;
+}
+.text-section .text-section__label {
+  margin-bottom: 24px;
+  line-height: 1.6667;
+  font-size: calc(var(--body-font-size) * 0.75);
+  text-transform: uppercase;
+}
+.text-section .text-section__link {
+  margin-top: 24px;
+}
+.text-section .text-section__read-more-button {
+  margin-top: 24px;
+  padding: 0;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.text-section .text-section__read-more-button .icon {
+  width: 16px;
+  height: 16px;
+}
+.text-section .text-section__read-more-button .icon path {
+  transform-origin: center;
+  transform: initial;
+  transition-property: transform;
+  transition-duration: var(--timing-base);
+}
+.text-section .text-section__read-more-button.is-active .icon path:last-child {
+  transform: rotate(90deg);
+}
+@media (min-width: 768px) {
+  .text-section {
+    padding-top: var(--inner-offset-top);
+    padding-bottom: var(--inner-offset-bottom);
+  }
+}

@@ -1,0 +1,43 @@
+{% doc %}
+  Keeps product-page controls visually square without changing cards on other pages.
+  @param {object} section - The current product section.
+{% enddoc %}
+
+<style>
+	#shopify-section-{{ section.id }} .product-media__slider-thumbnails-slide,
+	#shopify-section-{{ section.id }} .product-media__slider-thumbnails-slide picture,
+	#shopify-section-{{ section.id }} .product-media__slider-thumbnails-slide .product-media__image,
+	#shopify-section-{{ section.id }} .product-media__slider-thumbnails-container .thumb-nav,
+	#shopify-section-{{ section.id }} .product-options .radio-option-swatch__label,
+	#shopify-section-{{ section.id }} .product-options .radio-option-swatch__label::before,
+	#shopify-section-{{ section.id }} .product-options .radio-option-swatch__label::after,
+	#shopify-section-{{ section.id }} .product-options .radio-option-swatch__image,
+	#shopify-section-{{ section.id }} .product-options .radio-option__label,
+	#shopify-section-{{ section.id }} .product-quantity__container,
+	#shopify-section-{{ section.id }} .product-upsell-block,
+	#shopify-section-{{ section.id }} .product-upsell__checkbox,
+	#shopify-section-{{ section.id }} .product-add-to-cart .add-to-cart,
+	#shopify-section-{{ section.id }} .product-add-to-cart__additional-buttons,
+	#shopify-section-{{ section.id }} .product-add-to-cart__additional-buttons .shopify-payment-button__button,
+	#shopify-section-{{ section.id }} .mobile-sticky-atc__btn,
+	#shopify-section-{{ section.id }} .product-custom-banner-wrapper img,
+	#shopify-section-{{ section.id }} .product-promo-banner,
+	#shopify-section-{{ section.id }} .product-promo-banner__img,
+	#shopify-section-{{ section.id }} .also-available__item,
+	#shopify-section-{{ section.id }} .also-available__media,
+	#shopify-section-{{ section.id }} .also-available__price-difference {
+		border-radius: 0 !important;
+	}
+
+	#size-chart-overlay *,
+	#size-chart-overlay *::before,
+	#size-chart-overlay *::after {
+		border-radius: 0 !important;
+	}
+
+	#size-chart-overlay .size-chart-overlay__table th,
+	#size-chart-overlay .size-chart-overlay__tab.is-active,
+	#size-chart-overlay .size-chart-overlay__unit-tab.is-active {
+		color: #ffffff !important;
+	}
+</style>

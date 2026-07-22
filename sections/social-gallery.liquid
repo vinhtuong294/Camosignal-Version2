@@ -1,0 +1,438 @@
+{%- render 'adastra' with '/src/styles/social-gallery.scss' -%}
+
+{%- assign enable_color_scheme_inheritance 	= section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme 					= section.settings.color_scheme -%}
+{%- assign title 							= section.settings.title -%}
+{%- assign link_label 						= section.settings.link_label -%}
+{%- assign link_url 						= section.settings.link_url -%}
+{%- assign animation_movement_speed 		= section.settings.animation_movement_speed -%}
+{%- assign container 						= section.settings.container_width -%}
+{%- assign enable_instafeed 				= section.settings.enable_instafeed -%}
+{%- assign instafeed_proxy_url 			= section.settings.instafeed_proxy_url | strip -%}
+{%- assign instafeed_post_limit 			= section.settings.instafeed_post_limit -%}
+
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{% assign container_width = container -%}
+{%- endif -%}
+
+{%- if container_width == '2048px' -%}
+	{%- assign container_modify_class = 'social-gallery--large' -%}
+{%- elsif container_width == '1808px' -%}
+	{%- assign container_modify_class = 'social-gallery--default' -%}
+{%- elsif container_width == '100%' -%}
+	{%- assign container_modify_class = 'social-gallery--full' -%}
+{%- endif -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- capture section_styles -%}
+	--inner-offset-top: {{ section.settings.inner_offset_top }}px; {{-  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom }}px; {{-  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px; {{-  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px; {{-  -}}
+	--container-width: {{ container_width }}; {{-  -}}
+	--animation-duration: {{ animation_movement_speed }}s; {{-  -}}
+{%- endcapture -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+<section
+	class="social-gallery js-animate color-{{ color_scheme }} {{ container_modify_class }} js-social-gallery {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}"
+	style="{{ section_styles }}"
+	data-instafeed-enabled="{{ enable_instafeed }}"
+	data-instafeed-endpoint="{{ instafeed_proxy_url | escape }}"
+	data-instafeed-limit="{{ instafeed_post_limit }}"
+>
+	<div class="social-gallery__container container section-animate">
+		{%- if title != blank -%}
+			<h2 class="social-gallery__title">{{- title -}}</h2>
+		{%- endif -%}
+
+		{%- assign gallery_item_count = section.blocks.size -%}
+		{%- if enable_instafeed and instafeed_proxy_url != blank -%}
+			{%- assign gallery_item_count = instafeed_post_limit -%}
+		{%- endif -%}
+
+		{%- if gallery_item_count > 5 -%}
+			{%- assign animate_desktop_class = 'animate-desktop' -%}
+		{%- endif -%}
+
+		{%- if gallery_item_count > 2 -%}
+			{%- assign animate_mobile_class = 'animate-mobile' -%}
+		{%- endif -%}
+
+		{%- if section.blocks.size > 0 or enable_instafeed and instafeed_proxy_url != blank -%}
+			<div class="social-gallery__images">
+				<div
+					class="social-gallery__images-container {{ animate_desktop_class }} {{ animate_mobile_class }}"
+					data-instafeed-container
+					{% if enable_instafeed and instafeed_proxy_url != blank %}aria-busy="true"{% endif %}
+				>
+					{%- for block in section.blocks -%}
+						{%- assign image 				= block.settings.image -%}
+						{%- assign image_link 			= block.settings.image_link -%}
+						{%- assign open_link_in_new_tab = block.settings.open_link_in_new_tab -%}
+						{%- assign is_lazy 				= true -%}
+
+						{%- if section.index == 1 and forloop.index == 1 -%}
+							{%- assign is_lazy = false -%}
+						{%- endif -%}
+
+						{%- if image != blank -%}
+							{%- capture img_focal -%}
+								--img-pos: {{ image.presentation.focal_point }};
+							{%- endcapture -%}
+
+							{%- case forloop.index -%}
+								{%- when 1 -%}
+									{%- assign w_420 = 165 -%}
+									{%- assign w_420_x2 = w_420 | times: 2 -%}
+								{%- when 2 -%}
+									{%- assign w_420 = 133 %}
+									{%- assign w_420_x2 = w_420 | times: 2 %}
+								{%- when 3 -%}
+									{%- assign w_420 = 195 -%}
+									{%- assign w_420_x2 = w_420 | times: 2 -%}
+								{%- when 4 -%}
+									{%- assign w_420 = 133 -%}
+									{%- assign w_420_x2 = w_420 | times: 2 -%}
+								{%- when 5 -%}
+									{%- assign w_420 = 165 -%}
+									{%- assign w_420_x2 = w_420 | times: 2 -%}
+								{%- else -%}
+									{%- assign w_420 = 195 -%}
+									{%- assign w_420_x2 = w_420 | times: 2 -%}
+							{%- endcase -%}
+
+							{%- capture block_image -%}
+								<picture>
+									<source srcset="{{ image | image_url: width: w_420 }} 1x, {{ image | image_url: width: w_420_x2 }} 2x" media="(max-width: 420px)">
+									<source srcset="{{ image | image_url: width: 375 }} 1x, {{ image | image_url: width: 750 }} 2x" media="(max-width: 767px)">
+									<source srcset="{{ image | image_url: width: 285 }} 1x, {{ image | image_url: width: 570 }} 2x" media="(max-width: 1199px)">
+									<source srcset="{{ image | image_url: width: 360 }} 1x, {{ image | image_url: width: 720 }} 2x" media="(max-width: 1600px)">
+
+									<img class="social-gallery__image"
+										 src="{{ image | image_url: width: 500 }}"
+										 srcset="{{ image | image_url: width: 500 }} 1x, {{ image | image_url: width: 1000 }} 2x"
+										 width="{{ image.width }}"
+										 height="{{ image.height }}"
+										{% if is_lazy %}
+											fetchpriority="low"
+											loading="lazy"
+										{% else %}
+											fetchpriority="high"
+											loading="eager"
+										{% endif %}
+										 alt="{{ image.alt | escape }}"
+										 style="{{ img_focal }}"
+									>
+								</picture>
+							{%- endcapture -%}
+
+							<div class="social-gallery__image-col">
+								{%- if image_link != blank -%}
+									<a
+										href="{{ image_link }}"
+										class="social-gallery__image-wrapper social-gallery__image-wrapper--link focus-visible-outline js-social-gallery-link"
+										{% if open_link_in_new_tab %}
+											target="_blank"
+											rel="noopener noreferrer"
+										{% endif %}
+									>
+										{{- block_image -}}
+									</a>
+								{%- else -%}
+									<div class="social-gallery__image-wrapper">
+										{{- block_image -}}
+									</div>
+								{%- endif -%}
+							</div>
+						{%- else -%}
+							<div class="social-gallery__image-col">
+								<div class="social-gallery__image-wrapper">
+									{{- 'collection-apparel-3' | placeholder_svg_tag: "social-gallery__image" -}}
+								</div>
+							</div>
+						{%- endif -%}
+					{%- endfor -%}
+				</div>
+			</div>
+		{%- endif -%}
+
+		{%- if link_label != blank and link_url != blank -%}
+			<div class="social-gallery__link-wrapper">
+				<a href="{{ link_url }}" class="button-link focus-visible-outline">
+					<span data-text="{{ link_label }}">
+						<span>{{- link_label -}}</span>
+					</span>
+				</a>
+			</div>
+		{%- endif -%}
+	</div>
+</section>
+
+{%- render 'adastra' with '/src/scripts/section-social-gallery.js' -%}
+
+{% schema %}
+	{
+		"name": "Social gallery",
+		"disabled_on": {
+			"groups": ["header", "footer", "custom.popup"]
+		},
+		"settings": [
+			{
+				"type": "header",
+				"content": "Colors"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_color_scheme_inheritance",
+				"label": "Enable color scheme inheritance",
+				"default": true,
+				"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+			},
+			{
+				"type": "color_scheme",
+				"id": "color_scheme",
+				"label": "Color scheme",
+				"default": "scheme-1"
+			},
+			{
+				"type": "header",
+				"content": "General"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_instafeed",
+				"label": "Load live posts from Instagram",
+				"default": true
+			},
+			{
+				"type": "text",
+				"id": "instafeed_proxy_url",
+				"label": "Instafeed proxy URL",
+				"default": "https://camo-signal-instafeed-proxy.vercel.app/api/feed",
+				"info": "Public proxy URL only. Never paste the Instafeed API key here."
+			},
+			{
+				"type": "range",
+				"id": "instafeed_post_limit",
+				"label": "Instagram posts to load",
+				"min": 5,
+				"max": 24,
+				"step": 1,
+				"default": 10
+			},
+			{
+				"type": "inline_richtext",
+				"id": "title",
+				"label": "Heading",
+				"default": "Heading"
+			},
+			{
+				"type": "text",
+				"id": "link_label",
+				"label": "Link label",
+				"default": "Link label"
+			},
+			{
+				"type": "url",
+				"id": "link_url",
+				"label": "Link url"
+			},
+			{
+				"type": "range",
+				"id": "animation_movement_speed",
+				"label": "Movement speed",
+				"min": 10,
+				"max": 45,
+				"unit": "s",
+				"default": 30,
+				"info": "Images animation speed"
+			},
+			{
+				"type": "header",
+				"content": "Layout"
+			},
+			{
+				"type": "select",
+				"id": "container_width",
+				"label": "Container width",
+				"options": [
+					{
+						"value": "1808px",
+						"label": "Default - 1680px"
+					},
+					{
+						"value": "2048px",
+						"label": "Large - 1920px"
+					},
+					{
+						"value": "100%",
+						"label": "Full width"
+					},
+					{
+						"value": "inherit",
+						"label": "Inherit of general setting"
+					}
+				],
+				"default": "inherit",
+				"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+			},
+			{
+				"type": "paragraph",
+				"content": "External offsets"
+			},
+			{
+				"type": "range",
+				"id": "offset_top_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop external offset top",
+				"default": 60
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop external offset bottom",
+				"default": 60
+			},
+			{
+				"type": "range",
+				"id": "offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile external offset top",
+				"default": 30
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile external offset bottom",
+				"default": 30
+			},
+			{
+				"type": "paragraph",
+				"content": "Internal offsets"
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop internal offset top",
+				"default": 30
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop internal offset bottom",
+				"default": 30
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile internal offset top",
+				"default": 30
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile internal offset bottom",
+				"default": 30
+			}
+		],
+		"blocks": [
+			{
+				"type": "image",
+				"name": "Image",
+				"settings": [
+					{
+						"type": "image_picker",
+						"id": "image",
+						"label": "Image"
+					},
+					{
+						"type": "url",
+						"id": "image_link",
+						"label": "Link"
+					},
+					{
+						"type": "checkbox",
+						"id": "open_link_in_new_tab",
+						"label": "Open link in new tab",
+						"default": false
+					}
+				]
+			}
+		],
+		"presets": [
+			{
+				"name": "Social gallery",
+				"settings": {},
+				"blocks": [
+					{
+						"type": "image"
+					},
+					{
+						"type": "image"
+					},
+					{
+						"type": "image"
+					},
+					{
+						"type": "image"
+					},
+					{
+						"type": "image"
+					},
+					{
+						"type": "image"
+					}
+				]
+			}
+		]
+	}
+{% endschema %}

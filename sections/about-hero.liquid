@@ -1,0 +1,296 @@
+{{ 'about-page.css' | asset_url | stylesheet_tag }}
+{%- comment -%}
+------------------------------------------------------------------------------
+  Section: About Hero
+  A dramatic opening statement with large typography and optional background.
+  Designed for powerful first-impression storytelling.
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign color_scheme                    = section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign label                           = section.settings.label -%}
+{%- assign heading                         = section.settings.heading -%}
+{%- assign text_content                    = section.settings.text_content -%}
+{%- assign bg_image                        = section.settings.bg_image -%}
+{%- assign overlay_opacity                 = section.settings.overlay_opacity -%}
+{%- assign container                       = section.settings.container_width -%}
+{%- assign min_height_desktop              = section.settings.min_height_desktop -%}
+{%- assign min_height_mobile               = section.settings.min_height_mobile -%}
+{%- assign text_alignment                  = section.settings.text_alignment -%}
+{%- assign heading_size                    = section.settings.heading_size -%}
+{%- assign text_max_width                  = section.settings.text_max_width -%}
+{%- assign enable_separator                = section.settings.enable_separator -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- style -%}
+	#shopify-section-{{ section.id }} {
+		padding-top: {{ section.settings.offset_top_mobile }}px;
+		padding-bottom: {{ section.settings.offset_bottom_mobile }}px;
+	}
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{ section.id }} {
+			padding-top: {{ section.settings.offset_top_desktop }}px;
+			padding-bottom: {{ section.settings.offset_bottom_desktop }}px;
+		}
+	}
+{%- endstyle -%}
+
+<section
+	class="about-hero color-{{ color_scheme }}"
+	style="--container-width: {{ container_width }};
+		   --min-height-desktop: {{ min_height_desktop }}px;
+		   --min-height-mobile: {{ min_height_mobile }}px;
+		   --overlay-opacity: {{ overlay_opacity | divided_by: 100.0 }};
+		   --text-align: {{ text_alignment }};
+		   --heading-size: {{ heading_size }};
+		   --text-max-width: {{ text_max_width }}px;"
+>
+	{%- if bg_image != blank -%}
+		<div class="about-hero__bg">
+			<img
+				src="{{ bg_image | image_url: width: 1920 }}"
+				srcset="{{ bg_image | image_url: width: 750 }} 750w,
+						{{ bg_image | image_url: width: 1200 }} 1200w,
+						{{ bg_image | image_url: width: 1920 }} 1920w"
+				sizes="100vw"
+				alt="{{ bg_image.alt | escape }}"
+				loading="eager"
+				fetchpriority="high"
+				width="{{ bg_image.width }}"
+				height="{{ bg_image.height }}"
+			>
+			<div class="about-hero__overlay"></div>
+		</div>
+	{%- endif -%}
+
+	<div class="about-hero__container container">
+		<div class="about-hero__content">
+			{%- if label != blank -%}
+				<p class="about-hero__label">{{ label }}</p>
+			{%- endif -%}
+
+			{%- if heading != blank -%}
+				<h1 class="about-hero__heading">{{ heading }}</h1>
+			{%- endif -%}
+
+			{%- if enable_separator -%}
+				<div class="about-hero__separator"></div>
+			{%- endif -%}
+
+			{%- if text_content != blank -%}
+				<div class="about-hero__text rte">{{ text_content }}</div>
+			{%- endif -%}
+
+			{%- if section.settings.button_label != blank and section.settings.button_url != blank -%}
+				<a href="{{ section.settings.button_url }}" class="about-hero__button button button--{{ section.settings.button_style }}">
+					{{ section.settings.button_label }}
+				</a>
+			{%- endif -%}
+		</div>
+	</div>
+</section>
+
+{% schema %}
+{
+	"name": "About Hero",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": false
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Content"
+		},
+		{
+			"id": "label",
+			"type": "text",
+			"label": "Label",
+			"default": "ABOUT US"
+		},
+		{
+			"id": "heading",
+			"type": "textarea",
+			"label": "Heading",
+			"default": "Built on understanding, not attention."
+		},
+		{
+			"id": "text_content",
+			"type": "richtext",
+			"label": "Body text",
+			"default": "<p>It began with the land — the woods, the fields, and open prairies, in mountain backcountry and brush country, along marsh edges and the quiet places where hunting isn't a sport, but a way of reading the ground you grew up on.</p>"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_separator",
+			"label": "Show separator line",
+			"default": true
+		},
+		{
+			"id": "button_label",
+			"type": "text",
+			"label": "Button label"
+		},
+		{
+			"id": "button_url",
+			"type": "url",
+			"label": "Button link"
+		},
+		{
+			"id": "button_style",
+			"type": "select",
+			"label": "Button style",
+			"options": [
+				{ "value": "primary", "label": "Primary" },
+				{ "value": "secondary", "label": "Secondary" }
+			],
+			"default": "secondary"
+		},
+		{
+			"type": "header",
+			"content": "Typography"
+		},
+		{
+			"type": "select",
+			"id": "heading_size",
+			"label": "Heading size",
+			"options": [
+				{ "value": "small", "label": "Small" },
+				{ "value": "medium", "label": "Medium" },
+				{ "value": "large", "label": "Large" },
+				{ "value": "xlarge", "label": "Extra Large" }
+			],
+			"default": "large"
+		},
+		{
+			"type": "select",
+			"id": "text_alignment",
+			"label": "Text alignment",
+			"options": [
+				{ "value": "left", "label": "Left" },
+				{ "value": "center", "label": "Center" }
+			],
+			"default": "left"
+		},
+		{
+			"type": "range",
+			"id": "text_max_width",
+			"min": 400,
+			"max": 1000,
+			"step": 20,
+			"unit": "px",
+			"label": "Text max width",
+			"default": 720
+		},
+		{
+			"type": "header",
+			"content": "Background"
+		},
+		{
+			"type": "image_picker",
+			"id": "bg_image",
+			"label": "Background image"
+		},
+		{
+			"type": "range",
+			"id": "overlay_opacity",
+			"min": 0,
+			"max": 100,
+			"step": 5,
+			"unit": "%",
+			"label": "Overlay opacity",
+			"default": 65
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{ "value": "1808px", "label": "Default - 1680px" },
+				{ "value": "2048px", "label": "Large - 1920px" },
+				{ "value": "100%", "label": "Full width" },
+				{ "value": "inherit", "label": "Inherit of general setting" }
+			],
+			"default": "inherit"
+		},
+		{
+			"type": "range",
+			"id": "min_height_desktop",
+			"min": 200,
+			"max": 800,
+			"step": 10,
+			"unit": "px",
+			"label": "Minimum height (Desktop)",
+			"default": 520
+		},
+		{
+			"type": "range",
+			"id": "min_height_mobile",
+			"min": 200,
+			"max": 600,
+			"step": 10,
+			"unit": "px",
+			"label": "Minimum height (Mobile)",
+			"default": 400
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range", "id": "offset_top_desktop",
+			"min": 0, "max": 100, "step": 1, "unit": "px",
+			"label": "Desktop offset top", "default": 0
+		},
+		{
+			"type": "range", "id": "offset_bottom_desktop",
+			"min": 0, "max": 100, "step": 1, "unit": "px",
+			"label": "Desktop offset bottom", "default": 0
+		},
+		{
+			"type": "range", "id": "offset_top_mobile",
+			"min": 0, "max": 100, "step": 1, "unit": "px",
+			"label": "Mobile offset top", "default": 0
+		},
+		{
+			"type": "range", "id": "offset_bottom_mobile",
+			"min": 0, "max": 100, "step": 1, "unit": "px",
+			"label": "Mobile offset bottom", "default": 0
+		}
+	],
+	"presets": [
+		{
+			"name": "About Hero"
+		}
+	]
+}
+{% endschema %}

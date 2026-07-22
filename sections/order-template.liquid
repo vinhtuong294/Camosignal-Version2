@@ -1,0 +1,814 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Order template
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render "adastra" with "/src/styles/account-entrance.scss" -%}
+{%- render "adastra" with "/src/styles/order-item-details.scss" -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign color_scheme      	           	= section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance 	= section.settings.enable_color_scheme_inheritance -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- assign show_unit_price = settings.is_show_unit_price -%}
+
+{%- capture styles -%}
+	--inner-offset-top: {{ section.settings.inner_offset_top }}px; {{-  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom }}px; {{-  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px; {{-  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px; {{-  -}}
+{%- endcapture -%}
+
+<section class="account-entrance account-entrance--no-margins color-{{ color_scheme }}" style="{{ styles }}">
+	<div class="account-entrance__header">
+		<h1 class="account-entrance__heading">
+			{{- 'customer.account.title' | t -}}
+		</h1>
+	</div>
+
+	<div class="account-entrance__content-wrapper">
+		<div class="account-entrance__content">
+			<a class="button-link focus-visible-outline account-entrance__return" href="{{- routes.account_url -}}">
+				{%- render 'icons', icon: 'slider-arrow-left' -%}
+
+				<span data-text="{{- 'customer.account.return' | t -}}">
+					<span>{{- 'customer.account.return' | t -}}</span>
+				</span>
+			</a>
+
+			<div class="account-entrance__row account-entrance__row--date">
+				<h2 class="h4 account-entrance__order-title">
+					{{- 'customer.order.title' | t: name: order.name -}}
+				</h2>
+
+				{%- assign order_date = order.created_at | date: "%B %d, %Y %I:%M%p" -%}
+
+				<p class="account-entrance__order-date">
+					{{- 'customer.order.date' | t: date: order_date -}}
+				</p>
+			</div>
+
+			{%- if order.cancelled -%}
+				<div class="account-entrance__row account-entrance__row--canceled">
+					{%- assign cancelled_at = order.cancelled_at | date: "%B %d, %Y %I:%M%p" -%}
+
+					<p>{{- 'customer.order.cancelled' | t: date: cancelled_at -}}</p>
+
+					<p>{{- 'customer.order.cancelled_reason' | t: reason: order.cancel_reason -}}</p>
+				</div>
+			{%- endif -%}
+
+			<table class="account-entrance__table account-entrance__table--desktop responsive-table">
+				<thead>
+					<tr>
+						<th class="column-large">{{ 'customer.order.product' | t }}</th>
+
+						<th class="responsive-table__sku">{{ 'customer.order.sku' | t }}</th>
+
+						<th class="responsive-table__price">{{ 'customer.order.price' | t }}</th>
+
+						<th class="responsive-table__quantity">{{ 'customer.order.quantity' | t }}</th>
+
+						<th class="responsive-table__total">{{ 'customer.order.total' | t }}</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					{%- for line_item in order.line_items -%}
+						<tr id="{{ line_item.key }}" class="responsive-table__row">
+							<td class="column-large">
+								<span class="responsive-table__links">
+									<a class="focus-visible-outline responsive-table__link" href="{{- line_item.product.url -}}">
+										{% if line_item.image != blank %}
+											{% assign item_image = line_item.image %}
+										{% else %}
+											{% assign item_image = settings.product_default_image %}
+
+											{%- capture img_focal -%}
+												--img-desktop-pos: {{ item_image.presentation.focal_point }};
+											{%- endcapture -%}
+										{% endif %}
+
+										<span class="responsive-table__image-wrapper">
+											<picture>
+												{%- if item_image != blank -%}
+													<img
+														class="responsive-table__image"
+														src="{{- item_image | image_url: height: 120 -}}"
+														srcset="{{ item_image | image_url: height: 120 }} 1x, {{ item_image | image_url: height: 240 }} 2x"
+														alt="{{- item_image.alt -}}"
+														width="96"
+														height="120"
+														loading="lazy"
+														fetchpriority="low"
+														{% if img_focal %}
+															style="{{ img_focal }}"
+														{% endif %}
+													/>
+												{%- else -%}
+													{{ 'product-apparel-3' | placeholder_svg_tag: 'responsive-table__image' }}
+												{%- endif -%}
+											</picture>
+										</span>
+									</a>
+
+									<span>
+										<a class="focus-visible-outline responsive-table__link" href="{{- line_item.product.url -}}">
+											<span>
+												{{- line_item.title | split: '-' | first -}}
+											</span>
+										</a>
+
+										{%- assign variant_title = line_item.variant.title -%}
+
+										{%- if variant_title != blank and variant_title != 'Default Title' -%}
+											<span class="responsive-table__product-variant-title">
+												{{- variant_title -}}
+											</span>
+										{%- endif -%}
+
+										{%- assign property_size = line_item.properties | size -%}
+
+										{%- unless line_item.selling_plan_allocation == nil and property_size == 0 -%}
+											<ul class="account-entrance__order-detail-properties">
+												{%- unless line_item.selling_plan_allocation == nil -%}
+													<li>
+														{{- line_item.selling_plan_allocation.selling_plan.name -}}
+													</li>
+												{%- endunless -%}
+
+												{%- if property_size != 0 -%}
+													{%- for property in line_item.properties -%}
+														{% assign property_first_char = property.first | slice: 0 %}
+
+														{%- if property.last != blank and property_first_char != '_' -%}
+															<li>
+																{{- property.first -}}:&nbsp;
+
+																{%- if property.last contains '/uploads/' -%}
+																	<a class="focus-visible-outline" href="{{- property.last -}}">
+																		{{- property.last | split: '/' | last -}}
+																	</a>
+																{%- else -%}
+																	{{- property.last -}}
+																{%- endif -%}
+															</li>
+														{%- endif -%}
+													{%- endfor -%}
+												{%- endif -%}
+											</ul>
+										{%- endunless -%}
+
+										{%- if line_item.line_level_discount_allocations != blank -%}
+											<ul class="account-entrance__discount-list" role="list" aria-label="{{ 'customer.order.discount' | t | escape }}">
+												{%- for discount_allocation in line_item.line_level_discount_allocations -%}
+													<li class="account-entrance__discount-list-item">
+														{% render 'icons', icon: 'discount' %} {{- discount_allocation.discount_application.title }} (-{{ discount_allocation.amount | money -}})
+													</li>
+												{%- endfor -%}
+											</ul>
+										{%- endif -%}
+
+										{%- if line_item.fulfillment -%}
+											<div class="account-entrance__order-detail-note">
+												{%- render 'icons', icon: 'check' -%}
+
+												{{- 'customer.order.fulfilled_at' | t -}}
+											</div>
+										{%- endif -%}
+									</span>
+								</span>
+							</td>
+
+							<td class="responsive-table__sku" data-label="{{ 'customer.order.sku' | t }}">
+								{{ line_item.sku }}
+							</td>
+
+							<td class="responsive-table__price" data-label="{{ 'customer.order.price' | t }}">
+								{%- if line_item.original_price != line_item.final_price or line_item.unit_price_measurement -%}
+									<dl>
+										{%- if line_item.original_price != line_item.final_price -%}
+											<dt>
+												<span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+											</dt>
+
+											<dd class="regular-price">
+												<s>{{ line_item.original_price | money }}</s>
+											</dd>
+
+											<dt>
+												<span class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</span>
+											</dt>
+
+											<dd>
+												<span>{{ line_item.final_price | money }}</span>
+											</dd>
+										{%- else -%}
+											<dt>
+												<span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+											</dt>
+
+											<dd>
+												{{ line_item.original_price | money }}
+											</dd>
+										{%- endif -%}
+
+										{% if line_item.unit_price_measurement %}
+											<dt>
+												<span class="visually-hidden">{{ 'products.product.price.unit_price' | t }}</span>
+											</dt>
+
+											<dd>
+												<small>
+													{{ line_item.unit_price | money }}
+
+													<span aria-hidden="true">/</span>
+
+													{%- if line_item.unit_price_measurement.reference_value != 1 -%}
+														{{- line_item.unit_price_measurement.reference_value -}}
+													{%- endif -%}
+
+													{{ line_item.unit_price_measurement.reference_unit }}
+												</small>
+											</dd>
+										{% endif %}
+									</dl>
+								{%- else -%}
+									<span>{{ line_item.final_price | money }}</span>
+								{%- endif -%}
+							</td>
+
+							<td class="responsive-table__quantity" data-label="{{ 'customer.order.quantity' | t }}">
+								{{ line_item.quantity }}
+							</td>
+
+							<td class="responsive-table__total" data-label="{{ 'customer.order.total' | t }}">
+								{%- if line_item.original_line_price != line_item.final_line_price -%}
+									<dl>
+										<dt>
+											<span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+										</dt>
+
+										<dd class="regular-price">
+											<s>{{ line_item.original_line_price | money }}</s>
+										</dd>
+
+										<dt>
+											<span class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</span>
+										</dt>
+
+										<dd>
+											<span>{{ line_item.final_line_price | money }}</span>
+										</dd>
+									</dl>
+								{%- else -%}
+									{{ line_item.original_line_price | money }}
+								{%- endif -%}
+							</td>
+						</tr>
+					{%- endfor -%}
+				</tbody>
+
+				<tfoot>
+					<tr class="responsive-table__row">
+						<td colspan="4" class="responsive-table__small-hide">
+							{{ 'customer.order.subtotal' | t }}
+						</td>
+
+						<td data-label="{{ 'customer.order.subtotal' | t }}">
+							{{ order.line_items_subtotal_price | money }}
+						</td>
+					</tr>
+
+					{% for discount_application in order.cart_level_discount_applications %}
+						<tr>
+							<td colspan="4" class="responsive-table__small-hide">
+								{{ 'customer.order.discount' | t }}
+							</td>
+
+							<td data-label="{{ 'customer.order.discount' | t }}">
+								-{{ discount_application.total_allocated_amount | money }}
+
+								{% if discount_application.title != blank %}
+									<span class="account-entrance__order-summary-discount">
+										{% render 'icons', icon: 'discount' %} {{ discount_application.title }}
+									</span>
+								{% endif %}
+							</td>
+						</tr>
+					{% endfor %}
+
+					{%- for shipping_method in order.shipping_methods -%}
+						<tr>
+							<td colspan="4" class="responsive-table__small-hide">
+								{{ 'customer.order.shipping' | t }} ({{ shipping_method.title }}):
+							</td>
+
+							<td data-label="{{ 'customer.order.shipping' | t }} ({{ shipping_method.title }})">
+								{{ shipping_method.price | money }}
+							</td>
+						</tr>
+					{%- endfor -%}
+
+					{%- for tax_line in order.tax_lines -%}
+						<tr>
+							<td colspan="4" class="responsive-table__small-hide">
+								{{ 'customer.order.tax' | t }} ({{ tax_line.title }} {{ tax_line.rate | times: 100 }}%):
+							</td>
+
+							<td data-label="{{ 'customer.order.tax' | t }} ({{ tax_line.title }} {{ tax_line.rate | times: 100 }}%)">
+								{{ tax_line.price | money }}
+							</td>
+						</tr>
+					{%- endfor -%}
+
+					<tr>
+						<td colspan="4" class="responsive-table__small-hide">
+							{{- 'customer.order.total' | t -}}:
+						</td>
+
+						<td data-label="{{ 'customer.order.total' | t }}">
+							{{ order.total_net_amount | money }}
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+
+			<div class="account-entrance__table account-entrance__table--mobile">
+				<div class="account-entrance__order-items">
+					{%- for line_item in order.line_items -%}
+						<div class="order-item-details">
+							<div class="order-item-details__image-col">
+								<a class="focus-visible-outline order-item-details__image-link" href="{{- line_item.product.url -}}">
+									{%- if line_item.image != blank -%}
+										{%- assign item_image = line_item.image -%}
+									{%- else -%}
+										{%- assign item_image = settings.product_default_image -%}
+									{%- endif -%}
+
+									<span class="order-item-details__image-wrapper">
+										<picture>
+											<img
+												class="order-item-details__image"
+												src="{{- item_image | image_url: width: 80 -}}"
+												srcset="{{ item_image | image_url: width: 80 }} 1x, {{ item_image | image_url: width: 160 }} 2x"
+												alt="{{- item_image.alt -}}"
+												width="80"
+												height="80"
+												loading="lazy"
+												fetchpriority="low"
+											/>
+										</picture>
+									</span>
+								</a>
+							</div>
+
+							<div class="order-item-details__content-col">
+								<a class="focus-visible-outline order-item-details__link" href="{{- line_item.product.url -}}">
+									{{- line_item.title | split: '-' | first -}}
+								</a>
+
+								{%- assign variant_title = line_item.variant.title -%}
+
+								{%- if variant_title != blank and variant_title != 'Default Title' -%}
+									<div class="order-item-details__variant-title">
+										{{- variant_title -}}
+									</div>
+								{%- endif -%}
+
+								{%- assign property_size = line_item.properties | size -%}
+
+								{%- unless line_item.selling_plan_allocation == nil and property_size == 0 -%}
+									<ul class="order-item-details__properties">
+										{%- unless line_item.selling_plan_allocation == nil -%}
+											<li>
+												{{- line_item.selling_plan_allocation.selling_plan.name -}}
+											</li>
+										{%- endunless -%}
+
+										{%- if property_size != 0 -%}
+											{%- for property in line_item.properties -%}
+												{% assign property_first_char = property.first | slice: 0 %}
+
+												{%- if property.last != blank and property_first_char != '_' -%}
+													<li>
+														{{- property.first -}}:&nbsp;
+
+														{%- if property.last contains '/uploads/' -%}
+															<a class="focus-visible-outline" href="{{- property.last -}}">
+																{{- property.last | split: '/' | last -}}
+															</a>
+														{%- else -%}
+															{{- property.last -}}
+														{%- endif -%}
+													</li>
+												{%- endif -%}
+											{%- endfor -%}
+										{%- endif -%}
+									</ul>
+								{%- endunless -%}
+
+								{%- if line_item.line_level_discount_allocations != blank -%}
+									<ul class="order-item-details__discount-list" role="list" aria-label="{{- 'customer.order.discount' | t | escape -}}">
+										{%- for discount_allocation in line_item.line_level_discount_allocations -%}
+											<li class="order-item-details__discount-list-item">
+												{%- render 'icons', icon: 'discount' -%} {{- discount_allocation.discount_application.title }} (-{{ discount_allocation.amount | money -}})
+											</li>
+										{%- endfor -%}
+									</ul>
+								{%- endif -%}
+
+								{%- if line_item.fulfillment -%}
+									<div class="order-item-details__note">
+										{%- render 'icons', icon: 'check' -%}
+
+										{{- 'customer.order.fulfilled_at' | t -}}
+									</div>
+								{%- endif -%}
+
+								<div class="order-item-details__item-price-info">
+									{%- if line_item.sku != blank -%}
+										<div>
+											<span>{{- 'customer.order.sku' | t -}}</span>
+
+											<span>{{- line_item.sku -}}</span>
+										</div>
+									{%- endif -%}
+
+									<div>
+										<span>{{- 'customer.order.price' | t -}}</span>
+
+										{%- if line_item.original_price != line_item.final_price or line_item.unit_price_measurement -%}
+											<dl>
+												{%- if line_item.original_price != line_item.final_price -%}
+													<dt>
+														<span class="visually-hidden">
+															{{- 'products.product.price.regular_price' | t -}}
+														</span>
+													</dt>
+
+													<dd class="regular-price">
+														<s>{{- line_item.original_price | money -}}</s>
+													</dd>
+
+													<dt>
+														<span class="visually-hidden">
+															{{- 'products.product.price.sale_price' | t -}}
+														</span>
+													</dt>
+
+													<dd>
+														<span>{{- line_item.final_price | money -}}</span>
+													</dd>
+												{%- else -%}
+													<dt>
+														<span class="visually-hidden">
+															{{- 'products.product.price.regular_price' | t -}}
+														</span>
+													</dt>
+
+													<dd>
+														{{- line_item.original_price | money -}}
+													</dd>
+												{%- endif -%}
+
+												{%- if line_item.unit_price_measurement -%}
+													<dt>
+														<span class="visually-hidden">
+															{{- 'products.product.price.unit_price' | t -}}
+														</span>
+													</dt>
+
+													<dd>
+														<small>
+															{{ line_item.unit_price | money }}
+
+															<span aria-hidden="true">/</span>
+
+															{%- if line_item.unit_price_measurement.reference_value != 1 -%}
+																{{- line_item.unit_price_measurement.reference_value -}}
+															{%- endif -%}
+
+															{{ line_item.unit_price_measurement.reference_unit }}
+														</small>
+													</dd>
+												{%- endif -%}
+											</dl>
+										{%- else -%}
+											<span>{{- line_item.final_price | money -}}</span>
+										{%- endif -%}
+									</div>
+
+									<div>
+										<span>{{- 'customer.order.quantity' | t -}}</span>
+
+										<span>{{- line_item.quantity -}}</span>
+									</div>
+
+									<div>
+										<span>{{- 'customer.order.total' | t -}}</span>
+
+										{%- if line_item.original_line_price != line_item.final_line_price -%}
+											<dl>
+												<dt>
+													<span class="visually-hidden">
+														{{- 'products.product.price.regular_price' | t -}}
+													</span>
+												</dt>
+
+												<dd class="regular-price">
+													<s>{{- line_item.original_line_price | money -}}</s>
+												</dd>
+
+												<dt>
+													<span class="visually-hidden">
+														{{- 'products.product.price.sale_price' | t -}}
+													</span>
+												</dt>
+
+												<dd>
+													<span>{{- line_item.final_line_price | money -}}</span>
+												</dd>
+											</dl>
+										{%- else -%}
+											<span>{{- line_item.original_line_price | money -}}</span>
+										{%- endif -%}
+									</div>
+								</div>
+							</div>
+						</div>
+					{%- endfor -%}
+				</div>
+
+				<div class="account-entrance__order-total">
+					<div>
+						<span>
+							{{- 'customer.order.subtotal' | t -}}
+						</span>
+
+						<span>
+							{{- order.line_items_subtotal_price | money -}}
+						</span>
+					</div>
+
+					{%- for discount_application in order.cart_level_discount_applications -%}
+						<div>
+							<span>
+								{{- 'customer.order.discount' | t -}}
+							</span>
+
+							<span class="account-entrance__order-total-discount">
+								-{{- discount_application.total_allocated_amount | money -}}
+
+								{%- if discount_application.title != blank -%}
+									<span>
+										{%- render 'icons', icon: 'discount' -%} {{- discount_application.title -}}
+									</span>
+								{%- endif -%}
+							</span>
+						</div>
+					{%- endfor -%}
+
+					{%- for shipping_method in order.shipping_methods -%}
+						<div>
+							<span>
+								{{- 'customer.order.shipping' | t }} ({{ shipping_method.title -}}):
+							</span>
+
+							<span>
+								{{- shipping_method.price | money -}}
+							</span>
+						</div>
+					{%- endfor -%}
+
+					{%- for tax_line in order.tax_lines -%}
+						<div>
+							<span>
+								{{ 'customer.order.tax' | t }} ({{ tax_line.title }} {{ tax_line.rate | times: 100 }}%):
+							</span>
+
+							<span>
+								{{- tax_line.price | money -}}
+							</span>
+						</div>
+					{%- endfor -%}
+
+					<div>
+						<span>
+							{{- 'customer.order.total' | t -}}
+						</span>
+
+						<span>
+							{{- order.total_net_amount | money -}}
+						</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="account-entrance__row account-entrance__row--billings">
+				<div class="account-entrance__billings">
+					<h3 class="h4 account-entrance__billings-heading">
+						{{- 'customer.order.billing_address' | t -}}
+					</h3>
+
+					<div class="account-entrance__billings-status-wrapper">
+						{{- 'customer.order.payment_status' | t -}}:
+
+						{% capture order_status %}
+							{%- case order.financial_status -%}
+								{%- when 'authorized' or 'paid' or 'refunded' -%}
+									account-entrance__billings-status--success
+								{%- when 'expired' or 'unpaid' or 'voided' -%}
+									account-entrance__billings-status--attention
+							{%- endcase -%}
+						{% endcapture %}
+
+						<div class="account-entrance__billings-status {{ order_status | strip_newlines }}">
+							{%- case order.financial_status -%}
+								{%- when 'authorized' or 'paid' or 'refunded' -%}
+									{% render 'icons', icon: 'check' %}
+								{%- when 'partially_paid' or 'partially_refunded' or 'pending' -%}
+									{%- render 'icons', icon: 'clock' -%}
+								{%- when 'expired' or 'unpaid' or 'voided' -%}
+									{%- render 'icons', icon: 'close' -%}
+							{%- endcase -%}
+
+							{{- order.financial_status_label -}}
+						</div>
+					</div>
+
+					{{ order.billing_address | format_address }}
+				</div>
+
+				<div class="account-entrance__billings">
+					<h3 class="h4 account-entrance__billings-heading">
+						{{- 'customer.order.shipping_address' | t -}}
+					</h3>
+
+					<p class="account-entrance__billings-status-wrapper">
+						{{- 'customer.order.fulfillment_status' | t -}}:
+
+						{% capture order_status %}
+							{%- case order.fulfillment_status -%}
+								{%- when 'complete' or 'fulfilled' or 'restocked' -%}
+									account-entrance__billings-status--success
+								{%- when 'unfulfilled' -%}
+									account-entrance__billings-status--attention
+							{%- endcase -%}
+						{% endcapture %}
+
+						<span class="account-entrance__billings-status {{ order_status | strip_newlines }}">
+							{%- case order.fulfillment_status -%}
+								{%- when 'complete' or 'fulfilled' or 'restocked' -%}
+									{% render 'icons', icon: 'check' %}
+								{%- when 'partial' -%}
+									{%- render 'icons', icon: 'clock' -%}
+								{%- when 'unfulfilled' -%}
+								{%- render 'icons', icon: 'close' -%}
+							{%- endcase -%}
+
+							{{- order.fulfillment_status_label -}}
+						</span>
+					</p>
+
+					{{ order.shipping_address | format_address }}
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+{%- schema -%}
+{
+	"name": "Order template",
+	"settings": [
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset bottom",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset bottom",
+			"default": 0
+		},
+		{
+			"type": "paragraph",
+			"content": "Internal offsets"
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset top",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset bottom",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset top",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset bottom",
+			"default": 32
+		}
+	]
+}
+{%- endschema -%}

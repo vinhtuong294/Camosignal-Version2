@@ -1,0 +1,171 @@
+{% comment %}
+----------------------------------------------------------------------------
+  Snippet: Pagination
+  - Used on blog, collection, orders, addresses, and search.
+----------------------------------------------------------------------------
+{% endcomment %}
+
+{%- if paginate.parts.size > 0 -%}
+	<nav class="pagination" aria-label="{{- 'general.pagination.label' | t | escape -}}">
+		<div class="pagination__list" role="list">
+			<span class="pagination__item pagination__item--prev {% unless paginate.previous %} pagination__item--no-active {% endunless %}">
+				{%- if paginate.previous -%}
+					<a
+						class="pagination__link focus-visible-outline js-pagination-link"
+						href="{{- paginate.previous.url -}}{{ anchor }}"
+						aria-label="{{- 'general.pagination.previous' | t | escape -}}"
+					>
+						&lt;
+					</a>
+				{%- else -%}
+					<span class="pagination__link pagination__link--no-active" aria-hidden="true">
+						&lt;
+					</span>
+				{%- endif -%}
+			</span>
+
+			<div class="pagination__numbers">
+			{%- for part in paginate.parts -%}
+				<span class="pagination__item">
+					{%- if part.is_link -%}
+						<a
+							class="focus-visible-outline pagination__link js-pagination-link"
+							href="{{- part.url -}}{{ anchor }}"
+							{%- if part.title != paginate.pages -%}
+								aria-label="{{- 'general.pagination.page' | t: number: part.title | escape -}}"
+							{%- else -%}
+								aria-label="{{- 'general.pagination.last_page' | t: number: part.title | escape -}}"
+							{%- endif -%}
+						>
+							{{- part.title -}}
+						</a>
+					{%- else -%}
+						{%- if part.title == paginate.current_page -%}
+							<a
+								class="pagination__link {% if part.title == paginate.current_page %} is-active {% endif -%}"
+								role="link"
+								aria-disabled="true"
+								aria-current="page"
+								aria-label="{{- 'general.pagination.page' | t: number: part.title | escape -}}"
+							>
+								{{- part.title -}}
+							</a>
+						{%- else -%}
+							<span class="pagination__link" aria-hidden="true">
+								{{- part.title -}}
+							</span>
+						{%- endif -%}
+					{%- endif -%}
+				</span>
+			{%- endfor -%}
+			</div>
+
+			<span class="pagination__item pagination__item--next {% unless paginate.next %} pagination__item--no-active {%- endunless -%}">
+				{%- if paginate.next -%}
+					<a
+						class="focus-visible-outline pagination__link js-pagination-link"
+						href="{{- paginate.next.url -}}{{ anchor }}"
+						aria-label="{{- 'general.pagination.next' | t | escape -}}"
+					>
+						&gt;
+					</a>
+				{%- else -%}
+					<span class="pagination__link pagination__link--no-active" aria-hidden="true">
+						&gt;
+					</span>
+				{%- endif -%}
+			</span>
+		</div>
+	</nav>
+{%- endif -%}
+
+<style>
+.pagination {
+	padding: 40px 0 60px;
+}
+.pagination__list {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 6px;
+	font-family: 'Oswald', sans-serif;
+	font-size: 14px;
+	letter-spacing: 1px;
+	font-weight: 700;
+}
+.pagination__numbers {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+.pagination__item {
+	display: inline-flex;
+}
+.pagination__link {
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	min-width: 42px !important;
+	height: 42px !important;
+	padding: 0 12px !important;
+	text-decoration: none !important;
+	color: #2c3d33 !important;
+	border: 1.5px solid rgba(44, 61, 51, 0.3) !important;
+	background: transparent !important;
+	transition: all 0.25s ease !important;
+	cursor: pointer !important;
+}
+.pagination__link:hover {
+	background: #2c3d33 !important;
+	color: #faf6ee !important;
+	border-color: #2c3d33 !important;
+}
+.pagination__link.is-active,
+.pagination__link[aria-current="page"] {
+	background: #2c3d33 !important;
+	color: #faf6ee !important;
+	border-color: #2c3d33 !important;
+	pointer-events: none !important;
+}
+.pagination__link--no-active {
+	opacity: 0.25 !important;
+	pointer-events: none !important;
+	border-color: rgba(44, 61, 51, 0.15) !important;
+}
+.pagination__item--prev,
+.pagination__item--next {
+	position: static;
+}
+.pagination__item--prev .pagination__link,
+.pagination__item--next .pagination__link {
+	border-color: transparent;
+	font-size: 16px;
+	min-width: 36px;
+}
+.pagination__item--prev .pagination__link:hover,
+.pagination__item--next .pagination__link:hover {
+	background: #2c3d33;
+	color: #faf6ee;
+	border-color: #2c3d33;
+}
+
+/* Responsive adjustments for mobile */
+@media screen and (max-width: 767px) {
+	.pagination__list {
+		flex-wrap: wrap;
+		gap: 4px;
+	}
+	.pagination__numbers {
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 4px;
+	}
+	.pagination__link {
+		min-width: 36px !important;
+		height: 36px !important;
+		padding: 0 8px !important;
+		font-size: 13px !important;
+	}
+}
+</style>
+

@@ -1,0 +1,111 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Language localization form
+	Render language localization form
+	- class: General class for selectors (required)
+	- id_prefix: Add unuqie prefix to prevent duplicate id
+	- form_id: Add unuqie form id to prevent duplicate id
+	- list_class: Class for localization list
+
+	Usage:
+	{%- render 'language-localization-form', class: class -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/localization-form.scss' -%}
+
+{%- assign form_id          = form_id | default: 'localization_form' -%}
+{%- assign form_id_noscript = form_id | append: 'NoScript' -%}
+{%- assign animation_delay = 0 -%}
+
+<div class="{{- class -}}__language-selector">
+	<noscript>
+		{%- form 'localization', id: form_id_noscript -%}
+			<div class="select-wrapper disclosure localization-form__select">
+				<select
+					class="localization-select focus-visible-outline"
+					name="locale_code"
+				>
+					{%- for language in localization.available_languages -%}
+						<option
+							class="localization-option"
+							value="{{- language.iso_code -}}"
+							lang="{{- language.iso_code -}}"
+							{%- if language.iso_code == localization.language.iso_code %} selected{% endif %}
+						>
+							{{- language.endonym_name | capitalize -}}
+						</option>
+					{%- endfor -%}
+				</select>
+
+				{%- render 'icons', icon: 'arrow-down' -%}
+			</div>
+
+			<button class="button-link localization-button">
+				<span data-text="{{- 'general.localization.update_language' | t -}}">
+					<span>
+						{{- 'general.localization.update_language' | t -}}
+					</span>
+				</span>
+			</button>
+		{%- endform -%}
+	</noscript>
+
+	<localization-form>
+		{%- form 'localization', class: 'no-js-hidden js-localization-form', id: form_id -%}
+			<div class="disclosure">
+				<button
+					type="button"
+					class="button-link disclosure__button {{ class -}}__language-button js-disclosure-button"
+					aria-expanded="false"
+					aria-controls="LanguageList-{{- id_prefix -}}"
+				>
+					<span data-text="{{- localization.language.endonym_name | capitalize -}}">
+						<span>
+							{{- localization.language.endonym_name | capitalize -}}
+						</span>
+					</span>
+
+					{%- render 'icons', icon: 'arrow-down' -%}
+				</button>
+
+				<ul
+					id="LanguageList-{{- id_prefix -}}"
+					role="list"
+					class="disclosure__list {{ class -}}__language-list js-disclosure-list {{ list_class }}"
+					hidden
+				>
+					{% for language in localization.available_languages %}
+						{%- assign animation_delay = animation_delay | plus: 0.05 -%}
+
+						<li
+							class="disclosure__item {{ class -}}__language-item"
+							style="--animation-delay: {{- animation_delay -}}s"
+						>
+							<a
+								class="button-link disclosure__item-link {{ class -}}__language-item-link js-disclosure-link"
+								href="#"
+								{% if language.iso_code == localization.language.iso_code %}
+									aria-current="true"
+								{% endif %}
+								aria-label="{{- language.iso_code -}}"
+								hreflang="{{- language.iso_code -}}"
+								lang="{{- language.iso_code -}}"
+								data-value="{{- language.iso_code -}}"
+								tabindex="-1"
+							>
+								<span data-text="{{- language.endonym_name | capitalize -}}">
+									<span>
+										{{- language.endonym_name | capitalize -}}
+									</span>
+								</span>
+							</a>
+						</li>
+					{% endfor %}
+				</ul>
+
+				<input type="hidden" name="language_code" value="{{- localization.language.iso_code -}}">
+			</div>
+		{% endform %}
+	</localization-form>
+</div>

@@ -1,0 +1,281 @@
+<style>
+.custom-coll-wrap {
+  max-width: 1680px;
+  margin: 0 auto;
+  padding: 0 64px;
+}
+.custom-coll-inner {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 56px;
+  border-bottom: 1px solid rgba(44,61,51,0.15);
+  gap: 16px;
+}
+.custom-coll-meta {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.custom-coll-count {
+  font-style: italic;
+  color: #2c3d33;
+  font-size: 18px;
+  font-weight: 600;
+}
+.custom-coll-turkey-row {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: 22px;
+  position: relative;
+  z-index: 2;
+}
+.custom-coll-turkey-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #2c3d33;
+  font-family: 'Oswald', sans-serif;
+  font-size: 18px;
+  font-style: italic;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.custom-coll-turkey-link:hover {
+  opacity: 0.72;
+}
+.custom-coll-turkey-link__arrow {
+  font-size: 1.05em;
+  line-height: 1;
+}
+.custom-sort-inline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #2c3d33;
+  font-size: 18px;
+  white-space: nowrap;
+}
+.custom-sort-inline span {
+  font-style: italic;
+  font-weight: 400;
+}
+.custom-sort-inline select {
+  border: none;
+  background: transparent;
+  box-sizing: border-box;
+  font-style: normal;
+  font-size: 18px;
+  font-weight: 400;
+  color: rgba(44, 61, 51, 0.7);
+  cursor: pointer;
+  outline: none;
+  min-width: 0;
+  padding: 2px 14px 2px 4px;
+  font-family: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.custom-sort-select-wrap {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+}
+.custom-sort-select-wrap::after {
+  content: "";
+  position: absolute;
+  right: 2px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid rgba(44, 61, 51, 0.7);
+  border-bottom: 1.5px solid rgba(44, 61, 51, 0.7);
+  pointer-events: none;
+  transform: translateY(-65%) rotate(45deg);
+}
+@media (min-width: 1200px) {
+  .custom-coll-turkey-row {
+    transform: translateY(64px);
+  }
+}
+@media (max-width: 989px) {
+  .custom-coll-wrap {
+    padding: 0 20px;
+  }
+}
+@media (max-width: 767px) {
+  .custom-coll-wrap {
+    padding: 0 16px;
+  }
+  .custom-coll-inner {
+    align-items: center;
+    min-height: 52px;
+    border-bottom: 1px solid rgba(44,61,51,0.14);
+    gap: 12px;
+  }
+  .custom-coll-meta {
+    width: 100%;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .custom-sort-inline {
+    font-size: 16px;
+  }
+  .custom-sort-inline select {
+    font-size: 16px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .custom-coll-count {
+    font-size: 16px;
+  }
+  .custom-coll-turkey-row {
+    margin-top: 14px;
+    margin-bottom: 12px;
+  }
+  .custom-coll-turkey-link {
+    font-size: 16px;
+  }
+
+  body .collection {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+  body .collection .collection__container {
+    row-gap: 4px !important;
+  }
+  body .collection .collection__header {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  body .collection .collection__header-main {
+    display: none !important;
+    border: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+  }
+  body .collection .collection__body {
+    margin-top: -2px !important;
+    padding-top: 0 !important;
+  }
+  body .collection .collection__header-container {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  body .collection .collection__header-controls {
+    row-gap: 0 !important;
+  }
+  body .collection .collection__header-controls-wrapper {
+    min-height: 32px !important;
+    row-gap: 0 !important;
+    align-items: center !important;
+  }
+  body .collection .collection__header-filter-button {
+    margin: 0 !important;
+  }
+}
+</style>
+
+<div class="custom-coll-wrap">
+  <div class="custom-coll-inner">
+    <div class="custom-coll-meta">
+      <div class="custom-sort-inline">
+        <span>Sort by:</span>
+        <span class="custom-sort-select-wrap">
+          <select id="custom-sort-select">
+            {% for option in collection.sort_options %}
+              <option value="{{ option.value }}" {% if option.value == collection.sort_by or option.value == collection.default_sort_by and collection.sort_by == blank %}selected{% endif %}>
+                {{ option.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </span>
+      </div>
+      {%- assign real_count = collection.products_count -%}
+      {%- if collection.handle == 'all' -%}
+        {%- assign real_count = real_count | minus: 1 -%}
+      {%- endif -%}
+      <span class="custom-coll-count">{{ real_count | default: 0 }} products</span>
+    </div>
+  </div>
+  {%- if collection.handle == 'grand-slam-subspecies' or collection.handle == 'world-turkey-slam' -%}
+    {%- assign turkey_collection = collections['turkey'] -%}
+    <div class="custom-coll-turkey-row">
+      <a class="custom-coll-turkey-link" href="{%- if turkey_collection != blank -%}{{ turkey_collection.url }}{%- else -%}/collections/turkey{%- endif -%}">
+        <span>Shop all Turkey</span>
+        <span class="custom-coll-turkey-link__arrow" aria-hidden="true">&rarr;</span>
+      </a>
+    </div>
+  {%- endif -%}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var s = document.getElementById('custom-sort-select');
+  if(s) {
+    var sortCanvas = document.createElement('canvas');
+    var sortContext = sortCanvas.getContext('2d');
+    var sizeSortSelect = function() {
+      if (!sortContext || !s.options.length) {
+        return;
+      }
+
+      var selectedText = s.options[s.selectedIndex].text.trim();
+      var styles = window.getComputedStyle(s);
+      sortContext.font = [
+        styles.fontStyle,
+        styles.fontVariant,
+        styles.fontWeight,
+        styles.fontSize,
+        styles.fontFamily
+      ].join(' ');
+      s.style.width = Math.ceil(sortContext.measureText(selectedText).width + 20) + 'px';
+    };
+
+    sizeSortSelect();
+    window.addEventListener('resize', sizeSortSelect);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(sizeSortSelect);
+    }
+
+    s.addEventListener('change', function(){
+      sizeSortSelect();
+      var url = new URL(window.location.href);
+      url.searchParams.set('sort_by', s.value);
+      window.location.href = url.toString();
+    });
+  }
+
+  // Sync count with main grid js-product-count
+  var customCount = document.querySelector('.custom-coll-count');
+  function syncCount() {
+    var mainCount = document.querySelector('.js-product-count');
+    if (mainCount && customCount && mainCount.textContent.trim() !== '') {
+      var newText = mainCount.textContent.trim();
+      if (customCount.textContent !== newText) {
+        customCount.textContent = newText;
+      }
+    }
+  }
+
+  // Initial sync
+  setTimeout(syncCount, 100);
+
+  // Observe ajax DOM updates
+  var observer = new MutationObserver(syncCount);
+  if (document.body) {
+    observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+  }
+});
+</script>

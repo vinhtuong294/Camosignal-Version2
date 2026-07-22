@@ -1,0 +1,357 @@
+{%- assign swatch_option					= settings.color_swatches_option | default: 'Color' | downcase -%}
+{%- assign swatches                     	= swatch_option | split: ',' -%}
+{%- assign is_color_swatches_enabled		= settings.is_color_swatches_enabled -%}
+{%- assign variants_type					= settings.quick_view_variant_picker -%}
+{%- assign button_type 						= settings.quick_view_button_type -%}
+{%- assign button_buy_it_type 				= settings.quick_view_button_buy_it_type -%}
+{%- assign quick_view_show_stock_message	= settings.quick_view_show_stock_message -%}
+{%- assign current_variant 					= product.selected_or_first_available_variant -%}
+{%- assign can_sell_after_zero 				= false -%}
+
+{%- if current_variant.inventory_policy == "continue" or current_variant.inventory_management == nil -%}
+	{%- assign can_sell_after_zero = true -%}
+{%- endif -%}
+
+{%- capture button_buy_it_type_styles -%}
+	{%- case button_buy_it_type -%}
+		{%- when 'primary' -%}
+			--button-color: var(--button-text-color-primary); {{-  -}}
+			--button-background: var(--button-background-color-primary); {{-  -}}
+			--button-border-color: var(--button-border-color-primary); {{-  -}}
+			--button-color-hover: var(--button-text-color-primary-hover); {{-  -}}
+			--button-background-color-hover: var(--button-background-color-primary-hover); {{-  -}}
+			--button-border-color-hover: var(--button-border-color-primary-hover); {{-  -}}
+		{%- when 'secondary' -%}
+			--button-color: var(--button-text-color-secondary); {{-  -}}
+			--button-background: var(--button-background-color-secondary); {{-  -}}
+			--button-border-color: var(--button-border-color-secondary); {{-  -}}
+			--button-color-hover: var(--button-text-color-secondary-hover); {{-  -}}
+			--button-background-color-hover: var(--button-background-color-secondary-hover); {{-  -}}
+			--button-border-color-hover: var(--button-border-color-secondary-hover); {{-  -}}
+	{%- endcase -%}
+{%- endcapture -%}
+
+{%- form 'product', product, class: 'quick-view__form quick-view-form js-quick-view-form' -%}
+	{% if product.template_suffix == 'pre-order' %}
+		<input type="hidden" name="properties[_Pre-order]" value="true">
+	{% endif %}
+
+	<div class="quick-view-form__options">
+		<div class="js-quick-view-product-options">
+			{%- for option in product.options_with_values -%}
+				<fieldset class="fieldset quick-view-form__option">
+					{%- assign option_position  		= option.position -%}
+					{%- assign option_name_downcased	= option.name | downcase -%}
+					{%- assign option_name_handle		= option.name | handle -%}
+					{%- assign option_index				= "option" | append: option_position -%}
+					{%- assign swatch_count 			= option.values | map: 'swatch' | compact | size -%}
+
+					{%- assign use_color_swatch = false -%}
+
+					{%- if swatch_count > 0 and is_color_swatches_enabled -%}
+						{%- assign use_color_swatch = true -%}
+					{%- endif -%}
+
+					{%- for swatch in swatches -%}
+						{%- assign swatch_string = swatch | strip -%}
+
+						{%- if swatch_string == option_name_downcased -%}
+							{%- assign swatch_option = swatch_string -%}
+							{%- break -%}
+						{%- endif -%}
+					{%- endfor -%}
+
+					{%- if is_color_swatches_enabled and option_name_downcased == swatch_option -%}
+						{%- assign use_color_swatch = true -%}
+					{%- endif -%}
+
+					<legend class="legend product-options__option-label">
+						{{- option.name -}}:
+
+						{%- if use_color_swatch -%}
+							<span class="product-options__swatch-value js-swatch-label-name"
+								  data-swatch-name="{{ option.name }}"
+								  data-swatch-position="{{ option.position }}"
+							>
+								{{- option.selected_value -}}
+							</span>
+						{%- endif -%}
+					</legend>
+
+					{%- if use_color_swatch -%}
+						<div class="product-options__swatch-container">
+							{%- for value in option.values  -%}
+								{%- assign swatch_image = nil -%}
+								{%- assign swatch_color = nil -%}
+								{%- assign handleized_value = value | handleize -%}
+
+								<div class="radio-container radio-option-swatch">
+									{%- assign is_disabled = true -%}
+
+									{% if value.available %}
+										{%- assign is_disabled = false -%}
+									{% endif %}
+
+									{%- assign image_name = value | handle | prepend: 'swatch-' | append: '.png' -%}
+									{%- assign swatch_color_fallback = value | split: ' ' | last | handle -%}
+									{%- assign swatch_image = value.swatch.image | default: images[image_name] -%}
+									{%- assign swatch_color = value.swatch.color | default: swatch_color_fallback -%}
+
+									<input
+										id="section-{{- section.id -}}-product-{{- product.id -}}-option-{{- handleized_option -}}-value-{{- handleized_value -}}"
+										type="radio"
+										class="visually-hidden radio-input js-swatch"
+										value="{{- value -}}"
+										name="option{{- option.position -}}"
+										{% if value.selected %}
+											checked
+										{% endif %}
+										data-option="option{{- option.position -}}"
+										data-option-value-id="{{ value.id }}"
+									/>
+
+									<label
+										for="section-{{- section.id -}}-product-{{- product.id -}}-option-{{- handleized_option -}}-value-{{- handleized_value -}}"
+										class="radio-option-swatch__label {% if is_disabled %}is-disabled{% endif %}"
+									>
+										{%- if swatch_image != blank -%}
+											<img
+												src="{{- swatch_image | image_url: width: 48, height: 48 -}}"
+												class="radio-option-swatch__image"
+												aria-hidden="true"
+												fetchpriority="low"
+												loading="lazy"
+												decoding="async"
+												alt=""
+											/>
+										{%- else -%}
+											<span class="radio-option-swatch__image" style="--swatch-color: {{ swatch_color }};"></span>
+										{%- endif -%}
+
+										<span class="visually-hidden">{{- value -}}</span>
+
+										<span class="radio-option-swatch__label-overlay"></span>
+									</label>
+
+									<span class="radio-option-tooltip" aria-hidden="true">{{- value -}}</span>
+								</div>
+							{%- endfor -%}
+						</div>
+						</fieldset>
+						{%- continue -%}
+					{%- endif -%}
+
+					{%- if variants_type == "radio" or use_color_swatch -%}
+						<div style="display: flex; flex-wrap: nowrap; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px;">
+						{%- for value in option.values -%}
+							{%- assign is_disabled = true -%}
+
+							{% if value.available %}
+								{%- assign is_disabled = false -%}
+							{% endif %}
+
+							{%- assign swatch_image = nil -%}
+							{%- assign swatch_color = nil -%}
+
+							{%- if use_color_swatch and is_color_swatches_enabled -%}
+								{%- capture container_classes -%}
+									radio-container radio-option-swatch quick-view-form__radio-container
+								{%- endcapture -%}
+
+								{%- assign image_name = value | handle | prepend: 'swatch-' | append: '.png' -%}
+								{%- assign swatch_color_fallback = value | split: ' ' | last | handle -%}
+								{%- assign swatch_image = value.swatch.image | default: images[image_name] -%}
+								{%- assign swatch_color = value.swatch.color | default: swatch_color_fallback -%}
+							{%- else -%}
+								{%- capture container_classes -%}
+									radio-container radio-option quick-view-form__radio-container
+								{%- endcapture -%}
+							{%- endif -%}
+
+							<div class="{{- container_classes -}}" style="margin: 0; flex: 1 1 0; min-width: max-content;">
+								<input
+									id="quick-view-{{- value | handle -}}-{{- option_name_handle -}}"
+									type="radio"
+									class="visually-hidden radio-input"
+									value="{{- value | escape -}}"
+									name="option{{- option.position -}}"
+									{% if value.selected %}
+										checked
+									{% endif %}
+									data-option="option{{- option.position -}}"
+									data-option-value-id="{{ value.id }}"
+								/>
+
+								<label
+									for="quick-view-{{- value | handle -}}-{{- option_name_handle -}}"
+									class="radio-option__label quick-view-form {% if is_disabled %}is-disabled{% endif %}"
+									style="padding-left: 8px !important; padding-right: 8px !important; width: 100%; text-align: center; display: block; box-sizing: border-box;"
+								>
+									{%- if swatch_image != blank -%}
+										<img
+											src="{{- swatch_image | image_url: width: 60, height: 60 -}}"
+											class="radio-option-swatch__image"
+											aria-hidden="true"
+											fetchpriority="low"
+											loading="lazy"
+											decoding="async"
+											alt=""
+										/>
+									{%- else -%}
+										<span class="radio-option-swatch__image" style="--swatch-color: {{ swatch_color }};"></span>
+									{%- endif -%}
+
+									<span class="radio-label__text">
+										{{- value -}}
+									</span>
+								</label>
+							</div>
+						{%- endfor -%}
+						</div>
+					{%- else -%}
+						<div class="select-wrapper product-options__select-wrapper">
+							<select id="quick-view-option-{{ option_name_handle }}-{{- option.position -}}"
+									class="product-options__select"
+									name="option{{- option.position -}}"
+									data-option="option{{- option.position -}}"
+							>
+								{% comment %} selected="selected" not replace to selected, to prevent js-error {% endcomment %}
+								{%- for value in option.values  -%}
+									<option
+										value="{{- value | escape -}}"
+										data-option-value-id="{{ value.id }}"
+										{% if value.selected %}
+											selected="selected"
+										{% endif %}
+									>
+										{{- value -}} {% unless value.available %} ({{ "products.product.sold_out" | t }}){%endunless%}
+									</option>
+								{%- endfor -%}
+							</select>
+						</div>
+
+						<label
+							for="quick-view-option-{{ option_name_handle }}-{{- option.position -}}"
+							class="visually-hidden"
+						>
+							{{- option.name -}}
+						</label>
+					{%- endif -%}
+				</fieldset>
+			{%- endfor -%}
+
+			<script type="application/json" data-selected-variant>
+				{{ product.selected_or_first_available_variant | json }}
+			</script>
+		</div>
+
+		{%- if quick_view_show_stock_message -%}
+			<div class="js-quick-view-product-stock">
+				<div class="quick-view__product-stock {% if can_sell_after_zero or current_variant.inventory_quantity < 1 %}is-hidden{% endif %}">
+					{%- assign single_product_count_label   = 'products.product.product_stock_count.one' | t: count: current_variant.inventory_quantity -%}
+					{%- assign multiple_product_count_label = 'products.product.product_stock_count.other' | t: count: current_variant.inventory_quantity -%}
+
+					{%- render 'icons', icon: 'check' -%}
+
+					<span>{{- current_variant.inventory_quantity | pluralize: single_product_count_label, multiple_product_count_label -}}</span>
+				</div>
+			</div>
+		{%- endif -%}
+
+		<div class="quick-view__price js-quick-view-price">
+			{%- render 'price', product: product, show_unit_price: show_unit_price, currency_code_enabled: currency_code_enabled, use_variant: true -%}
+		</div>
+
+		{%- render 'product-customization-fields', product: product, section_id: section.id -%}
+
+		{%- render 'product-quantity' -%}
+
+		<input class="js-quick-view-hidden-select" type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+
+		<div class="quick-view-form__error is-hidden js-quick-view-error-wrapper" id="QuickViewError-{{- product.id -}}" role="alert">
+			<small class="quick-view-form__error js-quick-view-error"></small>
+		</div>
+	</div>
+
+	<div class="quick-view-form__buttons" style="{{- button_buy_it_type_styles -}}">
+		{%- assign button_add_to_cart_text 			= '' -%}
+
+		{%- if product.selected_or_first_available_variant.available  -%}
+			{% if product.template_suffix == 'pre-order' %}
+				{%- assign button_add_to_cart_text 		= 'products.product.pre_order' | t -%}
+			{% else %}
+				{%- assign button_add_to_cart_text 		= 'products.product.add_to_cart' | t -%}
+			{% endif %}
+		{%- else -%}
+			{%- assign button_add_to_cart_text 		= 'products.product.sold_out' | t -%}
+		{%- endif -%}
+
+		<button
+			class="button button--{{ button_type }} quick-view-form__button js-quick-submit-button"
+			data-add-to-card="{{- "products.product.add_to_cart" | t -}}"
+			data-sold-out="{{- "products.product.sold_out" | t -}}"
+			data-unavailable="{{- "products.product.unavailable" | t -}}"
+			{% if product.template_suffix == 'pre-order' %}
+				data-preorder
+			{% endif %}
+			data-type="{{- button_type -}}"
+			type="submit"
+			{%- if product.selected_or_first_available_variant.available == false -%}
+				disabled
+			{%- endif -%}
+		>
+			{%- if button_type == 'primary' -%}
+				<span data-loading>{{- button_add_to_cart_text -}}</span>
+			{%- else -%}
+				<span data-text="{{- button_add_to_cart_text -}}">
+					<span>{{- button_add_to_cart_text -}}</span>
+				</span>
+			{%- endif -%}
+
+			{%- render 'icons', icon: 'loader' -%}
+		</button>
+
+		{%- if quick_view_enable_buy_it_now -%}
+			<div class="additional-checkout-buttons additional-checkout-buttons--{{ button_buy_it_type }}">
+				{{- form | payment_button  -}}
+			</div>
+		{%- endif -%}
+
+		<a
+			class="quick-view-form__button-pdp button-link js-quick-view-link"
+			href="{{- product.url -}}/?variant={{- product.selected_or_first_available_variant.id -}}"
+		>
+			<span data-text="{{- "products.quick_view.visit_product_page" | t -}}">
+				<span>{{- "products.quick_view.visit_product_page" | t -}}</span>
+			</span>
+		</a>
+	</div>
+{%- endform -%}
+
+<style>
+	/* Make color swatches round on quick view */
+	.quick-view__form .radio-option-swatch__label,
+	.quick-view__form .radio-option-swatch__label::before,
+	.quick-view__form .radio-option-swatch__label::after,
+	.quick-view__form .radio-option-swatch__image {
+		border-radius: 50% !important;
+	}
+
+	/* Round corners for Size and other standard variant blocks */
+	.quick-view__form .radio-option__label {
+		border-radius: 8px !important;
+	}
+
+	/* Make add to cart button oswald font */
+	.quick-view-form__button,
+	.quick-view-form__button-pdp {
+		font-family: 'Oswald', sans-serif !important;
+		font-size: 15px !important;
+		font-weight: 600 !important;
+		text-transform: uppercase !important;
+		letter-spacing: 0.08em !important;
+		border-radius: 8px !important;
+		background-color: var(--color-text-primary, #203224) !important;
+		color: #faf6ee !important;
+	}
+</style>

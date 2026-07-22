@@ -1,0 +1,815 @@
+{% doc %}
+  @prompt
+    Create two accordion/drawer sections on the product page: "Size Guide" and "Shipping".
+    
+    1. **Size Guide**: When clicked, opens a popup/modal displaying a size chart table with the following columns: International size, Ukrainian size, Europe size, Breast size (cm), Waist size (cm), Hips size (cm). Rows: XXS(40,34,80,60,84), XS(42,36,84,64,88), S(44,38,88,68,92), M(46,40,92,72,96), L(48,42,96,76,100), XL(50,44,100,80,104), onesize(42-46,36-40,84-92,64-72,88-96). The modal should have a close (×) button and clean table styling with dividers between rows.
+    
+    2. **Shipping**: When clicked, opens a popup/modal with shipping policy content including: intro paragraph, "Shipping Policy" heading, "Processing Time" section (1-3 business days, excluding weekends/holidays, confirmation email with tracking), "Shipping Rates & Delivery Estimates" section with Standard Shipping (5-7 business days, free over $100 or $7.99 flat rate) and Expedited Shipping (2-3 business days, $14.99). The modal should have a close (×) button and be scrollable.
+    
+    Both items should appear as clickable rows with a right arrow (>) on the product page, similar to accordion items. Style should be minimal and clean with a bottom border separator., Tôi muốn tôi có thể sửa nội dung trong size guild và shipping, Làm để tôi có thể sửa các thông số cũng như các thuộc tính trong size guild, hãy sửa sizeguild để tối ưu cho 7 dòng và 4 cột
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-product-info-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    font-family: 'Oswald', sans-serif !important;
+  }
+
+  .ai-product-info-item-{{ ai_gen_id }} {
+    border-bottom: 1px solid {{ block.settings.border_color }};
+    padding: {{ block.settings.item_padding }}px 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: opacity 0.2s ease;
+  }
+
+  .ai-product-info-item-{{ ai_gen_id }}:hover {
+    opacity: 0.7;
+  }
+
+  .ai-product-info-item-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_font_size }}px;
+    color: {{ block.settings.text_color }};
+    font-weight: 500;
+  }
+
+  .ai-product-info-item-arrow-{{ ai_gen_id }} {
+    color: {{ block.settings.arrow_color }};
+    font-size: 20px;
+    transition: transform 0.2s ease;
+  }
+
+  .ai-product-info-modal-overlay-{{ ai_gen_id }} {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .ai-product-info-modal-overlay-{{ ai_gen_id }}.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .ai-product-info-modal-{{ ai_gen_id }} {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    background-color: {{ block.settings.modal_bg_color }};
+    border-radius: {{ block.settings.modal_border_radius }}px;
+    max-width: {{ block.settings.modal_max_width }}px;
+    width: 90%;
+    max-height: 80vh;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  }
+
+  .ai-product-info-modal-{{ ai_gen_id }}.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .ai-product-info-modal-header-{{ ai_gen_id }} {
+    padding: 24px;
+    border-bottom: 1px solid {{ block.settings.border_color }};
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .ai-product-info-modal-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.modal_title_font_size }}px;
+    color: {{ block.settings.text_color }};
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .ai-product-info-modal-close-{{ ai_gen_id }} {
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: {{ block.settings.text_color }};
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s ease;
+  }
+
+  .ai-product-info-modal-close-{{ ai_gen_id }}:hover {
+    opacity: 0.7;
+  }
+
+  .ai-product-info-modal-body-{{ ai_gen_id }} {
+    padding: 24px;
+    overflow-y: auto;
+    max-height: calc(80vh - 100px);
+  }
+
+  .ai-product-info-size-table-{{ ai_gen_id }} {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+  }
+
+  .ai-product-info-size-table-{{ ai_gen_id }} th,
+  .ai-product-info-size-table-{{ ai_gen_id }} td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid {{ block.settings.table_border_color }};
+    color: {{ block.settings.text_color }};
+  }
+
+  .ai-product-info-size-table-{{ ai_gen_id }} th {
+    font-weight: 600;
+    background-color: {{ block.settings.table_header_bg }};
+    font-size: {{ block.settings.table_font_size }}px;
+  }
+
+  .ai-product-info-size-table-{{ ai_gen_id }} td {
+    font-size: {{ block.settings.table_font_size }}px;
+  }
+
+  .ai-product-info-size-table-{{ ai_gen_id }} tr:last-child td {
+    border-bottom: none;
+  }
+
+  .ai-product-info-shipping-content-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    line-height: 1.6;
+  }
+
+  .ai-product-info-shipping-content-{{ ai_gen_id }} h3 {
+    font-size: {{ block.settings.shipping_heading_size }}px;
+    margin: 20px 0 12px;
+    font-weight: 600;
+  }
+
+  .ai-product-info-shipping-content-{{ ai_gen_id }} h4 {
+    font-size: {{ block.settings.shipping_subheading_size }}px;
+    margin: 16px 0 8px;
+    font-weight: 600;
+  }
+
+  .ai-product-info-shipping-content-{{ ai_gen_id }} p {
+    margin: 8px 0;
+    font-size: {{ block.settings.shipping_text_size }}px;
+  }
+
+  .ai-product-info-shipping-content-{{ ai_gen_id }} ul {
+    margin: 8px 0;
+    padding-left: 20px;
+  }
+
+  .ai-product-info-shipping-content-{{ ai_gen_id }} li {
+    margin: 4px 0;
+    font-size: {{ block.settings.shipping_text_size }}px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-product-info-modal-{{ ai_gen_id }} {
+      max-width: 95%;
+    }
+
+    .ai-product-info-size-table-{{ ai_gen_id }} {
+      font-size: 12px;
+    }
+
+    .ai-product-info-size-table-{{ ai_gen_id }} th,
+    .ai-product-info-size-table-{{ ai_gen_id }} td {
+      padding: 8px 4px;
+    }
+  }
+{% endstyle %}
+
+<product-info-accordion-{{ ai_gen_id }} class="ai-product-info-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {% if block.settings.show_size_guide %}
+    <div class="ai-product-info-item-{{ ai_gen_id }}" data-modal="size-guide">
+      <span class="ai-product-info-item-title-{{ ai_gen_id }}">{{ block.settings.size_guide_label }}</span>
+      <span class="ai-product-info-item-arrow-{{ ai_gen_id }}">›</span>
+    </div>
+  {% endif %}
+
+  {% if block.settings.show_shipping %}
+    <div class="ai-product-info-item-{{ ai_gen_id }}" data-modal="shipping">
+      <span class="ai-product-info-item-title-{{ ai_gen_id }}">{{ block.settings.shipping_label }}</span>
+      <span class="ai-product-info-item-arrow-{{ ai_gen_id }}">›</span>
+    </div>
+  {% endif %}
+
+  <div class="ai-product-info-modal-overlay-{{ ai_gen_id }}" data-overlay></div>
+
+  {% if block.settings.show_size_guide %}
+    <div class="ai-product-info-modal-{{ ai_gen_id }}" data-modal-content="size-guide">
+      <div class="ai-product-info-modal-header-{{ ai_gen_id }}">
+        <h2 class="ai-product-info-modal-title-{{ ai_gen_id }}">{{ block.settings.size_guide_modal_title }}</h2>
+        <button class="ai-product-info-modal-close-{{ ai_gen_id }}" aria-label="Close">×</button>
+      </div>
+      <div class="ai-product-info-modal-body-{{ ai_gen_id }}">
+        <table class="ai-product-info-size-table-{{ ai_gen_id }}">
+          <thead>
+            <tr>
+              <th>{{ block.settings.size_col_1_header }}</th>
+              <th>{{ block.settings.size_col_2_header }}</th>
+              <th>{{ block.settings.size_col_3_header }}</th>
+              <th>{{ block.settings.size_col_4_header }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if block.settings.size_row_1_col_1 != blank %}
+              <tr>
+                <td>{{ block.settings.size_row_1_col_1 }}</td>
+                <td>{{ block.settings.size_row_1_col_2 }}</td>
+                <td>{{ block.settings.size_row_1_col_3 }}</td>
+                <td>{{ block.settings.size_row_1_col_4 }}</td>
+              </tr>
+            {% endif %}
+            {% if block.settings.size_row_2_col_1 != blank %}
+              <tr>
+                <td>{{ block.settings.size_row_2_col_1 }}</td>
+                <td>{{ block.settings.size_row_2_col_2 }}</td>
+                <td>{{ block.settings.size_row_2_col_3 }}</td>
+                <td>{{ block.settings.size_row_2_col_4 }}</td>
+              </tr>
+            {% endif %}
+            {% if block.settings.size_row_3_col_1 != blank %}
+              <tr>
+                <td>{{ block.settings.size_row_3_col_1 }}</td>
+                <td>{{ block.settings.size_row_3_col_2 }}</td>
+                <td>{{ block.settings.size_row_3_col_3 }}</td>
+                <td>{{ block.settings.size_row_3_col_4 }}</td>
+              </tr>
+            {% endif %}
+            {% if block.settings.size_row_4_col_1 != blank %}
+              <tr>
+                <td>{{ block.settings.size_row_4_col_1 }}</td>
+                <td>{{ block.settings.size_row_4_col_2 }}</td>
+                <td>{{ block.settings.size_row_4_col_3 }}</td>
+                <td>{{ block.settings.size_row_4_col_4 }}</td>
+              </tr>
+            {% endif %}
+            {% if block.settings.size_row_5_col_1 != blank %}
+              <tr>
+                <td>{{ block.settings.size_row_5_col_1 }}</td>
+                <td>{{ block.settings.size_row_5_col_2 }}</td>
+                <td>{{ block.settings.size_row_5_col_3 }}</td>
+                <td>{{ block.settings.size_row_5_col_4 }}</td>
+              </tr>
+            {% endif %}
+            {% if block.settings.size_row_6_col_1 != blank %}
+              <tr>
+                <td>{{ block.settings.size_row_6_col_1 }}</td>
+                <td>{{ block.settings.size_row_6_col_2 }}</td>
+                <td>{{ block.settings.size_row_6_col_3 }}</td>
+                <td>{{ block.settings.size_row_6_col_4 }}</td>
+              </tr>
+            {% endif %}
+            {% if block.settings.size_row_7_col_1 != blank %}
+              <tr>
+                <td>{{ block.settings.size_row_7_col_1 }}</td>
+                <td>{{ block.settings.size_row_7_col_2 }}</td>
+                <td>{{ block.settings.size_row_7_col_3 }}</td>
+                <td>{{ block.settings.size_row_7_col_4 }}</td>
+              </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if block.settings.show_shipping %}
+    <div class="ai-product-info-modal-{{ ai_gen_id }}" data-modal-content="shipping">
+      <div class="ai-product-info-modal-header-{{ ai_gen_id }}">
+        <h2 class="ai-product-info-modal-title-{{ ai_gen_id }}">{{ block.settings.shipping_modal_title }}</h2>
+        <button class="ai-product-info-modal-close-{{ ai_gen_id }}" aria-label="Close">×</button>
+      </div>
+      <div class="ai-product-info-modal-body-{{ ai_gen_id }}">
+        <div class="ai-product-info-shipping-content-{{ ai_gen_id }}">
+          {{ block.settings.shipping_content }}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</product-info-accordion-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ProductInfoAccordion{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.items = this.querySelectorAll('.ai-product-info-item-{{ ai_gen_id }}');
+        this.overlay = this.querySelector('[data-overlay]');
+        this.modals = this.querySelectorAll('[data-modal-content]');
+        this.closeButtons = this.querySelectorAll('.ai-product-info-modal-close-{{ ai_gen_id }}');
+
+        this.setupEventListeners();
+      }
+
+      setupEventListeners() {
+        this.items.forEach((item) => {
+          item.addEventListener('click', () => {
+            const modalType = item.getAttribute('data-modal');
+            this.openModal(modalType);
+          });
+        });
+
+        this.closeButtons.forEach((button) => {
+          button.addEventListener('click', () => {
+            this.closeAllModals();
+          });
+        });
+
+        this.overlay.addEventListener('click', () => {
+          this.closeAllModals();
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            this.closeAllModals();
+          }
+        });
+      }
+
+      openModal(type) {
+        const modal = this.querySelector(`[data-modal-content="${type}"]`);
+        if (modal) {
+          this.overlay.classList.add('active');
+          modal.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+      }
+
+      closeAllModals() {
+        this.overlay.classList.remove('active');
+        this.modals.forEach((modal) => {
+          modal.classList.remove('active');
+        });
+        document.body.style.overflow = '';
+      }
+    }
+
+    customElements.define('product-info-accordion-{{ ai_gen_id }}', ProductInfoAccordion{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product info accordion",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "item_padding",
+      "label": "Item padding",
+      "min": 8,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "label": "Title font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Size guide"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_size_guide",
+      "label": "Show size guide",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "size_guide_label",
+      "label": "Label",
+      "default": "Size Guide"
+    },
+    {
+      "type": "text",
+      "id": "size_guide_modal_title",
+      "label": "Modal title",
+      "default": "Size Guide"
+    },
+    {
+      "type": "header",
+      "content": "Size table headers"
+    },
+    {
+      "type": "text",
+      "id": "size_col_1_header",
+      "label": "Column 1 header",
+      "default": "Size"
+    },
+    {
+      "type": "text",
+      "id": "size_col_2_header",
+      "label": "Column 2 header",
+      "default": "Chest (in)"
+    },
+    {
+      "type": "text",
+      "id": "size_col_3_header",
+      "label": "Column 3 header",
+      "default": "Waist (in)"
+    },
+    {
+      "type": "text",
+      "id": "size_col_4_header",
+      "label": "Column 4 header",
+      "default": "Length (in)"
+    },
+    {
+      "type": "header",
+      "content": "Size row 1"
+    },
+    {
+      "type": "text",
+      "id": "size_row_1_col_1",
+      "label": "Column 1",
+      "default": "S"
+    },
+    {
+      "type": "text",
+      "id": "size_row_1_col_2",
+      "label": "Column 2",
+      "default": "34-36"
+    },
+    {
+      "type": "text",
+      "id": "size_row_1_col_3",
+      "label": "Column 3",
+      "default": "28-30"
+    },
+    {
+      "type": "text",
+      "id": "size_row_1_col_4",
+      "label": "Column 4",
+      "default": "28"
+    },
+    {
+      "type": "header",
+      "content": "Size row 2"
+    },
+    {
+      "type": "text",
+      "id": "size_row_2_col_1",
+      "label": "Column 1",
+      "default": "M"
+    },
+    {
+      "type": "text",
+      "id": "size_row_2_col_2",
+      "label": "Column 2",
+      "default": "38-40"
+    },
+    {
+      "type": "text",
+      "id": "size_row_2_col_3",
+      "label": "Column 3",
+      "default": "32-34"
+    },
+    {
+      "type": "text",
+      "id": "size_row_2_col_4",
+      "label": "Column 4",
+      "default": "29"
+    },
+    {
+      "type": "header",
+      "content": "Size row 3"
+    },
+    {
+      "type": "text",
+      "id": "size_row_3_col_1",
+      "label": "Column 1",
+      "default": "L"
+    },
+    {
+      "type": "text",
+      "id": "size_row_3_col_2",
+      "label": "Column 2",
+      "default": "42-44"
+    },
+    {
+      "type": "text",
+      "id": "size_row_3_col_3",
+      "label": "Column 3",
+      "default": "36-38"
+    },
+    {
+      "type": "text",
+      "id": "size_row_3_col_4",
+      "label": "Column 4",
+      "default": "30"
+    },
+    {
+      "type": "header",
+      "content": "Size row 4"
+    },
+    {
+      "type": "text",
+      "id": "size_row_4_col_1",
+      "label": "Column 1",
+      "default": "XL"
+    },
+    {
+      "type": "text",
+      "id": "size_row_4_col_2",
+      "label": "Column 2",
+      "default": "46-48"
+    },
+    {
+      "type": "text",
+      "id": "size_row_4_col_3",
+      "label": "Column 3",
+      "default": "40-42"
+    },
+    {
+      "type": "text",
+      "id": "size_row_4_col_4",
+      "label": "Column 4",
+      "default": "31"
+    },
+    {
+      "type": "header",
+      "content": "Size row 5"
+    },
+    {
+      "type": "text",
+      "id": "size_row_5_col_1",
+      "label": "Column 1",
+      "default": "2XL"
+    },
+    {
+      "type": "text",
+      "id": "size_row_5_col_2",
+      "label": "Column 2",
+      "default": "50-52"
+    },
+    {
+      "type": "text",
+      "id": "size_row_5_col_3",
+      "label": "Column 3",
+      "default": "44-46"
+    },
+    {
+      "type": "text",
+      "id": "size_row_5_col_4",
+      "label": "Column 4",
+      "default": "32"
+    },
+    {
+      "type": "header",
+      "content": "Size row 6"
+    },
+    {
+      "type": "text",
+      "id": "size_row_6_col_1",
+      "label": "Column 1",
+      "default": "3XL"
+    },
+    {
+      "type": "text",
+      "id": "size_row_6_col_2",
+      "label": "Column 2",
+      "default": "54-56"
+    },
+    {
+      "type": "text",
+      "id": "size_row_6_col_3",
+      "label": "Column 3",
+      "default": "48-50"
+    },
+    {
+      "type": "text",
+      "id": "size_row_6_col_4",
+      "label": "Column 4",
+      "default": "33"
+    },
+    {
+      "type": "header",
+      "content": "Size row 7"
+    },
+    {
+      "type": "text",
+      "id": "size_row_7_col_1",
+      "label": "Column 1",
+      "default": "4XL"
+    },
+    {
+      "type": "text",
+      "id": "size_row_7_col_2",
+      "label": "Column 2",
+      "default": "58-60"
+    },
+    {
+      "type": "text",
+      "id": "size_row_7_col_3",
+      "label": "Column 3",
+      "default": "52-54"
+    },
+    {
+      "type": "text",
+      "id": "size_row_7_col_4",
+      "label": "Column 4",
+      "default": "34"
+    },
+    {
+      "type": "header",
+      "content": "Shipping"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_shipping",
+      "label": "Show shipping",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "shipping_label",
+      "label": "Label",
+      "default": "Shipping"
+    },
+    {
+      "type": "text",
+      "id": "shipping_modal_title",
+      "label": "Modal title",
+      "default": "Shipping Information"
+    },
+    {
+      "type": "richtext",
+      "id": "shipping_content",
+      "label": "Shipping content",
+      "default": "<p>We want you to receive your order as quickly as possible.</p><h3>Shipping Policy</h3><h4>Processing Time</h4><p>Orders are processed within 1-3 business days (excluding weekends and holidays). You will receive a confirmation email with tracking information once your order ships.</p><h4>Shipping Rates & Delivery Estimates</h4><p><strong>Domestic Fulfillment (U.S.-Based):</strong> 3-5 business days. - Free on orders over $70, otherwise $5.45 flat rate</p><p><strong>Extended Fulfillment:</strong>7-15 business days (Used for selected items depending on production method and availability).</p>"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#e9e9e9"
+    },
+    {
+      "type": "color",
+      "id": "arrow_color",
+      "label": "Arrow color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "modal_bg_color",
+      "label": "Modal background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "modal_border_radius",
+      "label": "Modal border radius",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "modal_max_width",
+      "label": "Modal max width",
+      "min": 400,
+      "max": 800,
+      "step": 50,
+      "unit": "px",
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "modal_title_font_size",
+      "label": "Modal title size",
+      "min": 16,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Table style"
+    },
+    {
+      "type": "color",
+      "id": "table_border_color",
+      "label": "Table border color",
+      "default": "#e9e9e9"
+    },
+    {
+      "type": "color",
+      "id": "table_header_bg",
+      "label": "Table header background",
+      "default": "#f6f6f6"
+    },
+    {
+      "type": "range",
+      "id": "table_font_size",
+      "label": "Table font size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Shipping content style"
+    },
+    {
+      "type": "range",
+      "id": "shipping_heading_size",
+      "label": "Heading size",
+      "min": 16,
+      "max": 28,
+      "step": 2,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "shipping_subheading_size",
+      "label": "Subheading size",
+      "min": 14,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "shipping_text_size",
+      "label": "Text size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product info accordion"
+    }
+  ]
+}
+{% endschema %}

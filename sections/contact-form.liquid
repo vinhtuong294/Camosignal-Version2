@@ -1,0 +1,446 @@
+{%- comment -%}
+    ------------------------------------------------------------------------------
+    Section: Contact form
+    ------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/contact-form.scss' -%}
+
+{%- style -%}
+    #shopify-section-{{- section.id -}} {
+        padding-top: {{- section.settings.offset_top_mobile -}}px;
+        padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+    }
+
+    @media screen and (min-width: 768px) {
+        #shopify-section-{{- section.id -}} {
+            padding-top: {{- section.settings.offset_top_desktop -}}px;
+            padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+        }
+    }
+{%- endstyle -%}
+
+{%- assign color_scheme      	           = section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+
+{%- assign heading = section.settings.heading -%}
+{%- assign text = section.settings.text -%}
+{%- assign terms_text = section.settings.terms_text -%}
+{%- assign name_placeholder = section.settings.name_placeholder -%}
+{%- assign email_placeholder = section.settings.email_placeholder -%}
+{%- assign phone_placeholder = section.settings.phone_placeholder -%}
+{%- assign message_placeholder = section.settings.message_placeholder -%}
+{%- assign submit_label = section.settings.submit_label -%}
+{%- assign default_success_message = "sections.contact_form.success_heading" | t -%}
+{%- assign success_message = section.settings.success_message | default: default_success_message -%}
+
+{%- assign container = section.settings.container_width -%}
+
+{%- if enable_color_scheme_inheritance -%}
+    {%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- if container == 'inherit' -%}
+    {%- assign container_width = settings.container_width -%}
+{%- else -%}
+    {%- assign container_width = container -%}
+{%- endif -%}
+
+{%- capture styles -%}
+    --container-width: {{ container_width }}; {{-  -}}
+    --inner-offset-top: {{ section.settings.inner_offset_top -}}px; {{-  -}}
+    --inner-offset-bottom: {{ section.settings.inner_offset_bottom -}}px; {{-  -}}
+    --inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile -}}px; {{-  -}}
+    --inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile -}}px; {{-  -}}
+{%- endcapture -%}
+
+<section
+    class="contact-form js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %} color-{{- color_scheme }}"
+    style="{{ styles }}"
+>
+    <div class="container contact-form__container section-animate">
+        {%- if heading != blank -%}
+            <h2 class="h2 contact-form__form-heading">
+                {{- heading -}}
+            </h2>
+        {%- endif -%}
+
+        {%- if text != blank -%}
+            <div class="contact-form__text-wrapper rte">
+                {{- text -}}
+            </div>
+        {%- endif -%}
+
+        {%- form "contact", class: "contact-form__form", id: "ContactForm" -%}
+            <div class="contact-form__form-fields">
+                {%- if form.posted_successfully? -%}
+                    <p class="contact-form__form-submitted-title success" tabindex="-1" autofocus>
+                        {{- success_message -}}
+                    </p>
+                {%- elsif form.errors -%}
+                    <p
+                        class="contact-form__form-submitted-title error"
+                        autofocus
+                        tabindex="-1"
+                        role="alert"
+                    >
+                        {{- "sections.contact_form.error_heading" | t -}}
+                    </p>
+                {%- endif -%}
+
+                <div class="contact-form__form-fields-row">
+                    {%- if name_placeholder != blank -%}
+                        <div class="input-wrapper contact-form__field contact-form__fields-col">
+                            <input
+                                id="ContactForm-name--{{- section.id -}}"
+                                class="input{% if form.errors contains "name" %} error{% endif %}"
+                                type="text"
+                                name="contact[name]"
+                                placeholder="{{- name_placeholder -}}"
+                                autocomplete="name"
+                                autocapitalize="off"
+                                {% if form.errors contains "name" %}
+                                    aria-invalid="true"
+                                    aria-describedby="ContactForm-name-error--{{- section.id -}}"
+                                {% endif %}
+                                {% if customer %}
+                                    value="{{- customer.name -}}"
+                                {% endif %}
+                            />
+
+                            <label class="input-label" for="ContactForm-name--{{- section.id -}}">
+                                {{- name_placeholder -}}
+                            </label>
+
+                            {%- if form.errors contains "name" -%}
+                                <small class="contact-form__input-error error" id="ContactForm-name-error--{{- section.id -}}">
+                                    <span class="visually-hidden">
+                                        {{- "sections.contact_form.error" | t -}}
+                                    </span>
+
+                                    <span class="contact__input-error-message">
+                                        {{ form.errors.translated_fields['name'] | capitalize }} {{ form.errors.messages['name'] }}
+                                    </span>
+                                </small>
+                            {%- endif -%}
+                        </div>
+                    {%- endif -%}
+
+                    {%- if email_placeholder != blank -%}
+                        <div class="input-wrapper contact-form__field contact-form__fields-col">
+                            <input
+                                id="ContactForm-email--{{- section.id -}}"
+                                class="input{% if form.errors contains "email" %} error{% endif %}"
+                                type="email"
+                                name="contact[email]"
+                                placeholder="{{- email_placeholder -}}"
+                                autocomplete="email"
+                                autocapitalize="off"
+                                {% if form.errors contains "email" %}
+                                    aria-invalid="true"
+                                    aria-describedby="ContactForm-email-error--{{- section.id -}}"
+                                {% endif %}
+                                {% if customer %}
+                                    value="{{- customer.email -}}"
+                                {% endif %}
+                                aria-required="true"
+                                required
+                            />
+
+                            <label class="input-label" for="ContactForm-email--{{- section.id -}}">
+                                {{- email_placeholder -}}
+                            </label>
+
+                            {%- if form.errors contains "email" -%}
+                                <small class="contact-form__input-error error" id="ContactForm-email-error--{{- section.id -}}">
+                                    <span class="visually-hidden">
+                                        {{- "sections.contact_form.error" | t -}}
+                                    </span>
+
+                                    <span class="contact-form__input-error-message">
+                                        {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
+                                    </span>
+                                </small>
+                            {%- endif -%}
+                        </div>
+                    {%- endif -%}
+                </div>
+
+                {%- if phone_placeholder != blank -%}
+                    <div class="input-wrapper contact-form__field">
+                        <input
+                            id="ContactForm-phone--{{- section.id -}}"
+                            class="input"
+                            type="tel"
+                            name="contact[phone]"
+                            placeholder="{{- phone_placeholder -}}"
+                            pattern="[0-9\-]*"
+                            autocomplete="tel"
+                            autocapitalize="off"
+                            value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
+                        />
+
+                        <label class="input-label" for="ContactForm-phone--{{- section.id -}}">
+                            {{- phone_placeholder -}}
+                        </label>
+                    </div>
+                {%- endif -%}
+
+                {%- if message_placeholder != blank -%}
+                    <div class="textarea-wrapper contact-form__field">
+                        <textarea
+                            id="ContactForm-message--{{- section.id -}}"
+                            class="textarea{% if form.errors contains "body" %} error{% endif %}"
+                            name="contact[body]"
+                            placeholder="{{- message_placeholder -}}"
+                            {% if form.errors contains "body" %}
+                                aria-invalid="true"
+                                aria-describedby="ContactForm-message-error--{{- section.id -}}"
+													  {% endif %}
+													  aria-required="true"
+													  required
+                        ></textarea>
+
+                        <label class="textarea-label" for="ContactForm-message--{{- section.id -}}">
+                            {{- message_placeholder -}}
+                        </label>
+
+                        {%- if form.errors contains "body" -%}
+                            <small class="contact-form__input-error error" id="ContactForm-message-error--{{- section.id -}}">
+                                <span class="visually-hidden">
+                                    {{- "sections.contact_form.error" | t -}}
+                                </span>
+
+                                <span class="contact-form__input-error-message">
+                                    {{ form.errors.translated_fields['body'] | capitalize }} {{ form.errors.messages['body'] }}
+                                </span>
+                            </small>
+                        {%- endif -%}
+                    </div>
+                {%- endif -%}
+
+                {%- if terms_text != blank -%}
+                    <div class="contact-form__text-terms rte">
+                        {{- terms_text -}}
+                    </div>
+                {%- endif -%}
+            </div>
+
+						<button class="button button--secondary contact-form__button" type="submit">
+								<span data-text="{{- submit_label -}}">
+										<span>{{- submit_label -}}</span>
+								</span>
+						</button>
+        {%- endform -%}
+    </div>
+</section>
+
+{%- schema -%}
+{
+    "name": "Contact form",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+    "settings": [
+        {
+            "type": "header",
+            "content": "Colors"
+        },
+        {
+            "type": "checkbox",
+            "id": "enable_color_scheme_inheritance",
+            "label": "Enable color scheme inheritance",
+            "default": true,
+            "info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+        },
+        {
+            "type": "color_scheme",
+            "id": "color_scheme",
+            "label": "Color scheme",
+            "default": "scheme-1"
+        },
+        {
+            "type": "header",
+            "content": "General"
+        },
+        {
+            "type": "inline_richtext",
+            "id": "heading",
+            "label": "Heading",
+            "default": "Heading"
+        },
+        {
+            "type": "richtext",
+            "id": "text",
+            "label": "Text",
+            "default": "<p>Rich <i>text</i></p>"
+        },
+        {
+            "type": "inline_richtext",
+            "id": "terms_text",
+            "label": "Terms and conditions text",
+            "default": "Rich <i>text</i>"
+        },
+        {
+            "type": "text",
+            "id": "name_placeholder",
+            "label": "Name placeholder",
+            "default": "Enter your name"
+        },
+        {
+            "type": "text",
+            "id": "email_placeholder",
+            "label": "Email placeholder",
+			"default": "Enter your Email *",
+			"info": "This is required field"
+		},
+        {
+            "type": "text",
+            "id": "phone_placeholder",
+            "label": "Phone placeholder",
+            "default": "Enter your phone number"
+        },
+        {
+            "type": "text",
+            "id": "message_placeholder",
+            "label": "Message placeholder",
+            "default": "Enter your message *",
+			"info": "This is required field"
+        },
+        {
+            "type": "text",
+            "id": "submit_label",
+            "label": "Button label",
+            "default": "Send request"
+        },
+        {
+            "type": "textarea",
+            "id": "success_message",
+            "label": "Success message",
+            "default": "Thanks for contacting us. We'll get back to you as soon as possible!"
+        },
+        {
+            "type": "header",
+            "content": "Layout"
+        },
+        {
+            "type": "select",
+            "id": "container_width",
+            "label": "Container width",
+            "options": [
+                {
+                    "value": "1808px",
+                    "label": "Default - 1680px"
+                },
+                {
+                    "value": "2048px",
+                    "label": "Large - 1920px"
+                },
+                {
+                    "value": "100%",
+                    "label": "Full width"
+                },
+                {
+                    "value": "inherit",
+                    "label": "Inherit of general setting"
+                }
+            ],
+            "default": "inherit",
+            "info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+        },
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset top",
+			"default": 60
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset bottom",
+			"default": 60
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset top",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset bottom",
+			"default": 30
+		},
+		{
+			"type": "paragraph",
+			"content": "Internal offsets"
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset top",
+			"default": 60
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset bottom",
+			"default": 60
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset top",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset bottom",
+			"default": 30
+		}
+    ],
+    "presets": [
+        {
+            "name": "Contact form"
+        }
+    ]
+}
+{%- endschema -%}

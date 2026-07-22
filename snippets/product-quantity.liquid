@@ -1,0 +1,274 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+  Snippet: Product quantity
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign cart_qty = cart | item_count_for_variant: product.selected_or_first_available_variant.id -%}
+{%- assign volume_pricing_array = product.selected_or_first_available_variant.quantity_price_breaks | sort: 'quantity' | reverse -%}
+{%- assign current_qty_for_volume_pricing = cart_qty | plus: product.selected_or_first_available_variant.quantity_rule.min -%}
+
+{%- if cart_qty > 0 -%}
+	{%- assign current_qty_for_volume_pricing = cart_qty | plus: product.selected_or_first_available_variant.quantity_rule.increment -%}
+{%- endif -%}
+
+{%- capture styles -%}
+	--offset-top-desktop: {{ block.settings.offset_top_desktop }}px; {{-  -}}
+	--offset-bottom-desktop: {{ block.settings.offset_bottom_desktop }}px; {{-  -}}
+	--offset-top-mobile: {{ block.settings.offset_top_mobile }}px; {{-  -}}
+	--offset-bottom-mobile: {{ block.settings.offset_bottom_mobile }}px;
+{%- endcapture -%}
+
+<div class="product-quantity js-product-quantity" style="{{ styles }}">
+	<label
+		class="product-options__option-label"
+		for="Product_{{- product.id -}}-Quantity"
+	>
+		{{- 'products.product.quantity' | t -}}: <span class="js-price-breaks-val {% if cart_qty == 0 %}is-hidden{%- endif -%}">{{- 'products.product.quantity_in_cart' | t: quantity: cart_qty -}}</span>
+	</label>
+
+	<div class="product-quantity__wrapper">
+		<div class="product-quantity__container">
+			<button
+				class="product-quantity__button"
+				type="button"
+				data-quantity-decrease
+				aria-label="{{ 'products.quantity.decrease' | t: product: product.title | escape }}"
+			>
+				{% render 'icons', icon: 'minus' %}
+			</button>
+
+			<input
+				type="number"
+				name="quantity"
+				id="Product_{{- product.id -}}-Quantity"
+				class="product-quantity__input"
+				value="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
+				min="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
+				max="{{ product.selected_or_first_available_variant.quantity_rule.max }}"
+				step="{{ product.selected_or_first_available_variant.quantity_rule.increment }}"
+				data-quantity-input
+			>
+
+			<button
+				class="product-quantity__button"
+				type="button"
+				data-quantity-increase
+				aria-label="{{ 'products.quantity.increase' | t: product: product.title | escape }}"
+			>
+				{% render 'icons', icon: 'plus' %}
+			</button>
+		</div>
+	</div>
+
+	<div class="product-quantity__price-each {% if product == blank %}is-hidden{% endif %}">
+		<span class="js-price-volume">
+			{%- if current_qty_for_volume_pricing < volume_pricing_array.last.minimum_quantity -%}
+				{%- assign variant_price = product.selected_or_first_available_variant.price | money_with_currency -%}
+				{{ 'products.product.volume_pricing.price_at_each' | t: price: variant_price }}
+			{%- else -%}
+				{%- for price_break in volume_pricing_array -%}
+					{%- if current_qty_for_volume_pricing >= price_break.minimum_quantity -%}
+						{%- assign price_break_price = price_break.price | money_with_currency -%}
+						{{ 'products.product.volume_pricing.price_at_each' | t: price: price_break_price }}
+						{%- break -%}
+					{%- endif -%}
+				{%- endfor -%}
+			{%- endif -%}
+		</span>
+	</div>
+
+	<div class="product__quantity-rules js-product-quantity-rules no-js-hidden {% if product == blank %}is-hidden{% endif %} {% if product.selected_or_first_available_variant.quantity_rule.increment < 2 and product.selected_or_first_available_variant.quantity_rule.min < 2 and product.selected_or_first_available_variant.quantity_rule.max == null %}is-hidden{%- endif-%}" id="quantity-rules-{{ section.id }}">
+		<span class="product__quantity-rules-item js-product-quantity-rule-increment {%- if product.selected_or_first_available_variant.quantity_rule.increment < 1 -%}is-hidden{%- endif -%}">
+			<span class="js-product-quantity-rule-increment-val">{{ 'products.product.increments_of' | t: number: product.selected_or_first_available_variant.quantity_rule.increment }}</span>
+		</span>
+
+		<span class="product__quantity-rules-item js-product-quantity-rule-min {% if product.selected_or_first_available_variant.quantity_rule.min < 1 %}is-hidden{% endif %}">
+			<span class="js-product-quantity-rule-min-val">{{ 'products.product.minimum_of' | t: number: product.selected_or_first_available_variant.quantity_rule.min }}</span>
+		</span>
+
+		<span class="product__quantity-rules-item js-product-quantity-rule-max {% if product.selected_or_first_available_variant.quantity_rule.max == null %}is-hidden{% endif %}">
+			<span class="js-product-quantity-rule-max-val">{{ 'products.product.maximum_of' | t: number: product.selected_or_first_available_variant.quantity_rule.max }}</span>
+		</span>
+	</div>
+
+	{% if product.quantity_price_breaks_configured? %}
+		<script data-product-qty-breaks-json type="application/json">
+				{
+					"{{- product.selected_or_first_available_variant.id | json -}}": {
+						"quantity_price_breaks": [
+						{% for price_break in product.selected_or_first_available_variant.quantity_price_breaks %}
+							{% assign price_break_w =  price_break.price | money_with_currency %}
+							{
+								"minimum_quantity": {{ price_break.minimum_quantity | json }},
+								"price": {{ price_break.price | money_with_currency | json }},
+								"price_at_each": {{ 'products.product.volume_pricing.price_at_each' | t: price: price_break_w | json }},
+								"price_each": {{ 'products.product.volume_pricing.each' | t: price: price_break_w | json }}
+							}{% unless forloop.last %},{% endunless %}
+						{% endfor %}
+						]
+					}
+				}
+		</script>
+
+		<div class="product-volume-pricing js-product-volume-pricing {% unless volume_pricing_array.size > 0 %}is-hidden{%- endunless -%}">
+			<p class="product-volume-pricing__title">{{ 'products.product.volume_pricing.title' | t }}</p>
+			<ul class="product-volume-pricing__list js-product-volume-pricing-list" data-variant="{{- product.selected_or_first_available_variant.id -}}">
+				<li class="product-volume-pricing__list-item">
+					<span>{{ product.selected_or_first_available_variant.quantity_rule.min }}+</span>
+					{%- assign price = product.selected_or_first_available_variant.price | money_with_currency -%}
+					<span data-text="{{ 'products.product.volume_pricing.price_at_each' | t: price: price }}">{{ price }}/ea</span>
+				</li>
+				{%- for price_break in product.selected_or_first_available_variant.quantity_price_breaks -%}
+					{%- assign price_break_price = price_break.price | money_with_currency -%}
+					<li class="product-volume-pricing__list-item{% if forloop.index >= 3 %} is-hidden{% endif %}">
+						<span>{{ price_break.minimum_quantity }}<span aria-hidden="true">+</span></span>
+						<span data-text="{{ 'products.product.volume_pricing.price_at_each' | t: price: price_break_price }}">{{ price_break_price }}/ea</span>
+					</li>
+				{%- endfor -%}
+			</ul>
+
+			<button class="product-volume-pricing__show-more button-link focus-visible-outline js-product-volume-pricing-show-more {% if product.selected_or_first_available_variant.quantity_price_breaks.size < 3 %}is-hidden{%- endif -%}"
+					type="button">
+				{{- 'products.product.volume_pricing.show_more' | t -}}
+			</button>
+		</div>
+	{% endif %}
+
+	<div class="product-quantity__error is-hidden js-product-quantity-error-wrapper" id="ProductQuantityError-{{- product.id -}}" role="alert">
+		<small class="product-quantity__error-text js-product-quantity-error"></small>
+	</div>
+</div>
+
+<style>
+	/* =============================================
+	   Quantity button: compact rectangular style
+	   ============================================= */
+	.product-quantity__container {
+		display: inline-flex;
+		align-items: center;
+		border: 1px solid #b0b0b0 !important;
+		border-radius: 6px !important;
+		overflow: hidden;
+		background-color: var(--color-background, #faf6ee);
+		height: 32px;
+		width: fit-content;
+		max-width: fit-content;
+	}
+
+	.product-quantity .product-quantity__button {
+		width: 26px !important;
+		max-width: 26px !important;
+		min-width: 26px !important;
+		height: 32px !important;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: transparent;
+		border: none !important;
+		color: #333;
+		cursor: pointer;
+		flex-shrink: 0;
+		padding: 0;
+	}
+
+	.product-quantity .product-quantity__button .icon {
+		width: 12px;
+		height: 12px;
+	}
+
+	.product-quantity .product-quantity__input {
+		width: 28px !important;
+		min-width: 28px !important;
+		max-width: 28px !important;
+		flex-grow: 0 !important;
+		height: 32px;
+		font-size: 14px;
+		padding: 0;
+		margin: 0;
+		border: none !important;
+		background: transparent;
+		text-align: center;
+		font-size: 14px;
+		font-weight: 500;
+		color: #222;
+		-moz-appearance: textfield;
+		-webkit-appearance: textfield;
+		appearance: textfield;
+	}
+
+	.product-quantity .product-quantity__input::-webkit-outer-spin-button,
+	.product-quantity .product-quantity__input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+
+	/* Desktop: label + nút cùng hàng, nút to hơn */
+	@media screen and (min-width: 768px) {
+		.product-quantity {
+			flex-direction: row !important;
+			align-items: center !important;
+			gap: 16px;
+		}
+		.product-quantity > .product-options__option-label {
+			margin-bottom: 0 !important;
+			white-space: nowrap;
+		}
+		.product-quantity .product-quantity__wrapper {
+			max-width: none;
+			width: auto;
+			gap: 0;
+		}
+		.product-quantity__container {
+			height: 38px;
+		}
+		.product-quantity .product-quantity__button {
+			width: 34px !important;
+			min-width: 34px !important;
+			max-width: 34px !important;
+			height: 38px !important;
+		}
+		.product-quantity .product-quantity__button .icon {
+			width: 14px;
+			height: 14px;
+		}
+		.product-quantity .product-quantity__input {
+			width: 40px !important;
+			min-width: 40px !important;
+			max-width: 40px !important;
+			height: 38px;
+			font-size: 15px;
+		}
+	}
+
+	/* Mobile: label + container nằm cùng hàng */
+	@media screen and (max-width: 767px) {
+		.product-quantity {
+			flex-direction: row !important;
+			align-items: center !important;
+			gap: 12px;
+		}
+		.product-quantity > .product-options__option-label {
+			margin-bottom: 0 !important;
+			font-size: 13px !important;
+			white-space: nowrap;
+		}
+		.product-quantity .product-quantity__wrapper {
+			max-width: none;
+			width: auto;
+			gap: 0;
+		}
+		.product-quantity__container {
+			height: 36px;
+		}
+		.product-quantity .product-quantity__button {
+			width: 36px;
+			height: 36px;
+		}
+		.product-quantity .product-quantity__input {
+			width: 32px;
+			height: 36px;
+			font-size: 14px;
+		}
+	}
+</style>

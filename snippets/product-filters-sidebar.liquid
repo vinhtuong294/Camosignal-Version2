@@ -1,0 +1,1057 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Product filters sidebar
+	- product_list: Collection or Search object (required)
+	- filter_type: filter type (sidebar/top-bar/drawer) (required)
+	- show_swatches: boolean. Set true to show swatches instead of checkbox
+
+	Usage:
+
+	{%- render 'product-filters-sidebar', product_list: product_list, filter_type: 'sidebar' -%}
+	or
+	{%- render 'product-filters-sidebar', product_list: product_list, filter_type: 'sidebar' -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- if template.name == 'collection' -%}
+	{%- assign count = product_list.products_count -%}
+{%- elsif template.name == 'search' -%}
+	{%- assign count = product_list.results_count -%}
+{%- endif -%}
+
+{%- assign id = filter_type -%}
+
+{%- if product_list != blank -%}
+	<div class="product-filters product-filters--sidebar">
+
+		<form class="product-filters__form js-form">
+			<div class="product-filters__form-body">
+				{%- render 'product-filters-selected', product_list: product_list, filter_type: 'sidebar' -%}
+
+
+
+				<div
+					class="accordion product-filters__form-accordion js-accordion-container js-filters-container"
+					id="filters-container-{{ section.id }}-{{ filter.param_name | escape }}-{{ section.id }}-{{- id -}}"
+				>
+					{%- assign filterListIndex = 1 -%}
+
+					{%- assign has_any_filter = false -%}
+					{%- for filter in product_list.filters -%}
+						{%- if filter.active_values.size > 0 -%}
+							{%- assign has_any_filter = true -%}
+						{%- endif -%}
+					{%- endfor -%}
+					{%- assign is_all_active = false -%}
+					{%- if collection.handle == 'all' or collection.handle == blank -%}
+						{%- unless has_any_filter -%}
+							{%- assign is_all_active = true -%}
+						{%- endunless -%}
+					{%- endif -%}
+
+					{%- comment -%} ── Build availability lookups from Shopify filter data ── {%- endcomment -%}
+					{%- assign available_hunting_values = '' -%}
+					{%- assign available_seasonal_values = '' -%}
+					{%- assign param_hunting = 'filter.p.m.custom.hunting' -%}
+					{%- assign param_seasonal = 'filter.p.m.custom.seasonal' -%}
+					{%- for filter in product_list.filters -%}
+						{%- assign param_down = filter.param_name | downcase -%}
+						{%- if param_down contains 'hunting' -%}
+							{%- assign param_hunting = filter.param_name -%}
+							{%- for fv in filter.values -%}
+								{%- if fv.count > 0 or fv.active -%}
+									{%- assign available_hunting_values = available_hunting_values | append: fv.label | append: '|||' -%}
+								{%- endif -%}
+							{%- endfor -%}
+						{%- elsif param_down contains 'seasonal' -%}
+							{%- for fv in filter.values -%}
+								{%- if fv.count > 0 or fv.active -%}
+									{%- assign available_seasonal_values = available_seasonal_values | append: fv.label | append: '|||' -%}
+								{%- endif -%}
+							{%- endfor -%}
+						{%- elsif param_down contains 'product_type' -%}
+							{%- for fv in filter.values -%}
+								{%- if fv.count > 0 or fv.active -%}
+									{%- assign available_clothing_values = available_clothing_values | append: fv.label | append: '|||' -%}
+								{%- endif -%}
+							{%- endfor -%}
+						{%- endif -%}
+					{%- endfor -%}
+
+					{%- comment -%} ── ALL PRODUCTS ── {%- endcomment -%}
+					<div class="product-filters__form-item js-filter-item is-active" style="padding-bottom: 10px; border-bottom: 1px solid #e8e8e1; margin-bottom: 20px;">
+						<ul class="filter-list filter-list--sidebar filter-list--collection-custom js-filter-list">
+							<li class="filter-list__item">
+								<a
+									href="/collections/all"
+									class="filter-list__collection-link js-filter-clear-btn {% if is_all_active %}filter-list__collection-link--active{% endif %}"
+								>
+									<span class="custom-checkbox-icon"></span>
+									ALL
+								</a>
+							</li>
+						</ul>
+					</div>
+
+
+					{%- comment -%} ── BRAND ── {%- endcomment -%}
+					{%- if false -%}
+					<div
+						id="filter-{{ section.id }}-seasonal-{{- id -}}"
+						class="accordion__item product-filters__form-item js-accordion-item js-filter-item is-active js-custom-accordion"
+						data-filter-group="filter.p.m.custom.seasonal"
+					>
+						<h3 class="accordion__title">
+							<button class="focus-visible-outline accordion__control product-filters__form-item-toggle-button js-accordion-control js-custom-accordion-btn is-active" type="button" aria-expanded="true">
+								<span typeof="product-filters__form-item-toggle-title">
+									BRAND
+									<span class="js-custom-counter" style="display:none;"></span>
+								</span>
+								{%- render 'icons', icon: 'arrow-down' -%}
+							</button>
+						</h3>
+						<div class="accordion__content accordion__content--animate js-accordion-content js-custom-accordion-content is-active" style="height: auto;">
+							<div class="js-accordion-inner product-filters__form-item-content">
+								<ul class="filter-list filter-list--sidebar filter-list--collection-custom js-filter-list">
+									{%- assign seasonal_labels = "INDEPENDENCE DAY,SIGNATURE,NEW ARRIVALS" | split: "," -%}
+									{%- assign seasonal_display = "Independence Day,Signature,NEW ARRIVALS" | split: "," -%}
+									{%- for s_label in seasonal_labels -%}
+										{%- assign s_check = s_label | downcase -%}
+										{%- assign s_available = false -%}
+										{%- assign s_checked = false -%}
+										{%- assign s_submit_value = s_label -%}
+										{%- assign exact_matched = false -%}
+										{%- for filter in product_list.filters -%}
+											{%- if filter.param_name == param_seasonal -%}
+												{%- for value in filter.values -%}
+													{%- assign val_down = value.label | downcase -%}
+													{%- if val_down == s_check -%}
+														{%- assign s_submit_value = value.value -%}
+														{%- if value.count > 0 or value.active -%}{%- assign s_available = true -%}{%- endif -%}
+														{%- if value.active -%}{%- assign s_checked = true -%}{%- endif -%}
+														{%- assign exact_matched = true -%}
+														{%- break -%}
+													{%- elsif val_down contains s_check and exact_matched == false -%}
+														{%- assign s_submit_value = value.value -%}
+														{%- if value.count > 0 or value.active -%}{%- assign s_available = true -%}{%- endif -%}
+														{%- if value.active -%}{%- assign s_checked = true -%}{%- endif -%}
+													{%- endif -%}
+												{%- endfor -%}
+											{%- endif -%}
+										{%- endfor -%}
+										{%- assign collection_handle_down = collection.handle | downcase -%}
+										{%- assign collection_title_down = collection.title | downcase -%}
+										{%- if s_check == 'independence day' -%}
+											{%- if collection_handle_down == 'usa' or collection_handle_down == 'independence-day' or collection_title_down contains 'independence day' -%}
+												{%- assign s_checked = true -%}
+											{%- endif -%}
+										{%- elsif s_check == 'signature' -%}
+											{%- if collection_handle_down == 'signature' or collection_title_down contains 'signature' -%}
+												{%- assign s_checked = true -%}
+											{%- endif -%}
+										{%- elsif s_check == 'new arrivals' -%}
+											{%- if collection_handle_down == 'new-arrivals' -%}
+												{%- assign s_checked = true -%}
+											{%- endif -%}
+										{%- endif -%}
+										<li class="filter-list__item">
+											<a
+												href="javascript:void(0);"
+												class="filter-list__collection-link js-custom-filter-link{% if s_checked %} filter-list__collection-link--active{% endif %}{% unless s_available %} filter-list__collection-link--disabled{% endunless %}"
+												data-filter-param="{{ param_seasonal }}"
+												data-filter-value="{{ s_submit_value | escape }}"
+											>
+												<span class="custom-checkbox-icon"></span>
+												{{ seasonal_display[forloop.index0] }}
+												{%- unless s_available -%}<span class="filter-list__coming-soon"> — <em>Coming Soon</em></span>{%- endunless -%}
+											</a>
+										</li>
+									{%- endfor -%}
+								</ul>
+							</div>
+						</div>
+					</div>
+					{%- endif -%}
+
+					{%- assign filterListIndex = filterListIndex | plus: 1 -%}
+
+					{%- comment -%} ── CLOTHING (Product Type) Filter ── {%- endcomment -%}
+					<div
+						id="filter-{{ section.id }}-clothing-{{- id -}}"
+						class="accordion__item product-filters__form-item js-accordion-item js-filter-item js-clothing-accordion is-active"
+					>
+						<h3 class="accordion__title">
+							<button
+								class="focus-visible-outline accordion__control product-filters__form-item-toggle-button js-accordion-control js-clothing-accordion-btn is-active"
+								type="button"
+								id="Filter-accordion-{{ section.id }}-clothing-{{- id -}}"
+								aria-controls="filter-list-{{ section.id }}-clothing-{{- id -}}"
+								aria-expanded="true" is-active
+							>
+								<span typeof="product-filters__form-item-toggle-title">
+									CLOTHING
+									<span class="js-clothing-counter js-filter-item-counter" style="display:none;">&nbsp;(1)</span>
+								</span>
+								{%- render 'icons', icon: 'arrow-down' -%}
+							</button>
+						</h3>
+						<div
+							class="accordion__content accordion__content--animate js-accordion-content js-clothing-accordion-content is-active"
+							id="filter-list-{{ section.id }}-clothing-{{- id -}}"
+							aria-labelledby="Filter-accordion-{{ section.id }}-clothing-{{- id -}}"
+							role="region"
+							style="height: auto;"
+						>
+							<div class="js-accordion-inner product-filters__form-item-content">
+								<ul class="filter-list filter-list--sidebar filter-list--collection-custom js-clothing-filter-list js-filter-list">
+									{%- assign product_type_filter = null -%}
+									{%- for filter in product_list.filters -%}
+										{%- if filter.param_name == 'filter.p.product_type' -%}
+											{%- assign product_type_filter = filter -%}
+											{%- break -%}
+										{%- endif -%}
+									{%- endfor -%}
+
+									{%- if product_type_filter -%}
+										{%- for value in product_type_filter.values -%}
+											{%- assign is_available = true -%}
+											{%- if value.count == 0 and value.active == false -%}
+												{%- assign is_available = false -%}
+											{%- endif -%}
+											<li class="filter-list__item">
+												<a
+													href="javascript:void(0);"
+													class="filter-list__collection-link js-clothing-type-link{% if value.active %} filter-list__collection-link--active{% endif %}{% unless is_available %} filter-list__collection-link--disabled filter-list__clothing-disabled{% endunless %}"
+													data-product-type="{{ value.value | escape }}"
+												>
+													<span class="custom-checkbox-icon"></span>
+													{{ value.label | upcase }}
+													{%- unless is_available -%}<span class="filter-list__coming-soon" style="color:#7a8a7e;"> — <em>Coming Soon</em></span>{%- endunless -%}
+												</a>
+											</li>
+										{%- endfor -%}
+									{%- else -%}
+										{%- comment -%} Fallback if product type filter is somehow missing {%- endcomment -%}
+										<li class="filter-list__item">
+											<span class="filter-list__collection-link filter-list__collection-link--disabled">No clothing types found</span>
+										</li>
+									{%- endif -%}
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					{%- comment -%} ── HUNTING Filter ── {%- endcomment -%}
+					<div id="filter-{{ section.id }}-hunting-{{- id -}}" class="accordion__item product-filters__form-item js-accordion-item js-filter-item is-active js-custom-accordion" data-filter-group="{{ param_hunting }}">
+						<h3 class="accordion__title">
+							<button class="focus-visible-outline accordion__control product-filters__form-item-toggle-button js-accordion-control js-custom-accordion-btn is-active" type="button" aria-expanded="true">
+								<span typeof="product-filters__form-item-toggle-title">
+									HUNTING
+									<span class="js-custom-counter" style="display:none;"></span>
+								</span>
+								{%- render 'icons', icon: 'arrow-down' -%}
+							</button>
+						</h3>
+						<div class="accordion__content accordion__content--animate js-accordion-content js-custom-accordion-content is-active" style="height: auto;">
+							<div class="js-accordion-inner product-filters__form-item-content">
+
+
+								<ul class="filter-list filter-list--sidebar filter-list--collection-custom js-filter-list">
+									{%- assign hunting_labels = "Deer,Turkey,Waterfowl,Fishing" | split: "," -%}
+									{%- for h_label in hunting_labels -%}
+										{%- assign h_target_down = h_label | downcase -%}
+										{%- assign h_available = false -%}
+										{%- assign h_checked = false -%}
+										{%- assign h_submit_value = h_label -%}
+										{%- assign exact_matched = false -%}
+										{%- for filter in product_list.filters -%}
+											{%- if filter.param_name == param_hunting -%}
+												{%- for value in filter.values -%}
+													{%- assign val_down = value.label | downcase -%}
+													{%- if val_down == h_target_down -%}
+														{%- assign h_submit_value = value.value -%}
+														{%- if value.count > 0 or value.active -%}{%- assign h_available = true -%}{%- endif -%}
+														{%- if value.active -%}{%- assign h_checked = true -%}{%- endif -%}
+														{%- assign exact_matched = true -%}
+														{%- break -%}
+													{%- elsif val_down contains h_target_down and exact_matched == false -%}
+														{%- assign h_submit_value = value.value -%}
+														{%- if value.count > 0 or value.active -%}{%- assign h_available = true -%}{%- endif -%}
+														{%- if value.active -%}{%- assign h_checked = true -%}{%- endif -%}
+													{%- endif -%}
+												{%- endfor -%}
+											{%- endif -%}
+										{%- endfor -%}
+										<li class="filter-list__item">
+											<input class="checkbox__input visually-hidden filter-list__checkbox" type="checkbox" name="{{ param_hunting }}" value="{{ h_submit_value | escape }}" id="Filter-{{ section.id }}-hunting-{{ forloop.index }}-{{ id }}"{% if h_checked %} checked{% endif %}{% unless h_available %} disabled{% endunless %}>
+											<label class="checkbox__label{% unless h_available %} is-disabled{% endunless %}" for="Filter-{{ section.id }}-hunting-{{ forloop.index }}-{{ id }}" {% unless h_available %}style="pointer-events: none; opacity: 0.6;"{% endunless %}>
+												{{ h_label }}
+												{%- unless h_available -%}<span class="filter-list__coming-soon" style="color:#7a8a7e;"> — <em>Coming Soon</em></span>{%- endunless -%}
+											</label>
+										</li>
+									{%- endfor -%}
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					{%- comment -%} ── SIZE Filter ── {%- endcomment -%}
+					{%- assign size_filter = null -%}
+					{%- for filter in product_list.filters -%}
+						{%- assign d_label = filter.label | downcase -%}
+						{%- if d_label == 'size' or d_label == 'kích thước' -%}
+							{%- assign size_filter = filter -%}
+						{%- endif -%}
+					{%- endfor -%}
+
+					{%- if size_filter -%}
+					<div id="filter-{{ section.id }}-size-{{- id -}}" class="accordion__item product-filters__form-item js-accordion-item js-filter-item js-custom-accordion is-active" data-filter-group="{{ size_filter.param_name }}">
+						<h3 class="accordion__title">
+							<button class="focus-visible-outline accordion__control product-filters__form-item-toggle-button js-accordion-control js-custom-accordion-btn is-active" type="button" aria-expanded="true">
+								<span typeof="product-filters__form-item-toggle-title">
+									SIZE
+									<span class="js-custom-counter js-filter-item-counter" style="display:none;">&nbsp;(1)</span>
+								</span>
+								{%- render 'icons', icon: 'arrow-down' -%}
+							</button>
+						</h3>
+						<div class="accordion__content accordion__content--animate js-accordion-content js-custom-accordion-content is-active" style="height: auto;">
+							<div class="js-accordion-inner product-filters__form-item-content">
+								<ul class="custom-pill-list js-filter-list">
+									{%- assign has_sizes = false -%}
+									{%- assign ordered_sizes = "XXS,XS,S,M,L,XL,2XL,3XL,4XL,5XL,6XL" | split: "," -%}
+									
+									{%- comment -%} First print the sizes that match standard order {%- endcomment -%}
+									{%- for std_size in ordered_sizes -%}
+										{%- assign std_s = std_size | upcase | strip -%}
+										{%- for value in size_filter.values -%}
+											{%- assign short_label = value.label | upcase | strip -%}
+											{%- if short_label contains '(' and short_label contains ')' -%}
+												{%- assign short_label = short_label | split: '(' | last | remove: ')' | strip -%}
+											{%- endif -%}
+											{%- if short_label == "XXL" -%}{%- assign short_label = "2XL" -%}{%- endif -%}
+											{%- if short_label == "XXXL" -%}{%- assign short_label = "3XL" -%}{%- endif -%}
+											
+											{%- if short_label == std_s -%}
+												{%- assign has_sizes = true -%}
+												<li class="filter-list__item">
+													<input class="checkbox__input visually-hidden filter-list__checkbox" type="checkbox" name="{{ size_filter.param_name }}" value="{{ value.value }}" id="Filter-{{ section.id }}-size-{{ std_size }}-{{ id }}"{% if value.active %} checked{% endif %}>
+													<label class="checkbox__label" for="Filter-{{ section.id }}-size-{{ std_size }}-{{ id }}">
+														{{ short_label }}
+													</label>
+												</li>
+											{%- endif -%}
+										{%- endfor -%}
+									{%- endfor -%}
+
+									{%- comment -%} Then print any weird sizes that weren't in standard order {%- endcomment -%}
+									{%- for value in size_filter.values -%}
+										{%- assign short_label = value.label | upcase | strip -%}
+										{%- if short_label contains '(' and short_label contains ')' -%}
+											{%- assign short_label = short_label | split: '(' | last | remove: ')' | strip -%}
+										{%- endif -%}
+										{%- if short_label == "XXL" -%}{%- assign short_label = "2XL" -%}{%- endif -%}
+										{%- if short_label == "XXXL" -%}{%- assign short_label = "3XL" -%}{%- endif -%}
+
+										{%- assign is_standard = false -%}
+										{%- for std_size in ordered_sizes -%}
+											{%- assign std_s = std_size | upcase | strip -%}
+											{%- if short_label == std_s -%}{%- assign is_standard = true -%}{%- break -%}{%- endif -%}
+										{%- endfor -%}
+										
+										{%- unless is_standard -%}
+											{%- assign has_sizes = true -%}
+											<li class="filter-list__item">
+												<input class="checkbox__input visually-hidden filter-list__checkbox" type="checkbox" name="{{ size_filter.param_name }}" value="{{ value.value }}" id="Filter-{{ section.id }}-size-ext-{{ forloop.index }}-{{ id }}"{% if value.active %} checked{% endif %}>
+												<label class="checkbox__label" for="Filter-{{ section.id }}-size-ext-{{ forloop.index }}-{{ id }}">
+													{% if short_label.size < 5 %}{{ short_label }}{% else %}{{ value.label }}{% endif %}
+												</label>
+											</li>
+										{%- endunless -%}
+									{%- endfor -%}
+
+									{%- unless has_sizes -%}
+										<li class="custom-pill-item" style="width: 100%; border: none; font-size: 13px; color: #666; pointer-events: none; text-align: left;">No sizes available</li>
+									{%- endunless -%}
+								</ul>
+							</div>
+						</div>
+					</div>
+					{%- endif -%}
+
+					{%- assign filterListIndex = filterListIndex | plus: 1 -%}
+
+					{%- for filter in product_list.filters -%}
+						{%- if filter.type == 'list' and filter.values.size == 0 or filter.type == 'boolean' and filter.values.size == 0 -%}
+							{%- continue -%}
+						{%- endif -%}
+
+						{%- assign downcased_label = filter.label | downcase -%}
+						{%- if downcased_label == 'color' or downcased_label == 'colour' or filter.param_name contains 'color' or filter.param_name contains 'colour' -%}
+							{%- continue -%}
+						{%- endif -%}
+						{%- if filter.param_name contains 'availab' or downcased_label contains 'availab' or downcased_label contains 'tình trạng' or filter.type == 'boolean' -%}
+							{%- continue -%}
+						{%- endif -%}
+
+						{%- comment -%} Skip filters we handle with custom UI {%- endcomment -%}
+						{%- if downcased_label == 'product type' or downcased_label == 'loại sản phẩm' or downcased_label == 'size' or downcased_label == 'kích thước' or downcased_label == 'tag' or downcased_label == 'thẻ' or downcased_label contains 'hunting' or downcased_label contains 'terrain' or downcased_label contains 'seasonal' -%}
+							{%- continue -%}
+						{%- endif -%}
+
+						<div
+							id="filter-{{ section.id }}-{{ filter.param_name | escape }}-{{- id -}}"
+							class="accordion__item product-filters__form-item js-accordion-item js-filter-item is-active"
+						>
+							<h3 class="accordion__title">
+								<button
+									class="focus-visible-outline accordion__control product-filters__form-item-toggle-button js-accordion-control is-active"
+									type="button"
+									id="Filter-accordion-{{ section.id }}-{{- filterListIndex -}}-{{- id -}}"
+									aria-controls="filter-list-{{ section.id }}-{{- filterListIndex -}}-{{- id -}}"
+									aria-expanded="true" is-active
+								>
+									<span typeof="product-filters__form-item-toggle-title">
+										{{- filter.label -}}
+
+										<span class="js-filter-item-counter">
+											{%- if filter.active_values.size > 0 and filter.type != 'price_range' -%}
+												&nbsp;({{- filter.active_values.size -}})
+											{%- endif -%}
+										</span>
+									</span>
+									{%- render 'icons', icon: 'arrow-down' -%}
+								</button>
+							</h3>
+
+							<div
+								class="accordion__content accordion__content--animate js-accordion-content is-active"
+								id="filter-list-{{ section.id }}-{{- filterListIndex -}}-{{- id -}}"
+								aria-labelledby="Filter-accordion-{{ section.id }}-{{- filterListIndex -}}-{{- id -}}"
+								role="region"
+								style="height: auto;"
+							>
+								<div class="js-accordion-inner product-filters__form-item-content">
+									{%- case filter.type -%}
+										{%- when 'list' or 'boolean' -%}
+											{% if filter.operator == "AND" %}
+												<span class="product-filters__form-helptext">
+													{{- 'general.filters.filter_and_operator_subtitle' | t -}}
+												</span>
+											{% endif %}
+
+											{%- render 'filter-list', filter: filter, show_swatches: show_swatches, filter_type: 'sidebar', id: id -%}
+										{%- when 'price_range' -%}
+											{%- render 'filter-price', filter: filter, id: id -%}
+									{%- endcase -%}
+								</div>
+							</div>
+
+							{%- assign filterListIndex = filterListIndex | plus: 1 -%}
+						</div>
+					{%- endfor -%}
+
+
+
+
+				</div>
+
+
+			</div>
+		</form>
+	</div>
+{%- endif -%}
+
+<style>
+.filter-list--collection-custom,
+.filter-list--sort-custom {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.filter-list--collection-custom .filter-list__item,
+.filter-list--sort-custom .filter-list__item {
+	margin-bottom: 8px;
+}
+/* Clothing filter - disabled / Coming Soon */
+.filter-list__clothing-disabled {
+	opacity: 0.5;
+	cursor: default;
+	pointer-events: none;
+	position: relative;
+}
+.filter-list__coming-soon {
+	font-size: 10px;
+	font-weight: 400;
+	font-style: italic;
+	text-transform: none;
+	letter-spacing: 0.02em;
+	color: #8a9a8e;
+	margin-left: 6px;
+}
+.product-filters__form-item-toggle-button {
+	font-family: 'Oswald', sans-serif !important;
+	font-size: 20px !important;
+	font-weight: 600 !important;
+	text-transform: uppercase !important;
+	letter-spacing: 0.05em !important;
+}
+.filter-list__collection-link {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	text-decoration: none;
+	color: #2c3d33;
+	font-family: var(--font-body-family, sans-serif);
+	font-size: 15px;
+	font-weight: 400;
+	text-transform: none;
+	transition: opacity 0.2s ease;
+	cursor: pointer;
+}
+.filter-list__collection-link:hover {
+	opacity: 0.7;
+}
+.filter-list__collection-link--active {
+	font-weight: 600;
+}
+.filter-list__collection-icon {
+	font-size: 14px;
+	line-height: 1;
+	width: 16px;
+	text-align: center;
+}
+/* Disabled / Coming Soon state */
+.filter-list__collection-link--disabled {
+	opacity: 0.4;
+	pointer-events: none;
+	cursor: default;
+}
+.filter-list__collection-link--disabled:hover {
+	opacity: 0.4;
+}
+.filter-list__coming-soon {
+	font-size: 11px;
+	font-style: italic;
+	color: #999;
+	margin-left: 2px;
+	text-transform: none;
+	font-weight: 400;
+	letter-spacing: 0.03em;
+}
+
+
+/* Thinner fonts for mobile filter items */
+.product-filters__drawer .filter-list__collection-link,
+.product-filters__drawer .filter-list__item a,
+.product-filters__drawer .filter-list label {
+	font-weight: 400 !important;
+}
+.product-filters__drawer .filter-list__collection-link.filter-list__collection-link--active,
+.product-filters__drawer .filter-list__item a.filter-list__collection-link--active {
+	font-weight: 500 !important;
+}
+
+/* Custom Swatch Styles */
+.custom-swatch-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	list-style: none;
+	padding: 0;
+	margin: 0 0 10px 0;
+}
+.custom-swatch-link {
+	display: block;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	border: 1px solid rgba(44, 61, 51, 0.2);
+	padding: 2px;
+	transition: all 0.2s ease;
+	background: transparent;
+}
+.custom-swatch-link:hover {
+	border-color: rgba(44, 61, 51, 0.6);
+}
+.custom-swatch-link.filter-list__collection-link--active {
+	border-color: #2c3d33;
+}
+.custom-swatch-color {
+	display: block;
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	background-size: cover;
+	background-position: center;
+	background: var(--swatch-color, #eee);
+}
+.custom-swatch-link[title="Black"] .custom-swatch-color { background-color: #000 !important; }
+.custom-swatch-link[title="Olive"] .custom-swatch-color { background-color: #556b2f !important; }
+.custom-swatch-link[title="Navy"] .custom-swatch-color { background-color: #000080 !important; }
+.custom-swatch-link[title="Camo"] .custom-swatch-color { background: repeating-linear-gradient(45deg, #4f5f40, #4f5f40 5px, #8b7355 5px, #8b7355 10px) !important; }
+.custom-swatch-link[title="Graphite"] .custom-swatch-color { background-color: #53565A !important; }
+
+/* Custom Pill Styles */
+.custom-pill-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	list-style: none;
+	padding: 0;
+	margin: 0 0 10px 0;
+}
+.custom-pill-item {
+	flex: 0 0 auto;
+}
+.custom-pill-link {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 36px;
+	height: 30px;
+	padding: 0 10px;
+	border: 1px solid rgba(44, 61, 51, 0.2);
+	border-radius: 2px;
+	color: #2c3d33;
+	font-family: 'Oswald', sans-serif;
+	font-size: 12px;
+	font-weight: 500;
+	text-decoration: none;
+	background: transparent;
+	transition: all 0.2s ease;
+	text-transform: uppercase;
+	text-align: center;
+}
+.custom-pill-link:hover {
+	border-color: rgba(44, 61, 51, 0.6);
+}
+.custom-pill-link.filter-list__collection-link--active {
+	background: #2c3d33;
+	color: #fff;
+	border-color: #2c3d33;
+}
+
+/* Clear All button */
+.filter-clear-wrapper {
+margin-bottom: 20px;
+}
+.filter-clear-wrapper--hidden {
+display: none;
+}
+.filter-clear-btn {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 6px;
+width: 100%;
+text-decoration: none;
+color: #fff;
+font-family: 'Oswald', sans-serif;
+font-size: 15px;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: 0.06em;
+padding: 12px 14px;
+background: #2c3d33;
+border-radius: 2px;
+cursor: pointer;
+transition: all 0.2s ease;
+}
+.filter-clear-btn svg {
+display: none; /* Hide the close icon if there is one */
+}
+.filter-clear-btn:hover {
+opacity: 0.9;
+}
+/* Loading state for grid during collection switch */
+.collection__grid-wrapper.is-ajax-loading {
+	opacity: 0.35;
+	pointer-events: none;
+	transition: opacity 0.25s ease;
+}
+.collection__grid-wrapper {
+	transition: opacity 0.3s ease;
+}
+
+/* Loading spinner overlay */
+.collection-ajax-loader {
+	display: none;
+	position: absolute;
+	top: 120px;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 10;
+}
+.collection-ajax-loader.is-active {
+	display: block;
+}
+.collection-ajax-loader__spinner {
+	width: 36px;
+	height: 36px;
+	border: 3px solid #e0e0e0;
+	border-top-color: #2c3d33;
+	border-radius: 50%;
+	animation: collectionSpinner 0.7s linear infinite;
+}
+@keyframes collectionSpinner {
+	to { transform: rotate(360deg); }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+	const collectionSection = document.querySelector('.js-collection');
+	if (!collectionSection) return;
+
+	const gridWrapper = collectionSection.querySelector('.js-grid-wrapper');
+	if (!gridWrapper) return;
+
+	/* Add spinner overlay to the grid's parent */
+	const gridParent = gridWrapper.parentElement;
+	if (gridParent) {
+		gridParent.style.position = 'relative';
+		const loader = document.createElement('div');
+		loader.className = 'collection-ajax-loader';
+		loader.innerHTML = '<div class="collection-ajax-loader__spinner"></div>';
+		gridParent.appendChild(loader);
+	}
+
+	/* Get the section_id from the collection section */
+	const sectionId = collectionSection.id;
+
+	/* ---- Verify if Custom Filters matched any products ---- */
+	/* Instead of trying to predict filter validity (which breaks with GIDs from Search & Discovery app),
+	   simply check if Shopify actually rendered any product items in the grid. This is 100% reliable. */
+	function verifyFilteredProducts() {
+		const currentUrl = new URL(window.location.href);
+		const hasAnyFilter = [...currentUrl.searchParams.keys()].some(k => k.startsWith('filter.'));
+
+		/* Count actual rendered product cards in the grid */
+		const gridWrapper = document.querySelector('.js-grid-wrapper');
+		if (!gridWrapper) return;
+		const productItems = gridWrapper.querySelectorAll('.collection__item');
+		const hasProducts = productItems.length > 0;
+
+		if (hasAnyFilter && !hasProducts) {
+			/* Hide pagination/load more if present using classes */
+			const pagination = document.querySelectorAll('.collection__pagination-wrapper, .collection__lazy-load-button-wrapper, .collection__infinite-scroll');
+			pagination.forEach(el => el.classList.add('is-hidden'));
+
+			/* Show native coming soon block using classes */
+			const nativeEmptyState = document.querySelector('.collection__coming-soon');
+			if (nativeEmptyState) {
+				nativeEmptyState.classList.remove('is-hidden');
+			}
+
+			/* Also update the product count */
+			const countElements = document.querySelectorAll('.js-product-count');
+			countElements.forEach(el => {
+				const isCountWithText = el.textContent.toLowerCase().includes('products') || el.textContent.toLowerCase().includes('sản phẩm');
+				el.textContent = isCountWithText ? '0 Products' : '0';
+			});
+		}
+	}
+	verifyFilteredProducts();
+
+	/* ---- Collection switching (full navigation to keep sidebar stable) ---- */
+	document.addEventListener('click', async (e) => {
+		const link = e.target.closest('.js-collection-ajax-link');
+		if (!link) return;
+		e.preventDefault();
+
+		/* Build target URL preserving existing filter params */
+		const rawHref = link.getAttribute('href');
+		const currentUrl = new URL(window.location.href);
+		const targetUrlObj = new URL(rawHref, window.location.origin);
+
+		/* Carry over all current filter.* and sort_by params to the new collection */
+		for (const [key, val] of currentUrl.searchParams.entries()) {
+			if (key.startsWith('filter.') || key === 'sort_by') {
+				targetUrlObj.searchParams.append(key, val);
+			}
+		}
+		targetUrlObj.searchParams.delete('page');
+
+		/* Full page navigation so sidebar re-renders correctly */
+		window.location.href = targetUrlObj.toString();
+	});
+
+	/* ---- Sort By sidebar handler ---- */
+	document.addEventListener('click', async (e) => {
+		const sortLink = e.target.closest('.js-sort-option-link');
+		if (!sortLink) return;
+		e.preventDefault();
+
+		const sortValue = sortLink.getAttribute('data-sort-value');
+		if (!sortValue) return;
+
+		/* Update active state visually */
+		const allSortLinks = document.querySelectorAll('.js-sort-option-link');
+		allSortLinks.forEach(link => {
+			link.classList.remove('filter-list__collection-link--active');
+			const icon = link.querySelector('.filter-list__collection-icon');
+			if (icon) icon.textContent = '\u25A1';
+		});
+		sortLink.classList.add('filter-list__collection-link--active');
+		const activeIcon = sortLink.querySelector('.filter-list__collection-icon');
+		if (activeIcon) activeIcon.textContent = '\u25A0';
+
+		/* Also update the external sort dropdown if exists */
+		const externalSelect = document.querySelector('.js-sort-select-external');
+		if (externalSelect) {
+			externalSelect.value = sortValue;
+			externalSelect.dispatchEvent(new Event('change', { bubbles: true }));
+			return; /* Let the theme's existing sort handler do the work */
+		}
+
+		/* Fallback: Navigate with sort_by param */
+		const url = new URL(window.location.href);
+		url.searchParams.set('sort_by', sortValue);
+		window.location.href = url.toString();
+	});
+
+	/* ---- Handle browser back/forward ---- */
+	window.addEventListener('popstate', () => {
+		window.location.reload();
+	});
+
+
+	/* ---- Sync custom URL params with hidden form inputs ---- */
+	function syncHiddenCustomInputs() {
+		const forms = document.querySelectorAll('form.js-form');
+		forms.forEach(form => {
+			/* Delete all dynamically injected hidden inputs to completely refresh them from the current URL */
+			form.querySelectorAll('.js-appended-hidden-filter').forEach(el => el.remove());
+			/* Edge case: clean up any untagged ones left by old click handlers */
+			form.querySelectorAll('input[type="checkbox"]').forEach(el => {
+				if (el.style.display === 'none' && !el.classList.contains('filter-list__checkbox')) el.remove();
+			});
+			
+			const url = new URL(window.location.href);
+			const customParams = ['filter.p.product_type', 'filter.p.m.custom.seasonal'];
+			customParams.forEach(param => {
+				url.searchParams.getAll(param).forEach(val => {
+					const chk = document.createElement('input');
+					chk.className = 'js-appended-hidden-filter';
+					chk.type = 'checkbox';
+					chk.name = param;
+					chk.value = val;
+					chk.checked = true;
+					chk.style.display = 'none';
+					form.appendChild(chk);
+				});
+			});
+		});
+	}
+	syncHiddenCustomInputs();
+
+	/* ---- Clothing Type Filter ---- */
+	function initClothingFilter() {
+		const url = new URL(window.location.href);
+		const activeTypes = url.searchParams.getAll('filter.p.product_type');
+		const activeTypesStr = activeTypes.sort().join(',');
+		const clothingLinks = document.querySelectorAll('.js-clothing-type-link');
+		const accordion = document.querySelector('.js-clothing-accordion');
+		const accordionBtn = document.querySelector('.js-clothing-accordion-btn');
+		const accordionContent = document.querySelector('.js-clothing-accordion-content');
+		const counter = document.querySelector('.js-clothing-counter');
+
+		clothingLinks.forEach(link => {
+			const typeAttr = link.getAttribute('data-product-type');
+			if (!typeAttr) return;
+			const typesArray = typeAttr.split(',');
+			const typesStr = [...typesArray].sort().join(',');
+			const icon = link.querySelector('.filter-list__collection-icon');
+
+			/* Mark active */
+			if (activeTypesStr && activeTypesStr === typesStr) {
+				link.classList.add('filter-list__collection-link--active');
+				if (icon) icon.innerHTML = '\u25A0'; /* ■ filled */
+			}
+		});
+
+		/* Auto-expand accordion if filter is active, otherwise reset */
+		if (activeTypes.length > 0) {
+			if (accordion) accordion.classList.add('is-active');
+			if (accordionBtn) {
+				accordionBtn.classList.add('is-active');
+				accordionBtn.setAttribute('aria-expanded', 'true');
+			}
+			if (accordionContent) {
+				accordionContent.style.height = 'auto';
+				accordionContent.classList.add('is-active');
+			}
+			if (counter) counter.style.display = 'inline';
+		} else {
+			if (counter) counter.style.display = 'none';
+		}
+	}
+	initClothingFilter();
+
+	/* Click handler for clothing links */
+	document.addEventListener('click', (e) => {
+		const typeLink = e.target.closest('.js-clothing-type-link');
+		if (!typeLink) return;
+		e.preventDefault();
+
+		/* Don't navigate if disabled (Coming Soon) */
+		if (typeLink.classList.contains('filter-list__clothing-disabled')) return;
+
+		const productTypeAttr = typeLink.getAttribute('data-product-type');
+		if (!productTypeAttr) return;
+
+		const typesToApply = productTypeAttr.split(',');
+		const typesToApplyStr = [...typesToApply].sort().join(',');
+
+		const url = new URL(window.location.href);
+		const activeTypes = url.searchParams.getAll('filter.p.product_type');
+		const activeTypesStr = activeTypes.sort().join(',');
+
+		const form = typeLink.closest('form.js-form') || document.querySelector('form.js-form');
+		if (!form) return;
+
+		if (activeTypesStr === typesToApplyStr) {
+			/* Already active — remove the filter */
+			form.querySelectorAll('input[name="filter.p.product_type"]').forEach(chk => chk.checked = false);
+		} else {
+			/* Apply the type filter, keep all other params */
+			form.querySelectorAll('input[name="filter.p.product_type"]').forEach(chk => chk.checked = false);
+			typesToApply.forEach(t => {
+				let existing = form.querySelector(`input[name="filter.p.product_type"][value="${t.replace(/"/g, '\\"')}"]`);
+				if (existing) {
+					existing.checked = true;
+				} else {
+					const chk = document.createElement('input');
+					chk.className = 'js-appended-hidden-filter';
+					chk.type = 'checkbox';
+					chk.name = 'filter.p.product_type';
+					chk.value = t;
+					chk.checked = true;
+					chk.style.display = 'none';
+					form.appendChild(chk);
+				}
+			});
+		}
+
+		form.dispatchEvent(new Event('change', {bubbles: true}));
+	});
+
+	/* ---- Generalized Static Filters (Hunting, Terrain, Colors, Size) ---- */
+	function initCustomFilters() {
+		const url = new URL(window.location.href);
+		
+		const groups = document.querySelectorAll('.js-custom-accordion');
+		groups.forEach(accordion => {
+			const filterParam = accordion.getAttribute('data-filter-group');
+			if (!filterParam) return;
+			const activeVals = url.searchParams.getAll(filterParam);
+			const links = accordion.querySelectorAll('.js-custom-filter-link');
+			const content = accordion.querySelector('.js-custom-accordion-content');
+			const btn = accordion.querySelector('.js-custom-accordion-btn');
+			const counter = accordion.querySelector('.js-custom-counter');
+			
+			let activeCount = 0;
+			links.forEach(link => {
+				const val = link.getAttribute('data-filter-value');
+				const icon = link.querySelector('.filter-list__collection-icon');
+				
+				if (activeVals.includes(val)) {
+					activeCount++;
+					link.classList.add('filter-list__collection-link--active');
+					if (icon) icon.innerHTML = '\u25A0'; /* ■ filled */
+					
+					/* Expand accordion */
+					accordion.classList.add('is-active');
+					if(btn) { btn.classList.add('is-active'); btn.setAttribute('aria-expanded', 'true'); }
+					if(content) { content.style.height = 'auto'; content.classList.add('is-active'); }
+				}
+			});
+			if (activeCount > 0 && counter) {
+				counter.innerHTML = `&nbsp;(${activeCount})`;
+				counter.style.display = 'inline';
+			} else if (counter) {
+				counter.style.display = 'none';
+			}
+		});
+	}
+	initCustomFilters();
+
+	/* Listen for AJAX updates from the native filter system */
+	document.addEventListener('theme:all:loaded', () => {
+		if (window.themeCore && window.themeCore.EventBus) {
+			window.themeCore.EventBus.listen("search-types:init", () => {
+				setTimeout(() => {
+					syncHiddenCustomInputs();
+					initClothingFilter();
+					initCustomFilters();
+					verifyFilteredProducts();
+				}, 50);
+			});
+		}
+	});
+
+	/* Click handler for custom filters (allow multiple selection via URL appending) */
+	document.addEventListener('click', (e) => {
+		const link = e.target.closest('.js-custom-filter-link');
+		if (!link) return;
+		e.preventDefault();
+
+		if (link.classList.contains('filter-list__clothing-disabled') || link.classList.contains('filter-list__collection-link--disabled')) return;
+
+		const param = link.getAttribute('data-filter-param');
+		const val = link.getAttribute('data-filter-value');
+		if (!param || !val) return;
+
+		const form = link.closest('form.js-form') || document.querySelector('form.js-form');
+		if (!form) return;
+
+		const url = new URL(window.location.href);
+		const activeVals = url.searchParams.getAll(param);
+
+		let existing = form.querySelector(`input[name="${param}"][value="${val.replace(/"/g, '\\"')}"]`);
+		if (existing) {
+			existing.checked = !existing.checked;
+		} else {
+			if (!activeVals.includes(val)) {
+				const chk = document.createElement('input');
+				chk.className = 'js-appended-hidden-filter';
+				chk.type = 'checkbox';
+				chk.name = param;
+				chk.value = val;
+				chk.checked = true;
+				chk.style.display = 'none';
+				form.appendChild(chk);
+			}
+		}
+
+		form.dispatchEvent(new Event('change', {bubbles: true}));
+	});
+
+	/* Enforce ALL button state correctly if theme JS overrides it */
+	setTimeout(() => {
+		const currUrl = new URL(window.location.href);
+		let hasFilter = false;
+		for (const [key] of currUrl.searchParams.entries()) {
+			if (key.includes('filter.')) {
+				hasFilter = true;
+				break;
+			}
+		}
+		
+		const allBtns = document.querySelectorAll('a[href="/collections/all"].js-filter-clear-btn');
+		allBtns.forEach(btn => {
+			if (hasFilter) {
+				btn.classList.remove('filter-list__collection-link--active');
+				const icon = btn.querySelector('.filter-list__collection-icon');
+				if (icon) icon.innerHTML = '&#9633;';
+			} else if (window.location.pathname.includes('/collections/all')) {
+				btn.classList.add('filter-list__collection-link--active');
+				const icon = btn.querySelector('.filter-list__collection-icon');
+				if (icon) icon.innerHTML = '&#9632;';
+			}
+		});
+	}, 100);
+
+});
+</script>

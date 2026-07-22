@@ -1,0 +1,495 @@
+{%- render 'adastra' with '/src/styles/carousel.scss' -%}
+{%- render 'adastra' with '/src/styles/product-banner.scss' -%}
+
+{%- assign blocks		 					= section.blocks -%}
+{%- assign container 	 					= section.settings.container_width -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 992px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+
+	@media screen and (min-width: 1200px) {
+		#shopify-section-{{- section.id }} .product-banner-wrapper {
+			min-height: calc(100dvh * {{ blocks.size }});
+		}
+	}
+{%- endstyle -%}
+
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- capture section_styles -%}
+	--container-width: {{- container_width -}}; {{-  -}}
+{%- endcapture -%}
+
+{%- if section.blocks.size > 0 -%}
+	{%- assign firsrt_block = section.blocks | first -%}
+	{%- assign default_enable_color_scheme_inheritance = firsrt_block.settings.enable_color_scheme_inheritance -%}
+	{%- assign default_color_scheme = firsrt_block.settings.color_scheme -%}
+
+	{%- if default_enable_color_scheme_inheritance -%}
+		{%- assign default_color_scheme = settings.main_color_scheme -%}
+	{%- endif -%}
+{%- endif -%}
+
+<div class="product-banner-wrapper js-product-banner-wrapper">
+	<section
+		class="product-banner color-{{ default_color_scheme }} {% if blocks.size > 1 %} js-product-banner{% endif %} js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}"
+		style="{{- section_styles -}}"
+	>
+		<div class="product-banner__container container section-animate">
+			<div class="product-banner__content-wrapper product-banner__content-wrapper--desktop">
+				<div
+					class="product-banner__content{% if blocks.size > 1 %} swiper js-product-banner-slider-content{% endif %}">
+					<div class="swiper-wrapper">
+						{%- for block in blocks -%}
+							{%- assign enable_color_scheme_inheritance = block.settings.enable_color_scheme_inheritance -%}
+							{%- assign color_scheme = block.settings.color_scheme -%}
+							{%- assign label = block.settings.label -%}
+							{%- assign heading = block.settings.heading -%}
+							{%- assign text = block.settings.text -%}
+							{%- assign button_label = block.settings.button_label -%}
+							{%- assign button_link = block.settings.button_link -%}
+							{%- assign button_style = block.settings.button_style -%}
+
+							{%- if enable_color_scheme_inheritance -%}
+								{%- assign color_scheme = settings.main_color_scheme -%}
+							{%- endif -%}
+
+							{%- if label != blank or heading != blank or text != blank -%}
+								<div
+									class="product-banner__content-slide color-{{ color_scheme }} {% if blocks.size > 1 %} swiper-slide{% endif %}"
+									data-color-scheme="color-{{ color_scheme }}"
+								>
+									<div class="product-banner__text-wrapper">
+										<div class="product-banner__text-header">
+											{%- if label != blank -%}
+												<p class="product-banner__label">
+													{{- label -}}
+												</p>
+											{%- endif -%}
+
+											{%- if heading != blank -%}
+												<h2 class="h2 product-banner__heading">
+													{{- heading -}}
+												</h2>
+											{%- endif -%}
+										</div>
+
+										{%- if text != blank -%}
+											<div class="product-banner__text rte">
+												{{- text -}}
+											</div>
+										{%- endif %}
+
+										{%- if button_label != blank and button_link != blank -%}
+											<a class="button button--{{ button_style }} product-banner__button"
+											   href="{{- button_link -}}">
+												{%- if button_style == "secondary" -%}
+													<span data-text="{{- button_label -}}">
+														<span>{{- button_label -}}</span>
+													</span>
+												{%- else -%}
+													{{- button_label -}}
+												{%- endif -%}
+											</a>
+										{%- endif %}
+									</div>
+								</div>
+							{%- endif -%}
+						{%- endfor -%}
+					</div>
+				</div>
+			</div>
+
+			<div class="product-banner__products product-banner__products--desktop js-product-banner-products-wrapper">
+				{%- for block in blocks -%}
+					{%- assign product = block.settings.product -%}
+					{%- assign enable_color_scheme_inheritance = block.settings.enable_color_scheme_inheritance -%}
+					{%- assign color_scheme = block.settings.color_scheme -%}
+
+					{%- if enable_color_scheme_inheritance -%}
+						{%- assign color_scheme = settings.main_color_scheme -%}
+					{%- endif -%}
+
+					<div
+						class="product-banner__card color-{{ color_scheme }} {% if forloop.first %} is-active{% endif %} js-product-banner-product-card">
+						{%- if product != blank -%}
+							{%- render 'product-card', product: product, size: 384, mobile_size: 340, is_lazy: true -%}
+						{%- else -%}
+							{%- render 'product-card' -%}
+						{%- endif -%}
+					</div>
+				{%- endfor -%}
+			</div>
+
+			<div class="product-banner__products-slider-container product-banner__products-slider-container--desktop">
+				<div
+					class="product-banner__products-slider-wrapper{% if blocks.size > 1 %} swiper js-product-banner-slider-media{% endif %}">
+					<div class="swiper-wrapper">
+						{%- for block in blocks -%}
+							{%- assign image = block.settings.image -%}
+							{%- assign is_lazy = true -%}
+
+							{%- if section.index == 1 and forloop.index < 2 -%}
+								{%- assign is_lazy = false -%}
+							{%- endif -%}
+
+							<div
+								class="product-banner__products-slide swiper-slide">
+								<div class="product-banner__image-aspect-ratio">
+									{%- if image != blank -%}
+										{%- capture img_focal -%}
+											--img-desktop-pos: {{ image.presentation.focal_point }};
+										{%- endcapture -%}
+
+									<picture>
+										<source
+											srcset="{{ image | image_url: width: 343 }} 1x, {{ image | image_url: width: 686 }} 2x"
+											media="(max-width: 375px)"
+											width="343"
+											height="281"
+										/>
+
+										<source
+											srcset="{{ image | image_url: width: 388 }} 1x, {{ image | image_url: width: 776 }} 2x"
+											media="(max-width: 420px)"
+											width="388"
+											height="318"
+										/>
+
+										<source
+											srcset="{{ image | image_url: width: 545 }} 1x, {{ image | image_url: width: 1090 }} 2x"
+											media="(max-width: 575px)"
+											width="545"
+											height="445"
+										/>
+
+										<source
+											srcset="{{ image | image_url: width: 735 }} 1x, {{ image | image_url: width: 1470 }} 2x"
+											media="(max-width: 767px)"
+											width="735"
+											height="603"
+										/>
+
+										<source
+											srcset="{{ image | image_url: width: 959 }} 1x, {{ image | image_url: width: 1918 }} 2x"
+											media="(max-width: 991px)"
+											width="959"
+											height="786"
+										/>
+
+										<source
+											srcset="{{ image | image_url: width: 540 }} 1x, {{ image | image_url: width: 1080 }} 2x"
+											media="(max-width: 1440px)"
+											width="540"
+											height="490"
+										/>
+
+										<img
+											class="product-banner__slide-media product-banner__slide-media--image"
+											src="{{ image | image_url: width: 770 }}"
+											srcset="{{ image | image_url: width: 770 }} 1x, {{ image | image_url: width: 1540 }} 2x"
+											{% if is_lazy %}
+												fetchpriority="low"
+												loading="lazy"
+											{% endif %}
+											alt="{{ image.alt | escape }}"
+											width="770"
+											height="698"
+											style="{{ img_focal }}"
+										/>
+									</picture>
+								{%- else -%}
+									{{- 'product-apparel-3' | placeholder_svg_tag: 'product-banner__slide-media' -}}
+								{%- endif -%}
+							</div>
+						</div>
+					{%- endfor -%}
+				</div>
+
+					{%- if blocks.size > 1 -%}
+						<div
+							class="swiper-pagination product-banner__pagination js-product-banner-slider-media-pagination"></div>
+					{%- endif -%}
+				</div>
+			</div>
+
+			<div
+				class="product-banner__content-with-products{% if blocks.size > 1 %} swiper js-product-banner-slider-content-with-products{% endif %}">
+				<div class="{% if blocks.size > 1 %}swiper-wrapper{% endif %}">
+					{%- for block in blocks -%}
+						{%- assign product = block.settings.product -%}
+						{%- assign label = block.settings.label -%}
+						{%- assign heading = block.settings.heading -%}
+						{%- assign text = block.settings.text -%}
+						{%- assign button_label = block.settings.button_label -%}
+						{%- assign button_link = block.settings.button_link -%}
+						{%- assign button_style = block.settings.button_style -%}
+
+						{%- assign enable_color_scheme_inheritance = block.settings.enable_color_scheme_inheritance -%}
+						{%- assign color_scheme = block.settings.color_scheme -%}
+
+						{%- if enable_color_scheme_inheritance -%}
+							{%- assign color_scheme = settings.main_color_scheme -%}
+						{%- endif -%}
+
+						{%- if label != blank or heading != blank or text != blank -%}
+							<div
+								class="product-banner__content-with-products-slide color-{{ color_scheme }} {% if blocks.size > 1 %} swiper-slide{% endif %}"
+								data-color-scheme="color-{{ color_scheme }}"
+							>
+								<div class="product-banner__text-wrapper">
+									<div class="product-banner__text-header">
+										{%- if label != blank -%}
+											<p class="product-banner__label">
+												{{- label -}}
+											</p>
+										{%- endif -%}
+
+											{%- if heading != blank -%}
+												<h2 class="h2 product-banner__heading">
+													{{- heading -}}
+												</h2>
+											{%- endif -%}
+										</div>
+
+									{%- if text != blank -%}
+										<div class="product-banner__text rte">
+											{{- text -}}
+										</div>
+									{%- endif %}
+
+									{%- if button_label != blank and button_link != blank -%}
+										<a class="button button--{{ button_style }} product-banner__button"
+										   href="{{- button_link -}}">
+											{%- if button_style == "secondary" -%}
+												<span data-text="{{- button_label -}}">
+													<span>{{- button_label -}}</span>
+												</span>
+												{%- else -%}
+													{{- button_label -}}
+												{%- endif -%}
+											</a>
+										{%- endif %}
+									</div>
+
+								{%- if product != blank -%}
+									<div class="product-banner__card">
+										{%- render 'product-card', product: product, size: 384, mobile_size: 340, is_lazy: true -%}
+									</div>
+								{%- else -%}
+									<div class="product-banner__card">
+										{%- render 'product-card' -%}
+									</div>
+								{%- endif -%}
+							</div>
+						{%- endif -%}
+					{%- endfor -%}
+				</div>
+
+				{%- if blocks.size > 1 -%}
+					<div
+						class="swiper-pagination product-banner__content-with-products-pagination js-product-banner-slider-content-with-products-pagination"></div>
+				{%- endif -%}
+			</div>
+		</div>
+
+		{%- render 'adastra' with '/src/scripts/component-swiper-modules.js' -%}
+		{%- render 'adastra' with '/src/scripts/section-product-banner.js' -%}
+	</section>
+</div>
+
+{% schema %}
+{
+	"name": "Product banner",
+	"disabled_on": {
+		"groups": [
+			"header",
+			"footer",
+			"custom.popup"
+		]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1808px",
+					"label": "Default - 1680px"
+				},
+				{
+					"value": "2048px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset bottom",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset bottom",
+			"default": 25
+		}
+	],
+	"blocks": [
+		{
+			"type": "product",
+			"name": "Product",
+			"limit": 4,
+			"settings": [
+				{
+					"type": "checkbox",
+					"id": "enable_color_scheme_inheritance",
+					"label": "Enable color scheme inheritance",
+					"default": true,
+					"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+				},
+				{
+					"type": "color_scheme",
+					"id": "color_scheme",
+					"label": "Color scheme",
+					"default": "scheme-1"
+				},
+				{
+					"type": "text",
+					"id": "label",
+					"label": "Label",
+					"default": "Label"
+				},
+				{
+					"type": "inline_richtext",
+					"id": "heading",
+					"label": "Heading",
+					"default": "Product banner"
+				},
+				{
+					"type": "richtext",
+					"id": "text",
+					"label": "Text",
+					"default": "<p>Text</p>"
+				},
+				{
+					"type": "text",
+					"id": "button_label",
+					"label": "Button label",
+					"default": "Shop All"
+				},
+				{
+					"type": "url",
+					"id": "button_link",
+					"label": "Button link",
+					"default": "/"
+				},
+				{
+					"type": "select",
+					"id": "button_style",
+					"label": "Button style",
+					"options": [
+						{
+							"value": "primary",
+							"label": "Primary"
+						},
+						{
+							"value": "secondary",
+							"label": "Secondary"
+						}
+					],
+					"default": "secondary"
+				},
+				{
+					"type": "product",
+					"id": "product",
+					"label": "Product"
+				},
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "Image"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Product banner",
+			"settings": {},
+			"blocks": [
+				{
+					"type": "product"
+				},
+				{
+					"type": "product"
+				},
+				{
+					"type": "product"
+				},
+				{
+					"type": "product"
+				}
+			]
+		}
+	]
+}
+{% endschema %}

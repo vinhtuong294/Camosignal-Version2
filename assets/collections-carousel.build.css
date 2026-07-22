@@ -1,0 +1,143 @@
+.collections-carousel {
+  overflow: hidden;
+  background-color: var(--color-background);
+}
+.collections-carousel .collections-carousel__container {
+  position: relative;
+  z-index: 10;
+  padding-top: var(--inner-offset-top-mobile);
+  padding-bottom: var(--inner-offset-bottom-mobile);
+}
+.collections-carousel .collections-carousel__container.collections-carousel__container--no-x-paddings {
+  padding-left: 0;
+  padding-right: 0;
+}
+.collections-carousel .collections-carousel__wrapper {
+  position: absolute;
+  z-index: 10;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  max-width: 100%;
+  width: 100%;
+}
+.collections-carousel .collections-carousel__wrapper.collections-carousel__wrapper--no-slider {
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.collections-carousel .collections-carousel__wrapper.collections-carousel__wrapper--no-slider .collections-carousel__slide-title {
+  color: var(--heading-active-color, #ffffff);
+}
+.collections-carousel .collections-carousel__slide.swiper-slide-active .collections-carousel__slide-title {
+  color: var(--heading-active-color, #ffffff);
+}
+.collections-carousel .collections-carousel__slide.swiper-slide {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+.collections-carousel .collections-carousel__slide-title {
+  color: var(--color-text-primary);
+  transition-property: color;
+  transition-duration: 0.3s;
+  text-align: center;
+  font-size: calc(var(--heading-font-size) * 1.63636364);
+}
+.collections-carousel .collections-carousel__image-blocks {
+  height: 378px;
+  position: relative;
+}
+.collections-carousel .collections-carousel__image-block {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 303px;
+  opacity: 0;
+  visibility: hidden;
+  transition-property: opacity, visibility;
+  transition-duration: 0.5s;
+  z-index: 9;
+}
+.collections-carousel .collections-carousel__image-block.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+.collections-carousel .collections-carousel__image-wrapper {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding-bottom: 125%;
+  height: 0;
+  overflow: hidden;
+}
+.collections-carousel .collections-carousel__image {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--img-desktop-pos);
+  pointer-events: none;
+}
+.collections-carousel .collections-carousel__image.collections-carousel__image--placeholder {
+  background-color: var(--color-img-placeholder-bg);
+}
+.collections-carousel .collections-carousel__image-link {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 215px;
+}
+@media (min-width: 576px) {
+  .collections-carousel .collections-carousel__image-blocks {
+    height: 480px;
+  }
+  .collections-carousel .collections-carousel__image-block {
+    max-width: 384px;
+  }
+}
+@media (min-width: 768px) {
+  .collections-carousel .collections-carousel__slide-title {
+    font-size: calc(var(--heading-font-size) * 2.3125);
+  }
+}
+@media (min-width: 992px) {
+  .collections-carousel .collections-carousel__image-blocks {
+    height: 600px;
+  }
+  .collections-carousel .collections-carousel__image-block {
+    max-width: 480px;
+  }
+  .collections-carousel .collections-carousel__image-link {
+    bottom: 48px;
+  }
+  .collections-carousel .collections-carousel__slide.swiper-slide {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}
+@media (min-width: 1200px) {
+  .collections-carousel .collections-carousel__slide-title {
+    font-size: calc(var(--heading-font-size) * 3.64);
+  }
+  .collections-carousel .collections-carousel__container {
+    padding-top: var(--inner-offset-top);
+    padding-bottom: var(--inner-offset-bottom);
+  }
+}
+@media (min-width: 1501px) {
+  .collections-carousel .collections-carousel__image-blocks {
+    height: 680px;
+  }
+  .collections-carousel .collections-carousel__image-block {
+    max-width: 544px;
+  }
+  .collections-carousel .collections-carousel__image-link {
+    bottom: 64px;
+  }
+  .collections-carousel .collections-carousel__slide.swiper-slide {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+}

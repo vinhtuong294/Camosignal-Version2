@@ -1,0 +1,410 @@
+{{ 'about-page.css' | asset_url | stylesheet_tag }}
+{%- comment -%}
+------------------------------------------------------------------------------
+  Section: About Story Block
+  A versatile image + text storytelling section.
+  Can be added multiple times for narrative flow.
+  Supports left/right image, full-width text, or quote mode.
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign color_scheme                    = section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign layout_style                    = section.settings.layout_style -%}
+{%- assign section_number                  = section.settings.section_number -%}
+{%- assign section_label                   = section.settings.section_label -%}
+{%- assign heading                         = section.settings.heading -%}
+{%- assign text_content                    = section.settings.text_content -%}
+{%- assign secondary_text                  = section.settings.secondary_text -%}
+{%- assign image                           = section.settings.image -%}
+{%- assign image_position                  = section.settings.image_position -%}
+{%- assign button_label                    = section.settings.button_label -%}
+{%- assign button_url                      = section.settings.button_url -%}
+{%- assign button_style                    = section.settings.button_style -%}
+{%- assign container                       = section.settings.container_width -%}
+{%- assign text_alignment                  = section.settings.text_alignment -%}
+{%- assign heading_size                    = section.settings.heading_size -%}
+{%- assign enable_border_top               = section.settings.enable_border_top -%}
+{%- assign enable_border_bottom            = section.settings.enable_border_bottom -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- style -%}
+	#shopify-section-{{ section.id }} {
+		padding-top: {{ section.settings.offset_top_mobile }}px;
+		padding-bottom: {{ section.settings.offset_bottom_mobile }}px;
+	}
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{ section.id }} {
+			padding-top: {{ section.settings.offset_top_desktop }}px;
+			padding-bottom: {{ section.settings.offset_bottom_desktop }}px;
+		}
+	}
+{%- endstyle -%}
+
+<section
+	class="about-story color-{{ color_scheme }} about-story--{{ layout_style }} about-story--heading-{{ heading_size }} {% if enable_border_top %}about-story--border-top{% endif %} {% if enable_border_bottom %}about-story--border-bottom{% endif %}"
+	style="--container-width: {{ container_width }}; --text-align: {{ text_alignment }};"
+>
+	<div class="about-story__container container">
+
+		{%- if layout_style == 'split' -%}
+			{%- comment -%} SPLIT LAYOUT: Image + Text side by side {%- endcomment -%}
+			<div class="about-story__grid about-story__grid--image-{{ image_position }}">
+				<div class="about-story__image-col">
+					{%- if image != blank -%}
+						<div class="about-story__image-wrapper">
+							<img
+								src="{{ image | image_url: width: 900 }}"
+								srcset="{{ image | image_url: width: 450 }} 450w,
+										{{ image | image_url: width: 700 }} 700w,
+										{{ image | image_url: width: 900 }} 900w"
+								sizes="(max-width: 991px) 100vw, 50vw"
+								alt="{{ image.alt | escape }}"
+								loading="lazy"
+								width="{{ image.width }}"
+								height="{{ image.height }}"
+								class="about-story__image"
+							>
+						</div>
+					{%- else -%}
+						<div class="about-story__image-wrapper about-story__image-wrapper--placeholder">
+							{{ 'lifestyle-1' | placeholder_svg_tag: 'about-story__image about-story__image--placeholder' }}
+						</div>
+					{%- endif -%}
+				</div>
+
+				<div class="about-story__text-col">
+					{%- if section_number != blank or section_label != blank -%}
+						<div class="about-story__label-row">
+							{%- if section_number != blank -%}
+								<span class="about-story__number">{{ section_number }}</span>
+							{%- endif -%}
+							{%- if section_label != blank -%}
+								<span class="about-story__label">/ {{ section_label }}</span>
+							{%- endif -%}
+						</div>
+					{%- endif -%}
+
+					{%- if heading != blank -%}
+						<h2 class="about-story__heading">{{ heading }}</h2>
+					{%- endif -%}
+
+					{%- if text_content != blank -%}
+						<div class="about-story__text rte">{{ text_content }}</div>
+					{%- endif -%}
+
+					{%- if secondary_text != blank -%}
+						<div class="about-story__secondary-text rte">{{ secondary_text }}</div>
+					{%- endif -%}
+
+					{%- if button_label != blank and button_url != blank -%}
+						<a href="{{ button_url }}" class="about-story__button button button--{{ button_style }}">
+							{{ button_label }}
+						</a>
+					{%- endif -%}
+				</div>
+			</div>
+
+		{%- elsif layout_style == 'fullwidth' -%}
+			{%- comment -%} FULL-WIDTH TEXT LAYOUT {%- endcomment -%}
+			<div class="about-story__fullwidth">
+				{%- if section_number != blank or section_label != blank -%}
+					<div class="about-story__label-row">
+						{%- if section_number != blank -%}
+							<span class="about-story__number">{{ section_number }}</span>
+						{%- endif -%}
+						{%- if section_label != blank -%}
+							<span class="about-story__label">/ {{ section_label }}</span>
+						{%- endif -%}
+					</div>
+				{%- endif -%}
+
+				{%- if heading != blank -%}
+					<h2 class="about-story__heading">{{ heading }}</h2>
+				{%- endif -%}
+
+				{%- if text_content != blank -%}
+					<div class="about-story__text rte">{{ text_content }}</div>
+				{%- endif -%}
+
+				{%- if secondary_text != blank -%}
+					<div class="about-story__secondary-text rte">{{ secondary_text }}</div>
+				{%- endif -%}
+
+				{%- if button_label != blank and button_url != blank -%}
+					<a href="{{ button_url }}" class="about-story__button button button--{{ button_style }}">
+						{{ button_label }}
+					</a>
+				{%- endif -%}
+			</div>
+
+		{%- elsif layout_style == 'quote' -%}
+			{%- comment -%} QUOTE / STATEMENT LAYOUT {%- endcomment -%}
+			<div class="about-story__quote-wrapper">
+				{%- if heading != blank -%}
+					<blockquote class="about-story__quote">
+						<p>{{ heading }}</p>
+					</blockquote>
+				{%- endif -%}
+
+				{%- if text_content != blank -%}
+					<div class="about-story__quote-attribution rte">{{ text_content }}</div>
+				{%- endif -%}
+			</div>
+
+		{%- elsif layout_style == 'two_column_text' -%}
+			{%- comment -%} TWO COLUMN TEXT LAYOUT {%- endcomment -%}
+			<div class="about-story__two-col-text">
+				<div class="about-story__two-col-left">
+					{%- if section_number != blank or section_label != blank -%}
+						<div class="about-story__label-row">
+							{%- if section_number != blank -%}
+								<span class="about-story__number">{{ section_number }}</span>
+							{%- endif -%}
+							{%- if section_label != blank -%}
+								<span class="about-story__label">/ {{ section_label }}</span>
+							{%- endif -%}
+						</div>
+					{%- endif -%}
+
+					{%- if heading != blank -%}
+						<h2 class="about-story__heading">{{ heading }}</h2>
+					{%- endif -%}
+				</div>
+
+				<div class="about-story__two-col-right">
+					{%- if text_content != blank -%}
+						<div class="about-story__text rte">{{ text_content }}</div>
+					{%- endif -%}
+
+					{%- if secondary_text != blank -%}
+						<div class="about-story__secondary-text rte">{{ secondary_text }}</div>
+					{%- endif -%}
+
+					{%- if button_label != blank and button_url != blank -%}
+						<a href="{{ button_url }}" class="about-story__button button button--{{ button_style }}">
+							{{ button_label }}
+						</a>
+					{%- endif -%}
+				</div>
+			</div>
+		{%- endif -%}
+
+	</div>
+</section>
+
+{% schema %}
+{
+	"name": "About Story Block",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Layout Mode"
+		},
+		{
+			"type": "select",
+			"id": "layout_style",
+			"label": "Layout style",
+			"options": [
+				{ "value": "split", "label": "Image + Text (Split)" },
+				{ "value": "fullwidth", "label": "Full-width Text" },
+				{ "value": "quote", "label": "Quote / Statement" },
+				{ "value": "two_column_text", "label": "Two Column Text" }
+			],
+			"default": "split",
+			"info": "Choose how this story block is displayed"
+		},
+		{
+			"type": "header",
+			"content": "Section Label"
+		},
+		{
+			"id": "section_number",
+			"type": "text",
+			"label": "Section number",
+			"info": "E.g.: 01, 02, 03"
+		},
+		{
+			"id": "section_label",
+			"type": "text",
+			"label": "Section label",
+			"info": "E.g.: THE LAND, OUR BELIEF"
+		},
+		{
+			"type": "header",
+			"content": "Content"
+		},
+		{
+			"id": "heading",
+			"type": "textarea",
+			"label": "Heading",
+			"default": "We believe hunting culture isn't defined by gear or noise."
+		},
+		{
+			"id": "text_content",
+			"type": "richtext",
+			"label": "Body text (primary)",
+			"default": "<p>It's defined by patience, responsibility, and knowing when not to move.</p>"
+		},
+		{
+			"id": "secondary_text",
+			"type": "richtext",
+			"label": "Body text (secondary)",
+			"info": "Optional second paragraph block"
+		},
+		{
+			"id": "button_label",
+			"type": "text",
+			"label": "Button label"
+		},
+		{
+			"id": "button_url",
+			"type": "url",
+			"label": "Button link"
+		},
+		{
+			"id": "button_style",
+			"type": "select",
+			"label": "Button style",
+			"options": [
+				{ "value": "primary", "label": "Primary" },
+				{ "value": "secondary", "label": "Secondary" }
+			],
+			"default": "primary"
+		},
+		{
+			"type": "header",
+			"content": "Typography"
+		},
+		{
+			"type": "select",
+			"id": "heading_size",
+			"label": "Heading size",
+			"options": [
+				{ "value": "small", "label": "Small" },
+				{ "value": "medium", "label": "Medium" },
+				{ "value": "large", "label": "Large" }
+			],
+			"default": "medium"
+		},
+		{
+			"type": "select",
+			"id": "text_alignment",
+			"label": "Text alignment",
+			"options": [
+				{ "value": "left", "label": "Left" },
+				{ "value": "center", "label": "Center" }
+			],
+			"default": "left"
+		},
+		{
+			"type": "header",
+			"content": "Image (Split layout)"
+		},
+		{
+			"type": "image_picker",
+			"id": "image",
+			"label": "Image"
+		},
+		{
+			"type": "select",
+			"id": "image_position",
+			"label": "Image position",
+			"options": [
+				{ "value": "left", "label": "Left" },
+				{ "value": "right", "label": "Right" }
+			],
+			"default": "left"
+		},
+		{
+			"type": "header",
+			"content": "Borders"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_border_top",
+			"label": "Show top border",
+			"default": false
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_border_bottom",
+			"label": "Show bottom border",
+			"default": false
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{ "value": "1808px", "label": "Default - 1680px" },
+				{ "value": "2048px", "label": "Large - 1920px" },
+				{ "value": "100%", "label": "Full width" },
+				{ "value": "inherit", "label": "Inherit of general setting" }
+			],
+			"default": "inherit"
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range", "id": "offset_top_desktop",
+			"min": 0, "max": 100, "step": 1, "unit": "px",
+			"label": "Desktop offset top", "default": 50
+		},
+		{
+			"type": "range", "id": "offset_bottom_desktop",
+			"min": 0, "max": 100, "step": 1, "unit": "px",
+			"label": "Desktop offset bottom", "default": 50
+		},
+		{
+			"type": "range", "id": "offset_top_mobile",
+			"min": 0, "max": 100, "step": 1, "unit": "px",
+			"label": "Mobile offset top", "default": 32
+		},
+		{
+			"type": "range", "id": "offset_bottom_mobile",
+			"min": 0, "max": 100, "step": 1, "unit": "px",
+			"label": "Mobile offset bottom", "default": 32
+		}
+	],
+	"presets": [
+		{
+			"name": "About Story Block"
+		}
+	]
+}
+{% endschema %}

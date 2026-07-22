@@ -1,0 +1,236 @@
+{%- assign has_predictive_results = false -%}
+{%- assign products_size          = predictive_search.resources.products.size -%}
+{%- assign articles_size          = predictive_search.resources.articles.size -%}
+{%- assign pages_size             = predictive_search.resources.pages.size -%}
+
+{%- if products_size > 0 or articles_size > 0 or pages_size > 0 -%}
+    {%- assign has_predictive_results = true -%}
+{%- endif -%}
+
+{%- if predictive_search.performed and has_predictive_results -%}
+    {%- assign product_placeholder 		 = settings.product_default_image  -%}
+	{%- assign product_placeholder_focal = settings.product_default_image.presentation.focal_point  -%}
+    {%- assign article_placeholder 		 = settings.article_default_image  -%}
+    {%- assign article_placeholder_focal = settings.article_default_image.presentation.focal_point  -%}
+
+	{%- assign min  = 1 -%}
+	{%- assign max  = 6 -%}
+	{%- assign diff = max | minus: min -%}
+
+    <div class="js-predictive-search-results">
+        {%- if products_size > 0 -%}
+			<div
+				class="predictive-search__result-wrapper visually-hidden js-predictive-search-result-wrapper"
+				data-id="product"
+				id="search-products"
+			>
+				<ul class="predictive-search__result-row predictive-search__result-row--products">
+					{%- for product in predictive_search.resources.products -%}
+						{%- assign product_image = product.featured_image | default: settings.product_default_image -%}
+
+						{%- capture img_focal -%}
+							--img-desktop-pos: {{ product_image.presentation.focal_point }};
+						{%- endcapture -%}
+
+						<li class="predictive-search__result-col">
+							<div class="predictive-search__product-card">
+								<a
+									class="predictive-search__product-card-image-container focus-visible-outline"
+									href="{{- product.url -}}"
+									{% unless product_image.alt != blank %}
+										aria-label="{{- product.title -}}"
+									{% endunless %}
+								>
+									{%- if product_image != blank -%}
+										<img
+											class="predictive-search__product-card-image"
+											src="{{- product_image | image_url: width: 96, height: 120 -}}"
+											srcset="{{ product_image | image_url: width: 96, height: 120 }} 1x,
+													{{ product_image | image_url: width: 192, height: 240 }} 2x"
+											width="96"
+											height="120"
+											alt="{{- product_image.alt | escape -}}"
+											style="{{ img_focal }}"
+											loading="lazy"
+											fetchpriority="low"
+											decoding="async"
+										/>
+									{%- else -%}
+										{%- assign random_number        = "now" | date: "%N" | modulo: diff | plus: min -%}
+										{%- assign placeholder_svg_name = 'product-' | append: random_number -%}
+
+										{{- placeholder_svg_name | placeholder_svg_tag: 'predictive-search__product-card-image predictive-search__product-card-image--placeholder' -}}
+									{%- endif -%}
+								</a>
+
+								<div class="predictive-search__product-card-info">
+									<a
+										class="predictive-search__product-card-heading focus-visible-outline"
+										href="{{- product.url -}}"
+									>
+										{{- product.title -}}
+									</a>
+
+									<div class="predictive-search__product-card-price">
+										{% render 'price', product: product %}
+									</div>
+								</div>
+							</div>
+						</li>
+					{%- endfor -%}
+				</ul>
+			</div>
+        {%- endif -%}
+
+        {%- if articles_size > 0 -%}
+			<div
+				class="predictive-search__result-wrapper visually-hidden js-predictive-search-result-wrapper"
+				data-id="article"
+				id="search-articles"
+			>
+				<ul class="predictive-search__result-row predictive-search__result-row--articles">
+					{%- for article in predictive_search.resources.articles -%}
+						{%- assign article_image = article.image | default: article_placeholder -%}
+
+						{%- capture img_focal -%}
+							--img-pos: {{ article_image.presentation.focal_point }};
+						{%- endcapture -%}
+
+						<li class="predictive-search__result-col">
+							<div class="predictive-search__article-card">
+								<a
+									class="predictive-search__article-card-image-container focus-visible-outline"
+									href="{{- article.url -}}"
+									{% unless article_image.alt != blank %}
+										aria-label="{{- article.title -}}"
+									{% endunless %}
+								>
+									{%- if article_image != blank -%}
+										<picture>
+											<source
+												srcset="{{ article_image | image_url: width: 343, height: 320 }} 1x,
+														{{ article_image | image_url: width: 686, height: 640 }} 2x"
+												media="(max-width: 375px)"
+												width="343"
+												height="320"
+											>
+
+											<source
+												srcset="{{ article_image | image_url: width: 388, height: 361 }} 1x,
+														{{ article_image | image_url: width: 776, height: 722 }} 2x"
+												media="(max-width: 420px)"
+												width="388"
+												height="361"
+											>
+
+											<source
+												srcset="{{ article_image | image_url: width: 543, height: 505 }} 1x,
+														{{ article_image | image_url: width: 1086, height: 1010 }} 2x"
+												media="(max-width: 575px)"
+												width="543"
+												height="505"
+											>
+
+											<source
+												srcset="{{ article_image | image_url: width: 360, height: 335 }} 1x,
+														{{ article_image | image_url: width: 720, height: 670 }} 2x"
+												media="(max-width: 767px)"
+												width="360"
+												height="335"
+											>
+
+											<source
+												srcset="{{ article_image | image_url: width: 472, height: 439 }} 1x,
+														{{ article_image | image_url: width: 944, height: 878 }} 2x"
+												media="(max-width: 991px)"
+												width="472"
+												height="439"
+											>
+
+											<source
+												srcset="{{ article_image | image_url: width: 379, height: 352 }} 1x,
+														{{ article_image | image_url: width: 758, height: 704 }} 2x"
+												media="(max-width: 1199px)"
+												width="379"
+												height="352"
+											>
+
+											<source
+												srcset="{{ article_image | image_url: width: 447, height: 387 }} 1x,
+														{{ article_image | image_url: width: 894, height: 774 }} 2x"
+												media="(max-width: 1500px)"
+												width="447"
+												height="387"
+											>
+
+											<source
+												srcset="{{ article_image | image_url: width: 370, height: 321 }} 1x,
+														{{ article_image | image_url: width: 740, height: 642 }} 2x"
+												media="(max-width: 1680px)"
+												width="370"
+												height="321"
+											>
+
+											<img
+												class="predictive-search__article-card-image"
+												src="{{- article_image | image_url: width: 430, height: 372 -}}"
+												srcset="{{ article_image | image_url: width: 430, height: 372 }} 1x,
+														{{ article_image | image_url: width: 860, height: 744 }} 2x"
+												width="430"
+												height="372"
+												loading="lazy"
+												fetchpriority="low"
+												alt="{{- article_image.alt | escape -}}"
+												style="{{ img_focal }}"
+												decoding="async"
+											/>
+										</picture>
+									{%- else -%}
+										{%- assign random_number        = "now" | date: "%N" | modulo: diff | plus: min -%}
+										{%- assign placeholder_svg_name = 'image-' | append: random_number -%}
+
+										{{- 'image' | placeholder_svg_tag: 'predictive-search__article-card-image predictive-search__article-card-image--placeholder' -}}
+									{%- endif -%}
+								</a>
+
+								<div class="predictive-search__article-card-content">
+									<div class="predictive-search__article-card-date">
+										{{ 'blogs.article.published_at' | t }} {{ article.published_at | time_tag: format: 'date' }}
+									</div>
+
+									<a
+										class="predictive-search__article-card-heading focus-visible-outline"
+										href="{{- article.url -}}"
+									>
+										{{- article.title -}}
+									</a>
+								</div>
+							</div>
+						</li>
+					{%- endfor -%}
+				</ul>
+			</div>
+        {%- endif -%}
+
+        {%- if pages_size > 0 -%}
+			<div
+				class="predictive-search__result-wrapper visually-hidden js-predictive-search-result-wrapper"
+				data-id="page"
+				id="search-pages"
+			>
+				<ul class="predictive-search__result-row predictive-search__result-row--pages">
+					{%- for page in predictive_search.resources.pages -%}
+						<li class="predictive-search__result-col">
+							<a
+								class="predictive-search__page-card focus-visible-outline"
+								href="{{- page.url -}}"
+							>
+								{{- page.title -}}
+							</a>
+						</li>
+					{%- endfor -%}
+				</ul>
+			</div>
+        {%- endif -%}
+    </div>
+{%- endif -%}

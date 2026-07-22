@@ -1,0 +1,1308 @@
+{% comment %}
+  Section: Smart Newsletter Popup
+  Features: Split Layout, Delay, Frequency Cap, Advanced Display Logic, Fully Customizable via Theme Customizer
+{% endcomment %}
+
+{%- assign show_popup = false -%}
+
+{%- if section.settings.display_scope == 'all' -%}
+  {%- assign show_popup = true -%}
+{%- else -%}
+  {%- if section.settings.show_on_home and template.name == 'index' -%}
+    {%- assign show_popup = true -%}
+  {%- endif -%}
+  {%- if section.settings.show_on_collection and template.name == 'collection' -%}
+    {%- assign show_popup = true -%}
+  {%- endif -%}
+  {%- if section.settings.show_on_product and template.name == 'product' -%}
+    {%- assign show_popup = true -%}
+  {%- endif -%}
+  {%- if section.settings.show_on_blog and template.name == 'article' or template.name == 'blog' -%}
+    {%- assign show_popup = true -%}
+  {%- endif -%}
+  {%- if section.settings.show_on_cart and template.name == 'cart' -%}
+    {%- assign show_popup = true -%}
+  {%- endif -%}
+
+  {%- if section.settings.target_handles != blank -%}
+    {%- assign handles = section.settings.target_handles | split: ',' -%}
+    {%- for handle in handles -%}
+      {%- assign clean_handle = handle | strip -%}
+      {%- if clean_handle == collection.template_suffix
+          or clean_handle == product.template_suffix
+          or clean_handle == page.template_suffix -%}
+        {%- assign show_popup = true -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- if show_popup and section.settings.enable_popup -%}
+
+  {%- comment -%} Assign customizable values {%- endcomment -%}
+  {%- assign border_radius = section.settings.border_radius | append: 'px' -%}
+  {%- assign input_radius = section.settings.input_radius | append: 'px' -%}
+  {%- assign heading_size_mobile = section.settings.heading_size_mobile | divided_by: 100.0 | append: 'rem' -%}
+  {%- assign heading_size_desktop = section.settings.heading_size_desktop | divided_by: 100.0 | append: 'rem' -%}
+
+  <div id="newsletter-popup-{{ section.id }}" class="popup-overlay" style="display: none;">
+    <div class="popup-container">
+      
+      <button class="popup-close" aria-label="Close" style="color: {{ section.settings.text_color }};">&times;</button>
+
+      <div class="popup-image">
+        {%- if section.settings.image != blank -%}
+          {%- # theme-check-disable RemoteAsset -%}
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+            data-popup-src="{{ section.settings.image | image_url: width: 800 }}"
+            alt="{{ section.settings.heading | escape }}"
+            loading="lazy"
+            decoding="async"
+            fetchpriority="low"
+            width="400" height="400"
+          >
+          {%- # theme-check-enable RemoteAsset -%}
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+      </div>
+
+      <div class="popup-content" style="background-color: {{ section.settings.bg_color }}; color: {{ section.settings.text_color }};">
+        <div class="popup-text-wrapper">
+          {%- if section.settings.subheading != blank -%}
+            <p class="popup-subheading">{{ section.settings.subheading }}</p>
+          {%- endif -%}
+          
+          {%- if section.settings.heading != blank -%}
+            <h2 class="popup-heading">{{ section.settings.heading }}</h2>
+          {%- endif -%}
+
+          {%- if section.settings.description != blank -%}
+            <div class="popup-desc">
+              {{ section.settings.description }}
+            </div>
+          {%- endif -%}
+
+          {%- assign popup_form_id = 'camo-popup-contact-form-' | append: section.id -%}
+          {% form 'customer', class: 'popup-form js-camo-popup-form', id: popup_form_id %}
+            <input type="hidden" name="contact[tags]" value="newsletter, popup, apparel">
+            <input type="hidden" name="contact[accepts_marketing]" value="true">
+            {%- if form.posted_successfully? and request.design_mode == false -%}
+              <div class="form-success-wrapper" style="text-align: center; margin: 15px 0;">
+                <div class="form-success">
+                  {{ section.settings.success_message | default: "Thank you! Use the promo code below at checkout:" | newline_to_br }}
+                </div>
+                {%- if section.settings.coupon_code != blank -%}
+                  <div class="popup-coupon-code">
+                    {{ section.settings.coupon_code }}
+                  </div>
+                {%- endif -%}
+              </div>
+              <script>
+                window.camoPopupSuccess = true;
+                try { localStorage.setItem('popupSubscribed', 'true'); } catch(e) {}
+                {%- if section.settings.coupon_code != blank -%}
+                try { localStorage.setItem('pending_discount', '{{ section.settings.coupon_code }}'); } catch(e) {}
+                {%- endif -%}
+              </script>
+            {%- else -%}
+              <div class="input-group">
+                <label class="visually-hidden" for="camo-popup-email-{{ section.id }}">
+                  {{ section.settings.input_placeholder }}
+                </label>
+                <input id="camo-popup-email-{{ section.id }}" type="email" inputmode="email" name="contact[email]" class="popup-input" value="{{ form.email }}" placeholder="{{ section.settings.input_placeholder }}" autocomplete="email" autocorrect="off" autocapitalize="off" required>
+                <div class="popup-email-suggestion js-camo-email-suggestion" aria-live="polite" hidden>
+                  Did you mean
+                  <button type="button" class="popup-email-suggestion__button js-camo-email-suggestion-button"></button>?
+                </div>
+                <button type="submit" name="commit" class="popup-submit">
+                  {{ section.settings.btn_label }}
+                </button>
+              </div>
+              {%- if form.errors -%}
+                <div class="form-error">{{ form.errors | default_errors }}</div>
+              {%- endif -%}
+              <div class="form-error js-camo-popup-submit-error" role="alert" hidden>
+                We could not verify this signup. Please allow the verification check or try again in another browser.
+              </div>
+            {%- endif -%}
+          {% endform %}
+          
+          <p class="popup-disclaimer">
+            {{ section.settings.disclaimer }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style id="popup-css-{{- section.id -}}" media="print">
+    .popup-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, {{ section.settings.overlay_opacity | divided_by: 100.0 }});
+      z-index: 2147483647 !important; display: flex; justify-content: center; align-items: center;
+      opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease;
+      pointer-events: auto !important;
+      touch-action: manipulation;
+    }
+    .popup-overlay.is-visible { opacity: 1; visibility: visible; }
+
+    .popup-container {
+      background: #fff; width: 90%; max-width: {{ section.settings.popup_max_width }}px; display: flex;
+      position: relative; border-radius: {{ border_radius }}; overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      transform: translateY(20px); transition: transform 0.4s ease;
+      min-height: 0px !important;
+      font-family: '{{ section.settings.font_family }}', sans-serif !important;
+      pointer-events: auto !important;
+    }
+    .popup-overlay.is-visible .popup-container { transform: translateY(0); }
+
+    .popup-close {
+      position: absolute; padding: 0; background: none; border: none;
+      font-size: 30px; line-height: 1; cursor: pointer; z-index: 10; opacity: 0.7;
+      width: 40px !important; height: 40px !important;
+      min-width: 0px !important; min-height: 0px !important;
+      right: 5px; top: 5px;
+      pointer-events: auto !important;
+    }
+    .popup-close:before { display: none; }
+    .popup-close:hover { opacity: 1; }
+
+    .popup-image { width: 50%; display: none; position: relative; }
+    .popup-image::before { content: ''; display: block; padding-top: 100%; }
+    .popup-image img, .popup-image svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+    @media (min-width: 769px) { .popup-image { display: block; } }
+
+    .popup-content { width: 100%; padding: 20px; display: flex; flex-direction: column; justify-content: center; text-align: center; box-sizing: border-box; }
+    @media (min-width: 769px) { .popup-content { width: 50%; padding: 30px 35px; text-align: {{ section.settings.text_alignment }}; aspect-ratio: 1 / 1; } }
+
+    .popup-subheading {
+      color: inherit;
+      font-family: '{{ section.settings.font_family }}', sans-serif !important;
+      text-transform: none !important;
+      letter-spacing: 1px;
+      font-size: 0.95rem;
+      font-weight: normal !important;
+      margin-bottom: 10px;
+    }
+    .popup-heading {
+      color: inherit;
+      font-family: '{{ section.settings.font_family }}', sans-serif !important;
+      font-size: {{ heading_size_mobile }};
+      margin: 0 0 15px 0;
+      line-height: 1.3;
+      font-weight: {{ section.settings.heading_weight }};
+      text-transform: {{ section.settings.heading_transform }} !important;
+      letter-spacing: 0;
+    }
+    @media (min-width: 769px) { .popup-heading { font-size: {{ heading_size_desktop }}; } }
+    .popup-desc {
+      color: inherit;
+      margin-bottom: 25px;
+      font-size: 1.05rem;
+      line-height: 1.5;
+      font-family: '{{ section.settings.font_family }}', sans-serif !important;
+      font-weight: normal !important;
+      text-transform: none !important;
+      opacity: 1;
+    }
+
+    .popup-form { width: 100%; }
+    .input-group { display: flex; flex-direction: column; gap: 10px; }
+    .popup-input {
+      font-family: '{{ section.settings.font_family }}', sans-serif !important;
+      background: {{ section.settings.input_bg }} !important;
+      color: {{ section.settings.input_text }} !important;
+      padding: 14px 24px !important;
+      border: 1px solid transparent;
+      border-radius: {{ input_radius }} !important;
+      width: 100%;
+      box-sizing: border-box;
+      outline: none;
+      font-size: 1rem;
+      pointer-events: auto !important;
+    }
+    .popup-submit {
+      font-family: '{{ section.settings.font_family }}', sans-serif !important;
+      padding: 14px 30px !important;
+      border: none !important;
+      font-weight: bold;
+      cursor: pointer;
+      text-transform: uppercase;
+      border-radius: {{ input_radius }} !important;
+      background-color: {{ section.settings.btn_bg }} !important;
+      color: {{ section.settings.btn_text }} !important;
+      transition: opacity 0.3s ease;
+      width: 100%;
+      font-size: 1rem;
+      pointer-events: auto !important;
+    }
+    .popup-submit:before { display: none; }
+    .popup-submit:hover { opacity: 0.85; }
+
+    .popup-email-suggestion {
+      margin-top: -3px;
+      margin-bottom: 2px;
+      padding: 8px 10px;
+      color: #ffffff !important;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.38);
+      border-radius: {{ input_radius }};
+      font-family: '{{ section.settings.font_family }}', sans-serif !important;
+      font-size: 0.84rem;
+      line-height: 1.35;
+      font-weight: 600;
+      opacity: 1;
+      text-align: {{ section.settings.text_alignment }};
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+    }
+    .popup-email-suggestion,
+    .popup-email-suggestion * {
+      color: #ffffff !important;
+    }
+    .popup-email-suggestion__button {
+      display: inline !important;
+      width: auto !important;
+      min-width: 0 !important;
+      min-height: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+      color: #ffffff !important;
+      font: inherit !important;
+      font-weight: 900 !important;
+      line-height: inherit !important;
+      text-transform: none !important;
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+      cursor: pointer;
+    }
+    .popup-email-suggestion__button:before { display: none !important; }
+
+    .popup-disclaimer {
+      color: inherit;
+      font-size: min(2.6vw, 0.75rem);
+      margin-top: 15px;
+      font-style: italic;
+      opacity: 1;
+      font-weight: normal !important;
+      letter-spacing: -0.2px;
+      white-space: nowrap;
+    }
+    @media (min-width: 769px) { .popup-disclaimer { font-size: 0.75rem; white-space: normal; } }
+
+    .form-success { color: inherit; font-family: '{{ section.settings.font_family }}', sans-serif !important; font-size: 1.1rem; line-height: 1.4; }
+    .popup-coupon-code {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 12px 25px;
+      color: inherit;
+      background-color: rgba(255,255,255,0.1);
+      border: 2px dashed currentColor;
+      font-family: '{{ section.settings.font_family }}', sans-serif !important;
+      font-size: 1.5rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      border-radius: {{ input_radius }};
+    }
+    
+    .placeholder-svg { background: #eee; width: 100%; height: 100%; }
+    .form-error { color: #ff4444; margin-top: 8px; font-size: 0.85rem; }
+  </style>
+
+  <script>
+    (function() {
+      var sectionId = '{{- section.id -}}';
+
+      // 1. Dọn dẹp instance cũ và phần tử cũ khỏi body nếu đã tồn tại để tránh duplicate
+      if (window.CamoSmartPopupInstances && window.CamoSmartPopupInstances[sectionId]) {
+        try {
+          window.CamoSmartPopupInstances[sectionId].destroy();
+        } catch(e) {
+          console.warn('[CamoSignal] Error destroying old popup instance:', e);
+        }
+      }
+
+      var popupSelector = '[id="newsletter-popup-' + sectionId + '"]';
+      var currentScript = document.currentScript;
+      var popupEl = currentScript && currentScript.parentNode ? currentScript.parentNode.querySelector(popupSelector) : null;
+      if (!popupEl) popupEl = document.querySelector(popupSelector);
+      if (!popupEl) return;
+
+      Array.prototype.slice.call(document.querySelectorAll(popupSelector)).forEach(function(node) {
+        if (node !== popupEl && node.parentNode) {
+          node.parentNode.removeChild(node);
+        }
+      });
+
+      var isDesignMode = {% if request.design_mode %}true{% else %}false{% endif %};
+
+      function safeStorageGet(key) {
+        try {
+          return window.localStorage ? localStorage.getItem(key) : null;
+        } catch(e) {
+          return null;
+        }
+      }
+
+      function safeStorageSet(key, value) {
+        try {
+          if (window.localStorage) localStorage.setItem(key, value);
+        } catch(e) {}
+      }
+
+      function CamoSmartPopup(el, id) {
+        this.popup = el;
+        this.sectionId = id;
+        this.initialized = false;
+        this.destroyed = false;
+
+        this.initTimer = null;
+        this.delayTimer = null;
+        this.transitionTimer = null;
+        this.submitTimer = null;
+        this.mailcheckTimer = null;
+        this.idleHandle = null;
+        this.domReadyHandler = null;
+        this.inertObserver = null;
+
+        this.closeBtn = this.popup.querySelector('.popup-close');
+        this.form = this.popup.querySelector('.js-camo-popup-form');
+        this.emailInput = this.form ? this.form.querySelector('input[name="contact[email]"]') : null;
+        this.emailSuggestion = this.popup.querySelector('.js-camo-email-suggestion');
+        this.emailSuggestionButton = this.popup.querySelector('.js-camo-email-suggestion-button');
+        this.submitButton = this.form ? this.form.querySelector('[type="submit"]') : null;
+        this.submitError = this.popup.querySelector('.js-camo-popup-submit-error');
+        this.currentEmailSuggestion = null;
+
+        // Binds
+        this.handleCloseClick = this.closePopup.bind(this, false);
+        this.handleOverlayClick = this.handleOverlayClick.bind(this);
+        this.handleEmailInput = this.handleEmailInput.bind(this);
+        this.handleEmailBlur = this.handleEmailBlur.bind(this);
+        this.handleEmailSuggestionClick = this.handleEmailSuggestionClick.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSectionSelect = this.handleSectionSelect.bind(this);
+        this.handleSectionDeselect = this.handleSectionDeselect.bind(this);
+        this.handleSectionUnload = this.handleSectionUnload.bind(this);
+      }
+
+      CamoSmartPopup.prototype.handleOverlayClick = function(e) {
+        if (this.destroyed) return;
+        if (e.target === this.popup) {
+          this.closePopup(false);
+        }
+      };
+
+      CamoSmartPopup.prototype.runWhenIdle = function(callback, timeout) {
+        if (this.destroyed) return;
+        var self = this;
+        var wrappedCallback = function() {
+          self.idleHandle = null;
+          self.initTimer = null;
+          if (self.destroyed) return;
+          callback();
+        };
+
+        if ('requestIdleCallback' in window) {
+          this.idleHandle = window.requestIdleCallback(wrappedCallback, { timeout: timeout || 2500 });
+          return;
+        }
+        this.initTimer = setTimeout(wrappedCallback, timeout || 2500);
+      };
+
+      CamoSmartPopup.prototype.loadPopupFont = function() {
+        var fontFamily = '{{ section.settings.font_family }}';
+        var whitelist = ['Oswald', 'Inter', 'Roboto', 'Montserrat', 'Playfair Display', 'Lato', 'Poppins', 'Raleway'];
+        if (whitelist.indexOf(fontFamily) === -1) {
+          console.log('[CamoSignal] Font family not in whitelist, using fallback:', fontFamily);
+          return;
+        }
+        var fontId = 'camo-font-' + fontFamily.toLowerCase().replace(/[^a-z0-9]/g, '-');
+        if (document.getElementById(fontId)) return;
+
+        var link = document.createElement('link');
+        link.id = fontId;
+        link.rel = 'stylesheet';
+        link.href = 'https://fonts.googleapis.com/css2?family=' + fontFamily.replace(/\s+/g, '+') + ':wght@300;400;500;700;900&display=swap';
+        document.head.appendChild(link);
+      };
+
+      CamoSmartPopup.prototype.hydratePopupMedia = function() {
+        this.popup.querySelectorAll('img[data-popup-src]').forEach(function(img) {
+          if (!img.dataset.popupSrc) return;
+          img.src = img.dataset.popupSrc;
+          img.removeAttribute('data-popup-src');
+        });
+      };
+
+      CamoSmartPopup.prototype.shouldShowPopup = function() {
+        if (isDesignMode) return true;
+        if (window.camoPopupSuccess) return true;
+        if (safeStorageGet('popupSubscribed') === 'true') return false;
+        var lastClosed = safeStorageGet('shopifyPopupClosed');
+        if (lastClosed) {
+          var hoursSince = (new Date().getTime() - lastClosed) / 3600000;
+          var hoursToExpire = {{ section.settings.frequency }};
+          if (hoursSince < hoursToExpire) return false;
+        }
+        return true;
+      };
+
+      CamoSmartPopup.prototype.normalizeEmailValue = function(value) {
+        var email = (value || '').trim();
+        var atIndex = email.lastIndexOf('@');
+        if (atIndex === -1) return email;
+
+        var localPart = email.slice(0, atIndex).trim();
+        var domain = email.slice(atIndex + 1).trim().toLowerCase();
+        return localPart + '@' + domain;
+      };
+
+      CamoSmartPopup.prototype.getEmailSuggestion = function(value) {
+        var email = this.normalizeEmailValue(value);
+        var atIndex = email.lastIndexOf('@');
+        if (atIndex <= 0 || atIndex === email.length - 1) return null;
+
+        var localPart = email.slice(0, atIndex);
+        var rawDomain = email.slice(atIndex + 1).trim().toLowerCase();
+        var domain = rawDomain
+          .replace(/\s+/g, '')
+          .replace(/[,\u3002\uff0e\uff61\/\\;:|_]+/g, '.')
+          .replace(/\.{2,}/g, '.')
+          .replace(/^\./, '')
+          .replace(/\.$/, '')
+          .toLowerCase();
+        if (domain.indexOf('www.') === 0) domain = domain.slice(4);
+        if (!domain || domain.length < 3) return null;
+        var hasDot = domain.indexOf('.') !== -1;
+
+        var knownDomains = [
+          'gmail.com',
+          'googlemail.com',
+          'yahoo.com',
+          'ymail.com',
+          'rocketmail.com',
+          'hotmail.com',
+          'outlook.com',
+          'live.com',
+          'msn.com',
+          'icloud.com',
+          'me.com',
+          'mac.com',
+          'aol.com',
+          'proton.me',
+          'protonmail.com',
+          'pm.me',
+          'mail.com',
+          'zoho.com',
+          'hey.com',
+          'fastmail.com',
+          'gmx.com',
+          'gmx.net',
+          'tutanota.com',
+          'comcast.net',
+          'verizon.net',
+          'att.net',
+          'ameritech.net',
+          'sbcglobal.net',
+          'bellsouth.net',
+          'earthlink.net',
+          'cox.net',
+          'charter.net',
+          'roadrunner.com',
+          'btinternet.com',
+          'sky.com',
+          'yahoo.co.uk',
+          'hotmail.co.uk',
+          'outlook.co.uk',
+          'yandex.com',
+          'yandex.ru',
+          'mail.ru',
+          'rambler.ru',
+          'qq.com',
+          '163.com',
+          '126.com',
+          'naver.com',
+          'daum.net',
+          'hanmail.net',
+          'web.de',
+          'gmx.de',
+          't-online.de',
+          'freenet.de',
+          'orange.fr',
+          'free.fr',
+          'laposte.net',
+          'wanadoo.fr',
+          'libero.it',
+          'tiscali.it',
+          'virgilio.it',
+          'seznam.cz',
+          'wp.pl',
+          'onet.pl',
+          'interia.pl'
+        ];
+        if (knownDomains.indexOf(domain) !== -1) {
+          return domain === rawDomain ? null : localPart + '@' + domain;
+        }
+
+        var splitDomain = function(candidate) {
+          var lastDotIndex = candidate.lastIndexOf('.');
+          if (lastDotIndex === -1) return { root: candidate, tld: '' };
+          return {
+            root: candidate.slice(0, lastDotIndex),
+            tld: candidate.slice(lastDotIndex + 1)
+          };
+        };
+        var distance = function(a, b) {
+          var matrix = [];
+          var i;
+          var j;
+
+          for (i = 0; i <= a.length; i += 1) {
+            matrix[i] = [i];
+          }
+          for (j = 0; j <= b.length; j += 1) {
+            matrix[0][j] = j;
+          }
+
+          for (i = 1; i <= a.length; i += 1) {
+            for (j = 1; j <= b.length; j += 1) {
+              var cost = a.charAt(i - 1) === b.charAt(j - 1) ? 0 : 1;
+              matrix[i][j] = Math.min(
+                matrix[i - 1][j] + 1,
+                matrix[i][j - 1] + 1,
+                matrix[i - 1][j - 1] + cost
+              );
+
+              if (
+                i > 1 &&
+                j > 1 &&
+                a.charAt(i - 1) === b.charAt(j - 2) &&
+                a.charAt(i - 2) === b.charAt(j - 1)
+              ) {
+                matrix[i][j] = Math.min(matrix[i][j], matrix[i - 2][j - 2] + cost);
+              }
+            }
+          }
+
+          return matrix[a.length][b.length];
+        };
+        var tldCorrections = {
+          'co': 'com',
+          'cm': 'com',
+          'con': 'com',
+          'cmo': 'com',
+          'comm': 'com',
+          'comn': 'com',
+          'comj': 'com',
+          'cim': 'com',
+          'cpm': 'com',
+          'ocm': 'com',
+          'om': 'com',
+          'ne': 'net',
+          'nt': 'net',
+          'nte': 'net',
+          'nett': 'net',
+          'or': 'org',
+          'ogr': 'org',
+          'orgg': 'org',
+          'ed': 'edu',
+          'eddu': 'edu',
+          'mee': 'me',
+          'rj': 'ru',
+          'ri': 'ru',
+          're': 'ru',
+          'dr': 'de',
+          'fe': 'de',
+          'ft': 'fr',
+          'gr': 'fr',
+          'ot': 'it',
+          'ut': 'it',
+          'pk': 'pl',
+          'po': 'pl',
+          'cf': 'cz',
+          'cy': 'cz',
+          'uj': 'uk',
+          'uo': 'uk'
+        };
+        var inputParts = splitDomain(domain);
+
+        var domainCorrections = {
+          'gmail': 'gmail.com',
+          'gmailcom': 'gmail.com',
+          'gamil.com': 'gmail.com',
+          'gmial.com': 'gmail.com',
+          'gmai.com': 'gmail.com',
+          'gmal.com': 'gmail.com',
+          'gnail.com': 'gmail.com',
+          'gmaill.com': 'gmail.com',
+          'gmaik.com': 'gmail.com',
+          'gmaol.com': 'gmail.com',
+          'gmaio.com': 'gmail.com',
+          'gmsil.com': 'gmail.com',
+          'gmaul.com': 'gmail.com',
+          'gmaiil.com': 'gmail.com',
+          'gmail,com': 'gmail.com',
+          'gmail.co': 'gmail.com',
+          'gmail.cm': 'gmail.com',
+          'gmail.cim': 'gmail.com',
+          'gmail.con': 'gmail.com',
+          'gmail.cmo': 'gmail.com',
+          'gmail.comm': 'gmail.com',
+          'gmail.om': 'gmail.com',
+          'googlemail.co': 'googlemail.com',
+          'googlemail.con': 'googlemail.com',
+          'yahoo': 'yahoo.com',
+          'yahoocom': 'yahoo.com',
+          'yaho.com': 'yahoo.com',
+          'yaoo.com': 'yahoo.com',
+          'yahoo.co': 'yahoo.com',
+          'yahoo.cm': 'yahoo.com',
+          'yahoo.con': 'yahoo.com',
+          'yahoo.cmo': 'yahoo.com',
+          'yahoo.comm': 'yahoo.com',
+          'yahho.com': 'yahoo.com',
+          'yhaoo.com': 'yahoo.com',
+          'yhoo.com': 'yahoo.com',
+          'ymail.co': 'ymail.com',
+          'ymail.con': 'ymail.com',
+          'rocketmail.co': 'rocketmail.com',
+          'rocketmail.con': 'rocketmail.com',
+          'hotmail': 'hotmail.com',
+          'hotmailcom': 'hotmail.com',
+          'hotamil.com': 'hotmail.com',
+          'hotmial.com': 'hotmail.com',
+          'hotmal.com': 'hotmail.com',
+          'homail.com': 'hotmail.com',
+          'hotmai.com': 'hotmail.com',
+          'hotmil.com': 'hotmail.com',
+          'hormail.com': 'hotmail.com',
+          'hptmail.com': 'hotmail.com',
+          'hotmail.co': 'hotmail.com',
+          'hotmail.cm': 'hotmail.com',
+          'hotmail.con': 'hotmail.com',
+          'hotmail.cmo': 'hotmail.com',
+          'hotmail.comm': 'hotmail.com',
+          'outlook': 'outlook.com',
+          'outlookcom': 'outlook.com',
+          'outlok.com': 'outlook.com',
+          'outloo.com': 'outlook.com',
+          'outllok.com': 'outlook.com',
+          'outloook.com': 'outlook.com',
+          'outlook.co': 'outlook.com',
+          'outlook.cm': 'outlook.com',
+          'outlook.con': 'outlook.com',
+          'outlook.cmo': 'outlook.com',
+          'outlook.comm': 'outlook.com',
+          'icloud': 'icloud.com',
+          'icloudcom': 'icloud.com',
+          'iclud.com': 'icloud.com',
+          'icould.com': 'icloud.com',
+          'icloid.com': 'icloud.com',
+          'icloud.co': 'icloud.com',
+          'icloud.cm': 'icloud.com',
+          'icloud.con': 'icloud.com',
+          'icloud.cmo': 'icloud.com',
+          'icloud.comm': 'icloud.com',
+          'aol.co': 'aol.com',
+          'aol.con': 'aol.com',
+          'aol.cmo': 'aol.com',
+          'live.co': 'live.com',
+          'live.con': 'live.com',
+          'msn.co': 'msn.com',
+          'msn.con': 'msn.com',
+          'me.co': 'me.com',
+          'me.con': 'me.com',
+          'mac.co': 'mac.com',
+          'mac.con': 'mac.com',
+          'mail.co': 'mail.com',
+          'mail.con': 'mail.com',
+          'zoho.co': 'zoho.com',
+          'zoho.con': 'zoho.com',
+          'hey.co': 'hey.com',
+          'hey.con': 'hey.com',
+          'proton': 'proton.me',
+          'proton.me.con': 'proton.me',
+          'pm.con': 'pm.me',
+          'pm.mee': 'pm.me',
+          'protonmail.co': 'protonmail.com',
+          'protonmail.con': 'protonmail.com',
+          'protonmail.cmo': 'protonmail.com',
+          'comcast.com': 'comcast.net',
+          'comcast.ne': 'comcast.net',
+          'comcast.nte': 'comcast.net',
+          'verizon.com': 'verizon.net',
+          'verizon.ne': 'verizon.net',
+          'att.com': 'att.net',
+          'att.ne': 'att.net',
+          'ameritech.com': 'ameritech.net',
+          'ameritech.ne': 'ameritech.net',
+          'sbcglobal.com': 'sbcglobal.net',
+          'sbcglobal.ne': 'sbcglobal.net',
+          'bellsouth.com': 'bellsouth.net',
+          'bellsouth.ne': 'bellsouth.net',
+          'earthlink.com': 'earthlink.net',
+          'earthlink.ne': 'earthlink.net',
+          'cox.com': 'cox.net',
+          'cox.ne': 'cox.net',
+          'charter.com': 'charter.net',
+          'charter.ne': 'charter.net',
+          'roadrunner.co': 'roadrunner.com',
+          'roadrunner.con': 'roadrunner.com',
+          'btinternet.co': 'btinternet.com',
+          'btinternet.con': 'btinternet.com',
+          'sky.co': 'sky.com',
+          'sky.con': 'sky.com',
+          'fastmail.co': 'fastmail.com',
+          'fastmail.con': 'fastmail.com',
+          'gmx.co': 'gmx.com',
+          'gmx.con': 'gmx.com',
+          'gmx.ne': 'gmx.net',
+          'tutanota.co': 'tutanota.com',
+          'tutanota.con': 'tutanota.com',
+          'yahoo.co.ik': 'yahoo.co.uk',
+          'yahoo.co.uj': 'yahoo.co.uk',
+          'yahoocouk': 'yahoo.co.uk',
+          'hotmail.co.ik': 'hotmail.co.uk',
+          'hotmail.co.uj': 'hotmail.co.uk',
+          'hotmailcouk': 'hotmail.co.uk',
+          'outlook.co.ik': 'outlook.co.uk',
+          'outlook.co.uj': 'outlook.co.uk',
+          'outlookcouk': 'outlook.co.uk',
+          'yandex.co': 'yandex.com',
+          'yandex.con': 'yandex.com',
+          'yandex.ri': 'yandex.ru',
+          'mail.ri': 'mail.ru',
+          'mail.rj': 'mail.ru',
+          'rambler.ri': 'rambler.ru',
+          'qq.co': 'qq.com',
+          'qq.con': 'qq.com',
+          '163.co': '163.com',
+          '163.con': '163.com',
+          '126.co': '126.com',
+          '126.con': '126.com',
+          'naver.co': 'naver.com',
+          'naver.con': 'naver.com',
+          'daum.ne': 'daum.net',
+          'hanmail.ne': 'hanmail.net',
+          'web.dr': 'web.de',
+          'web.fe': 'web.de',
+          'gmx.dr': 'gmx.de',
+          'gmx.fe': 'gmx.de',
+          't-online.dr': 't-online.de',
+          'freenet.dr': 'freenet.de',
+          'orange.ft': 'orange.fr',
+          'orange.gr': 'orange.fr',
+          'free.ft': 'free.fr',
+          'laposte.ne': 'laposte.net',
+          'wanadoo.ft': 'wanadoo.fr',
+          'libero.ot': 'libero.it',
+          'tiscali.ot': 'tiscali.it',
+          'virgilio.ot': 'virgilio.it',
+          'seznam.cf': 'seznam.cz',
+          'wp.pk': 'wp.pl',
+          'onet.pk': 'onet.pl',
+          'interia.pk': 'interia.pl'
+        };
+        var correctedDomain = domainCorrections[domain];
+        if (!correctedDomain) {
+          var domainPrefixParts = domain.split('.');
+          var leadingPart = domainPrefixParts[0];
+          var restDomain = domainPrefixParts.slice(1).join('.');
+          if (
+            ['mail', 'email', 'e-mail', 'webmail', 'smtp', 'imap', 'pop'].indexOf(leadingPart) !== -1 &&
+            knownDomains.indexOf(restDomain) !== -1
+          ) {
+            correctedDomain = restDomain;
+          }
+        }
+        if (!correctedDomain) {
+          var extraSuffixes = ['com', 'net', 'org', 'co', 'cm', 'con', 'cmo', 'comm', 'om'];
+          for (var suffixIndex = 0; suffixIndex < extraSuffixes.length; suffixIndex += 1) {
+            var extraSuffix = '.' + extraSuffixes[suffixIndex];
+            if (domain.slice(-extraSuffix.length) !== extraSuffix) continue;
+
+            var trimmedExtraSuffix = domain.slice(0, -extraSuffix.length);
+            if (knownDomains.indexOf(trimmedExtraSuffix) !== -1) {
+              correctedDomain = trimmedExtraSuffix;
+              break;
+            }
+          }
+        }
+        if (!correctedDomain) {
+          var parts = domain.split('.');
+          var tld = parts.length > 1 ? parts[parts.length - 1] : '';
+          var correctedTld = tldCorrections[tld];
+
+          if (correctedTld && parts.length > 1) {
+            parts[parts.length - 1] = correctedTld;
+            var tldCandidate = parts.join('.');
+            if (knownDomains.indexOf(tldCandidate) !== -1) correctedDomain = tldCandidate;
+          }
+        }
+
+        if (!correctedDomain) {
+          var squashedDomain = domain.replace(/\./g, '');
+          for (var i = 0; i < knownDomains.length; i += 1) {
+            var squashedKnownDomain = knownDomains[i].replace(/\./g, '');
+            var squashedKnownParts = splitDomain(knownDomains[i]);
+            var safeFuzzySquashedMatch = !hasDot &&
+              squashedKnownParts.root.length > 4 &&
+              squashedDomain.slice(0, 2) === squashedKnownDomain.slice(0, 2) &&
+              distance(squashedDomain, squashedKnownDomain) <= 2;
+
+            if (squashedDomain === squashedKnownDomain || safeFuzzySquashedMatch) {
+              correctedDomain = knownDomains[i];
+              break;
+            }
+          }
+        }
+
+        if (!correctedDomain) {
+          var bestMatch = null;
+          var bestScore = 1000;
+
+          for (var k = 0; k < knownDomains.length; k += 1) {
+            var knownParts = splitDomain(knownDomains[k]);
+            if (knownParts.root.length <= 4 && inputParts.root !== knownParts.root) continue;
+
+            var comparableTld = tldCorrections[inputParts.tld] || inputParts.tld || knownParts.tld;
+            var rootDistance = distance(inputParts.root, knownParts.root);
+            var tldDistance = distance(comparableTld, knownParts.tld);
+            var fullDistance = distance(domain, knownDomains[k]);
+            var sameRootFamily = inputParts.root.charAt(0) === knownParts.root.charAt(0) ||
+              inputParts.root === knownParts.root.slice(1) ||
+              inputParts.root.slice(1) === knownParts.root ||
+              inputParts.root.slice(0, 2) === knownParts.root.slice(0, 2);
+            var tldLooksClose = comparableTld === knownParts.tld ||
+              tldDistance <= 1 ||
+              (inputParts.root === knownParts.root && tldDistance <= 2);
+            var rootLimit = knownParts.root.length <= 4 ? 1 : knownParts.root.length <= 8 ? 2 : 3;
+            var fullLimit = knownDomains[k].length <= 8 ? 1 : 2;
+            var isCandidate = false;
+
+            if (sameRootFamily && tldLooksClose && rootDistance <= rootLimit) {
+              isCandidate = true;
+            } else if (sameRootFamily && fullDistance > 0 && fullDistance <= fullLimit) {
+              isCandidate = true;
+            } else if (inputParts.root === knownParts.root && tldLooksClose) {
+              isCandidate = true;
+            }
+
+            if (isCandidate) {
+              var score = (rootDistance * 4) + (tldDistance * 2) + fullDistance;
+              if (score < bestScore) {
+                bestScore = score;
+                bestMatch = knownDomains[k];
+              }
+            }
+          }
+
+          correctedDomain = bestMatch;
+        }
+
+        if (!correctedDomain || correctedDomain === domain) return null;
+        return localPart + '@' + correctedDomain;
+      };
+
+      CamoSmartPopup.prototype.hideEmailSuggestion = function() {
+        this.currentEmailSuggestion = null;
+        if (this.emailSuggestion) this.emailSuggestion.hidden = true;
+        if (this.emailSuggestionButton) this.emailSuggestionButton.textContent = '';
+      };
+
+      CamoSmartPopup.prototype.checkEmailSuggestion = function() {
+        if (this.destroyed || !this.emailInput || !this.emailSuggestion || !this.emailSuggestionButton) return;
+
+        var normalizedEmail = this.normalizeEmailValue(this.emailInput.value);
+        var suggestedEmail = this.getEmailSuggestion(normalizedEmail);
+        if (!suggestedEmail) {
+          this.hideEmailSuggestion();
+          return;
+        }
+
+        this.currentEmailSuggestion = suggestedEmail;
+        this.emailSuggestionButton.textContent = suggestedEmail;
+        this.emailSuggestion.hidden = false;
+      };
+
+      CamoSmartPopup.prototype.handleEmailInput = function() {
+        if (this.destroyed) return;
+        if (this.mailcheckTimer) clearTimeout(this.mailcheckTimer);
+        this.mailcheckTimer = null;
+        this.checkEmailSuggestion();
+      };
+
+      CamoSmartPopup.prototype.handleEmailBlur = function() {
+        if (this.destroyed || !this.emailInput) return;
+        var normalizedEmail = this.normalizeEmailValue(this.emailInput.value);
+        if (this.emailInput.value !== normalizedEmail) this.emailInput.value = normalizedEmail;
+        this.checkEmailSuggestion();
+      };
+
+      CamoSmartPopup.prototype.handleEmailSuggestionClick = function() {
+        if (this.destroyed || !this.emailInput || !this.currentEmailSuggestion) return;
+        this.emailInput.value = this.currentEmailSuggestion;
+        this.hideEmailSuggestion();
+        this.emailInput.focus();
+        this.emailInput.dispatchEvent(new Event('input', { bubbles: true }));
+        this.emailInput.dispatchEvent(new Event('change', { bubbles: true }));
+      };
+
+      CamoSmartPopup.prototype.showPopup = function(force) {
+        if (this.destroyed) return;
+        if (!force && !this.shouldShowPopup()) return;
+
+        if (this.delayTimer) {
+          clearTimeout(this.delayTimer);
+          this.delayTimer = null;
+        }
+
+        // Load font and hydrate media only when popup actually displays
+        this.loadPopupFont();
+        this.hydratePopupMedia();
+
+        var styleEl = document.getElementById('popup-css-' + this.sectionId);
+        if (styleEl) styleEl.media = 'all';
+
+        this.popup.style.display = 'flex';
+        var self = this;
+        if (this.transitionTimer) clearTimeout(this.transitionTimer);
+        this.transitionTimer = setTimeout(function() {
+          self.transitionTimer = null;
+          if (self.destroyed) return;
+          self.popup.classList.add('is-visible');
+        }, 10);
+      };
+
+      CamoSmartPopup.prototype.closePopup = function(force) {
+        if (this.destroyed) return;
+        this.popup.classList.remove('is-visible');
+        var self = this;
+        if (this.delayTimer) {
+          clearTimeout(this.delayTimer);
+          this.delayTimer = null;
+        }
+        if (this.transitionTimer) clearTimeout(this.transitionTimer);
+        this.transitionTimer = setTimeout(function() {
+          self.transitionTimer = null;
+          if (self.destroyed) return;
+          self.popup.style.display = 'none';
+        }, 400);
+
+        if (!force && !isDesignMode) {
+          safeStorageSet('shopifyPopupClosed', new Date().getTime());
+        }
+      };
+
+      CamoSmartPopup.prototype.handleSubmit = function(e) {
+        if (this.destroyed) return;
+        if (this.emailInput) {
+          this.emailInput.value = this.normalizeEmailValue(this.emailInput.value);
+          var suggestedEmail = this.getEmailSuggestion(this.emailInput.value);
+          if (suggestedEmail) {
+            if (e) e.preventDefault();
+            this.currentEmailSuggestion = suggestedEmail;
+            if (this.emailSuggestionButton) this.emailSuggestionButton.textContent = suggestedEmail;
+            if (this.emailSuggestion) this.emailSuggestion.hidden = false;
+            if (this.submitButton) this.submitButton.removeAttribute('aria-busy');
+            return;
+          }
+          this.hideEmailSuggestion();
+        }
+        if (this.submitError) this.submitError.hidden = true;
+        if (this.submitButton) this.submitButton.setAttribute('aria-busy', 'true');
+        if (this.submitTimer) clearTimeout(this.submitTimer);
+
+        var self = this;
+        this.submitTimer = setTimeout(function() {
+          self.submitTimer = null;
+          if (self.destroyed) return;
+          if (!self.popup.isConnected || !self.popup.classList.contains('is-visible')) return;
+          if (self.submitButton) self.submitButton.removeAttribute('aria-busy');
+          if (self.submitError) self.submitError.hidden = false;
+        }, 8000);
+      };
+
+      CamoSmartPopup.prototype.init = function() {
+        if (this.destroyed) return;
+        if (this.initialized) return;
+        this.initialized = true;
+
+        // Move popup to body to escape parent stacking context constraints
+        document.body.appendChild(this.popup);
+
+        // Prevent Cart Drawer (and others) from disabling popup via inert attributes
+        var self = this;
+        this.inertObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.attributeName === 'inert' && self.popup.hasAttribute('inert')) {
+              self.popup.removeAttribute('inert');
+            }
+          });
+        });
+        this.inertObserver.observe(this.popup, { attributes: true, attributeFilter: ['inert'] });
+
+        if (this.closeBtn) this.closeBtn.addEventListener('click', this.handleCloseClick);
+        this.popup.addEventListener('click', this.handleOverlayClick);
+        if (this.emailInput) {
+          this.emailInput.addEventListener('input', this.handleEmailInput);
+          this.emailInput.addEventListener('blur', this.handleEmailBlur);
+        }
+        if (this.emailSuggestionButton) this.emailSuggestionButton.addEventListener('click', this.handleEmailSuggestionClick);
+        if (this.form) this.form.addEventListener('submit', this.handleSubmit);
+
+        // Attach customizer listeners
+        document.addEventListener('shopify:section:select', this.handleSectionSelect);
+        document.addEventListener('shopify:section:deselect', this.handleSectionDeselect);
+        document.addEventListener('shopify:section:unload', this.handleSectionUnload);
+
+        var desktopDelay = {{ section.settings.delay }} * 1000;
+        var mobileDelay = {{ section.settings.mobile_delay | default: section.settings.delay }} * 1000;
+        var delay = window.matchMedia('(max-width: 767px)').matches ? mobileDelay : desktopDelay;
+
+        if (window.camoPopupSuccess) {
+          this.showPopup(true);
+        } else if (isDesignMode) {
+          this.showPopup(true);
+        } else {
+          this.delayTimer = setTimeout(function() {
+            self.delayTimer = null;
+            if (self.destroyed) return;
+            self.showPopup(false);
+          }, delay);
+        }
+      };
+
+      CamoSmartPopup.prototype.handleSectionSelect = function(e) {
+        if (this.destroyed) return;
+        if (!e.detail || e.detail.sectionId !== this.sectionId) return;
+        this.showPopup(true);
+      };
+
+      CamoSmartPopup.prototype.handleSectionDeselect = function(e) {
+        if (this.destroyed) return;
+        if (!e.detail || e.detail.sectionId !== this.sectionId) return;
+        this.closePopup(true);
+      };
+
+      CamoSmartPopup.prototype.handleSectionUnload = function(e) {
+        if (this.destroyed) return;
+        if (!e.detail || e.detail.sectionId !== this.sectionId) return;
+        this.destroy();
+      };
+
+      CamoSmartPopup.prototype.destroy = function() {
+        if (this.destroyed) return;
+        this.destroyed = true;
+
+        // Clear all timers
+        if (this.initTimer) clearTimeout(this.initTimer);
+        if (this.delayTimer) clearTimeout(this.delayTimer);
+        if (this.transitionTimer) clearTimeout(this.transitionTimer);
+        if (this.submitTimer) clearTimeout(this.submitTimer);
+        if (this.mailcheckTimer) clearTimeout(this.mailcheckTimer);
+
+        if (this.domReadyHandler) {
+          document.removeEventListener('DOMContentLoaded', this.domReadyHandler);
+          this.domReadyHandler = null;
+        }
+
+        // Cancel requestIdleCallback if scheduled
+        if (this.idleHandle && 'cancelIdleCallback' in window) {
+          window.cancelIdleCallback(this.idleHandle);
+          this.idleHandle = null;
+        }
+
+        // Disconnect MutationObserver
+        if (this.inertObserver) {
+          this.inertObserver.disconnect();
+          this.inertObserver = null;
+        }
+
+        // Clean up theme editor event listeners
+        document.removeEventListener('shopify:section:select', this.handleSectionSelect);
+        document.removeEventListener('shopify:section:deselect', this.handleSectionDeselect);
+        document.removeEventListener('shopify:section:unload', this.handleSectionUnload);
+
+        // Remove event listeners from elements
+        if (this.closeBtn) this.closeBtn.removeEventListener('click', this.handleCloseClick);
+        this.popup.removeEventListener('click', this.handleOverlayClick);
+        if (this.emailInput) {
+          this.emailInput.removeEventListener('input', this.handleEmailInput);
+          this.emailInput.removeEventListener('blur', this.handleEmailBlur);
+        }
+        if (this.emailSuggestionButton) this.emailSuggestionButton.removeEventListener('click', this.handleEmailSuggestionClick);
+        if (this.form) this.form.removeEventListener('submit', this.handleSubmit);
+
+        // Remove node from DOM if it is present
+        if (this.popup && this.popup.parentNode) {
+          this.popup.parentNode.removeChild(this.popup);
+        }
+
+        // Remove from registry
+        if (window.CamoSmartPopupInstances && window.CamoSmartPopupInstances[this.sectionId] === this) {
+          delete window.CamoSmartPopupInstances[this.sectionId];
+        }
+      };
+
+      // Create instance and register it
+      var instance = new CamoSmartPopup(popupEl, sectionId);
+      window.CamoSmartPopupInstances = window.CamoSmartPopupInstances || {};
+      window.CamoSmartPopupInstances[sectionId] = instance;
+
+      // Bootstrap logic
+      if (isDesignMode) {
+        instance.init();
+      } else {
+        var scheduled = false;
+        var scheduleInit = function() {
+          if (instance.destroyed || scheduled) return;
+          scheduled = true;
+          instance.initTimer = setTimeout(function() {
+            instance.initTimer = null;
+            if (instance.destroyed) return;
+            instance.runWhenIdle(function() {
+              instance.init();
+            }, 2500);
+          }, 1500);
+        };
+
+        if (document.readyState === 'loading') {
+          instance.domReadyHandler = scheduleInit;
+          document.addEventListener('DOMContentLoaded', instance.domReadyHandler, { once: true });
+        } else {
+          scheduleInit();
+        }
+      }
+    })();
+  </script>
+
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Popup with apparel tag",
+  "settings": [
+    { "type": "header", "content": "⚙️ Bật/Tắt & Cấu hình" },
+    { "type": "checkbox", "id": "enable_popup", "label": "Bật Popup", "default": true },
+    { "type": "range", "id": "delay", "min": 1, "max": 60, "step": 1, "label": "Delay (giây)", "default": 10 },
+    { "type": "range", "id": "mobile_delay", "min": 1, "max": 60, "step": 1, "label": "Delay mobile (giây)", "default": 14 },
+    { "type": "range", "id": "frequency", "min": 0, "max": 72, "step": 1, "label": "Hiện lại sau (giờ)", "default": 1, "info": "Đặt 0 để hiện mỗi lần truy cập" },
+    
+    { "type": "header", "content": "🎯 Nơi hiển thị (Display Logic)" },
+    {
+      "type": "select",
+      "id": "display_scope",
+      "label": "Phạm vi hiển thị",
+      "options": [
+        { "value": "all", "label": "Tất cả các trang" },
+        { "value": "specific", "label": "Chỉ các trang được chọn bên dưới" }
+      ],
+      "default": "all"
+    },
+    { "type": "checkbox", "id": "show_on_home", "label": "Trang chủ (Home)", "default": true },
+    { "type": "checkbox", "id": "show_on_collection", "label": "Tất cả Collection", "default": false },
+    { "type": "checkbox", "id": "show_on_product", "label": "Tất cả Sản phẩm", "default": false },
+    { "type": "checkbox", "id": "show_on_blog", "label": "Tất cả Blog/Bài viết", "default": false },
+    { "type": "checkbox", "id": "show_on_cart", "label": "Giỏ hàng (Cart)", "default": false },
+    {
+      "type": "textarea",
+      "id": "target_handles",
+      "label": "Danh sách trang cụ thể (Handles)",
+      "info": "Nhập template_suffix, cách nhau bằng dấu phẩy. VD: 'about-us, summer-sale'"
+    },
+
+    { "type": "header", "content": "🖼️ Hình ảnh" },
+    { "type": "image_picker", "id": "image", "label": "Hình ảnh (bên trái)" },
+    
+    { "type": "header", "content": "✏️ Nội dung" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "join our community" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "GET 10% OFF FOR YOUR FIRST ORDER AND LOTS OF GOOD DEALS" },
+    { "type": "textarea", "id": "description", "label": "Mô tả", "default": "join the ground:" },
+    { "type": "text", "id": "input_placeholder", "label": "Placeholder ô nhập", "default": "Your email address" },
+    { "type": "text", "id": "btn_label", "label": "Nút bấm", "default": "Subscribe" },
+    { "type": "textarea", "id": "success_message", "label": "Câu báo thành công", "default": "Thank you! Use the promo code below at checkout:" },
+    { "type": "text", "id": "coupon_code", "label": "Mã Giảm Giá", "default": "CAMO10" },
+    { "type": "text", "id": "disclaimer", "label": "Ghi chú", "default": "No spam, unsubscribe anytime. Just early promotions and new releases." },
+
+    { "type": "header", "content": "🎨 Màu sắc" },
+    { "type": "color", "id": "bg_color", "label": "Màu nền nội dung", "default": "#2C3D33" },
+    { "type": "color", "id": "text_color", "label": "Màu chữ", "default": "#ffffff" },
+    { "type": "color", "id": "input_bg", "label": "Màu nền ô nhập", "default": "#ffffff" },
+    { "type": "color", "id": "input_text", "label": "Màu chữ ô nhập", "default": "#000000" },
+    { "type": "color", "id": "btn_bg", "label": "Màu nền nút", "default": "#ffffff" },
+    { "type": "color", "id": "btn_text", "label": "Màu chữ nút", "default": "#2C3D33" },
+    { "type": "range", "id": "overlay_opacity", "min": 0, "max": 90, "step": 10, "unit": "%", "label": "Độ tối nền overlay", "default": 50 },
+
+    { "type": "header", "content": "🔤 Kiểu chữ" },
+    {
+      "type": "select",
+      "id": "font_family",
+      "label": "Phông chữ",
+      "options": [
+        { "value": "Oswald", "label": "Oswald" },
+        { "value": "Inter", "label": "Inter" },
+        { "value": "Roboto", "label": "Roboto" },
+        { "value": "Montserrat", "label": "Montserrat" },
+        { "value": "Playfair Display", "label": "Playfair Display" },
+        { "value": "Lato", "label": "Lato" },
+        { "value": "Poppins", "label": "Poppins" },
+        { "value": "Raleway", "label": "Raleway" }
+      ],
+      "default": "Oswald"
+    },
+    { "type": "range", "id": "heading_size_mobile", "min": 100, "max": 300, "step": 5, "label": "Cỡ heading (Mobile, x0.01rem)", "default": 115, "info": "115 = 1.15rem" },
+    { "type": "range", "id": "heading_size_desktop", "min": 100, "max": 400, "step": 5, "label": "Cỡ heading (Desktop, x0.01rem)", "default": 130, "info": "130 = 1.3rem" },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Độ đậm Heading",
+      "options": [
+        { "value": "400", "label": "Normal (400)" },
+        { "value": "500", "label": "Medium (500)" },
+        { "value": "600", "label": "Semi-Bold (600)" },
+        { "value": "700", "label": "Bold (700)" },
+        { "value": "900", "label": "Black (900)" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "select",
+      "id": "heading_transform",
+      "label": "Kiểu chữ Heading",
+      "options": [
+        { "value": "uppercase", "label": "IN HOA (UPPERCASE)" },
+        { "value": "capitalize", "label": "Viết Hoa Đầu Chữ (Capitalize)" },
+        { "value": "lowercase", "label": "viết thường (lowercase)" },
+        { "value": "none", "label": "Giữ nguyên (None)" }
+      ],
+      "default": "uppercase"
+    },
+
+    { "type": "header", "content": "📐 Hình dạng & Bố cục" },
+    { "type": "range", "id": "popup_max_width", "min": 600, "max": 1200, "step": 50, "unit": "px", "label": "Chiều rộng tối đa Popup", "default": 850 },
+    { "type": "range", "id": "border_radius", "min": 0, "max": 30, "step": 2, "unit": "px", "label": "Bo tròn Popup", "default": 8 },
+    { "type": "range", "id": "input_radius", "min": 0, "max": 30, "step": 2, "unit": "px", "label": "Bo tròn ô nhập & nút", "default": 12 },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Canh chữ (Desktop)",
+      "options": [
+        { "value": "left", "label": "Trái" },
+        { "value": "center", "label": "Giữa" },
+        { "value": "right", "label": "Phải" }
+      ],
+      "default": "left"
+    }
+  ],
+  "presets": [ { "name": "Popup with apparel tag" } ]
+}
+{% endschema %}

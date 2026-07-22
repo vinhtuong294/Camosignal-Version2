@@ -1,0 +1,58 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+  Snippet: Product Modal
+  Generic modal structure for product description and shipping info.
+  - id: Unique modal id (required)
+  - title: Modal title
+  - content: Modal content
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+<div id="{{ id }}" class="product-modal-overlay" aria-hidden="true" role="dialog" aria-modal="true">
+	<div class="product-modal-panel">
+		<button class="product-modal-close" aria-label="Close modal">&times;</button>
+		{% if title != blank %}
+			<h2 class="product-modal-title">{{ title }}</h2>
+		{% endif %}
+		<div class="product-modal-content rte">
+			{{ content }}
+		</div>
+	</div>
+</div>
+
+<script>
+	(function() {
+		const modal = document.getElementById('{{ id }}');
+		const closeBtn = modal.querySelector('.product-modal-close');
+
+		function openModal() {
+			modal.classList.add('is-active');
+			document.body.style.overflow = 'hidden';
+			modal.setAttribute('aria-hidden', 'false');
+			
+			// Focus trap logic could be added here
+			closeBtn.focus();
+		}
+
+		function closeModal() {
+			modal.classList.remove('is-active');
+			document.body.style.overflow = '';
+			modal.setAttribute('aria-hidden', 'true');
+		}
+
+		closeBtn.addEventListener('click', closeModal);
+		modal.addEventListener('click', (e) => {
+			if (e.target === modal) closeModal();
+		});
+
+		// Listen for custom open event
+		window.addEventListener('open-modal-{{ id }}', openModal);
+
+		// ESC key support
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape' && modal.classList.contains('is-active')) {
+				closeModal();
+			}
+		});
+	})();
+</script>

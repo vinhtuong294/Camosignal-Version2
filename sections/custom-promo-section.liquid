@@ -1,0 +1,1086 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Custom Promo Section
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign color_scheme      	           	= section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance 	= section.settings.enable_color_scheme_inheritance -%}
+{%- assign container 						= section.settings.container_width -%}
+
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- capture section_styles -%}
+	--inner-offset-top: {{ section.settings.inner_offset_top }}px;
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom }}px;
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px;
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px;
+	--container-width: {{ container_width }};
+	--section-bg-desktop: {% if section.settings.section_bg_image != blank %}url('{{ section.settings.section_bg_image | image_url: width: 2048 }}'){% else %}none{% endif %};
+	--section-bg-mobile: {% if section.settings.section_bg_image_mobile != blank %}url('{{ section.settings.section_bg_image_mobile | image_url: width: 1000 }}'){% elsif section.settings.section_bg_image != blank %}url('{{ section.settings.section_bg_image | image_url: width: 2048 }}'){% else %}none{% endif %};
+{%- endcapture -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+		background-color: var(--color-background);
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+
+	/* Nền tràn viền */
+	.custom-promo {
+		position: relative;
+		background-image: var(--section-bg-desktop);
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+		{%- if section.settings.section_bg_color != blank and section.settings.section_bg_color != 'rgba(0,0,0,0)' -%}
+			background-color: {{ section.settings.section_bg_color }} !important;
+		{%- endif -%}
+	}
+
+	.custom-promo__wrapper {
+		display: flex;
+		flex-wrap: nowrap;
+		gap: 40px;
+		padding: {{ section.settings.inner_offset_top_mobile }}px 0 {{ section.settings.inner_offset_bottom_mobile }}px;
+	}
+
+	.custom-promo__col-left {
+		flex: 0 0 45%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.custom-promo__col-right {
+		flex: 1;
+		min-width: 0;
+		display: flex;
+		align-items: center;
+		position: relative; /* Thêm position relative để neo mũi tên */
+	}
+
+	.custom-promo__banner {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: flex-start;
+		text-decoration: none;
+		background: transparent !important;
+		padding: 20px 0;
+	}
+
+	.custom-promo__banner-content {
+		position: relative;
+		z-index: 2;
+		color: #fff;
+		width: 100%;
+	}
+
+	.custom-promo__banner-logo {
+		max-width: 160px;
+		margin-bottom: 24px;
+	}
+
+	.custom-promo__banner-title {
+		font-family: {%- if section.settings.banner_title_font == 'heading' -%}var(--font-heading-family){%- else -%}var(--font-body-family){%- endif -%};
+		font-size: {{ section.settings.banner_title_size }}px;
+		font-weight: 800;
+		text-transform: uppercase;
+		line-height: 1.05;
+		margin-bottom: 16px;
+		color: {{ section.settings.banner_title_color }};
+	}
+
+	.custom-promo__banner-text {
+		font-family: var(--font-body-family);
+		font-size: {{ section.settings.banner_text_size }}px;
+		margin-bottom: 32px;
+		color: {{ section.settings.banner_text_color }};
+	}
+	
+	.custom-promo__banner-text p {
+		margin: 0;
+	}
+
+	.custom-promo__banner-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		padding: 12px 24px;
+		background-color: {{ section.settings.banner_btn_bg }};
+		color: {{ section.settings.banner_btn_text_color }};
+		font-family: var(--font-heading-family);
+		font-weight: 700;
+		font-size: 15px;
+		text-transform: uppercase;
+		text-decoration: none;
+		border-radius: 4px;
+		transition: transform 0.3s ease;
+	}
+	.custom-promo__banner:hover .custom-promo__banner-btn {
+		transform: translateX(5px);
+	}
+
+	.custom-promo__scroll-track {
+		display: flex;
+		flex-wrap: nowrap;
+		gap: 20px;
+		overflow-x: auto;
+		scrollbar-width: none;
+		-webkit-overflow-scrolling: touch;
+		padding-bottom: 15px;
+		width: 100%;
+		align-items: flex-start;
+		scroll-behavior: smooth;
+	}
+
+	.custom-promo__scroll-track::-webkit-scrollbar {
+		display: none;
+	}
+
+	/* Nút mũi tên chuyển Slide */
+	.custom-promo__nav-btn {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 44px;
+		height: 44px;
+		background: #fff;
+		border: none;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		z-index: 10;
+		box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+		color: #111;
+		transition: all 0.3s ease;
+	}
+	.custom-promo__nav-btn:hover {
+		background: #f4f4f4;
+		transform: translateY(-50%) scale(1.05);
+	}
+	.custom-promo__nav-btn svg {
+		width: 20px;
+		height: 20px;
+	}
+	.custom-promo__nav-prev {
+		left: -22px;
+	}
+	.custom-promo__nav-next {
+		right: -22px;
+	}
+	/* Ẩn mũi tên mobile trên desktop */
+	.custom-promo__nav-btn--mobile {
+		display: none !important;
+	}
+
+	.custom-promo__item {
+		flex: 0 0 var(--card-width, {{ section.settings.card_width }}px);
+		display: flex;
+		flex-direction: column;
+	}
+	
+	.custom-promo__card {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		height: auto;
+		text-decoration: none;
+		background-color: var(--card-bg, {{ section.settings.card_bg_color }});
+		border-radius: 4px;
+		overflow: hidden;
+		color: #111;
+	}
+	
+	.custom-promo__card-image {
+		width: 100%;
+		height: {{ section.settings.card_image_height }}px;
+		overflow: hidden;
+	}
+	
+	.custom-promo__card-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+
+	.custom-promo__card-content {
+		padding: {{ section.settings.card_padding }}px;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.custom-promo__card-title {
+		font-family: {%- if section.settings.card_title_font == 'heading' -%}var(--font-heading-family){%- elsif section.settings.card_title_font == 'oswald' -%}'Oswald', sans-serif{%- else -%}var(--font-body-family){%- endif -%};
+		font-size: {{ section.settings.card_title_size }}px;
+		font-weight: 700;
+		text-transform: uppercase;
+		line-height: 1.2;
+		margin: 0 0 12px 0;
+		color: var(--card-title, {{ section.settings.card_title_color }});
+	}
+
+	.custom-promo__card-body {
+		font-family: {%- if section.settings.card_text_font == 'heading' -%}var(--font-heading-family){%- elsif section.settings.card_text_font == 'oswald' -%}'Oswald', sans-serif{%- else -%}var(--font-body-family){%- endif -%};
+		font-size: {{ section.settings.card_text_size }}px;
+		color: var(--card-text, {{ section.settings.card_text_color }});
+		line-height: 1.5;
+		margin-bottom: 0;
+	}
+	
+	.custom-promo__card-body p {
+		margin: 0;
+	}
+
+	.custom-promo__card-meta {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		font-size: 11px;
+		font-weight: 700;
+		color: var(--card-text, {{ section.settings.card_text_color }});
+		text-transform: uppercase;
+		border-top: 1px solid rgba(0,0,0,0.1);
+		padding-top: 12px;
+		margin-top: 16px;
+	}
+
+	.custom-promo__meta-item {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+	}
+
+	.custom-promo__meta-item svg {
+		width: 14px;
+		height: 14px;
+		opacity: 0.7;
+	}
+
+	@media screen and (min-width: 992px) {
+		.custom-promo__wrapper {
+			padding: {{ section.settings.inner_offset_top }}px 0 {{ section.settings.inner_offset_bottom }}px;
+		}
+	}
+
+	@media (max-width: 991px) {
+		.custom-promo__wrapper {
+			flex-direction: column;
+			gap: 24px;
+		}
+		.custom-promo__col-left {
+			flex: 0 0 auto;
+			max-width: 100%;
+		}
+		.custom-promo__nav-prev { left: -10px; }
+		.custom-promo__nav-next { right: -10px; }
+	}
+	
+	@media (max-width: 767px) {
+		.custom-promo {
+			background-image: var(--section-bg-mobile);
+		}
+		.custom-promo__wrapper {
+			gap: 16px;
+		}
+		.custom-promo__banner {
+			padding: 10px 0;
+		}
+		.custom-promo__banner-title {
+			font-size: {{ section.settings.banner_title_size_mobile }}px;
+			margin-bottom: 8px;
+		}
+		.custom-promo__banner-text {
+			font-size: {{ section.settings.banner_text_size_mobile }}px;
+			margin-bottom: 16px;
+		}
+		.custom-promo__item {
+			flex: 0 0 var(--card-width-mobile, var(--card-width, {{ section.settings.card_width_mobile }}px));
+		}
+		.custom-promo__card-image {
+			height: {{ section.settings.card_image_height_mobile }}px;
+		}
+		.custom-promo__card-title {
+			font-size: {{ section.settings.card_title_size_mobile }}px;
+		}
+		.custom-promo__card-body {
+			font-size: {{ section.settings.card_text_size_mobile }}px;
+		}
+		/* Ẩn mũi tên desktop trên mobile, hiện mũi tên mobile riêng */
+		.custom-promo__nav-btn.custom-promo__nav-btn--desktop {
+			display: none !important;
+		}
+		.custom-promo__nav-btn.custom-promo__nav-btn--mobile {
+			display: flex !important;
+			width: 32px;
+			height: 32px;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+		}
+		.custom-promo__nav-btn--mobile svg {
+			width: 16px;
+			height: 16px;
+		}
+		.custom-promo__nav-btn--mobile.custom-promo__nav-prev { left: 4px; }
+		.custom-promo__nav-btn--mobile.custom-promo__nav-next { right: 4px; }
+	}
+{%- endstyle -%}
+
+<section class="custom-promo color-{{ color_scheme }} js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}"
+		 id="{{- section.id -}}" style="{{ section_styles }}"
+>
+	<div class="container" style="max-width: var(--container-width); margin: 0 auto;">
+		<div class="custom-promo__wrapper">
+			
+			<!-- Cột Trái: Banner tuỳ chỉnh nội dung (Chỉ hiện chữ) -->
+			<div class="custom-promo__col-left">
+				<div class="custom-promo__banner">
+					<div class="custom-promo__banner-content">
+						{%- if section.settings.banner_logo != blank -%}
+							<img src="{{ section.settings.banner_logo | image_url: width: 280 }}" alt="Logo" class="custom-promo__banner-logo" loading="lazy">
+						{%- endif -%}
+
+						{%- if section.settings.banner_title != blank -%}
+							<h3 class="custom-promo__banner-title">{{ section.settings.banner_title | newline_to_br }}</h3>
+						{%- endif -%}
+
+						{%- if section.settings.banner_text != blank -%}
+							<div class="custom-promo__banner-text">{{ section.settings.banner_text }}</div>
+						{%- endif -%}
+
+						{%- if section.settings.banner_btn_text != blank -%}
+							<a href="{{ section.settings.banner_link | default: '#' }}" class="custom-promo__banner-btn">
+								{{ section.settings.banner_btn_text }}
+								<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 4px;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+							</a>
+						{%- endif -%}
+					</div>
+				</div>
+			</div>
+
+			<!-- Cột Phải: Các khối Card nội dung -->
+			<div class="custom-promo__col-right">
+				{%- if section.settings.enable_arrows -%}
+					<button class="custom-promo__nav-btn custom-promo__nav-btn--desktop custom-promo__nav-prev" aria-label="Previous">
+						<svg xmlns="http://www.w3.org/0000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+					</button>
+				{%- endif -%}
+				{%- if section.settings.enable_arrows -%}
+					<button class="custom-promo__nav-btn custom-promo__nav-btn--mobile custom-promo__nav-prev" aria-label="Previous">
+						<svg xmlns="http://www.w3.org/0000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+					</button>
+				{%- endif -%}
+
+				<div class="custom-promo__scroll-track" id="promo-track-{{ section.id }}">
+					{%- for block in section.blocks -%}
+						{%- capture card_inline_styles -%}
+							{%- if block.settings.card_bg_color != blank and block.settings.card_bg_color != 'rgba(0,0,0,0)' -%}--card-bg: {{ block.settings.card_bg_color }};{%- endif -%}
+							{%- if block.settings.card_title_color != blank and block.settings.card_title_color != 'rgba(0,0,0,0)' -%}--card-title: {{ block.settings.card_title_color }};{%- endif -%}
+							{%- if block.settings.card_text_color != blank and block.settings.card_text_color != 'rgba(0,0,0,0)' -%}--card-text: {{ block.settings.card_text_color }};{%- endif -%}
+							{%- if block.settings.custom_width > 0 -%}--card-width: {{ block.settings.custom_width }}px;{%- endif -%}
+						{%- if block.settings.custom_width_mobile > 0 -%}--card-width-mobile: {{ block.settings.custom_width_mobile }}px;{%- endif -%}
+						{%- endcapture -%}
+						<div class="custom-promo__item" {{ block.shopify_attributes }} {% if card_inline_styles != blank %}style="{{ card_inline_styles }}"{% endif %}>
+							{%- if block.settings.link != blank -%}
+								<a href="{{ block.settings.link }}" class="custom-promo__card">
+							{%- else -%}
+								<div class="custom-promo__card">
+							{%- endif -%}
+								
+								<div class="custom-promo__card-image">
+									{%- if block.settings.image != blank -%}
+										<img src="{{ block.settings.image | image_url: width: 600 }}" alt="{{ block.settings.image.alt | escape | default: block.settings.title }}" loading="lazy">
+									{%- else -%}
+										<div style="background: #ccc; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+											{{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+										</div>
+									{%- endif -%}
+								</div>
+
+								<div class="custom-promo__card-content">
+									{%- if block.settings.title != blank -%}
+										<h4 class="custom-promo__card-title">{{ block.settings.title }}</h4>
+									{%- endif -%}
+
+									{%- if block.settings.text != blank -%}
+										<div class="custom-promo__card-body">{{ block.settings.text }}</div>
+									{%- endif -%}
+
+									{%- if block.settings.meta_1 != blank or block.settings.meta_2 != blank -%}
+										<div class="custom-promo__card-meta">
+											{%- if block.settings.meta_1 != blank -%}
+												<span class="custom-promo__meta-item">
+													<svg xmlns="http://www.w3.org/0000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+													{{ block.settings.meta_1 }}
+												</span>
+											{%- endif -%}
+											{%- if block.settings.meta_2 != blank -%}
+												<span class="custom-promo__meta-item">
+													<svg xmlns="http://www.w3.org/0000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+													{{ block.settings.meta_2 }}
+												</span>
+											{%- endif -%}
+										</div>
+									{%- endif -%}
+								</div>
+							{%- if block.settings.link != blank -%}
+								</a>
+							{%- else -%}
+								</div>
+							{%- endif -%}
+						</div>
+					{%- else -%}
+						<!-- Trạng thái trống (hiển thị 2 khối mẫu) -->
+						{%- for i in (1..2) -%}
+							<div class="custom-promo__item">
+								<div class="custom-promo__card">
+									<div class="custom-promo__card-image">
+										<div style="background: #ccc; width: 100%; height: 100%;">
+											{{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+										</div>
+									</div>
+									<div class="custom-promo__card-content">
+										<h4 class="custom-promo__card-title">SAMPLE RECIPE TITLE</h4>
+										<div class="custom-promo__card-body"><p>This is a sample description for your recipe card. You can customize this text.</p></div>
+										<div class="custom-promo__card-meta">
+											<span class="custom-promo__meta-item">30M PREP</span>
+											<span class="custom-promo__meta-item">20M COOK</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						{%- endfor -%}
+					{%- endfor -%}
+				</div>
+
+				{%- if section.settings.enable_arrows -%}
+					<button class="custom-promo__nav-btn custom-promo__nav-btn--desktop custom-promo__nav-next" aria-label="Next">
+						<svg xmlns="http://www.w3.org/0000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+					</button>
+				{%- endif -%}
+				{%- if section.settings.enable_arrows -%}
+					<button class="custom-promo__nav-btn custom-promo__nav-btn--mobile custom-promo__nav-next" aria-label="Next">
+						<svg xmlns="http://www.w3.org/0000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+					</button>
+				{%- endif -%}
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		const section = document.getElementById('shopify-section-{{- section.id -}}');
+		if (!section) return;
+		
+		const track = section.querySelector('#promo-track-{{ section.id }}');
+		if (!track) return;
+
+		// --- Tính năng Kéo/Thả bằng Chuột trên Desktop (Drag to Scroll) ---
+		let isDown = false;
+		let startX;
+		let scrollLeft;
+
+		// Khi di chuột vào track, con trỏ sẽ có hình bàn tay
+		track.style.cursor = 'grab';
+
+		track.addEventListener('mousedown', (e) => {
+			isDown = true;
+			track.style.cursor = 'grabbing'; // Bàn tay đang nắm
+			startX = e.pageX - track.offsetLeft;
+			scrollLeft = track.scrollLeft;
+			track.style.scrollBehavior = 'auto'; // Tắt smooth khi đang kéo bằng tay
+		});
+
+		track.addEventListener('mouseleave', () => {
+			isDown = false;
+			track.style.cursor = 'grab';
+			track.style.scrollBehavior = 'smooth';
+		});
+
+		track.addEventListener('mouseup', () => {
+			isDown = false;
+			track.style.cursor = 'grab';
+			track.style.scrollBehavior = 'smooth';
+		});
+
+		track.addEventListener('mousemove', (e) => {
+			if (!isDown) return;
+			e.preventDefault();
+			const x = e.pageX - track.offsetLeft;
+			const walk = (x - startX) * 1.5; // Tốc độ cuộn khi kéo
+			track.scrollLeft = scrollLeft - walk;
+		});
+
+		// --- Tính năng Nút Mũi Tên (nếu được bật) ---
+		const prevBtns = section.querySelectorAll('.custom-promo__nav-prev');
+		const nextBtns = section.querySelectorAll('.custom-promo__nav-next');
+		
+		if (prevBtns.length && nextBtns.length) {
+			const scrollAmount = 340; 
+			
+			nextBtns.forEach(btn => {
+				btn.addEventListener('click', (e) => {
+					e.preventDefault();
+					track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+				});
+			});
+			
+			prevBtns.forEach(btn => {
+				btn.addEventListener('click', (e) => {
+					e.preventDefault();
+					track.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+				});
+			});
+
+			const updateArrows = () => {
+				const hidePrev = track.scrollLeft <= 5;
+				const maxScroll = track.scrollWidth - track.clientWidth;
+				const hideNext = track.scrollLeft >= maxScroll - 5;
+
+				prevBtns.forEach(btn => {
+					btn.style.opacity = hidePrev ? '0' : '1';
+					btn.style.pointerEvents = hidePrev ? 'none' : 'auto';
+				});
+				nextBtns.forEach(btn => {
+					btn.style.opacity = hideNext ? '0' : '1';
+					btn.style.pointerEvents = hideNext ? 'none' : 'auto';
+				});
+			};
+			
+			track.addEventListener('scroll', updateArrows);
+			window.addEventListener('resize', updateArrows);
+			setTimeout(updateArrows, 100);
+		}
+	});
+</script>
+
+{%- schema -%}
+{
+	"name": "Custom Promo Banner",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "Ảnh nền (Backgrounds)"
+		},
+		{
+			"type": "image_picker",
+			"id": "section_bg_image",
+			"label": "Ảnh nền Desktop",
+			"info": "Bao phủ tràn màn hình máy tính (khuyên dùng tỷ lệ ngang dài)."
+		},
+		{
+			"type": "image_picker",
+			"id": "section_bg_image_mobile",
+			"label": "Ảnh nền Mobile",
+			"info": "Bao phủ màn hình điện thoại (khuyên dùng tỷ lệ vuông hoặc dọc)."
+		},
+		{
+			"type": "color",
+			"id": "section_bg_color",
+			"label": "Màu nền phụ (dự phòng)",
+			"default": "transparent"
+		},
+		{
+			"type": "header",
+			"content": "Cột Trái - Desktop (Left Banner)"
+		},
+		{
+			"type": "image_picker",
+			"id": "banner_logo",
+			"label": "Logo (tuỳ chọn)"
+		},
+		{
+			"type": "textarea",
+			"id": "banner_title",
+			"label": "Tiêu đề lớn",
+			"default": "WILD GAME\nRECIPES"
+		},
+		{
+			"type": "select",
+			"id": "banner_title_font",
+			"label": "Phông chữ Tiêu đề trái",
+			"options": [
+				{ "value": "heading", "label": "Phông chữ Tiêu đề chung" },
+				{ "value": "body", "label": "Phông chữ Nội dung chung" }
+			],
+			"default": "heading"
+		},
+		{
+			"type": "range",
+			"id": "banner_title_size",
+			"min": 24,
+			"max": 100,
+			"step": 2,
+			"unit": "px",
+			"label": "Cỡ chữ Tiêu đề (Desktop)",
+			"default": 64
+		},
+		{
+			"type": "color",
+			"id": "banner_title_color",
+			"label": "Màu chữ Tiêu đề trái",
+			"default": "#faf6ee"
+		},
+		{
+			"type": "richtext",
+			"id": "banner_text",
+			"label": "Đoạn văn ngắn",
+			"default": "<p>Exclusive collection of tasty wild game recipes</p>"
+		},
+		{
+			"type": "range",
+			"id": "banner_text_size",
+			"min": 12,
+			"max": 36,
+			"step": 1,
+			"unit": "px",
+			"label": "Cỡ chữ Đoạn văn (Desktop)",
+			"default": 16
+		},
+		{
+			"type": "color",
+			"id": "banner_text_color",
+			"label": "Màu chữ Đoạn văn trái",
+			"default": "#faf6ee"
+		},
+		{
+			"type": "text",
+			"id": "banner_btn_text",
+			"label": "Chữ trên nút",
+			"default": "VIEW ALL RECIPES"
+		},
+		{
+			"type": "color",
+			"id": "banner_btn_bg",
+			"label": "Màu nền nút",
+			"default": "#e6a822"
+		},
+		{
+			"type": "color",
+			"id": "banner_btn_text_color",
+			"label": "Màu chữ nút",
+			"default": "#000000"
+		},
+		{
+			"type": "url",
+			"id": "banner_link",
+			"label": "Link khi nhấn nút"
+		},
+		{
+			"type": "header",
+			"content": "Cột Phải - Desktop (Cards)"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_arrows",
+			"label": "Hiển thị mũi tên chuyển slide (Trên máy tính)",
+			"default": true
+		},
+		{
+			"type": "range",
+			"id": "card_width",
+			"min": 200,
+			"max": 700,
+			"step": 10,
+			"unit": "px",
+			"label": "Chiều rộng Thẻ (Desktop)",
+			"default": 550
+		},
+		{
+			"type": "range",
+			"id": "card_image_height",
+			"min": 150,
+			"max": 400,
+			"step": 10,
+			"unit": "px",
+			"label": "Chiều cao Ảnh Thẻ (Desktop)",
+			"default": 300
+		},
+		{
+			"type": "range",
+			"id": "card_padding",
+			"min": 10,
+			"max": 50,
+			"step": 1,
+			"unit": "px",
+			"label": "Khoảng đệm (Padding) Thẻ",
+			"default": 24
+		},
+		{
+			"type": "color",
+			"id": "card_bg_color",
+			"label": "Màu nền Thẻ (Chung)",
+			"default": "#dfdbce"
+		},
+		{
+			"type": "select",
+			"id": "card_title_font",
+			"label": "Phông chữ Tiêu đề Thẻ",
+			"options": [
+				{ "value": "heading", "label": "Phông chữ Tiêu đề chung" },
+				{ "value": "body", "label": "Phông chữ Nội dung chung" },
+				{ "value": "oswald", "label": "Oswald" }
+			],
+			"default": "heading"
+		},
+		{
+			"type": "range",
+			"id": "card_title_size",
+			"min": 14,
+			"max": 40,
+			"step": 1,
+			"unit": "px",
+			"label": "Cỡ chữ Tiêu đề Thẻ (Desktop)",
+			"default": 20
+		},
+		{
+			"type": "color",
+			"id": "card_title_color",
+			"label": "Màu chữ Tiêu đề Thẻ (Chung)",
+			"default": "#111111"
+		},
+		{
+			"type": "select",
+			"id": "card_text_font",
+			"label": "Phông chữ Nội dung Thẻ",
+			"options": [
+				{ "value": "heading", "label": "Phông chữ Tiêu đề chung" },
+				{ "value": "body", "label": "Phông chữ Nội dung chung" },
+				{ "value": "oswald", "label": "Oswald" }
+			],
+			"default": "oswald"
+		},
+		{
+			"type": "range",
+			"id": "card_text_size",
+			"min": 12,
+			"max": 24,
+			"step": 1,
+			"unit": "px",
+			"label": "Cỡ chữ Nội dung Thẻ (Desktop)",
+			"default": 14
+		},
+		{
+			"type": "color",
+			"id": "card_text_color",
+			"label": "Màu chữ Nội dung Thẻ (Chung)",
+			"default": "#2C3D33"
+		},
+		{
+			"type": "header",
+			"content": "📱 Thiết lập riêng cho MOBILE"
+		},
+		{
+			"type": "range",
+			"id": "banner_title_size_mobile",
+			"min": 16,
+			"max": 80,
+			"step": 1,
+			"unit": "px",
+			"label": "Cỡ chữ Tiêu đề trái (Mobile)",
+			"default": 48
+		},
+		{
+			"type": "range",
+			"id": "banner_text_size_mobile",
+			"min": 12,
+			"max": 24,
+			"step": 1,
+			"unit": "px",
+			"label": "Cỡ chữ Đoạn văn (Mobile)",
+			"default": 15
+		},
+		{
+			"type": "range",
+			"id": "card_width_mobile",
+			"min": 150,
+			"max": 400,
+			"step": 10,
+			"unit": "px",
+			"label": "Chiều rộng Thẻ (Mobile)",
+			"default": 260
+		},
+		{
+			"type": "range",
+			"id": "card_image_height_mobile",
+			"min": 100,
+			"max": 300,
+			"step": 10,
+			"unit": "px",
+			"label": "Chiều cao Ảnh Thẻ (Mobile)",
+			"default": 180
+		},
+		{
+			"type": "range",
+			"id": "card_title_size_mobile",
+			"min": 12,
+			"max": 32,
+			"step": 1,
+			"unit": "px",
+			"label": "Cỡ chữ Tiêu đề Thẻ (Mobile)",
+			"default": 18
+		},
+		{
+			"type": "range",
+			"id": "card_text_size_mobile",
+			"min": 10,
+			"max": 20,
+			"step": 1,
+			"unit": "px",
+			"label": "Cỡ chữ Nội dung Thẻ (Mobile)",
+			"default": 13
+		},
+
+		{
+			"type": "header",
+			"content": "Cấu trúc & Căn lề"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Kế thừa màu sắc Theme",
+			"default": true
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Bảng màu",
+			"default": "scheme-1"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Độ rộng Container nội dung",
+			"options": [
+				{
+					"value": "1808px",
+					"label": "Mặc định - 1680px"
+				},
+				{
+					"value": "2048px",
+					"label": "Lớn - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Toàn màn hình"
+				},
+				{
+					"value": "inherit",
+					"label": "Kế thừa từ Theme"
+				}
+			],
+			"default": "inherit"
+		},
+		{
+			"type": "paragraph",
+			"content": "Margin (Khoảng cách ngoài viền rách)"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop trên",
+			"default": 60
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop dưới",
+			"default": 60
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile trên",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile dưới",
+			"default": 30
+		},
+		{
+			"type": "paragraph",
+			"content": "Padding (Đệm lùi chữ vào trong)"
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 200,
+			"step": 2,
+			"unit": "px",
+			"label": "Desktop đệm trên",
+			"default": 80
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 200,
+			"step": 2,
+			"unit": "px",
+			"label": "Desktop đệm dưới",
+			"default": 80
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 150,
+			"step": 2,
+			"unit": "px",
+			"label": "Mobile đệm trên",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 150,
+			"step": 2,
+			"unit": "px",
+			"label": "Mobile đệm dưới",
+			"default": 40
+		}
+	],
+	"blocks": [
+		{
+			"type": "card",
+			"name": "Thẻ nội dung (Card)",
+			"settings": [
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "Ảnh minh hoạ"
+				},
+				{
+					"type": "text",
+					"id": "title",
+					"label": "Tiêu đề (Title)",
+					"default": "MÓN ĂN MỚI"
+				},
+				{
+					"type": "richtext",
+					"id": "text",
+					"label": "Nội dung (Body)",
+					"default": "<p>Mô tả ngắn gọn về món ăn này ở đây.</p>"
+				},
+				{
+					"type": "text",
+					"id": "meta_1",
+					"label": "Thông tin phụ 1 (VD: 30M PREP)"
+				},
+				{
+					"type": "text",
+					"id": "meta_2",
+					"label": "Thông tin phụ 2 (VD: 20M COOK)"
+				},
+				{
+					"type": "url",
+					"id": "link",
+					"label": "Đường link khi click vào thẻ"
+				},
+				{
+					"type": "header",
+					"content": "Kích thước & Màu sắc riêng (Tuỳ chọn)"
+				},
+				{
+					"type": "range",
+					"id": "custom_width",
+					"min": 0,
+					"max": 600,
+					"step": 10,
+					"unit": "px",
+					"label": "Chiều rộng thẻ này (Desktop)",
+					"info": "Kéo về 0 để dùng kích thước chung. Kéo lên lớn hơn 0 để tuỳ chỉnh riêng.",
+					"default": 0
+				},
+				{
+					"type": "range",
+					"id": "custom_width_mobile",
+					"min": 0,
+					"max": 400,
+					"step": 10,
+					"unit": "px",
+					"label": "Chiều rộng thẻ này (Mobile)",
+					"info": "Kéo về 0 để dùng kích thước chung. Kéo lên lớn hơn 0 để tuỳ chỉnh riêng.",
+					"default": 0
+				},
+				{
+					"type": "color",
+					"id": "card_bg_color",
+					"label": "Màu nền thẻ",
+					"info": "Để trống nếu muốn dùng màu nền chung của mục Section."
+				},
+				{
+					"type": "color",
+					"id": "card_title_color",
+					"label": "Màu chữ Tiêu đề thẻ",
+					"info": "Để trống nếu muốn dùng màu nền chung của mục Section."
+				},
+				{
+					"type": "color",
+					"id": "card_text_color",
+					"label": "Màu chữ Nội dung thẻ",
+					"info": "Để trống nếu muốn dùng màu nền chung của mục Section."
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Custom Promo Banner",
+			"blocks": [
+				{
+					"type": "card"
+				},
+				{
+					"type": "card"
+				}
+			]
+		}
+	]
+}
+{%- endschema -%}

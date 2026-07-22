@@ -1,0 +1,391 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Gift card
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign color_scheme      	           	= section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance 	= section.settings.enable_color_scheme_inheritance -%}
+{%- assign default_title 					= 'gift_cards.issued.subtext' | t -%}
+{%- assign title 							= section.settings.title | default: default_title -%}
+{%- assign logo								= section.settings.logo -%}
+{%- assign logo_width						= section.settings.logo_width -%}
+{%- assign gift_card_image_placeholder		= section.settings.gift_card_image_placeholder -%}
+{%- assign start_shopping_button_type		= section.settings.start_shopping_button_type -%}
+{%- assign print_button_type				= section.settings.print_button_type -%}
+{%- assign shop_link_label                  = 'gift_cards.issued.shop_link' | t -%}
+{%- assign print_label                  	= 'gift_cards.issued.print' | t -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- capture styles -%}
+	--inner-offset-top: {{- section.settings.inner_offset_top -}}px; {{-  -}}
+	--inner-offset-bottom: {{- section.settings.inner_offset_bottom -}}px; {{-  -}}
+	--inner-offset-top-mobile: {{- section.settings.inner_offset_top_mobile -}}px; {{-  -}}
+	--inner-offset-bottom-mobile: {{- section.settings.inner_offset_bottom_mobile -}}px; {{-  -}}
+{%- endcapture -%}
+
+<div class="gift-card color-{{ color_scheme }}" style="{{- styles -}}">
+	<div class="gift-card__container">
+		<div class="h2 gift-card__shop-name">
+			{%- if logo != blank -%}
+				{%- assign logo_alt = logo.alt | default: shop.name | escape -%}
+				{%- assign logo_height = logo_width | divided_by: logo.aspect_ratio | round: 0 -%}
+				{%- assign logo_width_x2 = logo_width | times: 2 -%}
+
+				{%- capture img_focal -%}
+					--img-desktop-pos: {{ logo.presentation.focal_point }};
+				{%- endcapture -%}
+
+				<img
+					class="gift-card__logo"
+					src="{{ logo | image_url: width: logo_width }}"
+					srcset="{{ logo | image_url: width: logo_width }} 1x, {{ logo | image_url: width: logo_width_x2 }} 2x"
+					width="{{ logo_width }}"
+					height="{{ logo_height }}"
+					style="{{ img_focal }}"
+					alt="{{- logo_alt -}}"
+					fetchpriority="high"
+					loading="eager"
+				/>
+			{%- else -%}
+				{{- shop.name -}}
+			{%- endif -%}
+		</div>
+
+		<div class="gift-card__header">
+			<h1 class="gift-card__title">
+				{{- title -}}
+			</h1>
+
+			<p class="gift-card__value h3">
+				{%- if settings.currency_code_enabled -%}
+					{{- gift_card.initial_value | money_with_currency -}}
+				{%- else %}
+					{{- gift_card.initial_value | money -}}
+				{%- endif -%}
+			</p>
+		</div>
+
+		{%- unless gift_card.enabled -%}
+			<p class="badge badge--sold-out">
+				{{- 'gift_cards.issued.disabled' | t -}}
+			</p>
+		{%- endunless -%}
+
+		{%- assign gift_card_expiry_date = gift_card.expires_on | date: "%d/%m/%y" -%}
+
+		{%- if gift_card.expired and gift_card.enabled -%}
+			<p class="badge badge--sold-out">
+				{{- 'gift_cards.issued.expired' | t: expiry: gift_card_expiry_date -}}
+			</p>
+		{%- endif -%}
+
+		{%- if gift_card.expired != true and gift_card.expires_on and gift_card.enabled -%}
+			<p class="badge">
+				{{- 'gift_cards.issued.active' | t: expiry: gift_card_expiry_date -}}
+			</p>
+		{%- endif -%}
+
+		<div class="gift-card__body">
+			{%- assign currentVariant = nil -%}
+
+			{%- for variant in gift_card.product.variants  -%}
+				{%- if variant.price == gift_card.initial_value -%}
+					{%- assign currentVariant = variant -%}
+					{%- break -%}
+				{%- endif -%}
+			{%- endfor -%}
+
+			{%- assign gift_card_image = currentVariant.featured_image | default: gift_card_image_placeholder -%}
+
+			{%- assign gift_card_image_aspect_ratio = gift_card_image.aspect_ratio -%}
+
+			{%- if gift_card_image -%}
+				<div class="gift-card__image-wrapper">
+					<picture class="gift-card__image-picture">
+						<source
+							srcset="{{ gift_card_image | image_url: width: 348 }} 1x, {{ gift_card_image | image_url: width: 696 }} 2x"
+							media="(max-width: 380px)"
+						/>
+
+						<source
+							srcset="{{ gift_card_image | image_url: width: 448 }} 1x, {{ gift_card_image | image_url: width: 896 }} 2x"
+							media="(max-width: 480px)"
+						/>
+
+						<source
+							srcset="{{ gift_card_image | image_url: width: 544 }} 1x, {{ gift_card_image | image_url: width: 1088 }} 2x"
+							media="(max-width: 575px)"
+						/>
+
+						<source
+							srcset="{{- gift_card_image | image_url: width: 668 -}} 1x, {{- gift_card_image | image_url: width: 1336 -}} 2x"
+							media="(max-width: 991px)"
+						/>
+
+						<img
+							class="gift-card__image"
+							src="{{- gift_card_image | image_url: width: 512 -}}"
+							srcset="{{- gift_card_image | image_url: width: 512 -}} 1x, {{- gift_card_image | image_url: width: 1024 -}} 2x"
+							alt="{%- if currentVariant != nil -%}{{- currentVariant.featured_image.alt -}}{%- else -%}{{- 'gift_cards.issued.gift_card_image_alt' | t -}}{%- endif -%}"
+							{% if gift_card_image_aspect_ratio %}style="aspect-ratio: {{ gift_card_image_aspect_ratio }};" {% endif %}
+							loading="eager"
+							fetchpriority="high"
+						>
+					</picture>
+				</div>
+			{%- endif -%}
+
+			<div class="gift-card__content">
+				<div class="gift-card__qr-code gift-card-qr" data-identifier="{{ gift_card.qr_identifier }}"></div>
+
+				<input
+					type="text"
+					class="gift-card__number"
+					id="GiftCardDigits"
+					value="{{ gift_card.code | format_code }}"
+					aria-label="{{ 'gift_cards.issued.gift_card_code' | t | escape }}"
+					readonly
+				/>
+
+				<div class="gift-card__copy-code">
+					<button class="gift-card__copy-link button-link focus-visible-outline">
+						{%- render 'icons', icon: 'copy-3' -%}
+
+						<span data-text="{{- 'gift_cards.issued.copy_code' | t -}}">
+							<span>{{- 'gift_cards.issued.copy_code' | t -}}</span>
+						</span>
+					</button>
+
+					<span
+						class="gift-card__copy-success"
+						role="status"
+					></span>
+
+					<template>
+						{%- render "icons", icon: "check" %}{{ 'gift_cards.issued.copy_code_success' | t -}}
+					</template>
+				</div>
+			</div>
+		</div>
+
+		<div class="gift-card__footer">
+			<p class="gift-card__redeem">
+				{{- 'gift_cards.issued.redeem_html' | t: value: formatted_initial_value_stripped -}}
+			</p>
+
+			<div class="gift-card__buttons-wrapper">
+				<a
+					href="{{ shop.url }}"
+					class="button button--{{- start_shopping_button_type -}}"
+					target="_blank"
+					rel="noopener"
+					rel="nofollow"
+					aria-describedby="a11y-new-window-message"
+				>
+					{%- if start_shopping_button_type == 'primary' -%}
+						{{- shop_link_label -}}
+					{%- else -%}
+						<span data-text="{{- shop_link_label -}}">
+							<span>{{- shop_link_label -}}</span>
+						</span>
+					{%- endif -%}
+				</a>
+
+				<button
+					type="button"
+					class="button button--{{- print_button_type -}}"
+					onclick="window.print();"
+				>
+					{%- if print_button_type == 'primary' -%}
+						{{- print_label -}}
+					{%- else -%}
+						<span data-text="{{- print_label -}}">
+							<span>{{- print_label -}}</span>
+						</span>
+					{%- endif -%}
+				</button>
+			</div>
+
+			{%- if gift_card.pass_url -%}
+				<a class="gift-card__apple-wallet" href="{{ gift_card.pass_url }}">
+					<img
+						id="apple-wallet-badge"
+						class="gift-card__apple-wallet-image"
+						src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}"
+						width="120"
+						height="40"
+						alt="{{ 'gift_cards.issued.add_to_apple_wallet' | t }}"
+						loading="lazy"
+						fetchpriority="low"
+					>
+				</a>
+			{%- endif -%}
+		</div>
+	</div>
+</div>
+
+<script>
+	let string = { qrImageAlt: {{ 'gift_cards.issued.qr_image_alt' | t | json }} };
+
+	document.addEventListener('DOMContentLoaded', function() {
+		new QRCode( document.querySelector('.gift-card__qr-code'), {
+			text: document.querySelector('.gift-card__qr-code').dataset.identifier,
+			width: 120,
+			height: 120,
+			imageAltText: string.qrImageAlt
+		});
+	});
+
+	let template = document.getElementsByTagName("template")[0];
+	let clonedTemplate = template.content.cloneNode(true);
+	let isMessageDisplayed = false;
+	let copyLink = document.querySelector('.gift-card__copy-link');
+
+	copyLink.addEventListener('click',function() {
+		navigator.clipboard.writeText(document.querySelector('.gift-card__number').value).then(function () {
+			if (!isMessageDisplayed) {
+				document.querySelector('.gift-card__copy-success')?.appendChild(clonedTemplate);
+				document.querySelector('.gift-card__copy-success')?.classList.add('show');
+				isMessageDisplayed = true
+			}
+		});
+	});
+</script>
+
+{% schema %}
+{
+	"name": "Gift card",
+	"class": "gift-card-section",
+	"settings": [
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "General"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "title",
+			"label": "Heading",
+			"default": "Your gift card"
+		},
+		{
+			"type": "image_picker",
+			"id": "logo",
+			"label": "Logo"
+		},
+		{
+			"type": "range",
+			"id": "logo_width",
+			"min": 20,
+			"max": 250,
+			"step": 5,
+			"default": 125,
+			"unit": "px",
+			"label": "Logo width",
+			"info": "Height will be calculated with logo aspect ratio."
+		},
+		{
+			"type": "image_picker",
+			"id": "gift_card_image_placeholder",
+			"label": "Gift card default image",
+			"info": "Used for default gift card image.The image for the Gift will be obtained from the product, which means you can assign images to different card options."
+		},
+		{
+			"type": "select",
+			"id": "start_shopping_button_type",
+			"label": "Start shopping button style",
+			"options": [
+				{
+					"value": "primary",
+					"label": "Primary"
+				},
+				{
+					"value": "secondary",
+					"label": "Secondary"
+				}
+			],
+			"default": "secondary"
+		},
+		{
+			"type": "select",
+			"id": "print_button_type",
+			"label": "Print button style",
+			"options": [
+				{
+					"value": "primary",
+					"label": "Primary"
+				},
+				{
+					"value": "secondary",
+					"label": "Secondary"
+				}
+			],
+			"default": "primary"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset top",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset bottom",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset top",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset bottom",
+			"default": 32
+		}
+	]
+}
+{% endschema %}

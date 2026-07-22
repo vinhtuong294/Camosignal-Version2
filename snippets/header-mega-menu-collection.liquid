@@ -1,0 +1,1303 @@
+{%- comment -%}
+	Mega Menu Collection
+	- SHOP: Gender + Clothing + product cards
+	- COLLECTION: Featured + Independence Day + Hunting + Fishing
+{%- endcomment -%}
+
+<div
+	id="headerDesktopMenu:{{- first_level_link.title | handleize -}}-{{- first_level_index -}}"
+	class="header-mega-desktop js-header-dropdown-menu"
+>
+	{%- if is_hunting_menu -%}
+		{%- assign hunting_handles = 'turkey,deer,hunting-spirit' | split: ',' -%}
+		{%- assign hunting_labels = 'Turkey,Deer,All Hunting' | split: ',' -%}
+		<div class="header-mega-desktop__inner mega-fishing-shop">
+			<ul class="mega-block__list mega-shop-clothing-nav mega-fishing-nav">
+				{%- for hunting_handle in hunting_handles -%}
+					{%- assign hunting_collection = collections[hunting_handle] -%}
+					{%- assign hunting_url = routes.collections_url | append: '/' | append: hunting_handle -%}
+					{%- if hunting_collection != blank -%}
+						{%- assign hunting_url = hunting_collection.url -%}
+					{%- endif -%}
+					<li><a href="{{ hunting_url }}" class="mega-block__link">{{ hunting_labels[forloop.index0] | escape }}</a></li>
+				{%- endfor -%}
+			</ul>
+
+			<div class="mega-shop-products mega-fishing-products">
+				{%- for hunting_handle in hunting_handles -%}
+					{%- assign hunting_collection = collections[hunting_handle] -%}
+					{%- assign hunting_label = hunting_labels[forloop.index0] -%}
+					{%- assign hunting_url = routes.collections_url | append: '/' | append: hunting_handle -%}
+					{%- assign hunting_product = blank -%}
+					{%- if forloop.index0 == 0 -%}
+						{%- assign hunting_product = section.settings.hunting_mega_turkey_product -%}
+					{%- elsif forloop.index0 == 1 -%}
+						{%- assign hunting_product = section.settings.hunting_mega_deer_product -%}
+					{%- endif -%}
+					{%- assign hunting_image = blank -%}
+					{%- if hunting_collection != blank -%}
+						{%- assign hunting_url = hunting_collection.url -%}
+						{%- if hunting_product == blank -%}
+							{%- if forloop.index0 == 0 or forloop.index0 == 1 -%}
+								{%- assign hunting_product = hunting_collection.products.first -%}
+							{%- endif -%}
+						{%- endif -%}
+					{%- endif -%}
+					{%- assign hunting_product_url = hunting_url -%}
+					{%- assign hunting_title = hunting_label -%}
+					{%- if hunting_product != blank -%}
+						{%- assign hunting_product_url = hunting_product.url -%}
+						{%- assign hunting_title = hunting_product.title -%}
+						{%- assign hunting_image = hunting_product.featured_image -%}
+					{%- elsif hunting_collection != blank -%}
+						{%- assign hunting_image = hunting_collection.image -%}
+						{%- if hunting_image == blank and hunting_collection.products.first.featured_image != blank -%}
+							{%- assign hunting_image = hunting_collection.products.first.featured_image -%}
+						{%- endif -%}
+					{%- endif -%}
+					<div class="mega-shop-product mega-fishing-product product-card">
+						<a href="{{ hunting_product_url }}" class="mega-shop-product__image-link" aria-label="{{ hunting_title | escape }}">
+							<span class="mega-shop-product__media">
+								{%- if hunting_image != blank -%}
+									<img src="{{ hunting_image | image_url: width: 800 }}" alt="{{ hunting_image.alt | default: hunting_title | escape }}" class="mega-shop-product__image" width="800" height="1000" loading="lazy">
+								{%- else -%}
+									<span class="mega-fishing-product__placeholder">{{ hunting_label | escape }}</span>
+								{%- endif -%}
+							</span>
+						</a>
+						<div class="mega-shop-product__footer">
+							<a href="{{ hunting_product_url }}" class="mega-shop-product__title">{{ hunting_title | escape }}</a>
+							<a href="{{ hunting_url }}" class="mega-shop-product__meta mega-shop-product__meta-link" aria-label="View all {{ hunting_label | escape }}">
+								<span>{{ hunting_label | escape }}</span>
+								<span class="mega-shop-product__view-all">View All <span aria-hidden="true">&gt;</span></span>
+							</a>
+						</div>
+					</div>
+				{%- endfor -%}
+			</div>
+		</div>
+	{%- elsif is_fishing_menu -%}
+		{%- assign fishing_all_col = collections['fishing'] -%}
+		{%- assign fishing_all_url = header_link_url | default: first_level_link.url -%}
+		{%- if fishing_all_url == blank or fishing_all_url == '#' -%}
+			{%- assign fishing_all_url = routes.collections_url | append: '/fishing' -%}
+			{%- if fishing_all_col != blank -%}
+				{%- assign fishing_all_url = fishing_all_col.url -%}
+			{%- endif -%}
+		{%- endif -%}
+		{%- assign fishing_fresh_col = collections['fishing-t-shirt'] -%}
+		{%- assign fishing_fresh_url = routes.collections_url | append: '/fishing-t-shirt' -%}
+		{%- if fishing_fresh_col != blank -%}
+			{%- assign fishing_fresh_url = fishing_fresh_col.url -%}
+		{%- endif -%}
+		{%- assign fishing_salt_col = collections['saltwater-fishing'] -%}
+		{%- if fishing_salt_col == blank -%}
+			{%- assign fishing_salt_col = collections['saltwater-fishing-t-shirt'] -%}
+		{%- endif -%}
+		{%- assign fishing_salt_url = routes.collections_url | append: '/saltwater-fishing' -%}
+		{%- if fishing_salt_col != blank -%}
+			{%- assign fishing_salt_url = fishing_salt_col.url -%}
+		{%- endif -%}
+
+		{%- assign fishing_show_products = true -%}
+		{%- if section.settings.fishing_mega_show_products == false -%}
+			{%- assign fishing_show_products = false -%}
+		{%- endif -%}
+		{%- assign fishing_all_product = section.settings.fishing_mega_all_product -%}
+		{%- assign fishing_fresh_product = section.settings.fishing_mega_freshwater_product -%}
+		{%- assign fishing_salt_product = section.settings.fishing_mega_saltwater_product -%}
+
+		{%- assign fishing_all_image = blank -%}
+		{%- if fishing_all_product.featured_image != blank -%}
+			{%- assign fishing_all_image = fishing_all_product.featured_image -%}
+		{%- endif -%}
+		{%- assign fishing_fresh_image = blank -%}
+		{%- if fishing_fresh_product.featured_image != blank -%}
+			{%- assign fishing_fresh_image = fishing_fresh_product.featured_image -%}
+		{%- endif -%}
+		{%- assign fishing_salt_image = blank -%}
+		{%- if fishing_salt_product.featured_image != blank -%}
+			{%- assign fishing_salt_image = fishing_salt_product.featured_image -%}
+		{%- endif -%}
+
+		{%- assign fishing_all_product_url = fishing_all_url -%}
+		{%- if fishing_all_product != blank -%}
+			{%- assign fishing_all_product_url = fishing_all_product.url -%}
+		{%- endif -%}
+		{%- assign fishing_fresh_product_url = fishing_fresh_url -%}
+		{%- assign fishing_salt_product_url = fishing_salt_url -%}
+		{%- if fishing_salt_product != blank -%}
+			{%- assign fishing_salt_product_url = fishing_salt_product.url -%}
+		{%- endif -%}
+
+		{%- assign fishing_all_title = fishing_all_product.title | default: 'All Fishing' -%}
+		{%- assign fishing_fresh_title = fishing_fresh_product.title | default: 'Freshwater Fishing' -%}
+		{%- assign fishing_salt_title = fishing_salt_product.title | default: 'Saltwater Fishing' -%}
+
+		<div class="header-mega-desktop__inner mega-fishing-shop mega-fishing-shop--fishing">
+			<ul class="mega-block__list mega-shop-clothing-nav mega-fishing-nav">
+				<li><a href="{{ fishing_salt_url }}" class="mega-block__link">Saltwater Fishing</a></li>
+				<li><a href="{{ fishing_fresh_url }}" class="mega-block__link">Fresh Water Fishing</a></li>
+				<li><a href="{{ fishing_all_url }}" class="mega-block__link">All Fishing</a></li>
+			</ul>
+
+			{%- if fishing_show_products -%}
+			<div class="mega-shop-products mega-fishing-products">
+				<div class="mega-shop-product mega-fishing-product product-card">
+					<a href="{{ fishing_salt_product_url }}" class="mega-shop-product__image-link" aria-label="{{ fishing_salt_title | escape }}">
+						<span class="mega-shop-product__media">
+							{%- if fishing_salt_image != blank -%}
+								<img src="{{ fishing_salt_image | image_url: width: 800 }}" alt="{{ fishing_salt_image.alt | default: fishing_salt_title | escape }}" class="mega-shop-product__image" width="800" height="1000" loading="lazy">
+							{%- else -%}
+								<span class="mega-fishing-product__placeholder">Saltwater</span>
+							{%- endif -%}
+						</span>
+					</a>
+					<div class="mega-shop-product__footer">
+						<a href="{{ fishing_salt_url }}" class="mega-shop-product__meta mega-shop-product__meta-link" aria-label="View all Saltwater Fishing">
+							<span>Saltwater Fishing</span>
+							<span class="mega-shop-product__view-all">View All <span aria-hidden="true">&gt;</span></span>
+						</a>
+					</div>
+				</div>
+
+				<div class="mega-shop-product mega-fishing-product product-card">
+					<a href="{{ fishing_fresh_product_url }}" class="mega-shop-product__image-link" aria-label="{{ fishing_fresh_title | escape }}">
+						<span class="mega-shop-product__media">
+							{%- if fishing_fresh_image != blank -%}
+								<img src="{{ fishing_fresh_image | image_url: width: 800 }}" alt="{{ fishing_fresh_image.alt | default: fishing_fresh_title | escape }}" class="mega-shop-product__image" width="800" height="1000" loading="lazy">
+							{%- else -%}
+								<span class="mega-fishing-product__placeholder">Freshwater</span>
+							{%- endif -%}
+						</span>
+					</a>
+					<div class="mega-shop-product__footer">
+						<a href="{{ fishing_fresh_url }}" class="mega-shop-product__meta mega-shop-product__meta-link" aria-label="View all Fresh Water Fishing">
+							<span>Fresh Water Fishing</span>
+							<span class="mega-shop-product__view-all">View All <span aria-hidden="true">&gt;</span></span>
+						</a>
+					</div>
+				</div>
+
+				<div class="mega-shop-product mega-fishing-product product-card">
+					<a href="{{ fishing_all_product_url }}" class="mega-shop-product__image-link" aria-label="{{ fishing_all_title | escape }}">
+						<span class="mega-shop-product__media">
+							{%- if fishing_all_image != blank -%}
+								<img src="{{ fishing_all_image | image_url: width: 800 }}" alt="{{ fishing_all_image.alt | default: fishing_all_title | escape }}" class="mega-shop-product__image" width="800" height="1000" loading="lazy">
+							{%- else -%}
+								<span class="mega-fishing-product__placeholder">All Fishing</span>
+							{%- endif -%}
+						</span>
+					</a>
+					<div class="mega-shop-product__footer">
+						<a href="{{ fishing_all_url }}" class="mega-shop-product__meta mega-shop-product__meta-link" aria-label="View all All Fishing">
+							<span>All Fishing</span>
+							<span class="mega-shop-product__view-all">View All <span aria-hidden="true">&gt;</span></span>
+						</a>
+					</div>
+				</div>
+			</div>
+			{%- endif -%}
+		</div>
+	{%- elsif is_more_collections_menu -%}
+		{%- assign best_sellers_collection = collections['best-sellers'] -%}
+		{%- if best_sellers_collection == blank -%}
+			{%- assign best_sellers_collection = collections['all'] -%}
+		{%- endif -%}
+		{%- assign best_sellers_url = routes.collections_url | append: '/best-sellers' -%}
+		{%- if best_sellers_collection != blank -%}
+			{%- assign best_sellers_url = best_sellers_collection.url -%}
+		{%- endif -%}
+
+		<div class="header-mega-desktop__inner mega-more-collections">
+			<div class="mega-more-collections__nav">
+				<div class="mega-block mega-block--featured">
+					<h3 class="mega-block__heading">American Outdoors</h3>
+					<ul class="mega-block__list mega-featured-list">
+						{%- assign outdoors_handles = 'national-park,faith-outdoors' | split: ',' -%}
+						{%- assign outdoors_labels = 'National Park,Faith & Outdoors' | split: ',' -%}
+						{%- for outdoors_handle in outdoors_handles -%}
+							{%- assign outdoors_collection = collections[outdoors_handle] -%}
+							{%- assign outdoors_url = routes.collections_url | append: '/' | append: outdoors_handle -%}
+							{%- if outdoors_collection != blank -%}
+								{%- assign outdoors_url = outdoors_collection.url -%}
+							{%- endif -%}
+							<li><a href="{{ outdoors_url }}" class="mega-block__link">{{ outdoors_labels[forloop.index0] | escape }}</a></li>
+						{%- endfor -%}
+					</ul>
+				</div>
+
+				<div class="mega-block mega-block--featured">
+					<h3 class="mega-block__heading">Shop by Occasion</h3>
+					<ul class="mega-block__list mega-featured-list">
+						{%- assign occasion_handles = 'nfl-shirt,back-to-school,usa' | split: ',' -%}
+						{%- assign occasion_labels = 'Game Day,Back to School,Independence Day' | split: ',' -%}
+						{%- for occasion_handle in occasion_handles -%}
+							{%- assign occasion_collection = collections[occasion_handle] -%}
+							{%- assign occasion_url = routes.collections_url | append: '/' | append: occasion_handle -%}
+							{%- if occasion_collection != blank -%}
+								{%- assign occasion_url = occasion_collection.url -%}
+							{%- endif -%}
+							<li><a href="{{ occasion_url }}" class="mega-block__link">{{ occasion_labels[forloop.index0] | escape }}</a></li>
+						{%- endfor -%}
+					</ul>
+				</div>
+			</div>
+
+			<div class="mega-more-collections__products">
+				<h3 class="mega-block__heading">
+					<a href="{{ best_sellers_url }}" class="mega-more-collections__heading-link">Best Sellers</a>
+				</h3>
+				<div class="mega-shop-products mega-more-collections__product-grid">
+					{%- assign featured_collection_handles = 'national-park,faith-outdoors,nfl-shirt,back-to-school' | split: ',' -%}
+					{%- assign selected_product_keys = '|' -%}
+					{%- for featured_collection_handle in featured_collection_handles -%}
+						{%- assign featured_collection = collections[featured_collection_handle] -%}
+						{%- if featured_collection == blank and featured_collection_handle == 'national-park' -%}
+							{%- assign featured_collection = collections['nation-park'] -%}
+						{%- endif -%}
+						{%- assign product = blank -%}
+						{%- case featured_collection_handle -%}
+							{%- when 'national-park' -%}
+								{%- assign product = section.settings.more_collections_national_park_product -%}
+							{%- when 'faith-outdoors' -%}
+								{%- assign product = section.settings.more_collections_faith_outdoors_product -%}
+							{%- when 'nfl-shirt' -%}
+								{%- assign product = section.settings.more_collections_game_day_product -%}
+							{%- when 'back-to-school' -%}
+								{%- assign product = section.settings.more_collections_back_to_school_product -%}
+						{%- endcase -%}
+						{%- if product != blank -%}
+							{%- capture selected_product_key -%}|{{ product.handle }}|{%- endcapture -%}
+							{%- if selected_product_keys contains selected_product_key -%}
+								{%- assign product = blank -%}
+							{%- endif -%}
+						{%- endif -%}
+
+						{%- if product == blank and featured_collection != blank -%}
+							{%- for candidate_product in best_sellers_collection.products -%}
+								{%- assign candidate_matches_collection = false -%}
+								{%- for candidate_collection in candidate_product.collections -%}
+									{%- if candidate_collection.handle == featured_collection.handle -%}
+										{%- assign candidate_matches_collection = true -%}
+										{%- break -%}
+									{%- endif -%}
+								{%- endfor -%}
+								{%- capture candidate_product_key -%}|{{ candidate_product.handle }}|{%- endcapture -%}
+								{%- if candidate_matches_collection and selected_product_keys contains candidate_product_key -%}
+									{%- continue -%}
+								{%- endif -%}
+								{%- if candidate_matches_collection -%}
+									{%- assign product = candidate_product -%}
+									{%- break -%}
+								{%- endif -%}
+							{%- endfor -%}
+
+							{%- if product == blank -%}
+								{%- for fallback_product in featured_collection.products -%}
+									{%- capture fallback_product_key -%}|{{ fallback_product.handle }}|{%- endcapture -%}
+									{%- unless selected_product_keys contains fallback_product_key -%}
+										{%- assign product = fallback_product -%}
+										{%- break -%}
+									{%- endunless -%}
+								{%- endfor -%}
+							{%- endif -%}
+						{%- endif -%}
+
+						{%- if product != blank -%}
+							{%- assign selected_product_keys = selected_product_keys | append: product.handle | append: '|' -%}
+						<div class="mega-shop-product product-card">
+							<a href="{{ product.url }}" class="mega-shop-product__image-link" aria-label="{{ product.title | escape }}">
+								<span class="mega-shop-product__media">
+									{%- if product.featured_image != blank -%}
+										<img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | default: product.title | escape }}" class="mega-shop-product__image" width="600" height="750" loading="lazy">
+									{%- else -%}
+										<span class="mega-fishing-product__placeholder">{{ product.title | escape }}</span>
+									{%- endif -%}
+								</span>
+							</a>
+							<div class="mega-shop-product__footer">
+								<a href="{{ product.url }}" class="mega-shop-product__title">{{ product.title | escape }}</a>
+								<a href="{{ product.url }}" class="mega-shop-product__meta mega-shop-product__meta-link" aria-label="View {{ product.title | escape }}">
+									<span>{{ product.price | money }}</span>
+									<span class="mega-shop-product__view-all">View <span aria-hidden="true">&gt;</span></span>
+								</a>
+							</div>
+						</div>
+						{%- endif -%}
+					{%- endfor -%}
+				</div>
+			</div>
+		</div>
+	{%- elsif is_shop_menu -%}
+		{%- assign shop_men_url = routes.all_products_collection_url -%}
+		{%- assign shop_tshirt_url = routes.all_products_collection_url | append: '?filter.p.product_type=Type1&filter.p.product_type=3D+Tshirt&filter.p.product_type=T-Shirt' -%}
+		{%- assign shop_longsleeve_url = routes.all_products_collection_url | append: '?filter.p.product_type=Long-sleeve' -%}
+		{%- assign shop_hat_url = routes.all_products_collection_url | append: '?filter.p.product_type=Hat' -%}
+		<div class="header-mega-desktop__inner mega-shop">
+			<div class="mega-block mega-block--gender">
+				<ul class="mega-block__list mega-gender-list">
+					<li>
+						<a href="{{ shop_men_url }}" class="mega-block__link mega-gender-link">
+							For Men
+						</a>
+					</li>
+					<li>
+						{%- assign shop_womens_col = collections['independence-day-womens'] -%}
+						{%- if shop_womens_col == blank -%}
+							{%- assign shop_womens_col = collections['independence-day-women-s'] -%}
+						{%- endif -%}
+						{%- assign shop_womens_url = routes.collections_url | append: '/independence-day-womens' -%}
+						{%- if shop_womens_col != blank -%}
+							{%- assign shop_womens_url = shop_womens_col.url -%}
+						{%- endif -%}
+						<a href="{{ shop_womens_url }}" class="mega-block__link mega-gender-link">
+							For Women
+						</a>
+					</li>
+				</ul>
+
+				{%- assign shop_gender_product_logic = section.settings.shop_mega_product_logic | default: 'manual_fallback' -%}
+				{%- assign shop_gender_show_products = true -%}
+				{%- if section.settings.shop_mega_show_products == false -%}
+					{%- assign shop_gender_show_products = false -%}
+				{%- endif -%}
+
+				{%- assign shop_men_product = blank -%}
+				{%- assign shop_women_product = blank -%}
+
+				{%- if shop_gender_product_logic != 'auto' -%}
+					{%- assign shop_men_product = section.settings.shop_mega_for_men_product -%}
+					{%- if shop_men_product == blank -%}
+						{%- assign shop_men_product = section.settings.shop_mega_men_product -%}
+					{%- endif -%}
+					{%- assign shop_women_product = section.settings.shop_mega_for_women_product -%}
+					{%- if shop_women_product == blank -%}
+						{%- assign shop_women_product = section.settings.shop_mega_women_product -%}
+					{%- endif -%}
+				{%- endif -%}
+
+				{%- assign shop_gender_should_auto_fill = false -%}
+				{%- if shop_gender_product_logic == 'auto' -%}
+					{%- assign shop_gender_should_auto_fill = true -%}
+				{%- elsif shop_gender_product_logic == 'manual_fallback' -%}
+					{%- if shop_men_product == blank or shop_women_product == blank -%}
+						{%- assign shop_gender_should_auto_fill = true -%}
+					{%- endif -%}
+				{%- endif -%}
+
+				{%- if shop_gender_should_auto_fill -%}
+					{%- if shop_men_product == blank -%}
+						{%- for product in collections['all'].products -%}
+							{%- assign shop_men_product = product -%}
+							{%- break -%}
+						{%- endfor -%}
+					{%- endif -%}
+
+					{%- if shop_women_product == blank and shop_womens_col != blank -%}
+						{%- for product in shop_womens_col.products -%}
+							{%- assign shop_women_product = product -%}
+							{%- break -%}
+						{%- endfor -%}
+					{%- endif -%}
+				{%- endif -%}
+
+				{%- assign shop_has_gender_products = false -%}
+				{%- if shop_men_product != blank or shop_women_product != blank -%}
+					{%- assign shop_has_gender_products = true -%}
+				{%- endif -%}
+
+				{%- if shop_gender_show_products and shop_has_gender_products -%}
+					<div class="mega-shop-products mega-gender-products">
+						{%- if shop_men_product != blank -%}
+							<div class="mega-shop-product product-card">
+								<a href="{{ shop_men_product.url }}" class="mega-shop-product__image-link" aria-label="{{ shop_men_product.title | escape }}">
+									<span class="mega-shop-product__media">
+										{%- if shop_men_product.featured_image != blank -%}
+											<img src="{{ shop_men_product.featured_image | image_url: width: 800 }}" alt="{{ shop_men_product.featured_image.alt | default: shop_men_product.title | escape }}" class="mega-shop-product__image" width="800" height="1000" loading="lazy">
+										{%- endif -%}
+									</span>
+								</a>
+								<div class="mega-shop-product__footer">
+									<a href="{{ shop_men_product.url }}" class="mega-shop-product__title">{{ shop_men_product.title | escape }}</a>
+									<a href="{{ shop_men_url }}" class="mega-shop-product__meta mega-shop-product__meta-link" aria-label="View all For Men">
+										<span>For Men</span>
+										<span class="mega-shop-product__view-all">View All <span aria-hidden="true">→</span></span>
+									</a>
+								</div>
+							</div>
+						{%- endif -%}
+
+						{%- if shop_women_product != blank -%}
+							<div class="mega-shop-product product-card">
+								<a href="{{ shop_women_product.url }}" class="mega-shop-product__image-link" aria-label="{{ shop_women_product.title | escape }}">
+									<span class="mega-shop-product__media">
+										{%- if shop_women_product.featured_image != blank -%}
+											<img src="{{ shop_women_product.featured_image | image_url: width: 800 }}" alt="{{ shop_women_product.featured_image.alt | default: shop_women_product.title | escape }}" class="mega-shop-product__image" width="800" height="1000" loading="lazy">
+										{%- endif -%}
+									</span>
+								</a>
+								<div class="mega-shop-product__footer">
+									<a href="{{ shop_women_product.url }}" class="mega-shop-product__title">{{ shop_women_product.title | escape }}</a>
+									<a href="{{ shop_womens_url }}" class="mega-shop-product__meta mega-shop-product__meta-link" aria-label="View all For Women">
+										<span>For Women</span>
+										<span class="mega-shop-product__view-all">View All <span aria-hidden="true">→</span></span>
+									</a>
+								</div>
+							</div>
+						{%- endif -%}
+					</div>
+				{%- endif -%}
+			</div>
+
+			<div class="mega-block mega-block--clothing">
+				<ul class="mega-block__list mega-shop-clothing-nav">
+					<li><a href="{{ shop_tshirt_url }}" class="mega-block__link">T-Shirts</a></li>
+					<li><a href="{{ shop_longsleeve_url }}" class="mega-block__link">Long-Sleeve</a></li>
+					<li><a href="{{ shop_hat_url }}" class="mega-block__link">Hats</a></li>
+				</ul>
+
+				{%- assign shop_product_logic = section.settings.shop_mega_product_logic | default: 'manual_fallback' -%}
+				{%- assign shop_show_products = true -%}
+				{%- if section.settings.shop_mega_show_products == false -%}
+					{%- assign shop_show_products = false -%}
+				{%- endif -%}
+
+				{%- assign shop_tshirt_product = blank -%}
+				{%- assign shop_longsleeve_product = blank -%}
+				{%- assign shop_hat_product = blank -%}
+
+				{%- if shop_product_logic != 'auto' -%}
+					{%- assign shop_hat_product = section.settings.shop_mega_hat_product -%}
+					{%- assign shop_tshirt_product = section.settings.shop_mega_tshirt_product -%}
+					{%- assign shop_longsleeve_product = section.settings.shop_mega_longsleeve_product -%}
+				{%- endif -%}
+
+				{%- assign shop_should_auto_fill = false -%}
+				{%- if shop_product_logic == 'auto' -%}
+					{%- assign shop_should_auto_fill = true -%}
+				{%- elsif shop_product_logic == 'manual_fallback' -%}
+					{%- if shop_tshirt_product == blank or shop_longsleeve_product == blank or shop_hat_product == blank -%}
+						{%- assign shop_should_auto_fill = true -%}
+					{%- endif -%}
+				{%- endif -%}
+
+				{%- if shop_should_auto_fill -%}
+					{%- for product in collections['all'].products -%}
+						{%- assign shop_product_type = product.type | downcase | strip -%}
+						{%- if shop_hat_product == blank -%}
+							{%- if shop_product_type == 'hat' or shop_product_type contains 'hat' -%}
+								{%- assign shop_hat_product = product -%}
+							{%- endif -%}
+						{%- endif -%}
+						{%- if shop_tshirt_product == blank -%}
+							{%- if shop_product_type == 'type1' or shop_product_type contains 't-shirt' or shop_product_type contains 'tshirt' -%}
+								{%- assign shop_tshirt_product = product -%}
+							{%- endif -%}
+						{%- endif -%}
+						{%- if shop_longsleeve_product == blank -%}
+							{%- if shop_product_type contains 'long' and shop_product_type contains 'sleeve' -%}
+								{%- assign shop_longsleeve_product = product -%}
+							{%- endif -%}
+						{%- endif -%}
+						{%- if shop_tshirt_product != blank and shop_longsleeve_product != blank and shop_hat_product != blank -%}
+							{%- break -%}
+						{%- endif -%}
+					{%- endfor -%}
+				{%- endif -%}
+
+				{%- assign shop_has_products = false -%}
+				{%- if shop_tshirt_product != blank or shop_longsleeve_product != blank or shop_hat_product != blank -%}
+					{%- assign shop_has_products = true -%}
+				{%- endif -%}
+
+				{%- if shop_show_products and shop_has_products -%}
+					<div class="mega-shop-products">
+						{%- if shop_tshirt_product != blank -%}
+							<div class="mega-shop-product product-card">
+								<a href="{{ shop_tshirt_product.url }}" class="mega-shop-product__image-link" aria-label="{{ shop_tshirt_product.title | escape }}">
+									<span class="mega-shop-product__media">
+										{%- if shop_tshirt_product.featured_image != blank -%}
+											<img src="{{ shop_tshirt_product.featured_image | image_url: width: 800 }}" alt="{{ shop_tshirt_product.featured_image.alt | default: shop_tshirt_product.title | escape }}" class="mega-shop-product__image" width="800" height="1000" loading="lazy">
+										{%- endif -%}
+									</span>
+								</a>
+								<div class="mega-shop-product__footer">
+									<a href="{{ shop_tshirt_product.url }}" class="mega-shop-product__title">{{ shop_tshirt_product.title | escape }}</a>
+									<a href="{{ shop_tshirt_url }}" class="mega-shop-product__meta mega-shop-product__meta-link" aria-label="View all T-Shirts">
+										<span>T-Shirt</span>
+										<span class="mega-shop-product__view-all">View All <span aria-hidden="true">→</span></span>
+									</a>
+								</div>
+							</div>
+						{%- endif -%}
+
+						{%- if shop_longsleeve_product != blank -%}
+							<div class="mega-shop-product product-card">
+								<a href="{{ shop_longsleeve_product.url }}" class="mega-shop-product__image-link" aria-label="{{ shop_longsleeve_product.title | escape }}">
+									<span class="mega-shop-product__media">
+										{%- if shop_longsleeve_product.featured_image != blank -%}
+											<img src="{{ shop_longsleeve_product.featured_image | image_url: width: 800 }}" alt="{{ shop_longsleeve_product.featured_image.alt | default: shop_longsleeve_product.title | escape }}" class="mega-shop-product__image" width="800" height="1000" loading="lazy">
+										{%- endif -%}
+									</span>
+								</a>
+								<div class="mega-shop-product__footer">
+									<a href="{{ shop_longsleeve_product.url }}" class="mega-shop-product__title">{{ shop_longsleeve_product.title | escape }}</a>
+									<a href="{{ shop_longsleeve_url }}" class="mega-shop-product__meta mega-shop-product__meta-link" aria-label="View all Long-Sleeve">
+										<span>Long-Sleeve</span>
+										<span class="mega-shop-product__view-all">View All <span aria-hidden="true">→</span></span>
+									</a>
+								</div>
+							</div>
+						{%- endif -%}
+
+						{%- if shop_hat_product != blank -%}
+							<div class="mega-shop-product product-card">
+								<a href="{{ shop_hat_product.url }}" class="mega-shop-product__image-link" aria-label="{{ shop_hat_product.title | escape }}">
+									<span class="mega-shop-product__media">
+										{%- if shop_hat_product.featured_image != blank -%}
+											<img src="{{ shop_hat_product.featured_image | image_url: width: 800 }}" alt="{{ shop_hat_product.featured_image.alt | default: shop_hat_product.title | escape }}" class="mega-shop-product__image" width="800" height="1000" loading="lazy">
+										{%- endif -%}
+									</span>
+								</a>
+								<div class="mega-shop-product__footer">
+									<a href="{{ shop_hat_product.url }}" class="mega-shop-product__title">{{ shop_hat_product.title | escape }}</a>
+									<a href="{{ shop_hat_url }}" class="mega-shop-product__meta mega-shop-product__meta-link" aria-label="View all Hats">
+										<span>Hat</span>
+										<span class="mega-shop-product__view-all">View All <span aria-hidden="true">→</span></span>
+									</a>
+								</div>
+							</div>
+						{%- endif -%}
+					</div>
+				{%- endif -%}
+			</div>
+		</div>
+	{%- else -%}
+		<div class="header-mega-desktop__inner mega-4block">
+			<div class="mega-block mega-block--featured">
+				<h3 class="mega-block__heading">Featured</h3>
+				<ul class="mega-block__list mega-featured-list">
+					{%- assign new_col = collections['new-arrivals'] -%}
+					{%- assign new_url = routes.collections_url | append: '/new-arrivals' -%}
+					{%- if new_col != blank -%}
+						{%- assign new_url = new_col.url -%}
+					{%- endif -%}
+
+					{%- assign nation_park_col = collections['nation-park'] -%}
+					{%- if nation_park_col == blank -%}
+						{%- assign nation_park_col = collections['national-park'] -%}
+					{%- endif -%}
+					{%- assign nation_park_url = routes.collections_url | append: '/nation-park' -%}
+					{%- if nation_park_col != blank -%}
+						{%- assign nation_park_url = nation_park_col.url -%}
+					{%- endif -%}
+
+					{%- assign world_turkey_slam_col = collections['world-turkey-slam'] -%}
+					{%- assign world_turkey_slam_url = routes.collections_url | append: '/world-turkey-slam' -%}
+					{%- if world_turkey_slam_col != blank -%}
+						{%- assign world_turkey_slam_url = world_turkey_slam_col.url -%}
+					{%- endif -%}
+
+					{%- assign grand_slam_col = collections['grand-slam-subspecies'] -%}
+					{%- assign grand_slam_url = routes.collections_url | append: '/grand-slam-subspecies' -%}
+					{%- if grand_slam_col != blank -%}
+						{%- assign grand_slam_url = grand_slam_col.url -%}
+					{%- endif -%}
+
+					{%- assign nfl_col = collections['nfl-shirt'] -%}
+					{%- assign nfl_url = routes.collections_url | append: '/nfl-shirt' -%}
+					{%- if nfl_col != blank -%}
+						{%- assign nfl_url = nfl_col.url -%}
+					{%- endif -%}
+
+					{%- assign back_to_school_col = collections['back-to-school'] -%}
+					{%- assign back_to_school_url = routes.collections_url | append: '/back-to-school' -%}
+					{%- if back_to_school_col != blank -%}
+						{%- assign back_to_school_url = back_to_school_col.url -%}
+					{%- endif -%}
+
+					<li><a href="{{ nfl_url }}" class="mega-block__link">GAME DAY</a></li>
+					<li><a href="{{ back_to_school_url }}" class="mega-block__link">Back to School</a></li>
+					<li><a href="{{ nation_park_url }}" class="mega-block__link">National Park</a></li>
+					<li><a href="{{ world_turkey_slam_url }}" class="mega-block__link">World Turkey Slam</a></li>
+					<li><a href="{{ grand_slam_url }}" class="mega-block__link">Grand Slam Subspecies</a></li>
+					<li><a href="{{ new_url }}" class="mega-block__link">New Arrivals</a></li>
+				</ul>
+			</div>
+
+			<div class="mega-block mega-block--hunting">
+				<h3 class="mega-block__heading">Hunting</h3>
+				<div class="mega-hunting-list">
+					{%- assign hunting_handles = "turkey,deer,waterfowl" | split: "," -%}
+					{%- assign hunting_labels = "Turkey,Deer,Waterfowl" | split: "," -%}
+					{%- for handle in hunting_handles -%}
+						{%- assign h_col = collections[handle] -%}
+						{%- assign h_label = hunting_labels[forloop.index0] -%}
+						{%- assign h_has_products = false -%}
+						{%- if h_col != blank and h_col.products_count > 0 -%}
+							{%- assign h_has_products = true -%}
+						{%- endif -%}
+						<a href="{%- if h_col != blank -%}{{ h_col.url }}{%- else -%}{{ routes.collections_url }}/{{ handle }}{%- endif -%}" class="mega-hunting-item{% unless h_has_products %} mega-hunting-item--disabled{% endunless %}"{% unless h_has_products %} tabindex="-1"{% endunless %}>
+							<span class="mega-hunting-icon-wrap">
+								{%- if h_col.image != blank -%}
+									<img src="{{ h_col.image | image_url: width: 120, height: 120, crop: 'center' }}" alt="{{ h_label }}" class="mega-hunting-icon mega-hunting-icon--{{ handle | handleize }}" width="120" height="120" loading="lazy">
+								{%- else -%}
+									<span class="mega-hunting-placeholder">{{ h_label | slice: 0 }}</span>
+								{%- endif -%}
+							</span>
+							<span class="mega-hunting-label">{{ h_label | upcase }}{%- unless h_has_products -%}<em class="mega-block__coming-soon"> - Coming Soon</em>{%- endunless -%}</span>
+						</a>
+					{%- endfor -%}
+				</div>
+			</div>
+
+			<div class="mega-block mega-block--independence">
+				<h3 class="mega-block__heading">Independence Day</h3>
+				<div class="mega-terrain-list mega-independence-list">
+					{%- assign dog_250_col = collections['dog-250'] -%}
+					{%- assign dog_250_url = routes.collections_url | append: '/dog-250' -%}
+					{%- assign dog_250_title = 'Dog 250' -%}
+					{%- if dog_250_col != blank -%}
+						{%- assign dog_250_url = dog_250_col.url -%}
+						{%- assign dog_250_title = dog_250_col.title -%}
+					{%- endif -%}
+
+					{%- assign deer_250_col = collections['deer-250'] -%}
+					{%- assign deer_250_url = routes.collections_url | append: '/deer-250' -%}
+					{%- assign deer_250_title = 'Deer 250' -%}
+					{%- if deer_250_col != blank -%}
+						{%- assign deer_250_url = deer_250_col.url -%}
+						{%- assign deer_250_title = deer_250_col.title -%}
+					{%- endif -%}
+
+					{%- assign eagle_250_col = collections['eagle-250'] -%}
+					{%- assign eagle_250_url = routes.collections_url | append: '/eagle-250' -%}
+					{%- assign eagle_250_title = 'Eagle 250' -%}
+					{%- if eagle_250_col != blank -%}
+						{%- assign eagle_250_url = eagle_250_col.url -%}
+						{%- assign eagle_250_title = eagle_250_col.title -%}
+					{%- endif -%}
+
+					{%- assign liberty_250_col = collections['liberty-250'] -%}
+					{%- assign liberty_250_url = routes.collections_url | append: '/liberty-250' -%}
+					{%- assign liberty_250_title = 'Liberty 250' -%}
+					{%- if liberty_250_col != blank -%}
+						{%- assign liberty_250_url = liberty_250_col.url -%}
+						{%- assign liberty_250_title = liberty_250_col.title -%}
+					{%- endif -%}
+
+					{%- assign womens_col = collections['independence-day-womens'] -%}
+					{%- if womens_col == blank -%}
+						{%- assign womens_col = collections['independence-day-women-s'] -%}
+					{%- endif -%}
+					{%- assign womens_url = routes.collections_url | append: '/independence-day-womens' -%}
+					{%- assign womens_title = "Women's" -%}
+					{%- if womens_col != blank -%}
+						{%- assign womens_url = womens_col.url -%}
+						{%- assign womens_title = womens_col.title -%}
+					{%- endif -%}
+
+					<a href="{{ dog_250_url }}" class="mega-block__link">{{ dog_250_title | escape }}</a>
+					<a href="{{ deer_250_url }}" class="mega-block__link">{{ deer_250_title | escape }}</a>
+					<a href="{{ eagle_250_url }}" class="mega-block__link">{{ eagle_250_title | escape }}</a>
+					<a href="{{ liberty_250_url }}" class="mega-block__link">{{ liberty_250_title | escape }}</a>
+					<a href="{{ womens_url }}" class="mega-block__link">{{ womens_title | escape }}</a>
+				</div>
+			</div>
+
+			<div class="mega-block mega-block--fishing">
+				<h3 class="mega-block__heading">Fishing</h3>
+				<div class="mega-hunting-list mega-fishing-list">
+					{%- assign fishing_handles = "fishing,fishing-t-shirt,saltwater-fishing" | split: "," -%}
+					{%- assign fishing_fallback_handles = "fishing,fishing-t-shirt,saltwater-fishing-t-shirt" | split: "," -%}
+					{%- assign fishing_labels = "All Fishing,Freshwater Fishing,Saltwater Fishing" | split: "," -%}
+					{%- assign fishing_icon_fallbacks = "https://cdn.shopify.com/s/files/1/0741/7987/0911/collections/icon_bass.jpg?v=1780569828,https://cdn.shopify.com/s/files/1/0741/7987/0911/collections/icon_bass.jpg?v=1780569828,https://cdn.shopify.com/s/files/1/0741/7987/0911/collections/icon_swordfish.jpg?v=1780569816" | split: "," -%}
+					{%- for handle in fishing_handles -%}
+						{%- assign f_col = collections[handle] -%}
+						{%- if f_col == blank -%}
+							{%- assign f_fallback_handle = fishing_fallback_handles[forloop.index0] -%}
+							{%- assign f_col = collections[f_fallback_handle] -%}
+						{%- endif -%}
+						{%- assign f_label = fishing_labels[forloop.index0] -%}
+						{%- if f_col != blank -%}
+							{%- assign f_url = f_col.url -%}
+						{%- else -%}
+							{%- assign f_url = routes.collections_url | append: '/' | append: handle -%}
+						{%- endif -%}
+						{%- assign f_fallback_icon = fishing_icon_fallbacks[forloop.index0] -%}
+						<a href="{{ f_url }}" class="mega-hunting-item mega-fishing-item">
+							<span class="mega-hunting-icon-wrap">
+								{%- if f_col.image != blank -%}
+									<img src="{{ f_col.image | image_url: width: 120, height: 120, crop: 'center' }}" alt="{{ f_label | escape }}" class="mega-hunting-icon mega-hunting-icon--{{ handle | handleize }}" width="120" height="120" loading="lazy">
+								{%- elsif f_fallback_icon != blank -%}
+									<img src="{{ f_fallback_icon }}" alt="{{ f_label | escape }}" class="mega-hunting-icon mega-hunting-icon--{{ handle | handleize }}" width="120" height="120" loading="lazy">
+								{%- else -%}
+									<span class="mega-hunting-placeholder">{{ f_label | slice: 0 }}</span>
+								{%- endif -%}
+							</span>
+							<span class="mega-hunting-label">{{ f_label | escape }}</span>
+						</a>
+					{%- endfor -%}
+				</div>
+			</div>
+		</div>
+	{%- endif -%}
+</div>
+
+<style>
+.header-menu__item-wrapper:has(.header-mega-desktop) {
+	position: static !important;
+}
+
+.header-menu__list-nested-wrapper:has(.header-mega-desktop) {
+	position: static !important;
+}
+
+.header-mega-desktop {
+	position: fixed;
+	top: var(--header-offset-bottom, var(--header-height-static, 86px));
+	left: 0;
+	width: 100vw;
+	background: #fff;
+	box-shadow: 0 15px 40px rgba(0, 0, 0, 0.10);
+	padding: 36px 40px;
+	opacity: 0;
+	visibility: hidden;
+	z-index: 100;
+	transform: translateY(-8px);
+	transition: top 0.18s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+	will-change: top, opacity, transform;
+	pointer-events: none;
+}
+
+.header-mega-desktop.is-active {
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0);
+	pointer-events: auto;
+}
+
+.mega-shop {
+	display: grid !important;
+	grid-template-columns: minmax(0, 444px) minmax(0, 676px);
+	gap: 40px;
+	max-width: 1230px;
+	margin: 0 auto;
+	align-items: start;
+	justify-content: start;
+}
+
+.mega-more-collections {
+	display: grid !important;
+	grid-template-columns: minmax(210px, 240px) minmax(0, 1fr);
+	gap: 28px;
+	width: min(1320px, calc(100vw - 80px));
+	margin: 0 auto;
+	align-items: start;
+}
+
+.mega-more-collections__nav {
+	display: flex;
+	flex-direction: column;
+	gap: 22px;
+}
+
+.mega-more-collections__nav .mega-block__heading {
+	margin-bottom: 10px;
+	padding-bottom: 10px;
+}
+
+.mega-more-collections__nav .mega-featured-list {
+	grid-auto-rows: auto;
+	gap: 2px;
+}
+
+.mega-more-collections__products {
+	min-width: 0;
+}
+
+.mega-more-collections__products > .mega-block__heading {
+	margin-bottom: 16px;
+}
+
+.mega-more-collections__heading-link {
+	color: inherit;
+	text-decoration: none;
+}
+
+.mega-more-collections__heading-link:hover,
+.mega-more-collections__heading-link:focus-visible {
+	color: #2C3D33;
+}
+
+.mega-shop-products.mega-more-collections__product-grid {
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	justify-content: stretch;
+	width: 100%;
+	gap: 16px;
+}
+
+.mega-more-collections__product-grid .mega-shop-product.product-card {
+	border-color: rgba(44, 61, 51, 0.12);
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.mega-more-collections__product-grid .mega-shop-product__footer {
+	min-height: 72px;
+	padding: 12px;
+}
+
+.mega-more-collections__product-grid .mega-shop-product__title {
+	font-size: 12px;
+}
+
+@media (max-width: 1399px) {
+	.mega-more-collections {
+		grid-template-columns: minmax(190px, 210px) minmax(0, 1fr);
+		gap: 22px;
+	}
+
+	.mega-shop-products.mega-more-collections__product-grid {
+		gap: 12px;
+	}
+}
+
+.mega-fishing-shop {
+	display: grid !important;
+	grid-template-columns: minmax(0, 676px);
+	gap: 24px;
+	max-width: 676px;
+	margin: 0 auto;
+	align-items: start;
+	justify-content: center;
+}
+
+.mega-4block {
+	display: grid !important;
+	grid-template-columns: 0.95fr 1.2fr 1.1fr 1.35fr;
+	gap: 34px;
+	max-width: 1200px;
+	margin: 0 auto;
+	align-items: start;
+}
+
+.mega-4block .mega-block--independence {
+	order: 2;
+}
+
+.mega-4block .mega-block--hunting {
+	order: 3;
+}
+
+.mega-4block .mega-block--fishing {
+	order: 4;
+}
+
+.mega-block__heading {
+	font-family: 'Oswald', sans-serif;
+	font-weight: 700;
+	font-size: 15px;
+	text-transform: uppercase;
+	letter-spacing: 2.5px;
+	color: #1a1a1a;
+	margin: 0 0 20px;
+	padding-bottom: 12px;
+	border-bottom: 2px solid #1a1a1a;
+}
+
+.mega-block__list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.mega-block__link {
+	font-family: 'Oswald', sans-serif;
+	font-weight: 400;
+	font-size: 16px;
+	color: #555;
+	text-decoration: none;
+	transition: color 0.2s ease;
+	line-height: 1.8;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+.mega-block__link:hover {
+	color: #000;
+}
+
+.mega-shop .mega-block--gender .mega-block__list,
+.mega-shop .mega-block--clothing .mega-block__list {
+	display: grid;
+	justify-content: start;
+	gap: 40px;
+	margin-bottom: 24px;
+}
+
+.mega-shop .mega-block--gender .mega-block__list {
+	grid-template-columns: repeat(2, minmax(0, 212px));
+}
+
+.mega-shop .mega-block--clothing .mega-block__list {
+	grid-template-columns: repeat(3, minmax(0, 212px));
+}
+
+.mega-fishing-nav {
+	display: grid !important;
+	grid-template-columns: repeat(3, minmax(0, 212px));
+	gap: 40px;
+	margin-bottom: 0;
+}
+
+.mega-fishing-nav .mega-block__link {
+	white-space: nowrap;
+}
+
+.mega-gender-list .mega-block__link,
+.mega-shop-clothing-nav .mega-block__link {
+	display: block;
+	padding-bottom: 12px;
+	border-bottom: 2px solid #2C3D33;
+	font-family: 'Oswald', sans-serif;
+	font-size: 15px;
+	font-weight: 600;
+	line-height: 1;
+	letter-spacing: 2.5px;
+	text-transform: uppercase;
+	color: #2C3D33;
+	text-align: center;
+}
+
+.mega-gender-list .mega-block__link:hover,
+.mega-shop-clothing-nav .mega-block__link:hover {
+	color: #2C3D33;
+}
+
+.mega-featured-list,
+.mega-terrain-list.mega-independence-list {
+	display: grid;
+	grid-auto-rows: 24px;
+	align-items: stretch;
+	gap: 4px;
+}
+
+.mega-featured-list li {
+	display: flex;
+	align-items: stretch;
+	min-height: 24px;
+}
+
+.mega-featured-list .mega-block__link,
+.mega-terrain-list.mega-independence-list .mega-block__link {
+	display: flex;
+	align-items: center;
+	min-height: 24px;
+	color: #2C3D33;
+	font-size: 15px;
+	font-weight: 400;
+	line-height: 1.2;
+}
+
+.mega-shop-products {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 212px));
+	justify-content: start;
+	gap: 40px;
+}
+
+.mega-fishing-products {
+	justify-content: center;
+}
+
+.mega-fishing-shop--fishing .mega-fishing-product.product-card {
+	border-radius: 0 !important;
+	box-shadow: none !important;
+}
+
+.mega-fishing-shop--fishing .mega-fishing-product .mega-shop-product__footer {
+	display: flex;
+	align-items: center;
+	min-height: 46px;
+	padding: 11px 14px;
+}
+
+.mega-fishing-shop--fishing .mega-fishing-product .mega-shop-product__meta-link {
+	width: 100%;
+}
+
+.mega-gender-products {
+	grid-template-columns: repeat(2, minmax(0, 212px));
+}
+
+.mega-shop-product.product-card {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	overflow: hidden;
+	border: 1px solid rgba(44, 61, 51, 0.18);
+	border-radius: 8px;
+	background: #fff;
+	box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.mega-shop-product__image-link {
+	display: block;
+	text-decoration: none;
+	background: #f7f4ef;
+	border-bottom: 1px solid rgba(44, 61, 51, 0.12);
+}
+
+.mega-shop-product__media {
+	display: block;
+	width: 100%;
+	aspect-ratio: 4 / 5;
+	overflow: hidden;
+	background: #f7f4ef;
+}
+
+.mega-shop-product__image {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	display: block;
+	transition: transform 0.25s ease;
+}
+
+.mega-shop-product:hover .mega-shop-product__image {
+	transform: scale(1.02);
+}
+
+.mega-fishing-product .mega-shop-product__meta-link > span:first-child {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.mega-fishing-product__placeholder {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	padding: 18px;
+	font-family: 'Oswald', sans-serif;
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 1.2;
+	letter-spacing: 0.08em;
+	text-align: center;
+	text-transform: uppercase;
+	color: #2C3D33;
+}
+
+.mega-shop-product__footer {
+	padding: 14px 14px 13px;
+	min-height: 78px;
+}
+
+.mega-shop-product__title {
+	display: block;
+	margin: 0 0 6px;
+	font-family: 'Oswald', sans-serif;
+	font-size: 13px;
+	font-weight: 700;
+	line-height: 1.25;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+	color: #2c3d33;
+	text-decoration: none;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.mega-shop-product__meta {
+	font-family: 'Oswald', sans-serif;
+	font-size: 13px;
+	font-weight: 400;
+	line-height: 1.2;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: #5a6e5f;
+}
+
+.mega-shop-product__meta-link {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	text-decoration: none;
+}
+
+.mega-shop-product__view-all {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	font-size: 10px;
+	font-weight: 500;
+	letter-spacing: 0.06em;
+	color: #2C3D33;
+	white-space: nowrap;
+	transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.mega-shop-product__meta-link:hover .mega-shop-product__view-all {
+	color: #1a1a1a;
+	transform: translateX(2px);
+}
+
+.mega-hunting-list {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.mega-hunting-item {
+	display: grid;
+	grid-template-columns: 52px minmax(0, 1fr);
+	align-items: center;
+	column-gap: 12px;
+	min-height: 52px;
+	color: #2C3D33;
+	text-decoration: none;
+}
+
+.mega-hunting-item--disabled {
+	opacity: 0.45;
+	cursor: default;
+}
+
+.mega-hunting-icon-wrap {
+	width: 52px;
+	height: 52px;
+	flex: 0 0 52px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.mega-hunting-icon {
+	width: 40px;
+	height: 40px;
+	object-fit: contain;
+}
+
+.mega-hunting-icon--turkey {
+	width: 40px;
+	height: 40px;
+}
+
+.mega-hunting-icon--deer {
+	width: 42px;
+	height: 42px;
+}
+
+.mega-hunting-icon--waterfowl {
+	width: 44px;
+	height: 34px;
+}
+
+.mega-hunting-icon--fishing-t-shirt {
+	width: 39px;
+	height: 39px;
+}
+
+.mega-hunting-icon--saltwater-fishing-t-shirt {
+	width: 43px;
+	height: 43px;
+	transform: translate(3px, -2px);
+}
+
+.mega-hunting-placeholder {
+	font-family: 'Oswald', sans-serif;
+	font-size: 15px;
+	font-weight: 600;
+	color: #2C3D33;
+}
+
+.mega-hunting-label {
+	font-family: 'Oswald', sans-serif;
+	font-size: 14px;
+	font-weight: 500;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.mega-block__coming-soon {
+	font-size: 10px;
+	font-style: normal;
+	font-weight: 400;
+	color: #8a9a8e;
+	margin-left: 4px;
+	text-transform: none;
+	letter-spacing: 0.02em;
+}
+
+.mega-terrain-list,
+.mega-seasonal-list {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.mega-seasonal-item {
+	text-decoration: none;
+	color: #2C3D33;
+}
+
+.mega-seasonal-img-wrap {
+	width: 76%;
+	aspect-ratio: 4 / 3;
+	border: 1px solid rgba(44, 61, 51, 0.18);
+	border-radius: 8px;
+	overflow: hidden;
+	background: #f7f4ef;
+}
+
+.mega-seasonal-img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	transition: transform 0.25s ease;
+}
+
+.mega-seasonal-item:hover .mega-seasonal-img {
+	transform: scale(1.03);
+}
+
+.mega-seasonal-label {
+	display: block;
+	margin-top: 8px;
+	font-family: 'Oswald', sans-serif;
+	font-size: 14px;
+	font-weight: 500;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.mega-terrain-placeholder {
+	width: 100%;
+	height: 100%;
+	min-height: 120px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-family: 'Oswald', sans-serif;
+	font-size: 18px;
+	font-weight: 600;
+	color: #2C3D33;
+}
+
+@media (max-width: 1199px) {
+	.header-mega-desktop {
+		display: none !important;
+	}
+}
+</style>

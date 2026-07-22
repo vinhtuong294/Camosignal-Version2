@@ -1,0 +1,85 @@
+.article-card-overlay {
+  position: relative;
+}
+.article-card-overlay .article-card-overlay__image-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  padding-top: 151.6%;
+}
+.article-card-overlay .article-card-overlay__image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--img-desktop-pos);
+  transition-property: transform, opacity;
+  transition-duration: var(--animate-img-scale);
+}
+.article-card-overlay .article-card-overlay__image.article-card-overlay__image--placeholder {
+  background-color: var(--color-img-placeholder-bg);
+}
+@media (-moz-touch-enabled: 0), (hover: hover), (pointer: fine) {
+  .article-card-overlay .article-card-overlay__image:hover {
+    transform: scale(1.15);
+  }
+}
+.article-card-overlay .article-card-overlay__content {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  right: 4px;
+  padding: 24px;
+  background-color: rgba(0, 0, 0, 0.08);
+  color: #fff;
+  backdrop-filter: blur(32px);
+}
+.article-card-overlay .article-card-overlay__info {
+  margin-bottom: 16px;
+  font-size: calc(var(--body-font-size) * 0.875);
+  line-height: 1.43;
+  word-wrap: break-word;
+}
+.article-card-overlay .article-card-overlay__title {
+  color: #fff;
+}
+.article-card-overlay .article-card-overlay__title.article-card-overlay__title--clipped {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.article-card-overlay .article-card-overlay__description {
+  margin-top: 16px;
+  line-height: 1.5;
+  word-break: break-word;
+}
+.article-card-overlay .article-card-overlay__description.article-card-overlay__description--clipped {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+.article-card-overlay .article-card-overlay__read-more {
+  margin-top: 16px;
+  color: #fff;
+}
+.article-card-overlay .article-card-overlay__read-more:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+@media (min-width: 768px) {
+  .article-card-overlay .article-card-overlay__image-wrapper {
+    padding-top: 120%;
+  }
+}
+@media (min-width: 992px) {
+  .article-card-overlay .article-card-overlay__image-wrapper {
+    padding-top: 104.7%;
+  }
+  .article-card-overlay .article-card-overlay__description.article-card-overlay__description--clipped {
+    -webkit-line-clamp: 2;
+  }
+}

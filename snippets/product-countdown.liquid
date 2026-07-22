@@ -1,0 +1,206 @@
+{%- comment -%}
+  Snippet: Product Countdown
+  Displays a stylized FOMO countdown timer with progress bar, designed to be minimal to avoid visual clutter.
+{%- endcomment -%}
+
+{%- assign id_last_digit = product.id | modulo: 8 -%}
+{%- assign inventory_left = id_last_digit | plus: 3 -%}
+{%- assign max_inventory = 25 -%}
+{%- assign inventory_percent = inventory_left | times: 100.0 | divided_by: max_inventory -%}
+
+<style>
+	.fomo-wrapper {
+		width: auto; /* Allow auto width for flex layout */
+		margin: 0;
+	}
+	.fomo-full-bar {
+		display: flex;
+		align-items: stretch;
+		border: 1.5px solid #d33636;
+		border-radius: 4px;
+		overflow: hidden;
+	}
+	.fomo-left {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: #d33636;
+		color: #ffffff;
+		padding: 6px 12px;
+		gap: 6px;
+		font-family: var(--font-heading-family), 'Oswald', sans-serif;
+		font-size: 16px;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+	}
+	.fomo-left svg {
+		width: 14px;
+		height: 20px;
+		fill: #ffffff;
+		animation: flash-bolt 1.5s infinite alternate;
+	}
+	@keyframes flash-bolt {
+		0% { filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.4)) scaleY(1); }
+		100% { filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8)) scaleY(1.05); }
+	}
+	.fomo-right {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: #fcf4f3; /* very light red/beige */
+		padding: 6px 12px;
+	}
+	.fomo-timer {
+		display: flex;
+		align-items: center;
+		gap: 2px;
+	}
+	.time-box {
+		color: #d33636;
+		font-family: var(--font-heading-family), 'Oswald', sans-serif;
+		font-size: 18px;
+		font-weight: 700;
+		width: 22px;
+		height: 24px;
+		position: relative;
+		overflow: hidden;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.fomo-separator {
+		color: #d33636;
+		font-size: 18px;
+		font-weight: 700;
+		margin: 0 4px;
+	}
+	.digit-col {
+		position: relative;
+		width: 11px;
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.digit {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		line-height: 1;
+	}
+	.roll-in {
+		animation: rollIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+	}
+	.roll-out {
+		animation: rollOut 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+	}
+	@keyframes rollIn {
+		0% { transform: translateY(100%); opacity: 0; }
+		100% { transform: translateY(0); opacity: 1; }
+	}
+	@keyframes rollOut {
+		0% { transform: translateY(0); opacity: 1; }
+		100% { transform: translateY(-100%); opacity: 0; }
+	}
+	@media (max-width: 767px) {
+		.fomo-left { font-size: 12px; padding: 5px 7px; gap: 4px; }
+		.fomo-left svg { width: 10px; height: 16px; }
+		.fomo-right { padding: 5px 7px; }
+		.time-box { font-size: 14px; width: 16px; height: 20px; }
+		.fomo-separator { font-size: 14px; margin: 0 1px; }
+		.digit-col { width: 9px; }
+	}
+</style>
+
+<div class="fomo-wrapper">
+	<div class="fomo-full-bar">
+		<div class="fomo-left">
+			<svg viewBox="0 0 24 24" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+			FLASH SALE
+		</div>
+		<div class="fomo-right">
+			<div class="fomo-timer js-fomo-timer-text">
+				<div class="time-box">
+					<div class="digit-col js-fomo-h0"></div>
+					<div class="digit-col js-fomo-h1"></div>
+				</div>
+				<span class="fomo-separator">:</span>
+				<div class="time-box">
+					<div class="digit-col js-fomo-m0"></div>
+					<div class="digit-col js-fomo-m1"></div>
+				</div>
+				<span class="fomo-separator">:</span>
+				<div class="time-box">
+					<div class="digit-col js-fomo-s0"></div>
+					<div class="digit-col js-fomo-s1"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		function updateRollDigit(selector, val) {
+			document.querySelectorAll(selector).forEach(box => {
+				if (box.dataset.val !== val) {
+					box.dataset.val = val;
+					
+					var newDigit = document.createElement('div');
+					newDigit.className = 'digit roll-in';
+					newDigit.textContent = val;
+					
+					var oldDigit = box.querySelector('.digit:not(.roll-out)');
+					if (oldDigit) {
+						oldDigit.classList.remove('roll-in');
+						oldDigit.classList.add('roll-out');
+						setTimeout(() => { if (oldDigit && oldDigit.parentNode) oldDigit.remove(); }, 300);
+					}
+					
+					box.appendChild(newDigit);
+				}
+			});
+		}
+
+		function updateEvergreenTimer() {
+			var now = new Date();
+			var startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+			var diffSinceStartOfDay = now.getTime() - startOfDay.getTime();
+			var periodMs = 4 * 60 * 60 * 1000; // 4 hours in milliseconds
+
+			var nextPeriodMs = Math.ceil(diffSinceStartOfDay / periodMs) * periodMs;
+			if (nextPeriodMs === diffSinceStartOfDay) {
+				nextPeriodMs += periodMs;
+			}
+			
+			var targetTime = startOfDay.getTime() + nextPeriodMs;
+			var diff = targetTime - now.getTime();
+			
+			if (diff > 0) {
+				var h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+				var m = Math.floor((diff / 1000 / 60) % 60);
+				var s = Math.floor((diff / 1000) % 60);
+
+				var strH = h.toString().padStart(2, '0');
+				var strM = m.toString().padStart(2, '0');
+				var strS = s.toString().padStart(2, '0');
+
+				updateRollDigit('.js-fomo-h0', strH[0]);
+				updateRollDigit('.js-fomo-h1', strH[1]);
+				updateRollDigit('.js-fomo-m0', strM[0]);
+				updateRollDigit('.js-fomo-m1', strM[1]);
+				updateRollDigit('.js-fomo-s0', strS[0]);
+				updateRollDigit('.js-fomo-s1', strS[1]);
+			}
+		}
+		
+		setInterval(updateEvergreenTimer, 1000);
+		updateEvergreenTimer();
+	});
+</script>

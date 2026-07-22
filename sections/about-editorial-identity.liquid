@@ -1,0 +1,196 @@
+{{ 'about-editorial.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+	assign container = section.settings.container_width
+
+	if container == 'inherit'
+		assign container_width = settings.container_width
+	else
+		assign container_width = container
+	endif
+-%}
+
+<section
+	class="about-editorial-section about-editorial-identity"
+	style="
+		--ae-container: {{ container_width }};
+		--ae-bg: {{ section.settings.background_color }};
+		--ae-ink: {{ section.settings.ink_color }};
+		--ae-ink-light: {{ section.settings.ink_light_color }};
+		--ae-bark: {{ section.settings.bark_color }};
+		--ae-earth: {{ section.settings.earth_color }};
+		--ae-pad-top-desktop: {{ section.settings.padding_top_desktop }}px;
+		--ae-pad-bottom-desktop: {{ section.settings.padding_bottom_desktop }}px;
+		--ae-pad-top-mobile: {{ section.settings.padding_top_mobile }}px;
+		--ae-pad-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px;
+	"
+>
+	<div class="about-editorial-section__inner container">
+		{%- if section.settings.label != blank -%}
+			<p class="about-editorial-label">{{ section.settings.label }}</p>
+		{%- endif -%}
+
+		<div class="about-editorial-identity__grid">
+			<div>
+				<h2 class="about-editorial-heading">
+					{{ section.settings.heading | escape | newline_to_br }}
+					{%- if section.settings.heading_accent != blank -%}
+						<em>{{ section.settings.heading_accent | escape }}</em>
+					{%- endif -%}
+				</h2>
+
+				{%- if section.settings.quote != blank -%}
+					<blockquote class="about-editorial-quote about-editorial-quote--tagline">
+						<span class="about-editorial-quote__mark">"</span>
+						<div class="about-editorial-quote__text rte">{{ section.settings.quote }}</div>
+					</blockquote>
+				{%- endif -%}
+			</div>
+
+			{%- if section.settings.body != blank -%}
+				<div class="about-editorial-body rte">{{ section.settings.body }}</div>
+			{%- endif -%}
+		</div>
+	</div>
+</section>
+
+{% schema %}
+{
+	"name": "About editorial identity",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "Content"
+		},
+		{
+			"type": "text",
+			"id": "label",
+			"label": "Label",
+			"default": "01 - Raised here"
+		},
+		{
+			"type": "textarea",
+			"id": "heading",
+			"label": "Heading",
+			"default": "We Are\nCamo"
+		},
+		{
+			"type": "text",
+			"id": "heading_accent",
+			"label": "Accent text",
+			"default": "Signal."
+		},
+		{
+			"type": "richtext",
+			"id": "body",
+			"label": "Body",
+			"default": "<p>We were born from the kind of places where hunting season is not a hobby - it is family tradition, responsibility, and patience handed down through generations who stayed, learned, and passed on knowledge rather than trophies.</p><p>Camo Signal is not a fashion brand borrowing the language of the outdoors. We are people who grew up there - where camo never meant style. It meant discipline.</p><p>Camo is a signal. For those who truly understand terrain, who notice tracks before antlers, who hear silence before motion, who put place before self.</p><p>We built this brand for the people who live by their values - quietly, proudly, without needing to explain themselves.</p>"
+		},
+		{
+			"type": "richtext",
+			"id": "quote",
+			"label": "Quote",
+			"default": "<p>Camo is not used to hide.<br>It is a signal - to those who know what it means to belong to the land.</p>"
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "color",
+			"id": "background_color",
+			"label": "Background",
+			"default": "#F5F0E8"
+		},
+		{
+			"type": "color",
+			"id": "ink_color",
+			"label": "Text",
+			"default": "#2C3D33"
+		},
+		{
+			"type": "color",
+			"id": "ink_light_color",
+			"label": "Body text",
+			"default": "#4A6156"
+		},
+		{
+			"type": "color",
+			"id": "bark_color",
+			"label": "Heading accent",
+			"default": "#8B6F4E"
+		},
+		{
+			"type": "color",
+			"id": "earth_color",
+			"label": "Lines",
+			"default": "#C4B89A"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{ "value": "1808px", "label": "Default - 1680px" },
+				{ "value": "2048px", "label": "Large - 1920px" },
+				{ "value": "1200px", "label": "Editorial - 1100px" },
+				{ "value": "100%", "label": "Full width" },
+				{ "value": "inherit", "label": "Inherit of general setting" }
+			],
+			"default": "100%"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_desktop",
+			"min": 40,
+			"max": 160,
+			"step": 4,
+			"unit": "px",
+			"label": "Padding top - desktop",
+			"default": 120
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_desktop",
+			"min": 40,
+			"max": 160,
+			"step": 4,
+			"unit": "px",
+			"label": "Padding bottom - desktop",
+			"default": 120
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 40,
+			"max": 120,
+			"step": 4,
+			"unit": "px",
+			"label": "Padding top - mobile",
+			"default": 80
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 40,
+			"max": 120,
+			"step": 4,
+			"unit": "px",
+			"label": "Padding bottom - mobile",
+			"default": 80
+		}
+	],
+	"presets": [
+		{
+			"name": "About editorial identity"
+		}
+	]
+}
+{% endschema %}

@@ -1,0 +1,32 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "default-page": {
+      "type": "page-template",
+      "disabled": true,
+      "settings": {
+        "enable_color_scheme_inheritance": true,
+        "color_scheme": "",
+        "offset_top_desktop": 0,
+        "offset_bottom_desktop": 0,
+        "offset_top_mobile": 0,
+        "offset_bottom_mobile": 0,
+        "inner_offset_top": 64,
+        "inner_offset_bottom": 64,
+        "inner_offset_top_mobile": 32,
+        "inner_offset_bottom_mobile": 32
+      }
+    }
+  },
+  "order": [
+    "default-page"
+  ]
+}

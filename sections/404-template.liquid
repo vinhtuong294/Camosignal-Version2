@@ -1,0 +1,263 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: 404 template
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/404-template.scss' -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign image                           = section.settings.image -%}
+{%- assign default_heading                 = "general.404_page.heading" | t -%}
+{%- assign heading                         = section.settings.heading | default: default_heading -%}
+{%- assign text                            = section.settings.text -%}
+{%- assign button_url                      = section.settings.button_url -%}
+{%- assign button_label                    = section.settings.button_label -%}
+{%- assign button_style                    = section.settings.button_style -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme 				   = section.settings.color_scheme -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- capture section_styles -%}
+	--inner-offset-top: {{ section.settings.inner_offset_top_desktop }}px; {{-  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom_desktop }}px; {{-  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px; {{-  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px; {{-  -}}
+{%- endcapture -%}
+
+<section class="page-404 color-{{ color_scheme.id }}" style="{{- section_styles -}}">
+	<div class="page-404__container">
+		<div class="page-404__content">
+			{% if image != blank %}
+				{%- capture image_focal -%}
+					--img-pos: {{ image.presentation.focal_point }};
+				{%- endcapture -%}
+
+				<div class="page-404__image-wrapper">
+					<img
+						class="page-404__image"
+						src="{{- image | image_url: width: 120 -}}"
+						srcset="{{ image | image_url: width: 120 }} 1x,
+								{{ image | image_url: width: 240 }} 2x"
+						style="{{- image_focal -}}"
+						loading="eager"
+						fetchpriority="high"
+						alt="{{- image.alt | escape -}}"
+					/>
+				</div>
+			{% endif %}
+
+			{%- if heading != blank -%}
+				<h1 class="h2">
+					{{- heading -}}
+				</h1>
+			{%- endif -%}
+
+			{%- if text != blank -%}
+				<div class="page-404__text rte">
+					{{- text -}}
+				</div>
+			{%- endif -%}
+		</div>
+
+		{%- if button_url != blank and button_label != blank -%}
+			<a
+				class="page-404__button button button--{{ button_style }}"
+				href="{{- button_url -}}"
+			>
+				{%- if button_style == 'secondary' -%}
+					<span data-text="{{- button_label -}}">
+						<span>
+							{{- button_label -}}
+						</span>
+					</span>
+				{%- else -%}
+					{{- button_label -}}
+				{%- endif -%}
+			</a>
+		{%- endif -%}
+	</div>
+</section>
+
+{%- schema -%}
+	{
+		"name": "Page 404",
+		"settings": [
+			{
+				"type": "header",
+				"content": "Colors"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_color_scheme_inheritance",
+				"label": "Enable color scheme inheritance",
+				"default": true,
+				"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+			},
+			{
+				"type": "color_scheme",
+				"id": "color_scheme",
+				"label": "Color scheme",
+				"default": "scheme-1"
+			},
+			{
+				"type": "header",
+				"content": "General"
+			},
+			{
+				"type": "image_picker",
+				"id": "image",
+				"label": "Image",
+				"info": "120x120px .svg recommended"
+			},
+			{
+				"type": "inline_richtext",
+				"id": "heading",
+				"label": "Heading",
+				"default": "Oopps! Page Not Found"
+			},
+			{
+				"type": "richtext",
+				"id": "text",
+				"label": "Text",
+				"default": "<p>It looks like this page is unavailable, but don't worry, we'll find you something just as good.</p>"
+			},
+			{
+				"type": "text",
+				"id": "button_label",
+				"label": "Button label",
+				"default": "Take Me Home"
+			},
+			{
+				"type": "url",
+				"id": "button_url",
+				"label": "Button link",
+				"default": "/"
+			},
+			{
+				"id": "button_style",
+				"type": "select",
+				"label": "Button style",
+				"options": [
+					{
+						"value": "primary",
+						"label": "Primary"
+					},
+					{
+						"value": "secondary",
+						"label": "Secondary"
+					}
+				],
+				"default": "secondary"
+			},
+			{
+				"type": "header",
+				"content": "Layout"
+			},
+			{
+				"type": "paragraph",
+				"content": "External offsets"
+			},
+			{
+				"type": "range",
+				"id": "offset_top_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop external offset top",
+				"default": 0
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop external offset bottom",
+				"default": 0
+			},
+			{
+				"type": "range",
+				"id": "offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile external offset top",
+				"default": 0
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile external offset bottom",
+				"default": 0
+			},
+			{
+				"type": "paragraph",
+				"content": "Internal offsets"
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop internal offset top",
+				"default": 64
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop internal offset bottom",
+				"default": 64
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile internal offset top",
+				"default": 32
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile internal offset bottom",
+				"default": 32
+			}
+		]
+	}
+{%- endschema -%}

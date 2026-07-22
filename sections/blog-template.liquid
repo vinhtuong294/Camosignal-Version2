@@ -1,0 +1,407 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Blog template
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/blog.scss' -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign color_scheme      	           = section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign paginate_by        	           = section.settings.paginate_by -%}
+{%- assign pagination_type    	           = section.settings.pagination_type -%}
+{%- assign lazy_load_button_type           = section.settings.lazy_load_button_type -%}
+{%- assign show_filter_by_tag 	           = section.settings.show_filter_by_tag -%}
+{%- assign container 			           = section.settings.container_width -%}
+
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- capture section_styles -%}
+	--inner-offset-top: {{ section.settings.inner_offset_top_desktop }}px; {{-  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom_desktop }}px; {{-  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px; {{-  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px; {{-  -}}
+	--container-width: {{ container_width }}; {{-  -}}
+{%- endcapture -%}
+
+{%- if show_filter_by_tag and blog.all_tags.size > 0 -%}
+	{%- capture filter_items -%}
+		{%- for tag in blog.all_tags -%}
+			<li>
+				<a
+					class="button-link blog__filters-link{% if current_tags contains tag %} is-active{% endif %} js-blog-filter-link"
+					href="{{- blog.url -}}/tagged/{{- tag | handleize -}}"
+					{% if current_tags contains tag %}
+						tabindex="-1"
+					{% endif %}
+				>
+					<span data-text="{{- tag -}}">
+						<span>
+							{{- tag -}}
+						</span>
+					</span>
+				</a>
+			</li>
+		{%- endfor -%}
+	{%- endcapture -%}
+{%- endif -%}
+
+<section
+	class="blog color-{{ color_scheme }} js-blog"
+	id="{{- section.id -}}"
+	style="{{- section_styles -}}"
+>
+	<div class="container">
+		<h1 class="blog__title">
+			{{- blog.title -}}
+		</h1>
+
+		{%- if blog.articles.size > 0 -%}
+			{%- paginate blog.articles by paginate_by, window_size: 2 -%}
+				{%- if filter_items != blank -%}
+					<div class="blog__filters-wrapper">
+						<ul class="blog__filters js-blog-filters">
+							<li>
+								<a
+									class="button-link blog__filters-link blog__filters-link--reset{% unless current_tags %} is-active{% endunless %} js-blog-filter-reset"
+								   	href="{{- blog.url -}}"
+									{% unless current_tags %}
+										tabindex="-1"
+									{% endunless %}
+								>
+									<span data-text="{{- 'blogs.article.view_all' | t -}}">
+										<span>
+											{{- 'blogs.article.view_all' | t -}}
+										</span>
+									</span>
+								</a>
+							</li>
+
+							{{- filter_items -}}
+						</ul>
+					</div>
+				{%- endif -%}
+
+				<div
+					class="blog__grid js-blog-grid"
+					aria-busy="false"
+				>
+					{%- for article in blog.articles -%}
+						{%- assign remove_lazy = false -%}
+
+						{%- if forloop.index == 1 and section.index == 1 -%}
+							{%- assign remove_lazy = true -%}
+						{%- endif -%}
+
+						{%- assign size_width_375 	= 343 -%}
+						{%- assign size_height_375 	= 297 -%}
+						{%- assign size_width_420 	= 388 -%}
+						{%- assign size_height_420 	= 336 -%}
+						{%- assign size_width_575 	= 543 -%}
+						{%- assign size_height_575 	= 470 -%}
+						{%- assign size_width_767 	= 735 -%}
+						{%- assign size_height_767 	= 636 -%}
+						{%- assign size_width_991 	= 468 -%}
+						{%- assign size_height_991 	= 405 -%}
+						{%- assign size_width_1199 	= 572 -%}
+						{%- assign size_height_1199 = 495 -%}
+						{%- assign size_width_1500 	= 442 -%}
+						{%- assign size_height_1500 = 382 -%}
+						{%- assign size_width 		= 430 -%}
+						{%- assign size_height 		= 372 -%}
+
+						<div class="blog__col">
+							{%- render 'article-card',
+								article: article,
+								aspect_ratio: '86.49%',
+								size_width_375: size_width_375,
+								size_height_375: size_height_375,
+								size_width_420: size_width_420,
+								size_height_420: size_height_420,
+								size_width_575: size_width_575,
+								size_height_575: size_height_575,
+								size_width_767: size_width_767,
+								size_height_767: size_height_767,
+								size_width_991: size_width_991,
+								size_height_991: size_height_991,
+								size_width_1199: size_width_1199,
+								size_height_1199: size_height_1199,
+								size_width_1500: size_width_1500,
+								size_height_1500: size_height_1500,
+								size_width: size_width,
+								size_height: size_height,
+								remove_lazy: remove_lazy
+							-%}
+						</div>
+					{%- endfor -%}
+				</div>
+
+				{%- if pagination_type == 'pagination' -%}
+					<div class="blog__pagination-wrapper js-blog-pagination">
+						{%- if paginate.pages > 1 -%}
+							{%- render 'pagination', paginate: paginate -%}
+						{%- endif -%}
+					</div>
+				{%- elsif pagination_type == "infinite_scroll" -%}
+					<div
+						class="blog__infinite-scroll{% unless paginate.next.url %} is-hidden{% endunless %} no-js-hidden js-blog-infinite-scroll"
+						data-next-url="{%- if paginate.next.url -%}{{- paginate.next.url -}}{%- endif -%}"
+					></div>
+				{%- else -%}
+					<div class="blog__lazy-load-button-wrapper no-js-hidden">
+						<button
+							class="button button--{{- lazy_load_button_type }} blog__lazy-load-button{% unless paginate.next.url %} is-hidden{% endunless %} js-blog-lazy-load"
+							data-next-url="{%- if paginate.next.url -%}{{- paginate.next.url -}}{%- endif -%}"
+						>
+							{%- case lazy_load_button_type -%}
+								{%- when 'secondary' -%}
+									<span data-text="{{- 'blogs.general.lazy_load_button' | t -}}">
+										<span>
+											{{- 'blogs.general.lazy_load_button' | t -}}
+										</span>
+									</span>
+								{%- else -%}
+									{{- 'blogs.general.lazy_load_button' | t -}}
+							{%- endcase -%}
+						</button>
+					</div>
+				{%- endif -%}
+
+				{%- unless pagination_type == 'pagination' -%}
+					<noscript>
+						<div class="blog__pagination-wrapper">
+							{%- if paginate.pages > 1 -%}
+								{%- render 'pagination', paginate: paginate -%}
+							{%- endif -%}
+						</div>
+					</noscript>
+				{%- endunless -%}
+
+				{%- render 'adastra' with '/src/scripts/blog-template.js' -%}
+			{%- endpaginate -%}
+		{%- else -%}
+			<h2 class="h2 blog__title blog__title--empty">
+				{{- 'blogs.general.empty_blog' | t -}}
+			</h2>
+		{%- endif -%}
+	</div>
+</section>
+
+{%- schema -%}
+{
+	"name": "Blog",
+	"settings": [
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "General"
+		},
+		{
+			"type": "range",
+			"id": "paginate_by",
+			"min": 8,
+			"max": 50,
+			"step": 1,
+			"label": "Paginate by",
+			"default": 16
+		},
+		{
+			"type": "select",
+			"id": "pagination_type",
+			"label": "Pagination type",
+			"options": [
+				{
+					"value": "pagination",
+					"label": "Pagination"
+				},
+				{
+					"value": "lazy_load",
+					"label": "Load more"
+				},
+				{
+					"value": "infinite_scroll",
+					"label": "Infinite scroll"
+				}
+			],
+			"default": "pagination"
+		},
+		{
+			"type": "select",
+			"id": "lazy_load_button_type",
+			"label": "Load more button style",
+			"options": [
+				{
+					"value": "primary",
+					"label": "Primary"
+				},
+				{
+					"value": "secondary",
+					"label": "Secondary"
+				}
+			],
+			"default": "secondary"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_filter_by_tag",
+			"label": "Show filter by tag",
+			"default": true
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1808px",
+					"label": "Default - 1680px"
+				},
+				{
+					"value": "2048px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset top",
+			"default": 24
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset bottom",
+			"default": 48
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset top",
+			"default": 16
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset bottom",
+			"default": 32
+		},
+		{
+			"type": "paragraph",
+			"content": "Internal offsets"
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset top",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset bottom",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset top",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset bottom",
+			"default": 30
+		}
+	]
+}
+{%- endschema -%}

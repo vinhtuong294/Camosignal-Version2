@@ -1,0 +1,125 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Product gallery video
+	This snippet will output main video on product page
+
+	- video: video object (optional, object),
+	- type: [video/external_video]
+
+	{%- render "product-gallery-image", image: image -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- capture placeholder_video -%}
+	{%- assign preview_image = video.preview_image -%}
+
+	<div class="product-gallery-video__placeholder js-product-gallery-video-placeholder">
+		<picture>
+			<source
+				srcset="{{ preview_image | image_url: width: 313 }} 1x, {{ preview_image | image_url: width: 626 }} 2x"
+				media="(max-width: 360px)"
+				width="313"
+				height="313"
+			>
+
+			<source
+				srcset="{{ preview_image | image_url: width: 333 }} 1x, {{ preview_image | image_url: width: 666 }} 2x"
+				media="(max-width: 380px)"
+				width="333"
+				height="333"
+			>
+
+			<source
+				srcset="{{ preview_image | image_url: width: 433 }} 1x, {{ preview_image | image_url: width: 866 }} 2x"
+				media="(max-width: 480px)"
+				width="433"
+				height="433"
+			>
+
+			<source
+				srcset="{{ preview_image | image_url: width: 720 }} 1x, {{ preview_image | image_url: width: 1440 }} 2x"
+				media="(max-width: 767px)"
+				width="720"
+				height="720"
+			>
+
+			<img
+				class="product-gallery-video__placeholder-img"
+				src="{{ preview_image | image_url: width: 440 }}"
+				srcset="{{ preview_image | image_url: width: 440 }} 1x, {{ preview_image | image_url: width: 880 }} 2x"
+				alt="{{ preview_image.alt }}"
+				width="440"
+				height="440"
+				loading="lazy"
+				fetchpriority="low"
+			/>
+		</picture>
+
+		<button class="product-gallery-video__placeholder-btn focus-visible-outline" aria-label="{{ 'general.accessibility.video_play' | t }}">
+			{%- render 'icons', icon: "play-filled" -%}
+		</button>
+	</div>
+{%- endcapture -%}
+
+{%- capture html_video -%}
+	<video
+		class="	product-gallery-video__html js-video"
+		data-device="desktop"
+		data-type="html"
+		preload="none"
+		controls
+		{% if enable_video_play_on_autoplay %}
+			autoplay
+			playsinline
+			muted
+		{% endif %}
+	>
+		{%- for source in video.sources  -%}
+			{%- if source.mime_type == 'video/mp4' -%}
+				<source
+					src="{{- source.url -}}#t=0.001"
+					type="{{- source.mime_type -}}"
+				>
+			{%- endif -%}
+		{%- endfor -%}
+	</video>
+{%- endcapture -%}
+
+{%- capture external_video -%}
+	{%- if video.host == 'youtube' -%}
+		<div
+			class="product-gallery-video__youtube js-video"
+			style="--aspect-ratio: {{ video.aspect_ratio | default: 1.0 }}"
+			data-device="desktop"
+			data-type="{{- video.host -}}"
+			{% if video.preview_image != nil %}data-lazy{% endif %}
+		>
+			<div
+				class="js-video-youtube"
+				data-video-id="{{- video.external_id -}}"
+			></div>
+		</div>
+	{%- else -%}
+		<div
+			class="product-gallery-video__vimeo js-video"
+			style="--aspect-ratio: {{ video.aspect_ratio | default: 1.0 }}"
+			data-device="desktop"
+			data-video-id="{{- video.external_id -}}"
+			data-type="{{- video.host -}}"
+			{% if video.preview_image != nil %}data-lazy{% endif %}
+		></div>
+	{%- endif -%}
+{%- endcapture -%}
+
+{%- case type -%}
+	{%- when 'video' -%}
+		{%- unless enable_video_play_on_autoplay -%}
+			{{- placeholder_video -}}
+		{%- endunless -%}
+
+		{{- html_video -}}
+	{%- when 'external_video' -%}
+		{{- placeholder_video -}}
+
+		{{- external_video -}}
+{%- endcase -%}

@@ -1,0 +1,20 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Page card
+	- page: Page object (required)
+
+	Usage:
+
+	{%- render 'page-card', page: page -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/page-card.scss' -%}
+
+<div class="page-card">
+	<div class="page-card__container">
+		<a href="{{- page.url -}}" class="page-card__title focus-visible-outline">
+			{{- page.title -}}
+		</a>
+	</div>
+</div>

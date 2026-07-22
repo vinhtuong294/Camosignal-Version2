@@ -1,0 +1,235 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+  Snippet: Shopify Inbox Chat Drag
+  Keeps the Shopify Inbox closed chat button draggable after Inbox UI updates.
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+<style>
+	#ShopifyChat.camo-chat-drag-ready:not([is-open="true"]) {
+		touch-action: none !important;
+		user-select: none !important;
+		-webkit-user-select: none !important;
+		cursor: grab;
+	}
+
+	#ShopifyChat.camo-chat-drag-ready.camo-chat-is-dragging:not([is-open="true"]) {
+		transition: none !important;
+		cursor: grabbing;
+	}
+
+	#ShopifyChat.camo-chat-drag-positioned:not([is-open="true"]) {
+		left: var(--camo-chat-left, auto) !important;
+		top: var(--camo-chat-top, auto) !important;
+		right: var(--camo-chat-right, auto) !important;
+		bottom: var(--camo-chat-bottom, auto) !important;
+	}
+</style>
+
+<script>
+	(function() {
+		var STORAGE_KEY = 'camo:shopify-chat-position:v1';
+		var DRAG_THRESHOLD = 8;
+		var EDGE_MARGIN = 16;
+		var boundHosts = [];
+		var currentHost = null;
+		var pointerState = null;
+		var blockNextClick = false;
+
+		function hasBound(host) {
+			return boundHosts.indexOf(host) !== -1;
+		}
+
+		function clamp(value, min, max) {
+			return Math.max(min, Math.min(value, max));
+		}
+
+		function getSavedPosition() {
+			try {
+				var raw = window.localStorage.getItem(STORAGE_KEY);
+				if (!raw) return null;
+
+				var position = JSON.parse(raw);
+				if (!position || (position.side !== 'left' && position.side !== 'right')) return null;
+				if (typeof position.top !== 'number' || !isFinite(position.top)) return null;
+
+				return position;
+			} catch (error) {
+				return null;
+			}
+		}
+
+		function savePosition(position) {
+			try {
+				window.localStorage.setItem(STORAGE_KEY, JSON.stringify(position));
+			} catch (error) {
+				return;
+			}
+		}
+
+		function setPosition(host, position) {
+			var rect = host.getBoundingClientRect();
+			var width = rect.width || host.offsetWidth || 96;
+			var height = rect.height || host.offsetHeight || 56;
+			var maxTop = Math.max(EDGE_MARGIN, window.innerHeight - height - EDGE_MARGIN);
+			var top = clamp(position.top, EDGE_MARGIN, maxTop);
+
+			host.style.setProperty('--camo-chat-top', top + 'px');
+			host.style.setProperty('--camo-chat-bottom', 'auto');
+
+			if (position.side === 'left') {
+				host.style.setProperty('--camo-chat-left', EDGE_MARGIN + 'px');
+				host.style.setProperty('--camo-chat-right', 'auto');
+			} else {
+				host.style.setProperty('--camo-chat-left', 'auto');
+				host.style.setProperty('--camo-chat-right', EDGE_MARGIN + 'px');
+			}
+
+			host.classList.add('camo-chat-drag-positioned');
+		}
+
+		function setFreePosition(host, left, top) {
+			host.style.setProperty('--camo-chat-left', left + 'px');
+			host.style.setProperty('--camo-chat-top', top + 'px');
+			host.style.setProperty('--camo-chat-right', 'auto');
+			host.style.setProperty('--camo-chat-bottom', 'auto');
+			host.classList.add('camo-chat-drag-positioned');
+		}
+
+		function applySavedPosition(host) {
+			var savedPosition = getSavedPosition();
+			if (savedPosition) {
+				setPosition(host, savedPosition);
+			}
+		}
+
+		function isChatClosed(host) {
+			return host.getAttribute('is-open') !== 'true';
+		}
+
+		function onPointerDown(event) {
+			var host = event.currentTarget;
+			if (!isChatClosed(host)) return;
+			if (event.pointerType === 'mouse' && event.button !== 0) return;
+
+			var rect = host.getBoundingClientRect();
+			currentHost = host;
+			pointerState = {
+				host: host,
+				id: event.pointerId,
+				startX: event.clientX,
+				startY: event.clientY,
+				startLeft: rect.left,
+				startTop: rect.top,
+				width: rect.width || host.offsetWidth || 96,
+				height: rect.height || host.offsetHeight || 56,
+				dragging: false
+			};
+
+			try {
+				host.setPointerCapture(event.pointerId);
+			} catch (error) {
+				return;
+			}
+		}
+
+		function onPointerMove(event) {
+			if (!pointerState || pointerState.id !== event.pointerId) return;
+			var host = pointerState.host;
+			if (!isChatClosed(host)) return;
+
+			var dx = event.clientX - pointerState.startX;
+			var dy = event.clientY - pointerState.startY;
+
+			if (!pointerState.dragging && (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD)) {
+				pointerState.dragging = true;
+				host.classList.add('camo-chat-is-dragging');
+			}
+
+			if (!pointerState.dragging) return;
+
+			event.preventDefault();
+			event.stopPropagation();
+
+			var maxLeft = Math.max(EDGE_MARGIN, window.innerWidth - pointerState.width - EDGE_MARGIN);
+			var maxTop = Math.max(EDGE_MARGIN, window.innerHeight - pointerState.height - EDGE_MARGIN);
+			var nextLeft = clamp(pointerState.startLeft + dx, EDGE_MARGIN, maxLeft);
+			var nextTop = clamp(pointerState.startTop + dy, EDGE_MARGIN, maxTop);
+
+			setFreePosition(host, nextLeft, nextTop);
+		}
+
+		function finishPointer(event) {
+			if (!pointerState || pointerState.id !== event.pointerId) return;
+
+			var host = pointerState.host;
+			var wasDragging = pointerState.dragging;
+
+			try {
+				host.releasePointerCapture(event.pointerId);
+			} catch (error) {
+			}
+
+			if (wasDragging) {
+				var rect = host.getBoundingClientRect();
+				var side = (rect.left + rect.width / 2) < window.innerWidth / 2 ? 'left' : 'right';
+				var position = {
+					side: side,
+					top: rect.top
+				};
+
+				setPosition(host, position);
+				savePosition(position);
+				host.classList.remove('camo-chat-is-dragging');
+				blockNextClick = true;
+				window.setTimeout(function() {
+					blockNextClick = false;
+				}, 450);
+			}
+
+			pointerState = null;
+		}
+
+		function onClick(event) {
+			if (!blockNextClick) return;
+
+			event.preventDefault();
+			event.stopImmediatePropagation();
+			blockNextClick = false;
+		}
+
+		function bindChatHost(host) {
+			if (!host || hasBound(host)) return;
+
+			currentHost = host;
+			boundHosts.push(host);
+			host.classList.add('camo-chat-drag-ready');
+			applySavedPosition(host);
+
+			host.addEventListener('pointerdown', onPointerDown, true);
+			host.addEventListener('pointermove', onPointerMove, true);
+			host.addEventListener('pointerup', finishPointer, true);
+			host.addEventListener('pointercancel', finishPointer, true);
+			host.addEventListener('click', onClick, true);
+		}
+
+		function findAndBindChat() {
+			var host = document.getElementById('ShopifyChat');
+			if (host) {
+				bindChatHost(host);
+			}
+		}
+
+		function keepPositionInViewport() {
+			if (!currentHost) return;
+			applySavedPosition(currentHost);
+		}
+
+		findAndBindChat();
+
+		var observer = new MutationObserver(findAndBindChat);
+		observer.observe(document.documentElement, { childList: true, subtree: true });
+		window.addEventListener('resize', keepPositionInViewport, { passive: true });
+		window.addEventListener('orientationchange', keepPositionInViewport, { passive: true });
+	})();
+</script>

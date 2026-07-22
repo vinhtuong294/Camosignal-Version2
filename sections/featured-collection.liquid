@@ -1,0 +1,304 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Featured collection
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/featured-collection.scss' -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign collection 					   = section.settings.collection -%}
+{%- assign heading 						   = section.settings.heading -%}
+{%- assign image 			   			   = section.settings.image | default: collection.featured_image -%}
+{%- assign link_label_default      		   = 'sections.collection_list.see_all_products' | t -%}
+{%- assign link_label 				       = section.settings.link_label | default: link_label_default -%}
+{%- assign link_url           	  		   = routes.all_products_collection_url -%}
+{%- assign title_default 	   			   = 'sections.collection_list.card_title' | t -%}
+{%- assign title          	               = collection.title | default: title_default -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme 				   = section.settings.color_scheme -%}
+{%- assign container 					   = section.settings.container_width -%}
+{%- assign products 					   = collection.products -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- if container == 'inherit' -%}
+	{% assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- assign is_lazy = true -%}
+
+{%- if section.index == 1 -%}
+	{%- assign is_lazy = false -%}
+{%- endif -%}
+
+{%- capture style -%}
+	--container-width: {{- container_width -}}; {{- -}}
+	--inner-offset-top: {{- section.settings.inner_offset_top -}}px; {{-  -}}
+	--inner-offset-bottom: {{- section.settings.inner_offset_bottom -}}px; {{-  -}}
+	--inner-offset-top-mobile: {{- section.settings.inner_offset_top_mobile -}}px; {{-  -}}
+	--inner-offset-bottom-mobile: {{- section.settings.inner_offset_bottom_mobile -}}px; {{-  -}}
+{%- endcapture -%}
+
+<section
+	class="featured-collection color-{{ color_scheme.id }} section-animate js-animate{% if request.visual_preview_mode or section.index == 1 %} animated{% endif %}"
+	style="{{- style -}}"
+>
+	<div class="container">
+		{%- if heading != blank -%}
+			<h2 class="h2 featured-collection__heading">
+				{{- heading -}}
+			</h2>
+		{%- endif -%}
+
+		<div class="featured-collection__grid">
+			<div class="featured-collection__collection">
+				{%- render 'media-card-overlay',
+					title: title,
+					link_label: link_label,
+					link_url: link_url,
+					image: image,
+					is_lazy: is_lazy,
+					size_width_375: 343,
+					size_height_375: 500,
+					size_width_420: 388,
+					size_height_420: 566,
+					size_width_575: 543,
+					size_height_575: 792,
+					size_width_767: 735,
+					size_height_767: 1072,
+					size_width_991: 316,
+					size_height_991: 421,
+					size_width_1199: 385,
+					size_height_1199: 500,
+					size_width_1500: 454,
+					size_height_1500: 579,
+					size_width: 594,
+					size_height: 740
+				-%}
+			</div>
+
+			<div class="featured-collection__products">
+				{%- if collection != blank -%}
+					{%- for product in products limit: 2 -%}
+						{%- unless product.selected_or_first_available_variant.requires_shipping -%}
+							{%- continue -%}
+						{%- endunless -%}
+						<div class="featured-collection__product">
+							{%- render 'product-card',
+								product: product,
+								size: 588,
+								tablet_size: 735,
+								mobile_size: 388
+							-%}
+						</div>
+					{%- endfor -%}
+				{%- else -%}
+					{% for product in (1..2) %}
+						<div class="featured-collection__product">
+							{%- render 'product-card' -%}
+						</div>
+					{% endfor %}
+				{%- endif -%}
+			</div>
+		</div>
+	</div>
+</section>
+
+{%- schema -%}
+{
+	"name": "Featured collection",
+	"class": "featured-collection-wrapper",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "General"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "heading",
+			"label": "Heading"
+		},
+		{
+			"type": "collection",
+			"id": "collection",
+			"label": "Collection"
+		},
+		{
+			"type": "image_picker",
+			"id": "image",
+			"label": "Image",
+			"info": "Use instead of collection image"
+		},
+		{
+			"type": "text",
+			"id": "link_label",
+			"label": "Link label",
+			"default": "See all products"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1808px",
+					"label": "Default - 1680px"
+				},
+				{
+					"value": "2048px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset bottom",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset bottom",
+			"default": 25
+		},
+		{
+			"type": "paragraph",
+			"content": "Internal offsets"
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset top",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset bottom",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset top",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset bottom",
+			"default": 32
+		}
+	],
+	"presets": [
+		{
+			"name": "Featured collection",
+			"settings": {
+				"heading": "Featured collection",
+				"link_label": "See all products"
+			}
+		}
+	]
+}
+{%- endschema -%}

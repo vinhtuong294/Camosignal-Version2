@@ -1,0 +1,272 @@
+{% comment %}
+	------------------------------------------------------------------------------
+	Snippet: Cart footer
+	Render shopping cart footer
+	- section: Section object (required)
+	- cart_button_label: text for "Go to cart" link (optional)
+
+	Usage:
+	{%- render 'cart-footer' -%}
+	------------------------------------------------------------------------------
+{% endcomment %}
+
+{%- assign benefits_blocks = section.blocks | where: 'type', 'benefit' -%}
+{%- assign show_benefits = false -%}
+{%- assign show_discount_form = false -%}
+{%- assign show_cart_note_form = false -%}
+{%- assign show_dynamic_checkout_buttons = false -%}
+{%- assign show_payment_icons = true -%}
+
+{%- if section.settings.show_benefits -%}
+	{%- assign show_benefits = true -%}
+{%- endif -%}
+
+{%- if section.settings.show_discount_form -%}
+	{%- assign show_discount_form = true -%}
+{%- endif -%}
+
+{%- if section.settings.show_cart_note -%}
+	{%- assign show_cart_note_form = true -%}
+{%- endif -%}
+
+{%- if section.settings.show_dynamic_checkout_buttons -%}
+	{%- assign show_dynamic_checkout_buttons = true -%}
+{%- endif -%}
+
+{%- if section.settings.show_payment_icons == false -%}
+	{%- assign show_payment_icons = false -%}
+{%- endif -%}
+
+{%- if cart_drawer == true -%}
+	{%- assign show_payment_icons = false -%}
+{%- endif -%}
+
+{%- assign subtotal_label = section.settings.subtotal_label | default: 'Subtotal' -%}
+{%- assign subtotal_item_singular = section.settings.subtotal_item_singular | default: 'item' -%}
+{%- assign subtotal_item_plural = section.settings.subtotal_item_plural | default: 'items' -%}
+
+{%- capture benefits -%}
+	{%- if show_benefits -%}
+		{%- for block in benefits_blocks -%}
+			<div class="cart-footer__benefit" {{ block.shopify_attributes }} style="display: flex; align-items: center; gap: 8px; color: var(--cart-drawer-subtotal-color, #000000); font-size: 13px; line-height: 1.4; margin-bottom: 10px;">
+				{%- if block.settings.icon != blank -%}
+					<img
+						src="{{ block.settings.icon | image_url: width: 40 }}"
+						srcset="{{ block.settings.icon | image_url: width: 20 }} 1x, {{ block.settings.icon | image_url: width: 40 }} 2x"
+						width="20"
+						height="20"
+						alt="{{ block.settings.icon.alt | escape }}"
+						loading="lazy"
+					>
+				{%- endif -%}
+
+				{%- if block.settings.text != blank -%}
+					<span>{{ block.settings.text }}</span>
+				{%- endif -%}
+			</div>
+		{%- endfor -%}
+	{%- endif -%}
+{%- endcapture -%}
+
+{%- capture tax_message -%}
+{%- endcapture -%}
+
+{%- capture cart_total -%}
+	{%- assign total_compare_at_price = 0 -%}
+	{%- for item in cart.items -%}
+		{%- assign item_compare_price = item.variant.compare_at_price | default: item.original_price -%}
+		{%- assign line_compare = item_compare_price | times: item.quantity -%}
+		{%- assign total_compare_at_price = total_compare_at_price | plus: line_compare -%}
+	{%- endfor -%}
+
+	{%- if cart.cart_level_discount_applications.size > 0 -%}
+		<div class="cart-footer__savings" style="display: flex; align-items: center; justify-content: space-between; font-size: 14px; margin-bottom: 14px;">
+			<span style="font-family: var(--font-body-family); color: var(--cart-drawer-subtotal-color, #000000);">Discounts</span>
+			<ul class="discounts discounts--right cart-footer__discounts" role="list" aria-label="{{- 'customer.order.discount' | t | escape -}}" style="margin: 0; padding: 0; list-style: none; display: flex; align-items: center; gap: 8px;">
+				{%- for discount in cart.cart_level_discount_applications -%}
+					<li class="discounts__item" style="display: flex; align-items: center; gap: 6px;">
+						<div style="background: #f2f2f2; padding: 4px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px; font-weight: 600; font-size: 12px; color: #333;">
+							{% render 'icons', icon: 'discount' %}
+							{{ discount.title }}
+						</div>
+						<span style="color: #333;">-{{ discount.total_allocated_amount | money }}</span>
+					</li>
+				{%- endfor -%}
+			</ul>
+		</div>
+	{%- endif -%}
+
+	<div class="cart-footer__subtotal" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+		<span class="cart-footer__subtotal-label" style="font-weight: 600; font-size: 16px; color: var(--cart-drawer-subtotal-color, #000000);">
+			{{ subtotal_label }} ({{ cart.item_count }} {% if cart.item_count == 1 %}{{ subtotal_item_singular }}{% else %}{{ subtotal_item_plural }}{% endif %})
+		</span>
+
+		<span class="cart-footer__subtotal-value" style="display: flex; gap: 8px; align-items: center; font-weight: 600; font-size: 18px;">
+			{%- if total_compare_at_price > cart.total_price -%}
+				<span style="color: var(--cart-drawer-subtotal-price-color, #c0392b);">{{ cart.total_price | money }}</span>
+				<s style="color: var(--cart-drawer-compare-price-color, #999999); font-size: 14px; font-weight: 400;">{{ total_compare_at_price | money }}</s>
+			{%- else -%}
+				<span style="color: var(--cart-drawer-subtotal-price-color, #c0392b);">{{ cart.total_price | money }}</span>
+			{%- endif -%}
+		</span>
+	</div>
+{%- endcapture -%}
+
+{%- capture checkout_buttons -%}
+	{%- assign cta_class = "cart-footer__ctas" -%}
+
+	{%- if cart_button_label == blank and cart_drawer == true -%}
+		{%- assign cta_class = cta_class | append: " cart-footer__ctas--one" -%}
+	{%- endif -%}
+
+	{%- if cart_drawer == false -%}
+		{%- assign cta_class = "cart-template__ctas" -%}
+	{%- endif -%}
+
+	<div class="{{ cta_class }} js-cart-footer-button" style="display: flex; flex-direction: column; width: 100%; z-index: 200; background: var(--cart-drawer-footer-bg, #ffffff); padding: var(--cart-drawer-footer-padding, 20px 24px 16px); border-top: 1px solid var(--cart-drawer-footer-border-color, rgba(0,0,0,0.06)); margin-left: auto; margin-right: auto; max-width: 100%;">
+		{%- render 'cart-discount', show_discount_form: show_discount_form -%}
+
+		<div class="js-cart-subtotal" style="width: 100%;">
+			{{- cart_total -}}
+		</div>
+		{%- capture default_checkout_button -%}
+			Checkout
+		{%- endcapture -%}
+
+		{%- assign checkout_button = section.settings.checkout_button_label | default: settings.cart_checkout_button | default: default_checkout_button -%}
+
+		{%- if cart_button_label != blank and cart_drawer == true -%}
+			<a href="{{ routes.cart_url }}" class="cart-footer__button button button--primary button--block" style="display: none;">
+				{{- cart_button_label -}}
+			</a>
+		{%- endif -%}
+
+		<button
+			type="button"
+			class="cart-footer__button button button--secondary button--block js-checkout-button"
+			style="width: 100%; background: var(--cart-drawer-checkout-bg, #0d1f6b) !important; border-color: var(--cart-drawer-checkout-border, #0d1f6b) !important; color: var(--cart-drawer-checkout-color, #ffffff) !important; font-family: 'Oswald', sans-serif !important; text-transform: uppercase; font-size: var(--cart-drawer-checkout-font-size, 16px); font-weight: 600; padding: var(--cart-drawer-checkout-padding, 14px); margin-bottom: 8px; border-radius: var(--cart-drawer-checkout-radius, 6px) !important;"
+			onclick="window.location.href = '/checkout';"
+		>
+			<span data-text="{{- checkout_button | strip_html -}}">
+				<span>{{ checkout_button }}</span>
+			</span>
+		</button>
+	</div>
+
+	{%- if show_dynamic_checkout_buttons and settings.show_additional_checkout_buttons and additional_checkout_buttons -%}
+		<style>
+			/* Force border-radius on all dynamic checkout buttons (PayPal, Shop Pay, GPay) */
+			.cart-footer__ctas-additional,
+			.cart-footer__ctas-additional * {
+				--payment-button-border-radius: var(--cart-drawer-checkout-radius, 6px);
+				--buttons-border-radius: var(--cart-drawer-checkout-radius, 6px);
+				--border-radius: var(--cart-drawer-checkout-radius, 6px);
+			}
+			.cart-footer__ctas-additional [role="button"],
+			.cart-footer__ctas-additional .shopify-cleanslate,
+			.cart-footer__ctas-additional .shopify-cleanslate > div,
+			.cart-footer__ctas-additional .additional-checkout-buttons ul li button {
+				border-radius: 6px !important;
+			}
+			/* Some buttons use iframes inside shadow DOM, wrapping them with overflow-hidden ensures border-radius applies at wrapper level */
+			.cart-footer__ctas-additional .additional-checkout-buttons ul li {
+				border-radius: 6px !important;
+				overflow: hidden !important;
+			}
+		</style>
+		<div class="cart-footer__ctas-additional js-cart-footer-additional-buttons" style="width: 100%; margin-bottom: 24px; padding: 0 24px;">
+			{{ content_for_additional_checkout_buttons }}
+		</div>
+	{%- endif -%}
+
+	{%- if cart_drawer == true and show_payment_icons -%}
+		<div class="cart-drawer__payment-icons" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; padding: 0 24px var(--cart-drawer-payment-padding-bottom, 24px);">
+			{%- for type in shop.enabled_payment_types -%}
+				{{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+			{%- endfor -%}
+		</div>
+	{%- endif -%}
+{%- endcapture -%}
+
+{%- if cart_drawer == false -%}
+	<div class="cart-footer">
+		<div class="cart-template__footer">
+			{%- if show_cart_note_form or benefits != blank or show_discount_form -%}
+				<div class="cart-template__additional-content">
+					{%- if benefits != blank -%}
+						<div class="cart-template__benefits">
+							{{- benefits -}}
+						</div>
+					{%- endif -%}
+
+					{%- if show_discount_form -%}
+						{% liquid
+							assign discount_codes = cart.cart_level_discount_applications | where: 'type', 'discount_code' | map: 'title'
+							for item in cart.items
+								for allocation in item.line_level_discount_allocations
+									if allocation.discount_application.type == 'discount_code'
+										assign discount_codes = item.line_level_discount_allocations | slice: forloop.index0 | map: 'discount_application' | map: 'title' | concat: discount_codes
+									endif
+								endfor
+							endfor
+
+							assign discount_codes = discount_codes | uniq
+						%}
+
+
+					{% endif %}
+
+					{%- if show_cart_note_form -%}
+						<div class="textarea-wrapper">
+							<textarea
+								id="note-cart"
+								name="note"
+								form="cart-{{- section.id -}}"
+								class="textarea cart-template__textarea js-cart-notes-field"
+								aria-label="{{- 'cart.general.note' | t | escape -}}"
+								placeholder="{{- 'cart.general.note_placeholder' | t | escape -}}"
+							>
+								{{- cart.note -}}
+							</textarea>
+
+							<label for="note-cart" class="textarea-label">{{- 'cart.general.note' | t -}}</label>
+						</div>
+					{%- endif -%}
+				</div>
+			{%- endif -%}
+
+			<div class="cart-template__total">
+				<div class="js-cart-subtotal" style="display: none;">
+					{{- cart_total -}}
+				</div>
+
+					{%- if settings.show_tax_and_shipping -%}
+						{{- tax_message -}}
+					{%- endif -%}
+				</div>
+
+				{{- checkout_buttons -}}
+			</div>
+		</div>
+	</div>
+{%- else -%}
+	<div class="cart-footer" style="display: contents;">
+		<div class="cart-footer__summary" style="padding: 0 24px;">
+			{%- render 'cart-notes', id: section.id, show_note_form: show_cart_note_form -%}
+
+			{%- if benefits != blank -%}
+				<div class="cart-footer__benefits">
+					{{- benefits -}}
+				</div>
+			{%- endif -%}
+		</div>
+
+		<div class="cart-footer__main" style="display: contents;">
+			{%- if settings.show_tax_and_shipping -%}
+				{{- tax_message -}}
+			{%- endif -%}
+
+			{{- checkout_buttons -}}
+		</div>
+	</div>
+{% endif %}

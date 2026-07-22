@@ -1,0 +1,75 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+  Snippet: Product Promo Banner
+  - Hiển thị banner khuyến mãi "Buy More Save More" 
+  - Desktop và Mobile dùng ảnh khác nhau
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+<div class="product-promo-banner">
+	<a href="/collections/all" class="product-promo-banner__link">
+		{%- comment -%} Desktop Banner {%- endcomment -%}
+		<img
+			class="product-promo-banner__img product-promo-banner__img--desktop"
+			src="https://cdn.shopify.com/s/files/1/0741/7987/0911/files/buymoresvemore1.jpg?v=1775816846"
+			alt="Buy More Save More - Discount Promotion"
+			loading="lazy"
+			width="800"
+			height="200"
+		/>
+
+		{%- comment -%} Mobile Banner {%- endcomment -%}
+		<img
+			class="product-promo-banner__img product-promo-banner__img--mobile"
+			src="https://cdn.shopify.com/s/files/1/0741/7987/0911/files/banner-mobile-save2.jpg?v=1775816846"
+			alt="Buy More Save More - Discount Promotion"
+			loading="lazy"
+			width="400"
+			height="200"
+		/>
+	</a>
+</div>
+
+<style>
+	.product-promo-banner {
+		width: 100%;
+		margin: 16px 0;
+		border-radius: 8px;
+		overflow: hidden;
+	}
+	.product-promo-banner__link {
+		display: block;
+		line-height: 0;
+	}
+	.product-promo-banner__img {
+		width: 100%;
+		height: auto;
+		object-fit: cover;
+		border-radius: 8px;
+	}
+
+	/* Desktop: hiện ảnh desktop, ẩn ảnh mobile */
+	.product-promo-banner__img--mobile {
+		display: none;
+	}
+	.product-promo-banner__img--desktop {
+		display: block;
+	}
+
+	/* Mobile: hiện ảnh mobile, ẩn ảnh desktop */
+	@media screen and (max-width: 767px) {
+		.product-promo-banner__img--desktop {
+			display: none;
+		}
+		.product-promo-banner__img--mobile {
+			display: block;
+		}
+		.product-promo-banner {
+			margin: 12px 0;
+			border-radius: 6px;
+		}
+		.product-promo-banner__img {
+			border-radius: 6px;
+		}
+	}
+</style>

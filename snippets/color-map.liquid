@@ -1,0 +1,96 @@
+{%- comment -%}
+  Snippet: Trả về mã màu hex cho một tên màu (được dùng để hiển thị các swatch màu)
+  Input: 
+  - color_name: Tên màu (ví dụ: "Moss", "Espresso", "Blue Jean")
+  Output: Mã hex (ví dụ: "#2A3A2F")
+{%- endcomment -%}
+
+{%- assign color_down = color_name | downcase | strip -%}
+{%- case color_down -%}
+	{%- when 'moss' -%}
+		#2A3A2F
+	{%- when 'espresso' -%}
+		#4B3621
+	{%- when 'blue jean' -%}
+		#5D7B93
+	{%- when 'bay' -%}
+		#8F9C8E
+	{%- when 'ivory' -%}
+		#E8DEC5
+	{%- when 'pepper' -%}
+		#454545
+	{%- when 'crimson' -%}
+		#8C1D24
+	{%- when 'black' -%}
+		#000000
+	{%- when 'white' -%}
+		#FFFFFF
+	{%- when 'navy' -%}
+		#1A2A40
+	{%- when 'olive' -%}
+		#495632
+	{%- when 'brown' -%}
+		#5C4033
+	{%- when 'grey' or 'gray' -%}
+		#808080
+	{%- when 'sand' -%}
+		#C2B280
+	{%- when 'tan' -%}
+		#D2B48C
+	{%- when 'military green' -%}
+		#4e5b31
+	{%- when 'dark heather' or 'heather dark' -%}
+		#3b4043
+	{%- when 'sport grey' or 'heather grey' -%}
+		#9b9fa1
+	{%- when 'ash' -%}
+		#dcdcdc
+	{%- when 'charcoal' -%}
+		#36454F
+	{%- when 'forest green' -%}
+		#228B22
+	{%- when 'kelly green' -%}
+		#4CBB17
+	{%- when 'maroon' -%}
+		#800000
+	{%- when 'cardinal red' -%}
+		#C41E3A
+	{%- when 'royal' or 'royal blue' -%}
+		#4169E1
+	{%- when 'light blue' -%}
+		#ADD8E6
+	{%- when 'indigo' -%}
+		#4B0082
+	{%- when 'gold' -%}
+		#FFD700
+	{%- when 'orange' -%}
+		#FFA500
+	{%- when 'purple' -%}
+		#800080
+	{%- when 'dark chocolate' or 'chocolate' -%}
+		#3b2f2f
+	{%- when 'midnight' -%}
+		#191970
+	{%- when 'camo' or 'camouflage' -%}
+		#4f5f40
+	{%- when 'stone' -%}
+		#c2b280
+	{%- when 'slate' -%}
+		#708090
+	{%- else -%}
+		{%- if color_down contains 'camo' -%}
+			linear-gradient(45deg, #4f5f40, #8b7355)
+		{%- elsif color_down contains 'green' -%}
+			#4e5b31
+		{%- elsif color_down contains 'grey' or color_down contains 'gray' -%}
+			#9b9fa1
+		{%- elsif color_down contains 'blue' -%}
+			#5D7B93
+		{%- elsif color_down contains 'red' -%}
+			#8C1D24
+		{%- elsif color_down contains 'brown' -%}
+			#4B3621
+		{%- else -%}
+			#F1F1F1
+		{%- endif -%}
+{%- endcase -%}

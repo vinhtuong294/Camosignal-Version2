@@ -1,0 +1,128 @@
+<script>
+    window.CUSTOMIX_FORM_PLACEMENT_SELECTOR = ".product-options";
+</script>
+
+<style>
+/* ============================================================================
+   CUSTOMIX INTEGRATION - UI/UX OVERRIDES
+   Xóa viền ngoài, mở rộng input
+============================================================================ */
+
+/* 1. Xóa Nền xám, viền, và padding của khung bao ngoài (Outer Wrapper) */
+html body #cm-options {
+    margin-top: 15px !important;
+    margin-bottom: 20px !important;
+}
+
+/* Tháo bỏ mọi viền và padding thừa của các block do Customix sinh ra */
+html body #cm-options > div,
+html body #cm-options > div > div,
+html body [class*="customix"],
+html body [class*="cx-"] {
+    background-color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    box-shadow: none !important;
+}
+
+/* 2. Tiêu đề (Label) -> Góc trái trên cùng của textbox */
+html body #cm-options label,
+html body #cm-options .cm-text-black {
+    font-family: 'Oswald', sans-serif !important;
+    font-weight: 500 !important;
+    color: #2c3d33 !important;
+    font-size: 14px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    margin-bottom: 8px !important;
+    display: block !important;
+    text-align: left !important;
+}
+html body #cm-options label span {
+    color: #e53935 !important;
+}
+
+/* 3. Input / Textarea -> To hơn, viền mảnh, nền be nguyên bản */
+html body #cm-options input:not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="radio"]):not([type="checkbox"]),
+html body #cm-options textarea,
+html body [class*="customix"] input:not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="radio"]):not([type="checkbox"]),
+html body [class*="customix"] textarea {
+    background-color: transparent !important;
+    background: transparent !important;
+    border: 1px solid rgba(44, 61, 51, 0.25) !important;
+    border-radius: 4px !important;
+    color: #2c3d33 !important;
+    padding: 16px 20px !important; /* Mở rộng diện tích nhập liệu */
+    font-family: inherit !important;
+    font-size: 16px !important;
+    width: 100% !important;
+    outline: none !important;
+    box-shadow: none !important;
+    transition: all 0.2s ease !important;
+}
+
+/* Chiều cao cho Input (1 dòng) */
+html body #cm-options input:not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="radio"]):not([type="checkbox"]),
+html body [class*="customix"] input:not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="radio"]):not([type="checkbox"]) {
+    min-height: 56px !important;
+}
+
+/* Chiều cao cho Textarea (nhiều dòng) */
+html body #cm-options textarea,
+html body [class*="customix"] textarea {
+    min-height: 100px !important;
+    resize: vertical !important;
+}
+
+/* Tương tác Focus khôi phục lại viền mỏng xanh đậm thay vì nguyên mảng màu */
+html body #cm-options input:not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="radio"]):not([type="checkbox"]):focus,
+html body #cm-options textarea:focus,
+html body [class*="customix"] input:not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="radio"]):not([type="checkbox"]):focus,
+html body [class*="customix"] textarea:focus {
+    border-color: #2c3d33 !important;
+    box-shadow: 0 0 0 1px #2c3d33 !important;
+}
+
+/* Override màu placeholder mờ ảo */
+html body #cm-options input::placeholder,
+html body #cm-options textarea::placeholder,
+html body [class*="customix"] input::placeholder,
+html body [class*="customix"] textarea::placeholder {
+    color: rgba(44, 61, 51, 0.5) !important;
+}
+
+/* 4. Nút Customize Primary */
+html body #cm-options button {
+    background: #2c3d33 !important;
+    background-color: #2c3d33 !important;
+    color: #faf6ee !important;
+    font-family: 'Oswald', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+    letter-spacing: 1.5px !important;
+    text-transform: uppercase !important;
+    border-radius: 4px !important;
+    border: none !important;
+    padding: 16px 24px !important;
+    width: 100% !important;
+    cursor: pointer !important;
+    margin-top: 15px !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08) !important;
+    transition: all 0.25s ease !important;
+}
+html body #cm-options button:hover {
+    background: #1a241e !important;
+    background-color: #1a241e !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Ẩn logo thừa */
+html body #cm-options .powered-by,
+html body #cm-options [href*="customix"] {
+    display: none !important;
+}
+</style>

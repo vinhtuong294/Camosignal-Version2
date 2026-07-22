@@ -1,0 +1,65 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Image with text image
+	This snippet will output main image on image with text section
+
+	- image: desktop image object (required, object),
+	- lazy: boolean,
+	- width: number (width size of the image),
+	- width_1600: number (width size of the image),
+	- width_991: number (width size of the image),
+	- width_767: number (width size of the image),
+	- width_420: number (width size of the image),
+	- width_375: number (width size of the image)
+
+	{% render 'image-with-text-image', desktop_image: first_desktop_image, mobile_image: first_mobile_image %}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign width_1920 	= width | default: 850 -%}
+{%- assign width_1600 	= width_1600 | default: 700 -%}
+{%- assign width_991 	= width_991 | default: 460 -%}
+{%- assign width_767 	= width_767 | default: 720 -%}
+{%- assign width_420 	= width_420 | default: 372 -%}
+{%- assign width_375 	= width_375 | default: 327 -%}
+
+{%- assign width_1920_x2 = width | times: 2 | default: 1700 -%}
+{%- assign width_1600_x2 = width_1600 | times: 2 | default: 1400 -%}
+{%- assign width_991_x2  = width_991 | times: 2 | default: 920 -%}
+{%- assign width_767_x2  = width_767 | times: 2 | default: 690 -%}
+{%- assign width_420_x2  = width_420 | times: 2 | default: 744 -%}
+{%- assign width_375_x2  = width_375 | times: 2 | default: 654 -%}
+
+
+{%- if desktop_image != blank -%}
+	{%- capture img_focal -%}
+		--img-desktop-pos: {{ desktop_image.presentation.focal_point }};
+	{%- endcapture -%}
+
+	<picture class="image-with-text__image-wrapper">
+		<source srcset="{{ desktop_image | image_url: width: width_375 }} 1x, {{ desktop_image | image_url: width: width_375_x2 }} 2x" media="(max-width: 375px)" />
+		<source srcset="{{ desktop_image | image_url: width: width_420 }} 1x, {{ desktop_image | image_url: width: width_420_x2 }} 2x" media="(max-width: 420px)" />
+		<source srcset="{{ desktop_image | image_url: width: width_767 }} 1x, {{ desktop_image | image_url: width: width_767_x2 }} 2x" media="(max-width: 767px)" />
+		<source srcset="{{ desktop_image | image_url: width: width_991 }} 1x, {{ desktop_image | image_url: width: width_991_x2 }} 2x" media="(max-width: 991px)" />
+		<source srcset="{{ desktop_image | image_url: width: width_1600 }} 1x, {{ desktop_image | image_url: width: width_1600_x2 }} 2x" media="(max-width: 1600px)" />
+
+		<img
+			src="{{ desktop_image | image_url: width: width_1920 }}"
+			srcset="{{ desktop_image | image_url: width: width_1920 }} 1x, {{ desktop_image | image_url: width: width_1920_x2 }} 2x"
+			{% if lazy %}
+				loading="lazy"
+				fetchpriority="low"
+			{% else %}
+				loading="eager"
+				fetchpriority="high"
+			{% endif %}
+			alt="{{ desktop_image.alt }}"
+			class="image-with-text__image"
+			style="{{ img_focal }}"
+		/>
+	</picture>
+{%- else -%}
+	<div class="image-with-text__image-wrapper">
+		{{ 'product-apparel-3' | placeholder_svg_tag: 'image-with-text__image' }}
+	</div>
+{%- endif -%}

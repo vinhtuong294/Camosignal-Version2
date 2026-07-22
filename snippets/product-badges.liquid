@@ -1,0 +1,96 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+  Snippet: Product Badges
+  ---------------------------
+  Require: product.tags
+  - use_variant: If true, then it will be used - product.selected_or_first_available_variant (optional, boolean)
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- if is_preset -%}
+	{%- assign tags = 'label__NEW:primary,label__SALE:secondary,label__TOP' | split: ',' -%}
+{%- else -%}
+	{%- assign tags = product.tags -%}
+{%- endif -%}
+
+{%- assign is_sale_percentage_label_enabled = settings.is_sale_percentage_label_enabled -%}
+
+{%- if tags.size > 0 or product.available == false or is_sale_percentage_label_enabled -%}
+	<ul
+		class="product-badges"
+		aria-label="{{- 'products.product.product_labels' | t | escape -}}"
+	>
+		{%- unless product.available or is_preset -%}
+			<li	class="badge badge--sold-out">
+				<span class="visually-hidden">
+					{{- 'products.product.product_label' | t -}}:
+				</span>
+
+				{{- "products.product.sold_out" | t -}}
+			</li>
+		{%- endunless -%}
+
+		{%- if is_sale_percentage_label_enabled -%}
+			{%- if use_variant -%}
+				{%- assign target = product.selected_or_first_available_variant -%}
+			{%- else -%}
+				{%- assign target = product -%}
+			{%- endif -%}
+
+			{%- assign price = target.price -%}
+			{%- assign compare_at_price = target.compare_at_price -%}
+			{%- assign show_sale_percentage_label = false -%}
+
+			{%- if compare_at_price > price and product.available -%}
+				{%- assign show_sale_percentage_label = true -%}
+				{%- assign sale_percentage_value = compare_at_price | minus: price | times: 100.0 | divided_by: compare_at_price | floor -%}
+			{% endif %}
+
+			<li	class="badge badge--sale-percentage {% if use_variant %} js-sale-percentage-badge {% endif %} {% unless show_sale_percentage_label %}is-hidden{% endunless %}">
+				<span class="visually-hidden">
+					{{- 'products.product.product_label' | t -}}:
+				</span>
+
+				<span class="badge__sale-visual" aria-hidden="true">
+					<span class="badge__sale-text" data-sale-percentage>
+						{{- "products.product.sale_percentage_label" | t: number: sale_percentage_value -}}
+					</span>
+				</span>
+			</li>
+		{%- endif -%}
+
+		{%- assign tag_index = 1 -%}
+
+		{%- for tag in tags -%}
+			{%- if tag contains 'label__' -%}
+				{%- assign class = 'badge' -%}
+
+				{%- if tag contains ':primary' -%}
+					{%- assign class = class | append: " badge--primary" | strip -%}
+				{%- elsif tag contains ':secondary' -%}
+					{%- assign class = class | append: " badge--secondary" | strip -%}
+				{%- endif -%}
+
+				{%- assign clipped_tag = tag
+					| remove: 'label__'
+					| remove: ':primary'
+					| remove: ':secondary'
+				-%}
+
+				<li	class="{{- class -}}">
+					<span class="visually-hidden">
+						{{- 'products.product.product_label' | t -}}:
+					</span>
+
+					{{- clipped_tag -}}
+				</li>
+
+				{%- assign tag_index = tag_index | plus: 1 -%}
+
+				{%- if tag_index > 3 -%}
+					{%- break -%}
+				{%- endif -%}
+			{%- endif -%}
+		{%- endfor -%}
+	</ul>
+{%- endif -%}

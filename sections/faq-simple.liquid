@@ -1,0 +1,343 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Section: FAQ simple
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/faq-simple.scss' -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- capture styles -%}
+	--inner-offset-top: {{- section.settings.inner_offset_top -}}px; {{-  -}}
+	--inner-offset-bottom: {{- section.settings.inner_offset_bottom -}}px; {{-  -}}
+	--inner-offset-top-mobile: {{- section.settings.inner_offset_top_mobile -}}px; {{-  -}}
+	--inner-offset-bottom-mobile: {{- section.settings.inner_offset_bottom_mobile -}}px; {{-  -}}
+{%- endcapture -%}
+
+{%- assign color_scheme      	           = section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign title  = section.settings.heading -%}
+{%- assign blocks = section.blocks -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- assign content = '' -%}
+
+{%- assign delay_step = 0 -%}
+
+{%- for block in blocks -%}
+	{%- case block.type -%}
+		{%- when "category" -%}
+			{%- assign delay_step = delay_step | plus: 0.3 -%}
+			{%- assign category_heading = block.settings.heading -%}
+
+			{%- if category_heading != blank -%}
+				{%- assign handle = category_heading | handleize -%}
+
+				{%- capture content -%}
+					{{- content -}}
+
+					{%- if content != '' -%}
+						</div>
+					{%- endif -%}
+
+					<div id="{{- handle -}}" class="faq-simple__category" style="transition-delay: {{ delay_step }}s;">
+						<h3 class="h3 faq-simple__category-heading">
+							{{- category_heading -}}
+						</h3>
+				{%- endcapture -%}
+			{%- endif -%}
+
+		{%- when "faq_item" -%}
+			{%- assign item_heading        = block.settings.heading -%}
+			{%- assign text                = block.settings.text -%}
+
+			{%- if item_heading == blank or text == blank -%}
+				{%- continue -%}
+			{%- endif -%}
+			{%- capture content -%}
+				{{- content -}}
+
+				{%- if content == '' -%}
+					<div class="faq-simple__category">
+				{%- endif -%}
+
+				<div class="accordion__item faq-simple__item js-accordion-item">
+					<h4 class="accordion__title faq-simple__item-title">
+						<button
+							id="control-{{- block.id -}}"
+							class="accordion__control faq-simple__item-control js-accordion-control"
+							aria-controls="content-{{- block.id -}}"
+							aria-expanded="false"
+						>
+							<span class="faq-simple__item-title-text">
+								{{- item_heading -}}
+							</span>
+
+							<span class="faq-simple__item-control-icon">
+								{% render 'icons', icon: 'plus' %}
+							</span>
+						</button>
+					</h4>
+
+					<div
+						id="content-{{- block.id -}}"
+						class="accordion__content accordion__content--animate faq-simple__item-content js-accordion-content"
+						style="height: 0;"
+						role="region"
+						aria-labelledby="control-{{- block.id -}}"
+					>
+						<div class="faq-simple__item-inner js-accordion-inner rte">
+							{{- text -}}
+						</div>
+					</div>
+				</div>
+			{%- endcapture -%}
+	{%- endcase -%}
+{%- endfor -%}
+
+{%- if content != '' -%}
+	{%- capture content -%}
+		{{- content -}}
+
+		</div>
+	{%- endcapture -%}
+{%- endif -%}
+
+<section
+	class="faq-simple js-animate color-{{ color_scheme }} {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}"
+	style="{{- styles -}}"
+>
+	<div class="container faq-simple__container section-animate">
+		{% if title != blank %}
+			<h2 class="h2 faq-simple__heading">
+				{{- title -}}
+			</h2>
+		{% endif %}
+
+		<div class="accordion faq-simple__content js-accordion-container">
+			{{- content -}}
+		</div>
+	</div>
+</section>
+
+{%- schema -%}
+{
+	"name": "FAQ",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "General"
+		},
+		{
+			"type": "text",
+			"id": "heading",
+			"label": "Heading",
+			"default": "FAQ"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset top",
+			"default": 60
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset bottom",
+			"default": 60
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset top",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset bottom",
+			"default": 30
+		},
+		{
+			"type": "paragraph",
+			"content": "Internal offsets"
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset top",
+			"default": 60
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset bottom",
+			"default": 60
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset top",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset bottom",
+			"default": 30
+		}
+	],
+	"blocks": [
+		{
+			"name": "Category",
+			"type": "category",
+			"settings": [
+				{
+					"type": "text",
+					"id": "heading",
+					"label": "Heading"
+				}
+			]
+		},
+		{
+			"name": "Question and answer",
+			"type": "faq_item",
+			"settings": [
+				{
+					"type": "inline_richtext",
+					"id": "heading",
+					"label": "Heading"
+				},
+				{
+					"type": "richtext",
+					"id": "text",
+					"label": "Text"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "FAQ",
+			"blocks": [
+				{
+					"type": "category",
+					"settings": {
+						"heading": "First category"
+					}
+				},
+				{
+					"type": "faq_item",
+					"settings": {
+						"heading": "Accordion heading",
+						"text": "<p>Accordion content.</p>"
+					}
+				},
+				{
+					"type": "faq_item",
+					"settings": {
+						"heading": "Accordion heading",
+						"text": "<p>Accordion content.</p>"
+					}
+				},
+				{
+					"type": "category",
+					"settings": {
+						"heading": "Second category"
+					}
+				},
+				{
+					"type": "faq_item",
+					"settings": {
+						"heading": "Accordion heading",
+						"text": "<p>Accordion content.</p>"
+					}
+				},
+				{
+					"type": "faq_item",
+					"settings": {
+						"heading": "Accordion heading",
+						"text": "<p>Accordion content.</p>"
+					}
+				}
+			]
+		}
+	]
+}
+{%- endschema -%}

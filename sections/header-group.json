@@ -1,0 +1,243 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "settings": {
+        "layout": "ticker",
+        "enable_autoplay": true,
+        "autoplay_speed": 5,
+        "text_content": "",
+        "ticker_hide_bullets": false,
+        "ticker_text": "<p>Free shipping from 2 items</p><p>Buy 2 save 10%</p><p>Buy 3 save 15%</p><p>Buy 4 save 20%</p>",
+        "desktop_movement_speed": 40,
+        "mobile_movement_speed": 20,
+        "discount_code": "",
+        "discount_label": "Copy",
+        "enable_color_scheme_inheritance": true,
+        "color_scheme": "",
+        "discount_text_color": "#000000",
+        "discount_background_color": "#ffffff",
+        "discount_border_color": "#e9e9e9"
+      }
+    },
+    "header": {
+      "type": "header",
+      "custom_css": [
+        "@media (min-width: 990px) {.header__hamburger {display: none !important; }}"
+      ],
+      "settings": {
+        "header_type": "static",
+        "enable_transparent_header_homepage": true,
+        "enable_transparent_header_collection": true,
+        "enable_transparent_header_mobile": true,
+        "is_show_border": true,
+        "is_language_selector": true,
+        "is_country_selector": true,
+        "logo": "shopify://shop_images/LOGO_FINAL_WEBSITE.png",
+        "logo_width": 50,
+        "logo_position": "left",
+        "menu": "main-menu",
+        "mobile_top_menu": "",
+        "open_menu_type": "mouseenter",
+        "make_first_lvl_clickable": true,
+        "shop_mega_show_products": true,
+        "shop_mega_product_logic": "manual_fallback",
+        "shop_mega_for_men_product": "america-250-flag-t-shirt",
+        "shop_mega_for_women_product": "250-years-of-usa-with-elk-t-shirt-copy",
+        "shop_mega_hat_product": "boy-dad-trucker-hat-with-leather-patch",
+        "shop_mega_tshirt_product": "wild-white-tailed-deer-infographic-t-shirt",
+        "shop_mega_longsleeve_product": "turkey-hunters-world-slam-long-sleeve-1",
+		"more_collections_national_park_product": "the-1929-teton-heritage-t-shirt",
+		"more_collections_faith_outdoors_product": "world-turkey-slam-t-shirt",
+		"more_collections_game_day_product": "san-francisco-phantom-inferno-football-t-shirt",
+		"more_collections_back_to_school_product": "marllard-go-to-school-youth-tee",
+        "fishing_mega_show_products": true,
+        "fishing_mega_all_product": "billfish-grand-slam-t-shirt",
+        "fishing_mega_freshwater_product": "trophy-largemouth-bass-fishing-t-shirt",
+        "fishing_mega_saltwater_product": "offshore-by-nature-t-shirt",
+        "burger_menu": "main-menu",
+        "hide_burger_menu_on_mobile": true,
+        "additional_menu": "",
+        "show_socials": true,
+        "scroll_images_direction": "top",
+        "phone_number": "<a href=\"tel:+13072273117\" title=\"tel:+1 307-227-3117\">+1 307-227-3117</a>",
+        "schedule_information": "Daily 9 am - 9 pm",
+        "media_url_1": "/",
+        "media_url_2": "/",
+        "media_url_3": "/",
+        "desktop_movement_speed": 10,
+        "mobile_movement_speed": 20,
+        "enable_color_scheme_inheritance": true,
+        "color_scheme": "",
+        "text_color_transparent": "#ffffff",
+        "count_text_color": "#000000",
+        "count_text_color_transparent": "#000000",
+        "count_text_bg": "#ececec",
+        "count_text_bg_transparent": "#ececec"
+      }
+    },
+    "1775506654da104d7f": {
+      "type": "apps",
+      "settings": {
+        "container_width": "inherit",
+        "offset_top_desktop": 0,
+        "offset_bottom_desktop": 0,
+        "offset_top_mobile": 0,
+        "offset_bottom_mobile": 0
+      }
+    },
+    "cart-drawer": {
+      "type": "cart-drawer",
+      "blocks": {
+        "items": {
+          "type": "items",
+          "settings": {}
+        },
+        "selling": {
+          "type": "shipping",
+          "settings": {
+            "amount": 45,
+            "message": "You are only {amount} away from free shipping",
+            "congratulatory_message": "You got free shipping",
+            "bar_color": "#e9e9e9",
+            "fill_color": "#ffd875",
+            "wrapper_background": "#2c3d33",
+            "wrapper_border_radius": 6,
+            "wrapper_shadow": "0 4px 6px rgba(0,0,0,0.05)",
+            "wrapper_padding_vertical": 10,
+            "wrapper_padding_horizontal": 16,
+            "wrapper_margin_top": 8,
+            "wrapper_margin_horizontal": 16,
+            "wrapper_margin_bottom": 8,
+            "label_color": "#ffffff",
+            "label_font_size": 13,
+            "label_letter_spacing": 1,
+            "label_text_transform": "uppercase"
+          }
+        },
+        "benefit": {
+          "type": "benefit",
+          "settings": {
+            "text": "BECOME CLUB MEMBER AND GET SPECIAL OFFERS"
+          }
+        },
+        "selleasy_lb_upsell_widget_bl_MniJze": {
+          "type": "shopify://apps/selleasy/blocks/lb-upsell-widget-bl/790c1a03-a71f-4bc1-9869-00dad526d3c2",
+          "settings": {}
+        },
+        "selleasy_lb_upsell_widget_icuc_9VJKpa": {
+          "type": "shopify://apps/selleasy/blocks/lb-upsell-widget-icuc/790c1a03-a71f-4bc1-9869-00dad526d3c2",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "items",
+        "selling",
+        "benefit",
+        "selleasy_lb_upsell_widget_bl_MniJze",
+        "selleasy_lb_upsell_widget_icuc_9VJKpa"
+      ],
+      "settings": {
+        "enable_color_scheme_inheritance": true,
+        "color_scheme": "",
+        "drawer_background_color": "#ffffff",
+        "footer_background_color": "#ffffff",
+        "footer_border_color": "rgba(0, 0, 0, 0.06)",
+        "footer_shadow": "0 -12px 24px rgba(255, 255, 255, 0.95)",
+        "heading": "Your cart",
+        "show_cart_items_count": true,
+        "show_auto_open": false,
+        "cart_button_label": "View cart",
+        "title_color": "#2c3d33",
+        "title_font_size": 20,
+        "title_font_weight": "700",
+        "title_text_transform": "uppercase",
+        "title_letter_spacing": "0.5px",
+        "drawer_top_padding": 20,
+        "title_margin_horizontal": 16,
+        "title_margin_bottom": 8,
+        "title_padding_right": 40,
+        "show_custom_banner": true,
+        "custom_banner_margin_top": 0,
+        "custom_banner_margin_horizontal": 16,
+        "custom_banner_margin_bottom": 0,
+        "custom_banner_radius": 6,
+        "show_upsell": false,
+        "upsell_heading": "Upsell products",
+        "upsell_products": [
+          "black-bear-wildlife-hunting-t-shirt",
+          "camoflage-freedom-t-shirt"
+        ],
+        "upsell_margin_top": 12,
+        "upsell_margin_horizontal": 16,
+        "upsell_margin_bottom": 24,
+        "upsell_heading_background": "#0d1f6b",
+        "upsell_heading_color": "#ffffff",
+        "upsell_heading_font_size": 16,
+        "upsell_heading_font_weight": "700",
+        "upsell_heading_padding": 12,
+        "upsell_heading_radius": 0,
+        "upsell_content_padding_vertical": 12,
+        "upsell_card_background": "#ffffff",
+        "upsell_card_border_color": "rgba(44,61,51,0.12)",
+        "upsell_card_border_hover_color": "#2c3d33",
+        "upsell_card_title_color": "#2c3d33",
+        "upsell_card_price_color": "#2c3d33",
+        "upsell_card_sale_price_color": "#b52a2a",
+        "upsell_button_background": "#0d1f6b",
+        "upsell_button_color": "#ffffff",
+        "upsell_button_hover_background": "#1e2d24",
+        "show_discount_form": false,
+        "show_cart_note": false,
+        "show_benefits": false,
+        "show_payment_icons": true,
+        "show_dynamic_checkout_buttons": false,
+        "footer_padding_top": 20,
+        "footer_padding_horizontal": 24,
+        "footer_padding_bottom": 16,
+        "payment_icons_padding_bottom": 24,
+        "subtotal_label": "Subtotal",
+        "subtotal_item_singular": "item",
+        "subtotal_item_plural": "items",
+        "subtotal_text_color": "#000000",
+        "subtotal_price_color": "#c0392b",
+        "compare_price_color": "#999999",
+        "checkout_button_label": "Checkout",
+        "checkout_button_background": "#0d1f6b",
+        "checkout_button_color": "#ffffff",
+        "checkout_button_border_color": "#0d1f6b",
+        "checkout_button_radius": 6,
+        "checkout_button_font_size": 16,
+        "checkout_button_padding_vertical": 14,
+        "checkout_button_padding_horizontal": 14,
+        "discount_badge_background": "#2c3d33",
+        "discount_badge_color": "#ffffff",
+        "discount_label_buy_2": "BUY 2 SAVE 10%",
+        "discount_label_buy_3": "BUY 3 SAVE 15%",
+        "discount_label_buy_4": "BUY 4 SAVE 20%",
+        "protection_subtitle": "Protect your order from loss/damage.",
+        "protection_border_color": "#3a7d6a",
+        "protection_background": "rgba(58, 125, 106, 0.06)",
+        "protection_title_color": "#2c3d33",
+        "protection_text_color": "#6b7f75"
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "header",
+    "1775506654da104d7f",
+    "cart-drawer"
+  ]
+}

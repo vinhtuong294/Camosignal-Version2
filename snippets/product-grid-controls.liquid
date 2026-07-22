@@ -1,0 +1,129 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Product grid controls
+
+	Usage:
+
+	{%- render 'product-grid-controls' -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/product-grid-controls.scss' -%}
+
+<form class="product-grid-controls js-product-grid-controls">
+	<p class="product-grid-controls__label">
+		{{- 'collections.general.grid_view_by_label' | t -}}
+	</p>
+
+	<div class="product-grid-controls__group product-grid-controls__group--desktop">
+		<label class="product-grid-controls__control">
+			<input
+				class="product-grid-controls__control-input visually-hidden"
+				type="radio"
+				name="gridColumnCountDesktop"
+				value="1"
+			>
+
+			<span class="product-grid-controls__control-label">
+				<span class="visually-hidden">{{ 'collections.general.grid_view_1' | t }}</span>
+				<span aria-hidden="true">1</span>
+			</span>
+		</label>
+
+		<label class="product-grid-controls__control">
+			<input
+				class="product-grid-controls__control-input visually-hidden"
+				type="radio"
+				name="gridColumnCountDesktop"
+				value="2"
+			>
+
+			<span class="product-grid-controls__control-label">
+				<span class="visually-hidden">{{ 'collections.general.grid_view_2' | t }}</span>
+				<span aria-hidden="true">2</span>
+			</span>
+		</label>
+
+		<label class="product-grid-controls__control">
+			<input
+				class="product-grid-controls__control-input visually-hidden"
+				type="radio"
+				name="gridColumnCountDesktop"
+				value="3"
+				checked
+			>
+
+			<span class="product-grid-controls__control-label">
+				<span class="visually-hidden">{{ 'collections.general.grid_view_3' | t }}</span>
+				<span aria-hidden="true">3</span>
+			</span>
+		</label>
+	</div>
+
+	<div class="product-grid-controls__group product-grid-controls__group--tablet">
+		<label class="product-grid-controls__control">
+			<input
+				class="product-grid-controls__control-input visually-hidden"
+				type="radio"
+				name="gridColumnCountTablet"
+				value="2"
+				checked
+			>
+
+			<span class="product-grid-controls__control-label">
+				<span class="visually-hidden">{{ 'collections.general.grid_view_2' | t }}</span>
+				<span aria-hidden="true">2</span>
+			</span>
+		</label>
+
+		<label class="product-grid-controls__control">
+			<input
+				class="product-grid-controls__control-input visually-hidden"
+				type="radio"
+				name="gridColumnCountTablet"
+				value="3"
+			>
+
+			<span class="product-grid-controls__control-label">
+				<span class="visually-hidden">{{ 'collections.general.grid_view_3' | t }}</span>
+				<span aria-hidden="true">3</span>
+			</span>
+		</label>
+	</div>
+
+	<div class="product-grid-controls__group product-grid-controls__group--mobile">
+		<label class="product-grid-controls__control">
+			<input
+				class="product-grid-controls__control-input visually-hidden"
+				type="radio"
+				name="gridColumnCountMobile"
+				value="1"
+				{% if mobile_grid == "1" %}
+					checked
+				{% endif %}
+			>
+
+			<span class="product-grid-controls__control-label">
+				<span class="visually-hidden">{{ 'collections.general.grid_view_1' | t }}</span>
+				<span aria-hidden="true">1</span>
+			</span>
+		</label>
+
+		<label class="product-grid-controls__control">
+			<input
+				class="product-grid-controls__control-input visually-hidden"
+				type="radio"
+				name="gridColumnCountMobile"
+				value="2"
+				{% if mobile_grid == "2" %}
+					checked
+				{% endif %}
+			>
+
+			<span class="product-grid-controls__control-label">
+				<span class="visually-hidden">{{ 'collections.general.grid_view_2' | t }}</span>
+				<span aria-hidden="true">2</span>
+			</span>
+		</label>
+	</div>
+</form>

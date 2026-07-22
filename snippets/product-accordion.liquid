@@ -1,0 +1,44 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+  Snippet: Product Accordion
+  Renders inline collapsible accordion items instead of side-drawer panels.
+  
+  Required:
+   - title: string
+   - content: string (HTML)
+   - accordion_id: string (unique ID)
+  Optional:
+   - open: boolean (default: false)
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- if title != blank and content != blank and accordion_id != blank -%}
+<div class="product-accordion__item" data-accordion-item>
+	<button
+		class="product-accordion__trigger"
+		type="button"
+		aria-expanded="{{ open | default: false }}"
+		aria-controls="accordion-content-{{ accordion_id }}"
+		data-accordion-trigger
+	>
+		<span class="product-accordion__trigger-text">{{ title }}</span>
+		<span class="product-accordion__trigger-icon" aria-hidden="true">
+			<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path class="product-accordion__icon-vertical" d="M6 0V12" stroke="currentColor" stroke-width="1.5"/>
+				<path d="M0 6H12" stroke="currentColor" stroke-width="1.5"/>
+			</svg>
+		</span>
+	</button>
+	<div
+		class="product-accordion__content{% if open %} is-open{% endif %}"
+		id="accordion-content-{{ accordion_id }}"
+		role="region"
+		aria-labelledby="accordion-trigger-{{ accordion_id }}"
+		{% unless open %}hidden{% endunless %}
+	>
+		<div class="product-accordion__content-inner rte">
+			{{ content }}
+		</div>
+	</div>
+</div>
+{%- endif -%}

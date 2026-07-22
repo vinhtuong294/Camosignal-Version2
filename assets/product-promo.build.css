@@ -1,0 +1,257 @@
+.product-promo {
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  width: 100%;
+  z-index: 12;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  animation-name: fadeInBottomMobile;
+  animation-duration: 0.5s;
+  animation-delay: 0s;
+  animation-fill-mode: forwards;
+}
+.product-promo .product-promo__close {
+  position: absolute;
+  opacity: 1;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  color: var(--color-text-primary);
+  transition-property: opacity;
+  transition-duration: var(--timing-base);
+}
+@media (-moz-touch-enabled: 0), (hover: hover), (pointer: fine) {
+  .product-promo .product-promo__close:hover {
+    opacity: 0.7;
+  }
+}
+.product-promo .product-promo__col-image {
+  width: 37%;
+}
+.product-promo .product-promo__image {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--img-mob-pos);
+}
+.product-promo .product-promo__header {
+  display: flex;
+  width: 100%;
+  gap: 16px;
+}
+.product-promo .product-promo__heading-container {
+  display: flex;
+  gap: 16px;
+}
+.product-promo .product-promo__text {
+  font-size: calc(var(--body-font-size) * 0.875);
+  line-height: 1.428;
+  color: inherit;
+  word-break: break-word;
+}
+.product-promo .product-promo__button {
+  padding: 11px;
+  align-self: flex-end;
+  max-width: 40px;
+  width: 100%;
+  height: 40px;
+}
+.product-promo .product-promo__button svg {
+  width: 16px;
+  height: 16px;
+}
+.product-promo .product-promo__media {
+  position: relative;
+  transition-property: opacity;
+  transition-duration: var(--timing-short);
+}
+@media (-moz-touch-enabled: 0), (hover: hover), (pointer: fine) {
+  .product-promo .product-promo__media:hover {
+    opacity: 0.5;
+  }
+}
+.product-promo .product-promo__title {
+  line-height: 1.5;
+  text-decoration: none;
+  color: var(--color-text-primary);
+  word-break: break-word;
+  transition-property: opacity;
+  transition-duration: var(--timing-short);
+  overflow: hidden;
+  display: -moz-box;
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  -moz-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+@media (-moz-touch-enabled: 0), (hover: hover), (pointer: fine) {
+  .product-promo .product-promo__title:hover {
+    opacity: 0.5;
+  }
+}
+.product-promo .product-promo__link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+.product-promo.product-promo--product {
+  display: flex;
+  gap: 16px;
+  padding: 11px 15px;
+  border: 1px solid var(--color-border-secondary);
+}
+.product-promo.product-promo--product .product-promo__image-wrapper {
+  position: relative;
+  width: 50px;
+  height: 80px;
+}
+.product-promo.product-promo--product .product-promo__close {
+  top: 12px;
+  inset-inline-end: 16px;
+}
+.product-promo.product-promo--product .product-promo__content {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  flex-direction: column;
+  gap: 12px;
+}
+.product-promo.product-promo--product .price {
+  font-size: calc(var(--body-font-size) * 0.875);
+  line-height: 1.285;
+}
+.product-promo.product-promo--text .product-promo__close {
+  top: 16px;
+  inset-inline-end: 16px;
+}
+.product-promo.product-promo--text .product-promo__heading {
+  padding-inline-end: 30px;
+}
+.product-promo.product-promo--text .product-promo__image-wrapper {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding-top: 128%;
+}
+.product-promo.product-promo--text .product-promo__content {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 16px;
+  width: 63%;
+  padding: 15px;
+  color: inherit;
+  border: 1px solid var(--color-border-secondary);
+  transition-property: opacity;
+  transition-timing-function: ease;
+  transition-duration: 0.3s;
+}
+.product-promo.product-promo--text .product-promo__content.product-promo__content--no-image {
+  width: 100%;
+  padding-inline-end: 45px;
+}
+.product-promo.product-promo--no-image {
+  padding-top: 30px;
+}
+@media (min-width: 576px) {
+  .product-promo .product-promo__text {
+    font-size: var(--body-font-size);
+    line-height: 1.5;
+    color: inherit;
+  }
+  .product-promo .product-promo__col-image {
+    width: 27%;
+  }
+  .product-promo .product-promo__image {
+    object-position: var(--img-desktop-pos);
+  }
+  .product-promo.product-promo--product {
+    right: 32px;
+    max-width: min(420px, 100vw - 32px);
+    padding-top: 15px;
+    padding-bottom: 15px;
+    animation-name: productPromoFadeInBottom;
+  }
+  .product-promo.product-promo--product .product-promo__image-wrapper {
+    width: 69px;
+    height: 94px;
+  }
+  .product-promo.product-promo--product .product-promo__close {
+    top: 16px;
+  }
+  .product-promo.product-promo--text {
+    right: 16px;
+    max-width: min(740px, 100vw - 32px);
+    animation-name: textPromoFadeInBottom;
+  }
+  .product-promo.product-promo--text .product-promo__close {
+    top: 32px;
+    inset-inline-end: 32px;
+  }
+  .product-promo.product-promo--text .product-promo__content {
+    width: 73%;
+    padding: 31px;
+  }
+  .product-promo.product-promo--text .product-promo__content.product-promo__content--no-image {
+    padding-inline-end: 70px;
+  }
+  .product-promo.product-promo--text .product-promo__image-wrapper {
+    padding-top: 100%;
+  }
+  .product-promo.product-promo--no-image {
+    padding-top: 40px;
+  }
+}
+@keyframes fadeInBottomMobile {
+  0% {
+    bottom: -100%;
+    opacity: 0;
+  }
+  100% {
+    bottom: 0;
+    opacity: 1;
+  }
+}
+@keyframes productPromoFadeInBottom {
+  0% {
+    bottom: 0;
+    opacity: 0;
+  }
+  100% {
+    bottom: 32px;
+    opacity: 1;
+  }
+}
+@keyframes textPromoFadeInBottom {
+  0% {
+    bottom: 0;
+    opacity: 0;
+  }
+  100% {
+    bottom: 16px;
+    opacity: 1;
+  }
+}
+.template-search .product-promo,
+.template-collection .product-promo {
+  bottom: 50px;
+  animation-name: fadeInBottomHigh;
+}
+@media (min-width: 768px) {
+  .template-search .product-promo,
+  .template-collection .product-promo {
+    bottom: 0;
+    animation-name: fadeInBottom;
+  }
+}

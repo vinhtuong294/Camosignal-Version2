@@ -1,0 +1,114 @@
+{% doc %}
+Renders required product customization fields controlled by product metafields.
+
+@param {product} product - The product being customized.
+@param {string} section_id - The product section identifier.
+
+@example
+{% render 'product-customization-fields', product: product, section_id: section.id %}
+{% enddoc %}
+
+{% liquid
+	assign enable_name = product.metafields.custom.enable_name.value
+	assign enable_number = product.metafields.custom.enable_number.value
+%}
+
+{% if enable_name or enable_number %}
+	<div class="product-customization">
+		{% if enable_name %}
+			<div class="product-customization__field">
+				<label class="product-customization__label" for="CustomizationName-{{ section_id }}-{{ product.id }}">
+					{{- 'products.customization.name_label' | t -}}
+					<span class="product-customization__required" aria-hidden="true">*</span>
+				</label>
+
+				<input
+					class="product-customization__input"
+					id="CustomizationName-{{ section_id }}-{{ product.id }}"
+					type="text"
+					name="properties[Your Name]"
+					maxlength="40"
+					autocomplete="off"
+					aria-required="true"
+					required
+				>
+			</div>
+		{% endif %}
+
+		{% if enable_number %}
+			<div class="product-customization__field">
+				<label class="product-customization__label" for="CustomizationNumber-{{ section_id }}-{{ product.id }}">
+					{{- 'products.customization.number_label' | t -}}
+					<span class="product-customization__required" aria-hidden="true">*</span>
+				</label>
+
+				<input
+					class="product-customization__input"
+					id="CustomizationNumber-{{ section_id }}-{{ product.id }}"
+					type="text"
+					name="properties[Your Number]"
+					inputmode="numeric"
+					pattern="[0-9]+"
+					maxlength="3"
+					autocomplete="off"
+					aria-required="true"
+					required
+				>
+			</div>
+		{% endif %}
+	</div>
+{% endif %}
+
+{% stylesheet %}
+	.product-customization {
+		display: grid;
+		gap: 20px;
+		width: 100%;
+		margin: 18px 0 20px;
+		padding: 0;
+	}
+
+	.product-customization__field {
+		display: grid;
+		gap: 10px;
+	}
+
+	.product-customization__label {
+		color: var(--color-text-primary, #324335);
+		font-family: 'Oswald', var(--font-heading-family), sans-serif;
+		font-size: 14px;
+		font-weight: 400;
+		line-height: 1.2;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+
+	.product-customization__required {
+		margin-left: 3px;
+		color: #c9574d;
+	}
+
+	.product-customization__input {
+		box-sizing: border-box;
+		width: 100%;
+		height: 56px;
+		min-height: 56px;
+		padding: 0 14px;
+		border: 1px solid #c8cbc8 !important;
+		border-radius: 4px !important;
+		background: #ffffff !important;
+		color: var(--color-text-primary, #324335);
+		font: inherit;
+		transition: border-color 160ms ease, box-shadow 160ms ease;
+	}
+
+	.product-customization__input:hover {
+		border-color: #929992 !important;
+	}
+
+	.product-customization__input:focus-visible {
+		border-color: var(--color-text-primary, #324335) !important;
+		outline: 0;
+		box-shadow: 0 0 0 1px var(--color-text-primary, #324335) !important;
+	}
+{% endstylesheet %}

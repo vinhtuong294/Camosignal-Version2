@@ -1,0 +1,135 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Product card mini
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- if product.handle == 'shipping-protection-apparel' -%}
+  <script>
+    (function(){
+      var el = document.currentScript;
+      if (el) {
+        var wrapper = el.closest('.collection__item, .swiper-slide, .grid__item, .product-card-container, li');
+        if (wrapper) {
+          wrapper.remove();
+        } else if (el.parentElement) {
+          el.parentElement.style.display = 'none';
+        }
+      }
+    })();
+  </script>
+{%- else -%}
+{%- render 'adastra' with '/src/styles/product-card-mini.scss' -%}
+
+{%- assign quick_view_label         = 'products.product_card.open_quick_view' | t -%}
+{%- assign add_to_cart_label        = 'products.product_card.add_to_cart' | t -%}
+
+{%- assign product_image = product.featured_image | default: settings.product_default_image -%}
+
+{%- assign can_add_directly = false -%}
+{%- if product.has_only_default_variant or product.variants.size == 1 -%}
+	{%- unless product.metafields.custom.enable_name.value or product.metafields.custom.enable_number.value -%}
+		{%- assign can_add_directly = true -%}
+	{%- endunless -%}
+{%- endif -%}
+
+{%- assign min	= 1 -%}
+{%- assign max  = 6 -%}
+{%- assign diff = max | minus: min -%}
+
+<div class="product-card-mini{% if is_bordered %} product-card-mini--bordered{% endif %} js-product-card">
+	<a
+		href="{{- product.url -}}"
+		class="product-card-mini__image-wrapper"
+		aria-label="{{- product.title | default: "Product preset title" | escape -}}"
+	>
+		{%- if product_image == blank -%}
+			{%- assign random_number = "now" | date: "%N" | modulo: diff | plus: min -%}
+			{%- assign placeholer_svg_name = 'product-' | append: random_number -%}
+
+			{{- placeholer_svg_name | placeholder_svg_tag: 'product-card-mini__image product-card-mini__image--placeholder' -}}
+		{%- else -%}
+			{%- capture img_focal -%}
+				--img-pos: {{ product_image.presentation.focal_point }};
+			{%- endcapture -%}
+
+			<img
+				class="product-card-mini__image"
+				src="{{- product_image | image_url: height: 150 -}}"
+				srcset="{{ product_image | image_url: height: 150 }} 1x, {{ product_image | image_url: height: 300 }} 2x"
+				alt="{{- product_image.alt | escape -}}"
+				loading="lazy"
+				fetchpriority="low"
+				{% if img_focal != blank %}
+					style="{{ img_focal }}"
+				{% endif %}
+			/>
+		{%- endif -%}
+	</a>
+
+	<div class="product-card-mini__info">
+		<div class="product-card-mini__info-header">
+			<a class="product-card-mini__title focus-visible-outline" href="{{ product.url }}">
+				{%- if product != blank -%}
+					{{- product.title -}}
+				{%- else -%}
+					{{- 'products.product_card.product_title' | t -}}
+				{%- endif -%}
+			</a>
+
+			<div class="product-card-mini__price">
+				{%- render 'price', product: product -%}
+			</div>
+
+			{%- if product.quantity_price_breaks_configured? -%}
+				<div class="product-card-mini__volume-pricing-note">
+					<span>{{ 'products.product.volume_pricing.note' | t }}</span>
+				</div>
+			{%- endif -%}
+		</div>
+
+		<input
+			type="hidden"
+			class="js-product-card-min-value"
+			value="{{- product.selected_or_first_available_variant.quantity_rule.min -}}"
+		>
+
+		<button
+			class="button-link focus-visible-outline js-add-to-cart"
+			type="button"
+			data-product-handle="{{- product.handle -}}"
+			data-min-quantity="{{- product.selected_or_first_available_variant.quantity_rule.min -}}"
+			{% if can_add_directly %}
+				data-variant-id="{{- product.variants[0].id -}}"
+			{% endif %}
+			{% unless product.available %}
+				disabled
+			{% endunless %}
+		>
+			{%- if product.available -%}
+				{%- render 'icons', icon: 'plus' -%}
+
+				{%- if can_add_directly -%}
+					{%- assign add_to_cart_label = 'products.product.add_to_cart' | t -%}
+
+					<span data-text="{{- add_to_cart_label -}}">
+						<span>{{- add_to_cart_label -}}</span>
+					</span>
+				{%- else -%}
+					{%- assign quick_view_label = 'products.product_card.open_quick_view' | t -%}
+
+					<span data-text="{{- quick_view_label -}}">
+						<span>{{- quick_view_label -}}</span>
+					</span>
+				{%- endif -%}
+			{%- else -%}
+				{%- assign sold_out_label = 'products.product.add_to_cart' | t -%}
+
+				<span data-text="{{- sold_out_label -}}">
+					<span>{{- sold_out_label -}}</span>
+				</span>
+			{%- endif -%}
+		</button>
+	</div>
+</div>
+{%- endif -%}

@@ -1,0 +1,88 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "tactical_contact": {
+      "type": "page-contact-tactical",
+      "blocks": {
+        "chat": {
+          "type": "info_card",
+          "settings": {
+            "icon": "chat_bubble",
+            "title": "CHAT",
+            "subtitle": "MON - FRI: 9AM - 5PM CST",
+            "action_text": "CHAT N/A",
+            "action_url": "",
+            "is_button": false,
+            "bg_color": "#1a1a1a",
+            "text_color": "#ffffff"
+          }
+        },
+        "email": {
+          "type": "info_card",
+          "settings": {
+            "icon": "mail",
+            "title": "EMAIL",
+            "subtitle": "HQ@IRONGARRISON.COM",
+            "action_text": "EMAIL US",
+            "action_url": "mailto:hq@irongarrison.com",
+            "is_button": true,
+            "bg_color": "#000000",
+            "text_color": "#ffffff"
+          }
+        },
+        "call": {
+          "type": "info_card",
+          "settings": {
+            "icon": "phone",
+            "title": "CALL US",
+            "subtitle": "MON - FRI: 9AM - 5PM CST",
+            "action_text": "877-554-7868",
+            "action_url": "tel:877-554-7868",
+            "is_button": false,
+            "bg_color": "#121212",
+            "text_color": "#ffffff"
+          }
+        },
+        "location_1": {
+          "type": "location",
+          "settings": {
+            "label": "HQ COORDINATES",
+            "address": "30 N Gould St Ste N, Sheridan, WY, 82801, US"
+          }
+        }
+      },
+      "block_order": [
+        "chat",
+        "email",
+        "call",
+        "location_1"
+      ],
+      "settings": {
+        "title": "CONTACT US",
+        "protocol_id": "PROTOCOL ID: IG-B824-XT",
+        "header_bg_color": "#000000",
+        "header_text_color": "#ffffff",
+        "locations_heading": "OFFICE LOCATIONS",
+        "show_map": true,
+        "form_subtitle": "DIRECT LINE",
+        "form_heading": "FIELD REPORT",
+        "label_name": "OPERATOR NAME",
+        "label_email": "EMAIL ADDRESS",
+        "label_subject": "SUBJECT \/ PROTOCOL",
+        "label_message": "MESSAGE LOG",
+        "label_submit": "SEND MESSAGE"
+      }
+    }
+  },
+  "order": [
+    "tactical_contact"
+  ]
+}

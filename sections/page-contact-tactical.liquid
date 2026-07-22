@@ -1,0 +1,649 @@
+{%- style -%}
+  .contact-tactical {
+    --ct-bg-dark: rgba(26, 26, 26, 1);
+    --ct-bg-darker: rgba(18, 18, 18, 1);
+    --ct-text-light: #ffffff;
+    --ct-text-dim: #a0a0a0;
+    --ct-accent: #007bff;
+    --ct-border: rgba(255, 255, 255, 0.1);
+    --ct-input-bg: #f2f2f2;
+    background-color: #ffffff;
+    font-family: var(--font-body-family), sans-serif;
+    color: #2c3d33;
+  }
+
+  /* Header Section */
+  .contact-tactical__header {
+    background-color: #f7f5f0; /* Match aesthetic */
+    color: #2c3d33;
+    text-align: center;
+    padding: 4rem 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  .contact-tactical__header h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    margin: 0;
+    text-transform: uppercase;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: inherit;
+  }
+  .contact-tactical__subtitle {
+    font-size: 0.85rem;
+    color: var(--ct-text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-top: 0.5rem;
+  }
+
+  /* Info Blocks Grid */
+  .contact-tactical__info-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    background-color: var(--ct-bg-darker);
+    border-bottom: 1px solid var(--ct-border);
+  }
+  @media screen and (min-width: 768px) {
+    .contact-tactical__info-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .contact-tactical__info-item {
+    background-color: var(--ct-bg-dark);
+    text-align: center;
+    padding: 3rem 2rem;
+    border: 1px solid var(--ct-bg-darker);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .contact-tactical__info-item svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+    margin-bottom: 0.5rem;
+  }
+  .contact-tactical__info-title {
+    color: var(--ct-text-light);
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0;
+    letter-spacing: 0.05em;
+  }
+  .contact-tactical__info-text {
+    color: var(--ct-text-dim);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .contact-tactical__info-action {
+    color: var(--ct-text-light);
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-decoration: none;
+    margin-top: 0.5rem;
+  }
+  .contact-tactical__info-button {
+    margin-top: 0.5rem;
+    padding: 10px 20px;
+    background-color: #3b4e42;
+    color: #ffffff;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    display: inline-block;
+    border-radius: 50px;
+    border: none;
+  }
+  .contact-tactical__info-button.disabled {
+    background-color: rgba(255,255,255,0.1);
+    color: var(--ct-text-dim);
+    cursor: not-allowed;
+  }
+
+  /* Main Layout Grid */
+  .contact-tactical__main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+  @media screen and (min-width: 900px) {
+    .contact-tactical__main {
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+    .contact-tactical__main-left {
+      padding-right: 3rem;
+      border-right: 1px solid #e0e0e0;
+    }
+  }
+
+  /* Section Headings */
+  .contact-tactical__section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.8rem;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.02em;
+    color: #2c3d33;
+  }
+  .contact-tactical__section-title svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+  }
+
+  .contact-tactical__section-subtitle {
+     font-size: 0.65rem;
+     color: #888;
+     text-transform: uppercase;
+     letter-spacing: 0.1em;
+     margin-bottom: 0.25rem;
+  }
+
+  /* Locations */
+  .contact-tactical__location {
+    margin-bottom: 2.5rem;
+  }
+  .contact-tactical__location-title {
+    font-size: 1.05rem;
+    font-weight: 500;
+    font-family: var(--font-body-family), sans-serif !important;
+    text-transform: none;
+    margin: 0 0 1rem 0;
+    max-width: 350px;
+    line-height: 1.6;
+    color: #2c3d33;
+  }
+  .contact-tactical__location-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .contact-tactical__location-contact a {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2c3d33;
+    text-decoration: none;
+    transition: opacity 0.3s;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .contact-tactical__location-contact a:hover {
+    opacity: 0.7;
+  }
+  .contact-tactical__map {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background-color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  .contact-tactical__map iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  /* Form */
+  .contact-tactical__form-wrapper {
+    width: 100%;
+  }
+  
+  .contact-tactical__form-title-wrapper {
+      border-bottom: 4px solid #3b4e42;
+      padding-bottom: 0.5rem;
+      margin-bottom: 2rem;
+      display: inline-block;
+  }
+  .contact-tactical__form-title-wrapper .contact-tactical__section-title {
+      margin-bottom: 0;
+  }
+
+  .contact-tactical__form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  @media screen and (min-width: 600px) {
+    .contact-tactical__form-row {
+      flex-direction: row;
+    }
+    .contact-tactical__form-row > * {
+      flex: 1;
+    }
+  }
+  .contact-tactical__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .contact-tactical__label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #2c3d33;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 0.05em;
+  }
+  .contact-tactical__input {
+    width: 100%;
+    padding: 1rem 1.25rem !important;
+    background-color: #ffffff !important;
+    border: 1px solid #d0d0d0 !important;
+    font-family: inherit;
+    font-size: 0.95rem;
+    color: #2c3d33;
+    border-radius: 6px !important;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02) !important;
+  }
+  .contact-tactical__input:focus {
+    outline: none !important;
+    border-color: #2c3d33 !important;
+    box-shadow: 0 0 0 1px #2c3d33 !important;
+  }
+  .contact-tactical__input::placeholder {
+    color: #a0a0a0;
+  }
+  textarea.contact-tactical__input {
+    min-height: 150px;
+    resize: vertical;
+  }
+  .contact-tactical__submit {
+    width: 100%;
+    background-color: #2c3d33;
+    color: #ffffff;
+    border: none;
+    padding: 1.25rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 8px;
+  }
+  .contact-tactical__submit:hover {
+    opacity: 0.8;
+  }
+  
+  /* Fallback/Overrides for theme matching */
+  .contact-tactical {
+    --ct-bg-dark: rgb(var(--color-background));
+    --ct-bg-darker: rgb(var(--color-background));
+    --ct-text-light: rgb(var(--color-foreground));
+  }
+{%- endstyle -%}
+
+<div class="contact-tactical">
+  <!-- HEADER -->
+  <div class="contact-tactical__header" style="background-color: {{ section.settings.header_bg_color }}; color: {{ section.settings.header_text_color }};">
+    <h1>{{ section.settings.title }}</h1>
+    {%- if section.settings.protocol_id != blank -%}
+      <div class="contact-tactical__subtitle" style="color: #3b4e42;">{{ section.settings.protocol_id }}</div>
+    {%- endif -%}
+  </div>
+
+  </div>
+
+  <!-- MAIN LAYOUT -->
+  <div class="contact-tactical__main">
+    <!-- LEFT: LOCATIONS -->
+    <div class="contact-tactical__main-left">
+      <h2 class="contact-tactical__section-title">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        {{ section.settings.locations_heading }}
+      </h2>
+
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'location' -%}
+          <div class="contact-tactical__location">
+            {%- if block.settings.label != blank -%}
+              <div class="contact-tactical__section-subtitle">{{ block.settings.label }}</div>
+            {%- endif -%}
+            
+            {%- assign display_address = block.settings.address -%}
+            {%- if forloop.first and shop.address != blank -%}
+               {%- capture display_address -%}{{ shop.name }}<br>{{ shop.address.street }},<br>{{ shop.address.city }}, {{ shop.address.province }} {{ shop.address.zip }}{%- endcapture -%}
+            {%- endif -%}
+
+            {%- if display_address != blank -%}
+              <h3 class="contact-tactical__location-title">{{ display_address }}</h3>
+            {%- endif -%}
+            
+            {%- if block.settings.email != blank or block.settings.phone != blank -%}
+              <div class="contact-tactical__location-contact">
+                {%- if block.settings.email != blank -%}
+                  <a href="mailto:{{ block.settings.email }}">
+                    <svg style="width:16px;height:16px;fill:currentColor;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                    {{ block.settings.email }}
+                  </a>
+                {%- endif -%}
+                {%- if block.settings.phone != blank -%}
+                  <a href="tel:{{ block.settings.phone }}">
+                    <svg style="width:16px;height:16px;fill:currentColor;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                    {{ block.settings.phone }}
+                  </a>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- if section.settings.show_map -%}
+        <div class="contact-tactical__map">
+          {%- assign default_map_query = shop.name | append: ' ' | append: shop.address.street | append: ', ' | append: shop.address.city | append: ', ' | append: shop.address.province | url_encode -%}
+          <iframe 
+            width="100%" 
+            height="100%" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade" 
+            src="https://maps.google.com/maps?q={{ default_map_query }}&t=&z=13&ie=UTF8&iwloc=&output=embed">
+          </iframe>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <!-- RIGHT: FORM -->
+    <div class="contact-tactical__form-wrapper">
+      <div class="contact-tactical__form-title-wrapper">
+        <div class="contact-tactical__section-subtitle">{{ section.settings.form_subtitle }}</div>
+        <h2 class="contact-tactical__section-title">{{ section.settings.form_heading }}</h2>
+      </div>
+
+      {%- form 'contact', id: 'ContactFormTactical' -%}
+        {%- if form.posted_successfully? -%}
+          <p class="form-status form-status-list form__message" tabindex="-1" autofocus>
+            Thư của bạn đã được gửi thành công!
+          </p>
+        {%- elsif form.errors -%}
+          <div class="form__message">
+            <h2 class="form-status caption-large text-body" role="alert" tabindex="-1" autofocus>
+              Không thể gửi yêu cầu! Vui lòng kiểm tra lại thông tin.
+            </h2>
+          </div>
+        {%- endif -%}
+
+        <div class="contact-tactical__form-row">
+          <div class="contact-tactical__field">
+            <label class="contact-tactical__label" for="ContactFormTactical-name">{{ section.settings.label_name }}</label>
+            <input class="contact-tactical__input" autocomplete="name" type="text" id="ContactFormTactical-name" name="contact[{{ 'templates.contact.form.name' | t }}]" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}" placeholder="REQUIRED">
+          </div>
+          <div class="contact-tactical__field">
+            <label class="contact-tactical__label" for="ContactFormTactical-email">{{ section.settings.label_email }}</label>
+            <input
+              autocomplete="email"
+              type="email"
+              id="ContactFormTactical-email"
+              class="contact-tactical__input"
+              name="contact[email]"
+              spellcheck="false"
+              autocapitalize="off"
+              value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+              aria-required="true"
+              {% if form.errors contains 'email' %}
+                aria-invalid="true"
+                aria-describedby="ContactFormTactical-email-error"
+              {% endif %}
+              placeholder="REQUIRED"
+            >
+          </div>
+        </div>
+
+        <div class="contact-tactical__field">
+          <label class="contact-tactical__label" for="ContactFormTactical-subject">{{ section.settings.label_subject }}</label>
+          <select id="ContactFormTactical-subject" name="contact[Subject]" class="contact-tactical__input" style="appearance: auto;">
+             <option value="Order Inquiry">ORDER INQUIRY</option>
+             <option value="Product Support">PRODUCT SUPPORT</option>
+             <option value="General Question">GENERAL QUESTION</option>
+          </select>
+        </div>
+
+        <div class="contact-tactical__field">
+          <label class="contact-tactical__label" for="ContactFormTactical-body">{{ section.settings.label_message }}</label>
+          <textarea
+            rows="10"
+            id="ContactFormTactical-body"
+            class="contact-tactical__input"
+            name="contact[{{ 'templates.contact.form.comment' | t }}]"
+            placeholder="STATE YOUR INQUIRY..."
+          >
+            {{- form.body -}}
+          </textarea>
+        </div>
+
+        <button type="submit" class="contact-tactical__submit">
+          {{ section.settings.label_submit }}
+        </button>
+      {%- endform -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Tactical Contact",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header Settings"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "CONTACT US"
+    },
+    {
+      "type": "text",
+      "id": "protocol_id",
+      "label": "Protocol ID / Subtitle",
+      "default": "PROTOCOL ID: IG-B824-XT"
+    },
+    {
+      "type": "color",
+      "id": "header_bg_color",
+      "label": "Header Background Color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "header_text_color",
+      "label": "Header Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Locations Layout"
+    },
+    {
+      "type": "text",
+      "id": "locations_heading",
+      "label": "Locations Heading",
+      "default": "OFFICE LOCATIONS"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_map",
+      "label": "Show Map",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "map_image",
+      "label": "Map Placeholder Image"
+    },
+    {
+      "type": "header",
+      "content": "Form Settings"
+    },
+    {
+      "type": "text",
+      "id": "form_subtitle",
+      "label": "Form Subtitle",
+      "default": "DIRECT LINE"
+    },
+    {
+      "type": "text",
+      "id": "form_heading",
+      "label": "Form Heading",
+      "default": "FIELD REPORT"
+    },
+    {
+      "type": "text",
+      "id": "label_name",
+      "label": "Name Label",
+      "default": "OPERATOR NAME"
+    },
+    {
+      "type": "text",
+      "id": "label_email",
+      "label": "Email Label",
+      "default": "EMAIL ADDRESS"
+    },
+    {
+      "type": "text",
+      "id": "label_subject",
+      "label": "Subject Label",
+      "default": "SUBJECT / PROTOCOL"
+    },
+    {
+      "type": "text",
+      "id": "label_message",
+      "label": "Message Label",
+      "default": "MESSAGE LOG"
+    },
+    {
+      "type": "text",
+      "id": "label_submit",
+      "label": "Submit Button Label",
+      "default": "SEND MESSAGE"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "info_card",
+      "name": "Info Box",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {"value": "none", "label": "None"},
+            {"value": "chat_bubble", "label": "Chat"},
+            {"value": "mail", "label": "Email"},
+            {"value": "phone", "label": "Phone"}
+          ],
+          "default": "chat_bubble"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "CHAT"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "default": "MON - FRI: 9AM - 5PM CST"
+        },
+        {
+          "type": "text",
+          "id": "action_text",
+          "label": "Action Text / Number",
+          "default": "CHAT N/A"
+        },
+        {
+          "type": "url",
+          "id": "action_url",
+          "label": "Action Link"
+        },
+        {
+          "type": "checkbox",
+          "id": "is_button",
+          "label": "Style Action as Button",
+          "default": true
+        },
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Background Color",
+          "default": "#1a1a1a"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text Color",
+          "default": "#ffffff"
+        }
+      ]
+    },
+    {
+      "type": "location",
+      "name": "Office Location",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Subtitle Label",
+          "default": "HQ COORDINATES"
+        },
+        {
+          "type": "textarea",
+          "id": "address",
+          "label": "Address",
+          "default": "123 TACTICAL WAY, SECTOR 7G,\nINDUSTRIAL DISTRICT, TX 78701"
+        },
+        {
+          "type": "text",
+          "id": "email",
+          "label": "Email",
+          "default": "support.camosignal@gmail.com"
+        },
+        {
+          "type": "text",
+          "id": "phone",
+          "label": "Phone",
+          "default": "3072273117"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Tactical Contact Page"
+    }
+  ]
+}
+{% endschema %}

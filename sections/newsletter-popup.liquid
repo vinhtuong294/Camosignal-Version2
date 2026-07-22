@@ -1,0 +1,430 @@
+{%- assign color_scheme      	           = section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+
+{%- assign default_label_text = 'newsletter_popup.label' | t -%}
+{%- assign default_btn_text = 'newsletter_popup.button_label' | t -%}
+{%- assign default_success_text = 'newsletter_popup.success' | t -%}
+{%- assign close_modal = 'general.accessibility.close_modal' | t -%}
+
+{%- assign is_newsletter_popup_show_socials = section.settings.is_newsletter_popup_show_socials -%}
+{%- assign newsletter_popup_enable_animation = section.settings.newsletter_popup_enable_animation -%}
+{%- assign newsletter_popup_cookie_time = section.settings.newsletter_popup_cookie_time -%}
+{%- assign scroll_images_direction = section.settings.scroll_images_direction -%}
+{%- assign newsletter_popup_heading = section.settings.newsletter_popup_heading -%}
+{%- assign newsletter_popup_text = section.settings.newsletter_popup_text -%}
+
+{%- assign newsletter_popup_input_placeholder = section.settings.newsletter_popup_input_placeholder | default: default_label_text -%}
+{%- assign newsletter_popup_input_button_submit_text = section.settings.newsletter_popup_input_button_submit_text | default: default_btn_text -%}
+{%- assign newsletter_popup_button_close_label = section.settings.newsletter_popup_button_close_label | default: default_btn_text -%}
+
+{%- assign blocks = section.blocks -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- capture image_cols -%}
+    {%- if blocks.size == 3 -%}
+        {%- for block in blocks -%}
+            {%- assign desktop_movement_speed = block.settings.newsletter_popup_desktop_movement_speed -%}
+            {%- assign mobile_movement_speed  = block.settings.newsletter_popup_mobile_movement_speed -%}
+
+            {%- capture image_col_styles -%}
+                --desktop-movement-speed: {{ desktop_movement_speed -}}s; {{-  -}}
+                --mobile-movement-speed: {{ mobile_movement_speed -}}s; {{-  -}}
+            {%- endcapture -%}
+
+            {%- capture image_col -%}
+                {%- assign image_count = 0 -%}
+
+                {%- for i in (1..4) -%}
+                    {% assign type = 'newsletter_popup_image_' | append: i %}
+                    {% assign image = block.settings[type] %}
+
+                    {%- if image != blank -%}
+                        {%- assign image_count = image_count | plus: 1 -%}
+                    {%- endif -%}
+                {%- endfor -%}
+
+                {%- for i in (1..4) -%}
+                    {% assign type = 'newsletter_popup_image_' | append: i %}
+                    {% assign image = block.settings[type] %}
+
+                    {%- if image != blank -%}
+                        {%- capture img_focal -%}
+                            --img-pos: {{ image.presentation.focal_point }};
+                        {%- endcapture -%}
+
+                        <picture class="newsletter-popup__image-wrapper">
+                            <source
+                                srcset="{{ image | image_url: height: 139 }} 1x, {{ image | image_url: height: 278 }} 2x"
+                                media="(max-width: 360px)"
+                            />
+
+                            <source
+                                srcset="{{ image | image_url: height: 169 }} 1x, {{ image | image_url: height: 338 }} 2x"
+                                media="(max-width: 420px)"
+                            />
+
+                            <source
+                                srcset="{{ image | image_url: height: 199 }} 1x, {{ image | image_url: height: 398 }} 2x"
+                                media="(max-width: 480px)"
+                            />
+
+                            <source
+                                srcset="{{ image | image_url: height: 215 }} 1x, {{ image | image_url: height: 430 }} 2x"
+                                media="(max-width: 991px)"
+                            />
+
+                            <img
+                                class="newsletter-popup__image"
+                                src="{{- image | image_url: height: 283 -}}"
+                                srcset="{{ image | image_url: height: 283 }} 1x, {{ image | image_url: height: 566 }} 2x"
+                                alt="{{- image.alt -}}"
+								loading="lazy"
+								fetchpriority="low"
+                                style="{{ img_focal }}"
+                            />
+                        </picture>
+                    {%- elsif image_count >= 3 -%}
+                        {%- continue -%}
+                    {%- else -%}
+                        <picture class="newsletter-popup__image-wrapper">
+                            {{- 'image' | placeholder_svg_tag: 'newsletter-popup__image newsletter-popup__image--placeholder' -}}
+                        </picture>
+                    {%- endif -%}
+                {%- endfor -%}
+            {%- endcapture -%}
+
+            {%- if image_col != blank -%}
+                <div class="newsletter-popup__image-col{% if newsletter_popup_enable_animation == false %} newsletter-popup__image-col--static{% endif %}{% if scroll_images_direction == 'bottom' %} newsletter-popup__image-col--animation-reverse{% endif %}" style="{{ image_col_styles }}">
+                    <div class="newsletter-popup__image-col-inner{% if newsletter_popup_enable_animation %} newsletter-popup__image-col-inner--animated{% endif %}">
+                        {{- image_col -}}
+                    </div>
+
+                    <div class="newsletter-popup__image-col-inner{% if newsletter_popup_enable_animation %} newsletter-popup__image-col-inner--animated{% endif %}" aria-hidden="true">
+                        {{- image_col -}}
+                    </div>
+                </div>
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endif -%}
+{%- endcapture -%}
+
+{%- if newsletter_popup_input_button_submit_text != blank and default_success_text != blank -%}
+	{%- render 'adastra' with '/src/styles/newsletter-popup.scss' -%}
+	{%- render 'adastra' with '/src/scripts/section-newsletter-popup.js' -%}
+
+	<div class="popup newsletter-popup color-{{- color_scheme }} js-newsletter-popup js-scroll-lock-container"
+		 id="NewsletterPopup"
+		 data-cookie-time="{{ newsletter_popup_cookie_time }}"
+		 role="dialog"
+		 aria-labelledby="NewsletterPopupTitle"
+		 style="z-index: 9999999 !important;"
+	>
+		<div class="newsletter-popup__images-row">
+			{{- image_cols -}}
+		</div>
+
+		<div class="newsletter-popup__box-text">
+			<div class="newsletter-popup__content">
+				{%- if newsletter_popup_heading != blank -%}
+					<h2 class="h3 newsletter-popup__heading" id="NewsletterPopupTitle">
+						{{- newsletter_popup_heading -}}
+					</h2>
+				{%- endif -%}
+
+				{%- if newsletter_popup_text != blank -%}
+					<p class="newsletter-popup__text">
+						{{- newsletter_popup_text -}}
+					</p>
+				{%- endif -%}
+
+					{% form 'customer', class: 'newsletter-popup-form', id: 'newsletter-popup-contact-form' %}
+						{%- assign form_success_status_class = "" %}
+
+						{%- if form.posted_successfully? -%}
+							{%- assign form_success_status_class = "posted" -%}
+						{%- endif -%}
+
+						<input type="hidden" name="contact[tags]" value="newsletter"/>
+
+						<div class="newsletter-popup-form__field">
+							<div class="input-wrapper">
+								<input
+									id="newsletter-popup-contact-form-input"
+									type="email"
+									name="contact[email]"
+									class="input {{ form_success_status_class }} js-newsletter-popup-input"
+									value="{{- form.email -}}"
+									aria-required="true"
+									autocapitalize="off"
+									autocomplete="email"
+									{% if form.errors %}
+										aria-invalid="true"
+										aria-describedby="newsletter-popup-contact-form-error"
+										{% elsif form.posted_successfully? %}
+										aria-describedby="newsletter-popup-contact-form-success"
+									{% endif %}
+									placeholder="{{- newsletter_popup_input_placeholder -}}"
+									required
+								/>
+
+							<label class="input-label" for="newsletter-popup-contact-form-input">
+								{{ newsletter_popup_input_placeholder }}
+							</label>
+						</div>
+
+						{%- if form.errors -%}
+							<small class="newsletter-popup-form__message newsletter-popup-form__message--error"
+								   id="newsletter-popup-contact-form-error">
+								{% render 'icons', icon: 'menu-close' %}
+
+								{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
+							</small>
+						{%- endif -%}
+
+						{%- if form.posted_successfully? -%}
+							<h3
+								class="newsletter-popup-form__message newsletter-popup-form__message--success text"
+								id="newsletter-popup-contact-form-success"
+								tabindex="-1"
+							>
+								{% render 'icons', icon: 'check' %}
+
+								{{- success_message | default: default_success_text -}}
+							</h3>
+						{%- endif -%}
+					</div>
+
+						<button
+							type="submit"
+							class="button button--secondary newsletter-popup-form__button"
+							name="commit"
+						>
+							<span data-text="{{- newsletter_popup_input_button_submit_text -}}">
+								<span>{{- newsletter_popup_input_button_submit_text -}}</span>
+							</span>
+						</button>
+
+					{%- if newsletter_popup_button_close_label != blank -%}
+						<button
+							class="button-link focus-visible-outline"
+							data-target="NewsletterPopup"
+							data-js-toggle="NewsletterPopupToggle"
+						>
+							<span data-text="{{- newsletter_popup_button_close_label -}}">
+								<span>{{- newsletter_popup_button_close_label -}}</span>
+							</span>
+						</button>
+					{%- endif -%}
+				{% endform %}
+
+				{%- if is_newsletter_popup_show_socials -%}
+					{%- render 'social-links' -%}
+				{%- endif -%}
+			</div>
+		</div>
+
+		<button type="button"
+				class="newsletter-popup__close-icon-button focus-visible-outline popup-close-icon-button"
+				aria-label="{{- close_modal | escape -}}"
+				data-target="NewsletterPopup"
+				data-js-toggle="NewsletterPopupToggle"
+		>
+			{% render 'icons', icon: 'menu-close' %}
+		</button>
+	</div>
+{% endif %}
+
+{% schema %}
+{
+	"name": "Newsletter popup",
+	"limit": 1,
+	"enabled_on": {
+		"groups": ["custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "paragraph",
+			"content": "All three blocks must be filled for the section to display the images block."
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "General"
+		},
+		{
+			"type": "select",
+			"id": "newsletter_popup_cookie_time",
+			"label": "Cookie time",
+			"options": [
+				{
+					"value": "1",
+					"label": "1 day"
+				},
+				{
+					"value": "7",
+					"label": "1 week"
+				},
+				{
+					"value": "30",
+					"label": "1 month"
+				},
+				{
+					"value": "90",
+					"label": "3 months"
+				},
+				{
+					"value": "360",
+					"label": "1 year"
+				}
+			],
+			"default": "1"
+		},
+		{
+			"type": "select",
+			"id": "scroll_images_direction",
+			"label": "Scroll images direction",
+			"options": [
+				{
+					"value": "top",
+					"label": "Top"
+				},
+				{
+					"value": "bottom",
+					"label": "Bottom"
+				}
+			],
+			"default": "top",
+			"info": "This setting changes the animation direction for all columns to a reverse direction."
+		},
+		{
+			"type": "inline_richtext",
+			"id": "newsletter_popup_heading",
+			"label": "Heading",
+			"default": "Subscribe to our newsletter"
+		},
+		{
+			"type": "textarea",
+			"id": "newsletter_popup_text",
+			"label": "Text",
+			"default": "Be the first to know about sales, exclusive offers and promotions."
+		},
+		{
+			"type": "text",
+			"id": "newsletter_popup_input_placeholder",
+			"label": "Input placeholder",
+			"default": "john.smith@example.com *"
+		},
+		{
+			"type": "text",
+			"id": "newsletter_popup_input_button_submit_text",
+			"label": "Button submit label",
+			"default": "Sign Up"
+		},
+		{
+			"type": "text",
+			"id": "newsletter_popup_button_close_label",
+			"label": "Button close label",
+			"default": "No Thanks"
+		},
+		{
+			"type": "checkbox",
+			"id": "is_newsletter_popup_show_socials",
+			"label": "Show socials",
+			"default": true,
+			"info": "Specify your social media links in 'Theme settings - Social accounts'"
+		},
+		{
+			"type": "checkbox",
+			"id": "newsletter_popup_enable_animation",
+			"label": "Enable images animation",
+			"default": true
+		}
+	],
+	"max_blocks": 3,
+	"blocks": [
+		{
+			"type": "block",
+			"name": "Block image",
+			"settings": [
+				{
+					"type": "paragraph",
+					"content": "By default placeholders are used for images. At least three image settings for a block must be filled in for placeholders not to be displayed."
+				},
+                {
+                    "type": "range",
+                    "id": "newsletter_popup_desktop_movement_speed",
+                    "label": "Movement speed (desktop)",
+                    "min": 4,
+                    "max": 20,
+                    "unit": "s",
+                    "default": 6
+                },
+                {
+                    "type": "range",
+                    "id": "newsletter_popup_mobile_movement_speed",
+                    "label": "Movement speed (mobile)",
+                    "min": 4,
+                    "max": 20,
+                    "unit": "s",
+                    "default": 6
+                },
+				{
+					"type": "image_picker",
+					"id": "newsletter_popup_image_1",
+					"label": "Image 1"
+				},
+				{
+					"type": "image_picker",
+					"id": "newsletter_popup_image_2",
+					"label": "Image 2"
+				},
+				{
+					"type": "image_picker",
+					"id": "newsletter_popup_image_3",
+					"label": "Image 3"
+				},
+				{
+					"type": "image_picker",
+					"id": "newsletter_popup_image_4",
+					"label": "Image 4"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Newsletter popup",
+            "blocks": [
+                {
+                    "type": "block"
+                },
+                {
+                    "type": "block"
+                },
+                {
+                    "type": "block"
+                }
+            ]
+		}
+	]
+}
+{% endschema %}

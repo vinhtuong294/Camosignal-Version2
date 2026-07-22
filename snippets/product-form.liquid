@@ -1,0 +1,235 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+  Snippet: Product Form
+  ---------------------------
+  Use blocks:
+  	- "Vendor"
+  	- "SKU"
+	- "Title"
+	- "Options"
+	- "Quantity"
+	- "Price"
+	- "Add to cart"
+	- "Pickup availability"
+	- "Sales point"
+	- "Custom liquid"
+------------------------------------------------------------------------------
+{%- endcomment -%}
+{%- assign is_preset = false -%}
+
+{%- if product == blank -%}
+	{%- assign is_preset = true -%}
+{%- endif -%}
+
+{%- assign show_sticky_add_to_cart = section.settings.show_sticky_add_to_cart -%}
+
+{%- assign section_contains_quantity_block = false -%}
+
+{%- for form_block in blocks -%}
+	{%- if form_block.type == 'quantity' -%}
+		{%- assign section_contains_quantity_block = true -%}
+		{%- break -%}
+	{%- endif -%}
+{%- endfor -%}
+
+{%- assign use_variant = false -%}
+
+{%- if product.variants.size > 1 -%}
+	{%- assign use_variant = true -%}
+{%- endif -%}
+
+{%- if blocks.size > 0 -%}
+	{%- comment -%}
+		The repeated content inside the <form> and <div> tags is there for a reason.
+		Liquid "form" tag cannot be designated as separately opening and separately closing.
+		If the Liquid "form" tag is replaced with an HTML tag,
+		then we will not be able to pass the "form" object to the "Price" snippet.
+		There, the "form" object is used to render "payment_terms"
+		Please fix this issue before changing anything.
+	{%- endcomment -%}
+	{%- if product != blank -%}
+		{% form 'product',
+			product,
+			data-js-product-form: true,
+			class: 'product-form',
+			data-section-id: section.id,
+			data-enable-history-state: enable_history_state,
+			data-template: product_template
+		%}
+			{%- render 'product-json', product: product -%}
+
+			{% if product.template_suffix == 'pre-order' %}
+				<input type="hidden" name="properties[_Pre-order]" value="true">
+			{% endif %}
+
+			{%- for block in blocks  -%}
+				{%- case block.type -%}
+					{%- when 'breadcrumbs' -%}
+						{%- render 'product-breadcrumbs', block: block, product: product, is_preset: is_preset -%}
+					{%- when 'sku' -%}
+						{%- render 'product-sku', block: block, product: product, is_preset: is_preset -%}
+					{%- when 'vendor' -%}
+						{%- render 'product-vendor', block: block, product: product, is_preset: is_preset -%}
+					{%- when 'title' -%}
+						{%- render 'product-title', block: block, product: product, is_preset: is_preset -%}
+					{%- when 'short_description' -%}
+						{%- render 'product-short-description', block: block, product: product, is_preset: is_preset -%}
+					{%- when 'description' -%}
+						{%- render 'product-description', block: block, product: product, is_preset: is_preset -%}
+					{% when 'product_combination' %}
+						{% render 'product-combination', block: block, product: product %}
+					{%- when 'options' -%}
+						{%- render 'product-options', section: section, block: block, product: product -%}
+					{%- when 'quantity' -%}
+						{%- render 'product-customization-fields', product: product, section_id: section.id -%}
+						{%- render 'product-quantity', block: block, product: product -%}
+					{%- when 'price' -%}
+						<div class="product-flashsale-and-price-group" style="display: flex; align-items: center; justify-content: flex-start; flex-wrap: nowrap; gap: 16px; margin-bottom: 16px; margin-top: 8px;">
+							<div class="product-price-and-review-wrapper" id="product-price-and-review-wrapper-{{ section.id }}" style="display: flex; align-items: center; justify-content: flex-start; gap: 8px; flex: 0 1 auto; min-width: 0;">
+								<div class="product-price-container" style="flex: 0 1 auto; min-width: 0;">
+									{%- render 'price',
+										product: product,
+										use_variant: use_variant,
+										show_unit_price: settings.is_show_unit_price,
+										currency_code_enabled: false,
+										show_currency_symbol: true,
+										price_class: 'product-price',
+										hide_from_price: true,
+										show_taxes_included: section.settings.show_taxes_included,
+										show_pay_installments: section.settings.show_pay_installments,
+										form: form,
+										show_volume_pricing_info: true,
+										block: block
+									-%}
+								</div>
+							</div>
+							<div class="product-countdown-container" style="flex: 0 0 auto;">
+								{%- render 'product-countdown', section: section -%}
+							</div>
+						</div>
+					{%- when 'add_to_cart' -%}
+						{%- unless section_contains_quantity_block -%}
+							{%- render 'product-customization-fields', product: product, section_id: section.id -%}
+						{%- endunless -%}
+						{%- render 'product-add-to-cart',
+							form: form,
+							section: section,
+							blocks: blocks,
+							block: block,
+							use_variant: use_variant,
+							show_sticky_add_to_cart: show_sticky_add_to_cart,
+							product: product
+						-%}
+						{%- if product_template -%}
+							{%- render 'product-also-available', product: product -%}
+						{%- endif -%}
+					{%- when 'pickup_availability' -%}
+						{%- render 'product-pickup-availability', product: product, block: block, section_id: section.id -%}
+					{%- when 'drawers' -%}
+						{%- render 'product-drawers', product: product, block: block, section: section -%}
+					{%- when 'complementary' -%}
+						{%- render 'product-complementary', product: product, block: block, section_id: section.id -%}
+					{%- when 'sales_point' -%}
+						{%- render 'product-sales-point', block: block -%}
+					{%- when 'inventory_status' -%}
+						{%- render 'product-inventory-status', block: block, product: product -%}
+					{%- when 'text' -%}
+						{%- render 'product-text', block: block -%}
+					{%- when 'custom_liquid' -%}
+						{%- render 'product-custom-liquid', block: block -%}
+					{%- when 'socials' -%}
+						{%- render 'product-share-buttons', block: block, product: product, section_id: section.id -%}
+					{%- when 'back_in_stock_alert' -%}
+						{%- render 'back-in-stock-alert-button', block: block -%}
+					{%- when 'gift_product_block' -%}
+						{% assign gift_product = block.settings.gift_product %}
+
+						{% if gift_product != blank and gift_product.available and gift_product != product %}
+							{% render 'product-gift-box', block: block %}
+						{% endif %}
+					{%- else -%}
+						{%- render block -%}
+				{%- endcase -%}
+			{%- endfor -%}
+		{% endform %}
+	{%- else -%}
+		<div
+			id="product_form_{{- product.id -}}"
+			class="shopify-product-form product-form"
+			data-section-id="{{- section.id -}}"
+		>
+			{%- for block in blocks  -%}
+				{%- case block.type -%}
+					{%- when 'breadcrumbs' -%}
+						{%- render 'product-breadcrumbs', block: block, product: product, is_preset: is_preset -%}
+					{%- when 'sku' -%}
+						{%- render 'product-sku', block: block, product: product, is_preset: is_preset -%}
+					{%- when 'vendor' -%}
+						{% render 'product-vendor', block: block, product: product, is_preset: is_preset -%}
+					{%- when 'title' -%}
+						{%- render 'product-title', block: block, product: product, is_preset: is_preset -%}
+					{%- when 'short_description' -%}
+						{%- render 'product-short-description', block: block, product: product, is_preset: is_preset -%}
+					{%- when 'options' -%}
+						{%- render 'product-options', section: section, block: block, product: product -%}
+					{%- when 'quantity' -%}
+						{%- render 'product-quantity', block: block, product: product -%}
+					{%- when 'price' -%}
+						<div class="product-price-and-review-wrapper" id="product-price-and-review-wrapper-{{ section.id }}-fallback" style="display: flex; align-items: flex-start; justify-content: flex-start; gap: 16px; margin-bottom: 8px;">
+							<div class="product-price-container" style="flex: 0 0 auto;">
+								{%- render 'price',
+									product: product,
+									use_variant: use_variant,
+									show_unit_price: settings.is_show_unit_price,
+									currency_code_enabled: settings.is_currency_code_enabled,
+									price_class: 'product-price h4',
+									hide_from_price: true,
+									show_taxes_included: section.settings.show_taxes_included,
+									show_pay_installments: section.settings.show_pay_installments,
+									form: form,
+									block: block
+								-%}
+							</div>
+							<div class="injected-review-container" id="injected-review-container-{{ section.id }}-fallback" style="flex: 0 0 auto; display: flex; align-items: center; padding-top: 4px;"></div>
+						</div>
+					{%- when 'add_to_cart' -%}
+						{%- render 'product-add-to-cart',
+							form: form,
+							section: section,
+							block: block,
+							blocks: blocks,
+							use_variant: use_variant,
+							show_sticky_add_to_cart: show_sticky_add_to_cart,
+							product: product
+						-%}
+					{%- when 'pickup_availability' -%}
+						{%- render 'product-pickup-availability', product: product, block: block, section_id: section.id -%}
+					{%- when 'drawers' -%}
+						{%- render 'product-drawers', product: product, block: block, section: section -%}
+					{%- when 'custom_liquid' -%}
+						{%- render 'product-custom-liquid', block: block -%}
+					{%- when 'socials' -%}
+						{%- render 'product-share-buttons', block: block, product: product, section_id: section.id -%}
+					{%- else -%}
+						{%- render block -%}
+				{%- endcase -%}
+			{%- endfor -%}
+		</div>
+	{%- endif -%}
+	{%- endif -%}
+	{%- if request.page_type == 'product' -%}
+		{%- render 'product-square-controls', section: section -%}
+	{%- endif -%}
+	<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var forms = document.querySelectorAll('.product-form, [data-js-product-form]');
+    forms.forEach(function(form) {
+      form.addEventListener('submit', function(e) {
+        if (e.submitter && (e.submitter.closest('.shopify-app-block') || e.submitter.closest('#looxReviews') || e.submitter.closest('.loox-reviews-default'))) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }, true);
+    });
+  });
+</script>

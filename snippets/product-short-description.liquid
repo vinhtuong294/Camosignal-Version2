@@ -1,0 +1,58 @@
+{%- comment -%}
+  Snippet: product-short-description
+  Renders the first meaningful paragraph of the product description (skipping the title paragraph).
+{%- endcomment -%}
+
+{%- assign full_description = product.description -%}
+
+{%- comment -%} Remove product title in various formats {%- endcomment -%}
+{%- assign product_title_bold_strong = '<strong>' | append: product.title | append: '</strong>' -%}
+{%- assign product_title_bold_b = '<b>' | append: product.title | append: '</b>' -%}
+{%- assign product_title_italic = '<em>' | append: product.title | append: '</em>' -%}
+
+{%- assign cleaned = full_description | replace: product_title_bold_strong, '' -%}
+{%- assign cleaned = cleaned | replace: product_title_bold_b, '' -%}
+{%- assign cleaned = cleaned | replace: product_title_italic, '' -%}
+{%- assign cleaned = cleaned | replace: product.title, '' -%}
+{%- assign cleaned = cleaned | strip -%}
+
+{%- comment -%}
+  Split by </p> to get individual paragraphs.
+  Loop through and find the first one with meaningful text content (>10 chars).
+{%- endcomment -%}
+{%- assign short_description = '' -%}
+{%- if cleaned contains '</p>' -%}
+  {%- assign paragraphs = cleaned | split: '</p>' -%}
+  {%- for para in paragraphs -%}
+    {%- if short_description == '' -%}
+      {%- assign para_text = para | strip_html | strip -%}
+      {%- assign para_text_size = para_text | size -%}
+      {%- if para_text_size > 10 -%}
+        {%- comment -%} Found a meaningful paragraph - extract just the <p>...</p> part {%- endcomment -%}
+        {%- if para contains '<p>' or para contains '<p ' -%}
+          {%- assign short_description = para | append: '</p>' -%}
+          {%- comment -%} Clean: keep only from <p> to </p> {%- endcomment -%}
+          {%- if short_description contains '<p>' -%}
+            {%- assign p_parts = short_description | split: '<p>' -%}
+            {%- assign text_after_p = p_parts.last -%}
+            {%- assign text_parts = text_after_p | split: '</p>' -%}
+            {%- assign short_description = '<p>' | append: text_parts.first | append: '</p>' -%}
+          {%- elsif short_description contains '<p ' -%}
+            {%- assign p_parts = short_description | split: '<p ' -%}
+            {%- assign text_after_p = p_parts.last -%}
+            {%- assign text_parts = text_after_p | split: '</p>' -%}
+            {%- assign short_description = '<p ' | append: text_parts.first | append: '</p>' -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{%- assign short_description = short_description | strip -%}
+
+{%- if short_description != blank -%}
+  <div class="product-short-description rte desktop-only">
+    {{ short_description }}
+  </div>
+{%- endif -%}

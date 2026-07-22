@@ -1,0 +1,1645 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Banner
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign banner_height_desktop 		= section.settings.desktop_image_height -%}
+{%- assign banner_height_mobile 		= section.settings.mobile_image_height -%}
+{%- if section.settings.enable_timer -%}
+	{%- assign banner_height_desktop = 'auto' -%}
+	{%- assign banner_height_mobile = 'auto' -%}
+{%- endif -%}
+{%- assign media_type 					= section.settings.media_type -%}
+{%- assign title 						= section.settings.title -%}
+{%- assign text 						= section.settings.text -%}
+
+{%- if template.suffix == "contact" -%}
+	{%- assign title = section.settings.title | default: page.title -%}
+	{%- assign text = section.settings.text | default: page.content -%}
+{%- endif -%}
+
+{%- assign button_label_1 				= section.settings.button_label_1 -%}
+{%- assign button_link_1 				= section.settings.button_link_1 -%}
+{%- assign button_aria_label_1 			= section.settings.button_aria_label_1 -%}
+{%- assign button_label_2 				= section.settings.button_label_2 -%}
+{%- assign button_link_2 				= section.settings.button_link_2 -%}
+{%- assign button_aria_label_2 			= section.settings.button_aria_label_2 -%}
+{%- assign image_desktop 				= section.settings.image_desktop -%}
+{%- assign image_mobile 				= section.settings.image_mobile | default: image_desktop -%}
+{%- assign html_video_desktop 			= section.settings.html_video_desktop -%}
+{%- assign html_video_mobile 			= section.settings.html_video_mobile | default: html_video_desktop -%}
+{%- assign external_video_url_desktop 	= section.settings.external_video_url_desktop -%}
+{%- assign external_video_url_mobile 	= section.settings.external_video_url_mobile | default: external_video_url_desktop -%}
+{%- assign content_alignment 			= section.settings.content_alignment -%}
+{%- assign content_alignment_mobile 	= section.settings.content_alignment_mobile -%}
+{%- assign block_alignment 				= section.settings.block_alignment -%}
+{%- assign block_alignment_vertical 	= section.settings.block_alignment_vertical -%}
+{%- assign block_alignment_vertical_mob = section.settings.block_alignment_vertical_mob -%}
+{%- assign show_section_breadcrumbs 	= section.settings.show_breadcrumbs -%}
+{%- assign container 					= section.settings.container_width -%}
+
+{% comment %}
+	Timer settings
+{% endcomment %}
+{%- assign enable_timer 				= section.settings.enable_timer -%}
+{%- assign timer_year 					= section.settings.timer_year -%}
+{%- assign timer_month 					= section.settings.timer_month -%}
+{%- assign timer_day 					= section.settings.timer_day -%}
+{%- assign timer_hour 					= section.settings.timer_hour -%}
+{%- assign timer_timezone 				= section.settings.timer_timezone -%}
+{%- assign evergreen_timer              = section.settings.evergreen_timer -%}
+{%- assign evergreen_reset_hour         = section.settings.evergreen_reset_hour | default: 7 -%}
+{%- assign timer_label_days             = section.settings.timer_label_days | default: 'DAYS' -%}
+{%- assign timer_label_hours            = section.settings.timer_label_hours | default: 'HOURS' -%}
+{%- assign timer_label_minutes          = section.settings.timer_label_minutes | default: 'MINUTES' -%}
+{%- assign timer_label_seconds          = section.settings.timer_label_seconds | default: 'SECONDS' -%}
+{%- assign timer_background 			= section.settings.timer_background -%}
+{%- assign timer_color 					= section.settings.timer_color -%}
+{%- assign timer_border_color 			= section.settings.timer_color | color_modify: 'alpha', 0.12 -%}
+
+{% comment %}
+	Colors
+{% endcomment %}
+{%- assign section_background 			= section.settings.section_background -%}
+{%- assign overlay 						= section.settings.overlay -%}
+{%- assign text_color 					= section.settings.text_color -%}
+{%- assign button_background_1 			= section.settings.button_background_1 -%}
+{%- assign button_color_1 				= section.settings.button_color_1 -%}
+{%- assign button_border_1 				= section.settings.button_border_1 -%}
+{%- assign button_background_hover_1 	= section.settings.button_background_hover_1 -%}
+{%- assign button_color_hover_1 		= section.settings.button_color_hover_1 -%}
+{%- assign button_border_hover_1 		= section.settings.button_border_hover_1 -%}
+{%- assign button_background_2 			= section.settings.button_background_2 -%}
+{%- assign button_color_2 				= section.settings.button_color_2 -%}
+{%- assign button_border_2 				= section.settings.button_border_2 -%}
+{%- assign button_background_hover_2 	= section.settings.button_background_hover_2 -%}
+{%- assign button_color_hover_2 		= section.settings.button_color_hover_2 -%}
+{%- assign button_border_hover_2 		= section.settings.button_border_hover_2 -%}
+
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- assign enable_lazy_load = true -%}
+
+{%- if section.index == 1 -%}
+	{%- assign enable_lazy_load = false -%}
+{%- endif -%}
+
+{%- if enable_timer or media_type == 'html_video' or media_type == 'iframe_video' -%}
+	{%- assign is_script_needed = true -%}
+{%- endif -%}
+
+{%- if banner_height_desktop == 'auto' and image_desktop != blank -%}
+	{%- assign use_aspect_desktop_class = true -%}
+{%- elsif banner_height_desktop == 'auto' and html_video_desktop != blank -%}
+	{%- assign use_aspect_desktop_class = true -%}
+{%- endif %}
+
+{%- if banner_height_mobile == 'auto' and image_mobile != blank -%}
+	{%- assign use_aspect_mobile_class = true -%}
+{%- elsif banner_height_mobile == 'auto' and html_video_mobile != blank -%}
+	{%- assign use_aspect_mobile_class = true -%}
+{%- endif -%}
+
+{%- capture section_styles -%}
+	--banner-min-height-desktop: {{ banner_height_desktop }}; {{-  -}}
+	--banner-min-height-mobile: {{ banner_height_mobile }}; {{-  -}}
+	--banner-background-color: {{- section_background -}}; {{-  -}}
+	--text-color: {{- text_color -}}; {{-  -}}
+	--overlay: {{- overlay -}}; {{-  -}}
+	--container-width: {{ container_width }}; {{-  -}}
+	{%- if  media_type == 'image' and image_desktop != blank -%}
+		--aspect-ratio-media-desktop: {{ image_desktop.aspect_ratio |  round: 2 }}; {{-  -}}
+		--aspect-ratio-media-mobile: {{ image_mobile.aspect_ratio | round: 2 }}; {{-  -}}
+	{%- elsif media_type == 'html_video' and image_desktop != blank -%}
+		--aspect-ratio-media-desktop: {{ html_video_desktop.aspect_ratio |  round: 2 }}; {{-  -}}
+		--aspect-ratio-media-mobile: {{ html_video_mobile.aspect_ratio | round: 2 }}; {{-  -}}
+	{%- endif -%}
+{%- endcapture -%}
+
+{%- if show_section_breadcrumbs -%}
+	{% style %}
+		.breadcrumb {
+			display: none;
+		}
+	{% endstyle %}
+{%- endif -%}
+
+{%- capture banner -%}
+	{%- capture image -%}
+		{%- render
+			'banner-image',
+			image_desktop: image_desktop,
+			image_mobile: image_mobile,
+			enable_lazy_load: enable_lazy_load
+		-%}
+	{%- endcapture -%}
+
+	{%- capture html_video -%}
+		{%- if html_video_desktop != blank -%}
+			<video
+				class="banner__media banner__video js-video"
+				data-device="desktop"
+				data-type="html"
+				loop
+				muted
+				playsinline
+				tabindex="-1"
+				aria-hidden="true"
+				preload="none"
+			>
+				{%- for source in html_video_desktop.sources -%}
+					{%- if source.mime_type == 'video/mp4' -%}
+						<source src="{{- source.url -}}" type="{{- source.mime_type -}}">
+					{%- endif -%}
+				{%- endfor -%}
+			</video>
+
+			<video
+				class="banner__media banner__video banner__video--mobile js-video"
+				data-device="mobile"
+				data-type="html"
+				loop
+				muted
+				playsinline
+				tabindex="-1"
+				aria-hidden="true"
+				preload="none"
+			>
+				{%- for source in html_video_mobile.sources -%}
+					{%- if source.mime_type == 'video/mp4' -%}
+						<source src="{{- source.url -}}" type="{{- source.mime_type -}}">
+					{%- endif -%}
+				{%- endfor -%}
+			</video>
+		{%- endif -%}
+	{%- endcapture -%}
+
+	{%- if external_video_url_desktop != nil -%}
+		{%- capture external_video -%}
+			{%- if external_video_url_desktop != nil -%}
+				{%- if external_video_url_desktop.type == 'youtube' -%}
+					<div
+						class="banner__media banner__video js-video"
+						data-device="desktop"
+						data-type="{{- external_video_url_desktop.type -}}"
+					>
+						<div
+							class="js-video-youtube"
+							data-video-id="{{- external_video_url_desktop.id -}}"
+							tabindex="-1"
+							aria-hidden="true"
+						></div>
+					</div>
+				{%- else -%}
+					<div
+						class="banner__media banner__video js-video"
+						data-device="desktop"
+						data-video-id="{{- external_video_url_desktop.id -}}"
+						data-type="{{- external_video_url_desktop.type -}}"
+						aria-hidden="true"
+					></div>
+				{%- endif -%}
+			{%- endif -%}
+
+			{%- if external_video_url_mobile != nil -%}
+				{%- if external_video_url_mobile.type == 'youtube' -%}
+					<div
+						class="banner__media banner__video banner__video--mobile js-video"
+						data-device="mobile"
+						data-type="{{- external_video_url_mobile.type -}}"
+					>
+						<div
+							class="js-video-youtube"
+							data-video-id="{{- external_video_url_mobile.id -}}"
+							tabindex="-1"
+							aria-hidden="true"
+						></div>
+					</div>
+				{%- else -%}
+					<div
+						class="banner__media banner__video banner__video--mobile js-video"
+						data-device="mobile"
+						data-video-id="{{- external_video_url_mobile.id -}}"
+						data-type="{{- external_video_url_mobile.type -}}"
+						aria-hidden="true"
+					></div>
+				{%- endif -%}
+			{%- endif -%}
+		{%- endcapture -%}
+	{%- endif -%}
+
+	{%- capture banner_media -%}
+		{%- case media_type -%}
+			{%- when 'image' -%}
+				{{- image -}}
+			{%- when 'html_video' -%}
+				{{- html_video -}}
+			{%- when 'iframe_video' -%}
+				{{- external_video -}}
+		{%- endcase -%}
+	{%- endcapture -%}
+
+	{%- capture timer -%}
+		{%- if enable_timer -%}
+			<style>
+				.custom-timer {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					gap: 24px;
+					margin: 20px auto;
+				}
+				.custom-timer__col {
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					justify-content: center;
+				}
+				.custom-timer__number {
+					font-family: var(--font-heading-family), 'Oswald', sans-serif;
+					font-size: 32px;
+					line-height: 1.2;
+					font-weight: 300;
+					letter-spacing: 2px;
+					margin: 0;
+					color: var(--timer-cell-color, #fff);
+				}
+				.custom-timer__label {
+					font-family: var(--font-body-family), sans-serif;
+					font-size: 11px;
+					text-transform: uppercase;
+					letter-spacing: 2px;
+					margin-top: 5px;
+					color: var(--timer-cell-color, #fff);
+				}
+				.custom-timer__divider {
+					height: 35px;
+					width: 1px;
+					background-color: var(--timer-cell-color, #fff);
+					opacity: 0.5;
+				}
+				@media (max-width: 767px) {
+					.custom-timer { gap: 12px; margin: 15px auto; }
+					.custom-timer__number { font-size: 24px; }
+					.custom-timer__label { font-size: 9px; letter-spacing: 1px; margin-top: 3px; }
+					.custom-timer__divider { height: 25px; }
+				}
+			</style>
+			
+			<div class="custom-timer" id="EvergreenTimer-{{ section.id }}" role="timer" aria-live="off">
+				<div class="custom-timer__col">
+					<p class="custom-timer__number js-d-both">0</p>
+					<p class="custom-timer__label">{{- timer_label_days | escape -}}</p>
+				</div>
+				<div class="custom-timer__divider"></div>
+				<div class="custom-timer__col">
+					<p class="custom-timer__number js-h-both">00</p>
+					<p class="custom-timer__label">{{- timer_label_hours | escape -}}</p>
+				</div>
+				<div class="custom-timer__divider"></div>
+				<div class="custom-timer__col">
+					<p class="custom-timer__number js-m-both">00</p>
+					<p class="custom-timer__label">{{- timer_label_minutes | escape -}}</p>
+				</div>
+				<div class="custom-timer__divider"></div>
+				<div class="custom-timer__col">
+					<p class="custom-timer__number js-s-both">00</p>
+					<p class="custom-timer__label">{{- timer_label_seconds | escape -}}</p>
+				</div>
+			</div>
+
+			<script>
+				document.addEventListener('DOMContentLoaded', function() {
+					function updateEvergreenTimer() {
+						var timerEl = document.getElementById('EvergreenTimer-{{ section.id }}');
+						if (!timerEl) return;
+						
+						var now = new Date();
+						var targetTime = 0;
+
+						{% if evergreen_timer %}
+							var startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+							var diffSinceStartOfDay = now.getTime() - startOfDay.getTime();
+							var periodMs = 4 * 60 * 60 * 1000; // 4 hours in milliseconds
+				
+							var nextPeriodMs = Math.ceil(diffSinceStartOfDay / periodMs) * periodMs;
+							if (nextPeriodMs === diffSinceStartOfDay) {
+								nextPeriodMs += periodMs;
+							}
+							
+							targetTime = startOfDay.getTime() + nextPeriodMs;
+						{% else %}
+							var fixedTarget = new Date(
+								{{ timer_year | default: 2024 | json }}, 
+								{{ timer_month | default: 1 | json }}, 
+								{{ timer_day | default: 1 | json }}, 
+								{{ timer_hour | default: 0 | json }}, 
+								0, 0
+							);
+							// Apply manual timezone offset offset
+							var offsetHours = {{ timer_timezone | default: 0 | json }};
+							fixedTarget.setHours(fixedTarget.getHours() - offsetHours);
+							targetTime = fixedTarget.getTime();
+						{% endif %}
+
+						var diff = targetTime - now.getTime();
+						
+						if (diff > 0) {
+							var d = Math.floor(diff / (1000 * 60 * 60 * 24));
+							var h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+							var m = Math.floor((diff / 1000 / 60) % 60);
+							var s = Math.floor((diff / 1000) % 60);
+
+							timerEl.querySelector('.js-d-both').textContent = d.toString();
+							timerEl.querySelector('.js-h-both').textContent = h.toString().padStart(2, '0');
+							timerEl.querySelector('.js-m-both').textContent = m.toString().padStart(2, '0');
+							timerEl.querySelector('.js-s-both').textContent = s.toString().padStart(2, '0');
+						}
+					}
+					setInterval(updateEvergreenTimer, 1000);
+					updateEvergreenTimer();
+				});
+			</script>
+		{%- endif -%}
+	{%- endcapture -%}
+
+	{%- capture banner_content -%}
+		{%- if title != blank or text != blank or button_label_1 != blank or button_label_2 != blank or timer != blank -%}
+			<div class="banner__content" {% if section.settings.banner_link != blank %}style="position: relative; z-index: 2; pointer-events: none;"{% endif %}>
+				{%- if show_section_breadcrumbs -%}
+					{%- render 'breadcrumbs', class: 'breadcrumb--banner' -%}
+				{%- endif -%}
+
+				{%- if title != blank -%}
+					<h2 class="h1 banner__heading">
+						{{- title -}}
+					</h2>
+				{%- endif -%}
+
+				{%- if text != blank -%}
+					<div class="banner__text rte">
+						{{- text -}}
+					</div>
+				{%- endif -%}
+
+				{%- if timer != blank -%}
+					{{- timer -}}
+				{%- endif -%}
+
+				{% if button_label_1 != blank and button_link_1 != blank %}
+					{% assign show_button_1 = true %}
+				{% endif %}
+
+				{% if button_label_2 != blank and button_link_2 != blank %}
+					{% assign show_button_2 = true %}
+				{% endif %}
+
+				{% if show_button_1 or show_button_2 %}
+					<div class="banner__buttons" {% if section.settings.banner_link != blank %}style="position: relative; z-index: 5; pointer-events: auto;"{% endif %}>
+						{%- if show_button_1 -%}
+							{%- capture button_styles_1 -%}
+								--banner-button-background: {{- button_background_1 -}}; {{-  -}}
+								--banner-button-color: {{- button_color_1 -}}; {{-  -}}
+								--banner-button-border: {{- button_border_1 -}}; {{-  -}}
+								--banner-button-background-hover: {{ button_background_hover_1 }}; {{-  -}}
+								--banner-button-color-hover: {{ button_color_hover_1 }}; {{-  -}}
+								--banner-button-border-hover: {{ button_border_hover_1 }}; {{-  -}}
+							{%- endcapture -%}
+
+							<a
+								class="button button--primary banner__button"
+								href="{{- button_link_1 -}}"
+								style="{{ button_styles_1 }}"
+								{% if button_aria_label_1 != blank %}
+									aria-label="{{- button_aria_label_1 | escape -}}"
+								{% endif %}
+							>
+								{{- button_label_1 -}}
+							</a>
+						{%- endif -%}
+
+						{%- if show_button_2 -%}
+							{% capture button_styles_2 %}
+								--banner-button-background: {{- button_background_2 -}}; {{-  -}}
+								--banner-button-color: {{- button_color_2 -}}; {{-  -}}
+								--banner-button-border: {{- button_border_2 -}}; {{-  -}}
+								--banner-button-background-hover: {{ button_background_hover_2 }}; {{-  -}}
+								--banner-button-color-hover: {{ button_color_hover_2 }}; {{-  -}}
+								--banner-button-border-hover: {{ button_border_hover_2 }}; {{-  -}}
+							{% endcapture %}
+
+							<a
+								class="button button--primary banner__button"
+								href="{{- button_link_2 -}}"
+								style="{{ button_styles_2 }}"
+								{% if button_aria_label_1 != blank %}
+									aria-label="{{- button_aria_label_2 | escape -}}"
+								{% endif %}
+							>
+								{{- button_label_2 -}}
+							</a>
+						{%- endif -%}
+					</div>
+				{% endif %}
+			</div>
+		{%- endif -%}
+	{%- endcapture -%}
+
+	{%- capture banner_wrapper_styles -%}
+		--banner-min-height-desktop: {{ banner_height_desktop }}; {{-  -}}
+		--banner-min-height-mobile: {{ banner_height_mobile }}; {{-  -}}
+		--banner-inner-content-alignment: {{- content_alignment | replace: 'left', 'start' | replace: 'right', 'end' -}}; {{-  -}}
+		--banner-inner-content-alignment-mobile: {{- content_alignment_mobile | replace: 'left', 'start' | replace: 'right', 'end' -}}; {{-  -}}
+		--banner-overlay-color: {{- overlay -}}; {{-  -}}
+		--banner-block-alignment: {{- block_alignment -}}; {{-  -}}
+		--banner-block-alignment-vertical: {{- block_alignment_vertical -}}; {{-  -}}
+		--banner-block-alignment-vertical-mobile: {{- block_alignment_vertical_mob -}}; {{-  -}}
+		--banner-buttons-alignment-desktop: {% if content_alignment == 'center' %}center{% elsif content_alignment == 'right' %}flex-end{% endif %}; {{-  -}}
+		--banner-buttons-alignment-mobile: {% if content_alignment_mobile == 'center' %}center{% elsif content_alignment_mobile == 'right' %}flex-end{% endif %}; {{-  -}}
+		{% if enable_timer %}
+			--timer-cell-background-color: {{- timer_background -}}; {{-  -}}
+			--timer-cell-color: {{- timer_color -}};
+			--timer-border-color: {{- timer_border_color -}};
+		{%- endif -%}
+	{%- endcapture -%}
+
+	{%- capture banner_wrapper_classes -%}
+		{% if overlay %}banner__wrapper--overlayed {{-  -}} {%- endif -%}
+		{% if enable_timer %}banner__wrapper--has-timer {{-  -}} {%- endif -%}
+	{%- endcapture -%}
+
+	{%- capture media_wrapper_classes -%}
+		{% if media_type == 'html_video' or media_type == 'iframe_video' %} js-videos {%- endif -%}
+	{%- endcapture -%}
+
+	{%- capture aspect_ratio_class -%}
+		{% if use_aspect_desktop_class and media_type != 'iframe_video' %} banner__inner--aspect-desktop{%- endif -%}
+		{% if use_aspect_mobile_class and media_type != 'iframe_video' %} banner__inner--aspect-mobile{%- endif -%}
+	{%- endcapture -%}
+
+	<div class="banner__wrapper section-animate {{ banner_wrapper_classes | strip_newlines }}" style="{{- banner_wrapper_styles | strip_newlines -}}">
+		{%- if section.settings.banner_link != blank -%}
+			<a href="{{ section.settings.banner_link }}" class="banner__full-link" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 3;">
+				<span class="visually-hidden">{{ title | default: "Banner" }}</span>
+			</a>
+		{%- endif -%}
+
+		{%- if banner_media != blank -%}
+			<div class="banner__media-wrapper {{- media_wrapper_classes | strip_newlines -}}">
+				{{- banner_media -}}
+			</div>
+		{%- endif -%}
+
+		{%- if banner_content != blank or aspect_ratio_class != blank -%}
+			<div class="banner__inner {{ aspect_ratio_class | strip_newlines }}" {% if section.settings.banner_link != blank %}style="position: relative; z-index: 4; pointer-events: none;"{% endif %}>
+				{{- banner_content -}}
+			</div>
+		{%- endif -%}
+	</div>
+{%- endcapture -%}
+
+{%- if banner != blank -%}
+	{%- render 'adastra' with '/src/styles/banner.scss' -%}
+
+	{%- style -%}
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_mobile -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+		}
+
+		@media screen and (min-width: 768px) {
+			#shopify-section-{{- section.id -}} {
+				padding-top: {{- section.settings.offset_top_desktop -}}px;
+				padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+			}
+		}
+	{%- endstyle -%}
+
+	<section class="banner{% if container_width == '100%' %} banner--full-width{% endif %} container js-banner js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}" style="{{- section_styles | strip_newlines -}}">
+		{{- banner -}}
+	</section>
+
+	<style>
+		@media (min-width: 992px) {
+			#shopify-section-{{ section.id }} .banner__content {
+				/* Use schema alignment settings */
+				padding-right: 0 !important; 
+				padding-bottom: 0px !important;
+				align-items: var(--banner-inner-content-alignment) !important;
+				text-align: var(--banner-inner-content-alignment) !important;
+				margin-right: 2%; 
+				width: 37%; 
+				transform: translate(15px, 20px); 
+			}
+			#shopify-section-{{ section.id }} .banner__text {
+				font-size: {{ section.settings.custom_font_size }}px; 
+				font-weight: 500;
+				letter-spacing: 0.5px;
+			}
+			#shopify-section-{{ section.id }} .banner__buttons {
+				justify-content: var(--banner-buttons-alignment-desktop, flex-start) !important;
+				width: 100%;
+			}
+			#shopify-section-{{ section.id }} .banner__button {
+				font-size: 14px; 
+				padding: 16px 40px;
+				margin-top: 20px;
+			}
+		}
+		/* Mobile: 4:5 aspect ratio and alignment overrides */
+		@media (max-width: 767px) {
+			#shopify-section-{{ section.id }} .banner__content {
+				align-items: var(--banner-inner-content-alignment-mobile) !important;
+				text-align: var(--banner-inner-content-alignment-mobile) !important;
+			}
+			#shopify-section-{{ section.id }} .banner__buttons {
+				justify-content: var(--banner-buttons-alignment-mobile, flex-start) !important;
+				width: 100%;
+			}
+			/* Removed forced aspect ratios to allow native theme settings (e.g., adapt to image) to work */
+			#shopify-section-{{ section.id }} .banner__wrapper .banner__media,
+			#shopify-section-{{ section.id }} .banner__wrapper .banner__media-wrapper {
+				position: absolute;
+				top: 0; left: 0; width: 100%; height: 100%;
+			}
+			#shopify-section-{{ section.id }} .banner__wrapper {
+				position: relative;
+				overflow: hidden;
+			}
+		}
+	</style>
+
+	{%- if is_script_needed == true -%}
+		{%- render 'adastra' with '/src/scripts/section-banner.js' -%}
+	{%- endif -%}
+{%- endif -%}
+
+{%- schema -%}
+{
+	"name": "Banner",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "General"
+		},
+		{
+			"type": "select",
+			"id": "desktop_image_height",
+			"label": "Desktop banner min height",
+			"options": [
+				{
+					"value": "200px",
+					"label": "200px"
+				},
+				{
+					"value": "250px",
+					"label": "250px"
+				},
+				{
+					"value": "300px",
+					"label": "300px"
+				},
+				{
+					"value": "350px",
+					"label": "350px"
+				},
+				{
+					"value": "400px",
+					"label": "400px"
+				},
+				{
+					"value": "450px",
+					"label": "450px"
+				},
+				{
+					"value": "500px",
+					"label": "500px"
+				},
+				{
+					"value": "550px",
+					"label": "550px"
+				},
+				{
+					"value": "600px",
+					"label": "600px"
+				},
+				{
+					"value": "650px",
+					"label": "650px"
+				},
+				{
+					"value": "700px",
+					"label": "700px"
+				},
+				{
+					"value": "750px",
+					"label": "750px"
+				},
+				{
+					"value": "800px",
+					"label": "800px"
+				},
+				{
+					"value": "auto",
+					"label": "Based on the media size"
+				}
+			],
+			"info": "'Based on the media size' value works with image and HTML5 video.",
+			"default": "600px"
+		},
+		{
+			"type": "select",
+			"id": "mobile_image_height",
+			"label": "Mobile banner min height",
+			"options": [
+				{
+					"value": "200px",
+					"label": "200px"
+				},
+				{
+					"value": "250px",
+					"label": "250px"
+				},
+				{
+					"value": "300px",
+					"label": "300px"
+				},
+				{
+					"value": "350px",
+					"label": "350px"
+				},
+				{
+					"value": "400px",
+					"label": "400px"
+				},
+				{
+					"value": "450px",
+					"label": "450px"
+				},
+				{
+					"value": "500px",
+					"label": "500px"
+				},
+				{
+					"value": "550px",
+					"label": "550px"
+				},
+				{
+					"value": "600px",
+					"label": "600px"
+				},
+				{
+					"value": "650px",
+					"label": "650px"
+				},
+				{
+					"value": "700px",
+					"label": "700px"
+				},
+				{
+					"value": "750px",
+					"label": "750px"
+				},
+				{
+					"value": "800px",
+					"label": "800px"
+				},
+				{
+					"value": "auto",
+					"label": "Based on the media size"
+				}
+			],
+			"info": "'Based on the media size' value works with image and HTML5 video.",
+			"default": "350px"
+		},
+		{
+			"type": "select",
+			"id": "media_type",
+			"label": "Media type",
+			"info": "Select the media type for the banner background. Settings are available below",
+			"options": [
+				{
+					"value": "image",
+					"label": "Image"
+				},
+				{
+					"value": "html_video",
+					"label": "HTML5 video"
+				},
+				{
+					"value": "iframe_video",
+					"label": "Youtube/Vimeo"
+				}
+			],
+			"default": "image"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "title",
+			"label": "Heading",
+			"default": "Heading"
+		},
+		{
+			"type": "textarea",
+			"id": "text",
+			"label": "Text",
+			"default": "Give customers details about the banner image or content on the banner."
+		},
+		{
+			"type": "text",
+			"id": "button_label_1",
+			"label": "First button label",
+			"default": "Button label"
+		},
+		{
+			"type": "url",
+			"id": "button_link_1",
+			"label": "First button link"
+		},
+		{
+			"type": "text",
+			"id": "button_aria_label_1",
+			"label": "First button aria-label"
+		},
+		{
+			"type": "text",
+			"id": "button_label_2",
+			"label": "Second button label",
+			"default": "Button label"
+		},
+		{
+			"type": "url",
+			"id": "button_link_2",
+			"label": "Second button link"
+		},
+		{
+			"type": "text",
+			"id": "button_aria_label_2",
+			"label": "Second button aria-label"
+		},
+		{
+			"type": "url",
+			"id": "banner_link",
+			"label": "Banner link",
+			"info": "Adds a clickable link to the entire banner"
+		},
+		{
+			"type": "image_picker",
+			"id": "image_desktop",
+			"label": "Image desktop",
+			"info": "Only works with 'Image' media type"
+		},
+		{
+			"type": "image_picker",
+			"id": "image_mobile",
+			"label": "Image mobile",
+			"info": "Only works with 'Image' media type"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_breadcrumbs",
+			"label": "Show breadcrumbs",
+			"default": false,
+			"info": "Can be displayed on any page except the homepage. This setting only concerns the display of breadcrumbs on the banner. To disable the breadcrumbs site-wide, please go to Theme Settings → Breadcrumbs."
+		},
+		{
+			"type": "header",
+			"content": "Countdown timer"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_timer",
+			"label": "Enable",
+			"default": false
+		},
+		{
+			"type": "checkbox",
+			"id": "evergreen_timer",
+			"label": "Enable 24h Evergreen Auto-Reset",
+			"default": true
+		},
+		{
+			"type": "range",
+			"id": "evergreen_reset_hour",
+			"min": 0,
+			"max": 23,
+			"step": 1,
+			"unit": "h",
+			"label": "Daily Reset Hour (UTC)",
+			"info": "For 2 PM Vietnam Time (14:00 UTC+7), select 7.",
+			"default": 7
+		},
+		{
+			"type": "text",
+			"id": "timer_label_days",
+			"label": "Label for Days",
+			"default": "DAYS"
+		},
+		{
+			"type": "text",
+			"id": "timer_label_hours",
+			"label": "Label for Hours",
+			"default": "HOURS"
+		},
+		{
+			"type": "text",
+			"id": "timer_label_minutes",
+			"label": "Label for Minutes",
+			"default": "MINUTES"
+		},
+		{
+			"type": "text",
+			"id": "timer_label_seconds",
+			"label": "Label for Seconds",
+			"default": "SECONDS"
+		},
+		{
+			"type": "number",
+			"id": "timer_year",
+			"label": "Year",
+			"info": "Write year in the next format, example: 2025"
+		},
+		{
+			"type": "select",
+			"id": "timer_month",
+			"label": "Month",
+			"options": [
+				{
+					"value": "0",
+					"label": "Jan"
+				},
+				{
+					"value": "1",
+					"label": "Feb"
+				},
+				{
+					"value": "2",
+					"label": "Mar"
+				},
+				{
+					"value": "3",
+					"label": "Apr"
+				},
+				{
+					"value": "4",
+					"label": "May"
+				},
+				{
+					"value": "5",
+					"label": "Jun"
+				},
+				{
+					"value": "6",
+					"label": "Jul"
+				},
+				{
+					"value": "7",
+					"label": "Aug"
+				},
+				{
+					"value": "8",
+					"label": "Sep"
+				},
+				{
+					"value": "9",
+					"label": "Oct"
+				},
+				{
+					"value": "10",
+					"label": "Nov"
+				},
+				{
+					"value": "11",
+					"label": "Dec"
+				}
+			],
+			"default": "0"
+		},
+		{
+			"type": "select",
+			"id": "timer_day",
+			"label": "Day",
+			"options": [
+				{
+					"value": "1",
+					"label": "1"
+				},
+				{
+					"value": "2",
+					"label": "2"
+				},
+				{
+					"value": "3",
+					"label": "3"
+				},
+				{
+					"value": "4",
+					"label": "4"
+				},
+				{
+					"value": "5",
+					"label": "5"
+				},
+				{
+					"value": "6",
+					"label": "6"
+				},
+				{
+					"value": "7",
+					"label": "7"
+				},
+				{
+					"value": "8",
+					"label": "8"
+				},
+				{
+					"value": "9",
+					"label": "9"
+				},
+				{
+					"value": "10",
+					"label": "10"
+				},
+				{
+					"value": "11",
+					"label": "11"
+				},
+				{
+					"value": "12",
+					"label": "12"
+				},
+				{
+					"value": "13",
+					"label": "13"
+				},
+				{
+					"value": "14",
+					"label": "14"
+				},
+				{
+					"value": "15",
+					"label": "15"
+				},
+				{
+					"value": "16",
+					"label": "16"
+				},
+				{
+					"value": "17",
+					"label": "17"
+				},
+				{
+					"value": "18",
+					"label": "18"
+				},
+				{
+					"value": "19",
+					"label": "19"
+				},
+				{
+					"value": "20",
+					"label": "20"
+				},
+				{
+					"value": "21",
+					"label": "21"
+				},
+				{
+					"value": "22",
+					"label": "22"
+				},
+				{
+					"value": "23",
+					"label": "23"
+				},
+				{
+					"value": "24",
+					"label": "24"
+				},
+				{
+					"value": "25",
+					"label": "25"
+				},
+				{
+					"value": "26",
+					"label": "26"
+				},
+				{
+					"value": "27",
+					"label": "27"
+				},
+				{
+					"value": "28",
+					"label": "28"
+				},
+				{
+					"value": "29",
+					"label": "29"
+				},
+				{
+					"value": "30",
+					"label": "30"
+				},
+				{
+					"value": "31",
+					"label": "31"
+				}
+			],
+			"default": "1"
+		},
+		{
+			"type": "select",
+			"id": "timer_hour",
+			"label": "Hour",
+			"options": [
+				{
+					"value": "0",
+					"label": "0"
+				},
+				{
+					"value": "1",
+					"label": "1"
+				},
+				{
+					"value": "2",
+					"label": "2"
+				},
+				{
+					"value": "3",
+					"label": "3"
+				},
+				{
+					"value": "4",
+					"label": "4"
+				},
+				{
+					"value": "5",
+					"label": "5"
+				},
+				{
+					"value": "6",
+					"label": "6"
+				},
+				{
+					"value": "7",
+					"label": "7"
+				},
+				{
+					"value": "8",
+					"label": "8"
+				},
+				{
+					"value": "9",
+					"label": "9"
+				},
+				{
+					"value": "10",
+					"label": "10"
+				},
+				{
+					"value": "11",
+					"label": "11"
+				},
+				{
+					"value": "12",
+					"label": "12"
+				},
+				{
+					"value": "13",
+					"label": "13"
+				},
+				{
+					"value": "14",
+					"label": "14"
+				},
+				{
+					"value": "15",
+					"label": "15"
+				},
+				{
+					"value": "16",
+					"label": "16"
+				},
+				{
+					"value": "17",
+					"label": "17"
+				},
+				{
+					"value": "18",
+					"label": "18"
+				},
+				{
+					"value": "19",
+					"label": "19"
+				},
+				{
+					"value": "20",
+					"label": "20"
+				},
+				{
+					"value": "21",
+					"label": "21"
+				},
+				{
+					"value": "22",
+					"label": "22"
+				},
+				{
+					"value": "23",
+					"label": "23"
+				}
+			],
+			"default": "0"
+		},
+		{
+			"type": "select",
+			"id": "timer_timezone",
+			"label": "Timezone",
+			"options": [
+				{
+					"value": "+0",
+					"label": "GMT"
+				},
+				{
+					"value": "+1",
+					"label": "GMT+1:00"
+				},
+				{
+					"value": "+2",
+					"label": "GMT+2:00"
+				},
+				{
+					"value": "+3",
+					"label": "GMT+3:00"
+				},
+				{
+					"value": "+3.5",
+					"label": "GMT+3:30"
+				},
+				{
+					"value": "+4",
+					"label": "GMT+4:00"
+				},
+				{
+					"value": "+5",
+					"label": "GMT+5:00"
+				},
+				{
+					"value": "+5.5",
+					"label": "GMT+5:30"
+				},
+				{
+					"value": "+6",
+					"label": "GMT+6:00"
+				},
+				{
+					"value": "+7",
+					"label": "GMT+7:00"
+				},
+				{
+					"value": "+8",
+					"label": "GMT+8:00"
+				},
+				{
+					"value": "+9",
+					"label": "GMT+9:00"
+				},
+				{
+					"value": "+9.5",
+					"label": "GMT+9:30"
+				},
+				{
+					"value": "+10",
+					"label": "GMT+10:00"
+				},
+				{
+					"value": "+11",
+					"label": "GMT+11:00"
+				},
+				{
+					"value": "+12",
+					"label": "GMT+12:00"
+				},
+				{
+					"value": "-11",
+					"label": "GMT-11:00"
+				},
+				{
+					"value": "-10",
+					"label": "GMT-10:00"
+				},
+				{
+					"value": "-9",
+					"label": "GMT-9:00"
+				},
+				{
+					"value": "-8",
+					"label": "GMT-8:00"
+				},
+				{
+					"value": "-7",
+					"label": "GMT-7:00"
+				},
+				{
+					"value": "-6",
+					"label": "GMT-6:00"
+				},
+				{
+					"value": "-5",
+					"label": "GMT-5:00"
+				},
+				{
+					"value": "-4",
+					"label": "GMT-4:00"
+				},
+				{
+					"value": "-3.5",
+					"label": "GMT-3:30"
+				},
+				{
+					"value": "-3",
+					"label": "GMT-3:00"
+				},
+				{
+					"value": "-1",
+					"label": "GMT-1:00"
+				}
+			],
+			"default": "+0"
+		},
+		{
+			"type": "color_background",
+			"id": "timer_background",
+			"label": "Timer background",
+			"default": "rgba(255,255,255, 0.12)"
+		},
+		{
+			"type": "color",
+			"id": "timer_color",
+			"label": "Timer color",
+			"default": "#fff"
+		},
+		{
+			"type": "header",
+			"content": "Video"
+		},
+		{
+			"type": "video",
+			"id": "html_video_desktop",
+			"label": "HTML5 desktop video",
+			"info": "Only works with 'HTML5 video' media type."
+		},
+		{
+			"type": "video",
+			"id": "html_video_mobile",
+			"label": "HTML5 mobile video",
+			"info": "Only works with 'HTML5 video' media type."
+		},
+		{
+			"type": "video_url",
+			"accept": [
+				"youtube",
+				"vimeo"
+			],
+			"id": "external_video_url_desktop",
+			"label": "Youtube/Vimeo desktop video url",
+			"info": "Only works with 'Youtube/Vimeo' media type"
+		},
+		{
+			"type": "video_url",
+			"accept": [
+				"youtube",
+				"vimeo"
+			],
+			"id": "external_video_url_mobile",
+			"label": "Youtube/Vimeo mobile video url",
+			"info": "Only works with 'Youtube/Vimeo' media type"
+		},
+		{
+			"type": "header",
+			"content": "Alignment"
+		},
+		{
+			"type": "select",
+			"id": "content_alignment",
+			"label": "Căn lề nội dung (Desktop)",
+			"options": [
+				{
+					"value": "left",
+					"label": "Trái"
+				},
+				{
+					"value": "center",
+					"label": "Giữa"
+				},
+				{
+					"value": "right",
+					"label": "Phải"
+				}
+			],
+			"default": "center"
+		},
+		{
+			"type": "select",
+			"id": "content_alignment_mobile",
+			"label": "Căn lề nội dung (Mobile)",
+			"options": [
+				{
+					"value": "left",
+					"label": "Trái"
+				},
+				{
+					"value": "center",
+					"label": "Giữa"
+				},
+				{
+					"value": "right",
+					"label": "Phải"
+				}
+			],
+			"default": "center"
+		},
+		{
+			"type": "select",
+			"id": "block_alignment",
+			"label": "Block alignment horizontal",
+			"options": [
+				{
+					"value": "flex-start",
+					"label": "Left"
+				},
+				{
+					"value": "center",
+					"label": "Center"
+				},
+				{
+					"value": "flex-end",
+					"label": "Right"
+				}
+			],
+			"default": "center"
+		},
+		{
+			"type": "select",
+			"id": "block_alignment_vertical",
+			"label": "Block alignment vertical",
+			"options": [
+				{
+					"value": "flex-start",
+					"label": "Top"
+				},
+				{
+					"value": "center",
+					"label": "Center"
+				},
+				{
+					"value": "flex-end",
+					"label": "Bottom"
+				}
+			],
+			"default": "center"
+		},
+		{
+			"type": "select",
+			"id": "block_alignment_vertical_mob",
+			"label": "Block alignment vertical mobile",
+			"options": [
+				{
+					"value": "flex-start",
+					"label": "Top"
+				},
+				{
+					"value": "center",
+					"label": "Center"
+				},
+				{
+					"value": "flex-end",
+					"label": "Bottom"
+				}
+			],
+			"default": "center"
+		},
+		{
+			"type": "header",
+			"content": "Advanced Custom Positioning (Desktop)"
+		},
+		{
+			"type": "range",
+			"id": "custom_margin_left",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "%",
+			"label": "Content Margin Left",
+			"default": 50
+		},
+		{
+			"type": "range",
+			"id": "custom_margin_right",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "%",
+			"label": "Content Margin Right",
+			"default": 5
+		},
+		{
+			"type": "range",
+			"id": "custom_width",
+			"min": 10,
+			"max": 100,
+			"step": 1,
+			"unit": "%",
+			"label": "Content Width",
+			"default": 45
+		},
+		{
+			"type": "range",
+			"id": "custom_font_size",
+			"min": 12,
+			"max": 40,
+			"step": 1,
+			"unit": "px",
+			"label": "Custom Text Font Size",
+			"default": 22
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "color",
+			"id": "section_background",
+			"label": "Section background",
+			"default": "#E7E7E7"
+		},
+		{
+			"type": "color_background",
+			"id": "overlay",
+			"label": "Overlay",
+			"default": "rgba(0,0,0, 0.3)"
+		},
+		{
+			"type": "color",
+			"id": "text_color",
+			"label": "Text",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "color",
+			"id": "button_background_1",
+			"label": "First button background",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "color",
+			"id": "button_color_1",
+			"label": "First button label",
+			"default": "#000000"
+		},
+		{
+			"type": "color",
+			"id": "button_border_1",
+			"label": "First button border",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "color",
+			"id": "button_background_hover_1",
+			"label": "First button background (hover)",
+			"default": "#000000"
+		},
+		{
+			"type": "color",
+			"id": "button_color_hover_1",
+			"label": "First button label (hover)",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "color",
+			"id": "button_border_hover_1",
+			"label": "First button border (hover)",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "color",
+			"id": "button_background_2",
+			"label": "Second button background",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "color",
+			"id": "button_color_2",
+			"label": "Second button label",
+			"default": "#000000"
+		},
+		{
+			"type": "color",
+			"id": "button_border_2",
+			"label": "Second button border",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "color",
+			"id": "button_background_hover_2",
+			"label": "Second button background (hover)",
+			"default": "#000000"
+		},
+		{
+			"type": "color",
+			"id": "button_color_hover_2",
+			"label": "Second button label (hover)",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "color",
+			"id": "button_border_hover_2",
+			"label": "Second button border (hover)",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1808px",
+					"label": "Default - 1680px"
+				},
+				{
+					"value": "2048px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "100%",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset bottom",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset bottom",
+			"default": 25
+		}
+	],
+	"presets": [
+		{
+			"name": "Banner",
+			"settings": {}
+		}
+	]
+}
+{%- endschema -%}

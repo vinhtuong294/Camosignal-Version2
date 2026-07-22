@@ -1,0 +1,1139 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Collection template
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/collection.scss' -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+
+	@media screen and (max-width: 767px) {
+		.collection .collection__header-filter-button {
+			display: none !important;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign show_grid_selector			= false -%}
+{%- assign mobile_grid					= '2' -%}
+{%- assign pagination_type 		  		= section.settings.pagination_type -%}
+{%- assign load_more_style 				= section.settings.load_more_style -%}
+{%- assign paginate_by 			  		= 12 -%}
+{%- assign show_color_swatch_in_filters	= section.settings.show_color_swatch_in_filters -%}
+{%- assign filters_type 				= 'sidebar' -%}
+{%- assign container 					= section.settings.container_width -%}
+{%- assign product_list 				= collection -%}
+{%- assign filters_empty		 		= false -%}
+
+{%- assign grid_banner 					= section.blocks | where: 'type', 'grid-banner' | first -%}
+{%- assign blocks_sidebar_banner 		= section.blocks | where: 'type', 'sidebar-banner' -%}
+
+{%- assign enable_color_scheme_inheritance 	= section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme 				   	= section.settings.color_scheme -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- if grid_banner != blank -%}
+	{%- assign paginate_by 					= paginate_by | minus: 1 -%}
+	{%- assign grid_banner_position 		= grid_banner.settings.position -%}
+	{%- assign grid_banner_last_position 	= false -%}
+{%- endif -%}
+
+{%- if product_list.filters == empty -%}
+	{%- assign filters_empty = true -%}
+{%- endif -%}
+
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- assign active_filters_size = 0 -%}
+
+{%- for filter in collection.filters -%}
+	{%- case filter.type -%}
+		{%- when 'list' or 'boolean' -%}
+			{%- assign active_filters_size = active_filters_size | plus: filter.active_values.size -%}
+		{%- when 'price_range' -%}
+			{%- if filter.min_value.value > 0 or filter.max_value.value < filter.range_max -%}
+				{%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+					{%- assign active_filters_size = active_filters_size | plus: 1 -%}
+				{%- endif -%}
+			{%- endif -%}
+	{%- endcase -%}
+{%- endfor -%}
+
+{%- if filters_type == 'sidebar' -%}
+	{% assign enable_sidebar = true %}
+{%- endif -%}
+
+{%- if filters_type == 'top-bar' -%}
+	{% assign enable_topbar = true %}
+{%- endif -%}
+
+{%- capture styles -%}
+	--container-width: {{ container_width }}; {{-  -}}
+	--inner-offset-top: {{ section.settings.inner_offset_top_desktop }}px; {{-  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom_desktop }}px; {{-  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px; {{-  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px; {{-  -}}
+{%- endcapture -%}
+
+<section class="collection {% if enable_sidebar %}collection--with-sidebar{% elsif enable_topbar %}collection--with-top-bar{% endif %} {% if filters_empty == true %}filters-hidden{% endif %} color-{{ color_scheme.id }} js-collection"
+		 id="{{- section.id -}}"
+		 style="{{ styles }}"
+>
+	<div class="is-hidden js-filters-state" data-filters-empty="{{- filters_empty -}}"></div>
+
+	<div class="collection__container">
+		{%- if enable_sidebar -%}
+			<div class="collection__sidebar">
+				<div class="collection__sidebar-wrapper">
+					{%- render 'product-filters',
+						filter_type: 'sidebar',
+						product_list: product_list,
+						show_swatches: show_color_swatch_in_filters
+					-%}
+
+					{%- if blocks_sidebar_banner.size > 0 -%}
+						{%- for block in blocks_sidebar_banner -%}
+							{%- assign image 			= block.settings.image -%}
+							{%- assign heading 			= block.settings.heading -%}
+							{%- assign link_label 		= block.settings.link_label -%}
+							{%- assign link_url 		= block.settings.link_url -%}
+							{%- assign link_external 	= block.settings.link_external %}
+
+							{%- if image == blank -%}
+								{%- assign link_url = '#' -%}
+							{%- endif -%}
+
+							<div class="collection__sidebar-media-card">
+								{%- render 'media-card-overlay',
+									title: heading,
+									link_label: link_label,
+									link_url: link_url,
+									open_link_in_new_tab: link_external,
+									image: image,
+									size_width: 304,
+									size_height: 420,
+									size_height_1500: 280,
+									size_width_1500: 387
+								-%}
+							</div>
+						{%- endfor -%}
+					{%- endif -%}
+				</div>
+			</div>
+		{%- endif -%}
+
+		<div class="collection__header js-element-to-scroll">
+			<div class="collection__header-drawer">
+				{%- render 'product-filters',
+					filter_type: 'drawer',
+					product_list: product_list,
+					show_swatches: show_color_swatch_in_filters
+				-%}
+			</div>
+
+			<div class="collection__header-main {% if enable_topbar %}collapse-wrapper{%- endif -%}">
+				<div class="collection__header-container">
+					<div class="collection__header-controls">
+						{%- if filters_type == 'top-bar' -%}
+							<div class="collection__header-top-bar">
+								{%- render 'product-filters',
+									filter_type: 'top-bar',
+									product_list: product_list,
+									show_swatches: show_color_swatch_in_filters
+								-%}
+							</div>
+						{%- endif -%}
+
+						<div class="collection__header-controls-wrapper">
+							<div class="collection__header-filter-button product-filters">
+								{%- render 'product-filter-button', active_filters_size: active_filters_size -%}
+							</div>
+
+							{%- if filters_type == 'top-bar' or filters_type == 'sidebar' -%}
+								<div class="collection__header-sort">
+									{%- render 'sort', product_list: product_list, id: filters_type, external: true -%}
+								</div>
+							{%- endif -%}
+
+							{%- if show_grid_selector -%}
+								<div class="collection__header-grid-controls">
+									{%- render 'product-grid-controls', mobile_grid: mobile_grid -%}
+								</div>
+							{%- endif -%}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{%- if enable_topbar -%}
+				<div class="collection__header-selected-filters">
+					{%- render 'product-filters-selected', product_list: product_list, filter_type: 'top-bar' -%}
+				</div>
+			{%- endif -%}
+		</div>
+
+
+
+		<div class="collection__body">
+			{%- paginate collection.products by paginate_by, window_size: 2 -%}
+				<div
+					class="collection__grid-wrapper js-grid-wrapper"
+					aria-busy="false"
+					data-grid-col-desktop="4"
+					data-grid-col-tablet="2"
+					data-grid-col-mobile="{{- mobile_grid -}}"
+				>
+					{%- for product in collection.products -%}
+						{%- unless product.selected_or_first_available_variant.requires_shipping -%}
+							{%- continue -%}
+						{%- endunless -%}
+						{%- assign index = forloop.index -%}
+						{%- assign index_next = index | plus: 1 -%}
+
+						{%- assign is_lazy = true -%}
+
+						{%- if grid_banner_position -%}
+							{%- assign products_on_page = collection.products.size -%}
+
+							{%- if grid_banner_position > products_on_page -%}
+								{%- assign grid_banner_last_position = true -%}
+								{%- assign grid_banner_position = products_on_page | plus: 1 -%}
+							{% endif %}
+
+							{%- capture grid_banner_markup -%}
+								<div class="collection__item collection__item--media-card">
+									{%- if grid_banner_position < 4 and section.index == 1 -%}
+										{%- assign is_lazy = false -%}
+									{%- endif -%}
+
+									{%- assign image 			= grid_banner.settings.image -%}
+									{%- assign heading 			= grid_banner.settings.heading -%}
+									{%- assign link_label 		= grid_banner.settings.link_label -%}
+									{%- assign link_url 		= grid_banner.settings.link_url -%}
+									{%- assign link_external 	= grid_banner.settings.link_external %}
+
+									{%- if image == blank -%}
+										{%- assign link_url = '#' -%}
+									{%- endif -%}
+
+									{%- assign size_width = 552 -%}
+									{%- assign size_height  = 738 -%}
+									{%- assign size_width_1500  = 450 -%}
+									{%- assign size_height_1500 = 600 -%}
+
+									{%- if enable_sidebar -%}
+										{%- assign size_width = 439 -%}
+										{%- assign size_height  = 587 -%}
+										{%- assign size_width_1500  = 334 -%}
+										{%- assign size_height_1500 = 449 -%}
+									{%- endif -%}
+
+									{%- render 'media-card-overlay',
+										title: heading,
+										link_label: link_label,
+										link_url: link_url,
+										open_link_in_new_tab: link_external,
+										aspect_ratio_desktop: '100',
+										aspect_ratio_mobile: '100',
+										is_lazy: is_lazy,
+										image: image,
+										size_width: size_width,
+										size_height: size_height,
+										size_width_1500: size_width_1500,
+										size_height_1500: size_height_1500,
+										size_width_1199: 381,
+										size_height_1199: 509,
+										size_width_991: 312,
+										size_height_991: 417,
+										size_width_767: 362,
+										size_height_767: 483,
+										size_width_575: 543,
+										size_height_575: 792,
+										size_width_420: 388,
+										size_height_420: 565,
+										size_width_375: 343,
+										size_height_375: 500
+									-%}
+
+									{%- assign is_lazy = true -%}
+								</div>
+							{%- endcapture -%}
+						{%- endif -%}
+
+						{%- if section.index == 1 -%}
+							{%- if grid_banner_position < 4 -%}
+								{%- if index < 3 -%}
+									{%- assign is_lazy = false -%}
+								{%- endif -%}
+							{%- elsif index < 4 -%}
+								{% assign is_lazy = false %}
+							{%- endif -%}
+						{%- endif -%}
+
+						{%- if grid_banner_last_position == false and index == grid_banner_position -%}
+							{{- grid_banner_markup -}}
+						{%- endif -%}
+
+						<div class="collection__item">
+							{%- assign product_img_size = 552 %}
+							{%- assign product_img_size_tablet = 543 %}
+							{%- assign product_img_size_mobile = 388 %}
+
+							{%- if enable_sidebar -%}
+								{%- assign product_img_size = 439 -%}
+							{%- endif -%}
+
+							{%- render 'product-card',
+								product: product,
+								size: product_img_size,
+								tablet_size: product_img_size_tablet,
+								mobile_size: product_img_size_mobile,
+								is_lazy: is_lazy
+							-%}
+						</div>
+
+						{%- if grid_banner_last_position == true and index_next == grid_banner_position -%}
+							{{- grid_banner_markup -}}
+						{%- endif -%}
+					{%- endfor -%}
+				</div>
+
+				{%- case pagination_type -%}
+					{%- when 'pagination' -%}
+						<div class="collection__pagination-wrapper js-pagination">
+							{%- if paginate.pages > 1 -%}
+								{%- render 'pagination', paginate: paginate -%}
+							{%- endif -%}
+						</div>
+					{%- when 'infinite_scroll' -%}
+						{%- capture collection_infinite_scroll_classes -%}
+							collection__infinite-scroll no-js-hidden js-infinite-scroll {{-  -}}
+							{% unless paginate.next.url %} is-hidden {%- endunless -%}
+						{%- endcapture -%}
+
+						<div class="{{- collection_infinite_scroll_classes | strip_newlines -}}"
+							{%- if paginate.next.url -%}
+								data-next-url="{{- paginate.next.url -}}"
+							{%- else -%}
+								data-next-url=""
+							{%- endif -%}
+						></div>
+					{%- else -%}
+						{%- capture collection_lazy_load_button_classes -%}
+							button button--{{- load_more_style }} collection__load-more-button js-lazy-load {{-  -}}
+							{% unless paginate.next.url %} is-hidden {%- endunless -%}
+						{%- endcapture -%}
+
+						<div class="collection__lazy-load-button-wrapper no-js-hidden">
+							<button
+								class="{{- collection_lazy_load_button_classes | strip_newlines -}}"
+								{% if paginate.next.url %}
+									data-next-url="{{- paginate.next.url -}}"
+								{% else %}
+									data-next-url=""
+								{% endif %}
+								aria-label="{{- 'general.pagination.lazy_load_aria' | t: items: 'products' | escape -}}"
+							>
+								{%- if load_more_style == "secondary" -%}
+									<span data-text="{{- 'general.pagination.lazy_load' | t | escape -}}">
+										<span>{{ 'general.pagination.lazy_load' | t }}</span>
+									</span>
+								{%- else -%}
+									{{ 'general.pagination.lazy_load' | t }}
+								{%- endif -%}
+							</button>
+						</div>
+				{%- endcase -%}
+
+				{%- unless pagination_type == 'pagination' -%}
+					<noscript>
+						<div class="collection__pagination-wrapper">
+							{%- if paginate.pages > 1 -%}
+								{%- render 'pagination', paginate: paginate -%}
+							{%- endif -%}
+						</div>
+					</noscript>
+				{%- endunless -%}
+			{%- endpaginate -%}
+
+			{%- capture collection_empty_classes -%}
+				collection__coming-soon js-template-empty-title {{-  -}}
+				{% if collection.products.size > 0 %} is-hidden {%- endif -%}
+			{%- endcapture -%}
+
+			<div class="{{- collection_empty_classes | strip_newlines -}}">
+				<span class="collection__coming-soon-icon">
+					<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+				</span>
+				<h2 class="collection__coming-soon-title">Coming Soon</h2>
+				<p class="collection__coming-soon-subtitle">Products are on the way. Stay tuned!</p>
+			</div>
+		</div>
+	</div>
+
+	{%- render 'adastra' with '/src/scripts/component-product-filters.js' -%}
+	{%- render 'adastra' with '/src/scripts/collection-template.js' -%}
+
+	<style>
+		/* Hide Availability filter aggressively */
+		.js-filter-item[id*="availability"],
+		.js-filter-item[id*="Availability"],
+		.product-filters__form-item[id*="filter.v.availability"] {
+			display: none !important;
+		}
+
+		/* Mobile: center the last product if it's alone in its row (odd count in 2-col grid) */
+		@media screen and (max-width: 767px) {
+			.collection__grid-wrapper {
+				justify-content: center;
+			}
+		}
+		/* Grid column overrides - placed at end of section to win CSS cascade */
+		@media screen and (min-width: 768px) {
+			.collection .collection__grid-wrapper[data-grid-col-desktop="1"] .collection__item {
+				width: 100% !important;
+				flex-basis: 100% !important;
+				max-width: 100% !important;
+			}
+			.collection .collection__grid-wrapper[data-grid-col-desktop="2"] .collection__item {
+				width: calc(50% - 6px) !important;
+			}
+			.collection .collection__grid-wrapper[data-grid-col-desktop="3"] .collection__item {
+				width: calc(33.33333% - 8px) !important;
+			}
+			.collection .collection__grid-wrapper[data-grid-col-desktop="4"] .collection__item {
+				width: calc(25% - 9px) !important;
+			}
+		}
+		@media screen and (min-width: 768px) {
+			/* Limit card size for 1 and 2 column views so images don't get freakishly large */
+			.collection .collection__grid-wrapper[data-grid-col-desktop="1"] .product-card {
+				max-width: 600px !important;
+				margin-left: auto !important;
+				margin-right: auto !important;
+			}
+			.collection .collection__grid-wrapper[data-grid-col-desktop="2"] .product-card {
+				max-width: 450px !important;
+				margin-left: auto !important;
+				margin-right: auto !important;
+			}
+		}
+		/* Filter headings - Oswald Bold, larger */
+		.product-filters--sidebar .accordion__control,
+		.product-filters--sidebar .accordion__control span {
+			font-family: 'Oswald', sans-serif !important;
+			font-weight: 900 !important;
+			font-size: 15px !important;
+			text-transform: uppercase !important;
+			letter-spacing: 0.06em !important;
+			color: #2c3d33 !important;
+		}
+		/* Filter collection links (CAMO, MENS, USA) */
+		.filter-list__collection-link {
+			font-family: 'Oswald', sans-serif !important;
+			font-weight: 700 !important;
+			font-size: 15px !important;
+			color: #2c3d33 !important;
+			text-transform: uppercase !important;
+		}
+		/* Filter checkboxes labels (In stock, Out of stock) */
+		.product-filters--sidebar .filter-list__label,
+		.product-filters--sidebar .filter-list__item label,
+		.product-filters--sidebar .filter-list__text {
+			font-family: 'Oswald', sans-serif !important;
+			font-weight: 700 !important;
+			font-size: 15px !important;
+			color: #2c3d33 !important;
+		}
+		/* Price filter inputs */
+		.product-filters--sidebar .filter-price__input,
+		.product-filters--sidebar input[type="number"] {
+			font-family: 'Oswald', sans-serif !important;
+			color: #2c3d33 !important;
+		}
+
+		/* Match the default collection filter styling on the USA template. */
+		.product-filters .accordion__control {
+			border-bottom: 1px solid #2c3d33 !important;
+			padding-bottom: 12px !important;
+			margin-bottom: 15px !important;
+		}
+
+		.product-filters .accordion__control span {
+			font-family: Oswald, sans-serif !important;
+			text-transform: uppercase !important;
+			color: #2c3d33 !important;
+			font-weight: 800 !important;
+			letter-spacing: 0.05em !important;
+			font-size: 16px !important;
+		}
+
+		.product-filters .checkbox__label {
+			font-family: Oswald, sans-serif !important;
+			text-transform: uppercase !important;
+			color: #2c3d33 !important;
+			font-size: 14px !important;
+			letter-spacing: 0.02em !important;
+		}
+
+		.product-filters .checkbox__label::before {
+			border-radius: 0 !important;
+			border: 1px solid #2c3d33 !important;
+			background-color: transparent !important;
+			width: 18px !important;
+			height: 18px !important;
+			top: 3px !important;
+		}
+
+		.product-filters .checkbox__input:checked + .checkbox__label::before {
+			background-color: #2c3d33 !important;
+			border-color: #2c3d33 !important;
+		}
+
+		.product-filters .checkbox__input:checked + .checkbox__label::after {
+			content: "" !important;
+			position: absolute !important;
+			border-color: white !important;
+			border-width: 0 2px 2px 0 !important;
+			border-style: solid !important;
+			width: 6px !important;
+			height: 10px !important;
+			top: 5px !important;
+			left: 7px !important;
+			transform: rotate(45deg) !important;
+			box-sizing: border-box !important;
+			display: block !important;
+		}
+
+		.product-filters .product-filters-selected__list {
+			display: flex !important;
+			flex-wrap: wrap !important;
+			gap: 8px !important;
+			margin-bottom: 25px !important;
+		}
+
+		.product-filters .product-filters-selected__item {
+			margin: 0 !important;
+		}
+
+		.product-filters .product-filters-selected__button,
+		.product-filters .custom-pill-list .checkbox__label {
+			display: inline-flex !important;
+			align-items: center !important;
+			background: #2c3d33 !important;
+			color: white !important;
+			border-radius: 99px !important;
+			padding: 4px 16px !important;
+			font-family: Oswald, sans-serif !important;
+			font-weight: 800 !important;
+			font-size: 12px !important;
+			text-transform: uppercase !important;
+			text-decoration: none !important;
+			border: none !important;
+			height: auto !important;
+			line-height: normal !important;
+			cursor: pointer !important;
+			letter-spacing: 0.05em !important;
+		}
+
+		.product-filters .product-filters-selected__button svg {
+			margin-left: 8px !important;
+			width: 10px !important;
+			height: 10px !important;
+			fill: white !important;
+			stroke: white !important;
+		}
+
+		.product-filters .filter-clear-btn,
+		.product-filters__form-footer-button.js-reset-filters {
+			display: flex !important;
+			justify-content: center !important;
+			align-items: center !important;
+			width: 100% !important;
+			background-color: #2c3d33 !important;
+			color: white !important;
+			font-family: Oswald, sans-serif !important;
+			font-weight: 800 !important;
+			font-size: 16px !important;
+			text-transform: uppercase !important;
+			padding: 15px 15px !important;
+			border: 2px solid #2c3d33 !important;
+			border-radius: 0 !important;
+			text-decoration: none !important;
+			margin-top: 20px !important;
+			letter-spacing: 0.05em !important;
+			transition: all 0.2s ease !important;
+		}
+
+		.product-filters .filter-clear-btn:hover,
+		.product-filters__form-footer-button.js-reset-filters:hover {
+			background-color: white !important;
+			color: #2c3d33 !important;
+		}
+
+		.product-filters .filter-clear-btn svg {
+			display: none !important;
+		}
+
+		.product-filters .custom-pill-list .checkbox__input:not(:checked) + .checkbox__label {
+			background: transparent !important;
+			color: #2c3d33 !important;
+			border: 1px solid #2c3d33 !important;
+		}
+
+		.product-filters .custom-pill-list .checkbox__label::before,
+		.product-filters .custom-pill-list .checkbox__label::after {
+			display: none !important;
+		}
+
+		.product-filters .custom-pill-list {
+			display: flex !important;
+			flex-wrap: wrap !important;
+			gap: 8px !important;
+			padding: 0 !important;
+			list-style: none !important;
+		}
+
+		.product-filters .custom-pill-list .filter-list__item {
+			width: auto !important;
+			margin: 0 !important;
+		}
+
+		.product-filters ul.filter-list--swatch {
+			display: grid !important;
+			grid-template-columns: repeat(7, 32px) !important;
+			gap: 14px clamp(8px, calc((100% - 224px) / 6), 16px) !important;
+			justify-content: start !important;
+			align-items: center !important;
+			padding: 6px 0 4px !important;
+			margin: 0 !important;
+			list-style: none !important;
+			overflow: visible !important;
+		}
+
+		.product-filters ul.filter-list--swatch li.filter-list__item {
+			width: 32px !important;
+			height: 32px !important;
+			min-width: 0 !important;
+			margin: 0 !important;
+			padding: 0 !important;
+			display: flex !important;
+			align-items: center !important;
+			justify-content: center !important;
+		}
+
+		.product-filters .checkbox__label--swatch {
+			border-radius: 50% !important;
+			width: 28px !important;
+			height: 28px !important;
+			padding: 0 !important;
+			display: block !important;
+			position: relative !important;
+			border: 1px solid #e0e0e0 !important;
+			min-width: 0 !important;
+			min-height: 0 !important;
+		}
+
+		.product-filters .checkbox__label--swatch .visually-hidden {
+			display: none !important;
+		}
+
+		.product-filters .checkbox__label--swatch .checkbox__label-image {
+			border-radius: 50% !important;
+			width: 100% !important;
+			height: 100% !important;
+			display: block !important;
+		}
+
+		.product-filters .checkbox__label--swatch::before,
+		.product-filters .checkbox__label--swatch::after {
+			display: none !important;
+		}
+
+		.product-filters .checkbox__input:checked + .checkbox__label--swatch::before {
+			display: block !important;
+			content: "" !important;
+			position: absolute !important;
+			top: -4px !important;
+			left: -4px !important;
+			right: -4px !important;
+			bottom: -4px !important;
+			border: 2px solid #2c3d33 !important;
+			border-radius: 50% !important;
+			background: transparent !important;
+			width: auto !important;
+			height: auto !important;
+		}
+
+		.product-filters .checkbox__input:checked + .checkbox__label--swatch::after {
+			display: none !important;
+		}
+
+		.product-filters .checkbox__label--swatch.custom-color-swatch {
+			display: inline-flex !important;
+			align-items: center !important;
+			justify-content: center !important;
+			width: 32px !important;
+			height: 32px !important;
+			min-width: 32px !important;
+			min-height: 32px !important;
+			padding: 0 !important;
+			border: 0 !important;
+			box-shadow: none !important;
+			overflow: visible !important;
+			background: transparent !important;
+		}
+
+		.product-filters .checkbox__label--swatch.custom-color-swatch::before,
+		.product-filters .checkbox__label--swatch.custom-color-swatch::after,
+		.product-filters .checkbox__input:checked + .checkbox__label--swatch.custom-color-swatch::before,
+		.product-filters .checkbox__input:checked + .checkbox__label--swatch.custom-color-swatch::after {
+			display: none !important;
+			content: none !important;
+		}
+
+		.product-filters .checkbox__label--swatch.custom-color-swatch .custom-color-swatch__fill {
+			display: block !important;
+			width: 28px !important;
+			height: 28px !important;
+			border-radius: 50% !important;
+		}
+
+		.product-filters .checkbox__input:checked + .checkbox__label--swatch.custom-color-swatch {
+			border: 0 !important;
+			box-shadow: none !important;
+		}
+
+		.product-filters .checkbox__input:checked + .checkbox__label--swatch.custom-color-swatch .custom-color-swatch__fill {
+			box-shadow: inset 0 0 0 2px #2c3d33 !important;
+		}
+
+		.product-filters .checkbox__input:checked + .checkbox__label--swatch.custom-color-swatch .custom-color-swatch__fill::after {
+			display: block !important;
+		}
+
+		.custom-checkbox-icon {
+			display: flex !important;
+			flex-shrink: 0 !important;
+			border-radius: 0 !important;
+			border: 1px solid #2c3d33 !important;
+			background-color: transparent !important;
+			width: 18px !important;
+			height: 18px !important;
+			min-width: 18px !important;
+			position: relative !important;
+			margin-right: 8px !important;
+			box-sizing: border-box !important;
+		}
+
+		.custom-checkbox-icon.is-checked,
+		.filter-list__collection-link.is-selected .custom-checkbox-icon,
+		.filter-list__collection-link--active .custom-checkbox-icon {
+			background-color: #2c3d33 !important;
+			border-color: #2c3d33 !important;
+		}
+
+		.custom-checkbox-icon.is-checked::after,
+		.filter-list__collection-link.is-selected .custom-checkbox-icon::after,
+		.filter-list__collection-link--active .custom-checkbox-icon::after {
+			content: "" !important;
+			position: absolute !important;
+			border-right: 2px solid white !important;
+			border-bottom: 2px solid white !important;
+			width: 6px !important;
+			height: 10px !important;
+			top: 1px !important;
+			left: 5px !important;
+			transform: rotate(45deg) !important;
+			box-sizing: border-box !important;
+		}
+
+		/* Hide header sort on desktop since sort is now in sidebar */
+		.collection--with-sidebar .collection__header-sort {
+			display: none !important;
+		}
+
+		/* Coming Soon empty state */
+		.collection__coming-soon {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			text-align: center;
+			padding: 80px 20px;
+			gap: 8px;
+		}
+		.collection__coming-soon.is-hidden {
+			display: none !important;
+		}
+		.collection__coming-soon-icon {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 64px;
+			height: 64px;
+			border-radius: 50%;
+			background: rgba(44, 61, 51, 0.06);
+			color: #7a8a7e;
+			margin-bottom: 12px;
+		}
+		.collection__coming-soon-title {
+			font-family: 'Oswald', sans-serif;
+			font-weight: 700;
+			font-size: 28px;
+			text-transform: uppercase;
+			letter-spacing: 4px;
+			color: #2c3d33;
+			margin: 0;
+		}
+		.collection__coming-soon-subtitle {
+			font-family: var(--base-font-family), system-ui, sans-serif;
+			font-weight: 400;
+			font-size: 15px;
+			color: #7a8a7e;
+			margin: 0;
+			letter-spacing: 0.5px;
+		}
+	</style>
+</section>
+
+{%- schema -%}
+{
+	"name": "Collection",
+	"settings": [
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Grid"
+		},
+		{
+			"type": "select",
+			"id": "filters_type",
+			"label": "Filters type",
+			"options": [
+				{
+					"value": "top-bar",
+					"label": "Top bar"
+				},
+				{
+					"value": "sidebar",
+					"label": "Sidebar"
+				}
+			],
+			"default": "top-bar",
+			"info": "Used only for desktop"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_grid_selector",
+			"label": "Show grid buttons",
+			"default": true,
+			"info": "Show grid buttons that allow change products per row"
+		},
+		{
+			"type": "select",
+			"id": "mobile_grid",
+			"label": "Mobile grid",
+			"options": [
+				{
+					"value": "1",
+					"label": "1"
+				},
+				{
+					"value": "2",
+					"label": "2"
+				}
+			],
+			"default": "1"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_color_swatch_in_filters",
+			"label": "Show color swatches in filters",
+			"default": false
+		},
+		{
+			"type": "range",
+			"id": "paginate_by",
+			"min": 12,
+			"max": 50,
+			"step": 1,
+			"label": "Paginate by",
+			"default": 16
+		},
+		{
+			"type": "select",
+			"id": "pagination_type",
+			"label": "Pagination type",
+			"options": [
+				{
+					"value": "pagination",
+					"label": "Pagination"
+				},
+				{
+					"value": "lazy_load",
+					"label": "Load more"
+				},
+				{
+					"value": "infinite_scroll",
+					"label": "Infinite scrolling"
+				}
+			],
+			"default": "pagination"
+		},
+		{
+			"type": "select",
+			"id": "load_more_style",
+			"label": "Load more button style",
+			"options": [
+				{
+					"value": "primary",
+					"label": "Primary"
+				},
+				{
+					"value": "secondary",
+					"label": "Secondary"
+				}
+			],
+			"default": "secondary"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1808px",
+					"label": "Default - 1680px"
+				},
+				{
+					"value": "2048px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset bottom",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset bottom",
+			"default": 0
+		},
+		{
+			"type": "paragraph",
+			"content": "Internal offsets"
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset top",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset bottom",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset top",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset bottom",
+			"default": 32
+		}
+	],
+	"blocks": [
+		{
+			"type": "sidebar-banner",
+			"name": "Sidebar banner",
+			"limit": 3,
+			"settings": [
+				{
+					"type": "paragraph",
+					"content": "The block is displayed only with the filter type - ‘Sidebar’"
+				},
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "Image"
+				},
+				{
+					"type": "text",
+					"id": "heading",
+					"label": "Heading",
+					"default": "Heading"
+				},
+				{
+					"type": "text",
+					"id": "link_label",
+					"label": "Link label",
+					"default": "Link label"
+				},
+				{
+					"type": "url",
+					"id": "link_url",
+					"label": "Link url"
+				},
+				{
+					"type": "checkbox",
+					"id": "link_external",
+					"label": "Open link in new tab",
+					"default": false
+				}
+			]
+		},
+		{
+			"type": "grid-banner",
+			"name": "Grid banner",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "Image"
+				},
+				{
+					"type": "text",
+					"id": "heading",
+					"label": "Heading",
+					"default": "Heading"
+				},
+				{
+					"type": "text",
+					"id": "link_label",
+					"label": "Link label",
+					"default": "Link label"
+				},
+				{
+					"type": "url",
+					"id": "link_url",
+					"label": "Link url"
+				},
+				{
+					"type": "checkbox",
+					"id": "link_external",
+					"label": "Open link in new tab",
+					"default": false
+				},
+				{
+					"type": "range",
+					"id": "position",
+					"min": 1,
+					"max": 50,
+					"step": 1,
+					"label": "Banner position",
+					"default": 1
+				}
+			]
+		}
+	]
+}
+{%- endschema -%}

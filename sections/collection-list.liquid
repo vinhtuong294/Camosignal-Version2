@@ -1,0 +1,322 @@
+{%- render 'adastra' with '/src/styles/collection-list.scss' -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign color_scheme      	           = section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign heading 		                   = section.settings.heading -%}
+{%- assign show_products_count 		       = section.settings.show_products_count -%}
+{%- assign blocks 		                   = section.blocks -%}
+{%- assign container 	                   = section.settings.container_width -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- capture styles -%}
+	--inner-offset-top: {{ section.settings.inner_offset_top_desktop }}px; {{-  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom_desktop }}px; {{-  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px; {{-  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px; {{-  -}}
+	--container-width: {{- container_width -}}; {{-  -}}
+{%- endcapture -%}
+
+<section
+	class="collection-list color-{{ color_scheme }} js-animate {% if request.visual_preview_mode or section.index == 1 %} animated{% endif %} js-collection-list"
+	style="{{- styles -}}"
+>
+	<div class="collection-list__container container section-animate">
+		{%- if heading != blank -%}
+			<h2 class="collection-list__heading">
+				{{- heading -}}
+			</h2>
+		{%- endif -%}
+
+		<div class="collection-list__slider swiper js-collection-list-slider">
+			<div class="collection-list__slider-container{% if blocks.size > 0 %} collection-list__slider-container--{{ blocks.size }}{% endif %} swiper-wrapper">
+				{%- if blocks.size > 0 -%}
+					{%- for block in blocks -%}
+						{%- assign collection 	= block.settings.collection -%}
+						{%- assign image 		= block.settings.image | default: collection.featured_image -%}
+						{%- assign is_lazy 		= false -%}
+
+						{%- if section.index > 1 -%}
+							{%- assign is_lazy = true -%}
+						{% elsif section.index == 1 and forloop.index > 2 %}
+							{% assign is_lazy = true %}
+						{%- endif -%}
+
+						{%- assign size_width_373 	= 282 -%}
+						{%- assign size_height_373 	= 302 -%}
+						{%- assign size_width_420 	= 165 -%}
+						{%- assign size_height_420 	= 176 -%}
+						{%- assign size_width_575 	= 234 -%}
+						{%- assign size_height_575 	= 250 -%}
+						{%- assign size_width_767 	= 219 -%}
+						{%- assign size_height_767 	= 234 -%}
+						{%- assign size_width_991 	= 217 -%}
+						{%- assign size_height_991 	= 232 -%}
+						{%- assign size_width_1199 	= 212 -%}
+						{%- assign size_height_1199 = 227 -%}
+						{%- assign size_width_1500 	= 216 -%}
+						{%- assign size_height_1500 = 231 -%}
+						{%- assign size_width 		= 196 -%}
+						{%- assign size_height 		= 210 -%}
+
+						<div class="collection-list__slide swiper-slide js-collection-list-slide">
+							{%- render "collection-card",
+								collection: collection,
+								image: image,
+								is_lazy: is_lazy,
+								size_width_373: size_width_373,
+								size_height_373: size_height_373,
+								size_width_420: size_width_420,
+								size_height_420: size_height_420,
+								size_width_575: size_width_575,
+								size_height_575: size_height_575,
+								size_width_767: size_width_767,
+								size_height_767: size_height_767,
+								size_width_991: size_width_991,
+								size_height_991: size_height_991,
+								size_width_1199: size_width_1199,
+								size_height_1199: size_height_1199,
+								size_width_1500: size_width_1500,
+								size_height_1500: size_height_1500,
+								size_width: size_width,
+								size_height: size_height,
+								show_products_count: show_products_count
+							-%}
+						</div>
+					{%- endfor -%}
+				{%- else -%}
+					{%- for i in (1..10) -%}
+						<div class="collection-list__slide swiper-slide js-collection-list-slide">
+							{%- render "collection-card", show_products_count: show_products_count, collection: nil -%}
+						</div>
+					{%- endfor -%}
+				{%- endif -%}
+			</div>
+
+			{%- unless blocks.size == 1  -%}
+				<div class="collection-list__slider-button-wrapper collection-list__slider-button-wrapper--prev">
+					<button class="swiper-button-prev-new js-collection-list-button-prev">
+						{%- render 'icons', icon: 'arrow-left' -%}
+					</button>
+				</div>
+
+				<div class="collection-list__slider-button-wrapper collection-list__slider-button-wrapper--next">
+					<button class="swiper-button-next-new js-collection-list-button-next">
+						{%- render 'icons', icon: 'arrow-right' -%}
+					</button>
+				</div>
+			{%- endunless -%}
+		</div>
+	</div>
+</section>
+
+{%- unless blocks.size == 1  -%}
+	{%- render 'adastra' with '/src/scripts/section-collection-list.js' -%}
+{%- endunless -%}
+
+{% schema %}
+{
+	"name": "Collection list",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "General"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "heading",
+			"label": "Heading",
+			"default": "Collection list"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_products_count",
+			"label": "Show products count",
+			"default": true
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1808px",
+					"label": "Default - 1680px"
+				},
+				{
+					"value": "2048px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset bottom",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset bottom",
+			"default": 25
+		},
+		{
+			"type": "paragraph",
+			"content": "Internal offsets"
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset top",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset bottom",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset top",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset bottom",
+			"default": 32
+		}
+	],
+	"blocks": [
+		{
+			"name": "Collection",
+			"type": "collection",
+			"settings": [
+				{
+					"type": "collection",
+					"id": "collection",
+					"label": "Collection"
+				},
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "Image",
+					"info": "Use instead of collection image"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Collection list"
+		}
+	]
+}
+{% endschema %}

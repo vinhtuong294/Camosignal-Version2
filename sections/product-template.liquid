@@ -1,0 +1,2127 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+  Section: Product template
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/carousel.scss' -%}
+{%- render 'adastra' with '/src/styles/product.scss' -%}
+
+{% render 'customix' %}
+
+{%- assign container 					   = section.settings.container_width -%}
+{%- assign color_scheme      	           = section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign blocks                          = section.blocks -%}
+{%- assign breadcrumbs_block               = blocks | where: "type", "breadcrumbs" | first -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- if container == 'inherit' %}
+	{%- assign container_width = settings.container_width -%}
+{%- else %}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- style -%}
+	/* CHẶN ĐỨT ĐIỂM CHẠM CỦA JAVASCRIPT BẰNG BIẾN :ROOT !IMPORTANT */
+	/* File Javascript của theme liên tục gán --header-height-sticky = 0 inline trên HTML khi cuộn.
+	   Dùng :root !important sẽ đè chết giá trị inline này, ép nó luôn bằng với chiều cao cố định của header! */
+	:root {
+		--header-height-sticky: 130px !important; /* Giá trị tĩnh ép buộc, trùm qua mọi tính toán */
+	}
+
+	/* Ép thanh Header luôn ghim cứng ở phần Top, không bao giờ thụt lên / biến mất */
+	.header-section,
+	.header-section.is-collapsed {
+		position: sticky !important;
+		top: 0 !important;
+	}
+
+	/* Cố thủ cột Hình Ảnh Sản Phẩm, ghi đè trực tiếp mọi class */
+	html body .product-media .product-media__grid-column.product-media__grid-column--sticky {
+		top: 150px !important; /* 130px header + 20px lề */
+	}
+
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+		
+		/* Thu hẹp riêng khung hiển thị của trang sản phẩm xuống 1600px */
+		.product .product__container {
+			max-width: 1600px !important;
+			margin-left: auto;
+			margin-right: auto;
+			width: 100%;
+		}
+		
+		/* Giới hạn chiều cao hiển thị ảnh sản phẩm trên Desktop để vừa màn hình
+		   Chú ý: KHÔNG áp dụng vào zoom modal (dùng .product-media để scope) */
+		#shopify-section-{{- section.id -}} .product-media .product-media__aspect-ratio {
+			padding-top: 0 !important;
+			height: 60vh !important;
+			max-height: 600px;
+			min-height: 300px;
+		}
+		#shopify-section-{{- section.id -}} .product-media .product-media__aspect-ratio .product-media__image,
+		#shopify-section-{{- section.id -}} .product-media .product-media__aspect-ratio img {
+			object-fit: contain !important;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
+	}
+
+	@media screen and (min-width: 992px) {
+		/* Ép buộc phần Product Media và Product Form chia đúng 50-50 không gian */
+		.product .product__container {
+			flex-direction: row !important;
+			align-items: flex-start !important;
+		}
+		.product .product-media {
+			flex: 0 0 calc(50% - 32px) !important;
+			max-width: calc(50% - 32px) !important;
+			width: calc(50% - 32px) !important;
+			padding-right: 0 !important;
+		}
+		.product .shopify-product-form,
+		.product .product-form {
+			flex: 0 0 calc(50% - 32px) !important;
+			max-width: calc(50% - 32px) !important;
+			width: calc(50% - 32px) !important;
+			padding-left: 0 !important;
+		}
+
+		/* Hiển thị thumbnails bên trái cho Carousel */
+		/* LƯU Ý: KHÔNG dùng position: sticky ở đây vì sẽ tạo stacking context
+		   làm hỏng modal zoom (fixed elements bên trong sẽ không thoát ra được) */
+		.product-media.product-media--layout-carousel.product-media--thumbnails-position-left {
+			column-gap: 16px;
+			display: flex !important;
+			flex-direction: row-reverse !important;
+			align-items: stretch; /* Kéo dài thumbnail container theo chiều cao ảnh main */
+			position: sticky !important;
+			top: var(--header-height-sticky, 20px) !important;
+		}
+		.product-media.product-media--layout-carousel.product-media--thumbnails-position-left .product-media__grid {
+			flex: 1;
+			min-width: 0; /* Cho phép co giãn đúng kích thước thay vì overflow */
+		}
+		.product-media.product-media--layout-carousel.product-media--thumbnails-position-left .product-media__swiper-button-prev,
+		.product-media.product-media--layout-carousel.product-media--thumbnails-position-left .product-media__swiper-button-next {
+			display: none !important;
+		}
+		.product-media.product-media--layout-carousel.product-media--thumbnails-position-left .product-media__slider-thumbnails-container {
+			width: 80px;
+			height: 100%; /* Stretch theo chiều cao flex parent */
+			display: flex !important;
+			flex-direction: column;
+		}
+		.product-media.product-media--layout-carousel.product-media--thumbnails-position-left .product-media__slider-thumbnails {
+			flex: 1; /* Chiếm toàn bộ chiều cao container */
+			height: 100%;
+			margin-top: 0;
+			padding-top: 0;
+			padding-bottom: 0;
+			overflow: hidden;
+		}
+		.product-media.product-media--layout-carousel.product-media--thumbnails-position-left .product-media__slider-thumbnails::-webkit-scrollbar,
+		.product-media.product-media--layout-carousel.product-media--thumbnails-position-left .product-media__slider-thumbnails-container::-webkit-scrollbar {
+			display: none;
+		}
+		.product-media.product-media--layout-carousel.product-media--thumbnails-position-left .product-media__slider-thumbnails-slide {
+			display: block;
+			width: 64px;
+			height: auto !important;
+			margin-left: auto;
+			margin-right: auto;
+			margin-bottom: 0;
+			aspect-ratio: var(--thumbnail-aspect-ratio, 1);
+			overflow: hidden;
+			border-radius: 6px;
+			box-sizing: border-box;
+			background: #fff;
+		}
+		.product-media.product-media--layout-carousel.product-media--thumbnails-position-left .product-media__slider-thumbnails-slide picture {
+			display: block !important;
+			width: 100% !important;
+			height: 100% !important;
+		}
+		.product-media.product-media--layout-carousel.product-media--thumbnails-position-left .product-media__slider-thumbnails-slide picture > .product-media__image,
+		.product-media.product-media--layout-carousel.product-media--thumbnails-position-left .product-media__slider-thumbnails-slide img {
+			display: block !important;
+			width: 100% !important;
+			height: 100% !important;
+			aspect-ratio: auto !important;
+			object-fit: contain !important;
+			object-position: center !important;
+			box-sizing: border-box !important;
+			background: #fff !important;
+		}
+		.product-media.product-media--layout-carousel.product-media--thumbnails-position-left .product-media__slider-thumbnails-slide img {
+			border: 1px solid var(--color-border-secondary, #e2e2e2) !important;
+			border-radius: 6px !important;
+		}
+		.product-media.product-media--layout-carousel.product-media--thumbnails-position-left .product-media__slider-thumbnails-slide.swiper-slide-thumb-active img,
+		.product-media.product-media--layout-carousel.product-media--thumbnails-position-left .product-media__slider-thumbnails-slide.is-active img {
+			border: 2px solid #1b4332 !important; /* Xanh đậm */
+		}
+
+		/* Nút điều hướng lên/xuống cho thumbnails dọc - kiểu tròn */
+		.product-media__slider-thumbnails-container .thumb-nav {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 36px;
+			height: 36px;
+			background: #ffffff;
+			border: none;
+			border-radius: 50%;
+			cursor: pointer;
+			color: #333;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+			transition: box-shadow 0.2s ease, transform 0.15s ease, background 0.2s ease;
+			flex-shrink: 0;
+			padding: 0;
+			margin: 4px auto;
+			align-self: center;
+		}
+		.product-media__slider-thumbnails-container .thumb-nav svg {
+			width: 18px;
+			height: 18px;
+			stroke-width: 2.5;
+		}
+		.product-media__slider-thumbnails-container .thumb-nav:hover {
+			box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+			transform: scale(1.08);
+			background: #f8f8f8;
+		}
+		.product-media__slider-thumbnails-container .thumb-nav:active {
+			transform: scale(0.95);
+		}
+		.product-media__slider-thumbnails-container .thumb-nav.swiper-button-disabled {
+			opacity: 0.3;
+			cursor: not-allowed;
+			pointer-events: none;
+		}
+		.product-media__slider-thumbnails-container .thumb-nav.is-hidden {
+			display: none;
+		}
+
+		/* Zoom modal phải luôn ở trên cùng */
+		[data-zoom-modal] {
+			z-index: 9999 !important;
+		}
+	}
+
+	/* Zoom modal z-index fix - outside media query to apply everywhere */
+	[data-zoom-modal] {
+		z-index: 9999 !important;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} .product-short-description {
+			display: none !important;
+		}
+	}
+
+	{% if breadcrumbs_block != blank -%}
+		.breadcrumb {
+			display: none;
+		}
+	{% endif %}
+{%- endstyle -%}
+
+{%- capture section_styles -%}
+	--color-button-bg: {{- color_scheme.settings.color_text_primary | color_modify: 'alpha', 0.2 | default: '#000000' -}};
+	--image-object-fit: {{- section.settings.image_object_fit -}}; {{-  -}}
+	--container-width: {{- container_width -}}; {{-  -}}
+	--inner-offset-top: {{ section.settings.inner_offset_top }}px; {{-  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom }}px; {{-  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px; {{-  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px; {{-  -}}
+{%- endcapture -%}
+
+<section
+	class="product color-{{ color_scheme }}"
+	style="{{ section_styles }}"
+	data-section-type="product"
+	data-section-id="{{- section.id -}}"
+	data-product-handle="{{- product.handle -}}"
+	data-url="{{- product.url -}}"
+>
+	<div class="product__container container">
+		{%- include 'product-media', media_height: section.settings.media_height, enable_video_play_on_autoplay: section.settings.enable_video_play_on_autoplay -%}
+		{%- include 'product-form', blocks: blocks, enable_history_state: true, product_template: true -%}
+		{%- render 'product-drawers-content', product: product, section: section, blocks: blocks -%}
+	</div>
+
+	{%- if description_overlay_html != blank -%}
+		{{ description_overlay_html }}
+	{%- endif -%}
+
+	{%- for block in section.blocks -%}
+		{%- if block.type == 'back_in_stock_alert' -%}
+			{%- render 'back-in-stock-alert-popup', block: block -%}
+		{% endif %}
+	{%- endfor -%}
+</section>
+
+<script>
+/* Fix zoom modal kẹt trong stacking context do position: sticky.
+   Đợi theme JS init xong (theme:all:loaded) rồi mới di chuyển modal ra ngoài body.
+   Vì: JS khởi tạo zoom lưu reference đến modal element trước → di chuyển sau không làm hỏng reference */
+(function() {
+	function teleportZoomModal() {
+		var zoomModals = document.querySelectorAll('[data-zoom-modal]');
+		zoomModals.forEach(function(modal) {
+			if (modal && modal.parentElement !== document.body) {
+				document.body.appendChild(modal);
+			}
+		});
+	}
+
+	/* Chạy sau khi theme JS đã init xong */
+	document.addEventListener('theme:all:loaded', function() {
+		setTimeout(teleportZoomModal, 100);
+	}, { once: true });
+
+	/* Fallback: nếu theme:all:loaded đã bắn trước khi script này chạy */
+	if (window.themeCore && window.themeCore.loaded) {
+		setTimeout(teleportZoomModal, 200);
+	}
+
+	/* Re-run on Shopify section reload (theme editor) */
+	document.addEventListener('shopify:section:load', function() {
+		setTimeout(teleportZoomModal, 300);
+	});
+})();
+</script>
+
+
+
+{%- render 'adastra' with '/src/scripts/section-product.js' -%}
+
+{%- liquid
+	if product.selected_or_first_available_variant.featured_media
+	assign seo_media = product.selected_or_first_available_variant.featured_media
+	else
+	assign seo_media = product.featured_media
+	endif
+-%}
+
+<script type="application/ld+json">
+    {{ product | structured_data }}
+  </script>
+
+{% schema %}
+{
+	"name": "Product template",
+	"settings": [
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Media"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_video_play_on_autoplay",
+			"label": "Enable video play on autoplay",
+			"default": false,
+			"info": "The setting only works with the HTML5 type of video."
+		},
+		{
+			"type": "checkbox",
+			"id": "is_zoom_enabled",
+			"label": "Enable zoom",
+			"default": true
+		},
+		{
+			"type": "select",
+			"id": "media_layout",
+			"label": "Media layout",
+			"options": [
+				{
+					"value": "carousel",
+					"label": "Carousel"
+				},
+				{
+					"value": "stacked",
+					"label": "Stacked"
+				},
+				{
+					"value": "stacked_2_col",
+					"label": "Stacked 2 columns"
+				}
+			],
+			"default": "stacked_2_col"
+		},
+		{
+			"type": "select",
+			"id": "thumbnails_position",
+			"label": "Thumbnails position",
+			"options": [
+				{
+					"value": "bottom",
+					"label": "Bottom"
+				},
+				{
+					"value": "right",
+					"label": "Right"
+				},
+				{
+					"value": "left",
+					"label": "Left"
+				}
+			],
+			"default": "bottom",
+			"info": "Setting only for carousel media layout"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_thumbnails_mobile",
+			"label": "Enable thumbnails on mobile",
+			"default": false
+		},
+		{
+			"type": "select",
+			"id": "media_height",
+			"label": "Media height",
+			"options": [
+				{
+					"value": "square",
+					"label": "Square"
+				},
+				{
+					"value": "full_size",
+					"label": "Full size"
+				}
+			],
+			"info": "On desktop used for additional media (exclude big image). On mobile used for all media.",
+			"default": "full_size"
+		},
+		{
+			"type": "select",
+			"id": "image_object_fit",
+			"label": "Image object fit",
+			"options": [
+				{
+					"value": "cover",
+					"label": "Cover"
+				},
+				{
+					"value": "contain",
+					"label": "Contain"
+				}
+			],
+			"default": "cover"
+		},
+		{
+			"type": "header",
+			"content": "General"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_taxes_included",
+			"label": "Show message of taxes included",
+			"default": true
+		},
+		{
+			"type": "checkbox",
+			"id": "show_pay_installments",
+			"label": "Show pay installments",
+			"default": true
+		},
+		{
+			"type": "checkbox",
+			"id": "show_sticky_add_to_cart",
+			"label": "Enable sticky add to cart",
+			"default": false
+		},
+		{
+			"type": "header",
+			"content": "Size guide"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_size_guide",
+			"label": "Show size guide",
+			"default": true
+		},
+		{
+			"type": "select",
+			"id": "size_guide_button_placement",
+			"label": "Button placement",
+			"options": [
+				{
+					"value": "under-options",
+					"label": "Under product options"
+				},
+				{
+					"value": "drawer",
+					"label": "Drawer"
+				}
+			],
+			"default": "under-options"
+		},
+		{
+			"type": "page",
+			"id": "size_guide_page",
+			"label": "Page",
+			"info": "Select a page with size guide content. You can use dynamic source to use metafield for each product with different size guides."
+		},
+		{
+			"type": "text",
+			"id": "size_guide_button_text",
+			"label": "Button label",
+			"default": "Size guide"
+		},
+		{
+			"type": "image_picker",
+			"id": "size_guide_button_icon",
+			"label": "Button icon",
+			"info": "24 x 24px .svg recommended"
+		},
+		{
+			"type": "text",
+			"id": "size_guide_drawer_title",
+			"label": "Drawer heading",
+			"default": "Size guide"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1808px",
+					"label": "Default - 1680px"
+				},
+				{
+					"value": "2048px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset bottom",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset bottom",
+			"default": 0
+		},
+		{
+			"type": "paragraph",
+			"content": "Internal offsets"
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset top",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset bottom",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset top",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset bottom",
+			"default": 24
+		}
+	],
+	"blocks": [
+		{
+			"name": "Breadcrumbs",
+			"type": "breadcrumbs",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "SKU",
+			"type": "sku",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "text",
+					"id": "sku_text",
+					"label": "SKU text",
+					"default": "SKU: {SKU}",
+					"info": "Use {SKU} to insert SKU into text"
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Vendor",
+			"type": "vendor",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "checkbox",
+					"id": "make_vendor_link",
+					"label": "Make vendor link to collection",
+					"default": true
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Title",
+			"type": "title",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Short Description",
+			"type": "short_description",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Description",
+			"type": "description",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Options",
+			"type": "options",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "select",
+					"id": "variant_picker",
+					"label": "Variant picker",
+					"options": [
+						{
+							"value": "radio",
+							"label": "Buttons"
+						},
+						{
+							"value": "select",
+							"label": "Dropdown"
+						}
+					],
+					"default": "radio"
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Price",
+			"type": "price",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Product combination",
+			"type": "product_combination",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "paragraph",
+					"content": "Link products of different colors using swatches. [Learn more](https://utdweb.team/shopify-themes/allure/manual/#section-product-template)"
+				},
+				{
+					"type": "text",
+					"id": "option_name",
+					"label": "Option name",
+					"info": "Example: Color, Style..."
+				},
+				{
+					"type": "text",
+					"id": "option_value_metafield",
+					"label": "Option value metafield",
+					"info": "Enter namespace and key of the metafield holding the value. Eg.: custom.color"
+				},
+				{
+					"type": "product_list",
+					"id": "product_list",
+					"label": "Products",
+					"info": "Select all the variations (including the product itself)."
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 32,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 16
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 32,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 16
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 32,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 32,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Quantity",
+			"type": "quantity",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Add to cart",
+			"type": "add_to_cart",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "select",
+					"id": "button_type",
+					"label": "Button style",
+					"options": [
+						{
+							"value": "primary",
+							"label": "Primary"
+						},
+						{
+							"value": "secondary",
+							"label": "Secondary"
+						}
+					],
+					"default": "secondary"
+				},
+				{
+					"type": "select",
+					"id": "button_buy_it_type",
+					"label": "Button 'Buy it now' style",
+					"options": [
+						{
+							"value": "primary",
+							"label": "Primary"
+						},
+						{
+							"value": "secondary",
+							"label": "Secondary"
+						}
+					],
+					"default": "primary"
+				},
+				{
+					"type": "checkbox",
+					"id": "show_additional_buttons",
+					"label": "Show additional payment buttons",
+					"default": true
+				},
+				{
+					"type": "checkbox",
+					"id": "show_gift_card_recipient",
+					"label": "Show recipient information form for gift cards",
+					"default": true,
+					"info": "Allows buyers to send gift cards on a scheduled date along with a personal message. [Learn more](https://help.shopify.com/manual/online-store/themes/customizing-themes/add-gift-card-recipient-fields)"
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Pickup availability",
+			"type": "pickup_availability",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Drawers",
+			"type": "drawers",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "header",
+					"content": "Description"
+				},
+				{
+					"type": "checkbox",
+					"id": "show_description",
+					"label": "Show description",
+					"default": false
+				},
+				{
+					"type": "text",
+					"id": "description_toggle_text",
+					"label": "Button label",
+					"default": "Description"
+				},
+				{
+					"type": "text",
+					"id": "description_drawer_title",
+					"label": "Drawer heading",
+					"default": "Description"
+				},
+				{
+					"type": "header",
+					"content": "Custom drawer 1"
+				},
+				{
+					"type": "page",
+					"id": "drawer_page_1",
+					"label": "Page",
+					"info": "Page must not be empty. The page content will be shown in a drawer"
+				},
+				{
+					"type": "text",
+					"id": "drawer_toggle_text_1",
+					"label": "Button label",
+					"default": "Drawer 1"
+				},
+				{
+					"type": "text",
+					"id": "drawer_title_1",
+					"label": "Drawer heading",
+					"default": "Drawer 1"
+				},
+				{
+					"type": "header",
+					"content": "Custom drawer 2"
+				},
+				{
+					"type": "page",
+					"id": "drawer_page_2",
+					"label": "Page",
+					"info": "Page must not be empty. The page content will be shown in a drawer"
+				},
+				{
+					"type": "text",
+					"id": "drawer_toggle_text_2",
+					"label": "Button label",
+					"default": "Drawer 2"
+				},
+				{
+					"type": "text",
+					"id": "drawer_title_2",
+					"label": "Drawer heading",
+					"default": "Drawer 2"
+				},
+				{
+					"type": "header",
+					"content": "Custom drawer 3"
+				},
+				{
+					"type": "page",
+					"id": "drawer_page_3",
+					"label": "Page",
+					"info": "Page must not be empty. The page content will be shown in a drawer"
+				},
+				{
+					"type": "text",
+					"id": "drawer_toggle_text_3",
+					"label": "Button label",
+					"default": "Drawer 3"
+				},
+				{
+					"type": "text",
+					"id": "drawer_title_3",
+					"label": "Drawer heading",
+					"default": "Drawer 3"
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Complementary products",
+			"type": "complementary",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "paragraph",
+					"content": "To select complementary products, add the Search & Discovery app. [Learn more](https://help.shopify.com/manual/online-store/search-and-discovery/product-recommendations)"
+				},
+				{
+					"type": "text",
+					"id": "heading",
+					"label": "Heading",
+					"default": "You May Also Like"
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Text",
+			"type": "text",
+			"settings": [
+				{
+					"type": "richtext",
+					"id": "text",
+					"label": "Text"
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Inventory status",
+			"type": "inventory_status",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Sales point",
+			"type": "sales_point",
+			"settings": [
+				{
+					"type": "image_picker",
+					"id": "sales_point_icon",
+					"label": "Icon",
+					"info": "20 x 20px .svg recommended"
+				},
+				{
+					"type": "inline_richtext",
+					"id": "sales_point_text",
+					"label": "Text"
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+
+		{
+			"name": "Gift product",
+			"type": "gift_product_block",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "paragraph",
+					"content": "[Learn more](https://utdweb.team/shopify-themes/allure/manual/#section-product-template) in the theme doc."
+				},
+				{
+					"type": "product",
+					"id": "gift_product",
+					"label": "Product"
+				},
+				{
+					"type": "text",
+					"id": "gift_button_label",
+					"label": "Button label",
+					"default": "Add gift-box"
+				},
+				{
+					"type": "image_picker",
+					"id": "gift_button_icon",
+					"label": "Button icon",
+					"info": "24 x 24px .svg recommended"
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 10
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 10
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 10
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 10
+				}
+			]
+		},
+		{
+			"name": "Socials",
+			"type": "socials",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "checkbox",
+					"id": "show_facebook",
+					"label": "Show Facebook",
+					"default": true
+				},
+				{
+					"type": "checkbox",
+					"id": "show_twitter",
+					"label": "Show X (Twitter)",
+					"default": true
+				},
+				{
+					"type": "checkbox",
+					"id": "show_pinterest",
+					"label": "Show Pinterest",
+					"default": true
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Product Upsell Checkbox",
+			"type": "upsell_product_block",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "product",
+					"id": "upsell_product",
+					"label": "Upsell Product"
+				},
+				{
+					"type": "text",
+					"id": "upsell_subtitle",
+					"label": "Subtitle",
+					"default": "Protect your order from loss/damage."
+				},
+				{
+					"type": "checkbox",
+					"id": "checked_by_default",
+					"label": "Checked by default",
+					"default": true
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 50,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 16
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 50,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 16
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 50,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 12
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 50,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 12
+				}
+			]
+		},
+		{
+			"type": "@app"
+		},
+		{
+			"name": "Custom liquid",
+			"type": "custom_liquid",
+			"settings": [
+				{
+					"type": "liquid",
+					"id": "custom_liquid",
+					"label": "Custom liquid",
+					"info": "Simple custom liquid"
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"name": "Back-in-stock alert",
+			"type": "back_in_stock_alert",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "header",
+					"content": "Button settings"
+				},
+				{
+					"type": "text",
+					"id": "back_in_stock_alert_button_label",
+					"label": "Button label",
+					"default": "Email me when available"
+				},
+				{
+					"type": "image_picker",
+					"id": "back_in_stock_alert_button_icon",
+					"label": "Button icon",
+					"info": "22 x 22px .svg recommended"
+				},
+				{
+					"type": "header",
+					"content": "Form settings"
+				},
+				{
+					"type": "text",
+					"id": "back_in_stock_alert_form_heading",
+					"label": "Heading",
+					"default": "Notified by email when this product becomes available"
+				},
+				{
+					"type": "text",
+					"id": "back_in_stock_alert_form_email_placeholder",
+					"label": "Email placeholder",
+					"default": "Your email"
+				},
+				{
+					"type": "text",
+					"id": "back_in_stock_alert_form_submit_button_label",
+					"label": "Button label",
+					"default": "Notify me when available"
+				},
+				{
+					"type": "text",
+					"id": "back_in_stock_alert_form_success_message",
+					"label": "Success message",
+					"default": "Email has been successfully sent"
+				},
+				{
+					"type": "header",
+					"content": "Layout"
+				},
+				{
+					"type": "range",
+					"id": "offset_top_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_desktop",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Desktop offset bottom",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_top_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset top",
+					"default": 8
+				},
+				{
+					"type": "range",
+					"id": "offset_bottom_mobile",
+					"min": 0,
+					"max": 25,
+					"step": 1,
+					"unit": "px",
+					"label": "Mobile offset bottom",
+					"default": 8
+				}
+			]
+		},
+		{
+			"type": "custom_image_banner",
+			"name": "Custom Banner",
+			"settings": [
+				{
+					"type": "image_picker",
+					"id": "banner_image",
+					"label": "Desktop Banner Image"
+				},
+				{
+					"type": "image_picker",
+					"id": "banner_image_mobile",
+					"label": "Mobile Banner Image (Optional)"
+				},
+				{
+					"type": "url",
+					"id": "banner_link",
+					"label": "Banner Link"
+				},
+				{
+					"type": "text",
+					"id": "condition_type",
+					"label": "Show ONLY for Product Type(s)",
+					"info": "Comma-separated. Leave blank to show on all products. Example: Hat, Cap"
+				},
+				{
+					"type": "text",
+					"id": "condition_collection",
+					"label": "Show ONLY for Collection(s)",
+					"info": "Comma-separated collection handles. Leave blank to show on all products. Example: graphic-tees, hats"
+				},
+				{
+					"type": "text",
+					"id": "exclude_type",
+					"label": "Hide for Product Type(s)",
+					"info": "Comma-separated. Useful for fallback banners. Example: Hat, Cap"
+				},
+				{
+					"type": "text",
+					"id": "exclude_collection",
+					"label": "Hide for Collection(s)",
+					"info": "Comma-separated collection handles."
+				},
+				{
+					"type": "range",
+					"id": "margin_top",
+					"min": 0,
+					"max": 50,
+					"step": 1,
+					"unit": "px",
+					"label": "Margin Top",
+					"default": 16
+				},
+				{
+					"type": "range",
+					"id": "margin_bottom",
+					"min": 0,
+					"max": 50,
+					"step": 1,
+					"unit": "px",
+					"label": "Margin Bottom",
+					"default": 16
+				}
+			]
+		}
+	]
+}
+{% endschema %}

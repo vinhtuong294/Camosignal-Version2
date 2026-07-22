@@ -1,0 +1,279 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: List collections
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/list-collections.scss' -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign heading 				           = section.settings.heading -%}
+{%- assign paginate_by 			           = section.settings.paginate_by -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme 				   = section.settings.color_scheme -%}
+{%- assign container 			           = section.settings.container_width -%}
+{%- assign link_label              		   = 'sections.collection_list.see_all_products' | t -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- capture styles -%}
+	--container-width: {{- container_width -}}; {{-  -}}
+	--inner-offset-top: {{- section.settings.inner_offset_top -}}px; {{-  -}}
+	--inner-offset-bottom: {{- section.settings.inner_offset_bottom -}}px; {{-  -}}
+	--inner-offset-top-mobile: {{- section.settings.inner_offset_top_mobile -}}px; {{-  -}}
+	--inner-offset-bottom-mobile: {{- section.settings.inner_offset_bottom_mobile -}}px; {{-  -}}
+{%- endcapture -%}
+
+<section class="list-collections color-{{ color_scheme.id }}" style="{{- styles -}}">
+	<div class="container list-collections__container">
+		{%- if heading != blank -%}
+			<h1 class="list-collections__heading">
+				{{- heading -}}
+			</h1>
+		{%- endif -%}
+
+		{%- if collections.size > 0 -%}
+			{%- paginate collections by paginate_by, window_size: 2 -%}
+				<div class="list-collections__row">
+					{%- for collection in collections -%}
+						{%- if section.index > 1 -%}
+							{%- assign is_lazy = true -%}
+						{%- elsif section.index == 1 and forloop.index > 2 -%}
+							{%- assign is_lazy = true -%}
+						{%- endif -%}
+
+						{%- assign mod_index = forloop.index0 | modulo: 6 -%}
+
+						{%- if mod_index == 0 or mod_index == 5 -%}
+							{%- assign size_width_767  = 735 -%}
+							{%- assign size_height_767 = 1072 -%}
+							{%- assign size_width_991  = 959 -%}
+							{%- assign size_height_991 = 959 -%}
+							{%- assign size_width_1199 = 576 -%}
+							{%- assign size_width_1500 = 678 -%}
+							{%- assign size_width      = 888 -%}
+						{%- else -%}
+							{%- assign size_width_767  = 360 -%}
+							{%- assign size_height_767 = 525 -%}
+							{%- assign size_width_991  = 472 -%}
+							{%- assign size_height_991 = 688 -%}
+							{%- assign size_width_1199 = 280 -%}
+							{%- assign size_width_1500 = 331 -%}
+							{%- assign size_width      = 436 -%}
+						{%- endif -%}
+
+						<div class="list-collections__col{% if mod_index == 0 or mod_index == 5 %} list-collections__col--large{% endif %}">
+							{%- render 'media-card-overlay',
+								title: collection.title,
+								link_label: link_label,
+								link_url: collection.url,
+								image: collection.featured_image,
+								is_lazy: is_lazy,
+								size_width_375: 343,
+								size_height_375: 500,
+								size_width_420: 388,
+								size_height_420: 566,
+								size_width_575: 543,
+								size_height_575: 792,
+								size_width_767: size_width_767,
+								size_height_767: size_height_767,
+								size_width_991: size_width_991,
+								size_height_991: size_height_991,
+								size_width_1199: size_width_1199,
+								size_height_1199: 461,
+								size_width_1500: size_width_1500,
+								size_height_1500: 579,
+								size_width: size_width,
+								size_height: 711
+							-%}
+						</div>
+					{%- endfor -%}
+				</div>
+
+				{%- if paginate.pages > 1 -%}
+					<div class="list-collections__pagination-wrapper">
+						{%- render 'pagination', paginate: paginate -%}
+					</div>
+				{%- endif -%}
+			{%- endpaginate -%}
+		{%- endif -%}
+	</div>
+</section>
+
+{%- schema -%}
+{
+	"name": "List collections",
+	"settings": [
+		{
+			"type": "inline_richtext",
+			"id": "heading",
+			"label": "Heading",
+			"default": "All collections"
+		},
+		{
+			"type": "range",
+			"id": "paginate_by",
+			"min": 8,
+			"max": 24,
+			"step": 1,
+			"label": "Paginate by",
+			"default": 16
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1808px",
+					"label": "Default - 1680px"
+				},
+				{
+					"value": "2048px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset bottom",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset bottom",
+			"default": 0
+		},
+		{
+			"type": "paragraph",
+			"content": "Internal offsets"
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset top",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset bottom",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset top",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset bottom",
+			"default": 32
+		}
+	]
+}
+{%- endschema -%}

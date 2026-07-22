@@ -1,0 +1,25 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Product filters
+	- product_list: Collection or Search object (required)
+	- filter_type: filter type (sidebar/top-bar/drawer) (required)
+	- show_swatches: boolean. Set true to show swatches instead of checkbox
+
+	Usage:
+
+	{%- render 'product-filters', product_list: collection, filter_type: 'drawer' -%}
+	or
+	{%- render 'product-filters', product_list: search, filter_type: 'drawer' -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/product-filters.scss' -%}
+
+{%- case filter_type -%}
+	{%- when 'drawer' -%}
+		{%- render 'product-filters-and-sort', product_list: product_list, filter_type: filter_type, show_swatches: show_swatches -%}
+	{%- when 'sidebar' -%}
+		{%- render 'product-filters-sidebar', product_list: product_list, filter_type: filter_type, show_swatches: show_swatches -%}
+	{%- when 'top-bar' -%}
+	{%- render 'product-filters-top-bar', product_list: product_list, filter_type: filter_type, show_swatches: show_swatches -%}
+{%- endcase -%}

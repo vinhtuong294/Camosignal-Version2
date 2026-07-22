@@ -1,0 +1,221 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Media card overlay
+	- title: title,
+	- link_label: link label,
+	- link_url: link url,
+	- open_link_in_new_tab: boolean; open link in new tab,
+	- image: image,
+	- is_lazy: boolean,
+	- size_width_375: image size
+	- size_height_375: image size
+	- size_width_420: image size
+	- size_height_420: image size
+	- size_width_575: image size
+	- size_height_575: image size
+	- size_width_767: image size
+	- size_height_767: image size
+	- size_width_991: image size
+	- size_height_991: image size
+	- size_width_1199: image size
+	- size_height_1199: image size
+	- size_width_1500: image size
+	- size_height_1500: image size
+	- size_width: image size
+	- size_height: image size
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/media-card-overlay.scss' -%}
+
+{%- if link_url != blank and link_label != blank -%}
+	{%- assign enable_link = true -%}
+{%- endif -%}
+
+{%- assign size_width 	    = size_width | default: 196 -%}
+{%- assign size_height      = size_height | default: 210 -%}
+{%- assign size_width_1500  = size_width_1500 | defualt: size_width -%}
+{%- assign size_height_1500 = size_height_1500 | default: size_height -%}
+{%- assign size_width_1199  = size_width_1199 | default: size_width_1500 -%}
+{%- assign size_height_1199 = size_height_1199 | default: size_height_1500 -%}
+{%- assign size_width_991   = size_width_991 | default: size_width_1199 -%}
+{%- assign size_height_991  = size_height_991 | default: size_height_1199 -%}
+{%- assign size_width_767   = size_width_767 | default: size_width_991 -%}
+{%- assign size_height_767  = size_height_767 | default: size_height_991 -%}
+{%- assign size_width_575   = size_width_575 | default: size_width_767 -%}
+{%- assign size_height_575  = size_height_575 | default: size_height_767 -%}
+{%- assign size_width_420   = size_width_420 | default: size_width_575 -%}
+{%- assign size_height_420  = size_height_420 | default: size_height_575 -%}
+{%- assign size_width_375   = size_width_375 | default: size_width_420 -%}
+{%- assign size_height_375  = size_height_375 | default: size_height_420 -%}
+
+{%- assign size_width_375_2x   = size_width_375 | times: 2 -%}
+{%- assign size_height_375_2x  = size_height_375 | times: 2 -%}
+{%- assign size_width_420_2x   = size_width_420 | times: 2 -%}
+{%- assign size_height_420_2x  = size_height_420 | times: 2 -%}
+{%- assign size_width_575_2x   = size_width_575 | times: 2 -%}
+{%- assign size_height_575_2x  = size_height_575 | times: 2 -%}
+{%- assign size_width_767_2x   = size_width_767 | times: 2 -%}
+{%- assign size_height_767_2x  = size_height_767 | times: 2 -%}
+{%- assign size_width_991_2x   = size_width_991 | times: 2 -%}
+{%- assign size_height_991_2x  = size_height_991 | times: 2 -%}
+{%- assign size_width_1199_2x  = size_width_1199 | times: 2 -%}
+{%- assign size_height_1199_2x = size_height_1199 | times: 2 -%}
+{%- assign size_width_1500_2x  = size_width_1500 | times: 2 -%}
+{%- assign size_height_1500_2x = size_height_1500 | times: 2 -%}
+{%- assign size_width_2x 	   = size_width | times: 2 -%}
+{%- assign size_height_2x      = size_height | times: 2 -%}
+
+{%- assign min  = 1 -%}
+{%- assign max  = 4 -%}
+{%- assign diff = max | minus: min -%}
+
+<div class="media-card-overlay">
+	{%- capture image_markup -%}
+		{%- if image != blank -%}
+			{%- capture img_focal -%}
+				--img-pos: {{ image.presentation.focal_point }};
+			{%- endcapture -%}
+
+			<picture>
+				<source
+					srcset="{{ image | image_url: height: size_height_375 }} 1x,
+								{{ image | image_url: height: size_height_375_2x }} 2x"
+					media="(max-width: 375px)"
+					width="{{- size_width_375 -}}"
+					height="{{- size_height_375 -}}"
+				/>
+
+				<source
+					srcset="{{ image | image_url: height: size_height_420 }} 1x,
+								{{ image | image_url: height: size_height_420_2x }} 2x"
+					media="(max-width: 420px)"
+					width="{{- size_width_420 -}}"
+					height="{{- size_height_420 -}}"
+				/>
+
+				<source
+					srcset="{{ image | image_url: height: size_height_575 }} 1x,
+								{{ image | image_url: height: size_height_575_2x }} 2x"
+					media="(max-width: 575px)"
+					width="{{- size_width_575 -}}"
+					height="{{- size_height_575 -}}"
+				/>
+
+				<source
+					srcset="{{ image | image_url: height: size_height_767 }} 1x,
+								{{ image | image_url: height: size_height_767_2x }} 2x"
+					media="(max-width: 767px)"
+					width="{{- size_width_767 -}}"
+					height="{{- size_height_767 -}}"
+				/>
+
+				<source
+					srcset="{{ image | image_url: height: size_height_991 }} 1x,
+								{{ image | image_url: height: size_height_991_2x }} 2x"
+					media="(max-width: 991px)"
+					width="{{- size_width_991 -}}"
+					height="{{- size_height_991 -}}"
+				/>
+
+				<source
+					srcset="{{ image | image_url: height: size_height_1199 }} 1x,
+								{{ image | image_url: height: size_height_1199_2x }} 2x"
+					media="(max-width: 1199px)"
+					width="{{- size_width_1199 -}}"
+					height="{{- size_height_1199 -}}"
+				/>
+
+				<source
+					srcset="{{ image | image_url: height: size_height_1500 }} 1x,
+								{{ image | image_url: height: size_height_1500_2x }} 2x"
+					media="(max-width: 1500px)"
+					width="{{- size_width_1500 -}}"
+					height="{{- size_height_1500 -}}"
+				/>
+
+				<img
+					class="media-card-overlay__image"
+					src="{{- image | image_url: height: size_height -}}"
+					srcset="{{ image | image_url: height: size_height }} 1x,
+								{{ image | image_url: height: size_height_2x }} 2x"
+					{% if is_lazy %}
+						fetchpriority="low"
+						loading="lazy"
+					{% else %}
+						fetchpriority="high"
+						loading="eager"
+					{% endif %}
+					alt="{{- image.alt | escape -}}"
+					width="{{- size_width -}}"
+					height="{{- size_height -}}"
+					style="{{- img_focal -}}"
+				/>
+			</picture>
+		{%- else -%}
+			{%- assign random_number        = "now" | date: "%N" | modulo: diff | plus: min -%}
+			{%- assign placeholder_svg_name = 'collection-apparel-' | append: random_number -%}
+
+			{{- placeholder_svg_name | placeholder_svg_tag: 'media-card-overlay__image' -}}
+		{%- endif -%}
+	{%- endcapture -%}
+
+	{%- if link_url != blank -%}
+		<a
+			class="media-card-overlay__container media-card-overlay__container--link"
+			href="{{- link_url -}}"
+			{% if link_label != blank %}aria-label="{{- link_label -}}" {% endif %}
+			{% if open_link_in_new_tab %}
+				target="_blank"
+				rel="nofollow"
+			{% endif %}
+		>
+			{{- image_markup -}}
+		</a>
+	{%- else -%}
+		<div class="media-card-overlay__container">
+			{{- image_markup -}}
+		</div>
+	{%- endif -%}
+
+	{%- if title != blank or enable_link -%}
+		<div class="media-card-overlay__text-wrapper">
+			{%- if title -%}
+				<h3 class="media-card-overlay__title h4">
+					{{- title -}}
+				</h3>
+			{% endif %}
+
+			{%- if enable_link -%}
+				<a
+					class="media-card-overlay__link-custom"
+					href="{{- link_url -}}"
+					{% if open_link_in_new_tab %}
+						target="_blank"
+						rel="nofollow"
+					{% endif %}
+				>
+					{{- link_label -}}
+					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 4px; position: relative; top: 1px;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+				</a>
+			{%- endif -%}
+		</div>
+	{%- endif -%}
+</div>
+
+<style>
+.media-card-overlay__link-custom {
+	display: inline-flex;
+	align-items: center;
+	font-family: 'Oswald', sans-serif;
+	font-size: 16px;
+	font-weight: 500;
+	color: #2c3d33;
+	text-decoration: none;
+	transition: opacity 0.2s ease;
+	margin-top: 16px;
+}
+.media-card-overlay__link-custom:hover {
+	opacity: 0.7;
+}
+</style>

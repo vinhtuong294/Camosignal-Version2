@@ -1,0 +1,162 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Product Drawers Content
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{%- assign block           = blocks | where: 'type', 'drawers' | first -%}
+{%- assign show_size_guide = section.settings.show_size_guide -%}
+
+{%- if block != nil -%}
+	{%- comment -%}
+		Description variables
+	{%- endcomment -%}
+	{%- assign description_show         = block.settings.show_description -%}
+	{%- assign description_toggle_text  = block.settings.description_toggle_text -%}
+	{%- assign description_drawer_title = block.settings.description_drawer_title -%}
+	{%- assign show_description         = false -%}
+
+	{%- if description_show and description_toggle_text != blank and product.description != blank and description_drawer_title != blank -%}
+		{%- assign show_description = true -%}
+	{%- endif -%}
+
+	{%- comment -%}
+		Drawer 1 variables
+	{%- endcomment -%}
+	{%- assign drawer_page_1 		= block.settings.drawer_page_1 -%}
+	{%- assign drawer_toggle_text_1 = block.settings.drawer_toggle_text_1 -%}
+	{%- assign drawer_title_1 		= block.settings.drawer_title_1 | default: drawer_page_1.title -%}
+	{%- assign show_drawer_1 		= false -%}
+
+	{%- if drawer_page_1 != blank and drawer_page_1.content != blank and drawer_toggle_text_1 != blank -%}
+		{%- assign show_drawer_1 = true -%}
+	{%- endif -%}
+
+	{%- comment -%}
+		Drawer 2 variables
+	{%- endcomment -%}
+	{%- assign drawer_page_2 		= block.settings.drawer_page_2 -%}
+	{%- assign drawer_toggle_text_2 = block.settings.drawer_toggle_text_2 -%}
+	{%- assign drawer_title_2 		= block.settings.drawer_title_2 | default: drawer_page_2.title -%}
+	{%- assign show_drawer_2 	    = false -%}
+
+	{%- if drawer_page_2 != blank and drawer_page_2.content != blank and drawer_toggle_text_2 != blank -%}
+		{%- assign show_drawer_2 = true -%}
+	{%- endif -%}
+
+	{%- comment -%}
+		Drawer 3 variables
+	{%- endcomment -%}
+	{%- assign drawer_page_3 	   = block.settings.drawer_page_3 -%}
+	{%- assign drawer_toggle_text_3 = block.settings.drawer_toggle_text_3 -%}
+	{%- assign drawer_title_3 	   = block.settings.drawer_title_3 | default: drawer_page_3.title -%}
+	{%- assign show_drawer_3 	   = false -%}
+
+	{%- if drawer_page_3 != blank and drawer_page_3.content != blank and drawer_toggle_text_3 != blank -%}
+		{%- assign show_drawer_3 = true -%}
+	{%- endif -%}
+
+	{%- if show_description -%}
+		{%- assign toggle_id = 'descriptionDrawer-' | append: section.id -%}
+		{%- assign product_description = product.description | replace: '<img', '<img loading="lazy"' -%}
+
+		{%- render 'product-form-drawer',
+			product: product,
+			title: description_drawer_title,
+			content: product_description,
+			toggle_id: toggle_id,
+			class_body: 'rte-product-drawer'
+		-%}
+	{%- endif -%}
+
+	{%- if show_drawer_1 -%}
+		{%- assign toggle_id = 'productDrawer1-' | append: section.id -%}
+		{%- assign drawer_page_1_content = drawer_page_1.content | replace: '<img', '<img loading="lazy"' -%}
+
+		{%- render 'product-form-drawer',
+			title: drawer_title_1,
+			content: drawer_page_1_content,
+			toggle_id: toggle_id,
+			class_body: 'rte-product-drawer'
+		-%}
+	{%- endif -%}
+
+	{%- if show_drawer_2 -%}
+		{%- assign toggle_id = 'productDrawer2-' | append: section.id -%}
+		{%- assign drawer_page_2_content = drawer_page_2.content | replace: '<img', '<img loading="lazy"' -%}
+
+		{%- render 'product-form-drawer',
+			title: drawer_title_2,
+			content: drawer_page_2_content,
+			toggle_id: toggle_id,
+			class_body: 'rte-product-drawer'
+		-%}
+	{%- endif -%}
+
+	{%- if show_drawer_3 -%}
+		{%- assign toggle_id = 'productDrawer3-' | append: section.id -%}
+		{%- assign drawer_page_3_content = drawer_page_3.content | replace: '<img', '<img loading="lazy"' -%}
+
+		{%- render 'product-form-drawer',
+			title: drawer_title_3,
+			content: drawer_page_3_content,
+			toggle_id: toggle_id,
+			class_body: 'rte-product-drawer'
+		-%}
+	{%- endif -%}
+{%- endif -%}
+
+{%- if show_size_guide -%}
+	{%- assign size_guide_page = section.settings.size_guide_page -%}
+
+	{%- if size_guide_page != blank and size_guide_page.content != blank -%}
+		{%- capture product_markup -%}
+			<div class="rte-product-card">
+				<div class="rte-product-card__image-container">
+					{%- assign product_image = product.featured_image | default: settings.product_default_image -%}
+
+					{%- if product_image != blank -%}
+						{%- capture img_focal -%}
+							--img-pos: {{ product_image.presentation.focal_point }};
+						{%- endcapture -%}
+
+						<img
+							class="rte-product-card__image"
+							src="{{- product_image | image_url: height: 100 -}}"
+							srcset="{{ product_image | image_url: height: 100 }} 1x,
+										{{ product_image | image_url: height: 200 }} 2x"
+							width="80"
+							height="100"
+							alt="{{- product_image.alt | escape -}}"
+							style="{{ img_focal }}"
+							loading="lazy"
+							fetchpriority="low"
+						/>
+					{%- else -%}
+						{%- assign random_number        = "now" | date: "%N" | modulo: diff | plus: min -%}
+						{%- assign placeholder_svg_name = 'product-' | append: random_number -%}
+
+						{{- placeholder_svg_name | placeholder_svg_tag: 'rte-product-card__image rte-product-card__image--placeholder' -}}
+					{%- endif -%}
+				</div>
+
+				<div class="rte-product-card__info">
+					{{- product.title -}}
+
+					{% render 'price', product: product %}
+				</div>
+			</div>
+		{%- endcapture -%}
+
+		{%- assign size_guide_drawer_title = section.settings.size_guide_drawer_title -%}
+		{%- assign toggle_id               = 'productSizeGuideDrawer-' | append: section.id -%}
+		{%- assign size_guide_page_content = size_guide_page.content | replace: '<img', '<img loading="lazy"' | prepend: product_markup -%}
+
+		{%- render 'product-form-drawer',
+			title: size_guide_drawer_title,
+			content: size_guide_page_content,
+			toggle_id: toggle_id,
+			class_body: 'rte-product-size-guide'
+		-%}
+	{%- endif -%}
+{%- endif -%}

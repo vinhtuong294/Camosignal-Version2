@@ -1,0 +1,737 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Cart template
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/cart.scss' -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+
+	/* Tactical Minimal typography overrides for Cart Page */
+	.cart-template__title {
+		font-family: 'Oswald', sans-serif !important;
+		text-transform: uppercase !important;
+		font-style: italic !important;
+		font-weight: 800 !important;
+		color: #2c3d33 !important;
+	}
+
+	.cart-items__head {
+		border-bottom: 2px solid #3a7d6a !important;
+		padding-bottom: 12px;
+		opacity: 1 !important;
+	}
+
+	.cart-items__head .cart-items__col {
+		font-family: 'Oswald', sans-serif !important;
+		text-transform: uppercase !important;
+		font-weight: 700 !important;
+		color: #2c3d33 !important;
+		font-size: 14px !important;
+	}
+
+	.cart-footer__subtotal-label {
+		font-family: 'Oswald', sans-serif !important;
+		text-transform: uppercase !important;
+		font-weight: 700 !important;
+		letter-spacing: 0.5px;
+	}
+
+	.cart-footer__subtotal-value {
+		font-family: 'Oswald', sans-serif !important;
+		font-weight: 700 !important;
+		color: #c0392b !important;
+	}
+{%- endstyle -%}
+
+{%- capture styles -%}
+	--inner-offset-top: {{- section.settings.inner_offset_top -}}px; {{-  -}}
+	--inner-offset-bottom: {{- section.settings.inner_offset_bottom -}}px; {{-  -}}
+	--inner-offset-top-mobile: {{- section.settings.inner_offset_top_mobile -}}px; {{-  -}}
+	--inner-offset-bottom-mobile: {{- section.settings.inner_offset_bottom_mobile -}}px; {{-  -}}
+	--color-background: #faf6ee !important; {{-  -}}
+	background-color: #faf6ee !important; {{-  -}}
+{%- endcapture -%}
+
+{%- capture default_heading -%}
+	{{- "cart.general.title" | t -}}
+{%- endcapture -%}
+
+{%- assign heading 							= section.settings.heading | default: default_heading -%}
+{%- assign color_scheme      	           	= section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance 	= section.settings.enable_color_scheme_inheritance -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- capture footer -%}
+	{%- render 'cart-footer', section: section, cart_drawer: false -%}
+{%- endcapture -%}
+
+{%- for block in section.blocks -%}
+	{%- case block.type -%}
+		{%- when 'shipping' -%}
+			{%- assign is_shipping_enabled = 'true' -%}
+	{%- endcase -%}
+{%- endfor -%}
+
+{%- capture blocks -%}
+	{%- for block in section.blocks -%}
+		{%- if block.type == "@app" -%}
+			{%- render block -%}
+		{%- endif -%}
+	{%- endfor -%}
+{%- endcapture -%}
+
+{%- capture custom_liquid_block  -%}
+	{%- for block in section.blocks -%}
+		{%- case block.type -%}
+			{%- when 'custom_liquid' -%}
+				{{ block.settings.custom_liquid }}
+		{%- endcase -%}
+	{%- endfor -%}
+{%- endcapture -%}
+
+<section
+	class="cart-template{% if cart.empty? %} is-empty{% endif %} color-{{ color_scheme }}"
+	style="{{- styles -}}"
+	data-section-id="{{- section.id -}}"
+	data-section-type="cart-template"
+>
+	<div class="cart-template__container js-cart-container">
+		<div class="cart-template__content js-cart-content">
+			{%- if cart.empty? -%}
+				{%- render 'cart-empty' -%}
+			{%- else -%}
+				<h1 class="h1 cart-template__title">
+					{{- heading -}}
+				</h1>
+
+				<div class="cart-template__items">
+					<div class="cart-items">
+						<form action="{{- routes.cart_url -}}" id="cart-{{- section.id -}}" class="cart-items__form" method="post">
+							<div class="cart-items__head">
+								<div class="cart-items__col cart-items__col--main">
+									{{- 'cart.label.product' | t -}}
+								</div>
+
+								<div class="cart-items__col cart-items__col--price">
+									{{- 'cart.label.price' | t -}}
+								</div>
+
+								<div class="cart-items__col cart-items__col--quantity">
+									{{- 'cart.label.quantity' | t -}}
+								</div>
+
+								<div class="cart-items__col cart-items__col--summary">
+									{{- 'cart.label.total' | t -}}
+								</div>
+
+								<div class="cart-items__col cart-items__col--actions"></div>
+							</div>
+
+							<div class="cart-items__body">
+								{%- render 'cart-items' -%}
+							</div>
+						</form>
+					</div>
+				</div>
+
+				{%- if is_shipping_enabled -%}
+					<div class="cart-template__shipping">
+						{%- for block in section.blocks -%}
+							{%- case block.type -%}
+								{%- when 'shipping' -%}
+									{%- assign amount  = block.settings.amount -%}
+									{%- assign message = block.settings.message -%}
+									{%- assign congratulatory_message = block.settings.congratulatory_message -%}
+									{%- assign congratulatory_image = block.settings.icon -%}
+									{%- assign bar_color = block.settings.bar_color -%}
+									{%- assign fill_color = block.settings.fill_color -%}
+
+									{%- capture shipping_content -%}
+										{%- render 'cart-shipping',
+											amount: amount,
+											message: message,
+											congratulatory_message: congratulatory_message,
+											congratulatory_image: congratulatory_image,
+											bar_color: bar_color,
+											fill_color: fill_color
+										-%}
+									{%- endcapture -%}
+
+									{%- if shipping_content != '' -%}
+										{{- shipping_content -}}
+									{%- endif -%}
+							{%- endcase -%}
+						{%- endfor -%}
+					</div>
+				{%- endif -%}
+			{%- endif -%}
+		</div>
+
+		{%- if blocks != '' or custom_liquid_block != blank -%}
+			<div class="cart-template__blocks">
+				{%- if blocks != '' -%}
+					{{- blocks -}}
+				{%- endif -%}
+
+				{%- if custom_liquid_block != blank -%}
+					{{- custom_liquid_block -}}
+				{%- endif -%}
+			</div>
+		{%- endif -%}
+
+		{%- if footer != '' -%}
+			{{- footer -}}
+		{%- endif -%}
+	</div>
+
+	{%- render "preloader" -%}
+</section>
+
+{%- render 'adastra' with '/src/scripts/cart-template.js' -%}
+
+<script>
+	(function() {
+		/* Selleasy / external cart-app bridge for the cart page.
+		   The cart-template only refreshes when window.themeCore.EventBus emits
+		   'cart:updated' (theme actions). External apps like Selleasy POST to
+		   /cart/*.js directly and never emit through the theme bus, so the cart
+		   items stay stale until a manual reload. This bridge intercepts those
+		   fetch responses and emits 'cart:refresh' so the section refreshes
+		   immediately. A short cooldown prevents double refreshes if the app
+		   already triggered one. */
+		if (window.__camoCartPageBridgeInstalled) return;
+		window.__camoCartPageBridgeInstalled = true;
+
+		var cartMutationRegex = /\/cart\/(add|change|update|clear)\.js(\?|$)/i;
+		var appTargetSelector = 'lb-upsell-widget, lb-upsell-flat-card, .lb-widget, .lb-product-card, .lb-flat-card-host, [id*="selleasy" i], [class*="selleasy" i], [id*="lb-widget" i], [class*="lb-widget" i], [id*="lb-upsell" i], [class*="lb-upsell" i], [id*="sll" i], [class*="sll" i]';
+		var lastRefreshEmitAt = 0;
+		var lastAppClickAt = 0;
+		var lastHeaderCountAt = 0;
+		var pendingHeaderFetch = false;
+
+		function emitHeaderCount(count) {
+			if (count === null || count === undefined) return;
+			if (!window.themeCore || !window.themeCore.EventBus) return;
+			lastHeaderCountAt = Date.now();
+			window.themeCore.EventBus.emit('header:update-item-count', { item_count: count });
+		}
+
+		function emitRefresh() {
+			if (!window.themeCore || !window.themeCore.EventBus) return;
+			var now = Date.now();
+			if (now - lastRefreshEmitAt < 350) return;
+			lastRefreshEmitAt = now;
+			window.themeCore.EventBus.emit('cart:refresh');
+		}
+
+		function isThemeCartChangeInProgress() {
+			return document.documentElement.classList.contains('is-cart-qty-changing');
+		}
+
+		function fetchHeaderCount() {
+			if (pendingHeaderFetch) return;
+			if (Date.now() - lastHeaderCountAt < 500) return;
+			pendingHeaderFetch = true;
+			var xhr = new XMLHttpRequest();
+			xhr.open('GET', '/cart.js', true);
+			xhr.onload = function() {
+				pendingHeaderFetch = false;
+				if (xhr.status >= 200 && xhr.status < 300) {
+					try {
+						var cart = JSON.parse(xhr.responseText);
+						if (typeof cart.item_count === 'number') {
+							emitHeaderCount(cart.item_count);
+						}
+					} catch (error) { /* ignore */ }
+				}
+			};
+			xhr.onerror = function() { pendingHeaderFetch = false; };
+			xhr.send();
+		}
+
+		function isCarouselNavigationTrigger(trigger) {
+			if (!trigger) return false;
+			var text = (trigger.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
+			var className = typeof trigger.className === 'string' ? trigger.className : '';
+			var label = [
+				text,
+				className,
+				trigger.getAttribute('aria-label') || '',
+				trigger.getAttribute('title') || '',
+				trigger.getAttribute('data-action') || '',
+				trigger.getAttribute('data-direction') || ''
+			].join(' ').toLowerCase();
+			var looksLikeNav = /(prev|previous|next|arrow|slide|carousel|swiper|slick|glide|splide)/.test(label);
+			var looksLikeCartAction = /(add|cart|bag|buy|checkout)/.test(label);
+			var isIconOnly = text.length <= 2 && !!trigger.querySelector('svg, path, use');
+			return looksLikeNav && !looksLikeCartAction || isIconOnly && !looksLikeCartAction;
+		}
+
+		document.addEventListener('click', function(event) {
+			var target = event.target;
+			if (!target || !target.closest) return;
+			try {
+				if (target.closest('#CartDrawer')) return;
+				var trigger = target.closest('button, [role="button"], input[type="submit"], a, .lb-button, [class*="lb-button" i], .lb-carousel-nav, [class*="lb-carousel" i]');
+				if (target.closest(appTargetSelector) && !isCarouselNavigationTrigger(trigger)) {
+					lastAppClickAt = Date.now();
+				}
+			} catch (error) { /* selector unsupported in old browsers */ }
+		}, true);
+
+		function getCartSectionsIds() {
+			var sections = document.querySelectorAll('[data-section-type="cart-template"]:not([data-section-modification="drawer"])');
+			if (!sections.length) {
+				sections = document.querySelectorAll('[data-section-type="cart-template"]');
+			}
+
+			return Array.prototype.map.call(
+				sections,
+				function(s) { return s.dataset.sectionId; }
+			).filter(Boolean).join(',');
+		}
+
+		function addSectionsToBody(body) {
+			var sectionsIds = getCartSectionsIds();
+			if (!sectionsIds || body == null) return body;
+			var sectionsUrl = window.location.pathname || '/cart';
+
+			if (typeof body === 'string') {
+				try {
+					var parsedBody = JSON.parse(body);
+					if (parsedBody && typeof parsedBody === 'object' && !Array.isArray(parsedBody) && !parsedBody.sections) {
+						parsedBody.sections = sectionsIds;
+						if (!parsedBody.sections_url) parsedBody.sections_url = sectionsUrl;
+						return JSON.stringify(parsedBody);
+					}
+				} catch (error) {
+					try {
+						var params = new URLSearchParams(body);
+						if (!params.has('sections')) {
+							params.set('sections', sectionsIds);
+							if (!params.has('sections_url')) params.set('sections_url', sectionsUrl);
+							return params.toString();
+						}
+					} catch (paramsError) { /* ignore */ }
+				}
+				return body;
+			}
+
+			if (typeof URLSearchParams === 'function' && body instanceof URLSearchParams && !body.has('sections')) {
+				body.set('sections', sectionsIds);
+				if (!body.has('sections_url')) body.set('sections_url', sectionsUrl);
+				return body;
+			}
+
+			if (typeof FormData === 'function' && body instanceof FormData && !body.has('sections')) {
+				body.append('sections', sectionsIds);
+				if (!body.has('sections_url')) body.append('sections_url', sectionsUrl);
+				return body;
+			}
+
+			return body;
+		}
+
+		function getCartSectionsUrl() {
+			var ids = getCartSectionsIds();
+			if (!ids) return null;
+			var url = new URL(window.location.href);
+			url.searchParams.set('sections', ids);
+			url.searchParams.set('lazyload', 'false');
+			return url.href;
+		}
+
+		function addSectionsToUrl(url) {
+			var sectionsIds = getCartSectionsIds();
+			if (!sectionsIds || !url) return url;
+
+			try {
+				var requestUrl = new URL(url, window.location.href);
+				if (!requestUrl.searchParams.has('sections')) {
+					requestUrl.searchParams.set('sections', sectionsIds);
+				}
+				if (!requestUrl.searchParams.has('sections_url')) {
+					requestUrl.searchParams.set('sections_url', window.location.pathname || '/cart');
+				}
+				return requestUrl.href;
+			} catch (error) {
+				return url;
+			}
+		}
+
+		function refreshSectionsSilently() {
+			var url = getCartSectionsUrl();
+			if (!url || typeof window.__camoCartPartialUpdate !== 'function') {
+				emitRefresh();
+				return;
+			}
+
+			fetch(url).then(function(response) {
+				return response.json();
+			}).then(function(sections) {
+				if (sections && typeof sections === 'object') {
+					window.__camoCartPartialUpdate({
+						action: 'addItem',
+						sections: sections,
+						params: [{ noRefresh: true }]
+					});
+				}
+			}).catch(function() {
+				emitRefresh();
+			});
+		}
+
+		function handleCartMutationData(data) {
+			var hasCount = data && typeof data.item_count === 'number';
+			if (hasCount) emitHeaderCount(data.item_count);
+
+			if (isThemeCartChangeInProgress()) return;
+
+			if (Date.now() - lastAppClickAt >= 7000) return;
+
+			var hasSections = data && data.sections && typeof data.sections === 'object' && !Array.isArray(data.sections) && Object.keys(data.sections).length > 0;
+			if (hasSections && typeof window.__camoCartPartialUpdate === 'function') {
+				window.__camoCartPartialUpdate({
+					action: 'addItem',
+					sections: data.sections,
+					params: [{ noRefresh: true }]
+				});
+				if (!hasCount) fetchHeaderCount();
+				return;
+			}
+
+			if (hasCount) {
+				refreshSectionsSilently();
+			} else {
+				refreshSectionsSilently();
+				fetchHeaderCount();
+			}
+		}
+
+		if (typeof window.fetch === 'function') {
+			var nativeFetch = window.fetch;
+			window.fetch = function(input, init) {
+				var url = '';
+				if (typeof input === 'string') {
+					url = input;
+				} else if (input && typeof input.url === 'string') {
+					url = input.url;
+				}
+
+				var isCartMutation = url && cartMutationRegex.test(url);
+				var fetchArgs = arguments;
+
+				/* Inject `sections=` into external-app cart mutation bodies so the
+				   response carries the rendered section HTML — that lets us morph
+				   the cart in place instead of triggering a flickery full
+				   refresh. Only do this for recent app clicks. */
+				if (isCartMutation && Date.now() - lastAppClickAt < 7000 && !isThemeCartChangeInProgress()) {
+					var bodyWithSections = init && init.body ? addSectionsToBody(init.body) : init && init.body;
+					var urlWithSections = addSectionsToUrl(url);
+					if ((init && bodyWithSections !== init.body) || urlWithSections !== url) {
+						var requestInput = input;
+						if (urlWithSections !== url) {
+							if (typeof input === 'string') {
+								requestInput = urlWithSections;
+							} else if (typeof Request === 'function' && input instanceof Request) {
+								try {
+									requestInput = new Request(urlWithSections, input);
+								} catch (error) {
+									requestInput = input;
+								}
+							}
+						}
+						fetchArgs = [
+							requestInput,
+							init ? Object.assign({}, init, { body: bodyWithSections }) : init
+						];
+					}
+				}
+				var promise = nativeFetch.apply(this, fetchArgs);
+
+				if (!isCartMutation) return promise;
+
+				promise.then(function(response) {
+					if (!response || typeof response.clone !== 'function') return;
+					/* Only intervene when the user just interacted with an external
+					   cart-app trigger — keeps the bridge invisible for theme actions
+					   which already emit cart:updated via the EventBus. */
+					if (Date.now() - lastAppClickAt >= 7000 || isThemeCartChangeInProgress()) return;
+
+					response.clone().json().then(function(data) {
+						handleCartMutationData(data);
+					}).catch(function() {
+						if (Date.now() - lastAppClickAt < 7000 && !isThemeCartChangeInProgress()) {
+							refreshSectionsSilently();
+							fetchHeaderCount();
+						}
+					});
+				}).catch(function() {});
+
+				return promise;
+			};
+		}
+
+		if (window.XMLHttpRequest && !window.__camoCartPageXhrPatched) {
+			window.__camoCartPageXhrPatched = true;
+			var nativeXhrOpen = XMLHttpRequest.prototype.open;
+			var nativeXhrSend = XMLHttpRequest.prototype.send;
+
+			XMLHttpRequest.prototype.open = function(method, url) {
+				if (url && cartMutationRegex.test(url) && Date.now() - lastAppClickAt < 7000 && !isThemeCartChangeInProgress()) {
+					url = addSectionsToUrl(url);
+					arguments[1] = url;
+				}
+				this.__camoCartUrl = url;
+				this.__camoCartMethod = method;
+				return nativeXhrOpen.apply(this, arguments);
+			};
+
+			XMLHttpRequest.prototype.send = function(body) {
+				var url = this.__camoCartUrl || '';
+				var isCartMutation = url && cartMutationRegex.test(url);
+				var recentAppClick = Date.now() - lastAppClickAt < 7000 && !isThemeCartChangeInProgress();
+
+				if (isCartMutation && recentAppClick) {
+					body = addSectionsToBody(body);
+					this.addEventListener('load', function() {
+						try {
+							handleCartMutationData(JSON.parse(this.responseText));
+						} catch (error) {
+							refreshSectionsSilently();
+						}
+					});
+				}
+
+				return nativeXhrSend.call(this, body);
+			};
+		}
+	})();
+</script>
+
+{% schema %}
+{
+	"name": "Cart",
+	"settings": [
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Cart settings"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "heading",
+			"label": "Heading",
+			"default": "Shopping cart"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset bottom",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset bottom",
+			"default": 0
+		},
+		{
+			"type": "paragraph",
+			"content": "Internal offsets"
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset top",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset bottom",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset top",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset bottom",
+			"default": 32
+		}
+	],
+	"blocks": [
+		{
+			"type": "@app"
+		},
+		{
+			"name": "Custom liquid",
+			"type": "custom_liquid",
+			"settings": [
+				{
+					"type": "liquid",
+					"id": "custom_liquid",
+					"label": "Custom liquid",
+					"info": "Simple custom liquid"
+				}
+			]
+		},
+		{
+			"name": "Shipping bar",
+			"type": "shipping",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "number",
+					"id": "amount",
+					"label": "Free shipping amount",
+					"default": 70
+				},
+				{
+					"type": "textarea",
+					"id": "message",
+					"label": "Shipping message",
+					"default": "You are only {amount} away from free shipping",
+					"info": "The pattern {amount} will be replaced with the remaining amount"
+				},
+				{
+					"type": "textarea",
+					"id": "congratulatory_message",
+					"label": "Shipping congratulatory message",
+					"default": "You got free shipping"
+				},
+				{
+					"type": "image_picker",
+					"id": "icon",
+					"label": "Congratulatory icon",
+					"info": "40 x 40px recommended"
+				},
+				{
+					"type": "header",
+					"content": "Colors"
+				},
+				{
+					"type": "color",
+					"id": "bar_color",
+					"label": "Progress bar background color",
+					"default": "#E9E9E9"
+				},
+				{
+					"type": "color",
+					"id": "fill_color",
+					"label": "Progress bar fill color",
+					"default": "#FFD875"
+				}
+			]
+		},
+		{
+			"name": "Benefit",
+			"type": "benefit",
+			"limit": 6,
+			"settings": [
+				{
+					"type": "inline_richtext",
+					"id": "text",
+					"label": "Text",
+					"default": "Short text content."
+				},
+				{
+					"type": "image_picker",
+					"id": "icon",
+					"label": "Icon",
+					"info": "20 x 20px .svg recommended"
+				}
+			]
+		}
+	]
+}
+{% endschema %}

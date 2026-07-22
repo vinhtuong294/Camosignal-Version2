@@ -1,0 +1,412 @@
+{%- assign upsell_product = block.settings.upsell_product -%}
+{%- assign upsell_subtitle = block.settings.upsell_subtitle -%}
+{%- assign checked_by_default = true -%}
+
+{%- assign upsell_initial_qty = 0 -%}
+{%- if upsell_product != blank -%}
+	{%- assign upsell_variant_id = upsell_product.selected_or_first_available_variant.id -%}
+	{%- assign upsell_variant_available = upsell_product.selected_or_first_available_variant.available -%}
+	{%- for item in cart.items -%}
+		{%- if item.variant_id == upsell_variant_id -%}
+			{%- assign upsell_initial_qty = item.quantity -%}
+		{%- endif -%}
+	{%- endfor -%}
+{%- endif -%}
+
+{%- capture styles -%}
+	--offset-top-desktop: {{ block.settings.offset_top_desktop }}px;
+	--offset-bottom-desktop: {{ block.settings.offset_bottom_desktop }}px;
+	--offset-top-mobile: {{ block.settings.offset_top_mobile }}px;
+	--offset-bottom-mobile: {{ block.settings.offset_bottom_mobile }}px;
+{%- endcapture -%}
+
+{%- if upsell_product != blank -%}
+<style>
+	.product-upsell-block {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 12px 16px;
+		border: 1px solid #e1e1e1;
+		border-radius: 8px;
+		margin-top: 16px;
+		margin-bottom: 12px;
+		background-color: #ffffff;
+		cursor: pointer;
+		user-select: none;
+		transition: all 0.2s ease;
+		order: 10;
+		width: 100%;
+	}
+	.product-upsell-block.is-selected {
+		border-color: #2c3d33;
+		background-color: #fafafa;
+	}
+	.product-upsell__left {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+	}
+	.product-upsell__checkbox {
+		width: 20px;
+		height: 20px;
+		border: 2px solid #2c3d33;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: #fff;
+		flex-shrink: 0;
+		border-radius: 4px;
+	}
+	.product-upsell-block.is-selected .product-upsell__checkbox {
+		background: #2c3d33;
+	}
+	.product-upsell__checkbox svg {
+		width: 14px;
+		height: 14px;
+		fill: none;
+		stroke: #fff;
+		stroke-width: 3;
+		opacity: 0;
+	}
+	.product-upsell-block.is-selected .product-upsell__checkbox svg {
+		opacity: 1;
+	}
+	.product-upsell__icon {
+		width: 32px;
+		height: 32px;
+		object-fit: contain;
+		flex-shrink: 0;
+	}
+	.product-upsell__text {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
+	.product-upsell__title {
+		font-family: 'Oswald', sans-serif !important;
+		font-size: 14px;
+		font-weight: 600;
+		text-transform: uppercase;
+		color: #2c3d33;
+		line-height: 1.2;
+		letter-spacing: 0.5px;
+	}
+	.product-upsell__subtitle {
+		font-size: 11px;
+		color: #555555;
+		line-height: 1.2;
+	}
+	.product-upsell__price {
+		font-family: 'Oswald', sans-serif !important;
+		font-size: 14px;
+		font-weight: 600;
+		color: #2c3d33;
+	}
+
+	@media (max-width: 767.98px) {
+		.product-upsell-block {
+			margin-top: 12px;
+			margin-bottom: 12px;
+			padding: 10px 12px;
+		}
+		.product-upsell__title, .product-upsell__price {
+			font-size: 13px;
+		}
+		.product-upsell__subtitle {
+			font-size: 10px;
+		}
+	}
+</style>
+
+<label class="product-upsell-block{% if checked_by_default %} is-selected{% endif %}" style="{{ styles }}" data-product-handle="{{- upsell_product.handle | escape -}}">
+	<div class="product-upsell__left">
+		<div class="product-upsell__checkbox">
+			<svg viewBox="0 0 16 16"><path d="M3 8L6 11L13 4"></path></svg>
+		</div>
+		
+		<input type="checkbox" style="display: none;" class="js-upsell-checkbox" name="properties[_upsell]" value="{{ upsell_product.selected_or_first_available_variant.id }}" autocomplete="off" {% if checked_by_default %}checked{% endif %}>
+		
+		{%- if upsell_product.featured_image != blank -%}
+			<img src="{{ upsell_product.featured_image | image_url: width: 64 }}" class="product-upsell__icon" width="32" height="32" alt="{{ upsell_product.title | escape }}" loading="lazy">
+		{%- endif -%}
+
+		<div class="product-upsell__text">
+			<span class="product-upsell__title" style="font-family: var(--heading-font-family);">{{ upsell_product.title }}</span>
+			{%- if upsell_subtitle != blank -%}
+				<span class="product-upsell__subtitle">{{ upsell_subtitle }}</span>
+			{%- endif -%}
+		</div>
+	</div>
+
+	<div class="product-upsell__price">
+		{{ upsell_product.price | money }}
+	</div>
+</label>
+
+<script>
+(function() {
+	var UPSELL_VARIANT_ID = {{ upsell_variant_id }};
+	var UPSELL_AVAILABLE = {{ upsell_variant_available | json }};
+	/* Server-side snapshot of how many of the upsell variant are already in the
+	   cart. We keep this in sync with cart:updated events so we never need a
+	   GET /cart.js round-trip just to decide whether to bundle the upsell. */
+	var upsellInCartQty = {{ upsell_initial_qty }};
+
+	function getCurrentCartItemCount() {
+		var cartObject = window.themeCore && window.themeCore.cartObject;
+		if (cartObject && Number.isFinite(Number(cartObject.item_count))) {
+			return Number(cartObject.item_count);
+		}
+
+		var counter = document.querySelector('[data-cart-count]');
+		var count = counter ? Number(counter.getAttribute('data-cart-count')) : 0;
+		return Number.isFinite(count) && count >= 0 ? count : 0;
+	}
+
+	function isSameVariant(item, variantId) {
+		if (!item) return false;
+		var id = Number(item.id);
+		var itemVariantId = Number(item.variant_id);
+		var expectedId = Number(variantId);
+		return id === expectedId || itemVariantId === expectedId;
+	}
+
+	function wasItemRejected(data, variantId) {
+		if (!data || !Array.isArray(data.items_not_added)) return false;
+		return data.items_not_added.some(function(item) {
+			return isSameVariant(item, variantId);
+		});
+	}
+
+	function getSuccessfulAddedQuantity(items, data) {
+		if (!Array.isArray(items)) return 0;
+
+		return items.reduce(function(total, item) {
+			if (!item || wasItemRejected(data, item.id)) return total;
+			var quantity = Number(item.quantity || 1);
+			return total + (Number.isFinite(quantity) && quantity > 0 ? quantity : 1);
+		}, 0);
+	}
+
+	function jsonResponse(response, data) {
+		if (typeof Response !== 'function') return response;
+		var headers = typeof Headers === 'function' ? new Headers(response.headers) : response.headers;
+		if (headers && typeof headers.set === 'function') {
+			headers.set('Content-Type', 'application/json');
+		}
+
+		return new Response(JSON.stringify(data), {
+			status: response.status,
+			statusText: response.statusText,
+			headers: headers
+		});
+	}
+
+	function xhrPost(url, data) {
+		return new Promise(function(resolve, reject) {
+			var xhr = new XMLHttpRequest();
+			xhr.open('POST', url, true);
+			xhr.setRequestHeader('Content-Type', 'application/json');
+			xhr.onload = function() {
+				if (xhr.status >= 200 && xhr.status < 300) {
+					resolve(JSON.parse(xhr.responseText));
+				} else { reject(xhr); }
+			};
+			xhr.onerror = reject;
+			xhr.send(JSON.stringify(data));
+		});
+	}
+
+	function enforceUpsellMaxOne() {
+		if (upsellInCartQty <= 1) return Promise.resolve();
+		return xhrPost('/cart/change.js', { id: UPSELL_VARIANT_ID, quantity: 1 }).then(function() {
+			upsellInCartQty = 1;
+			if (window.themeCore && window.themeCore.EventBus) {
+				window.themeCore.EventBus.emit('cart:refresh');
+			}
+		}).catch(function() {});
+	}
+
+	function bindCartListener() {
+		if (!window.themeCore || !window.themeCore.EventBus) return;
+		window.themeCore.EventBus.listen('cart:updated', function(cart) {
+			if (!cart || !Array.isArray(cart.items)) return;
+			/* /cart/add.js responses contain only the items that were just added,
+			   not the full cart — skip those so we don't reset the qty to 0. */
+			var isAddAction = cart.action === 'addItem' || cart.action === 'addItems';
+			if (isAddAction) return;
+
+			var found = false;
+			for (var i = 0; i < cart.items.length; i++) {
+				var item = cart.items[i];
+				var id = Number(item.id);
+				var variantId = Number(item.variant_id);
+				if (id === Number(UPSELL_VARIANT_ID) || variantId === Number(UPSELL_VARIANT_ID)) {
+					upsellInCartQty = item.quantity;
+					found = true;
+					break;
+				}
+			}
+			if (!found) upsellInCartQty = 0;
+		});
+	}
+
+	document.addEventListener('DOMContentLoaded', function() {
+		var block = document.querySelector('.product-upsell-block');
+		if (!block) return;
+
+		var checkbox = block.querySelector('.js-upsell-checkbox');
+
+		/* Toggle UI */
+		checkbox.addEventListener('change', function() {
+			block.classList.toggle('is-selected', this.checked);
+		});
+
+		/* Save the current fetch. Depending on script order this may be the
+		   cart-drawer bridge already, or the browser-native fetch. */
+		var nativeFetch = window.fetch;
+		var nativeFetchHadCartDrawerPatch = !!window.__camoCartDrawerFetchPatched;
+		var wrappedFetch = null;
+		/* Match Selleasy / lb-upsell / sll widgets anywhere on the page —
+		   in particular the "People also bought" block that renders below the
+		   product form. Without this scope, clicks on that widget would slip
+		   past `shouldSkipProtectionForExternalCartAdd()` and accidentally
+		   bundle the theme upsell variant into the Selleasy add request. */
+		var cartAppAddSelector = '.shopify-app-block, [id*="selleasy" i], [class*="selleasy" i], [id*="lb-widget" i], [class*="lb-widget" i], [id*="lb-upsell" i], [class*="lb-upsell" i], [id*="sll" i], [class*="sll" i]';
+		var lastCartAppAddAt = 0;
+
+		function isCartAppTarget(target) {
+			if (!target || !target.closest) return false;
+			try {
+				return !!target.closest(cartAppAddSelector);
+			} catch (error) {
+				return false;
+			}
+		}
+
+		function markExternalCartAppAdd(event) {
+			var target = event.target;
+			var trigger = target && target.closest ? target.closest('form, button, [role="button"], input[type="submit"], a') : null;
+
+			if (trigger && isCartAppTarget(trigger)) {
+				lastCartAppAddAt = Date.now();
+				if (window.CamoExternalCartAppSync && typeof window.CamoExternalCartAppSync.markIntent === 'function') {
+					window.CamoExternalCartAppSync.markIntent({
+						inDrawer: !!(trigger.closest && trigger.closest('#CartDrawer'))
+					});
+				}
+			}
+		}
+
+		document.addEventListener('pointerdown', markExternalCartAppAdd, true);
+		document.addEventListener('touchstart', markExternalCartAppAdd, true);
+		document.addEventListener('click', markExternalCartAppAdd, true);
+		document.addEventListener('submit', markExternalCartAppAdd, true);
+
+		function shouldSkipProtectionForExternalCartAdd() {
+			if (Date.now() - lastCartAppAddAt < 5000) return true;
+			return isCartAppTarget(document.activeElement);
+		}
+
+		function shouldNotifyCartDrawerManually() {
+			if (nativeFetchHadCartDrawerPatch) return false;
+			return !(window.__camoCartDrawerFetchPatched && window.fetch !== wrappedFetch);
+		}
+
+		function notifyCartDrawerFromResponse(response) {
+			if (!shouldNotifyCartDrawerManually() || !response || typeof response.clone !== 'function') {
+				return response;
+			}
+
+			response.clone().json().then(function(data) {
+				document.dispatchEvent(new CustomEvent('camo:external-cart-app-response', {
+					detail: data
+				}));
+			}).catch(function() {});
+
+			return response;
+		}
+
+		wrappedFetch = function(url, opts) {
+			var requestUrl = '';
+			if (typeof url === 'string') {
+				requestUrl = url;
+			} else if (typeof URL === 'function' && url instanceof URL) {
+				requestUrl = url.href;
+			} else if (url && typeof url.url === 'string') {
+				requestUrl = url.url;
+			}
+			var isAddJs = requestUrl.indexOf('/cart/add') !== -1;
+
+			if (!isAddJs) {
+				return nativeFetch.call(window, url, opts);
+			}
+
+			if (shouldSkipProtectionForExternalCartAdd()) {
+				return nativeFetch.call(window, url, opts).then(notifyCartDrawerFromResponse);
+			}
+
+			/* Bundle the upsell variant into the same /cart/add.js request so
+			   Shopify commits both line items in a single round-trip and the
+			   theme only refreshes the cart sections once instead of twice. */
+			var modifiedOpts = opts;
+			var bundledUpsell = false;
+
+			if (UPSELL_AVAILABLE && checkbox.checked && upsellInCartQty === 0 && opts && opts.body) {
+				try {
+					var body = typeof opts.body === 'string' ? JSON.parse(opts.body) : null;
+					if (body && Array.isArray(body.items)) {
+						var alreadyHasUpsell = body.items.some(function(item) {
+							return Number(item.id) === Number(UPSELL_VARIANT_ID);
+						});
+						if (!alreadyHasUpsell) {
+							body.items.push({ id: UPSELL_VARIANT_ID, quantity: 1 });
+							modifiedOpts = Object.assign({}, opts, { body: JSON.stringify(body) });
+							bundledUpsell = true;
+						}
+					}
+				} catch (error) { /* body wasn't JSON — fall back to no-op */ }
+			}
+
+			return nativeFetch.call(window, url, modifiedOpts).then(function(response) {
+				if (bundledUpsell && response && typeof response.clone === 'function') {
+					/* Optimistically mark upsell as in cart. Reconcile from the
+					   real response in case Shopify rejected it (e.g. sold out). */
+					return response.clone().json().then(function(data) {
+						var upsellRejected = wasItemRejected(data, UPSELL_VARIANT_ID);
+						upsellInCartQty = upsellRejected ? 0 : 1;
+
+						if (data && typeof data.item_count !== 'number') {
+							data.item_count = getCurrentCartItemCount() + getSuccessfulAddedQuantity(body.items, data);
+						}
+
+						if (data && !upsellRejected) {
+							data._camoSkipProtectionEnforce = true;
+						}
+
+						return jsonResponse(response, data);
+					}).catch(function() {
+						upsellInCartQty = 1;
+						return response;
+					});
+				} else if (upsellInCartQty > 1) {
+					/* Couldn't bundle (already in cart) but qty drifted above 1
+					   — enforce max 1 in the background. Rare path. */
+					enforceUpsellMaxOne();
+				}
+				return response;
+			});
+		};
+
+		window.fetch = wrappedFetch;
+
+		if (window.themeCore && window.themeCore.EventBus) {
+			bindCartListener();
+		} else {
+			document.addEventListener('theme:all:loaded', bindCartListener, { once: true });
+		}
+	});
+})();
+</script>
+{%- endif -%}

@@ -1,0 +1,306 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Header mega-menu content
+	Render header mega-menu content
+	- menu: Menu object (required)
+	- level: Menu level
+
+	Usage:
+	{%- render 'header-mega-menu-content', burger_menu: burger_menu -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- case level -%}
+	{%- when 1 -%}
+		{%- assign additional_menu      = section.settings.additional_menu -%}
+		{%- assign show_socials         = section.settings.show_socials -%}
+		{%- assign phone_number         = section.settings.phone_number -%}
+		{%- assign schedule_information = section.settings.schedule_information -%}
+		{%- assign animation_delay      = 0 -%}
+
+		<nav
+			class="drawer__body header-mega-menu__body header-mega-menu__body--main js-multi-drawer-content js-scroll-lock-ignore"
+			aria-label="{{- "layout.navigation.mega_menu" | t | escape -}}"
+			data-drawer-level="1"
+		>
+			<ul class="header-mega-menu__menu header-mega-menu__menu--main">
+				{%- for first_level_link in menu.links -%}
+					{%- if forloop.first -%}
+						{%- assign animation_delay_start = 0.2 -%}
+					{%- else -%}
+						{%- assign animation_delay_start = 0 -%}
+					{%- endif -%}
+
+					{%- assign animation_delay = animation_delay | plus: animation_delay_start | plus: 0.05 -%}
+
+					<li
+						class="header-mega-menu__menu-item-wrapper"
+						style="--animation-delay: {{ animation_delay }}s"
+					>
+						{%- if first_level_link.links != blank -%}
+							<button
+								class="button-link header-mega-menu__menu-item js-multi-drawer-toggle"
+								type="button"
+								data-drawer-level="2"
+								data-drawer-content="HeaderMegaMenuNested:{{- menu.handle -}}-{{ forloop.index }}-{{- first_level_link.handle -}}"
+								aria-controls="HeaderMegaMenuNested"
+								aria-expanded="false"
+							>
+								<span data-text="{{- first_level_link.title | escape -}}">
+									<span>
+										{{- first_level_link.title | escape -}}
+									</span>
+								</span>
+
+								{%- render 'icons', icon: 'arrow-right' -%}
+							</button>
+						{%- else -%}
+							<a
+								class="button-link header-mega-menu__menu-item"
+								href="{{- first_level_link.url -}}"
+								{% if first_level_link.current %}
+									aria-current="page"
+								{% endif %}
+							>
+								<span data-text="{{- first_level_link.title | escape -}}">
+									<span>
+										{{- first_level_link.title | escape -}}
+									</span>
+								</span>
+							</a>
+						{%- endif -%}
+					</li>
+				{%- endfor -%}
+			</ul>
+
+			{%- if additional_menu.links != blank or phone_number != blank or schedule_information != blank or show_socials -%}
+				<div class="header-mega-menu__menu-wrapper-additional">
+					{%- if additional_menu.links != blank -%}
+						<ul class="header-mega-menu__menu header-mega-menu__menu--additional">
+							{%- for first_level_link in additional_menu.links -%}
+								{%- assign animation_delay = animation_delay | plus: 0.05 -%}
+
+								<li class="header-mega-menu__menu-item-wrapper" style="--animation-delay: {{ animation_delay }}s">
+									<a
+										class="button-link header-mega-menu__menu-item"
+										href="{{- first_level_link.url -}}"
+										{% if first_level_link.current %}
+											aria-current="page"
+										{% endif %}
+									>
+										<span data-text="{{- first_level_link.title | escape -}}">
+											<span>
+												{{- first_level_link.title | escape -}}
+											</span>
+										</span>
+									</a>
+								</li>
+							{%- endfor -%}
+						</ul>
+					{%- endif -%}
+
+					{%- if phone_number != blank -%}
+						{%- assign animation_delay = animation_delay | plus: 0.05 -%}
+
+						<div class="rte header-mega-menu__store-info" style="--animation-delay: {{ animation_delay }}s">
+							{{- phone_number -}}
+						</div>
+					{%- endif -%}
+
+					{%- if schedule_information != blank -%}
+						{%- assign animation_delay = animation_delay | plus: 0.05 -%}
+
+						<div class="rte header-mega-menu__store-info" style="--animation-delay: {{ animation_delay }}s">
+							{{- schedule_information -}}
+						</div>
+					{%- endif -%}
+
+					{%- if show_socials -%}
+						{%- render 'social-links', animation_delay: animation_delay -%}
+					{%- endif -%}
+				</div>
+			{%- endif -%}
+		</nav>
+	{%- when 2 -%}
+		{%- capture images -%}
+			{%- for i in (1..3) -%}
+				{%- assign image_key   = 'media_image_' | append: i -%}
+				{%- assign url_key     = 'media_url_' | append: i -%}
+				{%- assign media_image = section.settings[image_key] -%}
+				{%- assign media_url   = section.settings[url_key] -%}
+
+				{%- if media_image != blank -%}
+					{%- assign images_count = images_count | plus: 1 -%}
+
+					{%- capture img_focal -%}
+						--img-pos: {{ media_image.presentation.focal_point }};
+					{%- endcapture -%}
+
+					{%- if media_url != blank -%}
+						<a class="header-mega-menu__menu-image-wrapper header-mega-menu__menu-image-wrapper--link focus-visible-outline" href="{{- media_url -}}">
+					{%- else -%}
+						<div class="header-mega-menu__menu-image-wrapper">
+					{%- endif -%}
+						<picture>
+							<source
+								srcset="{{ media_image | image_url: height: 300 }} 1x, {{ media_image | image_url: height: 600 }} 2x"
+								media="(max-width: 1200px)"
+							/>
+
+							<source
+								srcset="{{ media_image | image_url: height: 415 }} 1x, {{ media_image | image_url: height: 830 }} 2x"
+								media="(max-width: 1500px)"
+							/>
+
+							<source
+								srcset="{{ media_image | image_url: height: 422 }} 1x, {{ media_image | image_url: height: 844 }} 2x"
+								media="(max-width: 1680px)"
+							/>
+
+							<img
+								class="header-mega-menu__menu-image js-multi-drawer-image"
+								src="{{- media_image | image_url: height: 535 -}}"
+								srcset="{{ media_image | image_url: height: 535 }} 1x, {{ media_image | image_url: height: 1070 }} 2x"
+								alt="{{- media_image.alt | escape -}}"
+								loading="lazy"
+								fetchpriority="low"
+								style="{{- img_focal -}}"
+							/>
+						</picture>
+					{%- if media_url == blank -%}
+						</div>
+					{%- else -%}
+						</a>
+					{%- endif -%}
+				{%- endif -%}
+			{%- endfor -%}
+		{%- endcapture -%}
+
+		{%- capture images_with_tabindex -%}
+			{{ images | replace: '<a ', '<a tabindex="-1" ' }}
+		{%- endcapture -%}
+
+		{%- for first_level_link in menu.links -%}
+			{%- if first_level_link.links != blank -%}
+				{%- assign animation_delay = 0 -%}
+
+				<nav
+					class="drawer__body header-mega-menu__body header-mega-menu__body--nested js-multi-drawer-content js-scroll-lock-ignore"
+					aria-label="{{- "layout.navigation.mega_menu_nested" | t | escape -}}"
+					data-drawer-level="2"
+					data-drawer-content="HeaderMegaMenuNested:{{- menu.handle -}}-{{ forloop.index }}-{{- first_level_link.handle -}}"
+				>
+					<div class="header-mega-menu__menu-wrapper-nested{% if images == blank %} header-mega-menu__menu-wrapper-nested--full{% endif %}">
+						<ul class="header-mega-menu__menu header-mega-menu__menu--nested">
+							{%- for second_level_link in first_level_link.links -%}
+								{%- if forloop.first -%}
+									{%- assign animation_delay_start = 0.2 -%}
+								{%- else -%}
+									{%- assign animation_delay_start = 0 -%}
+								{%- endif -%}
+
+								{%- assign animation_delay = animation_delay | plus: animation_delay_start | plus: 0.03 -%}
+
+								<li
+									class="header-mega-menu__menu-item-wrapper header-mega-menu__menu-item-wrapper--parent"
+									style="--animation-delay: {{ animation_delay }}s"
+								>
+									{%- if second_level_link.links != blank -%}
+										<a
+											class="button-link header-mega-menu__menu-item"
+											href="{{- second_level_link.url -}}"
+											{% if second_level_link.current %}
+												aria-current="page"
+											{% endif %}
+										>
+											<span data-text="{{- second_level_link.title | escape -}}">
+												<span>
+													{{- second_level_link.title | escape -}}
+												</span>
+											</span>
+										</a>
+
+										<ul class="header-mega-menu__menu header-mega-menu__menu--deep-nested">
+											{%- for third_level_link in second_level_link.links -%}
+												{%- assign animation_delay = animation_delay | plus: 0.03 -%}
+
+												{%- assign tl_collection_empty = false -%}
+												{%- if third_level_link.type == 'collection_link' -%}
+													{%- assign tl_col_obj = third_level_link.object -%}
+													{%- if tl_col_obj != blank and tl_col_obj.products_count == 0 -%}
+														{%- assign tl_collection_empty = true -%}
+													{%- endif -%}
+												{%- endif -%}
+
+												<li class="header-mega-menu__menu-item-wrapper" style="--animation-delay: {{ animation_delay }}s">
+													<a
+														class="button-link header-mega-menu__menu-item{% if tl_collection_empty %} header-mega-menu__menu-item--disabled{% endif %}"
+														href="{{- third_level_link.url -}}"
+														{% if third_level_link.current %}
+															aria-current="page"
+														{% endif %}
+														{% if tl_collection_empty %}tabindex="-1"{% endif %}
+													>
+														<span data-text="{{- third_level_link.title | escape -}}">
+															<span>
+																{{- third_level_link.title | escape -}}{%- if tl_collection_empty -%}<em class="mega-block__coming-soon"> — Coming Soon</em>{%- endif -%}
+															</span>
+														</span>
+													</a>
+												</li>
+											{%- endfor -%}
+										</ul>
+									{%- else -%}
+										{%- assign sl_collection_empty = false -%}
+										{%- if second_level_link.type == 'collection_link' -%}
+											{%- assign sl_col_obj = second_level_link.object -%}
+											{%- if sl_col_obj != blank and sl_col_obj.products_count == 0 -%}
+												{%- assign sl_collection_empty = true -%}
+											{%- endif -%}
+										{%- endif -%}
+										<a
+											class="button-link header-mega-menu__menu-item{% if sl_collection_empty %} header-mega-menu__menu-item--disabled{% endif %}"
+											href="{{- second_level_link.url -}}"
+											{% if second_level_link.current %}
+												aria-current="page"
+											{% endif %}
+											{% if sl_collection_empty %}tabindex="-1"{% endif %}
+										>
+											<span data-text="{{- second_level_link.title | escape -}}">
+												<span>
+													{{- second_level_link.title | escape -}}{%- if sl_collection_empty -%}<em class="mega-block__coming-soon"> — Coming Soon</em>{%- endif -%}
+												</span>
+											</span>
+										</a>
+									{%- endif -%}
+								</li>
+							{%- endfor -%}
+						</ul>
+					</div>
+
+					{%- if images != blank -%}
+						{%- assign desktop_movement_speed = section.settings.desktop_movement_speed -%}
+
+						<div
+							class="header-mega-menu__images-wrapper{% if images_count > 1 %} header-mega-menu__images-wrapper--animation{% endif %}"
+							style="--desktop-movement-speed: {{- desktop_movement_speed -}}s;"
+						>
+							<div class="header-mega-menu__images">
+								{{- images -}}
+							</div>
+
+							{%- if images_count > 1 -%}
+								<div class="header-mega-menu__images" aria-hidden="true">
+									{{- images_with_tabindex -}}
+								</div>
+
+								<div class="header-mega-menu__images" aria-hidden="true">
+									{{- images_with_tabindex -}}
+								</div>
+							{%- endif -%}
+						</div>
+					{%- endif -%}
+				</nav>
+			{%- endif -%}
+		{%- endfor -%}
+{%- endcase -%}

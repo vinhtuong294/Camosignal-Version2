@@ -1,0 +1,494 @@
+{% doc %}
+  @prompt
+    Hãy thêm cho tôi section giống thế này để tôi truyền tải ngắn gọn thông điệp của shop một cho khách một cách nhanh chóng, tôi cần 4 block trong section này, đầu tiên là heading, thứ 2 là subheading, thứ 3 là text body, cút cùng là 1 button
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-content-block-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    padding: {{ block.settings.padding_vertical }}px {{ block.settings.padding_horizontal }}px;
+    background-color: {{ block.settings.background_color }};
+    border-radius: {{ block.settings.border_radius }}px;
+    text-align: {{ block.settings.text_alignment }};
+  }
+
+  .ai-content-block__inner-{{ ai_gen_id }} {
+    max-width: {{ block.settings.content_max_width }}px;
+    margin: 0 auto;
+  }
+
+  .ai-content-block__heading-{{ ai_gen_id }} {
+    margin: 0 0 {{ block.settings.heading_spacing }}px 0;
+    color: {{ block.settings.heading_color }};
+    font-size: {{ block.settings.heading_size }}px;
+    line-height: 1.2;
+    font-weight: 700;
+  }
+
+  .ai-content-block__subheading-{{ ai_gen_id }} {
+    margin: 0 0 {{ block.settings.subheading_spacing }}px 0;
+    color: {{ block.settings.subheading_color }};
+    font-size: {{ block.settings.subheading_size }}px;
+    line-height: 1.3;
+    font-weight: 500;
+  }
+
+  .ai-content-block__text-{{ ai_gen_id }} {
+    margin: 0 0 {{ block.settings.text_spacing }}px 0;
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.text_size }}px;
+    line-height: 1.6;
+  }
+
+  .ai-content-block__text-{{ ai_gen_id }} p {
+    margin: 0 0 {{ block.settings.paragraph_spacing }}px 0;
+  }
+
+  .ai-content-block__text-{{ ai_gen_id }} p:last-child {
+    margin-bottom: 0;
+  }
+
+  .ai-content-block__button-{{ ai_gen_id }} {
+    display: inline-block;
+    padding: {{ block.settings.button_padding_vertical }}px {{ block.settings.button_padding_horizontal }}px;
+    background-color: {{ block.settings.button_background }};
+    color: {{ block.settings.button_text_color }};
+    border: {{ block.settings.button_border_width }}px solid {{ block.settings.button_border_color }};
+    border-radius: {{ block.settings.button_border_radius }}px;
+    text-decoration: none;
+    font-size: {{ block.settings.button_text_size }}px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .ai-content-block__button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_background_hover }};
+    color: {{ block.settings.button_text_color_hover }};
+    border-color: {{ block.settings.button_border_color_hover }};
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-content-block-{{ ai_gen_id }} {
+      padding: {{ block.settings.padding_vertical_mobile }}px {{ block.settings.padding_horizontal_mobile }}px;
+    }
+
+    .ai-content-block__heading-{{ ai_gen_id }} {
+      font-size: {{ block.settings.heading_size_mobile }}px;
+    }
+
+    .ai-content-block__subheading-{{ ai_gen_id }} {
+      font-size: {{ block.settings.subheading_size_mobile }}px;
+    }
+
+    .ai-content-block__text-{{ ai_gen_id }} {
+      font-size: {{ block.settings.text_size_mobile }}px;
+    }
+
+    .ai-content-block__button-{{ ai_gen_id }} {
+      font-size: {{ block.settings.button_text_size_mobile }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-content-block-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-content-block__inner-{{ ai_gen_id }}">
+    {% if block.settings.heading != blank %}
+      <h2 class="ai-content-block__heading-{{ ai_gen_id }}">
+        {{ block.settings.heading }}
+      </h2>
+    {% endif %}
+
+    {% if block.settings.subheading != blank %}
+      <h3 class="ai-content-block__subheading-{{ ai_gen_id }}">
+        {{ block.settings.subheading }}
+      </h3>
+    {% endif %}
+
+    {% if block.settings.text != blank %}
+      <div class="ai-content-block__text-{{ ai_gen_id }}">
+        {{ block.settings.text }}
+      </div>
+    {% endif %}
+
+    {% if block.settings.button_text != blank %}
+      <a href="{{ block.settings.button_link }}" class="ai-content-block__button-{{ ai_gen_id }}">
+        {{ block.settings.button_text }}
+      </a>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Nội dung 4 phần",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Tiêu đề chính",
+      "default": "Chào mừng đến với cửa hàng"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Màu",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Kích thước desktop",
+      "min": 20,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "label": "Kích thước mobile",
+      "min": 18,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "heading_spacing",
+      "label": "Khoảng cách dưới",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Subheading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "subheading",
+      "label": "Tiêu đề phụ",
+      "default": "Khám phá bộ sưu tập mới nhất"
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Màu",
+      "default": "#535353"
+    },
+    {
+      "type": "range",
+      "id": "subheading_size",
+      "label": "Kích thước desktop",
+      "min": 16,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "subheading_size_mobile",
+      "label": "Kích thước mobile",
+      "min": 14,
+      "max": 36,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "subheading_spacing",
+      "label": "Khoảng cách dưới",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Text body"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Nội dung văn bản",
+      "default": "<p>Chúng tôi mang đến những sản phẩm chất lượng cao với giá cả hợp lý. Hãy khám phá ngay hôm nay để tìm được sản phẩm ưng ý nhất cho bạn.</p>"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Màu",
+      "default": "#535353"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Kích thước desktop",
+      "min": 12,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "text_size_mobile",
+      "label": "Kích thước mobile",
+      "min": 12,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "text_spacing",
+      "label": "Khoảng cách dưới",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "paragraph_spacing",
+      "label": "Khoảng cách giữa đoạn",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Văn bản nút",
+      "default": "Mua ngay"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Liên kết"
+    },
+    {
+      "type": "range",
+      "id": "button_padding_vertical",
+      "label": "Khoảng cách dọc",
+      "min": 5,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "button_padding_horizontal",
+      "label": "Khoảng cách ngang",
+      "min": 15,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Bo góc",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "button_border_width",
+      "label": "Độ dày viền",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "button_text_size",
+      "label": "Kích thước chữ desktop",
+      "min": 12,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "button_text_size_mobile",
+      "label": "Kích thước chữ mobile",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Nền",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Chữ",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_border_color",
+      "label": "Viền",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_background_hover",
+      "label": "Nền (hover)",
+      "default": "#292929"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color_hover",
+      "label": "Chữ (hover)",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_border_color_hover",
+      "label": "Viền (hover)",
+      "default": "#292929"
+    },
+    {
+      "type": "header",
+      "content": "Bố cục"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Căn chỉnh",
+      "options": [
+        {
+          "value": "left",
+          "label": "Trái"
+        },
+        {
+          "value": "center",
+          "label": "Giữa"
+        },
+        {
+          "value": "right",
+          "label": "Phải"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Độ rộng desktop",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "content_max_width",
+      "label": "Độ rộng nội dung tối đa",
+      "min": 400,
+      "max": 1200,
+      "step": 50,
+      "unit": "px",
+      "default": 800
+    },
+    {
+      "type": "range",
+      "id": "padding_vertical",
+      "label": "Khoảng cách dọc",
+      "min": 10,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "label": "Khoảng cách ngang",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_vertical_mobile",
+      "label": "Khoảng cách dọc mobile",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal_mobile",
+      "label": "Khoảng cách ngang mobile",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Bo góc",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Màu nền",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Nội dung 4 phần"
+    }
+  ]
+}
+{% endschema %}

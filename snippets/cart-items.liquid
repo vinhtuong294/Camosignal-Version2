@@ -1,0 +1,206 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Cart items
+	Render items in the shopping cart
+	- cart_drawer: Boolean (optional)
+
+	Usage:
+	{%- render 'cart-items', cart_drawer: true -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- unless cart.empty? -%}
+	{%- comment -%} 1. Regular products {%- endcomment -%}
+	{%- for item in cart.items -%}
+		{%- if item.product.handle == 'shipping-protection-apparel' -%}
+			{%- continue -%}
+		{%- endif -%}
+
+		{%- if cart_drawer -%}
+			{%- render 'cart-item-drawer', item: item, cart_drawer: cart_drawer -%}
+		{%- else -%}
+			{%- render 'cart-item', item: item -%}
+		{%- endif -%}
+	{%- endfor -%}
+
+	{%- comment -%} 2. Shipping Protection always at bottom — compact service card {%- endcomment -%}
+	{%- for item in cart.items -%}
+		{%- if item.product.handle != 'shipping-protection-apparel' -%}
+			{%- continue -%}
+		{%- endif -%}
+
+		<div
+			class="cart-item-drawer cart-item-drawer--protection"
+			id="CartItem-{{ item.index | plus: 1 }}"
+			data-index="{{ item.index | plus: 1 }}"
+			data-cart-item="{{ item.key }}"
+		>
+			{%- assign sp_image = item.image | default: settings.product_default_image -%}
+			<div class="sp-card__icon">
+				{%- if sp_image != blank -%}
+					<img
+						src="{{ sp_image | image_url: width: 80 }}"
+						srcset="{{ sp_image | image_url: width: 40 }} 1x, {{ sp_image | image_url: width: 80 }} 2x"
+						width="40" height="40"
+						alt="{{ sp_image.alt | escape }}"
+						loading="lazy"
+					/>
+				{%- endif -%}
+			</div>
+
+			<div class="sp-card__info">
+				<span class="sp-card__title">{{ item.product.title }}</span>
+				<span class="sp-card__subtitle">{{ section.settings.protection_subtitle | default: 'Protect your order from loss/damage.' }}</span>
+			</div>
+
+			<div class="sp-card__right">
+				<span class="sp-card__price">{{ item.final_line_price | money }}</span>
+				<a href="{{ item.url_to_remove }}"
+				   id="Remove-{{ item.index | plus: 1 }}"
+				   class="sp-card__remove button-link focus-visible-outline js-cart-item-remove"
+				   data-index="{{ item.index | plus: 1 }}"
+				   data-item-key="{{ item.key }}"
+				   aria-label="Remove {{ item.product.title | escape }}"
+				>
+					{% render 'icons', icon: 'menu-close' %}
+				</a>
+			</div>
+		</div>
+	{%- endfor -%}
+{%- endunless -%}
+
+{%- comment -%} Enforce shipping protection max quantity = 1 {%- endcomment -%}
+
+
+<style>
+	/* Hide quantity increase/decrease buttons for shipping protection on Cart page */
+	[data-cart-item] .cart-item__details-title[href*="shipping-protection"] ~ .cart-item__quantity .quantity__buttons,
+	.cart-item:has(.cart-item__details-title[href*="shipping-protection"]) .quantity__buttons {
+		display: none !important;
+	}
+	.cart-item:has(.cart-item__details-title[href*="shipping-protection"]) .quantity__input {
+		pointer-events: none !important;
+		-moz-appearance: textfield !important;
+	}
+	.cart-item:has(.cart-item__details-title[href*="shipping-protection"]) .quantity__input::-webkit-inner-spin-button,
+	.cart-item:has(.cart-item__details-title[href*="shipping-protection"]) .quantity__input::-webkit-outer-spin-button {
+		-webkit-appearance: none !important;
+		margin: 0 !important;
+	}
+
+	/* ── Compact Shipping Protection service card (Cart Drawer) ── */
+	.cart-item-drawer--protection {
+		display: flex !important;
+		align-items: center !important;
+		gap: 10px !important;
+		padding: 10px 14px !important;
+		margin: 8px 0 0 !important;
+		border: 1.5px solid var(--cart-protection-border-color, #3a7d6a) !important;
+		border-radius: 10px !important;
+		background: var(--cart-protection-background, rgba(58, 125, 106, 0.06)) !important;
+		position: relative !important;
+	}
+
+	.cart-item-drawer--protection .sp-card__icon {
+		flex-shrink: 0;
+		width: 40px;
+		height: 40px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.cart-item-drawer--protection .sp-card__icon img {
+		width: 36px;
+		height: 36px;
+		object-fit: contain;
+		border-radius: 6px;
+	}
+
+	.cart-item-drawer--protection .sp-card__info {
+		flex: 1;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 1px;
+		padding-right: 8px;
+	}
+	.cart-item-drawer--protection .sp-card__title {
+		font-family: 'Oswald', sans-serif;
+		font-size: 12px;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		color: var(--cart-protection-title-color, #2c3d33);
+		line-height: 1.3;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.cart-item-drawer--protection .sp-card__subtitle {
+		font-size: 11px;
+		color: var(--cart-protection-text-color, #6b7f75);
+		line-height: 1.3;
+	}
+
+	.cart-item-drawer--protection .sp-card__right {
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		padding-right: 12px;
+	}
+	.cart-item-drawer--protection .sp-card__price {
+		font-family: 'Oswald', sans-serif;
+		font-size: 13px;
+		font-weight: 600;
+		color: var(--cart-protection-title-color, #2c3d33);
+	}
+	.cart-item-drawer--protection .sp-card__remove {
+		position: absolute;
+		top: 6px;
+		right: 6px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 20px;
+		height: 20px;
+		font-size: 10px;
+		color: #888;
+		text-decoration: none;
+		transition: color 0.2s ease;
+	}
+	.cart-item-drawer--protection .sp-card__remove:hover {
+		color: #c0392b;
+	}
+	.cart-item-drawer--protection .sp-card__remove svg {
+		width: 12px;
+		height: 12px;
+	}
+
+	/* Override default cart-item-drawer grid so it doesn't fight our flexbox */
+	.cart-item-drawer--protection .cart-item-drawer__media,
+	.cart-item-drawer--protection .cart-item-drawer__content,
+	.cart-item-drawer--protection .cart-item-drawer__header,
+	.cart-item-drawer--protection .cart-item-drawer__footer {
+		display: none !important;
+	}
+
+	/* Make sale price darker red and bolder */
+	.cart-item__price--new,
+	.cart-item-drawer__price--new {
+		font-family: 'Oswald', sans-serif !important;
+		font-weight: 700 !important;
+		color: var(--cart-drawer-subtotal-price-color, #c0392b) !important;
+	}
+
+	/* Align sale and original prices horizontally */
+	.cart-item__price-varies,
+	.cart-item-drawer__price-varies {
+		display: flex !important;
+		gap: 8px !important;
+		align-items: baseline !important;
+		justify-content: flex-end !important;
+		flex-wrap: wrap !important;
+		flex-direction: row !important;
+	}
+</style>

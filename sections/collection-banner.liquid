@@ -1,0 +1,132 @@
+{%- liquid
+	assign collection_title = collection.title | default: 'Collection'
+	if collection.handle == 'all' or collection.handle == blank
+		assign collection_title = 'SHOP ALL'
+	endif
+
+	assign handle_token = '|' | append: collection.handle | append: '|'
+	assign fishing_handles = '|fishing|fishing-t-shirt|freshwater-fishing|freshwater-fishing-new-arrivals|saltwater-fishing-t-shirt|saltwater-fishing-new-arrivals|'
+	assign hunting_handles = '|deer|deer-hunting|deer250|deer-250|turkey|turkey-1|turkey-top-picks|wild-turkey|grand-slam-subspecies|world-turkey-slam|waterfowl|wild-game|hunting-spirit|'
+	assign patriotic_handles = '|america-250|america-250th|usa|independence-day-women-s|liberty-250|eagle-250|dog-250|'
+	assign apparel_handles = '|graphictee|long-sleeve|personalized-tshirt|camo|'
+	assign outdoor_handles = '|desert-brush-country|forest-hardwood|grassland-prairie|marsh-wetland|mountainous-terrain|national-park|national-park-1|national-park-new-arrivals|faith-outdoors|dog|'
+
+	assign collection_eyebrow = 'Camo Signal collection'
+	if fishing_handles contains handle_token
+		assign collection_eyebrow = 'Fishing collection'
+	elsif hunting_handles contains handle_token
+		assign collection_eyebrow = 'Hunting collection'
+	elsif patriotic_handles contains handle_token
+		assign collection_eyebrow = 'American collection'
+	elsif apparel_handles contains handle_token
+		assign collection_eyebrow = 'Apparel collection'
+	elsif outdoor_handles contains handle_token
+		assign collection_eyebrow = 'Outdoor collection'
+	elsif collection.handle contains 'new-arrivals'
+		assign collection_eyebrow = 'New arrivals'
+	elsif collection.handle == 'best-sellers'
+		assign collection_eyebrow = 'Customer favorites'
+	endif
+
+	assign eyebrow_override = collection.metafields.custom.banner_eyebrow.value
+	if eyebrow_override != blank
+		assign collection_eyebrow = eyebrow_override
+	endif
+
+	assign description_override = collection.metafields.custom.banner_description.value
+	if description_override != blank
+		assign collection_description = description_override
+	elsif collection.handle == 'all' or collection.handle == blank
+		assign collection_description = 'Explore the complete Camo Signal collection.'
+	elsif collection.handle == 'new-arrivals'
+		assign collection_description = 'Discover the latest outdoor-inspired styles from Camo Signal.'
+	elsif collection.handle == 'best-sellers'
+		assign collection_description = 'Shop the designs Camo Signal customers love most.'
+	else
+		assign collection_description = 'Explore outdoor-inspired ' | append: collection_title | append: ' styles from Camo Signal.'
+	endif
+-%}
+
+{%- style -%}
+	#shopify-section-{{ section.id }} {
+		--collection-banner-background: {{ section.settings.background_color }};
+		--collection-banner-text: {{ section.settings.text_color }};
+		--collection-banner-height-desktop: {{ section.settings.desktop_height }}px;
+		--collection-banner-height-mobile: {{ section.settings.mobile_height }}px;
+	}
+{%- endstyle -%}
+
+{%- render 'adastra' with '/src/styles/collection-banner.scss' -%}
+
+<section class="collection-banner" aria-labelledby="CollectionBannerTitle-{{ section.id }}">
+	<div class="collection-banner__wrapper">
+		<div class="collection-banner__content">
+			{%- if section.settings.show_eyebrow and collection_eyebrow != blank -%}
+				<p class="collection-banner__eyebrow">{{ collection_eyebrow | escape }}</p>
+			{%- endif -%}
+
+			<h1 class="collection-banner__title" id="CollectionBannerTitle-{{ section.id }}">
+				{{ collection_title | upcase | escape }}
+			</h1>
+
+			{%- if section.settings.show_description and collection_description != blank -%}
+				<p class="collection-banner__description">{{ collection_description | escape }}</p>
+			{%- endif -%}
+		</div>
+	</div>
+</section>
+
+{%- schema -%}
+{
+	"name": "Collection banner",
+	"settings": [
+		{
+			"type": "checkbox",
+			"id": "show_eyebrow",
+			"label": "Show eyebrow",
+			"default": true
+		},
+		{
+			"type": "checkbox",
+			"id": "show_description",
+			"label": "Show description",
+			"default": true
+		},
+		{
+			"type": "color",
+			"id": "background_color",
+			"label": "Background",
+			"default": "#2c3d33"
+		},
+		{
+			"type": "color",
+			"id": "text_color",
+			"label": "Text",
+			"default": "#ffffff"
+		},
+		{
+			"type": "range",
+			"id": "desktop_height",
+			"min": 140,
+			"max": 220,
+			"step": 4,
+			"unit": "px",
+			"label": "Desktop height",
+			"default": 160
+		},
+		{
+			"type": "range",
+			"id": "mobile_height",
+			"min": 104,
+			"max": 168,
+			"step": 4,
+			"unit": "px",
+			"label": "Mobile height",
+			"default": 120
+		}
+	],
+	"enabled_on": {
+		"templates": ["collection"]
+	}
+}
+{%- endschema -%}

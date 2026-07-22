@@ -1,0 +1,228 @@
+{{ 'about-editorial.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+	assign container = section.settings.container_width
+
+	if container == 'inherit'
+		assign container_width = settings.container_width
+	else
+		assign container_width = container
+	endif
+-%}
+
+<section
+	class="about-editorial-section about-editorial-why"
+	style="
+		--ae-container: {{ container_width }};
+		--ae-bg: {{ section.settings.background_color }};
+		--ae-cream: {{ section.settings.cream_color }};
+		--ae-earth: {{ section.settings.earth_color }};
+		--ae-ink-light: {{ section.settings.body_text_color }};
+		--ae-card-bg: {{ section.settings.card_background_color }};
+		--ae-card-bg-hover: {{ section.settings.card_background_hover_color }};
+		--ae-pad-top-desktop: {{ section.settings.padding_top_desktop }}px;
+		--ae-pad-bottom-desktop: {{ section.settings.padding_bottom_desktop }}px;
+		--ae-pad-top-mobile: {{ section.settings.padding_top_mobile }}px;
+		--ae-pad-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px;
+	"
+>
+	<div class="about-editorial-section__inner container">
+		{%- if section.settings.label != blank -%}
+			<p class="about-editorial-label">{{ section.settings.label }}</p>
+		{%- endif -%}
+
+		<h2 class="about-editorial-heading about-editorial-heading--light">
+			{{ section.settings.heading | escape | newline_to_br }}
+			{%- if section.settings.heading_accent != blank -%}
+				<br><em>{{ section.settings.heading_accent | escape }}</em>
+			{%- endif -%}
+		</h2>
+
+		{%- if section.blocks.size > 0 -%}
+			<div class="about-editorial-cards">
+				{%- for block in section.blocks -%}
+					<article class="about-editorial-card" {{ block.shopify_attributes }}>
+						{%- if block.settings.number != blank -%}
+							<p class="about-editorial-card__num">{{ block.settings.number }}</p>
+						{%- endif -%}
+
+						{%- if block.settings.title != blank -%}
+							<h3 class="about-editorial-card__title">{{ block.settings.title | escape | newline_to_br }}</h3>
+						{%- endif -%}
+
+						{%- if block.settings.text != blank -%}
+							<div class="about-editorial-card__body rte">{{ block.settings.text }}</div>
+						{%- endif -%}
+					</article>
+				{%- endfor -%}
+			</div>
+		{%- endif -%}
+	</div>
+</section>
+
+{% schema %}
+{
+	"name": "About editorial reasons",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "Content"
+		},
+		{
+			"type": "text",
+			"id": "label",
+			"label": "Label",
+			"default": "02 - Why we built this"
+		},
+		{
+			"type": "textarea",
+			"id": "heading",
+			"label": "Heading",
+			"default": "Why We"
+		},
+		{
+			"type": "text",
+			"id": "heading_accent",
+			"label": "Accent text",
+			"default": "Built This."
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "color",
+			"id": "background_color",
+			"label": "Background",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "color",
+			"id": "cream_color",
+			"label": "Heading text",
+			"default": "#2C3D33"
+		},
+		{
+			"type": "color",
+			"id": "body_text_color",
+			"label": "Body text",
+			"default": "#4A6156"
+		},
+		{
+			"type": "color",
+			"id": "earth_color",
+			"label": "Accent",
+			"default": "#8B6F4E"
+		},
+		{
+			"type": "color",
+			"id": "card_background_color",
+			"label": "Card background",
+			"default": "#F7F8F5"
+		},
+		{
+			"type": "color",
+			"id": "card_background_hover_color",
+			"label": "Card background hover",
+			"default": "#F1F4EF"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{ "value": "1808px", "label": "Default - 1680px" },
+				{ "value": "2048px", "label": "Large - 1920px" },
+				{ "value": "1200px", "label": "Editorial - 1100px" },
+				{ "value": "100%", "label": "Full width" },
+				{ "value": "inherit", "label": "Inherit of general setting" }
+			],
+			"default": "100%"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_desktop",
+			"min": 40,
+			"max": 160,
+			"step": 4,
+			"unit": "px",
+			"label": "Padding top - desktop",
+			"default": 120
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_desktop",
+			"min": 40,
+			"max": 160,
+			"step": 4,
+			"unit": "px",
+			"label": "Padding bottom - desktop",
+			"default": 120
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 40,
+			"max": 120,
+			"step": 4,
+			"unit": "px",
+			"label": "Padding top - mobile",
+			"default": 80
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 40,
+			"max": 120,
+			"step": 4,
+			"unit": "px",
+			"label": "Padding bottom - mobile",
+			"default": 80
+		}
+	],
+	"blocks": [
+		{
+			"type": "reason",
+			"name": "Reason card",
+			"limit": 6,
+			"settings": [
+				{
+					"type": "text",
+					"id": "number",
+					"label": "Number",
+					"default": "01"
+				},
+				{
+					"type": "textarea",
+					"id": "title",
+					"label": "Title",
+					"default": "A Culture\nMisrepresented"
+				},
+				{
+					"type": "richtext",
+					"id": "text",
+					"label": "Text",
+					"default": "<p>The market is full of outdoor imagery without roots. We built Camo Signal to speak from the culture, not borrow from it.</p>"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "About editorial reasons",
+			"blocks": [
+				{ "type": "reason" },
+				{ "type": "reason" },
+				{ "type": "reason" }
+			]
+		}
+	]
+}
+{% endschema %}

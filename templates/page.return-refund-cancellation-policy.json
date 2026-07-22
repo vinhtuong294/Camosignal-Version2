@@ -1,0 +1,31 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+	"sections": {
+		"return_refund_cancellation_policy": {
+			"type": "page-return-refund-cancellation-policy",
+			"settings": {
+				"color_scheme": "scheme-1",
+				"title": "Return, Refund & Cancellation Policy",
+				"intro": "Review CamoSignal return eligibility, refund timing, buyer change-of-mind rules, seller-error support, and order cancellation conditions.",
+				"support_email": "support.camosignal@gmail.com",
+				"business_hours": "Monday-Friday, 8:00 AM-5:00 PM",
+				"response_time": "Within 24 business hours",
+				"padding_top_desktop": 64,
+				"padding_bottom_desktop": 72,
+				"padding_top_mobile": 36,
+				"padding_bottom_mobile": 48
+			}
+		}
+	},
+	"order": [
+		"return_refund_cancellation_policy"
+	]
+}

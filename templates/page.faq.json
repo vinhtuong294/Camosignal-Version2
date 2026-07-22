@@ -1,0 +1,90 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+	"sections": {
+		"page-template": {
+			"type": "page-template",
+			"settings": {
+				"offset_top_desktop": 24,
+				"offset_bottom_desktop": 40,
+				"offset_top_mobile": 24,
+				"offset_bottom_mobile": 8
+			}
+		},
+		"faq-simple": {
+			"type": "faq-simple",
+			"blocks": {
+				"category_1": {
+					"type": "category",
+					"settings": {
+						"heading": "First category"
+					}
+				},
+				"faq_item_1": {
+					"type": "faq_item",
+					"settings": {
+						"heading": "Accordion heading",
+						"text": "<p>Accordion content</p>"
+					}
+				},
+				"faq_item_2": {
+					"type": "faq_item",
+					"settings": {
+						"heading": "Accordion heading",
+						"text": "<p>Accordion content</p>"
+					}
+				},
+				"category_2": {
+					"type": "category",
+					"settings": {
+						"heading": "Second category"
+					}
+				},
+				"faq_item_3": {
+					"type": "faq_item",
+					"settings": {
+						"heading": "Accordion heading",
+						"text": "<p>Accordion content</p>"
+					}
+				},
+				"faq_item_4": {
+					"type": "faq_item",
+					"settings": {
+						"heading": "Accordion heading",
+						"text": "<p>Accordion content</p>"
+					}
+				}
+			},
+			"block_order": [
+				"category_1",
+				"faq_item_1",
+				"faq_item_2",
+				"category_2",
+				"faq_item_3",
+				"faq_item_4"
+			],
+			"settings": {
+				"heading": "",
+				"offset_top_desktop": 32,
+				"offset_bottom_desktop": 32,
+				"offset_top_mobile": 32,
+				"offset_bottom_mobile": 16,
+				"inner_offset_top": 0,
+				"inner_offset_bottom": 32,
+				"inner_offset_top_mobile": 0,
+				"inner_offset_bottom_mobile": 16
+			}
+		}
+	},
+	"order": [
+		"page-template",
+		"faq-simple"
+	]
+}

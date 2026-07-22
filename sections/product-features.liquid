@@ -1,0 +1,633 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Product features
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign color_scheme      	           	= section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance	= section.settings.enable_color_scheme_inheritance -%}
+
+{%- assign is_hotspot_animated			= section.settings.is_hotspot_animated -%}
+{%- assign hotspot_color				= section.settings.hotspot_color -%}
+{%- assign hotspot_active_color			= section.settings.hotspot_active_color -%}
+{%- assign hotspot_border_color			= section.settings.hotspot_border_color -%}
+{%- assign hotspot_active_border_color	= section.settings.hotspot_active_border_color -%}
+{%- assign hotspot_background			= section.settings.hotspot_background -%}
+{%- assign hotspot_active_background	= section.settings.hotspot_active_background -%}
+
+{%- assign blocks		= section.blocks -%}
+{%- assign heading   	= section.settings.heading -%}
+{%- assign description	= section.settings.description -%}
+{%- assign image		= section.settings.image -%}
+
+{%- assign container	= section.settings.container_width -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- capture features -%}
+	{%- for block in blocks -%}
+		{%- assign block_heading				= block.settings.heading -%}
+		{%- assign block_description			= block.settings.description -%}
+		{%- assign hotspot_vertical_position	= block.settings.hotspot_vertical_position -%}
+		{%- assign hotspot_horizontal_position	= block.settings.hotspot_horizontal_position -%}
+
+		{%- capture items -%}
+			{%- for i in (1..4) -%}
+				{%- assign feature_icon = "feature_icon_" | append: i -%}
+				{%- assign feature_text = "feature_text_" | append: i -%}
+
+				{%- assign feature_icon = block.settings[feature_icon] -%}
+				{%- assign feature_text = block.settings[feature_text] -%}
+
+				{%- if feature_text != blank -%}
+					<div class="product-features__feature-item">
+						{%- if feature_icon != blank -%}
+							<img
+								class="product-features__feature-item-icon"
+								src="{{- feature_icon.src | img_url: width: 74, height: 74 -}}"
+								alt="{{- feature_icon.alt | escape -}}"
+								loading="lazy"
+								fetchpriority="low"
+							>
+						{%- endif -%}
+
+						<p class="product-features__feature-item-text">
+							{{- feature_text -}}
+						</p>
+					</div>
+				{%- endif -%}
+			{%- endfor -%}
+		{%- endcapture -%}
+
+		{%- capture header -%}
+			{%- if block_heading != blank -%}
+				<h3 class="h4 product-features__feature-heading">
+					{{- block_heading -}}
+				</h3>
+			{%- endif -%}
+
+			{%- if block_description != blank -%}
+				<div class="product-features__feature-description rte">
+					{{- block_description -}}
+				</div>
+			{%- endif -%}
+		{%- endcapture -%}
+
+		{%- if items != blank or header != blank -%}
+			<div
+				class="product-features__feature js-product-feature{% unless forloop.index0 == 0 %} visually-hidden{% endunless -%}"
+				data-feature-index="{{- forloop.index0 -}}"
+			>
+				{%- if header != blank -%}
+					<div class="product-features__feature-header">
+						{{- header -}}
+					</div>
+				{%- endif -%}
+
+				{%- if items != blank -%}
+					<div class="product-features__feature-items">
+						{{- items -}}
+					</div>
+				{%- endif -%}
+			</div>
+		{%- endif -%}
+	{%- endfor -%}
+{%- endcapture -%}
+
+{%- if features != blank -%}
+	{%- render 'adastra' with '/src/styles/product-features.scss' -%}
+
+	{%- style -%}
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_mobile -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+		}
+
+		@media screen and (min-width: 768px) {
+			#shopify-section-{{- section.id -}} {
+				padding-top: {{- section.settings.offset_top_desktop -}}px;
+				padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+			}
+		}
+	{%- endstyle -%}
+
+	{%- capture styles -%}
+		--container-width: {{ container_width }}; {{  -}}
+		--hotspot-color: {{ hotspot_color }}; {{  -}}
+		--hotspot-active-color: {{ hotspot_active_color }}; {{  -}}
+		--hotspot-border-color: {{ hotspot_border_color }}; {{  -}}
+		--hotspot-active-border-color: {{ hotspot_active_border_color }}; {{  -}}
+		--hotspot-background: {{ hotspot_background }}; {{  -}}
+		--hotspot-active-background: {{ hotspot_active_background }}; {{  -}}
+		--inner-offset-top: {{ section.settings.inner_offset_top -}}px; {{  -}}
+		--inner-offset-bottom: {{ section.settings.inner_offset_bottom -}}px; {{  -}}
+		--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile -}}px; {{  -}}
+		--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile -}}px; {{  -}}
+	{%- endcapture -%}
+
+	{%- capture container_classes -%}
+		container {{  -}}
+		product-features__container section-animate {{  -}}
+		{% if container_width == "100%" -%}
+			product-features__container--max-width
+		{%- endif -%}
+	{%- endcapture -%}
+
+	{%- assign is_lazy = true -%}
+
+	{%- if section.index == 1 -%}
+		{%- assign is_lazy = false -%}
+	{%- endif -%}
+
+	<section class="product-features color-{{ color_scheme }} js-product-features js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}" style="{{ styles }}">
+		<div class="{{- container_classes -}}">
+			{%- if heading != blank or description != blank -%}
+				<div class="product-features__header">
+					{%- if heading != blank -%}
+						<h2 class="h2 product-features__heading">
+							{{- heading -}}
+						</h2>
+					{%- endif -%}
+
+					{%- if description != blank -%}
+						<div class="rte product-features__description">
+							{{- description -}}
+						</div>
+					{%- endif -%}
+				</div>
+			{%- endif -%}
+
+			<div class="product-features__main">
+				<div class="product-features__features">
+					{{- features -}}
+				</div>
+
+				<div class="product-features__image-container">
+					<div class="product-features__image-wrapper">
+						{%- if image != blank -%}
+							{%- capture img_focal -%}
+								--img-focal: {{ image.presentation.focal_point }};
+							{%- endcapture -%}
+
+							<picture>
+								<source
+									srcset="{{ image | image_url: width: 343 }} 1x, {{ image | image_url: width: 686 }} 2x"
+									media="(max-width: 375px)"
+									width="343"
+									height="343"
+								>
+
+								<source
+									srcset="{{ image | image_url: width: 388 }} 1x, {{ image | image_url: width: 776 }} 2x"
+									media="(max-width: 420px)"
+									width="388"
+									height="388"
+								>
+
+								<source
+									srcset="{{ image | image_url: width: 735 }} 1x, {{ image | image_url: width: 1470 }} 2x"
+									media="(max-width: 767px)"
+									width="735"
+									height="735"
+								>
+
+								<source
+									srcset="{{ image | image_url: width: 959 }} 1x, {{ image | image_url: width: 1918 }} 2x"
+									media="(max-width: 991px)"
+									width="959"
+									height="959"
+								>
+
+								<source
+									srcset="{{ image | image_url: width: 671 }} 1x, {{ image | image_url: width: 1342 }} 2x"
+									media="(max-width: 1199px)"
+									width="671"
+									height="671"
+								>
+
+								<img
+									class="product-features__image"
+									src="{{ image | image_url: width: 800 }}"
+									srcset="{{ image | image_url: width: 800 }} 1x, {{ image | image_url: width: 1600 }} 2x"
+									{% if is_lazy %}
+										loading="lazy"
+										fetchpriority="low"
+									{% else %}
+										loading="eager"
+										fetchpriority="high"
+									{% endif %}
+									style="{{ img_focal }}"
+									alt="{{ image.alt | escape }}"
+									width="800"
+									height="800"
+								>
+							</picture>
+						{%- else -%}
+							{{ 'image' | placeholder_svg_tag: 'product-features__image product-features__image--placeholder' }}
+						{%- endif -%}
+
+						{%- for block in blocks -%}
+							{%- assign heading						= block.settings.heading -%}
+							{%- assign hotspot_vertical_position	= block.settings.hotspot_vertical_position -%}
+							{%- assign hotspot_horizontal_position	= block.settings.hotspot_horizontal_position -%}
+
+							{%- capture point_classes -%}
+								product-features__hotspot{% if is_hotspot_animated == true %} product-features__hotspot--animated{% endif %} js-product-features-point{% if forloop.index0 == 0 %} is-active{%- endif -%}
+							{%- endcapture -%}
+
+							{%- capture point_styles -%}
+								--hotspot-vertical-position: {{ hotspot_vertical_position -}}%; {{ -}}
+								--hotspot-horizontal-position: {{ hotspot_horizontal_position -}}%; {{ -}}
+							{%- endcapture -%}
+
+							<button
+								class="{{- point_classes -}}"
+								style="{{- point_styles -}}"
+								data-point-index="{{- forloop.index0 -}}"
+								aria-label="{{- 'sections.product_features.point_button' | t : title: heading | escape -}}"
+							>
+								{%- render 'icons', icon: 'hotspot-button-point-new' -%}
+							</button>
+						{%- endfor -%}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	{%- render 'adastra' with '/src/scripts/section-product-features.js' -%}
+{%- endif -%}
+
+{%- schema -%}
+{
+	"name": "Product features",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Hotspot"
+		},
+		{
+			"type": "checkbox",
+			"id": "is_hotspot_animated",
+			"label": "Animated",
+			"default": true
+		},
+		{
+			"type": "color",
+			"id": "hotspot_color",
+			"label": "Color",
+			"default": "#000"
+		},
+		{
+			"type": "color",
+			"id": "hotspot_border_color",
+			"label": "Border color",
+			"default": "#000"
+		},
+		{
+			"type": "color_background",
+			"id": "hotspot_background",
+			"label": "Background",
+			"default": "rgba(255, 255, 255, 0.90)"
+		},
+		{
+			"type": "color",
+			"id": "hotspot_active_color",
+			"label": "Color (active)",
+			"default": "#fff"
+		},
+		{
+			"type": "color",
+			"id": "hotspot_active_border_color",
+			"label": "Border color (active)",
+			"default": "#393939"
+		},
+		{
+			"type": "color_background",
+			"id": "hotspot_active_background",
+			"label": "Background (active)",
+			"default": "rgba(0, 0, 0, 0.72)"
+		},
+		{
+			"type": "header",
+			"content": "General"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "heading",
+			"label": "Heading",
+			"default": "Ensure a high level of comfort"
+		},
+		{
+			"type": "richtext",
+			"id": "description",
+			"label": "Text",
+			"default": "<p>THE LACE brand is a beacon of sophistication, offering meticulously crafted clothing that epitomizes timeless elegance. Our exquisite designs are tailored to accentuate individual style, empowering fashion enthusiasts to make a statement with confidence.</p>"
+		},
+		{
+			"type": "image_picker",
+			"id": "image",
+			"label": "Image"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1808px",
+					"label": "Default - 1680px"
+				},
+				{
+					"value": "2048px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "paragraph",
+			"content": "External offsets"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop external offset bottom",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile external offset bottom",
+			"default": 0
+		},
+		{
+			"type": "paragraph",
+			"content": "Internal offsets"
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop internal offset bottom",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile internal offset bottom",
+			"default": 0
+		}
+	],
+	"blocks": [
+		{
+			"type": "product_feature",
+			"name": "Product feature",
+			"settings": [
+				{
+					"type": "inline_richtext",
+					"id": "heading",
+					"label": "Heading",
+					"default": "Feature heading"
+				},
+				{
+					"type": "inline_richtext",
+					"id": "description",
+					"label": "Description",
+					"default": "Feature description"
+				},
+				{
+					"type": "range",
+					"id": "hotspot_vertical_position",
+					"label": "Hotspot vertical position",
+					"min": 0,
+					"max": 100,
+					"step": 1,
+					"default": 35,
+					"unit": "%"
+				},
+				{
+					"type": "range",
+					"id": "hotspot_horizontal_position",
+					"label": "Hotspot horizontal position",
+					"min": 0,
+					"max": 100,
+					"step": 1,
+					"default": 30,
+					"unit": "%"
+				},
+				{
+					"type": "header",
+					"content": "Feature 1"
+				},
+				{
+					"type": "image_picker",
+					"id": "feature_icon_1",
+					"label": "Icon",
+					"info": "74 x 74px .svg recommended"
+				},
+				{
+					"type": "textarea",
+					"id": "feature_text_1",
+					"label": "Text",
+					"default": "Feature text 1"
+				},
+				{
+					"type": "header",
+					"content": "Feature 2"
+				},
+				{
+					"type": "image_picker",
+					"id": "feature_icon_2",
+					"label": "Icon",
+					"info": "74 x 74px .svg recommended"
+				},
+				{
+					"type": "textarea",
+					"id": "feature_text_2",
+					"label": "Text",
+					"default": "Feature text 2"
+				},
+				{
+					"type": "header",
+					"content": "Feature 3"
+				},
+				{
+					"type": "image_picker",
+					"id": "feature_icon_3",
+					"label": "Icon",
+					"info": "74 x 74px .svg recommended"
+				},
+				{
+					"type": "textarea",
+					"id": "feature_text_3",
+					"label": "Text",
+					"default": "Feature text 3"
+				},
+				{
+					"type": "header",
+					"content": "Feature 4"
+				},
+				{
+					"type": "image_picker",
+					"id": "feature_icon_4",
+					"label": "Icon",
+					"info": "74 x 74px .svg recommended"
+				},
+				{
+					"type": "textarea",
+					"id": "feature_text_4",
+					"label": "Text",
+					"default": "Feature text 4"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Product features",
+			"settings": {
+				"heading": "Product features heading",
+				"description": "<p>Product features description</p>"
+			},
+			"blocks": [
+				{
+					"type": "product_feature",
+					"settings":	{
+							"heading": "Feature heading 1",
+							"description": "Feature description 1",
+							"hotspot_vertical_position": 28,
+							"hotspot_horizontal_position": 49,
+							"feature_text_1": "Feature text 1",
+							"feature_text_2": "Feature text 2",
+							"feature_text_3": "Feature text 3",
+							"feature_text_4": "Feature text 4"
+					}
+				},
+				{
+					"type": "product_feature",
+					"settings":	{
+							"heading": "Feature heading 2",
+							"description": "Feature description 2",
+							"hotspot_vertical_position": 49,
+							"hotspot_horizontal_position": 66,
+							"feature_text_1": "Feature text 1",
+							"feature_text_2": "Feature text 2",
+							"feature_text_3": "Feature text 3",
+							"feature_text_4": "Feature text 4"
+					}
+				},
+				{
+					"type": "product_feature",
+					"settings":	{
+							"heading": "Feature heading 3",
+							"description": "Feature description 3",
+							"hotspot_vertical_position": 72,
+							"hotspot_horizontal_position": 36,
+							"feature_text_1": "Feature text 1",
+							"feature_text_2": "Feature text 2",
+							"feature_text_3": "Feature text 3",
+							"feature_text_4": "Feature text 4"
+					}
+				}
+			]
+		}
+	]
+}
+{%- endschema -%}

@@ -1,0 +1,495 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+  Snippet: Product options
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign is_color_swatches_enabled	= settings.is_color_swatches_enabled -%}
+{%- assign swatch_option				= settings.color_swatches_option | default: 'Color' | downcase -%}
+{%- assign swatches 					= swatch_option | split: ',' -%}
+{%- assign variants_type 				= block.settings.variant_picker -%}
+
+{%- capture styles -%}
+	--offset-top-desktop: {{ block.settings.offset_top_desktop }}px; {{-  -}}
+	--offset-bottom-desktop: {{ block.settings.offset_bottom_desktop }}px; {{-  -}}
+	--offset-top-mobile: {{ block.settings.offset_top_mobile }}px; {{-  -}}
+	--offset-bottom-mobile: {{ block.settings.offset_bottom_mobile }}px;
+{%- endcapture -%}
+
+<div
+	class="product-variants {% if product.has_only_default_variant %}is-hidden{% endif %}"
+	style="{{ styles }}"
+	data-js-product-variant
+>
+	<input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+
+	{% if product.has_only_default_variant %}
+		<script type="application/json" data-selected-variant>
+			{{ product.selected_or_first_available_variant | json }}
+		</script>
+	{% endif %}
+</div>
+
+{%- unless product.has_only_default_variant -%}
+	<div class="product-options" style="{{ styles }}">
+		<div class="js-product-options">
+			{%- for option in product.options_with_values -%}
+				{%- assign downcased_option = option.name | downcase -%}
+				{%- assign handleized_option = option.name | handleize -%}
+				{%- assign swatch_count = option.values | map: 'swatch' | compact | size -%}
+
+				{%- for swatch in swatches -%}
+					{%- assign swatch_string = swatch | strip -%}
+
+					{%- if downcased_option == swatch_string -%}
+						{%- assign swatch_option = swatch_string -%}
+					{%- endif %}
+				{%- endfor -%}
+
+				{%- comment -%}
+					Swatch options
+				{%- endcomment -%}
+				{%- capture swatch_options -%}
+					<fieldset class="product-options__swatch">
+						<legend class="legend product-options__option-label">
+							{{- option.name -}}:
+
+							<span
+								class="product-options__swatch-value js-swatch-label-name"
+								data-swatch-name="{{ option.name }}"
+								data-swatch-position="{{ option.position }}"
+							>
+								{{- option.selected_value -}}
+							</span>
+						</legend>
+
+						<div class="product-options__swatch-container">
+							{%- for value in option.values  -%}
+								{%- assign swatch_image = nil -%}
+								{%- assign swatch_color = nil -%}
+								{%- assign handleized_value = value | handleize -%}
+
+								<div class="radio-container radio-option-swatch">
+									{%- assign is_disabled = true -%}
+
+									{% if value.available %}
+										{%- assign is_disabled = false -%}
+									{% endif %}
+
+									{%- assign image_name = value | handle | prepend: 'swatch-' | append: '.png' -%}
+									{%- assign swatch_color_fallback = value | split: ' ' | last | handle -%}
+									{%- assign swatch_image = value.swatch.image | default: images[image_name] -%}
+									{%- assign swatch_color = value.swatch.color | default: swatch_color_fallback -%}
+
+									<input
+										id="section-{{- section.id -}}-product-{{- product.id -}}-option-{{- handleized_option -}}-value-{{- handleized_value -}}"
+										type="radio"
+										class="visually-hidden radio-input"
+										value="{{- value -}}"
+										name="option{{- option.position -}}"
+										{% if value.selected %}
+											checked
+										{% endif %}
+										data-option="{{- option.name -}}"
+										data-option-value-id="{{ value.id }}"
+									/>
+
+									<label
+										for="section-{{- section.id -}}-product-{{- product.id -}}-option-{{- handleized_option -}}-value-{{- handleized_value -}}"
+										class="radio-option-swatch__label{% if is_disabled %} is-disabled{% endif %}"
+									>
+										{%- if swatch_image != blank -%}
+											<img
+												src="{{- swatch_image | image_url: width: 96, height: 96 -}}"
+												class="radio-option-swatch__image"
+												aria-hidden="true"
+												fetchpriority="low"
+												loading="lazy"
+												decoding="async"
+												alt=""
+											/>
+										{%- else -%}
+											<span class="radio-option-swatch__image" style="--swatch-color: {{ swatch_color }};"></span>
+										{%- endif -%}
+
+										<span class="visually-hidden">{{- value -}}</span>
+
+										<span class="radio-option-swatch__label-overlay"></span>
+									</label>
+
+									<span class="radio-option-tooltip" aria-hidden="true">{{- value -}}</span>
+								</div>
+							{%- endfor -%}
+						</div>
+					</fieldset>
+				{%- endcapture -%}
+
+				{%- comment -%}
+					Default options
+				{%- endcomment -%}
+				{%- capture other_options -%}
+					<fieldset class="product-options__default">
+						<legend class="legend product-options__option-label{% if downcased_option == 'size' %} product-options__option-label--size{% endif %}">
+							<span>{{- option.name -}}:</span>
+							{%- if downcased_option == 'size' -%}
+								<button
+									class="product-options__size-guide-inline"
+									type="button"
+									onclick="document.getElementById('size-chart-overlay').classList.add('is-active');document.body.style.overflow='hidden';"
+								>Size guide</button>
+							{%- endif -%}
+						</legend>
+
+						{% if variants_type == "radio" %}
+							<div class="product-options__size-grid {% if downcased_option == 'size' %}is-size-option{% else %}is-other-option{% endif %}">
+							{%- for value in option.values  -%}
+								{%- assign handleized_value = value | handleize -%}
+								{%- assign is_disabled = true -%}
+
+								{% if value.available %}
+									{%- assign is_disabled = false -%}
+								{% endif %}
+
+								<div class="radio-option">
+									<input
+										id="section-{{- section.id -}}-product-{{- product.id -}}-option-{{- handleized_option -}}-value-{{- handleized_value -}}"
+										type="radio"
+										class="visually-hidden radio-input"
+										value="{{- value | escape -}}"
+										name="option{{- option.position -}}"
+										{% if value.selected %}
+											checked
+										{% endif %}
+										data-option="{{- option.name -}}"
+										data-option-value-id="{{ value.id }}"
+									>
+
+									<label
+										for="section-{{- section.id -}}-product-{{- product.id -}}-option-{{- handleized_option -}}-value-{{- handleized_value -}}"
+										class="radio-option__label {% if is_disabled %}is-disabled{% endif %}"
+									>
+										{{- value | escape -}}
+									</label>
+								</div>
+							{%- endfor -%}
+							</div>
+						{%- else -%}
+							<div class="select-wrapper product-options__select-wrapper">
+								<select id="section-{{- section.id -}}-product-{{- product.id -}}-option-{{- handleized_option -}}"
+										name="option{{- option.position -}}"
+										data-option="{{- option.name -}}"
+								>
+									{% comment %} selected="selected" not replace to selected, to prevent js-error {% endcomment %}
+									{%- for value in option.values  -%}
+										<option
+											value="{{- value | escape -}}"
+											data-option-value-id="{{ value.id }}"
+											{% if value.selected %}
+												selected="selected"
+											{% endif %}
+										>
+											{{- value -}} {% unless value.available %} ({{ "products.product.sold_out" | t }}){%endunless%}
+										</option>
+									{%- endfor -%}
+								</select>
+							</div>
+
+							<label
+								for="section-{{- section.id -}}-product-{{- product.id -}}-option-{{- handleized_option -}}"
+								class="visually-hidden"
+							>
+								{{- option.name -}}
+							</label>
+						{%- endif -%}
+					</fieldset>
+				{%- endcapture -%}
+
+				{%- if swatch_count > 0 and is_color_swatches_enabled -%}
+					{{- swatch_options -}}
+				{%- elsif downcased_option == swatch_option and is_color_swatches_enabled -%}
+					{{- swatch_options -}}
+				{%- else -%}
+					{{- other_options -}}
+				{%- endif -%}
+			{%- endfor -%}
+
+			<script type="application/json" data-selected-variant>
+			  {{ product.selected_or_first_available_variant | json }}
+			</script>
+		</div>
+
+		{%- comment -%}
+			Size guide
+		{%- endcomment -%}
+		{%- assign show_size_guide 				= false -%}
+		{%- assign size_guide_page 				= section.settings.size_guide_page -%}
+		{%- assign size_guide_button_placement 	= section.settings.size_guide_button_placement -%}
+		{%- assign size_guide_button_text       = section.settings.size_guide_button_text | default: "Size guide" -%}
+		{%- assign size_guide_icon              = section.settings.size_guide_button_icon -%}
+
+		{%- if section.settings.show_size_guide
+			and size_guide_page != blank
+			and size_guide_page.content != blank
+			and size_guide_button_placement == 'under-options'
+		-%}
+			{%- assign show_size_guide = true -%}
+		{%- endif -%}
+
+		{%- capture size_guide -%}
+			<div class="product-options__size-guide">
+				<button
+					class="button-link button-link--with-icon"
+					data-target="productSizeGuideDrawer-{{- section.id -}}"
+					data-js-toggle="productSizeGuideDrawer-{{- section.id -}}"
+					type="button"
+				>
+					{%- if size_guide_icon != blank -%}
+						{%- capture img_focal -%}
+							--img-desktop-pos: {{ size_guide_icon.presentation.focal_point }};
+						{%- endcapture -%}
+
+						<img
+							class="button-link__icon"
+							srcset="{{ size_guide_icon | image_url: width: 24, height: 24 }} 1x,
+									{{ size_guide_icon | image_url: width: 48, height: 48 }} 2x"
+							src="{{- size_guide_icon | image_url: width: 24 -}}"
+							alt="{{- size_guide_icon.alt | escape -}}"
+							aria-hidden="true"
+							width="24"
+							height="24"
+							style="{{ img_focal }}"
+						/>
+					{%- endif -%}
+
+					<span data-text="{{- size_guide_button_text -}}">
+						<span>{{- size_guide_button_text -}}</span>
+					</span>
+				</button>
+			</div>
+		{%- endcapture -%}
+
+		{%- if show_size_guide -%}
+			{{- size_guide -}}
+		{%- endif -%}
+	</div>
+{%- endunless -%}
+
+<style>
+	/* Option label (legend) - force word wrap for very long option names */
+	legend.product-options__option-label {
+		max-width: 100%;
+		white-space: normal;
+		word-break: break-word;
+	}
+
+	/* Size label row: flex để "Size:" trái, "Size guide" phải */
+	legend.product-options__option-label--size {
+		display: flex !important;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		max-width: 100%;
+		box-sizing: border-box;
+	}
+
+	.product-options__size-guide-inline {
+		background: none;
+		border: none;
+		padding: 0;
+		margin: 0;
+		margin-left: auto;
+		font-size: 0.8rem;
+		font-weight: 500;
+		color: #2c3d33;
+		cursor: pointer;
+		text-decoration: underline;
+		text-underline-offset: 2px;
+		letter-spacing: 0.02em;
+		line-height: 1.4;
+		min-width: 0 !important;
+		min-height: 0 !important;
+		flex-shrink: 0;
+	}
+	@media (min-width: 768px) {
+		.product-options__size-guide-inline {
+			font-size: 1rem;
+		}
+	}
+	@media (max-width: 767px) {
+		.product-options__size-guide-inline {
+			font-size: calc(0.8rem + 3px);
+		}
+	}
+	.product-options__size-guide-inline:hover {
+		opacity: 0.7;
+	}
+
+	/* Make color swatches round on product page */
+	.product-options .radio-option-swatch__label,
+	.product-options .radio-option-swatch__label::before,
+	.product-options .radio-option-swatch__label::after,
+	.product-options .radio-option-swatch__image {
+		border-radius: 50% !important;
+	}
+
+	/* Increase gap between color swatches on desktop */
+	.product-options .product-options__swatch-container {
+		gap: 12px !important;
+	}
+
+	/* Selected color swatch indicator — áp dụng cả mobile lẫn desktop */
+	.product-options .radio-option-swatch .radio-input:checked + .radio-option-swatch__label {
+		outline: 2px solid #2c3d33 !important;
+		outline-offset: 3px !important;
+	}
+	.product-options .radio-option-swatch .radio-input:checked + .radio-option-swatch__label::after {
+		width: 0 !important;
+	}
+
+	/* Round corners for Size and other standard variant blocks */
+	.product-options .radio-option__label {
+		border-radius: 8px !important;
+	}
+
+	/* Size button: đổi màu khi được chọn */
+	.product-options .radio-option .radio-input:checked + .radio-option__label {
+		background-color: #2c3d33 !important;
+		color: #ffffff !important;
+		border-color: #2c3d33 !important;
+	}
+
+	/* Ensure default options and ancestors don't overflow their container */
+	.product-options,
+	.product-options .js-product-options,
+	.product-options__default,
+	.product-options fieldset.product-options__default {
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+		box-sizing: border-box;
+	}
+
+	/* --- Default Style for all variants (flex wrap) --- */
+	.product-options__size-grid {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+		padding-bottom: 4px;
+	}
+
+	.product-options__size-grid .radio-option {
+		flex: 0 1 auto;
+		max-width: 100%;
+	}
+
+	.product-options__size-grid .radio-option__label {
+		width: auto !important;
+		min-width: 52px !important;
+		max-width: 100% !important;
+		min-height: 44px !important;
+		height: auto !important;
+		padding: 8px 12px !important;
+		font-size: 13px !important;
+		font-weight: 600 !important;
+		white-space: normal !important;
+		word-break: break-word;
+		text-align: center;
+		display: flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+		box-sizing: border-box !important;
+	}
+
+	/* --- Specific Style for Size Option on Desktop (force 1 line, fixed width) --- */
+	.product-options__size-grid.is-size-option {
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+	}
+	.product-options__size-grid.is-size-option::-webkit-scrollbar {
+		display: none;
+	}
+	.product-options__size-grid.is-size-option .radio-option {
+		flex: 0 0 52px;
+	}
+	.product-options__size-grid.is-size-option .radio-option__label {
+		width: 52px !important;
+		padding: 0 !important;
+	}
+
+	/* Mobile: Size selector grid 6 cột đều nhau */
+	@media screen and (max-width: 767px) {
+		/* Hiển thị 7 màu trên 1 hàng (Color swatches) */
+		.product-options .product-options__swatch-container {
+			display: flex !important;
+			flex-wrap: wrap !important;
+			gap: 12px !important;
+			width: 100% !important;
+		}
+
+		.product-options .radio-option-swatch {
+			width: 36px !important;
+			height: 36px !important;
+			flex: 0 0 36px !important;
+			aspect-ratio: 1 / 1 !important;
+		}
+
+		.product-options .radio-option-swatch__label {
+			width: 36px !important;
+			height: 36px !important;
+		}
+
+		/* Force parent containers trải rộng full */
+		.product-options,
+		.product-options .js-product-options,
+		.product-options .product-options__default,
+		.product-options .product-options__default fieldset,
+		.product-options fieldset.product-options__default {
+			width: 100% !important;
+			max-width: 100% !important;
+			box-sizing: border-box !important;
+		}
+
+		/* CSS Grid 6 cột đều nhau CHỈ DÀNH CHO SIZE */
+		.product-options__size-grid.is-size-option {
+			display: grid !important;
+			grid-template-columns: repeat(6, 1fr) !important;
+			gap: 4px !important;
+			width: 100% !important;
+			max-width: 100% !important;
+		}
+
+		/* Mỗi radio-option lấp đầy ô grid */
+		.product-options__size-grid.is-size-option .radio-option {
+			width: 100% !important;
+			min-width: 0 !important;
+			margin: 0 !important;
+			padding: 0 !important;
+		}
+
+		/* Label nút chọn size - hình chữ nhật ngang 40px */
+		.product-options__size-grid.is-size-option .radio-option__label {
+			width: 100% !important;
+			height: 40px !important;
+			min-height: 40px !important;
+			max-height: 40px !important;
+			min-width: unset !important;
+			padding: 0 !important;
+			font-size: 13px !important;
+			font-weight: 500 !important;
+			border-radius: 4px !important;
+			display: flex !important;
+			align-items: center !important;
+			justify-content: center !important;
+		}
+
+		/* Resize chiều cao cho các option khác trên mobile */
+		.product-options__size-grid.is-other-option .radio-option__label {
+			min-height: 40px !important;
+			height: auto !important;
+			border-radius: 4px !important;
+			padding: 8px 12px !important;
+		}
+	}
+</style>

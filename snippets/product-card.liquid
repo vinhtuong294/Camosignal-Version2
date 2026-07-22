@@ -1,0 +1,1093 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Product card
+	- product: Product object (required, object)
+	- size: desktop image size (optional, default: 300, number)
+	- tablet_size: tablet image size (optional, default: size, number)
+	- mobile_size: mobile image size (optional, default: tablet_size, number)
+	- is_lazy: is lazy load enable (optional, default: true, boolean)
+
+	{%- render 'product-card', product: product, size: size, tablet_size: tablet_size, mobile_size: mobile_size, is_lazy: false -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- if product.handle == 'shipping-protection-apparel' -%}
+  <script>
+    (function(){
+      var el = document.currentScript;
+      if (el) {
+        var wrapper = el.closest('.collection__item, .swiper-slide, .grid__item, .product-card-container, li');
+        if (wrapper) {
+          wrapper.remove();
+        } else if (el.parentElement) {
+          el.parentElement.style.display = 'none';
+        }
+      }
+    })();
+  </script>
+{%- else -%}
+{%- render 'adastra' with '/src/styles/product-card.scss' -%}
+
+{%- assign is_show_first_media_image = settings.is_show_first_media_image -%}
+{%- assign aspect_ratio				= settings.product_card_img_aspect_ratio -%}
+{%- assign swatches_enabled			= settings.is_color_swatches_enabled -%}
+{%- assign swatch_option			= settings.color_swatches_option | default: 'Color' | downcase -%}
+{%- assign swatches_array 			= swatch_option | split: ',' -%}
+{%- assign show_vendor				= settings.is_show_vendor -%}
+{%- assign currency_code_enabled	= settings.is_currency_code_enabled -%}
+{%- assign show_unit_price			= settings.is_show_unit_price -%}
+{%- assign quick_view_enabled		= settings.is_quick_view_enabled -%}
+{%- assign image_on_hover_enabled	= settings.is_image_on_hover_enabled -%}
+{%- assign product_card_button_enable_blur = settings.product_card_button_enable_blur -%}
+{%- assign quick_view_label         = 'products.product_card.open_quick_view' | t -%}
+{%- assign add_to_cart_label        = 'products.product.add_to_cart' | t -%}
+
+{% if product.template_suffix == 'pre-order' %}
+	{%- assign add_to_cart_label = 'products.product.pre_order' | t -%}
+{% endif %}
+
+{%- if is_lazy == nil -%}
+	{%- assign is_lazy = true -%}
+{%- endif -%}
+
+{%- assign is_preset = false -%}
+{%- if product == blank -%}
+	{%- assign is_preset = true -%}
+{%- endif -%}
+
+{%- assign size		   = size | default: 300 -%}
+{%- assign tablet_size = tablet_size | default: size -%}
+{%- assign mobile_size = mobile_size | default: tablet_size -%}
+
+{%- assign has_swatch = false -%}
+{%- assign product_card_tag_badge_image = blank -%}
+{%- assign product_card_tag_badge_label = blank -%}
+{%- assign product_card_tag_badge_modifier = blank -%}
+{%- assign product_card_tag_badge_width = 0 -%}
+{%- assign product_card_tag_badge_height = 0 -%}
+{%- assign product_card_show_tag_badges = false -%}
+{%- assign product_card_has_comfort_tag = false -%}
+{%- assign product_card_has_bella_tag = false -%}
+{%- assign product_card_has_vneck_tag = false -%}
+{%- assign product_card_has_tanktop_tag = false -%}
+{%- assign product_card_has_longsleevetee_tag = false -%}
+{%- assign product_card_has_wash_tag = false -%}
+{%- assign product_card_has_sweater_tag = false -%}
+{%- assign product_card_has_hoodie_tag = false -%}
+{%- assign product_card_has_gildan_tag = false -%}
+{%- assign product_card_has_colorblast_tag = false -%}
+{%- assign product_card_has_trucker_tag = false -%}
+
+{%- if collection.handle == 'grand-slam-subspecies'
+	or collection.handle == 'world-turkey-slam'
+	or request.path contains '/collections/grand-slam-subspecies'
+	or request.path contains '/collections/world-turkey-slam'
+-%}
+	{%- assign product_card_show_tag_badges = true -%}
+{%- endif -%}
+
+{%- assign product_card_show_mobile_sale_badge = false -%}
+{%- assign product_card_mobile_sale_percentage_value = 0 -%}
+
+{%- if product_card_show_tag_badges and settings.is_sale_percentage_label_enabled and product != blank and product.available and product.compare_at_price > product.price -%}
+	{%- assign product_card_show_mobile_sale_badge = true -%}
+	{%- assign product_card_mobile_sale_percentage_value = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | floor -%}
+{%- endif -%}
+
+{%- if product != blank and product_card_show_tag_badges -%}
+	{%- for tag in product.tags -%}
+		{%- assign product_tag_handle = tag | handleize -%}
+
+		{%- if product_tag_handle contains 'colorblast' or product_tag_handle contains 'color-blast' -%}
+			{%- assign product_card_has_colorblast_tag = true -%}
+		{%- endif -%}
+		{%- if product_tag_handle contains 'trucker' -%}
+			{%- assign product_card_has_trucker_tag = true -%}
+		{%- endif -%}
+		{%- if product_tag_handle contains 'wash' -%}
+			{%- assign product_card_has_wash_tag = true -%}
+		{%- endif -%}
+		{%- if product_tag_handle contains 'sweater' or product_tag_handle contains 'sweatshirt' -%}
+			{%- assign product_card_has_sweater_tag = true -%}
+		{%- endif -%}
+		{%- if product_tag_handle contains 'hoodie' -%}
+			{%- assign product_card_has_hoodie_tag = true -%}
+		{%- endif -%}
+		{%- if product_tag_handle contains 'gildan' -%}
+			{%- assign product_card_has_gildan_tag = true -%}
+		{%- endif -%}
+		{%- if product_tag_handle contains 'comfort' -%}
+			{%- assign product_card_has_comfort_tag = true -%}
+		{%- elsif product_tag_handle contains 'bella' -%}
+			{%- assign product_card_has_bella_tag = true -%}
+		{%- elsif product_tag_handle contains 'vneck' or product_tag_handle contains 'v-neck' -%}
+			{%- assign product_card_has_vneck_tag = true -%}
+		{%- elsif product_tag_handle contains 'tanktop' or product_tag_handle contains 'tank-top' -%}
+			{%- assign product_card_has_tanktop_tag = true -%}
+		{%- elsif product_tag_handle contains 'longsleevetee' or product_tag_handle contains 'long-sleeve-tee' or product_tag_handle contains 'longsleeve' or product_tag_handle contains 'long-sleeve' -%}
+			{%- assign product_card_has_longsleevetee_tag = true -%}
+		{%- endif -%}
+	{%- endfor -%}
+
+	{%- if product_card_has_trucker_tag -%}
+		{%- assign product_card_tag_badge_image = 'https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Trucker_Cap.png?v=1779882764' -%}
+		{%- assign product_card_tag_badge_label = 'Trucker cap product tag' -%}
+		{%- assign product_card_tag_badge_modifier = ' product-card__tag-badge--trucker' -%}
+	{%- elsif product_card_has_colorblast_tag -%}
+		{%- assign product_card_tag_badge_image = 'https://cdn.shopify.com/s/files/1/0741/7987/0911/files/colorblast_tee.png?v=1779866400' -%}
+		{%- assign product_card_tag_badge_label = 'Colorblast tee product tag' -%}
+		{%- assign product_card_tag_badge_modifier = ' product-card__tag-badge--colorblast' -%}
+	{%- elsif product_card_has_wash_tag -%}
+		{%- assign product_card_tag_badge_image = 'https://cdn.shopify.com/s/files/1/0741/7987/0911/files/wash_tee.png?v=1779866551' -%}
+		{%- assign product_card_tag_badge_label = 'Wash tee product tag' -%}
+		{%- assign product_card_tag_badge_modifier = ' product-card__tag-badge--wash' -%}
+	{%- elsif product_card_has_sweater_tag -%}
+		{%- assign product_card_tag_badge_image = 'https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Class_sweater.png?v=1779866507' -%}
+		{%- assign product_card_tag_badge_label = 'Sweater product tag' -%}
+		{%- assign product_card_tag_badge_modifier = ' product-card__tag-badge--sweater' -%}
+	{%- elsif product_card_has_hoodie_tag -%}
+		{%- assign product_card_tag_badge_image = 'https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Classic_hoodie.png?v=1779866453' -%}
+		{%- assign product_card_tag_badge_label = 'Hoodie product tag' -%}
+		{%- assign product_card_tag_badge_modifier = ' product-card__tag-badge--hoodie' -%}
+	{%- elsif product_card_has_comfort_tag -%}
+		{%- assign product_card_tag_badge_image = 'https://cdn.shopify.com/s/files/1/0741/7987/0911/files/1.png?v=1779782675' -%}
+		{%- assign product_card_tag_badge_label = 'Comfort product tag' -%}
+		{%- assign product_card_tag_badge_modifier = ' product-card__tag-badge--comfort' -%}
+	{%- elsif product_card_has_bella_tag -%}
+		{%- assign product_card_tag_badge_image = 'https://cdn.shopify.com/s/files/1/0741/7987/0911/files/2.png?v=1779782724' -%}
+		{%- assign product_card_tag_badge_label = 'Bella product tag' -%}
+		{%- assign product_card_tag_badge_modifier = ' product-card__tag-badge--bella' -%}
+	{%- elsif product_card_has_vneck_tag -%}
+		{%- assign product_card_tag_badge_image = 'https://cdn.shopify.com/s/files/1/0741/7987/0911/files/3.png?v=1779782792' -%}
+		{%- assign product_card_tag_badge_label = 'V-neck product tag' -%}
+		{%- assign product_card_tag_badge_modifier = ' product-card__tag-badge--vneck' -%}
+	{%- elsif product_card_has_tanktop_tag -%}
+		{%- assign product_card_tag_badge_image = 'https://cdn.shopify.com/s/files/1/0741/7987/0911/files/4.png?v=1779782848' -%}
+		{%- assign product_card_tag_badge_label = 'Tank top product tag' -%}
+		{%- assign product_card_tag_badge_modifier = ' product-card__tag-badge--tanktop' -%}
+	{%- elsif product_card_has_longsleevetee_tag -%}
+		{%- assign product_card_tag_badge_image = 'https://cdn.shopify.com/s/files/1/0741/7987/0911/files/tag_long_sleeve_tee.png?v=1779782923' -%}
+		{%- assign product_card_tag_badge_label = 'Long sleeve tee product tag' -%}
+		{%- assign product_card_tag_badge_modifier = ' product-card__tag-badge--longsleeve-tee' -%}
+	{%- elsif product_card_has_gildan_tag -%}
+		{%- assign product_card_tag_badge_image = 'https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Classic_tee.png?v=1779866319' -%}
+		{%- assign product_card_tag_badge_label = 'Gildan tee product tag' -%}
+		{%- assign product_card_tag_badge_modifier = ' product-card__tag-badge--gildan' -%}
+	{%- endif -%}
+
+	{%- if product_card_tag_badge_image != blank -%}
+		{%- assign product_card_tag_badge_width = 394 -%}
+		{%- assign product_card_tag_badge_height = 116 -%}
+	{%- endif -%}
+{%- endif -%}
+
+{%- assign min = 1 -%}
+{%- assign max = 6 -%}
+{%- assign diff = max | minus: min -%}
+
+{%- for option in product.options_with_values -%}
+	{%- assign option_name = option.name | downcase -%}
+
+	{%- for swatch in swatches_array -%}
+		{%- assign trimmed_string = swatch | strip -%}
+
+		{%- if option_name == trimmed_string -%}
+			{%- assign swatch_option = trimmed_string -%}
+
+			{%- break -%}
+		{%- endif -%}
+	{%- endfor -%}
+{%- endfor -%}
+
+{%- for option in product.options_with_values -%}
+	{%- assign swatch_count = option.values | map: 'swatch' | compact | size -%}
+	{%- assign option_name = option.name | downcase -%}
+
+	{%- if swatch_count > 0 and swatches_enabled -%}
+		{%- assign swatch_pos = option.position | minus: 1 -%}
+		{%- assign swatches = product.options_by_name[option_name].values -%}
+		{%- assign has_swatch = true -%}
+
+		{%- break -%}
+	{%- endif -%}
+
+	{%- if swatches_enabled and option_name == swatch_option -%}
+		{%- assign swatch_pos = option.position | minus: 1 -%}
+		{%- assign swatches = product.options_by_name[swatch_option].values -%}
+		{%- assign has_swatch = true -%}
+	{%- endif -%}
+{%- endfor -%}
+
+{%- capture images -%}
+	{%- if product.selected_variant -%}
+		{% comment %}
+			Make selected variant first in the variant array - to show correct image, when use filters
+		{% endcomment %}
+		{%- assign swatches_selected = product.options_by_name[swatch_option].values | where: 'selected', true -%}
+		{%- assign swatches = swatches_selected | concat: swatches | uniq -%}
+	{%- endif -%}
+
+	<a
+		href="{{- product.url -}}"
+		class="product-card__image-wrapper-link"
+		aria-label="{{- product.title | default: "Product preset title" | escape -}}"
+	>
+		
+		{% if is_show_first_media_image %}
+			{%- assign hover_image = product.metafields.product_card.hover_image | default: product.images[1] -%}
+
+			<div
+				class="js-product-card-image-wrapper product-card__image-wrapper product-card__image-wrapper--{{ aspect_ratio }}{% if hover_image != blank and image_on_hover_enabled == true %} product-card__image-wrapper--with-hover{% endif %} is-active">
+				{%- render 'product-card-image',
+					product: product,
+					is_lazy: is_lazy,
+					image: product.featured_image,
+					is_hover_image: false,
+					size: size,
+					tablet_size: tablet_size,
+					mobile_size: mobile_size -%}
+
+				{%- if hover_image != blank and image_on_hover_enabled == true -%}
+					{%- if hover_image.value.media_type == 'video' -%}
+						<div class="product-card__image-picture product-card__image-picture--hover">
+							<video
+								class="product-card__image js-product-card-video"
+								loop
+								muted
+								playsinline
+								tabindex="-1"
+								preload="none"
+								aria-hidden="true"
+							>
+								{%- for source in hover_image.value.sources -%}
+									{%- if source.mime_type == 'video/mp4' -%}
+										<source src="{{- source.url -}}" type="{{- source.mime_type -}}">
+									{%- endif -%}
+								{%- endfor -%}
+							</video>
+						</div>
+					{%- else -%}
+						{%- render 'product-card-image',
+							product: product,
+							is_lazy: true,
+							image: hover_image,
+							is_hover_image: true,
+							size: size,
+							tablet_size: tablet_size,
+							mobile_size: mobile_size -%}
+					{%- endif -%}
+				{%- endif -%}
+			</div>
+		{% endif %}
+
+		{%- for color in swatches limit: 6 -%}
+			{%- assign color_variant 	= color.variant -%}
+			{%- assign image        	= color.variant.featured_image -%}
+			{%- assign hover_image		= color.variant.metafields.product_card.hover_image  -%}
+
+			{% if color.variant == blank %}
+				{% for variant in product.variants %}
+					{% if variant.options[swatch_pos] == color.name and variant.featured_media %}
+						{% assign image = variant.featured_media %}
+						{% assign hover_image = variant.metafields.product_card.hover_image %}
+						{% assign color_variant = variant %}
+						{% break %}
+					{% endif  %}
+				{% endfor %}
+			{% endif %}
+
+			{%- assign image        	= image | default: product.featured_image | default: settings.product_default_image -%}
+			{%- assign hover_image		= hover_image | default: product.metafields.product_card.hover_image | default: product.images[1] -%}
+
+			{% if image == hover_image %}
+				{% assign hover_image = product.images[2] %}
+			{% endif %}
+
+			{%- capture wrapper_classes -%}
+				product-card__image-wrapper product-card__image-wrapper--{{ aspect_ratio }}{% if hover_image != blank and image_on_hover_enabled == true %} product-card__image-wrapper--with-hover{% endif %}{% unless product.has_only_default_variant %} js-product-card-images-wrapper{% endunless %}{% if color.selected and is_show_first_media_image == false  %} is-active{%- endif -%}
+			{%- endcapture -%}
+
+			<div
+				class="{{- wrapper_classes | strip_newlines -}}"
+				data-image="{{- color.name | escape -}}"
+				data-variant="{{- color_variant.id -}}"
+			>
+				{%- if product == blank -%}
+					{%- assign random_number       = "now" | date: "%N" | modulo: diff | plus: min -%}
+					{%- assign placeholer_svg_name = 'product-' | append: random_number -%}
+
+					<div class="product-card__image-picture">
+						{{- placeholer_svg_name | placeholder_svg_tag: 'product-card__image product-card__image--placeholder' -}}
+					</div>
+
+					{%- if image_on_hover_enabled == true -%}
+						{%- if random_number != 6 -%}
+							{%- assign random_number2 = random_number | plus: 1 -%}
+						{%- else -%}
+							{%- assign random_number2 = 1 -%}
+						{%- endif -%}
+
+						{%- assign placeholer_svg_name = 'product-' | append: random_number2 -%}
+
+						<div class="product-card__image-picture product-card__image-picture--hover">
+							{{- placeholer_svg_name | placeholder_svg_tag: 'product-card__image product-card__image--hover product-card__image--placeholder' -}}
+						</div>
+					{%- endif -%}
+				{%- else -%}
+					{%- assign is_swatch_img_lazy = false -%}
+
+					{%- if is_lazy == false and color.variant.options[swatch_pos] != product.selected_or_first_available_variant.options[swatch_pos] -%}
+						{%- assign is_swatch_img_lazy = true -%}
+					{%- endif -%}
+
+					{%- if is_lazy == true -%}
+						{%- assign is_swatch_img_lazy = true -%}
+					{%- endif -%}
+
+					{%- render 'product-card-image',
+						product: product,
+						is_lazy: is_swatch_img_lazy,
+						image: image,
+						is_hover_image: false,
+						size: size,
+						tablet_size: tablet_size,
+						mobile_size: mobile_size
+					-%}
+
+					{%- if hover_image != blank and image_on_hover_enabled == true -%}
+						{%- if hover_image.value.media_type == 'video' -%}
+							<div class="product-card__image-picture product-card__image-picture--hover">
+								<video
+									class="product-card__image js-product-card-video"
+									loop
+									muted
+									playsinline
+									tabindex="-1"
+									preload="none"
+									aria-hidden="true"
+								>
+									{%- for source in hover_image.value.sources -%}
+										{%- if source.mime_type == 'video/mp4' -%}
+											<source src="{{- source.url -}}" type="{{- source.mime_type -}}">
+										{%- endif -%}
+									{%- endfor -%}
+								</video>
+							</div>
+						{%- else -%}
+							{%- render 'product-card-image',
+								product: product,
+								is_lazy: true,
+								image: hover_image,
+								is_hover_image: true,
+								size: size,
+								tablet_size: tablet_size,
+								mobile_size: mobile_size -%}
+						{%- endif -%}
+					{%- endif -%}
+				{%- endif -%}
+			</div>
+		{%- endfor -%}
+	</a>
+{%- endcapture -%}
+
+<div class="product-card js-product-card{% if product_card_show_tag_badges %} product-card--grand-slam-subspecies{% endif %}"
+	{% if product != blank %}
+		data-existing-product
+	{% endif -%}
+	{% if product.template_suffix == 'pre-order' %} data-preorder{% endif %}
+>
+	<div class="product-card__main" data-product-card-handle="{{- product.handle -}}">
+		{%- if settings.is_labels_enabled -%}
+			{%- render 'product-badges', product: product, is_preset: is_preset -%}
+		{%- endif -%}
+
+		{%- if product.variants.size > 1 and has_swatch == true and swatches_enabled -%}
+			{{- images -}}
+		{%- else -%}
+			{%- assign image		= product.featured_image | default: settings.product_default_image -%}
+			{%- assign hover_image	= product.metafields.product_card.hover_image | default: product.images[1] -%}
+
+			{%- if image == hover_image -%}
+				{%- assign hover_image	= product.metafields.product_card.hover_image | default: product.images[2] -%}
+			{%- endif -%}
+
+			<a
+				href="{{- product.url -}}"
+				class="product-card__image-wrapper-link"
+				aria-label="{{- product.title | default: "Product preset title" | escape -}}"
+			>
+				
+				<div
+					class="product-card__image-wrapper product-card__image-wrapper--{{ aspect_ratio }}{% if hover_image != blank and image_on_hover_enabled == true %} product-card__image-wrapper--with-hover{% endif %} is-active{% unless product.has_only_default_variant or product.variants.size == 1 %} js-product-card-images-wrapper{% endunless -%}"
+					{%- unless product.has_only_default_variant -%}
+					data-variant="{{- product.selected_or_first_available_variant.id -}}"
+					{%- endunless -%}
+				>
+					{%- if product == blank -%}
+						{%- assign random_number		= "now" | date: "%N" | modulo: diff | plus: min -%}
+						{%- assign placeholer_svg_name	= 'product-' | append: random_number -%}
+
+						<div class="product-card__image-picture">
+							{{- placeholer_svg_name | placeholder_svg_tag: 'product-card__image product-card__image--placeholder' -}}
+						</div>
+
+						{%- if image_on_hover_enabled == true -%}
+							{%- if random_number != 6 -%}
+								{%- assign random_number2 = random_number | plus: 1 -%}
+							{%- else -%}
+								{%- assign random_number2 = 1 -%}
+							{%- endif -%}
+
+							{%- assign placeholer_svg_name	= 'product-' | append: random_number2 -%}
+
+							<div class="product-card__image-picture product-card__image-picture--hover">
+								{{- placeholer_svg_name | placeholder_svg_tag: 'product-card__image product-card__image--placeholder product-card__image--hover' -}}
+							</div>
+						{%- endif -%}
+					{%- else -%}
+						{%- render 'product-card-image',
+							product: product,
+							is_lazy: is_lazy,
+							image: image,
+							is_hover_image: false,
+							size: size,
+							tablet_size: tablet_size,
+							mobile_size: mobile_size
+						-%}
+
+						{%- if hover_image != blank and image_on_hover_enabled == true -%}
+							{%- if hover_image.value.media_type == 'video' -%}
+								<div class="product-card__image-picture product-card__image-picture--hover">
+									<video
+										class="product-card__image js-product-card-video"
+										loop
+										muted
+										playsinline
+										tabindex="-1"
+										preload="none"
+										aria-hidden="true"
+									>
+										{%- for source in hover_image.value.sources -%}
+											{%- if source.mime_type == 'video/mp4' -%}
+												<source src="{{- source.url -}}" type="{{- source.mime_type -}}">
+											{%- endif -%}
+										{%- endfor -%}
+									</video>
+								</div>
+							{%- else -%}
+								{%- render 'product-card-image',
+									product: product,
+									is_lazy: true,
+									image: hover_image,
+									is_hover_image: true,
+									size: size,
+									tablet_size: tablet_size,
+									mobile_size: mobile_size
+								-%}
+							{%- endif -%}
+						{%- endif -%}
+					{%- endif -%}
+				</div>
+			</a>
+		{%- endif -%}
+
+		{%- if product_card_tag_badge_image != blank -%}
+			<div
+				class="product-card__tag-badge{{ product_card_tag_badge_modifier }}"
+				role="img"
+				aria-label="{{- product_card_tag_badge_label | escape -}}"
+			>
+				<img
+					class="product-card__tag-badge-image"
+					src="{{- product_card_tag_badge_image -}}"
+					alt=""
+					width="{{- product_card_tag_badge_width -}}"
+					height="{{- product_card_tag_badge_height -}}"
+					loading="lazy"
+				>
+			</div>
+		{%- endif -%}
+
+		{%- comment -%} 
+			Native quick view removed.
+		{%- if quick_view_enabled and product.available -%}
+			{%- if product.has_only_default_variant or product.variants.size == 1 -%}
+				{%- assign button_label = add_to_cart_label -%}
+			{%- else -%}
+				{%- assign button_label = quick_view_label -%}
+			{%- endif -%}
+
+			<button
+				class="button button--secondary button--with-icon product-card__quick-view-text-button{% if product_card_button_enable_blur %} product-card__quick-view-text-button--blur{% endif %} js-product-card-quick-view-button"
+				data-product-card-handle="{{- product.handle -}}"
+				{%- if product.has_only_default_variant or product.variants.size == 1 -%} data-variant="{{- product.selected_or_first_available_variant.id -}}" {%- endif -%}
+				type="button"
+			>
+				{%- render 'icons', icon: 'plus' -%}
+
+				<span data-text="{{- button_label -}}">
+					<span>
+						{{- button_label -}}
+					</span>
+				</span>
+
+				{%- render 'icons', icon: 'loader' -%}
+			</button>
+		{%- endif -%}
+		{%- endcomment -%}
+	</div>
+
+	<div class="product-card__footer" style="text-align: left; padding: 15px 0;">
+	<a class="product-card__title" href="{{ product.url }}" style="display: block; font-family: 'Oswald', sans-serif; font-weight: 700; text-transform: uppercase; font-size: 11px; color: #2c3d33; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+			{%- if product != blank -%}
+				{{- product.title -}}
+			{%- else -%}
+				{{- 'products.product_card.product_title' | t -}}
+			{%- endif -%}
+		</a>
+
+		{%- if show_vendor -%}
+			<div class="product-card__vendor" style="margin-bottom: 5px; font-family: 'Oswald', sans-serif; font-size: 11px; color: #5a6e5f;">
+				{%- if product != blank -%}
+					<span class="visually-hidden">
+						{{- 'products.product_card.product_vendor' | t -}}
+					</span>
+
+					{{- product.vendor -}}
+				{%- else -%}
+					{{- 'products.product_card.product_vendor_placeholder' | t -}}
+				{%- endif -%}
+			</div>
+		{%- endif -%}
+
+		<div class="product-card__price" style="font-family: 'Oswald', sans-serif; font-size: 13px; color: #2c3d33; margin-bottom: 12px;">
+			<div class="product-card__price-row">
+				<div class="product-card__price-value">
+					{%- render 'price', product: product, show_unit_price: show_unit_price, currency_code_enabled: currency_code_enabled, hide_from_price: true -%}
+				</div>
+
+				{%- if product_card_show_mobile_sale_badge -%}
+					<span class="badge badge--sale-percentage product-card__mobile-sale-badge">
+						<span class="visually-hidden">
+							{{- 'products.product.product_label' | t -}}:
+						</span>
+						<span class="badge__sale-visual" aria-hidden="true">
+							<span class="badge__sale-text">
+								-{{- product_card_mobile_sale_percentage_value -}}%
+							</span>
+						</span>
+					</span>
+				{%- endif -%}
+			</div>
+			<!-- Start of Judge.me code -->
+      <div style='{{ jm_style }}' class='jdgm-widget jdgm-preview-badge' data-id='{{ product.id }}' data-auto-install='false'>
+        {{ product.metafields.judgeme.badge }}
+      </div>
+      <!-- End of Judge.me code -->
+		</div>
+
+		{%- if product.quantity_price_breaks_configured? -%}
+			<div class="product-card__volume-pricing-note" style="margin-bottom: 12px; font-family: 'Oswald', sans-serif; font-size: 11px; color: #5a6e5f;">
+				<span>{{ 'products.product.volume_pricing.note' | t }}</span>
+			</div>
+		{%- endif -%}
+
+		{%- if swatches != blank and swatches_enabled -%}
+			<div style="margin-bottom: 15px;">
+			{%- render 'product-card-swatches',
+					swatches: swatches,
+					product: product,
+					swatch_pos: swatch_pos,
+					is_show_first_media_image: is_show_first_media_image
+			-%}
+			</div>
+		{%- endif -%}
+
+		<input type="hidden" class="js-product-card-min-value" value="{{- product.selected_or_first_available_variant.quantity_rule.min -}}">
+		{%- if product != blank -%}
+			<button
+				class="product-card__custom-quick-add js-product-card-quick-view-button"
+				data-product-card-handle="{{- product.handle -}}"
+				{%- if product.has_only_default_variant or product.variants.size == 1 -%} data-variant="{{- product.selected_or_first_available_variant.id -}}" {%- endif -%}
+				type="button"
+			>
+				QUICK ADD
+			</button>
+		{%- endif -%}
+	</div>
+</div>
+
+<style>
+	.product-card__custom-quick-add {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+		background: #2c3d33;
+		color: #faf6ee;
+		border: none;
+		border-radius: 8px !important;
+		text-transform: uppercase;
+		font-family: 'Oswald', sans-serif;
+		font-weight: 600;
+		font-size: 10px;
+		letter-spacing: 1.5px;
+		padding: 14px 15px;
+		margin-top: 6px; /* Pulled closer to the swatches/price */
+		cursor: pointer;
+		transition: background 0.3s ease;
+	}
+	.product-card__custom-quick-add:hover {
+		background: #3a4e42;
+	}
+	.product-card__custom-quick-add.is-loading {
+		color: transparent;
+		position: relative;
+	}
+	.product-card__custom-quick-add.is-loading::after {
+		content: "";
+		position: absolute;
+		width: 16px;
+		height: 16px;
+		border: 2px solid #faf6ee;
+		border-radius: 50%;
+		border-top-color: transparent;
+		animation: spin 1s linear infinite;
+	}
+	@keyframes spin { 100% { transform: rotate(360deg); } }
+
+	.product-card__tag-badge {
+		position: absolute;
+		left: 12px;
+		bottom: 14px;
+		z-index: 3;
+		display: flex;
+		width: clamp(132px, 58%, 210px);
+		max-width: calc(100% - 24px);
+		pointer-events: none;
+		filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.18));
+	}
+
+	.product-card__tag-badge--bella {
+		width: clamp(118px, 52%, 190px);
+	}
+
+	.product-card__tag-badge--comfort,
+	.product-card__tag-badge--bella,
+	.product-card__tag-badge--vneck,
+	.product-card__tag-badge--tanktop,
+	.product-card__tag-badge--longsleeve-tee,
+	.product-card__tag-badge--wash,
+	.product-card__tag-badge--sweater,
+	.product-card__tag-badge--hoodie,
+	.product-card__tag-badge--gildan,
+	.product-card__tag-badge--trucker,
+	.product-card__tag-badge--colorblast {
+		left: 0;
+		bottom: 6px;
+		width: 50%;
+		max-width: 50%;
+	}
+
+	.product-card__tag-badge-image {
+		display: block;
+		width: 100%;
+		height: auto;
+		object-fit: contain;
+	}
+
+	/* Match Sassy Girl / Iron Garrison design overrides */
+	.product-card__swatches-wrapper {
+		opacity: 1 !important;
+		visibility: visible !important;
+		transform: none !important;
+	}
+	.product-card__swatches {
+		display: flex !important;
+		flex-wrap: wrap !important;
+		gap: 4px !important;
+		justify-content: flex-start !important;
+		opacity: 1 !important;
+		visibility: visible !important;
+		transform: none !important;
+		position: relative !important;
+	}
+	.product-card__swatch-button {
+		width: 12px !important;
+		height: 12px !important;
+		border-radius: 50% !important;
+		padding: 0 !important;
+		margin: 0 !important;
+	}
+	.product-card__swatch-button.is-active {
+		box-shadow: 0 0 0 1px #000 !important;
+		border-radius: 50% !important;
+	}
+	.product-card__swatch-button::after,
+	.product-card__swatch-button.is-active::after {
+		border-radius: 50% !important;
+	}
+	.product-card__swatch-image {
+		border-radius: 50% !important;
+		width: 100% !important;
+		height: 100% !important;
+	}
+
+	/* Keep square reference-card swatch fills centered at every zoom level. */
+	.product-card.product-card--reference .product-card__swatch-button {
+		align-items: center !important;
+		justify-content: center !important;
+	}
+
+	.product-card.product-card--reference .product-card__swatch-color {
+		position: static !important;
+		inset: auto !important;
+		width: calc(100% - 6px) !important;
+		height: calc(100% - 6px) !important;
+		flex: 0 0 auto;
+	}
+	.product-card__swatches-wrapper .product-card__swatches-count {
+		display: none !important;
+	}
+	/* Force show all visible swatches on mobile */
+	.product-card .product-card__swatch-button:nth-child(1n+3) {
+		display: inline-flex !important;
+	}
+
+	/* ============================================
+	   PRODUCT CARD: force price text to be sharp
+	   ============================================ */
+	.product-card__price,
+	.product-card__price *,
+	.product-card__price .price,
+	.product-card__price .price *,
+	.product-card__price .price__container,
+	.product-card__price .price__sale,
+	.product-card__price .price__regular,
+	.product-card__price .price-item,
+	.product-card__price .price-item--sale,
+	.product-card__price .price-item--regular {
+		opacity: 1 !important;
+		visibility: visible !important;
+		color: inherit !important;
+	}
+
+	/* Sale price RED */
+	.product-card__price .price--on-sale .price-item--sale,
+	.product-card__price .price-item--sale {
+		color: #c0392b !important;
+		font-weight: 700 !important;
+	}
+
+	/* Compare-at price — dark gray, readable */
+	.product-card__price .price--on-sale .price-item--regular {
+		color: #777777 !important;
+		font-weight: 400 !important;
+	}
+
+	/* Regular price — dark */
+	@media screen and (min-width: 768px) {
+		.product-card__price .price.price--on-sale .price__sale {
+			align-items: baseline !important;
+			gap: 6px !important;
+		}
+
+		.product-card__price .price.price--on-sale .price__sale .price-item--sale {
+			font-size: 16px !important;
+			line-height: 1.1 !important;
+		}
+
+		.product-card__price .price.price--on-sale .price__sale .price-item--regular {
+			font-size: 15px !important;
+			line-height: 1.1 !important;
+			text-decoration: line-through !important;
+		}
+	}
+
+	.product-card__price .price-item--regular {
+		color: #2c3d33 !important;
+	}
+
+	.product-card__mobile-sale-badge {
+		display: none !important;
+	}
+
+	/* Enforce rounded product images everywhere (desktop & mobile) */
+	.product-card__image-wrapper {
+		border-radius: 8px 8px 0 0 !important;
+		overflow: hidden !important;
+	}
+	.product-card__image-picture {
+		border-radius: 8px 8px 0 0 !important;
+		overflow: hidden !important;
+	}
+	.product-card__image {
+		border-radius: 8px 8px 0 0 !important;
+	}
+
+	/* ============================================
+	   MOBILE: Fix uneven cards and layout breakage
+	   ============================================ */
+	@media screen and (max-width: 767px) {
+		/* ===== FORCE UNIFORM CARD IMAGE SIZE ON MOBILE ===== */
+		/* Ensure grids don't break because of different image heights */
+		.product-card__image-wrapper {
+			aspect-ratio: 1 / 1 !important;
+			width: 100% !important;
+			overflow: hidden !important;
+			position: relative !important;
+		}
+		.product-card__image-picture {
+			width: 100% !important;
+			height: 100% !important;
+			display: block !important;
+			position: absolute !important;
+			top: 0 !important;
+			left: 0 !important;
+		}
+		.product-card__image {
+			width: 100% !important;
+			height: 100% !important;
+			object-fit: cover !important;
+			object-position: center top !important;
+		}
+
+		.product-card__tag-badge {
+			left: 7px;
+			bottom: 8px;
+			width: clamp(104px, 76%, 150px);
+			max-width: calc(100% - 14px);
+			filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.16));
+		}
+
+		.product-card__tag-badge--bella {
+			width: clamp(92px, 68%, 136px);
+		}
+
+		.product-card__tag-badge--comfort,
+		.product-card__tag-badge--bella,
+		.product-card__tag-badge--vneck,
+		.product-card__tag-badge--tanktop,
+		.product-card__tag-badge--longsleeve-tee,
+		.product-card__tag-badge--wash,
+		.product-card__tag-badge--sweater,
+		.product-card__tag-badge--hoodie,
+		.product-card__tag-badge--gildan,
+		.product-card__tag-badge--trucker,
+		.product-card__tag-badge--colorblast {
+			left: 0;
+			bottom: 5px;
+			width: 50%;
+			max-width: 50%;
+		}
+
+		/* SVG placeholders */
+		.product-card__image--placeholder {
+			width: 100% !important;
+			height: 100% !important;
+		}
+
+		/* Product card box model safeguard to prevent blowout */
+		.product-card {
+			width: 100% !important;
+			max-width: 100% !important;
+			min-width: 0 !important; /* CRITICAL for flex/grid blowout */
+			box-sizing: border-box !important;
+			overflow: hidden !important;
+		}
+		.product-card__main {
+			width: 100% !important;
+			margin-bottom: 0 !important;
+			padding-bottom: 0 !important;
+			min-width: 0 !important;
+		}
+		.product-card__info {
+			min-width: 0 !important;
+			width: 100% !important;
+			overflow: hidden !important;
+		}
+
+		/* Hide Quick Add button on mobile */
+		.product-card__custom-quick-add {
+			display: none !important;
+		}
+		/* Reduce footer padding (space between image and title/price) */
+		.product-card__footer {
+			padding: 0 !important;
+			margin-top: 5px !important;
+			min-width: 0 !important;
+			width: 100% !important;
+			overflow: visible !important;
+		}
+		/* Tighten title margin and padding, force strict 1-line ellipsis */
+		.product-card .product-card__title {
+			margin-bottom: 2px !important;
+			margin-top: 0 !important;
+			padding-top: 0 !important;
+			font-weight: 500 !important;
+			text-transform: capitalize !important;
+			font-size: 13px !important;
+			white-space: nowrap !important;
+			overflow: hidden !important;
+			text-overflow: ellipsis !important;
+			display: block !important;
+			max-width: 100% !important;
+			width: 100% !important;
+			min-height: auto !important;
+			min-width: 0 !important;
+			word-break: normal !important;
+			overflow-wrap: normal !important;
+			-webkit-line-clamp: unset !important;
+			-webkit-box-orient: unset !important;
+		}
+		/* Tighten price margin and reduce font size */
+		.product-card__price,
+		.product-card__price .price,
+		.product-card__price .price-item,
+		.product-card__price .price-item--regular,
+		.product-card__price .price-item--sale {
+			margin-bottom: 4px !important;
+			margin-top: 0 !important;
+			font-size: 15px !important;
+			white-space: nowrap !important;
+			overflow: hidden !important;
+			text-overflow: ellipsis !important;
+		}
+
+		.product-card__price {
+			display: block !important;
+			line-height: 1.15 !important;
+		}
+
+		.product-card--grand-slam-subspecies .product-card__main > .product-badges .badge--sale-percentage {
+			display: none !important;
+		}
+
+		.product-card--grand-slam-subspecies .product-card__price-row {
+			display: flex !important;
+			align-items: center !important;
+			justify-content: flex-start !important;
+			gap: 6px !important;
+			width: 100% !important;
+			min-width: 0 !important;
+		}
+
+		.product-card--grand-slam-subspecies .product-card__price-value {
+			flex: 0 1 auto !important;
+			min-width: 0 !important;
+		}
+
+		.product-card--grand-slam-subspecies .product-card__mobile-sale-badge {
+			display: inline-flex !important;
+			flex: 0 0 auto !important;
+			align-items: center !important;
+			justify-content: center !important;
+			min-width: 42px !important;
+			min-height: 20px !important;
+			padding: 4px 8px !important;
+			margin: 0 !important;
+			border: 0 !important;
+			border-radius: 999px !important;
+			background-color: #e21b23 !important;
+			color: #ffffff !important;
+			font-family: "Segoe UI", Arial, Helvetica, sans-serif !important;
+			font-size: 12px !important;
+			font-weight: 600 !important;
+			line-height: 1 !important;
+			letter-spacing: 0.03em !important;
+			text-transform: uppercase !important;
+			white-space: nowrap !important;
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14) !important;
+		}
+
+		.product-card--grand-slam-subspecies .product-card__mobile-sale-badge * {
+			color: #ffffff !important;
+			font-size: inherit !important;
+			line-height: inherit !important;
+		}
+
+		.product-card__price .price {
+			display: block !important;
+			width: 100% !important;
+			margin-bottom: 2px !important;
+		}
+
+		.product-card__price .price__container {
+			display: block !important;
+			width: 100% !important;
+		}
+
+		.product-card__price .price.price--on-sale .price__regular,
+		.product-card__price .price:not(.price--on-sale) .price__sale {
+			display: none !important;
+		}
+
+		.product-card__price .price.price--on-sale .price__sale {
+			display: flex !important;
+			flex-direction: row !important;
+			flex-wrap: nowrap !important;
+			align-items: baseline !important;
+			gap: 6px !important;
+			width: 100% !important;
+			line-height: 1.15 !important;
+		}
+
+		.product-card__price .price.price--on-sale .price__sale > .price-item--sale {
+			display: inline-block !important;
+			width: auto !important;
+			max-width: none !important;
+			flex: 0 0 auto !important;
+			margin: 0 !important;
+			overflow: visible !important;
+			text-overflow: clip !important;
+		}
+
+		.product-card__price .price.price--on-sale .price__sale > span:not(.visually-hidden) {
+			display: inline-block !important;
+			width: auto !important;
+			max-width: none !important;
+			margin-top: 0 !important;
+			flex: 0 0 auto !important;
+			overflow: visible !important;
+			text-overflow: clip !important;
+		}
+
+		.product-card__price .price.price--on-sale .price__sale .price-item--regular {
+			display: inline-block !important;
+			width: auto !important;
+			margin: 0 !important;
+			font-size: 13px !important;
+			text-decoration: line-through !important;
+			overflow: visible !important;
+			text-overflow: clip !important;
+		}
+
+		.product-card--grand-slam-subspecies .product-card__price-value .price,
+		.product-card--grand-slam-subspecies .product-card__price-value .price__container,
+		.product-card--grand-slam-subspecies .product-card__price-value .price__sale {
+			width: auto !important;
+			max-width: none !important;
+		}
+
+		.product-card__price .jdgm-widget,
+		.product-card__price .jdgm-preview-badge {
+			display: block !important;
+			width: 100% !important;
+			margin-top: 2px !important;
+			white-space: nowrap !important;
+			overflow: visible !important;
+		}
+		/* Tighten swatches wrapper */
+		.product-card__footer > div:last-of-type {
+			margin-bottom: 0 !important;
+			max-width: 100% !important;
+			overflow: visible !important;
+			padding-top: 2px !important;
+			padding-bottom: 2px !important;
+		}
+	}
+</style>
+{%- endif -%}
+
+
+

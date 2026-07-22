@@ -70,7 +70,7 @@
       "name": "Banner slider",
       "settings": {
         "enable_autoplay": true,
-        "show_dots": true,
+        "show_dots": false,
         "autoplay_delay": 5,
         "height_desktop": 620,
         "height_mobile": 560,
@@ -859,6 +859,76 @@
     },
     "instagram_social_gallery": {
       "type": "social-gallery",
+      "blocks": {
+        "instagram_post_1": {
+          "type": "image",
+          "settings": {
+            "external_image_url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/2_547614d7-77b9-4b7f-9eb8-081290c42c5d.png?v=1783678906",
+            "alt_text": "Camo Signal graphic T-shirt",
+            "media_type": "image",
+            "image_link": "https://www.instagram.com/camo.signal/",
+            "open_link_in_new_tab": true
+          }
+        },
+        "instagram_post_2": {
+          "type": "image",
+          "settings": {
+            "external_image_url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/3_8e0d15c8-5790-43e2-add8-0d90bc14ac27.png?v=1783678906",
+            "alt_text": "Camo Signal long-sleeve shirt",
+            "media_type": "image",
+            "image_link": "https://www.instagram.com/camo.signal/",
+            "open_link_in_new_tab": true
+          }
+        },
+        "instagram_post_3": {
+          "type": "image",
+          "settings": {
+            "external_image_url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/4_6eca0b30-3bda-412b-a41d-9521471edf01.png?v=1783678906",
+            "alt_text": "Camo Signal youth T-shirt",
+            "media_type": "video",
+            "image_link": "https://www.instagram.com/camo.signal/",
+            "open_link_in_new_tab": true
+          }
+        },
+        "instagram_post_4": {
+          "type": "image",
+          "settings": {
+            "external_image_url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/1_1644edc5-76cf-418f-8f31-eaa6122d47f4.png?v=1783678906",
+            "alt_text": "Camo Signal trucker hat",
+            "media_type": "image",
+            "image_link": "https://www.instagram.com/camo.signal/",
+            "open_link_in_new_tab": true
+          }
+        },
+        "instagram_post_5": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/deer_hunting_image.jpg",
+            "alt_text": "Camo Signal deer hunting collection",
+            "media_type": "video",
+            "image_link": "https://www.instagram.com/camo.signal/",
+            "open_link_in_new_tab": true
+          }
+        },
+        "instagram_post_6": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/duck_hunting_image.jpg",
+            "alt_text": "Camo Signal duck hunting collection",
+            "media_type": "image",
+            "image_link": "https://www.instagram.com/camo.signal/",
+            "open_link_in_new_tab": true
+          }
+        }
+      },
+      "block_order": [
+        "instagram_post_1",
+        "instagram_post_2",
+        "instagram_post_3",
+        "instagram_post_4",
+        "instagram_post_5",
+        "instagram_post_6"
+      ],
       "settings": {
         "enable_color_scheme_inheritance": true,
         "color_scheme": "scheme-1",

@@ -86,17 +86,20 @@
 				>
 					{%- for block in section.blocks -%}
 						{%- assign image 				= block.settings.image -%}
+						{%- assign external_image_url 	= block.settings.external_image_url | strip -%}
 						{%- assign image_link 			= block.settings.image_link -%}
 						{%- assign open_link_in_new_tab = block.settings.open_link_in_new_tab -%}
+						{%- assign alt_text 				= block.settings.alt_text | default: image.alt | default: 'Camo Signal Instagram post' -%}
+						{%- assign media_type 			= block.settings.media_type | default: 'image' -%}
 						{%- assign is_lazy 				= true -%}
 
 						{%- if section.index == 1 and forloop.index == 1 -%}
 							{%- assign is_lazy = false -%}
 						{%- endif -%}
 
-						{%- if image != blank -%}
+						{%- if image != blank or external_image_url != blank -%}
 							{%- capture img_focal -%}
-								--img-pos: {{ image.presentation.focal_point }};
+								{%- if image != blank -%}--img-pos: {{ image.presentation.focal_point }};{%- endif -%}
 							{%- endcapture -%}
 
 							{%- case forloop.index -%}
@@ -121,28 +124,40 @@
 							{%- endcase -%}
 
 							{%- capture block_image -%}
-								<picture>
-									<source srcset="{{ image | image_url: width: w_420 }} 1x, {{ image | image_url: width: w_420_x2 }} 2x" media="(max-width: 420px)">
-									<source srcset="{{ image | image_url: width: 375 }} 1x, {{ image | image_url: width: 750 }} 2x" media="(max-width: 767px)">
-									<source srcset="{{ image | image_url: width: 285 }} 1x, {{ image | image_url: width: 570 }} 2x" media="(max-width: 1199px)">
-									<source srcset="{{ image | image_url: width: 360 }} 1x, {{ image | image_url: width: 720 }} 2x" media="(max-width: 1600px)">
+								{%- if image != blank -%}
+									<picture>
+										<source srcset="{{ image | image_url: width: w_420 }} 1x, {{ image | image_url: width: w_420_x2 }} 2x" media="(max-width: 420px)">
+										<source srcset="{{ image | image_url: width: 375 }} 1x, {{ image | image_url: width: 750 }} 2x" media="(max-width: 767px)">
+										<source srcset="{{ image | image_url: width: 285 }} 1x, {{ image | image_url: width: 570 }} 2x" media="(max-width: 1199px)">
+										<source srcset="{{ image | image_url: width: 360 }} 1x, {{ image | image_url: width: 720 }} 2x" media="(max-width: 1600px)">
 
-									<img class="social-gallery__image"
-										 src="{{ image | image_url: width: 500 }}"
-										 srcset="{{ image | image_url: width: 500 }} 1x, {{ image | image_url: width: 1000 }} 2x"
-										 width="{{ image.width }}"
-										 height="{{ image.height }}"
-										{% if is_lazy %}
-											fetchpriority="low"
-											loading="lazy"
-										{% else %}
-											fetchpriority="high"
-											loading="eager"
-										{% endif %}
-										 alt="{{ image.alt | escape }}"
-										 style="{{ img_focal }}"
+										<img class="social-gallery__image"
+											 src="{{ image | image_url: width: 500 }}"
+											 srcset="{{ image | image_url: width: 500 }} 1x, {{ image | image_url: width: 1000 }} 2x"
+											 width="{{ image.width }}"
+											 height="{{ image.height }}"
+											{% if is_lazy %}
+												fetchpriority="low"
+												loading="lazy"
+											{% else %}
+												fetchpriority="high"
+												loading="eager"
+											{% endif %}
+											 alt="{{ alt_text | escape }}"
+											 style="{{ img_focal }}"
+										>
+									</picture>
+								{%- else -%}
+									<img
+										class="social-gallery__image"
+										src="{{ external_image_url | escape }}"
+										width="1080"
+										height="1080"
+										{% if is_lazy %}loading="lazy" fetchpriority="low"{% else %}loading="eager" fetchpriority="high"{% endif %}
+										alt="{{ alt_text | escape }}"
+										decoding="async"
 									>
-								</picture>
+								{%- endif -%}
 							{%- endcapture -%}
 
 							<div class="social-gallery__image-col">
@@ -156,10 +171,16 @@
 										{% endif %}
 									>
 										{{- block_image -}}
+										{%- if media_type == 'video' -%}
+											<span class="social-gallery__play-badge" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M8.5 6.7v10.6L17 12 8.5 6.7Z"/></svg></span>
+										{%- endif -%}
 									</a>
 								{%- else -%}
 									<div class="social-gallery__image-wrapper">
 										{{- block_image -}}
+										{%- if media_type == 'video' -%}
+											<span class="social-gallery__play-badge" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M8.5 6.7v10.6L17 12 8.5 6.7Z"/></svg></span>
+										{%- endif -%}
 									</div>
 								{%- endif -%}
 							</div>
@@ -393,6 +414,32 @@
 						"type": "image_picker",
 						"id": "image",
 						"label": "Image"
+					},
+					{
+						"type": "url",
+						"id": "external_image_url",
+						"label": "External image URL"
+					},
+					{
+						"type": "text",
+						"id": "alt_text",
+						"label": "Alternative text"
+					},
+					{
+						"type": "select",
+						"id": "media_type",
+						"label": "Media type",
+						"options": [
+							{
+								"value": "image",
+								"label": "Image"
+							},
+							{
+								"value": "video",
+								"label": "Video"
+							}
+						],
+						"default": "image"
 					},
 					{
 						"type": "url",

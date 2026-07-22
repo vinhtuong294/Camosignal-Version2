@@ -620,10 +620,14 @@
 		}
 
 		.camo-hero-slider__button {
+			position: absolute;
+			right: 16px;
+			bottom: 48px;
 			width: 176px;
 			min-width: 176px;
-			justify-content: space-between;
-			gap: 0;
+			margin: 0;
+			justify-content: center;
+			gap: 12px;
 		}
 
 		.camo-hero-slider__slide--mobile-button-left .camo-hero-slider__button {
@@ -639,6 +643,10 @@
 		.camo-hero-slider__slide--mobile-button-right .camo-hero-slider__button {
 			display: flex;
 			margin-inline: auto 0;
+		}
+
+		.camo-hero-slider__slide .camo-hero-slider__button {
+			margin: 0;
 		}
 
 		.camo-hero-slider__slide--left .camo-hero-slider__content-inner,
@@ -708,8 +716,8 @@
 		}
 
 		.camo-hero-slider__heading {
-			font-size: clamp(60px, 5.2vw, 88px);
-			white-space: normal;
+			font-size: clamp(52px, 4vw, 76px);
+			white-space: nowrap;
 		}
 
 		.camo-hero-slider__eyebrow {
@@ -724,14 +732,17 @@
 		}
 
 		.camo-hero-slider__subheading {
-			gap: 14px;
+			display: block;
+			width: 100%;
 			margin-top: 18px;
 			font-size: clamp(17px, 1.35vw, 24px);
+			text-align: left;
 		}
 
 		.camo-hero-slider__subheading::before,
 		.camo-hero-slider__subheading::after {
-			width: 52px;
+			content: none;
+			display: none;
 		}
 
 		.camo-hero-slider__button {

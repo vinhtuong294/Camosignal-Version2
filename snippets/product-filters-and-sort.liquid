@@ -13,13 +13,24 @@
 	------------------------------------------------------------------------------
 {%- endcomment -%}
 
-{%- if template.name == 'collection' -%}
-	{%- assign count = product_list.products_count -%}
-{%- elsif template.name == 'search' -%}
-	{%- assign count = product_list.results_count -%}
-{%- endif -%}
-
 {%- assign id = filter_type -%}
+
+{%- assign active_sort_by = product_list.sort_by | default: product_list.default_sort_by -%}
+{%- assign active_sort_label = 'collections.sorting.featured' | t -%}
+{%- case active_sort_by -%}
+	{%- when 'created-descending' -%}
+		{%- assign active_sort_label = 'collections.sorting.newest' | t -%}
+	{%- when 'best-selling' -%}
+		{%- assign active_sort_label = 'collections.sorting.most_popular' | t -%}
+	{%- when 'price-ascending' -%}
+		{%- assign active_sort_label = 'collections.sorting.price_low_to_high' | t -%}
+	{%- when 'price-descending' -%}
+		{%- assign active_sort_label = 'collections.sorting.price_high_to_low' | t -%}
+	{%- else -%}
+		{%- if active_sort_by contains 'rating' -%}
+			{%- assign active_sort_label = 'collections.sorting.highest_rated' | t -%}
+		{%- endif -%}
+{%- endcase -%}
 
 {%- assign active_filters_size = 0 -%}
 
@@ -70,13 +81,12 @@
 								class="accordion product-filters__form-accordion js-accordion-container js-filters-container"
 								id="filters-container-{{ section.id }}-{{ filter.param_name | escape }}-{{- id -}}"
 							>
-								{%- assign filterListIndex = 1 -%}
+								{%- assign filter_list_index = 1 -%}
 
 							{%- comment -%} ── Build availability lookups (same as sidebar) ── {%- endcomment -%}
 							{%- assign available_hunting_values = '' -%}
 							{%- assign available_seasonal_values = '' -%}
 							{%- assign param_hunting = 'filter.p.m.custom.hunting' -%}
-							{%- assign param_seasonal = 'filter.p.m.custom.seasonal' -%}
 							{%- for filter in product_list.filters -%}
 								{%- assign param_down = filter.param_name | downcase -%}
 								{%- if param_down contains 'hunting' -%}
@@ -87,7 +97,6 @@
 										{%- endif -%}
 									{%- endfor -%}
 								{%- elsif param_down contains 'seasonal' -%}
-									{%- assign param_seasonal = filter.param_name -%}
 									{%- for fv in filter.values -%}
 										{%- if fv.count > 0 or fv.active -%}
 											{%- assign available_seasonal_values = available_seasonal_values | append: fv.label | append: '|||' -%}
@@ -110,12 +119,15 @@
 									<button
 										class="focus-visible-outline accordion__control product-filters__form-item-toggle-button js-accordion-control"
 										type="button"
-										id="Filter-accordion-{{ section.id }}-{{- filterListIndex -}}-{{- id -}}"
-										aria-controls="filter-list-{{ section.id }}-{{- filterListIndex -}}-{{- id -}}"
+										id="Filter-accordion-{{ section.id }}-{{- filter_list_index -}}-{{- id -}}"
+										aria-controls="filter-list-{{ section.id }}-{{- filter_list_index -}}-{{- id -}}"
 										aria-expanded="false"
 									>
-										<span class="product-filters__form-item-toggle-title">
-											{{- 'collections.sorting.title' | t -}}
+										<span
+											class="product-filters__form-item-toggle-title js-sort-title"
+											data-sort-title-prefix="{{- 'collections.sorting.title' | t | escape -}}"
+										>
+											{{- 'collections.sorting.title' | t -}}: {{ active_sort_label -}}
 										</span>
 										{%- render 'icons', icon: 'arrow-down' -%}
 									</button>
@@ -123,8 +135,8 @@
 
 								<div
 									class="accordion__content accordion__content--animate js-accordion-content"
-									id="filter-list-{{ section.id }}-{{- filterListIndex -}}-{{- id -}}"
-									aria-labelledby="Filter-accordion-{{ section.id }}-{{- filterListIndex -}}-{{- id -}}"
+									id="filter-list-{{ section.id }}-{{- filter_list_index -}}-{{- id -}}"
+									aria-labelledby="Filter-accordion-{{ section.id }}-{{- filter_list_index -}}-{{- id -}}"
 									role="region"
 									style="height: 0;"
 								>
@@ -134,7 +146,7 @@
 								</div>
 							</div>
 
-							{%- assign filterListIndex = filterListIndex | plus: 1 -%}
+							{%- assign filter_list_index = filter_list_index | plus: 1 -%}
 
 							{%- comment -%} Custom Collection Filter (mobile drawer) {%- endcomment -%}
 							{%- if template.name == 'collection' -%}
@@ -185,10 +197,11 @@
 									</div>
 								</div>
 
-								{%- assign filterListIndex = filterListIndex | plus: 1 -%}
+								{%- assign filter_list_index = filter_list_index | plus: 1 -%}
 							{%- endif -%}
 
 							{%- comment -%} ── BRAND (Seasonal) ── {%- endcomment -%}
+							{%- if false -%}
 							<div id="filter-{{ section.id }}-seasonal-{{- id -}}" class="accordion__item product-filters__form-item js-accordion-item js-filter-item js-custom-accordion" data-filter-group="filter.p.m.custom.seasonal">
 								<h3 class="accordion__title">
 									<button class="focus-visible-outline accordion__control product-filters__form-item-toggle-button js-accordion-control js-custom-accordion-btn" type="button" aria-expanded="false">
@@ -230,6 +243,8 @@
 									</div>
 								</div>
 							</div>
+
+							{%- endif -%}
 
 							{%- comment -%} ── CLOTHING (Product Type) ── {%- endcomment -%}
 							<div id="filter-{{ section.id }}-clothing-{{- id -}}" class="accordion__item product-filters__form-item js-accordion-item js-filter-item js-clothing-accordion">
@@ -415,6 +430,9 @@
 								{%- endif -%}
 
 								{%- assign downcased_label = filter.label | downcase -%}
+								{%- if downcased_label == 'color' or downcased_label == 'colour' or downcased_label == 'brand' or downcased_label == 'vendor' or filter.param_name contains 'color' or filter.param_name contains 'colour' or filter.param_name contains 'vendor' -%}
+									{%- continue -%}
+								{%- endif -%}
 								{%- if filter.param_name contains 'availab' or downcased_label contains 'availab' or downcased_label contains 'tình trạng' or filter.type == 'boolean' -%}
 									{%- continue -%}
 								{%- endif -%}
@@ -432,8 +450,8 @@
 										<button
 											class="focus-visible-outline accordion__control product-filters__form-item-toggle-button js-accordion-control"
 											type="button"
-											id="Filter-accordion-{{ section.id }}-{{- filterListIndex -}}-{{- id -}}"
-											aria-controls="filter-list-{{ section.id }}-{{- filterListIndex -}}-{{- id -}}"
+											id="Filter-accordion-{{ section.id }}-{{- filter_list_index -}}-{{- id -}}"
+											aria-controls="filter-list-{{ section.id }}-{{- filter_list_index -}}-{{- id -}}"
 											aria-expanded="false"
 										>
 											<span typeof="product-filters__form-item-toggle-title">
@@ -451,8 +469,8 @@
 
 									<div
 										class="accordion__content accordion__content--animate js-accordion-content"
-										id="filter-list-{{ section.id }}-{{- filterListIndex -}}-{{- id -}}"
-										aria-labelledby="Filter-accordion-{{ section.id }}-{{- filterListIndex -}}-{{- id -}}"
+										id="filter-list-{{ section.id }}-{{- filter_list_index -}}-{{- id -}}"
+										aria-labelledby="Filter-accordion-{{ section.id }}-{{- filter_list_index -}}-{{- id -}}"
 										role="region"
 										style="height: 0;"
 									>
@@ -472,7 +490,7 @@
 										</div>
 									</div>
 
-									{%- assign filterListIndex = filterListIndex | plus: 1 -%}
+									{%- assign filter_list_index = filter_list_index | plus: 1 -%}
 								</div>
 							{%- endfor -%}
 						</div>
@@ -494,3 +512,37 @@
 		</div>
 	</div>
 {%- endif -%}
+
+<script>
+	(function () {
+		function syncSortTitle(selectedLabel) {
+			var drawer = document.getElementById('filterMenuDrawer');
+			var title = drawer && drawer.querySelector('.js-sort-title');
+			var select = drawer && drawer.querySelector('select[name="sort_by"]');
+			var label = selectedLabel || (select && select.selectedOptions[0] && select.selectedOptions[0].textContent.trim());
+
+			if (title && label) {
+				title.textContent = title.dataset.sortTitlePrefix + ': ' + label;
+			}
+		}
+
+		window.camoSyncSortTitle = syncSortTitle;
+
+		if (!window.camoSortTitleSyncBound) {
+			window.camoSortTitleSyncBound = true;
+			document.addEventListener('change', function (event) {
+				if (event.target.matches('select[name="sort_by"]')) {
+					syncSortTitle(event.target.selectedOptions[0].textContent.trim());
+				}
+			});
+			document.addEventListener('click', function (event) {
+				if (event.target.closest('.js-filter-menu-opener')) {
+					window.setTimeout(syncSortTitle, 50);
+					window.setTimeout(syncSortTitle, 300);
+				}
+			});
+		}
+
+		window.setTimeout(syncSortTitle, 300);
+	})();
+</script>

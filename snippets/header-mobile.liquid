@@ -299,16 +299,34 @@
 													<span class="header-mobile__mega-plus" aria-hidden="true"></span>
 												</button>
 												<ul class="header-mobile__mega-panel">
-													{%- assign mobile_occasion_handles = 'nfl-shirt,back-to-school,usa' | split: ',' -%}
-													{%- assign mobile_occasion_labels = 'Game Day,Back to School,Independence Day' | split: ',' -%}
+											{%- assign mobile_occasion_handles = 'spooky-kids-tee,game-day,back-to-school,usa' | split: ',' -%}
+												{%- assign mobile_occasion_labels = 'Spooky Kids Tee,Game Day,First Day Kids Tee,Independence Day' | split: ',' -%}
 													{%- for mobile_occasion_handle in mobile_occasion_handles -%}
 														{%- assign mobile_occasion_col = collections[mobile_occasion_handle] -%}
 														{%- assign mobile_occasion_url = routes.collections_url | append: '/' | append: mobile_occasion_handle -%}
-														{%- if mobile_occasion_col != blank -%}
-															{%- assign mobile_occasion_url = mobile_occasion_col.url -%}
-														{%- endif -%}
-														<li class="header-mobile__dropdown-item"><a class="header-mobile__dropdown-link" href="{{ mobile_occasion_url }}"><span>{{ mobile_occasion_labels[forloop.index0] | escape }}</span></a></li>
-													{%- endfor -%}
+												{%- if mobile_occasion_col != blank -%}
+													{%- assign mobile_occasion_url = mobile_occasion_col.url -%}
+												{%- endif -%}
+										<li class="header-mobile__dropdown-item{% if mobile_occasion_handle == 'game-day' %} header-mobile__occasion-parent{% endif %}">
+									<a class="header-mobile__dropdown-link{% if mobile_occasion_handle == 'spooky-kids-tee' %} header-mobile__dropdown-link--spooky{% endif %}" href="{{ mobile_occasion_url }}"><span>{{ mobile_occasion_labels[forloop.index0] | escape }}</span></a>
+											{%- if mobile_occasion_handle == 'game-day' -%}
+														<ul class="header-mobile__occasion-submenu">
+											{%- assign mobile_game_day_sub_handles = 'game-day-t-shirt,game-day-jersey' | split: ',' -%}
+															{%- assign mobile_game_day_sub_labels = 'Graphic Tee,Jersey Football' | split: ',' -%}
+															{%- for mobile_game_day_sub_handle in mobile_game_day_sub_handles -%}
+																{%- assign mobile_game_day_sub_collection = collections[mobile_game_day_sub_handle] -%}
+																{%- assign mobile_game_day_sub_url = routes.collections_url | append: '/' | append: mobile_game_day_sub_handle -%}
+																{%- if mobile_game_day_sub_collection != blank -%}
+																	{%- assign mobile_game_day_sub_url = mobile_game_day_sub_collection.url -%}
+																{%- endif -%}
+																<li class="header-mobile__occasion-subitem">
+																	<a class="header-mobile__occasion-sublink" href="{{ mobile_game_day_sub_url }}"><span>{{ mobile_game_day_sub_labels[forloop.index0] | escape }}</span></a>
+																</li>
+															{%- endfor -%}
+														</ul>
+													{%- endif -%}
+												</li>
+											{%- endfor -%}
 												</ul>
 											</li>
 										{%- elsif is_collection_link -%}
@@ -330,10 +348,15 @@
 												{%- if mob_grand_slam_col != blank -%}
 													{%- assign mob_grand_slam_url = mob_grand_slam_col.url -%}
 												{%- endif -%}
-												{%- assign mob_nfl_col = collections['nfl-shirt'] -%}
-												{%- assign mob_nfl_url = routes.collections_url | append: '/nfl-shirt' -%}
-												{%- if mob_nfl_col != blank -%}
-													{%- assign mob_nfl_url = mob_nfl_col.url -%}
+												{%- assign mob_game_day_col = collections['game-day'] -%}
+												{%- assign mob_game_day_url = routes.collections_url | append: '/game-day' -%}
+												{%- if mob_game_day_col != blank -%}
+													{%- assign mob_game_day_url = mob_game_day_col.url -%}
+												{%- endif -%}
+												{%- assign mob_spooky_kids_tee_col = collections['spooky-kids-tee'] -%}
+												{%- assign mob_spooky_kids_tee_url = routes.collections_url | append: '/spooky-kids-tee' -%}
+												{%- if mob_spooky_kids_tee_col != blank -%}
+													{%- assign mob_spooky_kids_tee_url = mob_spooky_kids_tee_col.url -%}
 												{%- endif -%}
 												{%- assign mob_back_to_school_col = collections['back-to-school'] -%}
 												{%- assign mob_back_to_school_url = routes.collections_url | append: '/back-to-school' -%}
@@ -349,8 +372,9 @@
 													<ul class="header-mobile__mega-panel">
 								{% comment %}<li class="header-mobile__dropdown-item"><a class="header-mobile__dropdown-link" href="/collections/all?filter.p.product_type=Sweatshirt"><span>Sweatshirts</span></a></li>{% endcomment %}
 								{% comment %}<li class="header-mobile__dropdown-item"><a class="header-mobile__dropdown-link" href="/collections/all?filter.p.product_type=Hoodie"><span>Hoodies</span></a></li>{% endcomment %}
-								<li class="header-mobile__dropdown-item"><a class="header-mobile__dropdown-link" href="{{ mob_nfl_url }}"><span>GAME DAY</span></a></li>
-								<li class="header-mobile__dropdown-item"><a class="header-mobile__dropdown-link" href="{{ mob_back_to_school_url }}"><span>Back to School</span></a></li>
+								<li class="header-mobile__dropdown-item"><a class="header-mobile__dropdown-link header-mobile__dropdown-link--spooky" href="{{ mob_spooky_kids_tee_url }}"><span>Spooky Kids Tee</span></a></li>
+								<li class="header-mobile__dropdown-item"><a class="header-mobile__dropdown-link" href="{{ mob_game_day_url }}"><span>GAME DAY</span></a></li>
+								<li class="header-mobile__dropdown-item"><a class="header-mobile__dropdown-link" href="{{ mob_back_to_school_url }}"><span>First Day Kids Tee</span></a></li>
 								<li class="header-mobile__dropdown-item"><a class="header-mobile__dropdown-link" href="{{ mob_nation_park_url }}"><span>National Park</span></a></li>
 								<li class="header-mobile__dropdown-item"><a class="header-mobile__dropdown-link" href="{{ mob_world_turkey_slam_url }}"><span>World Turkey Slam</span></a></li>
 								<li class="header-mobile__dropdown-item"><a class="header-mobile__dropdown-link" href="{{ mob_grand_slam_url }}"><span>Grand Slam Subspecies</span></a></li>
@@ -1046,6 +1070,37 @@
 .header-mobile__dropdown-link.is-active,
 .header-mobile__dropdown-link.is-active span {
 	font-weight: 600 !important;
+}
+.header-mobile__dropdown-item .header-mobile__dropdown-link--spooky,
+.header-mobile__dropdown-item .header-mobile__dropdown-link--spooky span {
+	color: #E66A1F !important;
+}
+.header-mobile__occasion-parent {
+	margin-bottom: 4px;
+}
+.header-mobile__occasion-submenu {
+	list-style: none;
+	margin: -5px 0 5px 14px;
+	padding: 0;
+}
+.header-mobile__occasion-subitem {
+	list-style: none;
+}
+.header-mobile__occasion-sublink,
+.header-mobile__occasion-sublink span {
+	display: block;
+	padding: 4px 0;
+	font-family: var(--heading-font-family) !important;
+	font-size: 13px !important;
+	font-weight: 400 !important;
+	line-height: 1.35;
+	letter-spacing: 0.03em !important;
+	text-transform: uppercase !important;
+	text-decoration: none;
+	color: #2C3D33 !important;
+}
+.header-mobile__occasion-sublink span {
+	padding: 0;
 }
 .header-mobile__dropdown-link--disabled {
 	opacity: 0.45;

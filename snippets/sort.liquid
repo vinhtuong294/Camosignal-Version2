@@ -36,11 +36,33 @@
 			name="sort_by"
 			aria-label="{{- 'collections.sorting.title' | t | escape -}}"
 		>
+			{%- assign available_sort_values = '|' -%}
+			{%- assign rating_sort_value = blank -%}
 			{%- for option in product_list.sort_options -%}
-				<option value="{{- option.value | escape -}}" {% if option.value == sort_by %} selected{%- endif -%}>
-					{{- option.name | escape -}}
-				</option>
+				{%- assign available_sort_values = available_sort_values | append: option.value | append: '|' -%}
+				{%- if option.value contains 'rating' -%}
+					{%- assign rating_sort_value = option.value -%}
+				{%- endif -%}
 			{%- endfor -%}
+
+			{%- if available_sort_values contains '|manual|' -%}
+				<option value="manual" {% if sort_by == 'manual' %} selected{%- endif -%}>{{- 'collections.sorting.featured' | t | escape -}}</option>
+			{%- endif -%}
+			{%- if available_sort_values contains '|created-descending|' -%}
+				<option value="created-descending" {% if sort_by == 'created-descending' %} selected{%- endif -%}>{{- 'collections.sorting.newest' | t | escape -}}</option>
+			{%- endif -%}
+			{%- if available_sort_values contains '|best-selling|' -%}
+				<option value="best-selling" {% if sort_by == 'best-selling' %} selected{%- endif -%}>{{- 'collections.sorting.most_popular' | t | escape -}}</option>
+			{%- endif -%}
+			{%- if rating_sort_value != blank -%}
+				<option value="{{- rating_sort_value | escape -}}" {% if sort_by == rating_sort_value %} selected{%- endif -%}>{{- 'collections.sorting.highest_rated' | t | escape -}}</option>
+			{%- endif -%}
+			{%- if available_sort_values contains '|price-ascending|' -%}
+				<option value="price-ascending" {% if sort_by == 'price-ascending' %} selected{%- endif -%}>{{- 'collections.sorting.price_low_to_high' | t | escape -}}</option>
+			{%- endif -%}
+			{%- if available_sort_values contains '|price-descending|' -%}
+				<option value="price-descending" {% if sort_by == 'price-descending' %} selected{%- endif -%}>{{- 'collections.sorting.price_high_to_low' | t | escape -}}</option>
+			{%- endif -%}
 		</select>
 	</div>
 </div>

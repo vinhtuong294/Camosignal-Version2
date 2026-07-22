@@ -186,6 +186,14 @@
 					</div>
 				{%- endif -%}
 			</div>
+
+			<button
+				type="button"
+				class="announcement-bar__close js-announcement-bar-close"
+				aria-label="{{ 'general.accessibility.close' | t }}"
+			>
+				<span aria-hidden="true">&times;</span>
+			</button>
 		</div>
 	</section>
 
@@ -193,6 +201,7 @@
 		(function() {
 			const section = document.querySelector(".js-announcement-bar");
 			const ticker = section.querySelector(".js-announcement-bar-ticker-container");
+			const closeButton = section.querySelector(".js-announcement-bar-close");
 			const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 			let tickerIsVisible = true;
 
@@ -233,6 +242,17 @@
 				}
 
 				updateTickerState();
+			}
+
+			if (closeButton) {
+				closeButton.addEventListener("click", () => {
+					section.classList.add("is-hidden");
+					changeCssVariable("--announcement-bar-height", "0px");
+
+					if (window.themeCore && window.themeCore.EventBus) {
+						window.themeCore.EventBus.emit("announcement-bar:changed", {});
+					}
+				});
 			}
 
 			function changeCssVariable(variable, value) {
@@ -291,7 +311,7 @@
 			"id": "autoplay_speed",
 			"label": "Autoplay speed",
 			"unit": "s",
-			"min": 3,
+			"min": 2,
 			"max": 10,
 			"step": 1,
 			"info": "Works only with enabled autoplay",

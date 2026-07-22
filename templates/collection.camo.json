@@ -12,7 +12,7 @@
     "plp-banner": {
       "type": "collection-banner",
       "settings": {
-        "show_eyebrow": true,
+        "show_eyebrow": false,
         "show_description": true,
         "background_color": "#2c3d33",
         "text_color": "#ffffff",

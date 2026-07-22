@@ -237,9 +237,12 @@
 		}
 	},
 	"collections": {
+		"banner": {
+			"description": "Explore outdoor-inspired {{ title }} styles from Camo Signal."
+		},
 		"general": {
 			"empty_collection": "No products found",
-			"filter_and_sort": "Filters and sort",
+			"filter_and_sort": "Filter",
 			"grid_view_by_label": "View by",
 			"grid_view_1": "Change grid view to 1 product per row",
 			"grid_view_2": "Change grid view to 2 products per row",
@@ -247,7 +250,13 @@
 			"grid_view_4": "Change grid view to 4 products per row"
 		},
 		"sorting": {
-			"title": "Sort by"
+			"title": "Sort by",
+			"featured": "Featured",
+			"newest": "Newest",
+			"most_popular": "Most Popular",
+			"highest_rated": "Highest Rated",
+			"price_low_to_high": "Price: Low to High",
+			"price_high_to_low": "Price: High to Low"
 		}
 	},
 	"customer": {
@@ -439,6 +448,13 @@
 			"minimum_of": "Minimum of {{number}}",
 			"maximum_of": "Maximum of {{number}}",
 			"add_to_cart": "Add to cart",
+			"purchase_perks_label": "Purchase offers",
+			"free_shipping_from_one_item": "Free shipping from 1 item",
+			"free_shipping_from_two_items": "Free shipping from 2 items",
+			"buy_more_save_more": "Buy more, save more",
+			"buy_two_save_ten": "Buy 2 · Save 10%",
+			"buy_three_save_fifteen": "Buy 3 · Save 15%",
+			"buy_four_save_twenty": "Buy 4 · Save 20%",
 			"also_available_as": "Also available as",
 			"pre_order": "Pre-order",
 			"choose_an_option": "Choose an option",

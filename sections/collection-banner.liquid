@@ -33,17 +33,9 @@
 		assign collection_eyebrow = eyebrow_override
 	endif
 
-	assign description_override = collection.metafields.custom.banner_description.value
-	if description_override != blank
-		assign collection_description = description_override
-	elsif collection.handle == 'all' or collection.handle == blank
-		assign collection_description = 'Explore the complete Camo Signal collection.'
-	elsif collection.handle == 'new-arrivals'
-		assign collection_description = 'Discover the latest outdoor-inspired styles from Camo Signal.'
-	elsif collection.handle == 'best-sellers'
-		assign collection_description = 'Shop the designs Camo Signal customers love most.'
-	else
-		assign collection_description = 'Explore outdoor-inspired ' | append: collection_title | append: ' styles from Camo Signal.'
+	assign collection_description = blank
+	if collection.handle != 'all' and collection.handle != blank and collection.title != blank
+		assign collection_description = 'collections.banner.description' | t: title: collection.title
 	endif
 -%}
 
@@ -84,7 +76,7 @@
 			"type": "checkbox",
 			"id": "show_eyebrow",
 			"label": "Show eyebrow",
-			"default": true
+			"default": false
 		},
 		{
 			"type": "checkbox",

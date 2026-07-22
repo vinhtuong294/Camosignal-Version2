@@ -24,6 +24,53 @@
   font-size: 18px;
   font-weight: 600;
 }
+.custom-sort-inline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #2c3d33;
+  font-size: 18px;
+  white-space: nowrap;
+}
+.custom-sort-inline__label {
+  color: rgba(44, 61, 51, 0.65);
+  font-weight: 400;
+}
+.custom-sort-select-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(44, 61, 51, 0.85);
+}
+.custom-sort-inline select {
+  min-width: 160px;
+  min-height: 0;
+  height: auto;
+  padding: 2px 28px 4px 0;
+  border: 0;
+  background: transparent;
+  color: #2c3d33;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.3;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.custom-sort-select-wrap::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 4px;
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid #2c3d33;
+  border-bottom: 1.5px solid #2c3d33;
+  pointer-events: none;
+  transform: translateY(-70%) rotate(45deg);
+}
 .custom-coll-turkey-row {
   display: flex;
   justify-content: flex-end;
@@ -56,52 +103,6 @@
   font-size: 1.05em;
   line-height: 1;
 }
-.custom-sort-inline {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: #2c3d33;
-  font-size: 18px;
-  white-space: nowrap;
-}
-.custom-sort-inline span {
-  font-style: italic;
-  font-weight: 400;
-}
-.custom-sort-inline select {
-  border: none;
-  background: transparent;
-  box-sizing: border-box;
-  font-style: normal;
-  font-size: 18px;
-  font-weight: 400;
-  color: rgba(44, 61, 51, 0.7);
-  cursor: pointer;
-  outline: none;
-  min-width: 0;
-  padding: 2px 14px 2px 4px;
-  font-family: inherit;
-  -webkit-appearance: none;
-  appearance: none;
-}
-.custom-sort-select-wrap {
-  position: relative;
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-}
-.custom-sort-select-wrap::after {
-  content: "";
-  position: absolute;
-  right: 2px;
-  top: 50%;
-  width: 6px;
-  height: 6px;
-  border-right: 1.5px solid rgba(44, 61, 51, 0.7);
-  border-bottom: 1.5px solid rgba(44, 61, 51, 0.7);
-  pointer-events: none;
-  transform: translateY(-65%) rotate(45deg);
-}
 @media (min-width: 1200px) {
   .custom-coll-turkey-row {
     transform: translateY(64px);
@@ -111,29 +112,25 @@
   .custom-coll-wrap {
     padding: 0 20px;
   }
+  .custom-sort-inline,
+  .custom-sort-inline select {
+    font-size: 16px;
+  }
+  .custom-sort-inline select {
+    min-width: 145px;
+  }
 }
 @media (max-width: 767px) {
   .custom-coll-wrap {
     padding: 0 16px;
   }
   .custom-coll-inner {
-    align-items: center;
-    min-height: 52px;
-    border-bottom: 1px solid rgba(44,61,51,0.14);
-    gap: 12px;
+    display: none;
   }
   .custom-coll-meta {
     width: 100%;
-    justify-content: space-between;
+    justify-content: flex-end;
     gap: 12px;
-  }
-  .custom-sort-inline {
-    font-size: 16px;
-  }
-  .custom-sort-inline select {
-    font-size: 16px;
-    padding-top: 0;
-    padding-bottom: 0;
   }
   .custom-coll-count {
     font-size: 16px;
@@ -146,59 +143,43 @@
     font-size: 16px;
   }
 
-  body .collection {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-  }
-  body .collection .collection__container {
-    row-gap: 4px !important;
-  }
-  body .collection .collection__header {
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-  }
-  body .collection .collection__header-main {
-    display: none !important;
-    border: 0 !important;
-    min-height: 0 !important;
-    padding: 0 !important;
-  }
-  body .collection .collection__body {
-    margin-top: -2px !important;
-    padding-top: 0 !important;
-  }
-  body .collection .collection__header-container {
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-  }
-  body .collection .collection__header-controls {
-    row-gap: 0 !important;
-  }
-  body .collection .collection__header-controls-wrapper {
-    min-height: 32px !important;
-    row-gap: 0 !important;
-    align-items: center !important;
-  }
-  body .collection .collection__header-filter-button {
-    margin: 0 !important;
-  }
 }
 </style>
 
 <div class="custom-coll-wrap">
   <div class="custom-coll-inner">
     <div class="custom-coll-meta">
+      {%- assign custom_sort_by = collection.sort_by | default: collection.default_sort_by -%}
+      {%- assign custom_available_sort_values = '|' -%}
+      {%- assign custom_rating_sort_value = blank -%}
+      {%- for option in collection.sort_options -%}
+        {%- assign custom_available_sort_values = custom_available_sort_values | append: option.value | append: '|' -%}
+        {%- if option.value contains 'rating' -%}
+          {%- assign custom_rating_sort_value = option.value -%}
+        {%- endif -%}
+      {%- endfor -%}
       <div class="custom-sort-inline">
-        <span>Sort by:</span>
+        <label class="custom-sort-inline__label" for="custom-sort-select">{{- 'collections.sorting.title' | t -}}</label>
         <span class="custom-sort-select-wrap">
-          <select id="custom-sort-select">
-            {% for option in collection.sort_options %}
-              <option value="{{ option.value }}" {% if option.value == collection.sort_by or option.value == collection.default_sort_by and collection.sort_by == blank %}selected{% endif %}>
-                {{ option.name }}
-              </option>
-            {% endfor %}
+          <select id="custom-sort-select" name="sort_by" aria-label="{{- 'collections.sorting.title' | t | escape -}}">
+            {%- if custom_available_sort_values contains '|manual|' -%}
+              <option value="manual"{% if custom_sort_by == 'manual' %} selected{% endif %}>{{- 'collections.sorting.featured' | t | escape -}}</option>
+            {%- endif -%}
+            {%- if custom_available_sort_values contains '|created-descending|' -%}
+              <option value="created-descending"{% if custom_sort_by == 'created-descending' %} selected{% endif %}>{{- 'collections.sorting.newest' | t | escape -}}</option>
+            {%- endif -%}
+            {%- if custom_available_sort_values contains '|best-selling|' -%}
+              <option value="best-selling"{% if custom_sort_by == 'best-selling' %} selected{% endif %}>{{- 'collections.sorting.most_popular' | t | escape -}}</option>
+            {%- endif -%}
+            {%- if custom_rating_sort_value != blank -%}
+              <option value="{{ custom_rating_sort_value | escape }}"{% if custom_sort_by == custom_rating_sort_value %} selected{% endif %}>{{- 'collections.sorting.highest_rated' | t | escape -}}</option>
+            {%- endif -%}
+            {%- if custom_available_sort_values contains '|price-ascending|' -%}
+              <option value="price-ascending"{% if custom_sort_by == 'price-ascending' %} selected{% endif %}>{{- 'collections.sorting.price_low_to_high' | t | escape -}}</option>
+            {%- endif -%}
+            {%- if custom_available_sort_values contains '|price-descending|' -%}
+              <option value="price-descending"{% if custom_sort_by == 'price-descending' %} selected{% endif %}>{{- 'collections.sorting.price_high_to_low' | t | escape -}}</option>
+            {%- endif -%}
           </select>
         </span>
       </div>
@@ -222,38 +203,12 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function(){
-  var s = document.getElementById('custom-sort-select');
-  if(s) {
-    var sortCanvas = document.createElement('canvas');
-    var sortContext = sortCanvas.getContext('2d');
-    var sizeSortSelect = function() {
-      if (!sortContext || !s.options.length) {
-        return;
-      }
-
-      var selectedText = s.options[s.selectedIndex].text.trim();
-      var styles = window.getComputedStyle(s);
-      sortContext.font = [
-        styles.fontStyle,
-        styles.fontVariant,
-        styles.fontWeight,
-        styles.fontSize,
-        styles.fontFamily
-      ].join(' ');
-      s.style.width = Math.ceil(sortContext.measureText(selectedText).width + 20) + 'px';
-    };
-
-    sizeSortSelect();
-    window.addEventListener('resize', sizeSortSelect);
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(sizeSortSelect);
-    }
-
-    s.addEventListener('change', function(){
-      sizeSortSelect();
-      var url = new URL(window.location.href);
-      url.searchParams.set('sort_by', s.value);
-      window.location.href = url.toString();
+  var customSort = document.getElementById('custom-sort-select');
+  if (customSort) {
+    customSort.addEventListener('change', function(){
+      var sortUrl = new URL(window.location.href);
+      sortUrl.searchParams.set('sort_by', customSort.value);
+      window.location.href = sortUrl.toString();
     });
   }
 

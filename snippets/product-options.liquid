@@ -102,6 +102,8 @@
 											<img
 												src="{{- swatch_image | image_url: width: 96, height: 96 -}}"
 												class="radio-option-swatch__image"
+												width="96"
+												height="96"
 												aria-hidden="true"
 												fetchpriority="low"
 												loading="lazy"
@@ -324,12 +326,24 @@
 		opacity: 0.7;
 	}
 
-	/* Make color swatches round on product page */
+	/* Compact rectangular color swatches on the product page */
+	.product-options .radio-option-swatch {
+		width: 42px !important;
+		height: 28px !important;
+		flex: 0 0 42px !important;
+		aspect-ratio: auto !important;
+	}
+
 	.product-options .radio-option-swatch__label,
 	.product-options .radio-option-swatch__label::before,
 	.product-options .radio-option-swatch__label::after,
 	.product-options .radio-option-swatch__image {
-		border-radius: 50% !important;
+		border-radius: 2px !important;
+	}
+
+	.product-options .radio-option-swatch__label {
+		width: 42px !important;
+		height: 28px !important;
 	}
 
 	/* Increase gap between color swatches on desktop */
@@ -337,10 +351,36 @@
 		gap: 12px !important;
 	}
 
+	@media screen and (min-width: 768px) {
+		.product-options .product-options__swatch-container {
+			width: 100% !important;
+			min-width: 0;
+			padding: 3px;
+			flex-wrap: nowrap !important;
+			overflow-x: auto;
+			scrollbar-width: none;
+		}
+
+		.product-options .product-options__swatch-container::-webkit-scrollbar {
+			display: none;
+		}
+
+		.product-options .radio-option-swatch {
+			width: 52px !important;
+			height: 30px !important;
+			flex: 0 0 52px !important;
+		}
+
+		.product-options .radio-option-swatch__label {
+			width: 52px !important;
+			height: 30px !important;
+		}
+	}
+
 	/* Selected color swatch indicator — áp dụng cả mobile lẫn desktop */
 	.product-options .radio-option-swatch .radio-input:checked + .radio-option-swatch__label {
 		outline: 2px solid #2c3d33 !important;
-		outline-offset: 3px !important;
+		outline-offset: 1px !important;
 	}
 	.product-options .radio-option-swatch .radio-input:checked + .radio-option-swatch__label::after {
 		width: 0 !important;
@@ -426,18 +466,6 @@
 			flex-wrap: wrap !important;
 			gap: 12px !important;
 			width: 100% !important;
-		}
-
-		.product-options .radio-option-swatch {
-			width: 36px !important;
-			height: 36px !important;
-			flex: 0 0 36px !important;
-			aspect-ratio: 1 / 1 !important;
-		}
-
-		.product-options .radio-option-swatch__label {
-			width: 36px !important;
-			height: 36px !important;
 		}
 
 		/* Force parent containers trải rộng full */

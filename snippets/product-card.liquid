@@ -25,6 +25,7 @@ Renders the shared storefront product card with variant images, solid color swat
 
 	{%- liquid
 		assign swatches_enabled = settings.is_color_swatches_enabled
+		assign is_image_on_hover_enabled = settings.is_image_on_hover_enabled
 		assign configured_swatch_names = settings.color_swatches_option | default: 'Color' | downcase | split: ','
 		assign currency_code_enabled = settings.is_currency_code_enabled
 		assign size = size | default: 439
@@ -52,6 +53,11 @@ Renders the shared storefront product card with variant images, solid color swat
 
 		if is_lazy == nil
 			assign is_lazy = true
+		endif
+
+		assign card_hover_image = blank
+		if product != blank and is_image_on_hover_enabled and product.images.size > 1
+			assign card_hover_image = product.images[1]
 		endif
 
 		if card_collection_handle == blank
@@ -243,6 +249,10 @@ Renders the shared storefront product card with variant images, solid color swat
 							endif
 
 							assign swatch_image = swatch_image | default: product.featured_image | default: settings.product_default_image
+							assign swatch_has_hover_image = false
+							if card_hover_image != blank and card_hover_image.id != swatch_image.id
+								assign swatch_has_hover_image = true
+							endif
 							assign swatch_is_active = false
 							if swatch_name == selected_color
 								assign swatch_is_active = true
@@ -257,7 +267,7 @@ Renders the shared storefront product card with variant images, solid color swat
 						-%}
 
 						<div
-							class="product-card__image-wrapper product-card__image-wrapper--reference js-product-card-images-wrapper{% if swatch_is_active %} is-active{% endif %}"
+							class="product-card__image-wrapper product-card__image-wrapper--reference js-product-card-images-wrapper{% if swatch_has_hover_image %} product-card__image-wrapper--with-hover{% endif %}{% if swatch_is_active %} is-active{% endif %}"
 							data-image="{{- swatch_name | escape -}}"
 							data-variant="{{- swatch_variant.id -}}"
 						>
@@ -270,11 +280,22 @@ Renders the shared storefront product card with variant images, solid color swat
 								tablet_size: tablet_size,
 								mobile_size: mobile_size
 							-%}
+							{%- if swatch_has_hover_image -%}
+								{%- render 'product-card-image',
+									product: product,
+									is_lazy: true,
+									image: card_hover_image,
+									is_hover_image: true,
+									size: size,
+									tablet_size: tablet_size,
+									mobile_size: mobile_size
+								-%}
+							{%- endif -%}
 						</div>
 					{%- endfor -%}
 				{%- else -%}
 					{%- assign card_image = product.featured_image | default: settings.product_default_image -%}
-					<div class="product-card__image-wrapper product-card__image-wrapper--reference is-active">
+					<div class="product-card__image-wrapper product-card__image-wrapper--reference{% if card_hover_image != blank and card_hover_image.id != card_image.id %} product-card__image-wrapper--with-hover{% endif %} is-active">
 						{%- render 'product-card-image',
 							product: product,
 							is_lazy: is_lazy,
@@ -284,6 +305,17 @@ Renders the shared storefront product card with variant images, solid color swat
 							tablet_size: tablet_size,
 							mobile_size: mobile_size
 						-%}
+						{%- if card_hover_image != blank and card_hover_image.id != card_image.id -%}
+							{%- render 'product-card-image',
+								product: product,
+								is_lazy: true,
+								image: card_hover_image,
+								is_hover_image: true,
+								size: size,
+								tablet_size: tablet_size,
+								mobile_size: mobile_size
+							-%}
+						{%- endif -%}
 					</div>
 				{%- endif -%}
 			</a>

@@ -6,6 +6,31 @@
 {%- endcomment -%}
 
 <style>
+	body.template-cart :is(
+		#ShopifyChat,
+		#shopify-chat,
+		shopify-chat,
+		[id*="shopify-chat"],
+		iframe#dummy-chat-button-iframe,
+		iframe[title*="chat" i],
+		iframe[src*="shopifychat" i],
+		iframe[src*="inbox.shopify" i]
+	),
+	body:has(#CartDrawer.is-active) :is(
+		#ShopifyChat,
+		#shopify-chat,
+		shopify-chat,
+		[id*="shopify-chat"],
+		iframe#dummy-chat-button-iframe,
+		iframe[title*="chat" i],
+		iframe[src*="shopifychat" i],
+		iframe[src*="inbox.shopify" i]
+	) {
+		display: none !important;
+		visibility: hidden !important;
+		pointer-events: none !important;
+	}
+
 	#ShopifyChat.camo-chat-drag-ready:not([is-open="true"]) {
 		touch-action: none !important;
 		user-select: none !important;

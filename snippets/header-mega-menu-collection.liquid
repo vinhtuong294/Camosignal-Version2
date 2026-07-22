@@ -11,7 +11,7 @@
 	{%- if is_hunting_menu -%}
 		{%- assign hunting_handles = 'turkey,deer,hunting-spirit' | split: ',' -%}
 		{%- assign hunting_labels = 'Turkey,Deer,All Hunting' | split: ',' -%}
-		<div class="header-mega-desktop__inner mega-fishing-shop">
+		<div class="header-mega-desktop__inner mega-fishing-shop mega-fishing-shop--fishing">
 			<ul class="mega-block__list mega-shop-clothing-nav mega-fishing-nav">
 				{%- for hunting_handle in hunting_handles -%}
 					{%- assign hunting_collection = collections[hunting_handle] -%}
@@ -66,7 +66,6 @@
 							</span>
 						</a>
 						<div class="mega-shop-product__footer">
-							<a href="{{ hunting_product_url }}" class="mega-shop-product__title">{{ hunting_title | escape }}</a>
 							<a href="{{ hunting_url }}" class="mega-shop-product__meta mega-shop-product__meta-link" aria-label="View all {{ hunting_label | escape }}">
 								<span>{{ hunting_label | escape }}</span>
 								<span class="mega-shop-product__view-all">View All <span aria-hidden="true">&gt;</span></span>
@@ -229,16 +228,34 @@
 
 				<div class="mega-block mega-block--featured">
 					<h3 class="mega-block__heading">Shop by Occasion</h3>
-					<ul class="mega-block__list mega-featured-list">
-						{%- assign occasion_handles = 'nfl-shirt,back-to-school,usa' | split: ',' -%}
-						{%- assign occasion_labels = 'Game Day,Back to School,Independence Day' | split: ',' -%}
+					<ul class="mega-block__list mega-featured-list mega-occasion-list">
+						{%- assign occasion_handles = 'spooky-kids-tee,game-day,back-to-school,usa' | split: ',' -%}
+						{%- assign occasion_labels = 'Spooky Kids Tee,Game Day,First Day Kids Tee,Independence Day' | split: ',' -%}
 						{%- for occasion_handle in occasion_handles -%}
 							{%- assign occasion_collection = collections[occasion_handle] -%}
 							{%- assign occasion_url = routes.collections_url | append: '/' | append: occasion_handle -%}
 							{%- if occasion_collection != blank -%}
 								{%- assign occasion_url = occasion_collection.url -%}
 							{%- endif -%}
-							<li><a href="{{ occasion_url }}" class="mega-block__link">{{ occasion_labels[forloop.index0] | escape }}</a></li>
+							<li class="mega-occasion-item{% if occasion_handle == 'game-day' %} mega-occasion-item--has-submenu{% endif %}">
+								<a href="{{ occasion_url }}" class="mega-block__link{% if occasion_handle == 'spooky-kids-tee' %} mega-block__link--spooky{% endif %}">{{ occasion_labels[forloop.index0] | escape }}</a>
+								{%- if occasion_handle == 'game-day' -%}
+									<ul class="mega-occasion-submenu">
+										{%- assign game_day_sub_handles = 'game-day-t-shirt,game-day-jersey' | split: ',' -%}
+										{%- assign game_day_sub_labels = 'Graphic Tee,Jersey Football' | split: ',' -%}
+										{%- for game_day_sub_handle in game_day_sub_handles -%}
+											{%- assign game_day_sub_collection = collections[game_day_sub_handle] -%}
+											{%- assign game_day_sub_url = routes.collections_url | append: '/' | append: game_day_sub_handle -%}
+											{%- if game_day_sub_collection != blank -%}
+												{%- assign game_day_sub_url = game_day_sub_collection.url -%}
+											{%- endif -%}
+											<li class="mega-occasion-submenu__item">
+												<a href="{{ game_day_sub_url }}" class="mega-occasion-submenu__link">{{ game_day_sub_labels[forloop.index0] | escape }}</a>
+											</li>
+										{%- endfor -%}
+									</ul>
+								{%- endif -%}
+							</li>
 						{%- endfor -%}
 					</ul>
 				</div>
@@ -249,7 +266,7 @@
 					<a href="{{ best_sellers_url }}" class="mega-more-collections__heading-link">Best Sellers</a>
 				</h3>
 				<div class="mega-shop-products mega-more-collections__product-grid">
-					{%- assign featured_collection_handles = 'national-park,faith-outdoors,nfl-shirt,back-to-school' | split: ',' -%}
+					{%- assign featured_collection_handles = 'national-park,faith-outdoors,game-day,back-to-school' | split: ',' -%}
 					{%- assign selected_product_keys = '|' -%}
 					{%- for featured_collection_handle in featured_collection_handles -%}
 						{%- assign featured_collection = collections[featured_collection_handle] -%}
@@ -262,7 +279,7 @@
 								{%- assign product = section.settings.more_collections_national_park_product -%}
 							{%- when 'faith-outdoors' -%}
 								{%- assign product = section.settings.more_collections_faith_outdoors_product -%}
-							{%- when 'nfl-shirt' -%}
+							{%- when 'game-day' -%}
 								{%- assign product = section.settings.more_collections_game_day_product -%}
 							{%- when 'back-to-school' -%}
 								{%- assign product = section.settings.more_collections_back_to_school_product -%}
@@ -605,10 +622,16 @@
 						{%- assign grand_slam_url = grand_slam_col.url -%}
 					{%- endif -%}
 
-					{%- assign nfl_col = collections['nfl-shirt'] -%}
-					{%- assign nfl_url = routes.collections_url | append: '/nfl-shirt' -%}
-					{%- if nfl_col != blank -%}
-						{%- assign nfl_url = nfl_col.url -%}
+					{%- assign game_day_col = collections['game-day'] -%}
+					{%- assign game_day_url = routes.collections_url | append: '/game-day' -%}
+					{%- if game_day_col != blank -%}
+						{%- assign game_day_url = game_day_col.url -%}
+					{%- endif -%}
+
+					{%- assign spooky_kids_tee_col = collections['spooky-kids-tee'] -%}
+					{%- assign spooky_kids_tee_url = routes.collections_url | append: '/spooky-kids-tee' -%}
+					{%- if spooky_kids_tee_col != blank -%}
+						{%- assign spooky_kids_tee_url = spooky_kids_tee_col.url -%}
 					{%- endif -%}
 
 					{%- assign back_to_school_col = collections['back-to-school'] -%}
@@ -617,8 +640,9 @@
 						{%- assign back_to_school_url = back_to_school_col.url -%}
 					{%- endif -%}
 
-					<li><a href="{{ nfl_url }}" class="mega-block__link">GAME DAY</a></li>
-					<li><a href="{{ back_to_school_url }}" class="mega-block__link">Back to School</a></li>
+					<li><a href="{{ spooky_kids_tee_url }}" class="mega-block__link mega-block__link--spooky">Spooky Kids Tee</a></li>
+					<li><a href="{{ game_day_url }}" class="mega-block__link">GAME DAY</a></li>
+					<li><a href="{{ back_to_school_url }}" class="mega-block__link">First Day Kids Tee</a></li>
 					<li><a href="{{ nation_park_url }}" class="mega-block__link">National Park</a></li>
 					<li><a href="{{ world_turkey_slam_url }}" class="mega-block__link">World Turkey Slam</a></li>
 					<li><a href="{{ grand_slam_url }}" class="mega-block__link">Grand Slam Subspecies</a></li>
@@ -813,6 +837,43 @@
 	gap: 2px;
 }
 
+.mega-occasion-item--has-submenu {
+	display: block !important;
+	min-height: auto !important;
+}
+
+.mega-occasion-submenu {
+	display: grid;
+	gap: 0;
+	margin: 0 0 3px 12px;
+	padding: 0;
+	list-style: none;
+}
+
+.mega-featured-list .mega-occasion-submenu__item {
+	display: block;
+	min-height: 20px;
+}
+
+.mega-occasion-submenu__link {
+	display: flex;
+	align-items: center;
+	min-height: 20px;
+	font-family: var(--heading-font-family);
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 1.35;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	text-decoration: none;
+	color: #2C3D33;
+}
+
+.mega-occasion-submenu__link:hover {
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
 .mega-more-collections__products {
 	min-width: 0;
 }
@@ -824,6 +885,16 @@
 .mega-more-collections__heading-link {
 	color: inherit;
 	text-decoration: none;
+}
+
+.mega-more-collections .mega-block__heading,
+.mega-more-collections .mega-more-collections__heading-link,
+.mega-more-collections .mega-block__link {
+	color: #2C3D33;
+}
+
+.mega-more-collections .mega-block__heading {
+	border-bottom-color: #2C3D33;
 }
 
 .mega-more-collections__heading-link:hover,
@@ -929,6 +1000,11 @@
 
 .mega-block__link:hover {
 	color: #000;
+}
+
+.mega-block__link.mega-block__link--spooky,
+.mega-block__link.mega-block__link--spooky:hover {
+	color: #E66A1F !important;
 }
 
 .mega-shop .mega-block--gender .mega-block__list,

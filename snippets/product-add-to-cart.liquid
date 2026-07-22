@@ -235,6 +235,35 @@
 		{%- endif -%}
 	{%- endfor -%}
 
+	{%- assign free_shipping_from_one_item = false -%}
+	{%- assign current_type = product.type | downcase -%}
+	{%- if current_type == 'hat' -%}
+		{%- assign free_shipping_from_one_item = true -%}
+	{%- endif -%}
+
+	<aside class="product-purchase-perks" aria-label="{{- 'products.product.purchase_perks_label' | t -}}">
+		<p class="product-purchase-perks__shipping">
+			{%- render 'icons', icon: 'shipping' -%}
+			<span>
+				{%- if free_shipping_from_one_item -%}
+					{{- 'products.product.free_shipping_from_one_item' | t -}}
+				{%- else -%}
+					{{- 'products.product.free_shipping_from_two_items' | t -}}
+				{%- endif -%}
+			</span>
+		</p>
+
+		<div
+			class="product-purchase-perks__savings"
+			role="list"
+			aria-label="{{- 'products.product.buy_more_save_more' | t -}}"
+		>
+			<span role="listitem">{{- 'products.product.buy_two_save_ten' | t -}}</span>
+			<span role="listitem">{{- 'products.product.buy_three_save_fifteen' | t -}}</span>
+			<span role="listitem">{{- 'products.product.buy_four_save_twenty' | t -}}</span>
+		</div>
+	</aside>
+
 	<button
 		type="submit"
 		class="add-to-cart button button--block button--{{- button_type }} {% unless product.first_available_variant.available %}disabled{% endunless %}"
@@ -257,46 +286,97 @@
 		{%- render 'icons', icon: 'loader' -%}
 	</button>
 
-	<div class="product-custom-banner-wrapper" style="order: 17; width: 100%; margin-top: 16px; margin-bottom: -10px;">
-		{%- assign is_hat = false -%}
-		{%- assign current_type = product.type | downcase -%}
-		{%- if current_type == 'hat' -%}
-			{%- assign is_hat = true -%}
-		{%- endif -%}
-		{%- for collection in product.collections -%}
-			{%- assign coll_title = collection.title | downcase -%}
-			{%- if coll_title == 'graphic tee' or collection.handle == 'graphic-tee' -%}
-				{%- assign is_hat = true -%}
-			{%- endif -%}
-		{%- endfor -%}
-
-		<picture>
-			{%- if is_hat -%}
-				<source media="(max-width: 767px)" srcset="https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Shipping-Mo1_b4238c92-15d6-448a-9a49-e812c6490d7a.jpg?v=1776857116">
-				<img src="https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Shipping-1item.jpg?v=1776857186" alt="Promo Banner" style="width: 100%; height: auto; border-radius: 6px 6px 0 0; display: block;">
-			{%- else -%}
-				<source media="(max-width: 767px)" srcset="https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Shipping-Mo.jpg?v=1776858319">
-				<img src="https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Shipping-2item.jpg?v=1776857227" alt="Promo Banner" style="width: 100%; height: auto; border-radius: 6px 6px 0 0; display: block;">
-			{%- endif -%}
-		</picture>
-	</div>
-
-	<div class="product-promo-banner-wrapper" style="order: 18; width: 100%;">
-		<style>
-			.product-add-to-cart .product-promo-banner-wrapper .product-promo-banner,
-			.product-add-to-cart .product-promo-banner-wrapper .product-promo-banner__img {
-				border-radius: 0 0 6px 6px !important;
-			}
-		</style>
-		{%- render 'product-promo-banner' -%}
-	</div>
-
 	{% if block.settings.show_additional_buttons %}
 		<div class="product-add-to-cart__additional-buttons product-add-to-cart__additional-buttons--{{ button_buy_it_type }}">
 			{{ form | payment_button }}
 		</div>
 	{% endif %}
 </div>
+
+{% stylesheet %}
+	.product-purchase-perks {
+		display: grid;
+		grid-template-columns: minmax(170px, 1fr) auto;
+		align-items: center;
+		gap: 10px;
+		order: 14;
+		width: 100%;
+		margin: 0 0 10px;
+		padding: 6px 10px;
+		border: 1px solid var(--color-accent, #ffd875);
+		border-radius: 0;
+		background: transparent;
+		color: var(--color-text-primary, #203224);
+	}
+
+	.product-purchase-perks__shipping {
+		display: flex;
+		align-items: center;
+		gap: 7px;
+		margin: 0;
+		font-size: 12px;
+		font-weight: 700;
+		line-height: 1.2;
+		letter-spacing: 0.02em;
+		text-transform: uppercase;
+	}
+
+	.product-purchase-perks__shipping .icon {
+		flex: 0 0 auto;
+		width: 19px;
+		height: 19px;
+	}
+
+	.product-purchase-perks__savings {
+		display: flex;
+		align-items: center;
+		padding-left: 6px;
+		border-left: 1px solid var(--color-accent, #ffd875);
+	}
+
+	.product-purchase-perks__savings span {
+		padding: 2px 7px;
+		border-left: 1px solid var(--color-accent, #ffd875);
+		font-family: "Oswald", sans-serif;
+		font-size: 11px;
+		font-weight: 600;
+		line-height: 1.2;
+		letter-spacing: 0.02em;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+
+	.product-purchase-perks__savings span:first-child {
+		border-left: 0;
+	}
+
+	@media screen and (max-width: 767px) {
+		.product-purchase-perks {
+			grid-template-columns: 1fr;
+			gap: 6px;
+			padding: 6px 10px;
+		}
+
+		.product-purchase-perks__shipping {
+			justify-content: center;
+		}
+
+		.product-purchase-perks__savings {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			padding-top: 6px;
+			padding-left: 0;
+			border-top: 1px solid var(--color-accent, #ffd875);
+			border-left: 0;
+		}
+
+		.product-purchase-perks__savings span {
+			padding: 2px 4px;
+			font-size: 10.5px;
+			text-align: center;
+		}
+	}
+{% endstylesheet %}
 
 {%- if show_sticky_add_to_cart -%}
 	<div class="mobile-sticky-atc js-mobile-sticky-atc" id="mobile-sticky-atc">
@@ -340,12 +420,12 @@
 		
 		/* Target any div injected by the BMSM app directly, force its styling to match Tactical Minimal */
 		.product-add-to-cart > div[class*="x1ghz6dp"], 
-		.product-add-to-cart > div:not(.product-upsell-block):not(.add-to-cart):not(.product-add-to-cart__additional-buttons):not(.product-add-to-cart__error):not(.recipient-form):not(.product-promo-banner-wrapper):not(.product-custom-banner-wrapper) {
-			order: 19; /* App block appears BELOW promo banner */
+		.product-add-to-cart > div:not(.product-upsell-block):not(.add-to-cart):not(.product-add-to-cart__additional-buttons):not(.product-add-to-cart__error):not(.recipient-form) {
+			order: 19;
 			margin-bottom: 0px !important; /* reduce gap! */
 			margin-top: 16px !important;
 		}
-		.product-add-to-cart > div:not(.product-upsell-block):not(.add-to-cart):not(.product-add-to-cart__additional-buttons):not(.product-add-to-cart__error):not(.recipient-form):not(.product-promo-banner-wrapper):not(.product-custom-banner-wrapper) * {
+		.product-add-to-cart > div:not(.product-upsell-block):not(.add-to-cart):not(.product-add-to-cart__additional-buttons):not(.product-add-to-cart__error):not(.recipient-form) * {
 			border-radius: 0px !important;
 		}
 

@@ -199,7 +199,6 @@
 {%- endcomment -%}
 {%- assign drawer_page_1 		= block.settings.drawer_page_1 -%}
 {%- assign drawer_toggle_text_1 	= block.settings.drawer_toggle_text_1 -%}
-{%- assign drawer_title_1 		= block.settings.drawer_title_1 | default: drawer_page_1.title -%}
 {%- assign show_drawer_1 		= false -%}
 
 {%- if drawer_page_1 != blank and drawer_page_1.content != blank and drawer_toggle_text_1 != blank -%}
@@ -219,7 +218,6 @@
 {%- endcomment -%}
 {%- assign drawer_page_2 		= block.settings.drawer_page_2 -%}
 {%- assign drawer_toggle_text_2 	= block.settings.drawer_toggle_text_2 -%}
-{%- assign drawer_title_2 		= block.settings.drawer_title_2 | default: drawer_page_2.title -%}
 {%- assign show_drawer_2 		= false -%}
 
 {%- if drawer_page_2 != blank and drawer_page_2.content != blank and drawer_toggle_text_2 != blank -%}
@@ -231,7 +229,6 @@
 {%- endcomment -%}
 {%- assign drawer_page_3 	   = block.settings.drawer_page_3 -%}
 {%- assign drawer_toggle_text_3 = block.settings.drawer_toggle_text_3 -%}
-{%- assign drawer_title_3 	   = block.settings.drawer_title_3 | default: drawer_page_3.title -%}
 {%- assign show_drawer_3 	   = false -%}
 
 {%- if drawer_page_3 != blank and drawer_page_3.content != blank and drawer_toggle_text_3 != blank -%}
@@ -248,8 +245,20 @@
 {%- assign size_guide_button_text			  = section.settings.size_guide_button_text | default: size_guide_button_text_translation -%}
 {%- assign size_chart_product_type = product.type | downcase | strip -%}
 {%- assign size_chart_mode = 'all' -%}
+{%- assign use_game_day_jersey_size_chart = false -%}
 
-{%- if size_chart_product_type == 'hat' -%}
+{%- if size_chart_product_type == '3d tshirt' -%}
+	{%- for size_chart_collection in product.collections -%}
+		{%- if size_chart_collection.handle == 'game-day-jersey' -%}
+			{%- assign use_game_day_jersey_size_chart = true -%}
+			{%- break -%}
+		{%- endif -%}
+	{%- endfor -%}
+{%- endif -%}
+
+{%- if use_game_day_jersey_size_chart -%}
+	{%- assign size_chart_mode = 'game-day-jersey' -%}
+{%- elsif size_chart_product_type == 'hat' -%}
 	{%- assign size_chart_mode = 'all' -%}
 {%- elsif size_chart_product_type contains 'long' and size_chart_product_type contains 'sleeve' -%}
 	{%- assign size_chart_mode = 'longsleeve' -%}
@@ -322,7 +331,7 @@
 			text-align: left;
 			line-height: 1.4;
 			transition: color var(--timing-short, 0.2s), opacity var(--timing-short, 0.2s);
-			font-family: 'Oswald', sans-serif !important;
+			font-family: var(--heading-font-family) !important;
 		}
 		.product-accordion__trigger-text,
 		.product-accordion__trigger > span:first-child {
@@ -600,6 +609,82 @@
 					aria-label="Close"
 				>&#10005;</button>
 			<div class="size-chart-overlay__panel">
+				{%- if use_game_day_jersey_size_chart -%}
+					<div class="size-chart-overlay__content size-chart-overlay__content--game-day-jersey">
+						<div class="size-chart-overlay__unit-tabs" role="tablist" aria-label="Game Day Jersey measurement unit">
+							<button class="size-chart-overlay__unit-tab is-active" type="button" onclick="switchSizeUnit(this, 'in')">In</button>
+							<button class="size-chart-overlay__unit-tab" type="button" onclick="switchSizeUnit(this, 'cm')">Cm</button>
+						</div>
+
+						<div class="size-chart-overlay__unit-panel is-active" data-unit-panel="in">
+							<h3 class="size-chart-overlay__subtitle">3D T-Shirt Size Chart</h3>
+							<p class="size-chart-overlay__note">Measurements are in <strong>inches</strong>. 1/2 Bust is measured flat across the garment.</p>
+							<div class="size-chart-overlay__table-wrap">
+								<table class="size-chart-overlay__table size-chart-overlay__table--game-day-jersey">
+									<thead>
+										<tr>
+											<th>Size</th>
+											<th>1/2 Bust (in)</th>
+											<th>Length (in)</th>
+											<th>Shoulder (in)</th>
+											<th>Sleeve Length (in)</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr><td>XXS</td><td>18.5</td><td>26.5</td><td>15.0</td><td>7.5</td></tr>
+										<tr><td>XS</td><td>19.7</td><td>27.5</td><td>16.5</td><td>7.9</td></tr>
+										<tr><td>S</td><td>20.9</td><td>28.5</td><td>17.3</td><td>8.3</td></tr>
+										<tr><td>M</td><td>22.0</td><td>29.5</td><td>18.1</td><td>8.7</td></tr>
+										<tr><td>L</td><td>23.2</td><td>30.5</td><td>19.3</td><td>9.1</td></tr>
+										<tr><td>XL</td><td>24.4</td><td>31.5</td><td>20.5</td><td>9.4</td></tr>
+										<tr><td>XXL</td><td>25.6</td><td>32.5</td><td>21.7</td><td>9.8</td></tr>
+										<tr><td>3XL</td><td>26.8</td><td>33.5</td><td>22.8</td><td>10.2</td></tr>
+										<tr><td>4XL</td><td>27.9</td><td>34.4</td><td>24.0</td><td>10.6</td></tr>
+										<tr><td>5XL</td><td>29.1</td><td>35.4</td><td>25.2</td><td>11.0</td></tr>
+										<tr><td>6XL</td><td>30.3</td><td>36.5</td><td>26.3</td><td>11.4</td></tr>
+										<tr><td>7XL</td><td>31.5</td><td>37.4</td><td>27.5</td><td>11.8</td></tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						<div class="size-chart-overlay__unit-panel" data-unit-panel="cm">
+							<h3 class="size-chart-overlay__subtitle">3D T-Shirt Size Chart</h3>
+							<p class="size-chart-overlay__note">Measurements are in <strong>centimeters (cm)</strong>. 1/2 Bust is measured flat across the garment.</p>
+							<div class="size-chart-overlay__table-wrap">
+								<table class="size-chart-overlay__table size-chart-overlay__table--game-day-jersey">
+									<thead>
+										<tr>
+											<th>Size</th>
+											<th>1/2 Bust (cm)</th>
+											<th>Length (cm)</th>
+											<th>Shoulder (cm)</th>
+											<th>Sleeve Length (cm)</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr><td>XXS</td><td>47</td><td>67.5</td><td>38</td><td>19</td></tr>
+										<tr><td>XS</td><td>50</td><td>70.0</td><td>42</td><td>20</td></tr>
+										<tr><td>S</td><td>53</td><td>72.5</td><td>44</td><td>21</td></tr>
+										<tr><td>M</td><td>56</td><td>75.0</td><td>46</td><td>22</td></tr>
+										<tr><td>L</td><td>59</td><td>77.5</td><td>49</td><td>23</td></tr>
+										<tr><td>XL</td><td>62</td><td>80.0</td><td>52</td><td>24</td></tr>
+										<tr><td>XXL</td><td>65</td><td>82.5</td><td>55</td><td>25</td></tr>
+										<tr><td>3XL</td><td>68</td><td>85.0</td><td>58</td><td>26</td></tr>
+										<tr><td>4XL</td><td>71</td><td>87.5</td><td>61</td><td>27</td></tr>
+										<tr><td>5XL</td><td>74</td><td>90.0</td><td>64</td><td>28</td></tr>
+										<tr><td>6XL</td><td>77</td><td>92.5</td><td>67</td><td>29</td></tr>
+										<tr><td>7XL</td><td>80</td><td>95.0</td><td>70</td><td>30</td></tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						<p class="size-chart-overlay__disclaimer">
+							<em>* Measurements are taken from the garment laid flat. Actual fit may vary slightly depending on body shape and personal preference.</em>
+						</p>
+					</div>
+				{%- else -%}
 				{%- comment -%} Tabs {%- endcomment -%}
 				<div class="size-chart-overlay__tabs{% unless size_chart_mode == 'all' %} size-chart-overlay__tabs--single{% endunless %}">
 					{%- if size_chart_mode == 'all' or size_chart_mode == 'tshirt' -%}
@@ -895,9 +980,10 @@
 				</div>
 			</div>
 
-								<p class="size-chart-overlay__disclaimer">
+				<p class="size-chart-overlay__disclaimer">
 					<em>* Measurements are taken from the garment laid flat. Actual fit may vary slightly depending on body shape and personal preference. We recommend measuring a similar garment you already own for the best fit.</em>
 				</p>
+				{%- endif -%}
 			</div>
 		</div>
 

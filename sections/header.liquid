@@ -171,7 +171,7 @@
 		text-transform: uppercase !important;
 		font-family: var(--font-heading-family) !important;
 		font-weight: 700 !important;
-		font-size: 14px !important;
+		font-size: 16px !important;
 		letter-spacing: 0.5px !important;
 		padding-left: 0 !important;
 		padding-right: 0 !important;
@@ -276,15 +276,17 @@
 	.header-menu__item--arrow svg {
 		width: 10px;
 		height: 10px;
+		transition: none !important;
+		transform: none !important;
 	}
 
 	.header-menu__item--arrow:hover {
 		opacity: 0.7;
 	}
 
-	.header-menu__item--arrow[aria-expanded="true"],
-	.header-menu__item--arrow[aria-expanded="true"] svg {
-		transform: none;
+	.header-menu .header-menu__list--main .header-menu__item--arrow.is-active svg,
+	.header-menu .header-menu__list--main .header-menu__item--arrow[aria-expanded="true"] svg {
+		transform: none !important;
 	}
 
 	/* When link is separate from arrow, keep tight */

@@ -13,12 +13,6 @@
 	------------------------------------------------------------------------------
 {%- endcomment -%}
 
-{%- if template.name == 'collection' -%}
-	{%- assign count = product_list.products_count -%}
-{%- elsif template.name == 'search' -%}
-	{%- assign count = product_list.results_count -%}
-{%- endif -%}
-
 {%- assign id = filter_type -%}
 
 {%- if product_list != blank -%}
@@ -34,7 +28,7 @@
 					class="accordion product-filters__form-accordion js-accordion-container js-filters-container"
 					id="filters-container-{{ section.id }}-{{ filter.param_name | escape }}-{{ section.id }}-{{- id -}}"
 				>
-					{%- assign filterListIndex = 1 -%}
+					{%- assign filter_list_index = 1 -%}
 
 					{%- assign has_any_filter = false -%}
 					{%- for filter in product_list.filters -%}
@@ -83,7 +77,7 @@
 						<ul class="filter-list filter-list--sidebar filter-list--collection-custom js-filter-list">
 							<li class="filter-list__item">
 								<a
-									href="/collections/all"
+									href="{{ routes.all_products_collection_url }}"
 									class="filter-list__collection-link js-filter-clear-btn {% if is_all_active %}filter-list__collection-link--active{% endif %}"
 								>
 									<span class="custom-checkbox-icon"></span>
@@ -173,7 +167,7 @@
 					</div>
 					{%- endif -%}
 
-					{%- assign filterListIndex = filterListIndex | plus: 1 -%}
+					{%- assign filter_list_index = filter_list_index | plus: 1 -%}
 
 					{%- comment -%} ── CLOTHING (Product Type) Filter ── {%- endcomment -%}
 					<div
@@ -379,7 +373,7 @@
 					</div>
 					{%- endif -%}
 
-					{%- assign filterListIndex = filterListIndex | plus: 1 -%}
+					{%- assign filter_list_index = filter_list_index | plus: 1 -%}
 
 					{%- for filter in product_list.filters -%}
 						{%- if filter.type == 'list' and filter.values.size == 0 or filter.type == 'boolean' and filter.values.size == 0 -%}
@@ -407,8 +401,8 @@
 								<button
 									class="focus-visible-outline accordion__control product-filters__form-item-toggle-button js-accordion-control is-active"
 									type="button"
-									id="Filter-accordion-{{ section.id }}-{{- filterListIndex -}}-{{- id -}}"
-									aria-controls="filter-list-{{ section.id }}-{{- filterListIndex -}}-{{- id -}}"
+									id="Filter-accordion-{{ section.id }}-{{- filter_list_index -}}-{{- id -}}"
+									aria-controls="filter-list-{{ section.id }}-{{- filter_list_index -}}-{{- id -}}"
 									aria-expanded="true" is-active
 								>
 									<span typeof="product-filters__form-item-toggle-title">
@@ -426,8 +420,8 @@
 
 							<div
 								class="accordion__content accordion__content--animate js-accordion-content is-active"
-								id="filter-list-{{ section.id }}-{{- filterListIndex -}}-{{- id -}}"
-								aria-labelledby="Filter-accordion-{{ section.id }}-{{- filterListIndex -}}-{{- id -}}"
+								id="filter-list-{{ section.id }}-{{- filter_list_index -}}-{{- id -}}"
+								aria-labelledby="Filter-accordion-{{ section.id }}-{{- filter_list_index -}}-{{- id -}}"
 								role="region"
 								style="height: auto;"
 							>
@@ -447,7 +441,7 @@
 								</div>
 							</div>
 
-							{%- assign filterListIndex = filterListIndex | plus: 1 -%}
+							{%- assign filter_list_index = filter_list_index | plus: 1 -%}
 						</div>
 					{%- endfor -%}
 
@@ -832,6 +826,11 @@ document.addEventListener('DOMContentLoaded', () => {
 			const customParams = ['filter.p.product_type', 'filter.p.m.custom.seasonal'];
 			customParams.forEach(param => {
 				url.searchParams.getAll(param).forEach(val => {
+					const hasNativeInput = Array.from(form.querySelectorAll('input.filter-list__checkbox')).some(input => {
+						return input.name === param && input.value === val;
+					});
+					if (hasNativeInput) return;
+
 					const chk = document.createElement('input');
 					chk.className = 'js-appended-hidden-filter';
 					chk.type = 'checkbox';

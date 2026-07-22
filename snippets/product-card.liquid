@@ -65,7 +65,14 @@ Renders the shared storefront product card with variant images, solid color swat
 				assign card_collection_handle = 'world-turkey-slam'
 			elsif request.path contains '/collections/grand-slam-subspecies'
 				assign card_collection_handle = 'grand-slam-subspecies'
+			elsif request.path contains '/collections/spooky-kids-tee'
+				assign card_collection_handle = 'spooky-kids-tee'
 			endif
+		endif
+
+		assign is_spooky_card = false
+		if card_collection_handle == 'spooky-kids-tee'
+			assign is_spooky_card = true
 		endif
 
 		if product != blank and swatches_enabled
@@ -217,7 +224,7 @@ Renders the shared storefront product card with variant images, solid color swat
 	{%- endcapture -%}
 
 	<article
-		class="product-card product-card--reference js-product-card"
+		class="product-card product-card--reference{% if is_spooky_card %} product-card--spooky{% endif %} js-product-card"
 		{% if product != blank %}data-existing-product{% endif %}
 		{% if product.template_suffix == 'pre-order' %}data-preorder{% endif %}
 	>
@@ -743,12 +750,105 @@ Renders the shared storefront product card with variant images, solid color swat
 			pointer-events: none;
 		}
 
+		.product-card.product-card--reference.product-card--spooky .product-card__image-wrapper-link {
+			position: relative;
+			box-sizing: border-box;
+			overflow: hidden;
+			border-radius: 0;
+		}
+
+		.product-card.product-card--reference.product-card--spooky .product-card__image-wrapper-link::before {
+			content: "";
+			position: absolute;
+			top: -1px;
+			left: -1px;
+			z-index: 3;
+			width: 48%;
+			aspect-ratio: 10 / 7;
+			background-image: url("../assets/spooky-corner-web.png");
+			background-position: top left;
+			background-repeat: no-repeat;
+			background-size: contain;
+			filter: drop-shadow(0 1px 2px rgba(89, 34, 6, 0.28));
+			pointer-events: none;
+		}
+
+		.product-card.product-card--reference.product-card--spooky .product-card__image-wrapper--reference,
+		.product-card.product-card--reference.product-card--spooky .product-card__image-picture,
+		.product-card.product-card--reference.product-card--spooky .product-card__image {
+			border-radius: 0 !important;
+		}
+
+		.product-card.product-card--reference.product-card--spooky .product-card__discount--image {
+			top: 12px;
+			left: 12px;
+			width: 40%;
+			max-width: 128px;
+			min-height: 0;
+			aspect-ratio: 2.35 / 1;
+			box-sizing: border-box;
+			padding: 0 10px;
+			border: 0;
+			background-color: transparent;
+			background-image: url("../assets/spooky-sale-tag.png");
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+			clip-path: none;
+			filter: drop-shadow(0 3px 5px rgba(82, 28, 4, 0.35));
+			color: #fff8ea !important;
+			font-family: 'Oswald', var(--heading-font-family), sans-serif !important;
+			font-size: 15px !important;
+			font-weight: 800 !important;
+			letter-spacing: 0.035em;
+			text-shadow: 1px 2px 0 rgba(85, 26, 4, 0.55);
+		}
+
+		.product-card.product-card--reference.product-card--spooky a.product-card__title {
+			color: #a83f08 !important;
+			letter-spacing: 0.015em;
+			text-shadow: 0 1px 0 rgba(255, 174, 68, 0.22);
+		}
+
+		.product-card.product-card--reference.product-card--spooky a.product-card__title:hover {
+			color: #e9680b !important;
+		}
+
+		.product-card.product-card--reference.product-card--spooky .product-card__rating .jdgm-star {
+			color: #e9680b !important;
+			text-shadow: 0 1px 0 #5b2108, 0 0 4px rgba(233, 104, 11, 0.28);
+		}
+
 		.product-card.product-card--reference .product-card__custom-quick-add,
 		.product-card.product-card--reference .product-card__swatches-count {
 			display: none !important;
 		}
 
 		@media screen and (max-width: 767px) {
+			.product-card.product-card--reference.product-card--spooky .product-card__image-wrapper-link {
+				border-radius: 0;
+			}
+
+			.product-card.product-card--reference.product-card--spooky .product-card__image-wrapper--reference,
+			.product-card.product-card--reference.product-card--spooky .product-card__image-picture,
+			.product-card.product-card--reference.product-card--spooky .product-card__image {
+				border-radius: 0 !important;
+			}
+
+			.product-card.product-card--reference.product-card--spooky .product-card__image-wrapper-link::before {
+				width: 54%;
+			}
+
+			.product-card.product-card--reference.product-card--spooky .product-card__discount--image {
+				top: 8px;
+				left: 8px;
+				width: 50%;
+				max-width: 92px;
+				min-height: 0;
+				padding: 0 7px;
+				font-size: 11px !important;
+			}
+
 			.product-card.product-card--reference .product-card__discount--image {
 				--sale-tag-point: 7px;
 				top: 8px;

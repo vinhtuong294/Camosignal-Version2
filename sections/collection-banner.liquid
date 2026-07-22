@@ -34,8 +34,13 @@
 	endif
 
 	assign collection_description = blank
-	if collection.handle != 'all' and collection.handle != blank and collection.title != blank
-		assign collection_description = 'collections.banner.description' | t: title: collection.title
+	if collection.handle != 'all' and collection.handle != blank
+		assign collection_description = collection.description | strip_html | strip
+	endif
+
+	assign is_spooky_collection = false
+	if collection.handle == 'spooky-kids-tee'
+		assign is_spooky_collection = true
 	endif
 -%}
 
@@ -46,11 +51,247 @@
 		--collection-banner-height-desktop: {{ section.settings.desktop_height }}px;
 		--collection-banner-height-mobile: {{ section.settings.mobile_height }}px;
 	}
+
+	{%- if is_spooky_collection -%}
+		#shopify-section-{{ section.id }} .collection-banner--halloween {
+			position: relative;
+			isolation: isolate;
+			overflow: hidden;
+			color: #fff2d7;
+			background:
+				radial-gradient(circle at 82% 50%, rgba(255, 126, 24, 0.16) 0, rgba(255, 126, 24, 0) 28%),
+				linear-gradient(108deg, #120918 0%, #24102e 54%, #3b142d 100%);
+			box-shadow: inset 0 -4px 0 #f2711c;
+		}
+		#shopify-section-{{ section.id }} .collection-banner--halloween::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+			z-index: 0;
+			background-image:
+				radial-gradient(circle, rgba(255, 239, 200, 0.65) 0 1px, transparent 1.6px),
+				radial-gradient(circle, rgba(245, 140, 52, 0.45) 0 1px, transparent 1.6px);
+			background-position: 0 0, 22px 28px;
+			background-size: 54px 54px, 68px 68px;
+			opacity: 0.3;
+		}
+		#shopify-section-{{ section.id }} .collection-banner--halloween .collection-banner__wrapper {
+			position: relative;
+			z-index: 2;
+		}
+		#shopify-section-{{ section.id }} .collection-banner--halloween .collection-banner__content {
+			max-width: 760px;
+		}
+		#shopify-section-{{ section.id }} .collection-banner--halloween .collection-banner__title {
+			position: relative;
+			display: inline-block;
+			color: #fff2d7;
+			letter-spacing: 0.01em;
+			text-shadow: 3px 3px 0 rgba(109, 45, 132, 0.85);
+		}
+		#shopify-section-{{ section.id }} .collection-banner--halloween .collection-banner__title::after {
+			content: "";
+			display: block;
+			width: 72px;
+			height: 4px;
+			margin-top: 10px;
+			background: #f2711c;
+			clip-path: polygon(0 0, 100% 0, 92% 100%, 7% 78%);
+		}
+		#shopify-section-{{ section.id }} .collection-banner--halloween .collection-banner__description {
+			margin-top: 10px;
+			color: #ffd8ad;
+		}
+		#shopify-section-{{ section.id }} .collection-banner__halloween-scene {
+			position: absolute;
+			inset: 0;
+			z-index: 1;
+			pointer-events: none;
+		}
+		#shopify-section-{{ section.id }} .collection-banner__halloween-moon {
+			position: absolute;
+			top: 18px;
+			right: 13%;
+			width: 102px;
+			height: 102px;
+			border-radius: 50%;
+			background: #ffb33f;
+			box-shadow: 0 0 0 10px rgba(255, 179, 63, 0.08), 0 0 42px rgba(255, 126, 24, 0.34);
+		}
+		#shopify-section-{{ section.id }} .collection-banner__halloween-moon::before,
+		#shopify-section-{{ section.id }} .collection-banner__halloween-moon::after {
+			content: "";
+			position: absolute;
+			border-radius: 50%;
+			background: rgba(173, 80, 40, 0.18);
+		}
+		#shopify-section-{{ section.id }} .collection-banner__halloween-moon::before {
+			top: 20px;
+			left: 22px;
+			width: 22px;
+			height: 22px;
+		}
+		#shopify-section-{{ section.id }} .collection-banner__halloween-moon::after {
+			right: 20px;
+			bottom: 24px;
+			width: 14px;
+			height: 14px;
+		}
+		#shopify-section-{{ section.id }} .collection-banner__halloween-bats {
+			position: absolute;
+			top: 35px;
+			right: 7%;
+			width: 240px;
+			height: 92px;
+			color: #16091c;
+			opacity: 0.95;
+		}
+		#shopify-section-{{ section.id }} .collection-banner__halloween-web {
+			position: absolute;
+			top: -2px;
+			right: -2px;
+			width: 220px;
+			height: 138px;
+			color: rgba(255, 242, 215, 0.2);
+		}
+		body .custom-coll-inner {
+			border-bottom-color: rgba(242, 113, 28, 0.35);
+		}
+		body .custom-sort-inline__label {
+			color: rgba(86, 39, 21, 0.7);
+		}
+		body .custom-sort-select-wrap {
+			border-bottom-color: #d65b14;
+		}
+		body .custom-sort-inline select,
+		body .custom-coll-count {
+			color: #5e2712;
+		}
+		body .product-filters-selected__label,
+		body .product-filters-selected__button-clear-all,
+		body .product-filters .accordion__control span,
+		body .product-filters .checkbox__label,
+		body .filter-list__collection-link {
+			color: #b9470f !important;
+		}
+		body .checkbox__label.is-disabled[for*="-hunting-"] {
+			color: #b9470f !important;
+			opacity: 1 !important;
+		}
+		body .checkbox__label.is-disabled[for*="-hunting-"] .filter-list__coming-soon,
+		body .checkbox__label.is-disabled[for*="-hunting-"] .filter-list__coming-soon em {
+			color: #b9470f !important;
+		}
+		body .product-filters .accordion__control {
+			border-bottom-color: rgba(242, 113, 28, 0.72) !important;
+		}
+		body .product-filters .accordion__control svg,
+		body .product-filters .product-filters__open-menu-button svg {
+			color: #f2711c !important;
+			stroke: #f2711c !important;
+		}
+		body .product-filters .checkbox__label::before,
+		body .custom-checkbox-icon {
+			border-color: #f2711c !important;
+		}
+		body .product-filters .checkbox__input:checked + .checkbox__label::before,
+		body .custom-checkbox-icon.is-checked,
+		body .filter-list__collection-link.is-selected .custom-checkbox-icon,
+		body .filter-list__collection-link--active .custom-checkbox-icon {
+			border-color: #f2711c !important;
+			background-color: #f2711c !important;
+		}
+		body .product-filters .checkbox__input:checked + .checkbox__label::after,
+		body .custom-checkbox-icon.is-checked::after,
+		body .filter-list__collection-link.is-selected .custom-checkbox-icon::after,
+		body .filter-list__collection-link--active .custom-checkbox-icon::after {
+			border-color: #2a1033 !important;
+		}
+		body .product-filters .product-filters-selected__button,
+		body .product-filters .custom-pill-list .checkbox__input:checked + .checkbox__label {
+			border-color: #f2711c !important;
+			background-color: #f2711c !important;
+			color: #2a1033 !important;
+		}
+		body .product-filters .product-filters-selected__button svg {
+			fill: #2a1033 !important;
+			stroke: #2a1033 !important;
+		}
+		body .product-filters .custom-pill-list .checkbox__input:not(:checked) + .checkbox__label {
+			border-color: #f2711c !important;
+			color: #b9470f !important;
+		}
+		body .product-filters .filter-clear-btn,
+		body .product-filters__form-footer-button.js-reset-filters {
+			border-color: #f2711c !important;
+			background-color: #f2711c !important;
+			color: #2a1033 !important;
+		}
+		body .product-filters .filter-clear-btn:hover,
+		body .product-filters__form-footer-button.js-reset-filters:hover {
+			border-color: #2a1033 !important;
+			background-color: #2a1033 !important;
+			color: #ffb33f !important;
+		}
+		body .product-filters__open-menu-button {
+			border-color: #f2711c !important;
+			color: #b9470f !important;
+		}
+		@media screen and (max-width: 767px) {
+			#shopify-section-{{ section.id }} .collection-banner--halloween .collection-banner__content {
+				max-width: 78%;
+			}
+			#shopify-section-{{ section.id }} .collection-banner--halloween .collection-banner__title {
+				font-size: clamp(28px, 8.5vw, 34px);
+			}
+			#shopify-section-{{ section.id }} .collection-banner--halloween .collection-banner__title::after {
+				width: 52px;
+				height: 3px;
+				margin-top: 7px;
+			}
+			#shopify-section-{{ section.id }} .collection-banner--halloween .collection-banner__description {
+				margin-top: 7px;
+				font-size: 12px;
+				line-height: 1.25;
+			}
+			#shopify-section-{{ section.id }} .collection-banner__halloween-moon {
+				top: 13px;
+				right: -18px;
+				width: 74px;
+				height: 74px;
+			}
+			#shopify-section-{{ section.id }} .collection-banner__halloween-bats {
+				top: 39px;
+				right: -13px;
+				width: 142px;
+				height: 58px;
+			}
+			#shopify-section-{{ section.id }} .collection-banner__halloween-web {
+				width: 120px;
+				height: 82px;
+			}
+		}
+	{%- endif -%}
 {%- endstyle -%}
 
 {%- render 'adastra' with '/src/styles/collection-banner.scss' -%}
 
-<section class="collection-banner" aria-labelledby="CollectionBannerTitle-{{ section.id }}">
+<section class="collection-banner{% if is_spooky_collection %} collection-banner--halloween{% endif %}" aria-labelledby="CollectionBannerTitle-{{ section.id }}">
+	{%- if is_spooky_collection -%}
+		<div class="collection-banner__halloween-scene" aria-hidden="true">
+			<span class="collection-banner__halloween-moon"></span>
+			<svg class="collection-banner__halloween-bats" viewBox="0 0 240 92" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path fill="currentColor" d="M84 49c-6-13-15-18-26-14-8 3-12 11-20 12 2-8-1-14-9-18 11-5 21-4 31 1-2-8 1-14 8-18 3 7 8 11 16 12 8-1 13-5 16-12 7 4 10 10 8 18 10-5 20-6 31-1-8 4-11 10-9 18-8-1-12-9-20-12-11-4-20 1-26 14Z"/>
+				<path fill="currentColor" d="M174 72c-4-9-11-12-18-9-6 2-8 7-14 8 1-6-1-10-6-12 7-4 15-3 21 0-1-5 1-10 6-12 2 5 5 7 11 8 5-1 9-3 11-8 5 2 7 7 6 12 7-3 14-4 22 0-6 2-8 6-7 12-5-1-8-6-14-8-7-3-14 0-18 9Z"/>
+				<path fill="currentColor" d="M27 75c-3-7-8-9-13-7-4 1-6 5-10 5 1-4-1-7-4-9 5-2 10-2 15 1-1-4 1-7 4-9 2 4 4 6 8 6 4 0 6-2 8-6 4 2 5 5 4 9 5-3 11-3 16-1-4 2-5 5-4 9-4 0-6-4-10-5-6-2-11 0-14 7Z"/>
+			</svg>
+			<svg class="collection-banner__halloween-web" viewBox="0 0 220 138" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M220 0H72M220 0 91 63M220 0 145 111M220 0v138" stroke="currentColor" stroke-width="2"/>
+				<path d="M184 0c0 20 16 35 36 35M149 0c0 38 31 68 71 68M112 0c0 58 48 104 108 104" stroke="currentColor" stroke-width="2"/>
+				<path d="M199 11c-8 4-13 11-15 20M176 22c-12 8-20 18-24 31M151 35c-14 10-24 24-30 41" stroke="currentColor" stroke-width="2"/>
+			</svg>
+		</div>
+	{%- endif -%}
 	<div class="collection-banner__wrapper">
 		<div class="collection-banner__content">
 			{%- if section.settings.show_eyebrow and collection_eyebrow != blank -%}
@@ -61,7 +302,7 @@
 				{{ collection_title | upcase | escape }}
 			</h1>
 
-			{%- if section.settings.show_description and collection_description != blank -%}
+			{%- if section.settings.show_description and collection_description != blank and is_spooky_collection == false -%}
 				<p class="collection-banner__description">{{ collection_description | escape }}</p>
 			{%- endif -%}
 		</div>

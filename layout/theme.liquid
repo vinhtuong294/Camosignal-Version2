@@ -245,6 +245,15 @@
 				z-index: 999999 !important;
 			}
 
+			/* Keep Selleasy cart recommendations consistent with the theme typography. */
+			#CartDrawer lb-upsell-widget.lb-widget,
+			#CartDrawer lb-upsell-widget.lb-widget *,
+			body.template-cart lb-upsell-widget.lb-widget,
+			body.template-cart lb-upsell-widget.lb-widget * {
+				font-family: 'Oswald', sans-serif !important;
+				letter-spacing: 0 !important;
+			}
+
 			/* Soft Blurred Shadow Effect for Product Cards on Desktop */
 			@media (min-width: 990px) {
 				.product-card {

@@ -7,7 +7,6 @@
 	#shopify-section-{{ section.id }} .product-media__slider-thumbnails-slide,
 	#shopify-section-{{ section.id }} .product-media__slider-thumbnails-slide picture,
 	#shopify-section-{{ section.id }} .product-media__slider-thumbnails-slide .product-media__image,
-	#shopify-section-{{ section.id }} .product-media__slider-thumbnails-container .thumb-nav,
 	#shopify-section-{{ section.id }} .product-options .radio-option-swatch__label,
 	#shopify-section-{{ section.id }} .product-options .radio-option-swatch__label::before,
 	#shopify-section-{{ section.id }} .product-options .radio-option-swatch__label::after,
@@ -33,6 +32,10 @@
 	#size-chart-overlay *::before,
 	#size-chart-overlay *::after {
 		border-radius: 0 !important;
+	}
+
+	#size-chart-overlay .size-chart-overlay__panel {
+		border-radius: 6px !important;
 	}
 
 	#size-chart-overlay .size-chart-overlay__table th,

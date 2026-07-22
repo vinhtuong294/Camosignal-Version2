@@ -241,6 +241,28 @@
 		{%- assign free_shipping_from_one_item = true -%}
 	{%- endif -%}
 
+	<button
+		type="submit"
+		class="add-to-cart button button--block button--{{- button_type }} {% unless product.first_available_variant.available %}disabled{% endunless %}"
+		{% if product.template_suffix == 'pre-order' %}
+			data-preorder
+		{% endif %}
+		{% unless product.first_available_variant.available %}
+			disabled
+		{% endunless %}
+		data-type="{{- button_type -}}"
+	>
+		{%- if button_type == 'primary' -%}
+			<span data-loading>{{- button_add_to_cart_text -}}</span>
+		{%- else -%}
+			<span data-text="{{- button_add_to_cart_text -}}">
+				<span>{{- button_add_to_cart_text -}}</span>
+			</span>
+		{%- endif -%}
+
+		{%- render 'icons', icon: 'loader' -%}
+	</button>
+
 	<aside class="product-purchase-perks" aria-label="{{- 'products.product.purchase_perks_label' | t -}}">
 		<p class="product-purchase-perks__shipping">
 			{%- render 'icons', icon: 'shipping' -%}
@@ -264,28 +286,6 @@
 		</div>
 	</aside>
 
-	<button
-		type="submit"
-		class="add-to-cart button button--block button--{{- button_type }} {% unless product.first_available_variant.available %}disabled{% endunless %}"
-		{% if product.template_suffix == 'pre-order' %}
-			data-preorder
-		{% endif %}
-		{% unless product.first_available_variant.available %}
-			disabled
-		{% endunless %}
-		data-type="{{- button_type -}}"
-	>
-		{%- if button_type == 'primary' -%}
-			<span data-loading>{{- button_add_to_cart_text -}}</span>
-		{%- else -%}
-			<span data-text="{{- button_add_to_cart_text -}}">
-				<span>{{- button_add_to_cart_text -}}</span>
-			</span>
-		{%- endif -%}
-
-		{%- render 'icons', icon: 'loader' -%}
-	</button>
-
 	{% if block.settings.show_additional_buttons %}
 		<div class="product-add-to-cart__additional-buttons product-add-to-cart__additional-buttons--{{ button_buy_it_type }}">
 			{{ form | payment_button }}
@@ -299,7 +299,7 @@
 		grid-template-columns: minmax(170px, 1fr) auto;
 		align-items: center;
 		gap: 10px;
-		order: 14;
+		order: 16;
 		width: 100%;
 		margin: 0 0 10px;
 		padding: 6px 10px;

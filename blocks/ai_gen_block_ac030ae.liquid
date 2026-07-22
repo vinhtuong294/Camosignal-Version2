@@ -77,7 +77,8 @@
     }
 
     .ai-message-block__heading-{{ ai_gen_id }} {
-      font-size: {{ block.settings.heading_size_mobile }}px;
+      font-size: min({{ block.settings.heading_size_mobile }}px, 6.6vw);
+      white-space: nowrap;
     }
 
     .ai-message-block__subheading-{{ ai_gen_id }} {

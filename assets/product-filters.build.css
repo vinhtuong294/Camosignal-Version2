@@ -77,6 +77,11 @@
 .product-filters .product-filters__form-item {
   border-bottom: 1px solid var(--color-border-secondary);
 }
+@media (max-width: 767px) {
+  .product-filters .product-filters__drawer .product-filters__form-item {
+    border-bottom: 0;
+  }
+}
 .product-filters .product-filters__form-item-toggle-button {
   padding: 16px 0;
   font-family: var(--base-font-family);

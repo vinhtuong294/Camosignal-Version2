@@ -621,14 +621,27 @@
 
 		.camo-hero-slider__button {
 			position: absolute;
-			right: 16px;
+			right: auto;
 			bottom: 48px;
+			left: 50%;
 			width: 176px;
 			min-width: 176px;
 			margin: 0;
 			justify-content: center;
-			gap: 12px;
-			font-size: 12px;
+			gap: 0;
+			padding-inline: 42px;
+			font-size: 10px;
+			translate: -50% 0;
+		}
+
+		.camo-hero-slider__button-label {
+			width: 100%;
+			text-align: center;
+		}
+
+		.camo-hero-slider__button-icon {
+			position: absolute;
+			right: 14px;
 		}
 
 		.camo-hero-slider__slide--mobile-button-left .camo-hero-slider__button {

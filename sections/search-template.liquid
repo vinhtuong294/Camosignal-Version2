@@ -174,7 +174,7 @@
 			overflow: hidden !important;
 		}
 
-		#shopify-section-{{ section.id }} .search__item .product-card {
+		#shopify-section-{{ section.id }} .search__item .product-card:not(.product-card--reference) {
 			display: flex !important;
 			flex-direction: column !important;
 			height: 100% !important;
@@ -182,14 +182,14 @@
 			overflow: hidden !important;
 		}
 
-		#shopify-section-{{ section.id }} .search__item .product-card__main {
+		#shopify-section-{{ section.id }} .search__item .product-card:not(.product-card--reference) .product-card__main {
 			width: 100% !important;
 			margin-bottom: 0 !important;
 			padding-bottom: 0 !important;
 			min-width: 0 !important;
 		}
 
-		#shopify-section-{{ section.id }} .search__item .product-card__footer {
+		#shopify-section-{{ section.id }} .search__item .product-card:not(.product-card--reference) .product-card__footer {
 			padding: 0 !important;
 			margin-top: 5px !important;
 			min-width: 0 !important;
@@ -197,7 +197,7 @@
 			overflow: visible !important;
 		}
 
-		#shopify-section-{{ section.id }} .search__item .product-card__title {
+		#shopify-section-{{ section.id }} .search__item .product-card:not(.product-card--reference) .product-card__title {
 			display: block !important;
 			width: 100% !important;
 			max-width: 100% !important;
@@ -217,7 +217,7 @@
 			line-height: 1.4 !important;
 		}
 
-		#shopify-section-{{ section.id }} .search__item .product-card__image-wrapper {
+		#shopify-section-{{ section.id }} .search__item .product-card:not(.product-card--reference) .product-card__image-wrapper {
 			aspect-ratio: 1 / 1 !important;
 			width: 100% !important;
 			overflow: hidden !important;
@@ -225,7 +225,7 @@
 			border-radius: 8px 8px 0 0 !important;
 		}
 
-		#shopify-section-{{ section.id }} .search__item .product-card__image-picture {
+		#shopify-section-{{ section.id }} .search__item .product-card:not(.product-card--reference) .product-card__image-picture {
 			width: 100% !important;
 			height: 100% !important;
 			display: block !important;
@@ -236,7 +236,7 @@
 			overflow: hidden !important;
 		}
 
-		#shopify-section-{{ section.id }} .search__item .product-card__image {
+		#shopify-section-{{ section.id }} .search__item .product-card:not(.product-card--reference) .product-card__image {
 			width: 100% !important;
 			height: 100% !important;
 			object-fit: cover !important;
@@ -244,7 +244,7 @@
 			border-radius: 8px 8px 0 0 !important;
 		}
 
-		#shopify-section-{{ section.id }} .search__item .product-card__custom-quick-add {
+		#shopify-section-{{ section.id }} .search__item .product-card:not(.product-card--reference) .product-card__custom-quick-add {
 			display: none !important;
 		}
 	}

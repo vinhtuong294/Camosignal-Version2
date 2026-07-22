@@ -94,8 +94,6 @@
 {%- assign container 					= section.settings.container_width -%}
 {%- assign product_list 				= collection -%}
 {%- assign filters_empty		 		= false -%}
-{%- assign filters_size 				= product_list.filters.size -%}
-
 {%- assign grid_banner 					= section.blocks | where: 'type', 'grid-banner' | first -%}
 {%- assign blocks_sidebar_banner 		= section.blocks | where: 'type', 'sidebar-banner' -%}
 
@@ -372,6 +370,7 @@
 
 							{%- render 'product-card',
 								product: product,
+								collection: collection,
 								size: product_img_size,
 								tablet_size: product_img_size_tablet,
 								mobile_size: product_img_size_mobile,

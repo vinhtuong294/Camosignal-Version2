@@ -15,7 +15,7 @@
 
 	/* Mobile: 1-line truncation for product titles */
 	@media screen and (max-width: 767px) {
-		#shopify-section-{{- section.id -}} .product-card .product-card__title {
+		#shopify-section-{{- section.id -}} .product-card:not(.product-card--reference) .product-card__title {
 			min-height: auto !important;
 			line-height: 1.4 !important;
 			display: block !important;
@@ -30,11 +30,11 @@
 			text-transform: capitalize !important;
 			font-size: 13px !important;
 		}
-		#shopify-section-{{- section.id -}} .product-card__footer {
+		#shopify-section-{{- section.id -}} .product-card:not(.product-card--reference) .product-card__footer {
 			padding: 0 !important;
 			margin-top: 5px !important;
 		}
-		#shopify-section-{{- section.id -}} .product-card__custom-quick-add {
+		#shopify-section-{{- section.id -}} .product-card:not(.product-card--reference) .product-card__custom-quick-add {
 			display: none !important;
 		}
 	}
@@ -153,20 +153,11 @@
 						{%- assign image_size = 439 -%}
 					{%- endif -%}
 
-					{%- assign _slide_limit = 1 -%}
-					{%- if layout == '8_grid' -%}
-						{%- assign _slide_limit = 1 -%}
-					{%- endif -%}
-
-					{%- assign _counter = 0 -%}
 					{%- for product in items -%}
 						{%- unless product.selected_or_first_available_variant.requires_shipping -%}
 							{%- continue -%}
 						{%- endunless -%}
-						{%- assign _counter = _counter | plus: 1 -%}
-						{%- if _counter == 1 -%}
-							<div class="featured-products__col {% if is_swiper %}swiper-slide js-featured-products-slide{% else %}featured-grid-page{% endif %}">
-						{%- endif -%}
+						<div class="featured-products__col {% if is_swiper %}swiper-slide js-featured-products-slide{% else %}featured-grid-page{% endif %}">
 
 						{%- if is_swiper == false -%}<div class="featured-grid-item">{%- endif -%}
 
@@ -187,32 +178,17 @@
 
 						{%- if is_swiper == false -%}</div>{%- endif -%}
 
-						{%- if _counter == _slide_limit or forloop.last -%}
-							</div>
-							{%- assign _counter = 0 -%}
-						{%- endif -%}
+						</div>
 					{%- endfor -%}
 				{%- else -%}
-					{%- assign _slide_limit = 1 -%}
-					{%- if layout == '8_grid' -%}
-						{%- assign _slide_limit = 1 -%}
-					{%- endif -%}
-
-					{%- assign _counter = 0 -%}
 					{%- for i in (1..16) -%}
-						{%- assign _counter = _counter | plus: 1 -%}
-						{%- if _counter == 1 -%}
-							<div class="featured-products__col {% if is_swiper %}swiper-slide js-featured-products-slide{% else %}featured-grid-page{% endif %}">
-						{%- endif -%}
+						<div class="featured-products__col {% if is_swiper %}swiper-slide js-featured-products-slide{% else %}featured-grid-page{% endif %}">
 
 						{%- if is_swiper == false -%}<div class="featured-grid-item">{%- endif -%}
 						{%- render 'product-card' -%}
 						{%- if is_swiper == false -%}</div>{%- endif -%}
 
-						{%- if _counter == _slide_limit or forloop.last -%}
-							</div>
-							{%- assign _counter = 0 -%}
-						{%- endif -%}
+						</div>
 					{%- endfor -%}
 				{%- endif -%}
 			</div>
@@ -251,7 +227,7 @@
 	display: inline-flex;
 	align-items: center;
 	gap: 6px;
-	font-family: 'Oswald', sans-serif;
+	font-family: var(--button-font-family);
 	font-weight: 500;
 	font-size: 15px;
 	text-transform: uppercase;
@@ -294,6 +270,21 @@
 {%- endif -%}
 <style>
 	@media screen and (max-width: 767px) {
+		/* Keep the section inside the mobile viewport if reveal animation is unavailable. */
+		#shopify-section-{{ section.id }} .featured-products.section-animate {
+			box-sizing: border-box;
+			width: 100%;
+			max-width: 100%;
+			opacity: 1;
+			transform: none;
+		}
+		{%- if heading_text == 'ANGLERS ALSO BOUGHT' -%}
+			#shopify-section-{{ section.id }} .featured-products__header h2 {
+				font-size: clamp(24px, 8vw, 31px) !important;
+				line-height: 1 !important;
+				white-space: nowrap;
+			}
+		{%- endif -%}
 		#shopify-section-{{ section.id }} .featured-products__slider {
 			overflow: visible !important;
 			cursor: default !important;
@@ -317,9 +308,15 @@
 			padding-bottom: 0 !important;
 		}
 		#shopify-section-{{ section.id }} .featured-products__col {
+			min-width: 0 !important;
+			max-width: 100% !important;
 			width: 100% !important;
 			margin: 0 !important;
 			flex-shrink: unset !important;
+		}
+		#shopify-section-{{ section.id }} .product-card {
+			min-width: 0 !important;
+			max-width: 100% !important;
 		}
 		/* Hide products beyond limit */
 		#shopify-section-{{ section.id }} .featured-products__col:nth-child(n+{{ mobile_product_limit }}) {
@@ -330,7 +327,7 @@
 			display: none !important;
 		}
 		/* Truncate product title to 1 line with ellipsis on mobile */
-		#shopify-section-{{ section.id }} .product-card__title {
+		#shopify-section-{{ section.id }} .product-card:not(.product-card--reference) .product-card__title {
 			display: block !important;
 			white-space: nowrap !important;
 			overflow: hidden !important;
@@ -350,10 +347,10 @@
 			display: none !important;
 		}
 		/* Soften product card images on mobile */
-		#shopify-section-{{ section.id }} .product-card__image img {
+		#shopify-section-{{ section.id }} .product-card:not(.product-card--reference) .product-card__image img {
 			filter: brightness(1.03) contrast(0.95) saturate(0.92);
 		}
-		#shopify-section-{{ section.id }} .product-card__image {
+		#shopify-section-{{ section.id }} .product-card:not(.product-card--reference) .product-card__image {
 			border-radius: 10px;
 			overflow: hidden;
 		}
@@ -411,7 +408,7 @@
     }
 
 	/* Truncate text on 8_grid */
-	.featured-products--layout-8_grid .product-card__title {
+	.featured-products--layout-8_grid .product-card:not(.product-card--reference) .product-card__title {
 		display: -webkit-box !important;
 		-webkit-line-clamp: 2;
 		-webkit-box-orient: vertical;

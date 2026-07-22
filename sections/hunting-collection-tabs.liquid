@@ -100,6 +100,7 @@
 								<div class="hunting-collections__product-col">
 									{%- render 'product-card',
 										product: product,
+										collection: col,
 										size: 439,
 										tablet_size: 328,
 										mobile_size: 308,
@@ -153,7 +154,7 @@
 
 /* Heading */
 .hunting-collections__heading {
-	font-family: 'Oswald', sans-serif;
+	font-family: var(--heading-font-family);
 	font-weight: 700;
 	font-size: 32px;
 	text-transform: uppercase;
@@ -194,7 +195,7 @@
 	align-items: center;
 	justify-content: center;
 	margin: 0 0 14px;
-	font-family: 'Oswald', sans-serif;
+	font-family: var(--heading-font-family);
 	font-size: 20px;
 	font-weight: 700;
 	line-height: 1.2;
@@ -284,7 +285,7 @@
 }
 
 .hunting-collections__tab-label {
-	font-family: 'Oswald', sans-serif;
+	font-family: var(--heading-font-family);
 	font-weight: 500;
 	font-size: 14px;
 	text-transform: uppercase;
@@ -358,7 +359,7 @@
 	margin-bottom: 8px;
 }
 .hunting-collections__empty-title {
-	font-family: 'Oswald', sans-serif;
+	font-family: var(--heading-font-family);
 	font-weight: 700;
 	font-size: 22px;
 	text-transform: uppercase;
@@ -385,7 +386,7 @@
 	display: inline-flex;
 	align-items: center;
 	gap: 6px;
-	font-family: 'Oswald', sans-serif;
+	font-family: var(--button-font-family);
 	font-weight: 500;
 	font-size: 15px;
 	text-transform: uppercase;
@@ -415,7 +416,7 @@
 }
 .hunting-collections__cta-btn {
 	display: inline-block;
-	font-family: 'Oswald', sans-serif;
+	font-family: var(--button-font-family);
 	font-weight: 600;
 	font-size: 14px;
 	text-transform: uppercase;
@@ -514,7 +515,7 @@
 	}
 
 	/* Truncate product title for mobile grid */
-	.hunting-collections__product-col .product-card__title {
+	.hunting-collections__product-col .product-card:not(.product-card--reference) .product-card__title {
 		display: -webkit-box !important;
 		-webkit-line-clamp: 2;
 		-webkit-box-orient: vertical;
@@ -524,10 +525,10 @@
 	}
 
 	/* Soften product card images on mobile */
-	.hunting-collections__product-col .product-card__image img {
+	.hunting-collections__product-col .product-card:not(.product-card--reference) .product-card__image img {
 		filter: brightness(1.03) contrast(0.95) saturate(0.92);
 	}
-	.hunting-collections__product-col .product-card__image-wrapper {
+	.hunting-collections__product-col .product-card:not(.product-card--reference) .product-card__image-wrapper {
 		border-radius: 10px !important;
 		overflow: hidden !important;
 	}

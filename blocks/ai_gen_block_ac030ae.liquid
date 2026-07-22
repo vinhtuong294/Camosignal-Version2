@@ -22,8 +22,8 @@
   }
 
   .ai-message-block__heading-{{ ai_gen_id }} {
-    font-family: {{ block.settings.heading_font.family }}, {{ block.settings.heading_font.fallback_families }};
-    font-weight: {{ block.settings.heading_font.weight }};
+    font-family: var(--heading-font-family);
+    font-weight: var(--heading-font-weight);
     font-style: {{ block.settings.heading_font.style }};
     font-size: {{ block.settings.heading_size }}px;
     color: {{ block.settings.heading_color }};
@@ -32,8 +32,8 @@
   }
 
   .ai-message-block__subheading-{{ ai_gen_id }} {
-    font-family: {{ block.settings.subheading_font.family }}, {{ block.settings.subheading_font.fallback_families }};
-    font-weight: {{ block.settings.subheading_font.weight }};
+    font-family: var(--base-font-family);
+    font-weight: 400;
     font-style: {{ block.settings.subheading_font.style }};
     font-size: {{ block.settings.subheading_size }}px;
     color: {{ block.settings.subheading_color }};
@@ -42,6 +42,7 @@
   }
 
   .ai-message-block__text-{{ ai_gen_id }} {
+	font-family: var(--base-font-family);
     font-size: {{ block.settings.text_size }}px;
     color: {{ block.settings.text_color }};
     margin: 0 0 {{ block.settings.text_spacing }}px;
@@ -59,6 +60,9 @@
     text-decoration: none;
     transition: all 0.3s ease;
     cursor: pointer;
+	font-family: var(--button-font-family);
+	font-weight: var(--button-font-weight);
+	text-transform: uppercase;
   }
 
   .ai-message-block__button-{{ ai_gen_id }}:hover {

@@ -15,7 +15,7 @@
 
 	/* Mobile: 1-line truncation for product titles */
 	@media screen and (max-width: 767px) {
-		#shopify-section-{{- section.id -}} .product-card .product-card__title {
+		#shopify-section-{{- section.id -}} .product-card:not(.product-card--reference) .product-card__title {
 			min-height: auto !important;
 			line-height: 1.4 !important;
 			display: block !important;
@@ -30,11 +30,11 @@
 			text-transform: capitalize !important;
 			font-size: 13px !important;
 		}
-		#shopify-section-{{- section.id -}} .product-card__footer {
+		#shopify-section-{{- section.id -}} .product-card:not(.product-card--reference) .product-card__footer {
 			padding: 0 !important;
 			margin-top: 5px !important;
 		}
-		#shopify-section-{{- section.id -}} .product-card__custom-quick-add {
+		#shopify-section-{{- section.id -}} .product-card:not(.product-card--reference) .product-card__custom-quick-add {
 			display: none !important;
 		}
 	}
@@ -128,6 +128,7 @@
 
 							{%- render 'product-card',
 								product: product,
+								collection: collection,
 								size: 439,
 								tablet_size: 328,
 								mobile_size: 308,
@@ -180,7 +181,7 @@
 			flex-shrink: unset !important;
 		}
 		/* Truncate product title to 1 line with ellipsis on mobile */
-		#shopify-section-{{ section.id }} .product-card__title {
+		#shopify-section-{{ section.id }} .product-card:not(.product-card--reference) .product-card__title {
 			display: block !important;
 			white-space: nowrap !important;
 			overflow: hidden !important;
@@ -200,10 +201,10 @@
 			display: none !important;
 		}
 		/* Soften product card images on mobile */
-		#shopify-section-{{ section.id }} .product-card__image img {
+		#shopify-section-{{ section.id }} .product-card:not(.product-card--reference) .product-card__image img {
 			filter: brightness(1.03) contrast(0.95) saturate(0.92);
 		}
-		#shopify-section-{{ section.id }} .product-card__image {
+		#shopify-section-{{ section.id }} .product-card:not(.product-card--reference) .product-card__image {
 			border-radius: 10px;
 			overflow: hidden;
 		}

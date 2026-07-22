@@ -61,6 +61,18 @@
 		<div class="camo-hero-slider__track" data-camo-hero-track>
 			{%- for block in section.blocks -%}
 				{%- liquid
+					assign asset_image_desktop = block.settings.asset_image_desktop | strip
+					assign asset_image_mobile = block.settings.asset_image_mobile | strip
+					if asset_image_desktop == blank
+						assign asset_image_desktop = asset_image_mobile
+					endif
+					if asset_image_mobile == blank
+						assign asset_image_mobile = asset_image_desktop
+					endif
+					assign use_asset_images = false
+					if asset_image_desktop != blank
+						assign use_asset_images = true
+					endif
 					assign image_desktop = block.settings.image_desktop
 					assign image_mobile = block.settings.image_mobile
 					if image_desktop == blank
@@ -73,14 +85,27 @@
 					assign image_alt = image_desktop.alt | default: heading
 					assign slide_link = block.settings.full_slide_link | default: block.settings.button_link
 					assign content_position = block.settings.content_position | default: 'center'
+					assign mobile_content_position = block.settings.mobile_content_position | default: 'center'
+					assign mobile_button_position = block.settings.mobile_button_position | default: 'center'
+					assign slide_heading_color = block.settings.heading_color | default: text_color
+					assign slide_subheading_color = block.settings.subheading_color | default: text_color
+					assign slide_button_text = block.settings.slide_button_text_color | default: button_text_color
+					assign slide_button_background = block.settings.slide_button_background | default: button_background
+					assign slide_button_border = block.settings.slide_button_border | default: button_border
+					assign slide_scrim = block.settings.content_scrim_opacity | default: 0 | divided_by: 100.0
 					assign desktop_image_position = block.settings.desktop_image_position | default: 'center center'
 					assign mobile_image_position = block.settings.mobile_image_position | default: 'center center'
 					assign desktop_aspect = '16 / 9'
 					assign mobile_aspect = desktop_aspect
-					if image_desktop != blank and image_desktop.width > 0 and image_desktop.height > 0
+					if use_asset_images
+						assign desktop_aspect = '1800 / 760'
+						assign mobile_aspect = '1100 / 1375'
+					elsif image_desktop != blank and image_desktop.width > 0 and image_desktop.height > 0
 						assign desktop_aspect = image_desktop.width | append: ' / ' | append: image_desktop.height
 					endif
-					if image_mobile != blank and image_mobile.width > 0 and image_mobile.height > 0
+					if use_asset_images
+						assign mobile_aspect = '1100 / 1375'
+					elsif image_mobile != blank and image_mobile.width > 0 and image_mobile.height > 0
 						assign mobile_aspect = image_mobile.width | append: ' / ' | append: image_mobile.height
 					else
 						assign mobile_aspect = desktop_aspect
@@ -92,16 +117,34 @@
 				-%}
 
 				<article
-					class="camo-hero-slider__slide{% if is_active %} is-active{% endif %} camo-hero-slider__slide--{{ content_position }}"
+					class="camo-hero-slider__slide{% if is_active %} is-active{% endif %} camo-hero-slider__slide--{{ content_position }} camo-hero-slider__slide--mobile-{{ mobile_content_position }} camo-hero-slider__slide--mobile-button-{{ mobile_button_position }}"
 					data-camo-hero-slide
 					data-slide-index="{{ forloop.index0 }}"
 					data-slide-link="{{ slide_link | escape }}"
 					aria-hidden="{% if is_active %}false{% else %}true{% endif %}"
 					{{ block.shopify_attributes }}
-					style="--camo-hero-desktop-position: {{ desktop_image_position }}; --camo-hero-mobile-position: {{ mobile_image_position }}; --camo-hero-aspect-desktop: {{ desktop_aspect }}; --camo-hero-aspect-mobile: {{ mobile_aspect }};"
+					style="--camo-hero-desktop-position: {{ desktop_image_position }}; --camo-hero-mobile-position: {{ mobile_image_position }}; --camo-hero-aspect-desktop: {{ desktop_aspect }}; --camo-hero-aspect-mobile: {{ mobile_aspect }}; --camo-slide-heading: {{ slide_heading_color }}; --camo-slide-subheading: {{ slide_subheading_color }}; --camo-slide-button-text: {{ slide_button_text }}; --camo-slide-button-bg: {{ slide_button_background }}; --camo-slide-button-border: {{ slide_button_border }}; --camo-slide-scrim: {{ slide_scrim }};"
 				>
 					<div class="camo-hero-slider__media">
-						{%- if image_desktop != blank -%}
+						{%- if use_asset_images -%}
+							<picture>
+								<source
+									media="(max-width: 767px)"
+									srcset="{{ asset_image_mobile | asset_url }}"
+									sizes="100vw"
+								>
+								<img
+									src="{{ asset_image_desktop | asset_url }}"
+									alt="{{ heading | escape }}"
+									width="1800"
+									height="760"
+									loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+									fetchpriority="{% if forloop.first %}high{% else %}low{% endif %}"
+									decoding="async"
+									draggable="false"
+								>
+							</picture>
+						{%- elsif image_desktop != blank -%}
 							<picture>
 								<source
 									media="(max-width: 767px)"
@@ -159,8 +202,10 @@
 
 								{%- if block.settings.button_label != blank and slide_link != blank -%}
 									<a class="camo-hero-slider__button" href="{{ slide_link }}">
-										<span>{{ block.settings.button_label }}</span>
-										<span aria-hidden="true">&#8599;</span>
+										<span class="camo-hero-slider__button-label">{{ block.settings.button_label }}</span>
+										<span class="camo-hero-slider__button-icon" aria-hidden="true">
+											{%- render 'icons', icon: 'arrow-right-2' -%}
+										</span>
 									</a>
 								{%- endif -%}
 							</div>
@@ -234,6 +279,19 @@
 		z-index: 1;
 	}
 
+	.camo-hero-slider__slide::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: 2;
+		background: linear-gradient(
+			180deg,
+			rgba(7, 16, 12, var(--camo-slide-scrim, 0)) 0%,
+			rgba(7, 16, 12, 0) 58%
+		);
+		pointer-events: none;
+	}
+
 	.camo-hero-slider.is-swipe-next .camo-hero-slider__slide,
 	.camo-hero-slider.is-swipe-prev .camo-hero-slider__slide {
 		visibility: hidden;
@@ -303,17 +361,17 @@
 	}
 
 	.camo-hero-slider__content {
-		position: relative;
+		position: absolute;
+		inset: 0;
 		z-index: 4;
 		display: flex;
-		align-items: center;
-		min-height: min(var(--camo-hero-height-mobile), 100vw);
-		padding: 86px 24px 96px;
+		align-items: flex-start;
+		padding: calc(var(--header-height-static, 73px) + 16px) 24px 54px;
 		pointer-events: none;
 	}
 
 	.camo-hero-slider__content-inner {
-		width: min(100%, var(--camo-hero-content-width));
+		width: min(100%, 350px);
 		margin: 0 auto;
 		text-align: center;
 		pointer-events: none;
@@ -336,23 +394,32 @@
 	}
 
 	.camo-hero-slider__eyebrow {
-		margin: 0 0 14px;
-		font-size: 12px;
-		font-weight: 700;
-		letter-spacing: 0;
-		line-height: 1.4;
+		display: inline-block;
+		margin: 0 0 12px;
+		padding: 6px 10px 5px;
+		border: 1px solid color-mix(in srgb, var(--camo-slide-button-border, #e4ad00) 70%, transparent);
+		background: rgba(12, 31, 23, 0.64);
+		box-shadow: 0 6px 20px rgba(3, 10, 7, 0.2);
+		color: var(--camo-slide-button-border, #e4ad00);
+		font-size: 10px;
+		font-weight: 800;
+		letter-spacing: 0.15em;
+		line-height: 1.2;
 		text-transform: uppercase;
 	}
 
 	.camo-hero-slider__heading {
 		margin: 0;
-		color: inherit;
-		font-size: clamp(42px, 12vw, 74px);
-		font-weight: 800;
-		letter-spacing: 0;
-		line-height: 0.95;
+		color: var(--camo-slide-heading, var(--camo-hero-text));
+		font-family: var(--heading-font-family, inherit);
+		font-size: clamp(25px, 7.5vw, 30px);
+		font-weight: 900;
+		letter-spacing: -0.02em;
+		line-height: 0.94;
+		text-shadow: 0 2px 0 rgba(0, 0, 0, 0.5), 0 8px 22px rgba(0, 0, 0, 0.28);
 		text-transform: uppercase;
 		text-wrap: balance;
+		white-space: nowrap;
 	}
 
 	.camo-hero-slider__accent {
@@ -368,13 +435,31 @@
 	}
 
 	.camo-hero-slider__subheading {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
 		max-width: 620px;
-		margin: 24px auto 0;
-		font-size: 14px;
-		font-weight: 600;
-		letter-spacing: 0;
-		line-height: 1.7;
-		text-transform: uppercase;
+		margin: 8px auto 0;
+		color: var(--camo-slide-subheading, var(--camo-hero-text));
+		font-size: 12px;
+		font-weight: 700;
+		letter-spacing: 0.035em;
+		line-height: 1.35;
+		text-shadow: 0 2px 12px rgba(0, 0, 0, 0.42);
+	}
+
+	.camo-hero-slider__subheading::before,
+	.camo-hero-slider__subheading::after {
+		content: "";
+		width: 22px;
+		height: 1px;
+		background: currentColor;
+		opacity: 0.88;
+	}
+
+	.camo-hero-slider__subheading p {
+		margin: 0;
 	}
 
 	.camo-hero-slider__slide--left .camo-hero-slider__subheading {
@@ -391,28 +476,69 @@
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		gap: 10px;
-		min-width: 174px;
-		min-height: 56px;
-		margin-top: 28px;
-		padding: 15px 28px;
-		border: 2px solid var(--camo-hero-button-border);
-		background: var(--camo-hero-button-bg);
-		color: var(--camo-hero-button-text);
-		font-size: 14px;
-		font-weight: 800;
+		gap: 16px;
+		min-width: 176px;
+		min-height: 48px;
+		margin-top: 12px;
+		padding: 13px 20px 13px 22px;
+		border: 2px solid var(--camo-slide-button-border, var(--camo-hero-button-border));
+		border-radius: 0;
+		background: var(--camo-slide-button-bg, var(--camo-hero-button-bg));
+		box-shadow: none;
+		color: var(--camo-slide-button-text, var(--camo-hero-button-text));
+		font-family: var(--heading-font-family, inherit);
+		font-size: 13px;
+		font-weight: 700;
+		letter-spacing: 0;
 		line-height: 1;
 		text-decoration: none;
 		text-transform: uppercase;
 		pointer-events: auto;
-		transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+		transition: transform 180ms ease, background-color 180ms ease, color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+	}
+
+	.camo-hero-slider__button-label {
+		flex: 0 0 auto;
+		padding-right: 0;
+		white-space: nowrap;
+	}
+
+	.camo-hero-slider__button-icon {
+		display: inline-flex;
+		width: 22px;
+		height: 22px;
+		flex: 0 0 22px;
+		align-items: center;
+		justify-content: center;
+		background: transparent;
+		color: currentColor;
+		transition: transform 180ms ease;
+	}
+
+	.camo-hero-slider__button-icon .icon {
+		width: 22px;
+		height: 22px;
 	}
 
 	.camo-hero-slider__button:hover,
 	.camo-hero-slider__button:focus-visible {
-		background: var(--camo-hero-button-text);
-		border-color: var(--camo-hero-button-text);
-		color: #10110e;
+		background: #ffffff;
+		border-color: #ffffff;
+		box-shadow: none;
+		color: #000000;
+		transform: none;
+	}
+
+	.camo-hero-slider__button:hover .camo-hero-slider__button-icon,
+	.camo-hero-slider__button:focus-visible .camo-hero-slider__button-icon {
+		background: transparent;
+		color: currentColor;
+		transform: translateX(4px);
+	}
+
+	.camo-hero-slider__button:focus-visible {
+		outline: 3px solid #ffffff;
+		outline-offset: 4px;
 	}
 
 	.camo-hero-slider__controls {
@@ -429,31 +555,92 @@
 	.camo-hero-slider__dots {
 		position: absolute;
 		right: 24px;
-		bottom: 34px;
+		bottom: 12px;
 		left: 24px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		gap: 10px;
+		gap: 2px;
 	}
 
 	.camo-hero-slider__dot {
-		width: 8px;
-		height: 8px;
+		position: relative;
+		width: 32px;
+		height: 32px;
 		padding: 0;
 		border: 0;
 		border-radius: 999px;
-		background: rgba(255, 255, 255, 0.34);
+		background: transparent;
 		cursor: pointer;
+	}
+
+	.camo-hero-slider__dot:focus-visible {
+		outline: 2px solid #f4c430;
+		outline-offset: -5px;
+	}
+
+	.camo-hero-slider__dot::before {
+		content: "";
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 8px;
+		height: 8px;
+		border-radius: 999px;
+		background: rgba(255, 255, 255, 0.48);
+		transform: translate(-50%, -50%);
 		transition: background-color 180ms ease, transform 180ms ease;
 	}
 
-	.camo-hero-slider__dot.is-active {
+	.camo-hero-slider__dot.is-active::before {
 		background: #fff;
-		transform: scale(1.15);
+		transform: translate(-50%, -50%) scale(1.35);
 	}
 
 	@media screen and (max-width: 767px) {
+		.camo-hero-slider__content-inner {
+			width: min(100%, 318px);
+		}
+
+		.camo-hero-slider__slide--mobile-center .camo-hero-slider__content-inner {
+			width: min(100%, 342px);
+			margin-inline: auto;
+			text-align: center;
+		}
+
+		.camo-hero-slider__subheading {
+			display: grid;
+			grid-template-columns: minmax(14px, 1fr) auto minmax(14px, 1fr);
+			width: 100%;
+		}
+
+		.camo-hero-slider__subheading::before,
+		.camo-hero-slider__subheading::after {
+			width: 100%;
+		}
+
+		.camo-hero-slider__button {
+			width: 176px;
+			min-width: 176px;
+			justify-content: space-between;
+			gap: 0;
+		}
+
+		.camo-hero-slider__slide--mobile-button-left .camo-hero-slider__button {
+			display: flex;
+			margin-inline: 0 auto;
+		}
+
+		.camo-hero-slider__slide--mobile-button-center .camo-hero-slider__button {
+			display: flex;
+			margin-inline: auto;
+		}
+
+		.camo-hero-slider__slide--mobile-button-right .camo-hero-slider__button {
+			display: flex;
+			margin-inline: auto 0;
+		}
+
 		.camo-hero-slider__slide--left .camo-hero-slider__content-inner,
 		.camo-hero-slider__slide--right .camo-hero-slider__content-inner {
 			margin-inline: auto;
@@ -464,8 +651,32 @@
 		.camo-hero-slider__slide--right .camo-hero-slider__subheading {
 			margin-inline: auto;
 		}
-		.camo-hero-slider__dots {
-			bottom: 24px;
+
+		.camo-hero-slider__slide--mobile-left .camo-hero-slider__content-inner {
+			margin-inline: 0 auto;
+			text-align: left;
+		}
+
+		.camo-hero-slider__slide--mobile-left .camo-hero-slider__subheading {
+			justify-content: stretch;
+			margin-inline: 0 auto;
+		}
+
+		.camo-hero-slider__slide--mobile-right .camo-hero-slider__content-inner {
+			margin-inline: auto 0;
+			text-align: right;
+		}
+
+		.camo-hero-slider__slide--mobile-right .camo-hero-slider__subheading {
+			justify-content: flex-end;
+			margin-inline: auto 0;
+		}
+	}
+
+	@media screen and (max-width: 340px) {
+		.camo-hero-slider__subheading {
+			gap: 8px;
+			font-size: 11px;
 		}
 	}
 
@@ -479,13 +690,33 @@
 			object-position: var(--camo-hero-desktop-position);
 		}
 
+		.camo-hero-slider__slide::after {
+			background: linear-gradient(
+				90deg,
+				rgba(7, 16, 12, var(--camo-slide-scrim, 0)) 0%,
+				rgba(7, 16, 12, 0) 62%
+			);
+		}
+
 		.camo-hero-slider__content {
-			min-height: min(var(--camo-hero-height-desktop), 56.25vw);
-			padding: 112px 72px 104px;
+			align-items: center;
+			padding: max(130px, calc(var(--header-height-static, 102px) + 28px)) 72px 76px;
+		}
+
+		.camo-hero-slider__content-inner {
+			width: min(100%, var(--camo-hero-content-width));
 		}
 
 		.camo-hero-slider__heading {
-			font-size: clamp(68px, 7.2vw, 122px);
+			font-size: clamp(60px, 5.2vw, 88px);
+			white-space: normal;
+		}
+
+		.camo-hero-slider__eyebrow {
+			margin-bottom: 16px;
+			padding: 8px 13px 7px;
+			font-size: 12px;
+			letter-spacing: 0.17em;
 		}
 
 		.camo-hero-slider__accent {
@@ -493,7 +724,41 @@
 		}
 
 		.camo-hero-slider__subheading {
-			font-size: 15px;
+			gap: 14px;
+			margin-top: 18px;
+			font-size: clamp(17px, 1.35vw, 24px);
+		}
+
+		.camo-hero-slider__subheading::before,
+		.camo-hero-slider__subheading::after {
+			width: 52px;
+		}
+
+		.camo-hero-slider__button {
+			min-width: 208px;
+			min-height: 52px;
+			margin-top: 24px;
+			padding: 14px 25px 14px 29px;
+			font-size: 14px;
+		}
+
+		.camo-hero-slider__button-label {
+			padding-right: 0;
+		}
+
+		.camo-hero-slider__button-icon {
+			width: 24px;
+			height: 24px;
+			flex-basis: 24px;
+		}
+
+		.camo-hero-slider__button-icon .icon {
+			width: 24px;
+			height: 24px;
+		}
+
+		.camo-hero-slider__dots {
+			bottom: 18px;
 		}
 
 	}
@@ -747,7 +1012,7 @@
 			"type": "checkbox",
 			"id": "show_dots",
 			"label": "Show slide dots",
-			"default": false
+			"default": true
 		},
 		{
 			"type": "range",
@@ -787,7 +1052,7 @@
 			"type": "checkbox",
 			"id": "show_content",
 			"label": "Show text content",
-			"default": false
+			"default": true
 		},
 		{
 			"type": "header",
@@ -826,9 +1091,60 @@
 					"label": "Mobile image"
 				},
 				{
+					"type": "header",
+					"content": "Theme asset override"
+				},
+				{
+					"type": "paragraph",
+					"content": "Optional: use a filename from the theme assets folder instead of an uploaded image. Optimized for 1800 x 760 desktop and 1100 x 1375 mobile assets."
+				},
+				{
+					"type": "text",
+					"id": "asset_image_desktop",
+					"label": "Desktop asset filename"
+				},
+				{
+					"type": "text",
+					"id": "asset_image_mobile",
+					"label": "Mobile asset filename"
+				},
+				{
 					"type": "url",
 					"id": "full_slide_link",
 					"label": "Image click link"
+				},
+				{
+					"type": "select",
+					"id": "content_position",
+					"label": "Desktop content position",
+					"options": [
+						{ "value": "left", "label": "Left" },
+						{ "value": "center", "label": "Center" },
+						{ "value": "right", "label": "Right" }
+					],
+					"default": "left"
+				},
+				{
+					"type": "select",
+					"id": "mobile_content_position",
+					"label": "Mobile content position",
+					"options": [
+						{ "value": "left", "label": "Left" },
+						{ "value": "center", "label": "Center" },
+						{ "value": "right", "label": "Right" }
+					],
+					"default": "center"
+				},
+				{
+					"type": "select",
+					"id": "mobile_button_position",
+					"label": "Mobile button position",
+					"options": [
+						{ "value": "left", "label": "Left" },
+						{ "value": "center", "label": "Center" },
+						{ "value": "right", "label": "Right" }
+					],
+					"default": "center"
 				},
 				{
 					"type": "text",
@@ -859,6 +1175,50 @@
 					"type": "url",
 					"id": "button_link",
 					"label": "Button link (optional fallback)"
+				},
+				{
+					"type": "header",
+					"content": "Content style"
+				},
+				{
+					"type": "color",
+					"id": "heading_color",
+					"label": "Heading color",
+					"default": "#ffffff"
+				},
+				{
+					"type": "color",
+					"id": "subheading_color",
+					"label": "Subheading color",
+					"default": "#ffffff"
+				},
+				{
+					"type": "color",
+					"id": "slide_button_text_color",
+					"label": "Button text color",
+					"default": "#ffffff"
+				},
+				{
+					"type": "color_background",
+					"id": "slide_button_background",
+					"label": "Button background",
+					"default": "rgba(0,0,0,0.12)"
+				},
+				{
+					"type": "color",
+					"id": "slide_button_border",
+					"label": "Button border and hover color",
+					"default": "#ffffff"
+				},
+				{
+					"type": "range",
+					"id": "content_scrim_opacity",
+					"label": "Content contrast overlay",
+					"min": 0,
+					"max": 60,
+					"step": 5,
+					"unit": "%",
+					"default": 20
 				}
 			]
 		}

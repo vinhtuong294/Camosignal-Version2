@@ -6,6 +6,8 @@
 
 {%- render 'adastra' with '/src/styles/footer.scss' -%}
 
+{%- # The recovered custom footer intentionally supersedes the captured legacy footer fragments below. -%}
+{%- # theme-check-disable UnusedAssign -%}
 {%- assign logo_image		    	= section.settings.logo_image -%}
 {%- assign logo_image_width	    	= section.settings.logo_image_width -%}
 
@@ -296,6 +298,7 @@
 	</div>
 {% endcapture %}
 
+{%- # theme-check-enable UnusedAssign -%}
 <footer class="footer need-animate js-animate" style="{{ section_styles }}">
 	<style>
 		html, body {
@@ -365,7 +368,7 @@
 
 		/* Column 2 & 3: Headings */
 		.footer-heading {
-			font-family: 'Oswald', sans-serif;
+			font-family: var(--heading-font-family);
 			font-size: 20px;
 			font-weight: 600;
 			text-transform: uppercase;
@@ -458,7 +461,7 @@
 			min-height: 44px !important;
 			max-height: 44px !important;
 			padding: 0 20px;
-			font-family: 'Oswald', sans-serif;
+			font-family: var(--button-font-family);
 			font-weight: 600;
 			text-transform: uppercase;
 			font-size: 14px;
@@ -605,7 +608,15 @@
 					{%- assign display_logo = logo_image | default: settings.logo -%}
 					{%- if display_logo != blank -%}
 						<div class="desktop-only" style="flex-shrink: 0;">
-							<img src="{{ display_logo | img_url: '300x' }}" alt="Camo Signal" class="footer-logo-img" loading="lazy" style="margin-bottom: 0;">
+							<img
+								src="{{ display_logo | image_url: width: 300 }}"
+								alt="Camo Signal"
+								width="{{ display_logo.width }}"
+								height="{{ display_logo.height }}"
+								class="footer-logo-img"
+								loading="lazy"
+								style="margin-bottom: 0;"
+							>
 						</div>
 					{%- endif -%}
 					
@@ -692,7 +703,7 @@
 	<div class="footer-custom-bottom">
 		<div class="footer-custom-bottom-inner">
 			<div class="footer-custom-bottom-left">
-				<span>&copy; {{ 'now' | date: "%Y" }} PN LOVE COSMETICS CORPORATION</span>
+				<span>&copy; {{ 'now' | date: "%Y" }} - Camo Signal. All Rights Reserved.</span>
 
 				{%- if section.settings.sub_footer_menu != blank -%}
 					{%- for link in linklists[section.settings.sub_footer_menu].links -%}

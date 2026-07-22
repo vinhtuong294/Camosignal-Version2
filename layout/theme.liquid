@@ -14,6 +14,16 @@
 		<link rel="canonical" href="{{- canonical_url -}}">
 		<link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
 		<link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+		{% comment %}
+			Realtree-style typography. These Adobe Fonts kits currently serve
+			Poster Gothic ATF and Capitana. Replace them with a licensed project
+			for this storefront domain before publishing the theme.
+		{% endcomment %}
+		{%- # theme-check-disable RemoteAsset -%}
+		<link rel="preconnect" href="https://use.typekit.net" crossorigin>
+		<link rel="stylesheet" href="https://use.typekit.net/spq4kmf.css">
+		<link rel="stylesheet" href="https://use.typekit.net/ptg5ntw.css">
+		{%- # theme-check-enable RemoteAsset -%}
 		{%- if settings.favicon != blank -%}
 			<link rel="icon" href="{{ settings.favicon | image_url: width: 32 }}" type="image/png">
 		{%- endif -%}

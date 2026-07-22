@@ -9,8 +9,11 @@
  */
 {
   "current": {
-    "base_font": "oswald_n4",
-    "heading_font": "anton_n4",
+    "base_font": "archivo_n4",
+    "heading_font": "archivo_black_n4",
+    "button_font_family": "archivo_n7",
+    "uppercase": true,
+    "button_font_uppercase": true,
     "base_font_size": 130,
     "favicon": "shopify://shop_images/LOGO_FINAL_WEBSITE.png",
     "container_width": "2048px",
@@ -49,7 +52,7 @@
           "btn_bg": "#ffffff",
           "btn_text": "#2c3d33",
           "overlay_opacity": 50,
-          "font_family": "Oswald",
+          "font_family": "Capitana",
           "heading_size_mobile": 115,
           "heading_size_desktop": 130,
           "heading_weight": "700",

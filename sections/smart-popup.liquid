@@ -155,7 +155,7 @@
       box-shadow: 0 20px 40px rgba(0,0,0,0.2);
       transform: translateY(20px); transition: transform 0.4s ease;
       min-height: 0px !important;
-      font-family: '{{ section.settings.font_family }}', sans-serif !important;
+      font-family: var(--base-font-family) !important;
       pointer-events: auto !important;
     }
     .popup-overlay.is-visible .popup-container { transform: translateY(0); }
@@ -181,7 +181,7 @@
 
     .popup-subheading {
       color: inherit;
-      font-family: '{{ section.settings.font_family }}', sans-serif !important;
+      font-family: var(--base-font-family) !important;
       text-transform: none !important;
       letter-spacing: 1px;
       font-size: 0.95rem;
@@ -190,7 +190,7 @@
     }
     .popup-heading {
       color: inherit;
-      font-family: '{{ section.settings.font_family }}', sans-serif !important;
+      font-family: var(--heading-font-family) !important;
       font-size: {{ heading_size_mobile }};
       margin: 0 0 15px 0;
       line-height: 1.3;
@@ -204,7 +204,7 @@
       margin-bottom: 25px;
       font-size: 1.05rem;
       line-height: 1.5;
-      font-family: '{{ section.settings.font_family }}', sans-serif !important;
+      font-family: var(--base-font-family) !important;
       font-weight: normal !important;
       text-transform: none !important;
       opacity: 1;
@@ -213,7 +213,7 @@
     .popup-form { width: 100%; }
     .input-group { display: flex; flex-direction: column; gap: 10px; }
     .popup-input {
-      font-family: '{{ section.settings.font_family }}', sans-serif !important;
+      font-family: var(--base-font-family) !important;
       background: {{ section.settings.input_bg }} !important;
       color: {{ section.settings.input_text }} !important;
       padding: 14px 24px !important;
@@ -226,7 +226,7 @@
       pointer-events: auto !important;
     }
     .popup-submit {
-      font-family: '{{ section.settings.font_family }}', sans-serif !important;
+      font-family: var(--button-font-family) !important;
       padding: 14px 30px !important;
       border: none !important;
       font-weight: bold;
@@ -251,7 +251,7 @@
       background: rgba(255, 255, 255, 0.16);
       border: 1px solid rgba(255, 255, 255, 0.38);
       border-radius: {{ input_radius }};
-      font-family: '{{ section.settings.font_family }}', sans-serif !important;
+      font-family: var(--base-font-family) !important;
       font-size: 0.84rem;
       line-height: 1.35;
       font-weight: 600;
@@ -297,7 +297,7 @@
     }
     @media (min-width: 769px) { .popup-disclaimer { font-size: 0.75rem; white-space: normal; } }
 
-    .form-success { color: inherit; font-family: '{{ section.settings.font_family }}', sans-serif !important; font-size: 1.1rem; line-height: 1.4; }
+    .form-success { color: inherit; font-family: var(--base-font-family) !important; font-size: 1.1rem; line-height: 1.4; }
     .popup-coupon-code {
       display: inline-block;
       margin-top: 15px;
@@ -305,7 +305,7 @@
       color: inherit;
       background-color: rgba(255,255,255,0.1);
       border: 2px dashed currentColor;
-      font-family: '{{ section.settings.font_family }}', sans-serif !important;
+      font-family: var(--heading-font-family) !important;
       font-size: 1.5rem;
       font-weight: 900;
       letter-spacing: 2px;
@@ -419,6 +419,8 @@
 
       CamoSmartPopup.prototype.loadPopupFont = function() {
         var fontFamily = '{{ section.settings.font_family }}';
+		var typekitFonts = ['Capitana', 'Poster Gothic ATF'];
+		if (typekitFonts.indexOf(fontFamily) !== -1) return;
         var whitelist = ['Oswald', 'Inter', 'Roboto', 'Montserrat', 'Playfair Display', 'Lato', 'Poppins', 'Raleway'];
         if (whitelist.indexOf(fontFamily) === -1) {
           console.log('[CamoSignal] Font family not in whitelist, using fallback:', fontFamily);
@@ -1248,6 +1250,8 @@
       "id": "font_family",
       "label": "Phông chữ",
       "options": [
+		{ "value": "Capitana", "label": "Capitana (Realtree body)" },
+		{ "value": "Poster Gothic ATF", "label": "Poster Gothic ATF (Realtree heading)" },
         { "value": "Oswald", "label": "Oswald" },
         { "value": "Inter", "label": "Inter" },
         { "value": "Roboto", "label": "Roboto" },
@@ -1257,7 +1261,7 @@
         { "value": "Poppins", "label": "Poppins" },
         { "value": "Raleway", "label": "Raleway" }
       ],
-      "default": "Oswald"
+      "default": "Capitana"
     },
     { "type": "range", "id": "heading_size_mobile", "min": 100, "max": 300, "step": 5, "label": "Cỡ heading (Mobile, x0.01rem)", "default": 115, "info": "115 = 1.15rem" },
     { "type": "range", "id": "heading_size_desktop", "min": 100, "max": 400, "step": 5, "label": "Cỡ heading (Desktop, x0.01rem)", "default": 130, "info": "130 = 1.3rem" },

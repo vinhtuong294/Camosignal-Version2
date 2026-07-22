@@ -17,13 +17,24 @@
           "settings": {
             "image_desktop": "shopify://shop_images/bannerslider2.jpg",
             "image_mobile": "shopify://shop_images/banner-mobile-4.jpg",
+            "asset_image_desktop": "camo-hero-wild-turkey-desktop-v2.jpg",
+            "asset_image_mobile": "camo-hero-wild-turkey-mobile-v2.jpg",
             "full_slide_link": "shopify://collections/wild-turkey",
+            "content_position": "left",
+            "mobile_content_position": "center",
+            "mobile_button_position": "center",
             "eyebrow": "",
-            "heading": "",
+            "heading": "WILD TURKEY CHASE",
             "accent_text": "",
-            "subheading": "",
-            "button_label": "",
-            "button_link": "shopify://collections/wild-turkey"
+            "subheading": "<p>Outsmart the sharpest eyes</p>",
+            "button_label": "SHOP NOW",
+            "button_link": "shopify://collections/wild-turkey",
+            "heading_color": "#ffffff",
+            "subheading_color": "#ffffff",
+            "slide_button_text_color": "#000000",
+            "slide_button_background": "#e4ad00",
+            "slide_button_border": "#e4ad00",
+            "content_scrim_opacity": 30
           }
         },
         "slide_ryx8LC": {
@@ -31,13 +42,24 @@
           "settings": {
             "image_desktop": "shopify://shop_images/banner_3.png",
             "image_mobile": "shopify://shop_images/banner_3_mobile_ver2.png",
-            "full_slide_link": "shopify://collections/saltwater-fishing-t-shirt",
+            "asset_image_desktop": "camo-hero-deer-wilderness-desktop-v2.jpg",
+            "asset_image_mobile": "camo-hero-deer-wilderness-mobile-v2.jpg",
+            "full_slide_link": "shopify://collections/deer",
+            "content_position": "left",
+            "mobile_content_position": "center",
+            "mobile_button_position": "left",
             "eyebrow": "",
-            "heading": "",
+            "heading": "DEER WILDERNESS",
             "accent_text": "",
-            "subheading": "",
-            "button_label": "",
-            "button_link": "shopify://collections/saltwater-fishing-t-shirt"
+            "subheading": "<p>The Hunting & Outdoor Collection</p>",
+            "button_label": "SHOP NOW",
+            "button_link": "shopify://collections/deer",
+            "heading_color": "#ffffff",
+            "subheading_color": "#ffffff",
+            "slide_button_text_color": "#000000",
+            "slide_button_background": "#e4ad00",
+            "slide_button_border": "#e4ad00",
+            "content_scrim_opacity": 25
           }
         }
       },
@@ -48,11 +70,11 @@
       "name": "Banner slider",
       "settings": {
         "enable_autoplay": true,
-        "show_dots": false,
+        "show_dots": true,
         "autoplay_delay": 5,
         "height_desktop": 620,
         "height_mobile": 560,
-        "show_content": false,
+        "show_content": true,
         "enable_overlay": false,
         "overlay_opacity": 0
       }
@@ -181,12 +203,12 @@
             "padding_top_mobile": 30,
             "padding_bottom_mobile": 0,
             "padding_horizontal_mobile": 15,
-            "heading_font": "oswald_n7",
+            "heading_font": "archivo_black_n4",
             "heading_size": 48,
             "heading_size_mobile": 32,
             "heading_color": "#2c3d33",
             "heading_spacing": 16,
-            "subheading_font": "oswald_n4",
+            "subheading_font": "archivo_n4",
             "subheading_size": 24,
             "subheading_size_mobile": 18,
             "subheading_color": "#535353",
@@ -835,6 +857,26 @@
         "inner_offset_bottom_mobile": 0
       }
     },
+    "instagram_social_gallery": {
+      "type": "social-gallery",
+      "settings": {
+        "enable_color_scheme_inheritance": true,
+        "color_scheme": "scheme-1",
+        "title": "FOLLOW US ON INSTAGRAM",
+        "link_label": "",
+        "link_url": "https://www.instagram.com/camo.signal/",
+        "animation_movement_speed": 34,
+        "container_width": "100%",
+        "offset_top_desktop": 0,
+        "offset_bottom_desktop": 20,
+        "offset_top_mobile": 0,
+        "offset_bottom_mobile": 16,
+        "inner_offset_top": 16,
+        "inner_offset_bottom": 20,
+        "inner_offset_top_mobile": 16,
+        "inner_offset_bottom_mobile": 20
+      }
+    },
     "17755869487c283f8c": {
       "type": "apps",
       "disabled": true,
@@ -900,6 +942,7 @@
     "hunting_collections",
     "banner_ULEW7k",
     "featured_products_ENKafe",
+    "instagram_social_gallery",
     "17755869487c283f8c"
   ]
 }

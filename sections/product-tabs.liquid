@@ -244,11 +244,12 @@
 										</div>
 
 										{%- if product_list != blank and product_list.count > 0 -%}
-											{%- for product in product_list limit: limit -%}
+											{%- for product in product_list limit: 6 -%}
 												<div class="product-tabs__slide swiper-slide js-product-tabs-slide">
 													{%- render
 														'product-card',
 														product: product,
+														collection: collection,
 														size: 383,
 														tablet_size: product_card_tablet_size,
 														mobile_size: 308

@@ -84,12 +84,6 @@
 	{{ base_italic_font | font_face: font_display: 'swap' }}
 	{{ base_bold_italic_font| font_face: font_display: 'swap' }}
 
-	{% if settings.uppercase %}
-		{% assign heading_text_transform = 'uppercase' %}
-	{% else %}
-		{% assign heading_text_transform = 'none' %}
-	{% endif %}
-
 	{% if settings.button_font_uppercase %}
 		{% assign button_text_transform = 'uppercase' %}
 	{% else %}
@@ -100,13 +94,34 @@
 		--body-font-size: {{- settings.base_font_size | times: 0.1391 | round -}}px;
 		--body-font-size-without-unit: {{- settings.base_font_size | times: 0.1391 | round -}};
 		--heading-font-size: {{- settings.heading_font_size | times:  0.1913 | round -}}px;
-		--base-font-family: {{ settings.base_font.family }}, {{ settings.base_font.fallback_families }};
-		--heading-font-family: {{ settings.heading_font.family }}, {{ settings.heading_font.fallback_families }};
-		--heading-font-weight: {{- settings.heading_font.weight -}};
-		--heading-text-transform: {{- heading_text_transform -}};
-		--button-font-family: {{ settings.button_font_family.family }}, {{ settings.button_font_family.fallback_families }};
+		--base-font-family: "capitana", {{ settings.base_font.family }}, {{ settings.base_font.fallback_families }};
+		--heading-font-family: "poster-gothic-atf", {{ settings.heading_font.family }}, {{ settings.heading_font.fallback_families }};
+		--font-body-family: var(--base-font-family);
+		--font-heading-family: var(--heading-font-family);
+		--heading-font-weight: 900;
+		--heading-text-transform: uppercase;
+		--button-font-family: "capitana", {{ settings.button_font_family.family }}, {{ settings.button_font_family.fallback_families }};
+		--button-font-weight: 600;
 		--button-font-size: {{- settings.button_font_size | times: 0.12 | round -}}px;
 		--button-text-transform: {{- button_text_transform -}};
+	}
+
+	body {
+		font-family: var(--base-font-family);
+		font-weight: 400;
+	}
+
+	h1, h2, h3, h4, h5, h6,
+	.h1, .h2, .h3, .h4, .h5, .h6 {
+		font-family: var(--heading-font-family) !important;
+		font-weight: var(--heading-font-weight);
+		text-transform: var(--heading-text-transform);
+	}
+
+	button, .button, [role="button"], input[type="button"], input[type="submit"] {
+		font-family: var(--button-font-family) !important;
+		font-weight: var(--button-font-weight);
+		text-transform: uppercase;
 	}
 
 	{% comment %}Product_Card{% endcomment %}

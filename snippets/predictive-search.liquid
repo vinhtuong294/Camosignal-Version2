@@ -42,13 +42,104 @@
 <style>
 	/* BRUTALIST PREDICTIVE SEARCH REDESIGN */
 	.predictive-search__tabs-wrapper,
-	.predictive-search__trending,
 	.js-predictive-search-promo-products,
 	.predictive-search__promo {
 		display: none !important;
 	}
 
+	/* KUIU-inspired popular search links. The terms remain editable in Theme settings. */
+	.predictive-search .predictive-search__trending {
+		display: flex !important;
+		flex-direction: column;
+		align-items: flex-start;
+		order: 5;
+		margin-top: 24px;
+		padding-top: 20px;
+		border-top: 1px solid var(--color-border-secondary);
+		row-gap: 10px;
+	}
 
+	.predictive-search .predictive-search__trending-heading {
+		font-size: 16px !important;
+		font-weight: 700 !important;
+		line-height: 1.25 !important;
+		letter-spacing: 0.5px;
+		text-transform: uppercase;
+		color: var(--color-heading) !important;
+	}
+
+	.predictive-search .predictive-search__trending-terms {
+		display: flex;
+		width: 100%;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0;
+	}
+
+	.predictive-search .predictive-search__trending-term {
+		display: flex;
+		width: 100%;
+		min-height: 40px;
+		align-items: center;
+		padding: 7px 0 !important;
+		font-size: 15px !important;
+		font-weight: 400;
+		line-height: 1.4 !important;
+		color: var(--color-text-primary) !important;
+		background: transparent !important;
+		text-decoration: none;
+	}
+
+	@media (-moz-touch-enabled: 0), (hover: hover), (pointer: fine) {
+		.predictive-search .predictive-search__trending-term:hover {
+			opacity: 1;
+			text-decoration: underline;
+			text-underline-offset: 3px;
+		}
+	}
+
+	@media (min-width: 1025px) {
+		.predictive-search .predictive-search__form.is-active {
+			display: grid;
+			grid-template-columns: minmax(0, 3fr) minmax(240px, 1fr);
+			column-gap: 32px;
+			align-items: start;
+		}
+
+		.predictive-search .predictive-search__form.is-active .predictive-search__search {
+			grid-column: 1 / -1;
+			grid-row: 1;
+		}
+
+		.predictive-search .predictive-search__form.is-active .predictive-search__result {
+			grid-column: 1;
+			grid-row: 2;
+			min-width: 0;
+		}
+
+		.predictive-search .predictive-search__form.is-active .predictive-search__trending {
+			grid-column: 2;
+			grid-row: 2;
+			order: initial;
+			align-self: stretch;
+			margin-top: 24px;
+			padding: 0 0 0 24px;
+			border-top: 0;
+			border-left: 1px solid var(--color-border-secondary);
+		}
+
+		.predictive-search .predictive-search__form.is-active .predictive-search__footer {
+			grid-column: 1;
+			grid-row: 3;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.predictive-search .predictive-search__trending {
+			margin-top: 32px;
+			padding-top: 24px;
+		}
+	}
 
 	/* Hide default focus rings if needed to keep it brutal */
 	.predictive-search__input:focus {
@@ -336,12 +427,35 @@
 
 				<div class="predictive-search__trending-terms">
 					{%- for term in predictive_search_trending_terms_array -%}
-						<a
-							class="predictive-search__trending-term focus-visible-outline"
-							href="{{- routes.search_url -}}?q={{- term | handleize -}}"
-						>
-							{{- term | escape -}}
-						</a>
+						{%- assign popular_search_item  = term | strip -%}
+						{%- assign popular_search_parts = popular_search_item | split: "|" -%}
+						{%- assign popular_search_term  = popular_search_parts | first | strip -%}
+						{%- assign popular_search_url   = popular_search_parts | last | strip -%}
+
+						{%- if popular_search_term != blank -%}
+							{%- assign popular_search_key = popular_search_term | handleize -%}
+							{%- if popular_search_parts.size == 1 or popular_search_url == blank -%}
+								{%- case popular_search_key -%}
+									{%- when "t-shirts" -%}
+										{%- assign popular_search_url = "/collections/graphictee" -%}
+									{%- when "hoodies" -%}
+										{%- assign popular_search_url = "/collections/hunting-hoodie?filter.p.product_type=Hoodie" -%}
+									{%- when "jerseys" -%}
+										{%- assign popular_search_url = "/collections/game-day-jersey" -%}
+									{%- when "new-arrivals" -%}
+										{%- assign popular_search_url = "/collections/new-arrivals" -%}
+									{%- else -%}
+										{%- capture popular_search_url -%}{{- routes.search_url -}}?q={{- popular_search_term | url_encode -}}&search_type=popular{%- endcapture -%}
+								{%- endcase -%}
+							{%- endif -%}
+
+							<a
+								class="predictive-search__trending-term focus-visible-outline"
+								href="{{- popular_search_url | escape -}}"
+							>
+								{{- popular_search_term | escape -}}
+							</a>
+						{%- endif -%}
 					{%- endfor -%}
 				</div>
 			</div>

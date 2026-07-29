@@ -1101,9 +1101,9 @@
 			{
 				"type": "textarea",
 				"id": "predictive_search_trending_terms",
-				"label": "Trending search terms",
-				"info": "Enter words separated by commas without spaces that will be displayed as frequently used search terms.",
-				"default": "Term 1,Term 2,Term 3,Term 4,Term 5,Term 6"
+				"label": "Popular Search keywords",
+				"info": "Add comma-separated items as Label|Collection URL. Example: Hoodies|/collections/hunting-hoodie?filter.p.product_type=Hoodie.",
+				"default": "T-Shirts|/collections/graphictee,Hoodies|/collections/hunting-hoodie?filter.p.product_type=Hoodie,Jerseys|/collections/game-day-jersey,New Arrivals|/collections/new-arrivals"
 			},
 			{
 				"type": "product_list",

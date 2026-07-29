@@ -88,7 +88,7 @@
 			"submit_query": "Search",
 			"submit_query_aria_label": "Submit search query",
 			"reset_aria_label": "Reset search",
-			"trending_search_terms": "Trending Search Terms",
+			"trending_search_terms": "Popular Search",
 			"promo_products": "Recently viewed"
 		},
 		"filters": {

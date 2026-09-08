@@ -102,7 +102,8 @@
 			"clear_all": "Clear all",
 			"filter_price_from": "Price from...",
 			"filter_price_to": "Price to...",
-			"filter_and_operator_subtitle": "Match all"
+			"filter_and_operator_subtitle": "Match all",
+			"game_day_jersey": "GAME DAY JERSEY"
 		},
 		"payment": {
 			"method": "Payment methods"
@@ -433,10 +434,14 @@
 	"products": {
 		"customization": {
 			"heading": "Personalization",
+			"customize": "Customize",
 			"name_label": "Your Name",
 			"name_placeholder": "Enter your name",
 			"number_label": "Your Number",
-			"number_placeholder": "Enter your number"
+			"number_placeholder": "Enter your number",
+			"required_message": "Please enter all required personalization details.",
+			"cart_missing_item": "Personalization details are missing. Remove this item and add it again.",
+			"cart_missing_checkout": "Complete the missing personalization details before checkout."
 		},
 		"product": {
 			"sold_out": "Sold out",

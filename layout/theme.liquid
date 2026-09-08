@@ -397,9 +397,11 @@
 					return promise;
 				};
 			})();
-		</script>
+			</script>
 
-		<style>
+			{%- render 'personalized-cart-guard' -%}
+
+			<style>
 			/* Suppress the full-section preloader overlay during quantity
 			   changes — the optimistic input value + the in-place price
 			   update already give the user enough feedback. */
@@ -1357,7 +1359,7 @@
 			})();
 		</script>
 
-		{%- comment -%} Global Cart Enforcer (Shipping Protection Max 1 & Merge Split Variants) + Auto-apply Discount {%- endcomment -%}
+		{%- comment -%} Global Cart Enforcer (Shipping Protection Max 1) + Auto-apply Discount {%- endcomment -%}
 		<style>
 			html.is-cart-merging .cart-drawer__items,
 			html.is-cart-merging .cart-item,
@@ -1383,7 +1385,6 @@
 				function analyzeItems(items) {
 					var updates = {};
 					var needsUpdate = false;
-					var variants = {};
 
 					for (var i = 0; i < items.length; i++) {
 						var item = items[i];
@@ -1393,16 +1394,6 @@
 								needsUpdate = true;
 								updates[item.key] = 1;
 							}
-							continue;
-						}
-
-						if (variants[item.variant_id]) {
-							needsUpdate = true;
-							variants[item.variant_id].qty += item.quantity;
-							updates[item.key] = 0;
-							updates[variants[item.variant_id].key] = variants[item.variant_id].qty;
-						} else {
-							variants[item.variant_id] = { key: item.key, qty: item.quantity };
 						}
 					}
 

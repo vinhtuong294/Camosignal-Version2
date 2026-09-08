@@ -40,58 +40,73 @@
 
 {%- if show_popup and section.settings.enable_popup -%}
 
-  {%- comment -%} Assign customizable values {%- endcomment -%}
-  {%- assign border_radius = section.settings.border_radius | append: 'px' -%}
+  {%- assign desktop_background_url = 'https://cdn.shopify.com/s/files/1/0741/7987/0911/files/banner_form_desktop.png?v=1787042376' -%}
+  {%- assign mobile_background_url = 'https://cdn.shopify.com/s/files/1/0741/7987/0911/files/banner_form_mobile.png?v=1787042375' -%}
+  {%- assign brand_logo_url = 'https://cdn.shopify.com/s/files/1/0741/7987/0911/files/logo_camosignal.png?v=1787044050' -%}
+  {%- if section.settings.desktop_background != blank -%}
+    {%- assign desktop_background_url = section.settings.desktop_background | image_url: width: 2400 -%}
+  {%- endif -%}
+  {%- if section.settings.mobile_background != blank -%}
+    {%- assign mobile_background_url = section.settings.mobile_background | image_url: width: 1000 -%}
+  {%- endif -%}
+  {%- if section.settings.brand_logo != blank -%}
+    {%- assign brand_logo_url = section.settings.brand_logo | image_url: width: 600 -%}
+  {%- endif -%}
   {%- assign input_radius = section.settings.input_radius | append: 'px' -%}
-  {%- assign heading_size_mobile = section.settings.heading_size_mobile | divided_by: 100.0 | append: 'rem' -%}
-  {%- assign heading_size_desktop = section.settings.heading_size_desktop | divided_by: 100.0 | append: 'rem' -%}
 
   <div id="newsletter-popup-{{ section.id }}" class="popup-overlay" style="display: none;">
-    <div class="popup-container">
-      
-      <button class="popup-close" aria-label="Close" style="color: {{ section.settings.text_color }};">&times;</button>
+    <div
+      class="popup-container"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="camo-popup-title-{{ section.id }}"
+    >
+      <button class="popup-close" type="button" aria-label="Close popup">&times;</button>
 
-      <div class="popup-image">
-        {%- if section.settings.image != blank -%}
-          {%- # theme-check-disable RemoteAsset -%}
-          <img
-            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
-            data-popup-src="{{ section.settings.image | image_url: width: 800 }}"
-            alt="{{ section.settings.heading | escape }}"
-            loading="lazy"
-            decoding="async"
-            fetchpriority="low"
-            width="400" height="400"
-          >
-          {%- # theme-check-enable RemoteAsset -%}
-        {%- else -%}
-          {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
-        {%- endif -%}
-      </div>
+      <picture class="popup-media" aria-hidden="true">
+        {%- # theme-check-disable RemoteAsset -%}
+        <source
+          media="(max-width: 768px)"
+          data-popup-srcset="{{ mobile_background_url }}"
+        >
+        <img
+          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+          data-popup-src="{{ desktop_background_url }}"
+          alt=""
+          loading="lazy"
+          decoding="async"
+          fetchpriority="low"
+          width="1928"
+          height="816"
+        >
+        {%- # theme-check-enable RemoteAsset -%}
+      </picture>
 
-      <div class="popup-content" style="background-color: {{ section.settings.bg_color }}; color: {{ section.settings.text_color }};">
+      <div class="popup-content" style="color: {{ section.settings.text_color }};">
         <div class="popup-text-wrapper">
-          {%- if section.settings.subheading != blank -%}
-            <p class="popup-subheading">{{ section.settings.subheading }}</p>
-          {%- endif -%}
-          
-          {%- if section.settings.heading != blank -%}
-            <h2 class="popup-heading">{{ section.settings.heading }}</h2>
-          {%- endif -%}
-
-          {%- if section.settings.description != blank -%}
-            <div class="popup-desc">
-              {{ section.settings.description }}
-            </div>
-          {%- endif -%}
-
           {%- assign popup_form_id = 'camo-popup-contact-form-' | append: section.id -%}
           {% form 'customer', class: 'popup-form js-camo-popup-form', id: popup_form_id %}
-            <input type="hidden" name="contact[tags]" value="newsletter, popup, apparel">
+            <input
+              type="hidden"
+              name="contact[tags]"
+              value="newsletter, popup, apparel"
+              data-popup-tags
+              data-base-tags="newsletter, popup, apparel"
+            >
             <input type="hidden" name="contact[accepts_marketing]" value="true">
+
             {%- if form.posted_successfully? and request.design_mode == false -%}
-              <div class="form-success-wrapper" style="text-align: center; margin: 15px 0;">
-                <div class="form-success">
+              <div class="popup-step popup-step--success" aria-live="polite">
+                <img
+                  class="popup-brand-logo"
+                  src="{{ brand_logo_url }}"
+                  alt="{{ section.settings.brand_label | default: 'Camo Signal' | escape }}"
+                  width="600"
+                  height="750"
+                  loading="eager"
+                  decoding="async"
+                >
+                <div class="form-success" id="camo-popup-title-{{ section.id }}">
                   {{ section.settings.success_message | default: "Thank you! Use the promo code below at checkout:" | newline_to_br }}
                 </div>
                 {%- if section.settings.coupon_code != blank -%}
@@ -108,147 +123,478 @@
                 {%- endif -%}
               </script>
             {%- else -%}
-              <div class="input-group">
-                <label class="visually-hidden" for="camo-popup-email-{{ section.id }}">
-                  {{ section.settings.input_placeholder }}
-                </label>
-                <input id="camo-popup-email-{{ section.id }}" type="email" inputmode="email" name="contact[email]" class="popup-input" value="{{ form.email }}" placeholder="{{ section.settings.input_placeholder }}" autocomplete="email" autocorrect="off" autocapitalize="off" required>
-                <div class="popup-email-suggestion js-camo-email-suggestion" aria-live="polite" hidden>
-                  Did you mean
-                  <button type="button" class="popup-email-suggestion__button js-camo-email-suggestion-button"></button>?
-                </div>
-                <button type="submit" name="commit" class="popup-submit">
-                  {{ section.settings.btn_label }}
+              <section
+                class="popup-step popup-step--interests js-camo-interest-step"
+                data-popup-step="interests"
+                {% if form.errors %}hidden{% endif %}
+              >
+                <img
+                  class="popup-brand-logo"
+                  src="{{ brand_logo_url }}"
+                  alt="{{ section.settings.brand_label | default: 'Camo Signal' | escape }}"
+                  width="600"
+                  height="750"
+                  loading="eager"
+                  decoding="async"
+                >
+
+                <h2 class="popup-heading" id="camo-popup-title-{{ section.id }}">
+                  {{ section.settings.heading }}
+                </h2>
+
+                {%- if section.settings.description != blank -%}
+                  <p class="popup-desc">{{ section.settings.description }}</p>
+                {%- endif -%}
+
+                <fieldset class="popup-interests js-camo-interests">
+                  <legend class="visually-hidden">Choose one or more categories</legend>
+
+                  <label class="popup-interest-option">
+                    <input type="checkbox" value="Deer" data-popup-interest>
+                    <span class="popup-interest-option__copy">DEER</span>
+                  </label>
+
+                  <label class="popup-interest-option">
+                    <input type="checkbox" value="Turkey" data-popup-interest>
+                    <span class="popup-interest-option__copy">TURKEY</span>
+                  </label>
+
+                  <label class="popup-interest-option">
+                    <input type="checkbox" value="Freshwater" data-popup-interest>
+                    <span class="popup-interest-option__copy">FRESHWATER</span>
+                  </label>
+
+                  <label class="popup-interest-option">
+                    <input type="checkbox" value="Saltwater" data-popup-interest>
+                    <span class="popup-interest-option__copy">SALTWATER</span>
+                  </label>
+
+                  <label class="popup-interest-option popup-interest-option--seasonal">
+                    <input type="checkbox" value="Seasonal" data-popup-interest>
+                    <span class="popup-interest-option__copy">SEASONAL</span>
+                  </label>
+                </fieldset>
+
+                <p class="popup-interest-error js-camo-interest-error" role="alert" hidden>
+                  Please select at least one category.
+                </p>
+
+                <button type="button" class="popup-submit popup-interest-next js-camo-interest-next">
+                  {{ section.settings.interest_btn_label | default: 'Submit' }}
                 </button>
-              </div>
-              {%- if form.errors -%}
-                <div class="form-error">{{ form.errors | default_errors }}</div>
-              {%- endif -%}
-              <div class="form-error js-camo-popup-submit-error" role="alert" hidden>
-                We could not verify this signup. Please allow the verification check or try again in another browser.
-              </div>
+              </section>
+
+              <section
+                class="popup-step popup-step--email js-camo-email-step"
+                data-popup-step="email"
+                {% unless form.errors %}hidden{% endunless %}
+              >
+                <img
+                  class="popup-brand-logo"
+                  src="{{ brand_logo_url }}"
+                  alt="{{ section.settings.brand_label | default: 'Camo Signal' | escape }}"
+                  width="600"
+                  height="750"
+                  loading="eager"
+                  decoding="async"
+                >
+
+                <h2 class="popup-heading popup-heading--email" id="camo-popup-email-title-{{ section.id }}">
+                  {{ section.settings.email_heading | default: 'Be the first to know' }}
+                </h2>
+
+                <div class="input-group">
+                  <label class="visually-hidden" for="camo-popup-email-{{ section.id }}">
+                    {{ section.settings.input_placeholder }}
+                  </label>
+                  <input
+                    id="camo-popup-email-{{ section.id }}"
+                    type="email"
+                    inputmode="email"
+                    name="contact[email]"
+                    class="popup-input"
+                    value="{{ form.email }}"
+                    placeholder="{{ section.settings.input_placeholder }}"
+                    autocomplete="email"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    {% unless form.errors %}disabled{% endunless %}
+                    required
+                  >
+                  <div class="popup-email-suggestion js-camo-email-suggestion" aria-live="polite" hidden>
+                    Did you mean
+                    <button type="button" class="popup-email-suggestion__button js-camo-email-suggestion-button"></button>?
+                  </div>
+                  <button type="submit" name="commit" class="popup-submit">
+                    {{ section.settings.btn_label }}
+                  </button>
+                  <button type="button" class="popup-back js-camo-interest-back">
+                    Back to interests
+                  </button>
+                </div>
+
+                {%- if form.errors -%}
+                  <div class="form-error">{{ form.errors | default_errors }}</div>
+                {%- endif -%}
+                <div class="form-error js-camo-popup-submit-error" role="alert" hidden>
+                  We could not verify this signup. Please allow the verification check or try again in another browser.
+                </div>
+              </section>
             {%- endif -%}
           {% endform %}
-          
-          <p class="popup-disclaimer">
-            {{ section.settings.disclaimer }}
-          </p>
         </div>
       </div>
     </div>
   </div>
 
   <style id="popup-css-{{- section.id -}}" media="print">
+    html.camo-popup-is-open,
+    html.camo-popup-is-open body {
+      overflow: hidden !important;
+    }
+
     .popup-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, {{ section.settings.overlay_opacity | divided_by: 100.0 }});
-      z-index: 2147483647 !important; display: flex; justify-content: center; align-items: center;
-      opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease;
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      background: #061014;
+      z-index: 2147483647 !important;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.35s ease, visibility 0.35s ease;
       pointer-events: auto !important;
       touch-action: manipulation;
     }
-    .popup-overlay.is-visible { opacity: 1; visibility: visible; }
+
+    .popup-overlay.is-visible {
+      opacity: 1;
+      visibility: visible;
+    }
 
     .popup-container {
-      background: #fff; width: 90%; max-width: {{ section.settings.popup_max_width }}px; display: flex;
-      position: relative; border-radius: {{ border_radius }}; overflow: hidden;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-      transform: translateY(20px); transition: transform 0.4s ease;
-      min-height: 0px !important;
+      position: relative;
+      display: flex;
+      width: 100vw;
+      max-width: none;
+      height: 100vh;
+      height: 100dvh;
+      min-height: 0 !important;
+      overflow: hidden;
+      background: #061014;
+      border-radius: 0;
+      box-shadow: none;
       font-family: var(--base-font-family) !important;
       pointer-events: auto !important;
     }
-    .popup-overlay.is-visible .popup-container { transform: translateY(0); }
+
+    .popup-container::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: linear-gradient(90deg, rgba(1, 11, 14, 0.28) 0%, rgba(1, 11, 14, 0.1) 48%, rgba(1, 11, 14, 0) 76%);
+    }
+
+    .popup-media {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .popup-media img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
 
     .popup-close {
-      position: absolute; padding: 0; background: none; border: none;
-      font-size: 30px; line-height: 1; cursor: pointer; z-index: 10; opacity: 0.7;
-      width: 40px !important; height: 40px !important;
-      min-width: 0px !important; min-height: 0px !important;
-      right: 5px; top: 5px;
+      position: absolute;
+      top: max(14px, env(safe-area-inset-top));
+      right: max(14px, env(safe-area-inset-right));
+      z-index: 10;
+      display: grid;
+      place-items: center;
+      width: 42px !important;
+      height: 42px !important;
+      min-width: 0 !important;
+      min-height: 0 !important;
+      padding: 0 !important;
+      border: 1px solid rgba(255, 255, 255, 0.65) !important;
+      border-radius: 50% !important;
+      background: rgba(255, 255, 255, 0.78) !important;
+      color: #071014 !important;
+      box-shadow: 0 3px 14px rgba(0, 0, 0, 0.16);
+      font-family: Arial, sans-serif !important;
+      font-size: 29px;
+      font-weight: 300;
+      line-height: 1;
+      cursor: pointer;
+      opacity: 0.92;
       pointer-events: auto !important;
+      transition: opacity 0.2s ease, background-color 0.2s ease;
     }
-    .popup-close:before { display: none; }
-    .popup-close:hover { opacity: 1; }
 
-    .popup-image { width: 50%; display: none; position: relative; }
-    .popup-image::before { content: ''; display: block; padding-top: 100%; }
-    .popup-image img, .popup-image svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
-    @media (min-width: 769px) { .popup-image { display: block; } }
-
-    .popup-content { width: 100%; padding: 20px; display: flex; flex-direction: column; justify-content: center; text-align: center; box-sizing: border-box; }
-    @media (min-width: 769px) { .popup-content { width: 50%; padding: 30px 35px; text-align: {{ section.settings.text_alignment }}; aspect-ratio: 1 / 1; } }
-
-    .popup-subheading {
-      color: inherit;
-      font-family: var(--base-font-family) !important;
-      text-transform: none !important;
-      letter-spacing: 1px;
-      font-size: 0.95rem;
-      font-weight: normal !important;
-      margin-bottom: 10px;
+    .popup-close::before {
+      display: none !important;
     }
+
+    .popup-close:hover,
+    .popup-close:focus-visible {
+      opacity: 1;
+      background: #ffffff !important;
+    }
+
+    .popup-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      overflow-y: auto;
+      padding: clamp(70px, 8vh, 100px) clamp(42px, 5vw, 96px);
+    }
+
+    .popup-text-wrapper {
+      width: min(100%, 620px);
+      margin-left: clamp(40px, 10.5vw, 205px);
+      text-align: center;
+    }
+
+    .popup-form,
+    .popup-step {
+      width: 100%;
+    }
+
+    .popup-step[hidden] {
+      display: none !important;
+    }
+
+    .popup-brand-logo {
+      display: block;
+      width: clamp(190px, 15vw, 240px);
+      height: auto;
+      aspect-ratio: 1.95 / 1;
+      margin: 0 auto 18px;
+      object-fit: cover;
+      object-position: center 42%;
+      filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.34));
+    }
+
     .popup-heading {
+      margin: 0 0 22px;
       color: inherit;
       font-family: var(--heading-font-family) !important;
-      font-size: {{ heading_size_mobile }};
-      margin: 0 0 15px 0;
-      line-height: 1.3;
-      font-weight: {{ section.settings.heading_weight }};
-      text-transform: {{ section.settings.heading_transform }} !important;
-      letter-spacing: 0;
+      font-size: clamp(2rem, 2.35vw, 2.8rem);
+      font-weight: 700 !important;
+      line-height: 1.12;
+      letter-spacing: 0.1em;
+      text-transform: uppercase !important;
+      text-wrap: balance;
+      text-shadow: 0 2px 18px rgba(0, 0, 0, 0.38);
     }
-    @media (min-width: 769px) { .popup-heading { font-size: {{ heading_size_desktop }}; } }
+
+    .popup-heading--email {
+      max-width: 560px;
+      margin-inline: auto;
+    }
+
     .popup-desc {
+      margin: 0 0 16px;
       color: inherit;
-      margin-bottom: 25px;
-      font-size: 1.05rem;
-      line-height: 1.5;
       font-family: var(--base-font-family) !important;
-      font-weight: normal !important;
+      font-size: clamp(1rem, 1.15vw, 1.22rem);
+      font-weight: 500 !important;
+      line-height: 1.45;
       text-transform: none !important;
+      text-align: left;
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.44);
+    }
+
+    .popup-interests {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 0;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      color: inherit;
+      text-align: left;
+    }
+
+    .popup-interest-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      width: fit-content;
+      max-width: 100%;
+      color: inherit;
+      font-family: var(--base-font-family) !important;
+      font-size: clamp(0.94rem, 1.05vw, 1.1rem);
+      font-weight: 650 !important;
+      line-height: 1.35;
+      letter-spacing: 0.035em;
+      text-transform: uppercase !important;
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.48);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .popup-interest-option input {
+      appearance: none;
+      flex: 0 0 17px;
+      width: 17px;
+      height: 17px;
+      margin: 2px 0 0;
+      border: 1px solid rgba(255, 255, 255, 0.68);
+      border-radius: 3px;
+      background: rgba(4, 14, 17, 0.22);
+      cursor: pointer;
+      transition: background-color 0.18s ease, border-color 0.18s ease;
+    }
+
+    .popup-interest-option input:checked {
+      border-color: {{ section.settings.accent_color | default: '#d7bd92' }};
+      background-color: {{ section.settings.accent_color | default: '#d7bd92' }};
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10'%3E%3Cpath d='M1 5l3 3 7-7' fill='none' stroke='%23071014' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: 11px 9px;
+    }
+
+    .popup-interest-option input:focus-visible {
+      outline: 2px solid #ffffff;
+      outline-offset: 3px;
+    }
+
+    .popup-interest-option__copy {
+      min-width: 0;
+    }
+
+    .popup-interest-error {
+      margin: 12px 0 0;
+      color: #ffd2ca;
+      font-family: var(--base-font-family) !important;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-align: left;
+      text-shadow: 0 1px 7px rgba(0, 0, 0, 0.6);
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: min(100%, 490px);
+      margin: 34px auto 0;
+    }
+
+    .popup-input {
+      font-family: var(--base-font-family) !important;
+      width: 100%;
+      min-height: 58px;
+      box-sizing: border-box;
+      padding: 15px 16px !important;
+      border: 1px solid rgba(255, 255, 255, 0.64) !important;
+      border-radius: {{ input_radius }} !important;
+      background: rgba(3, 12, 15, 0.28) !important;
+      color: #ffffff !important;
+      outline: none;
+      font-size: 1rem;
+      box-shadow: none !important;
+      pointer-events: auto !important;
+    }
+
+    .popup-input::placeholder {
+      color: rgba(255, 255, 255, 0.76) !important;
       opacity: 1;
     }
 
-    .popup-form { width: 100%; }
-    .input-group { display: flex; flex-direction: column; gap: 10px; }
-    .popup-input {
-      font-family: var(--base-font-family) !important;
-      background: {{ section.settings.input_bg }} !important;
-      color: {{ section.settings.input_text }} !important;
-      padding: 14px 24px !important;
-      border: 1px solid transparent;
-      border-radius: {{ input_radius }} !important;
-      width: 100%;
-      box-sizing: border-box;
-      outline: none;
-      font-size: 1rem;
-      pointer-events: auto !important;
+    .popup-input:focus {
+      border-color: {{ section.settings.accent_color | default: '#d7bd92' }} !important;
+      box-shadow: 0 0 0 2px rgba(215, 189, 146, 0.22) !important;
     }
+
     .popup-submit {
-      font-family: var(--button-font-family) !important;
-      padding: 14px 30px !important;
-      border: none !important;
-      font-weight: bold;
-      cursor: pointer;
-      text-transform: uppercase;
-      border-radius: {{ input_radius }} !important;
-      background-color: {{ section.settings.btn_bg }} !important;
-      color: {{ section.settings.btn_text }} !important;
-      transition: opacity 0.3s ease;
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
       width: 100%;
-      font-size: 1rem;
+      min-height: 62px;
+      margin: 20px 0 0;
+      padding: 14px 30px !important;
+      border: 1px solid {{ section.settings.accent_color | default: '#d7bd92' }} !important;
+      border-radius: {{ input_radius }} !important;
+      background: rgba(3, 12, 15, 0.32) !important;
+      color: {{ section.settings.accent_color | default: '#d7bd92' }} !important;
+      font-family: var(--button-font-family) !important;
+      font-size: 1.12rem;
+      font-weight: 700 !important;
+      line-height: 1.2;
+      letter-spacing: 0.12em;
+      text-transform: uppercase !important;
+      cursor: pointer;
       pointer-events: auto !important;
+      transition: color 0.2s ease, background-color 0.2s ease, opacity 0.2s ease;
     }
-    .popup-submit:before { display: none; }
-    .popup-submit:hover { opacity: 0.85; }
+
+    .input-group .popup-submit {
+      margin-top: 0;
+    }
+
+    .popup-submit::before {
+      display: none !important;
+    }
+
+    .popup-submit:hover,
+    .popup-submit:focus-visible {
+      background: {{ section.settings.accent_color | default: '#d7bd92' }} !important;
+      color: #071014 !important;
+      opacity: 1;
+    }
+
+    .popup-back {
+      align-self: center;
+      width: auto !important;
+      min-width: 0 !important;
+      min-height: 0 !important;
+      margin: 0;
+      padding: 4px 8px !important;
+      border: 0 !important;
+      background: transparent !important;
+      color: rgba(255, 255, 255, 0.82) !important;
+      font-family: var(--base-font-family) !important;
+      font-size: 0.86rem;
+      font-weight: 600;
+      line-height: 1.2;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-transform: none !important;
+      cursor: pointer;
+    }
+
+    .popup-back::before {
+      display: none !important;
+    }
 
     .popup-email-suggestion {
-      margin-top: -3px;
-      margin-bottom: 2px;
+      margin: -6px 0 0;
       padding: 8px 10px;
       color: #ffffff !important;
-      background: rgba(255, 255, 255, 0.16);
+      background: rgba(3, 12, 15, 0.5);
       border: 1px solid rgba(255, 255, 255, 0.38);
       border-radius: {{ input_radius }};
       font-family: var(--base-font-family) !important;
@@ -256,7 +602,7 @@
       line-height: 1.35;
       font-weight: 600;
       opacity: 1;
-      text-align: {{ section.settings.text_alignment }};
+      text-align: left;
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
     }
@@ -285,35 +631,182 @@
     }
     .popup-email-suggestion__button:before { display: none !important; }
 
-    .popup-disclaimer {
+    .form-success {
       color: inherit;
-      font-size: min(2.6vw, 0.75rem);
-      margin-top: 15px;
-      font-style: italic;
-      opacity: 1;
-      font-weight: normal !important;
-      letter-spacing: -0.2px;
-      white-space: nowrap;
+      font-family: var(--base-font-family) !important;
+      font-size: 1.15rem;
+      font-weight: 600;
+      line-height: 1.5;
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.42);
     }
-    @media (min-width: 769px) { .popup-disclaimer { font-size: 0.75rem; white-space: normal; } }
 
-    .form-success { color: inherit; font-family: var(--base-font-family) !important; font-size: 1.1rem; line-height: 1.4; }
     .popup-coupon-code {
       display: inline-block;
       margin-top: 15px;
       padding: 12px 25px;
-      color: inherit;
-      background-color: rgba(255,255,255,0.1);
-      border: 2px dashed currentColor;
+      color: {{ section.settings.accent_color | default: '#d7bd92' }};
+      background-color: rgba(3, 12, 15, 0.34);
+      border: 2px dashed {{ section.settings.accent_color | default: '#d7bd92' }};
       font-family: var(--heading-font-family) !important;
       font-size: 1.5rem;
       font-weight: 900;
       letter-spacing: 2px;
       border-radius: {{ input_radius }};
     }
-    
-    .placeholder-svg { background: #eee; width: 100%; height: 100%; }
-    .form-error { color: #ff4444; margin-top: 8px; font-size: 0.85rem; }
+
+    .form-error {
+      margin-top: 10px;
+      color: #ffd2ca;
+      font-family: var(--base-font-family) !important;
+      font-size: 0.88rem;
+      text-align: center;
+      text-shadow: 0 1px 7px rgba(0, 0, 0, 0.58);
+    }
+
+    @media (min-width: 769px) {
+      .popup-interests {
+        gap: 6px;
+      }
+
+      .popup-interest-option {
+        gap: 8px;
+        font-size: clamp(0.8rem, 0.82vw, 0.95rem);
+        line-height: 1.3;
+      }
+
+      .popup-interest-option input {
+        flex-basis: 15px;
+        width: 15px;
+        height: 15px;
+        margin-top: 1px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .popup-container::after {
+        background: linear-gradient(180deg, rgba(1, 11, 14, 0.05) 0%, rgba(1, 11, 14, 0.17) 43%, rgba(1, 11, 14, 0.58) 100%);
+      }
+
+      .popup-media img {
+        object-position: center;
+      }
+
+      .popup-close {
+        top: max(12px, env(safe-area-inset-top));
+        right: max(12px, env(safe-area-inset-right));
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 25px;
+      }
+
+      .popup-content {
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-end;
+        min-height: 100%;
+        padding: max(72px, calc(env(safe-area-inset-top) + 52px)) 16px calc(clamp(96px, 15vh, 132px) + 60px + env(safe-area-inset-bottom));
+      }
+
+      .popup-text-wrapper {
+        width: min(100%, 520px);
+        margin: 0 auto;
+      }
+
+      .popup-brand-logo {
+        width: clamp(150px, 46vw, 185px);
+        margin-bottom: 14px;
+      }
+
+      .popup-heading {
+        width: clamp(215px, 72vw, 285px);
+        margin: 0 auto 18px;
+        font-size: clamp(1.55rem, 8vw, 2.1rem);
+        line-height: 1.12;
+        letter-spacing: 0.085em;
+        text-wrap: balance;
+        white-space: normal;
+      }
+
+      .popup-desc {
+        margin-bottom: 15px;
+        font-size: clamp(0.72rem, 3.45vw, 0.84rem);
+        letter-spacing: -0.01em;
+        text-align: center;
+        white-space: nowrap;
+      }
+
+      .popup-interests {
+        gap: 7px;
+      }
+
+      .popup-interest-option {
+        gap: 9px;
+        font-size: clamp(0.88rem, 3.9vw, 1rem);
+      }
+
+      .popup-interest-option input {
+        flex-basis: 16px;
+        width: 16px;
+        height: 16px;
+      }
+
+      .popup-submit {
+        min-height: 56px;
+        margin-top: 16px;
+        font-size: 1rem;
+      }
+
+      .input-group {
+        width: 100%;
+        margin-top: 28px;
+        gap: 14px;
+      }
+
+      .popup-input {
+        min-height: 54px;
+      }
+
+      .popup-step--email {
+        padding-bottom: clamp(52px, 10vh, 96px);
+      }
+    }
+
+    @media (max-height: 680px) and (max-width: 768px) {
+      .popup-content {
+        justify-content: flex-end;
+        padding-top: max(62px, calc(env(safe-area-inset-top) + 48px));
+      }
+
+      .popup-brand-logo {
+        margin-bottom: 12px;
+      }
+
+      .popup-heading {
+        margin-bottom: 12px;
+      }
+
+      .popup-desc {
+        margin-bottom: 10px;
+      }
+
+      .popup-interests {
+        gap: 5px;
+      }
+
+      .popup-submit {
+        min-height: 50px;
+        margin-top: 12px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .popup-overlay,
+      .popup-interest-option input,
+      .popup-submit,
+      .popup-close {
+        transition: none !important;
+      }
+    }
   </style>
 
   <script>
@@ -372,6 +865,7 @@
         this.domReadyHandler = null;
         this.inertObserver = null;
 
+        this.dialog = this.popup.querySelector('.popup-container');
         this.closeBtn = this.popup.querySelector('.popup-close');
         this.form = this.popup.querySelector('.js-camo-popup-form');
         this.emailInput = this.form ? this.form.querySelector('input[name="contact[email]"]') : null;
@@ -379,11 +873,22 @@
         this.emailSuggestionButton = this.popup.querySelector('.js-camo-email-suggestion-button');
         this.submitButton = this.form ? this.form.querySelector('[type="submit"]') : null;
         this.submitError = this.popup.querySelector('.js-camo-popup-submit-error');
+        this.interestStep = this.popup.querySelector('.js-camo-interest-step');
+        this.emailStep = this.popup.querySelector('.js-camo-email-step');
+        this.interestNextButton = this.popup.querySelector('.js-camo-interest-next');
+        this.interestBackButton = this.popup.querySelector('.js-camo-interest-back');
+        this.interestError = this.popup.querySelector('.js-camo-interest-error');
+        this.interestInputs = Array.prototype.slice.call(this.popup.querySelectorAll('[data-popup-interest]'));
+        this.tagsInput = this.form ? this.form.querySelector('[data-popup-tags]') : null;
         this.currentEmailSuggestion = null;
 
         // Binds
         this.handleCloseClick = this.closePopup.bind(this, false);
         this.handleOverlayClick = this.handleOverlayClick.bind(this);
+        this.handleDocumentKeydown = this.handleDocumentKeydown.bind(this);
+        this.handleInterestChange = this.handleInterestChange.bind(this);
+        this.handleInterestNext = this.handleInterestNext.bind(this);
+        this.handleInterestBack = this.handleInterestBack.bind(this);
         this.handleEmailInput = this.handleEmailInput.bind(this);
         this.handleEmailBlur = this.handleEmailBlur.bind(this);
         this.handleEmailSuggestionClick = this.handleEmailSuggestionClick.bind(this);
@@ -398,6 +903,11 @@
         if (e.target === this.popup) {
           this.closePopup(false);
         }
+      };
+
+      CamoSmartPopup.prototype.handleDocumentKeydown = function(e) {
+        if (this.destroyed || e.key !== 'Escape' || !this.popup.classList.contains('is-visible')) return;
+        this.closePopup(false);
       };
 
       CamoSmartPopup.prototype.runWhenIdle = function(callback, timeout) {
@@ -437,6 +947,12 @@
       };
 
       CamoSmartPopup.prototype.hydratePopupMedia = function() {
+        this.popup.querySelectorAll('source[data-popup-srcset]').forEach(function(source) {
+          if (!source.dataset.popupSrcset) return;
+          source.srcset = source.dataset.popupSrcset;
+          source.removeAttribute('data-popup-srcset');
+        });
+
         this.popup.querySelectorAll('img[data-popup-src]').forEach(function(img) {
           if (!img.dataset.popupSrc) return;
           img.src = img.dataset.popupSrc;
@@ -958,6 +1474,61 @@
         this.emailInput.dispatchEvent(new Event('change', { bubbles: true }));
       };
 
+      CamoSmartPopup.prototype.getSelectedInterests = function() {
+        return this.interestInputs.filter(function(input) {
+          return input.checked;
+        }).map(function(input) {
+          return input.value;
+        });
+      };
+
+      CamoSmartPopup.prototype.syncInterestTags = function() {
+        if (!this.tagsInput) return;
+        var baseTags = this.tagsInput.getAttribute('data-base-tags') || 'newsletter, popup, apparel';
+        var selectedInterests = this.getSelectedInterests();
+        this.tagsInput.value = selectedInterests.length ? baseTags + ', ' + selectedInterests.join(', ') : baseTags;
+      };
+
+      CamoSmartPopup.prototype.handleInterestChange = function() {
+        if (this.destroyed) return;
+        this.syncInterestTags();
+        if (this.interestError && this.getSelectedInterests().length) {
+          this.interestError.hidden = true;
+        }
+      };
+
+      CamoSmartPopup.prototype.handleInterestNext = function() {
+        if (this.destroyed || !this.interestStep || !this.emailStep) return;
+        if (!this.getSelectedInterests().length) {
+          if (this.interestError) this.interestError.hidden = false;
+          if (this.interestInputs[0]) this.interestInputs[0].focus();
+          return;
+        }
+
+        this.syncInterestTags();
+        this.interestStep.hidden = true;
+        this.interestStep.setAttribute('aria-hidden', 'true');
+        this.emailStep.hidden = false;
+        this.emailStep.removeAttribute('aria-hidden');
+        if (this.dialog) this.dialog.setAttribute('aria-labelledby', 'camo-popup-email-title-' + this.sectionId);
+        if (this.emailInput) {
+          this.emailInput.disabled = false;
+          this.emailInput.focus();
+        }
+      };
+
+      CamoSmartPopup.prototype.handleInterestBack = function() {
+        if (this.destroyed || !this.interestStep || !this.emailStep) return;
+        this.hideEmailSuggestion();
+        this.emailStep.hidden = true;
+        this.emailStep.setAttribute('aria-hidden', 'true');
+        this.interestStep.hidden = false;
+        this.interestStep.removeAttribute('aria-hidden');
+        if (this.dialog) this.dialog.setAttribute('aria-labelledby', 'camo-popup-title-' + this.sectionId);
+        if (this.emailInput) this.emailInput.disabled = true;
+        if (this.interestNextButton) this.interestNextButton.focus();
+      };
+
       CamoSmartPopup.prototype.showPopup = function(force) {
         if (this.destroyed) return;
         if (!force && !this.shouldShowPopup()) return;
@@ -974,6 +1545,7 @@
         var styleEl = document.getElementById('popup-css-' + this.sectionId);
         if (styleEl) styleEl.media = 'all';
 
+        document.documentElement.classList.add('camo-popup-is-open');
         this.popup.style.display = 'flex';
         var self = this;
         if (this.transitionTimer) clearTimeout(this.transitionTimer);
@@ -987,6 +1559,7 @@
       CamoSmartPopup.prototype.closePopup = function(force) {
         if (this.destroyed) return;
         this.popup.classList.remove('is-visible');
+        document.documentElement.classList.remove('camo-popup-is-open');
         var self = this;
         if (this.delayTimer) {
           clearTimeout(this.delayTimer);
@@ -1006,6 +1579,13 @@
 
       CamoSmartPopup.prototype.handleSubmit = function(e) {
         if (this.destroyed) return;
+        if (this.interestStep && !this.interestStep.hidden) {
+          if (e) e.preventDefault();
+          this.handleInterestNext();
+          return;
+        }
+
+        this.syncInterestTags();
         if (this.emailInput) {
           this.emailInput.value = this.normalizeEmailValue(this.emailInput.value);
           var suggestedEmail = this.getEmailSuggestion(this.emailInput.value);
@@ -1054,12 +1634,25 @@
 
         if (this.closeBtn) this.closeBtn.addEventListener('click', this.handleCloseClick);
         this.popup.addEventListener('click', this.handleOverlayClick);
+        document.addEventListener('keydown', this.handleDocumentKeydown);
+        if (this.interestNextButton) this.interestNextButton.addEventListener('click', this.handleInterestNext);
+        if (this.interestBackButton) this.interestBackButton.addEventListener('click', this.handleInterestBack);
+        this.interestInputs.forEach(function(input) {
+          input.addEventListener('change', self.handleInterestChange);
+        });
         if (this.emailInput) {
           this.emailInput.addEventListener('input', this.handleEmailInput);
           this.emailInput.addEventListener('blur', this.handleEmailBlur);
         }
         if (this.emailSuggestionButton) this.emailSuggestionButton.addEventListener('click', this.handleEmailSuggestionClick);
         if (this.form) this.form.addEventListener('submit', this.handleSubmit);
+
+        if (this.interestStep && this.interestStep.hidden) this.interestStep.setAttribute('aria-hidden', 'true');
+        if (this.emailStep && this.emailStep.hidden) this.emailStep.setAttribute('aria-hidden', 'true');
+        if (this.dialog && this.interestStep && this.interestStep.hidden && this.emailStep && !this.emailStep.hidden) {
+          this.dialog.setAttribute('aria-labelledby', 'camo-popup-email-title-' + this.sectionId);
+        }
+        this.syncInterestTags();
 
         // Attach customizer listeners
         document.addEventListener('shopify:section:select', this.handleSectionSelect);
@@ -1129,6 +1722,8 @@
           this.inertObserver = null;
         }
 
+        document.documentElement.classList.remove('camo-popup-is-open');
+
         // Clean up theme editor event listeners
         document.removeEventListener('shopify:section:select', this.handleSectionSelect);
         document.removeEventListener('shopify:section:deselect', this.handleSectionDeselect);
@@ -1137,6 +1732,13 @@
         // Remove event listeners from elements
         if (this.closeBtn) this.closeBtn.removeEventListener('click', this.handleCloseClick);
         this.popup.removeEventListener('click', this.handleOverlayClick);
+        document.removeEventListener('keydown', this.handleDocumentKeydown);
+        if (this.interestNextButton) this.interestNextButton.removeEventListener('click', this.handleInterestNext);
+        if (this.interestBackButton) this.interestBackButton.removeEventListener('click', this.handleInterestBack);
+        var interestChangeHandler = this.handleInterestChange;
+        this.interestInputs.forEach(function(input) {
+          input.removeEventListener('change', interestChangeHandler);
+        });
         if (this.emailInput) {
           this.emailInput.removeEventListener('input', this.handleEmailInput);
           this.emailInput.removeEventListener('blur', this.handleEmailBlur);
@@ -1223,26 +1825,24 @@
     },
 
     { "type": "header", "content": "🖼️ Hình ảnh" },
-    { "type": "image_picker", "id": "image", "label": "Hình ảnh (bên trái)" },
+    { "type": "image_picker", "id": "desktop_background", "label": "Ảnh nền desktop" },
+    { "type": "image_picker", "id": "mobile_background", "label": "Ảnh nền mobile" },
+    { "type": "image_picker", "id": "brand_logo", "label": "Logo thương hiệu" },
     
     { "type": "header", "content": "✏️ Nội dung" },
-    { "type": "text", "id": "subheading", "label": "Subheading", "default": "join our community" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "GET 10% OFF FOR YOUR FIRST ORDER AND LOTS OF GOOD DEALS" },
-    { "type": "textarea", "id": "description", "label": "Mô tả", "default": "join the ground:" },
-    { "type": "text", "id": "input_placeholder", "label": "Placeholder ô nhập", "default": "Your email address" },
-    { "type": "text", "id": "btn_label", "label": "Nút bấm", "default": "Subscribe" },
+    { "type": "text", "id": "brand_label", "label": "Tên thương hiệu", "default": "CAMO SIGNAL" },
+    { "type": "text", "id": "heading", "label": "Tiêu đề bước chọn", "default": "BE THE FIRST TO KNOW" },
+    { "type": "textarea", "id": "description", "label": "Mô tả bước chọn", "default": "Choose the categories you’d like to hear about." },
+    { "type": "text", "id": "interest_btn_label", "label": "Nút chuyển sang bước email", "default": "SUBMIT" },
+    { "type": "text", "id": "email_heading", "label": "Tiêu đề bước email", "default": "BE THE FIRST TO KNOW" },
+    { "type": "text", "id": "input_placeholder", "label": "Placeholder email", "default": "Email Address" },
+    { "type": "text", "id": "btn_label", "label": "Nút đăng ký", "default": "CONTINUE" },
     { "type": "textarea", "id": "success_message", "label": "Câu báo thành công", "default": "Thank you! Use the promo code below at checkout:" },
     { "type": "text", "id": "coupon_code", "label": "Mã Giảm Giá", "default": "CAMO10" },
-    { "type": "text", "id": "disclaimer", "label": "Ghi chú", "default": "No spam, unsubscribe anytime. Just early promotions and new releases." },
 
     { "type": "header", "content": "🎨 Màu sắc" },
-    { "type": "color", "id": "bg_color", "label": "Màu nền nội dung", "default": "#2C3D33" },
     { "type": "color", "id": "text_color", "label": "Màu chữ", "default": "#ffffff" },
-    { "type": "color", "id": "input_bg", "label": "Màu nền ô nhập", "default": "#ffffff" },
-    { "type": "color", "id": "input_text", "label": "Màu chữ ô nhập", "default": "#000000" },
-    { "type": "color", "id": "btn_bg", "label": "Màu nền nút", "default": "#ffffff" },
-    { "type": "color", "id": "btn_text", "label": "Màu chữ nút", "default": "#2C3D33" },
-    { "type": "range", "id": "overlay_opacity", "min": 0, "max": 90, "step": 10, "unit": "%", "label": "Độ tối nền overlay", "default": 50 },
+    { "type": "color", "id": "accent_color", "label": "Màu viền và nút", "default": "#d7bd92" },
 
     { "type": "header", "content": "🔤 Kiểu chữ" },
     {
@@ -1263,49 +1863,9 @@
       ],
       "default": "Capitana"
     },
-    { "type": "range", "id": "heading_size_mobile", "min": 100, "max": 300, "step": 5, "label": "Cỡ heading (Mobile, x0.01rem)", "default": 115, "info": "115 = 1.15rem" },
-    { "type": "range", "id": "heading_size_desktop", "min": 100, "max": 400, "step": 5, "label": "Cỡ heading (Desktop, x0.01rem)", "default": 130, "info": "130 = 1.3rem" },
-    {
-      "type": "select",
-      "id": "heading_weight",
-      "label": "Độ đậm Heading",
-      "options": [
-        { "value": "400", "label": "Normal (400)" },
-        { "value": "500", "label": "Medium (500)" },
-        { "value": "600", "label": "Semi-Bold (600)" },
-        { "value": "700", "label": "Bold (700)" },
-        { "value": "900", "label": "Black (900)" }
-      ],
-      "default": "700"
-    },
-    {
-      "type": "select",
-      "id": "heading_transform",
-      "label": "Kiểu chữ Heading",
-      "options": [
-        { "value": "uppercase", "label": "IN HOA (UPPERCASE)" },
-        { "value": "capitalize", "label": "Viết Hoa Đầu Chữ (Capitalize)" },
-        { "value": "lowercase", "label": "viết thường (lowercase)" },
-        { "value": "none", "label": "Giữ nguyên (None)" }
-      ],
-      "default": "uppercase"
-    },
 
     { "type": "header", "content": "📐 Hình dạng & Bố cục" },
-    { "type": "range", "id": "popup_max_width", "min": 600, "max": 1200, "step": 50, "unit": "px", "label": "Chiều rộng tối đa Popup", "default": 850 },
-    { "type": "range", "id": "border_radius", "min": 0, "max": 30, "step": 2, "unit": "px", "label": "Bo tròn Popup", "default": 8 },
-    { "type": "range", "id": "input_radius", "min": 0, "max": 30, "step": 2, "unit": "px", "label": "Bo tròn ô nhập & nút", "default": 12 },
-    {
-      "type": "select",
-      "id": "text_alignment",
-      "label": "Canh chữ (Desktop)",
-      "options": [
-        { "value": "left", "label": "Trái" },
-        { "value": "center", "label": "Giữa" },
-        { "value": "right", "label": "Phải" }
-      ],
-      "default": "left"
-    }
+    { "type": "range", "id": "input_radius", "min": 0, "max": 24, "step": 2, "unit": "px", "label": "Bo tròn ô nhập & nút", "default": 0 }
   ],
   "presets": [ { "name": "Popup with apparel tag" } ]
 }

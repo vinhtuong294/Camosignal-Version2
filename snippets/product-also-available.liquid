@@ -9,7 +9,6 @@ Renders products that share the current product's design tag.
 
 {%- liquid
 	assign design_tag = blank
-	assign design_tag_normalized = blank
 
 	for product_tag in product.tags
 		assign normalized_tag = product_tag | strip | downcase
@@ -17,125 +16,60 @@ Renders products that share the current product's design tag.
 
 		if tag_prefix == 'design:'
 			assign design_tag = product_tag | strip
-			assign design_tag_normalized = normalized_tag
 			break
 		endif
 	endfor
+
+	assign design_tag_handle = design_tag | handleize
 -%}
 
 {%- if design_tag != blank -%}
-	{%- liquid
-		assign design_handle = design_tag_normalized | remove_first: 'design:' | strip | handleize
-		assign design_collection = collections[design_handle]
-		assign related_count = 0
-	-%}
-
-	{%- if design_collection != blank -%}
-		{%- capture related_items -%}
-			{%- for related_product in design_collection.products -%}
-				{%- liquid
-					assign has_matching_design = false
-
-					for related_tag in related_product.tags
-						assign normalized_related_tag = related_tag | strip | downcase
-
-						if normalized_related_tag == design_tag_normalized
-							assign has_matching_design = true
-							break
-						endif
-					endfor
-				-%}
-
-				{%- if related_product.id != product.id and has_matching_design -%}
-					{%- liquid
-						assign related_count = related_count | plus: 1
-						assign product_label = related_product.title
-						assign formatted_price = related_product.price | money
-						assign price_difference = related_product.price | minus: product.price
-
-						if price_difference > 0
-							assign formatted_difference = price_difference | money_without_trailing_zeros
-						endif
-					-%}
-
-					<a
-						href="{{ related_product.url }}"
-						class="also-available__item focus-visible-outline"
-						role="listitem"
-						aria-label="{{ related_product.title | escape }}"
-					>
-						<span class="also-available__media">
-							{%- if related_product.featured_image != blank -%}
-								{{- related_product.featured_image
-									| image_url: width: 240
-									| image_tag:
-										alt: related_product.title,
-										class: 'also-available__image',
-										loading: 'lazy',
-										sizes: '(max-width: 767px) 45vw, 320px',
-										widths: '160, 240, 320, 480, 640'
-								-}}
-							{%- else -%}
-								{{- 'product-1' | placeholder_svg_tag: 'also-available__image placeholder-svg' -}}
-							{%- endif -%}
-
-							{%- if price_difference > 0 -%}
-								<span class="also-available__price-difference">+{{ formatted_difference }}</span>
-							{%- endif -%}
-						</span>
-						<span class="also-available__title">{{ product_label | escape }}</span>
-						<span class="also-available__price">
-							{{- 'products.product.price.from_price_html' | t: price: formatted_price -}}
-						</span>
-					</a>
-				{%- endif -%}
-			{%- endfor -%}
-		{%- endcapture -%}
-
-		{%- if related_count > 0 -%}
-			<also-available-carousel class="also-available" data-design="{{ design_handle | escape }}">
-				<div class="also-available__header">
-					<h2 class="also-available__heading">{{ 'products.product.also_available_as' | t }}</h2>
-					{%- if related_count > 2 -%}
-						<div class="also-available__controls">
-							<button
-								type="button"
-								class="also-available__arrow"
-								data-also-available-previous
-								aria-controls="AlsoAvailableList-{{ product.id }}"
-								aria-label="{{ 'general.accessibility.slider.prev_slide_message' | t }}"
-								hidden
-							>
-								<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-									<path d="M15 18 9 12l6-6" fill="none" stroke="currentColor" stroke-linecap="square" stroke-linejoin="miter" stroke-width="2"/>
-								</svg>
-							</button>
-							<button
-								type="button"
-								class="also-available__arrow"
-								data-also-available-next
-								aria-controls="AlsoAvailableList-{{ product.id }}"
-								aria-label="{{ 'general.accessibility.slider.next_slide_message' | t }}"
-							>
-								<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-									<path d="m9 18 6-6-6-6" fill="none" stroke="currentColor" stroke-linecap="square" stroke-linejoin="miter" stroke-width="2"/>
-								</svg>
-							</button>
-						</div>
-					{%- endif -%}
-				</div>
-				<div
-					id="AlsoAvailableList-{{ product.id }}"
-					class="also-available__list"
-					data-also-available-list
-					role="list"
-					aria-label="{{ 'products.product.also_available_as' | t }}"
+	<also-available-carousel
+		class="also-available"
+		data-current-product-id="{{ product.id }}"
+		data-current-product-price="{{ product.price }}"
+		data-design-tag="{{ design_tag | escape }}"
+		data-tagged-products-url="{{ routes.all_products_collection_url }}/{{ design_tag_handle }}?view=also-available"
+		hidden
+	>
+		<div class="also-available__header">
+			<h2 class="also-available__heading">{{ 'products.product.also_available_as' | t }}</h2>
+			<div class="also-available__controls">
+				<button
+					type="button"
+					class="also-available__arrow"
+					data-also-available-previous
+					aria-controls="AlsoAvailableList-{{ product.id }}"
+					aria-label="{{ 'general.accessibility.slider.prev_slide_message' | t }}"
+					hidden
 				>
-					{{- related_items -}}
-				</div>
-			</also-available-carousel>
-		{%- endif -%}
-	{%- endif -%}
+					<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+						<path d="M15 18 9 12l6-6" fill="none" stroke="currentColor" stroke-linecap="square" stroke-linejoin="miter" stroke-width="2"/>
+					</svg>
+				</button>
+				<button
+					type="button"
+					class="also-available__arrow"
+					data-also-available-next
+					aria-controls="AlsoAvailableList-{{ product.id }}"
+					aria-label="{{ 'general.accessibility.slider.next_slide_message' | t }}"
+					hidden
+				>
+					<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+						<path d="m9 18 6-6-6-6" fill="none" stroke="currentColor" stroke-linecap="square" stroke-linejoin="miter" stroke-width="2"/>
+					</svg>
+				</button>
+			</div>
+		</div>
+		<div
+			id="AlsoAvailableList-{{ product.id }}"
+			class="also-available__list"
+			data-also-available-list
+			role="list"
+			aria-busy="true"
+			aria-label="{{ 'products.product.also_available_as' | t }}"
+		></div>
+	</also-available-carousel>
 {%- endif -%}
 
 {% stylesheet %}
@@ -145,6 +79,10 @@ Renders products that share the current product's design tag.
 		margin-block: 16px 8px;
 		min-width: 0;
 		padding-top: 16px;
+	}
+
+	.also-available[hidden] {
+		display: none;
 	}
 
 	.also-available__header {
@@ -308,11 +246,21 @@ Renders products that share the current product's design tag.
 	if (!customElements.get('also-available-carousel')) {
 		class AlsoAvailableCarousel extends HTMLElement {
 			connectedCallback() {
+				if (this.hasLoaded) return;
+
+				this.hasLoaded = true;
 				this.list = this.querySelector('[data-also-available-list]');
 				this.previousButton = this.querySelector('[data-also-available-previous]');
 				this.nextButton = this.querySelector('[data-also-available-next]');
+				this.currentProductId = this.dataset.currentProductId;
+				this.currentProductPrice = Number(this.dataset.currentProductPrice);
+				this.designTag = (this.dataset.designTag || '').trim().toLowerCase();
+				this.taggedProductsUrl = this.dataset.taggedProductsUrl;
 
-				if (!this.list || !this.previousButton || !this.nextButton) return;
+				if (!this.list || !this.previousButton || !this.nextButton || !this.designTag || !this.taggedProductsUrl) {
+					this.remove();
+					return;
+				}
 
 				this.updateControls = this.updateControls.bind(this);
 				this.handleScroll = this.handleScroll.bind(this);
@@ -332,10 +280,12 @@ Renders products that share the current product's design tag.
 				this.list.addEventListener('dragstart', this.handleDragStart);
 				this.resizeObserver = new ResizeObserver(this.updateControls);
 				this.resizeObserver.observe(this.list);
-				requestAnimationFrame(this.updateControls);
+				this.abortController = new AbortController();
+				this.loadProducts();
 			}
 
 			disconnectedCallback() {
+				if (this.abortController) this.abortController.abort();
 				if (this.resizeObserver) this.resizeObserver.disconnect();
 				if (this.list && this.handleScroll) this.list.removeEventListener('scroll', this.handleScroll);
 				if (this.list && this.handlePointerDown) this.list.removeEventListener('pointerdown', this.handlePointerDown);
@@ -346,6 +296,68 @@ Renders products that share the current product's design tag.
 				}
 				if (this.list && this.handleClick) this.list.removeEventListener('click', this.handleClick, true);
 				if (this.list && this.handleDragStart) this.list.removeEventListener('dragstart', this.handleDragStart);
+			}
+
+			async loadProducts() {
+				try {
+					const response = await fetch(this.taggedProductsUrl, {
+						headers: { 'X-Requested-With': 'XMLHttpRequest' },
+						signal: this.abortController.signal
+					});
+
+					if (!response.ok) throw new Error(`Unable to load related products: ${response.status}`);
+
+					const responseDocument = new DOMParser().parseFromString(await response.text(), 'text/html');
+					const products = [...responseDocument.querySelectorAll('[data-also-available-product]')]
+						.filter((relatedProduct) => relatedProduct.dataset.productId !== this.currentProductId)
+						.filter((relatedProduct) => this.hasMatchingDesignTag(relatedProduct.dataset.productTags));
+
+					if (!products.length) {
+						this.remove();
+						return;
+					}
+
+					products.forEach((relatedProduct) => this.updatePriceDifference(relatedProduct));
+					this.list.replaceChildren(...products);
+					this.list.setAttribute('aria-busy', 'false');
+					this.hidden = false;
+					requestAnimationFrame(this.updateControls);
+				} catch (error) {
+					if (error.name !== 'AbortError') this.remove();
+				}
+			}
+
+			hasMatchingDesignTag(tagsJson) {
+				try {
+					const tags = JSON.parse(tagsJson || '[]');
+					return tags.some((tag) => tag.trim().toLowerCase() === this.designTag);
+				} catch (error) {
+					return false;
+				}
+			}
+
+			updatePriceDifference(relatedProduct) {
+				const relatedPrice = Number(relatedProduct.dataset.productPrice);
+				const priceDifference = relatedPrice - this.currentProductPrice;
+				const differenceElement = relatedProduct.querySelector('[data-price-difference]');
+
+				if (!differenceElement || !Number.isFinite(priceDifference) || priceDifference <= 0) return;
+
+				differenceElement.textContent = `+${this.formatMoney(priceDifference)}`;
+				differenceElement.hidden = false;
+			}
+
+			formatMoney(cents) {
+				const formatMoney = window.themeCore?.utils?.formatMoney;
+				const moneyFormat = window.themeCore?.objects?.shop?.money_format;
+
+				if (typeof formatMoney === 'function' && moneyFormat) return formatMoney(cents, moneyFormat);
+
+				const currency = window.Shopify?.currency?.active || window.themeCore?.objects?.currency?.cart || 'USD';
+				return new Intl.NumberFormat(document.documentElement.lang || 'en', {
+					currency,
+					style: 'currency'
+				}).format(cents / 100);
 			}
 
 			scroll(direction) {
@@ -365,14 +377,16 @@ Renders products that share the current product's design tag.
 				this.dragStartX = event.clientX;
 				this.dragStartScroll = this.list.scrollLeft;
 				this.list.classList.add('is-dragging');
-				this.list.setPointerCapture(event.pointerId);
 			}
 
 			handlePointerMove(event) {
 				if (!this.isDragging) return;
 
 				const distance = event.clientX - this.dragStartX;
-				if (Math.abs(distance) > 4) this.dragged = true;
+				if (Math.abs(distance) > 4 && !this.dragged) {
+					this.dragged = true;
+					this.list.setPointerCapture(event.pointerId);
+				}
 				this.list.scrollLeft = this.dragStartScroll - distance;
 			}
 

@@ -11,6 +11,10 @@
 
 {% assign button_type 			= block.settings.button_type %}
 {% assign button_buy_it_type 	= block.settings.button_buy_it_type %}
+{% assign requires_customization = false %}
+{% if product.metafields.custom.enable_name.value or product.metafields.custom.enable_number.value %}
+	{% assign requires_customization = true %}
+{% endif %}
 
 {%- capture button_buy_it_type_styles -%}
 	{%- case button_buy_it_type -%}
@@ -286,10 +290,10 @@
 		</div>
 	</aside>
 
-	{% if block.settings.show_additional_buttons %}
-		<div class="product-add-to-cart__additional-buttons product-add-to-cart__additional-buttons--{{ button_buy_it_type }}">
-			{{ form | payment_button }}
-		</div>
+		{% if block.settings.show_additional_buttons and requires_customization == false %}
+			<div class="product-add-to-cart__additional-buttons product-add-to-cart__additional-buttons--{{ button_buy_it_type }}">
+				{{ form | payment_button }}
+			</div>
 	{% endif %}
 </div>
 

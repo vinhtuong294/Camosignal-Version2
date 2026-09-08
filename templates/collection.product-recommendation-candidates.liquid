@@ -1,0 +1,39 @@
+{%- layout none -%}
+
+{%- paginate collection.products by 50 -%}
+	{%- assign candidate_count = 0 -%}
+
+	{%- for candidate_product in collection.products -%}
+		{%- if candidate_count >= 5 -%}
+			{%- break -%}
+		{%- endif -%}
+
+		{%- unless candidate_product.available and candidate_product.selected_or_first_available_variant.requires_shipping -%}
+			{%- continue -%}
+		{%- endunless -%}
+
+		{%- assign candidate_rank = candidate_count | plus: 1 -%}
+
+		<div
+			class="featured-products__col swiper-slide js-featured-products-slide"
+			data-recommendation-candidate
+			data-recommendation-source="best-seller"
+			data-product-handle="{{- candidate_product.handle | escape -}}"
+			data-product-title="{{- candidate_product.title | escape -}}"
+			data-product-type="{{- candidate_product.type | escape -}}"
+			data-best-seller-rank="{{- candidate_rank -}}"
+		>
+			{%- render
+				'product-card',
+				product: candidate_product,
+				collection: collection,
+				size: 439,
+				tablet_size: 328,
+				mobile_size: 308,
+				is_lazy: true
+			-%}
+		</div>
+
+		{%- assign candidate_count = candidate_count | plus: 1 -%}
+	{%- endfor -%}
+{%- endpaginate -%}

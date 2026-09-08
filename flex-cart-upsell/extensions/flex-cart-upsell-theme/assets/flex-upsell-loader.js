@@ -1,0 +1,1 @@
+"use strict";(()=>{if(window.__flexUpsellCoreRequested)return;const r=document.currentScript;if(!r?.src)return;window.__flexUpsellCoreRequested=!0;const e=document.createElement("script");e.src=new URL("flex-upsell-cart-refresh.js",r.src).href,e.async=!0,e.fetchPriority="high",document.head.appendChild(e)})();

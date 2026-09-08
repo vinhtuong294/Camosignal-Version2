@@ -28,6 +28,10 @@ Renders the shared storefront product card with variant images, solid color swat
 		assign is_image_on_hover_enabled = settings.is_image_on_hover_enabled
 		assign configured_swatch_names = settings.color_swatches_option | default: 'Color' | downcase | split: ','
 		assign currency_code_enabled = settings.is_currency_code_enabled
+		assign product_card_url = product.url
+		if collection != blank
+			assign product_card_url = product.url | within: collection
+		endif
 		assign size = size | default: 439
 		assign tablet_size = tablet_size | default: size
 		assign mobile_size = mobile_size | default: tablet_size
@@ -50,6 +54,12 @@ Renders the shared storefront product card with variant images, solid color swat
 		assign has_gildan_tag = false
 		assign has_colorblast_tag = false
 		assign has_trucker_tag = false
+		assign best_value_product_handles = '|let-us-thank-him-for-our-food-hoodie|the-genesis-turkey-hoodie|provided-by-him-hoodie|'
+		assign product_handle_key = product.handle | prepend: '|' | append: '|'
+		assign is_best_value_product = false
+		if best_value_product_handles contains product_handle_key
+			assign is_best_value_product = true
+		endif
 
 		if is_lazy == nil
 			assign is_lazy = true
@@ -67,11 +77,13 @@ Renders the shared storefront product card with variant images, solid color swat
 				assign card_collection_handle = 'grand-slam-subspecies'
 			elsif request.path contains '/collections/spooky-kids-tee'
 				assign card_collection_handle = 'spooky-kids-tee'
+			elsif request.path contains '/collections/halloween-dog-t-shirt'
+				assign card_collection_handle = 'halloween-dog-t-shirt'
 			endif
 		endif
 
 		assign is_spooky_card = false
-		if card_collection_handle == 'spooky-kids-tee'
+		if card_collection_handle == 'spooky-kids-tee' or card_collection_handle == 'halloween-dog-t-shirt'
 			assign is_spooky_card = true
 		endif
 
@@ -230,7 +242,7 @@ Renders the shared storefront product card with variant images, solid color swat
 	>
 		<div class="product-card__main" data-product-card-handle="{{- product.handle -}}">
 			<a
-				href="{{- product.url -}}"
+				href="{{- product_card_url -}}"
 				class="product-card__image-wrapper-link"
 				aria-label="{{- card_title | escape -}}"
 			>
@@ -329,7 +341,11 @@ Renders the shared storefront product card with variant images, solid color swat
 
 			{%- if is_on_sale -%}
 				<span class="product-card__discount product-card__discount--image">
-					{{- 'products.product.sale_percentage_label' | t: number: sale_percentage -}}
+					{%- if is_best_value_product -%}
+						BEST VALUE
+					{%- else -%}
+						{{- 'products.product.sale_percentage_label' | t: number: sale_percentage -}}
+					{%- endif -%}
 				</span>
 			{%- endif -%}
 
@@ -366,7 +382,7 @@ Renders the shared storefront product card with variant images, solid color swat
 				</div>
 			{%- endif -%}
 
-			<a class="product-card__title" href="{{- product.url -}}">
+			<a class="product-card__title" href="{{- product_card_url -}}">
 				{{- card_title -}}
 			</a>
 
@@ -817,6 +833,10 @@ Renders the shared storefront product card with variant images, solid color swat
 		.product-card.product-card--reference.product-card--spooky .product-card__rating .jdgm-star {
 			color: #e9680b !important;
 			text-shadow: 0 1px 0 #5b2108, 0 0 4px rgba(233, 104, 11, 0.28);
+		}
+
+		.product-card.product-card--reference.product-card--spooky .product-card__sale-price {
+			color: #e9680b !important;
 		}
 
 		.product-card.product-card--reference .product-card__custom-quick-add,

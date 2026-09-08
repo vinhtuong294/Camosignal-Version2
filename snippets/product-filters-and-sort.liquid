@@ -84,28 +84,13 @@
 								{%- assign filter_list_index = 1 -%}
 
 							{%- comment -%} ── Build availability lookups (same as sidebar) ── {%- endcomment -%}
-							{%- assign available_hunting_values = '' -%}
 							{%- assign available_seasonal_values = '' -%}
-							{%- assign param_hunting = 'filter.p.m.custom.hunting' -%}
 							{%- for filter in product_list.filters -%}
 								{%- assign param_down = filter.param_name | downcase -%}
-								{%- if param_down contains 'hunting' -%}
-									{%- assign param_hunting = filter.param_name -%}
-									{%- for fv in filter.values -%}
-										{%- if fv.count > 0 or fv.active -%}
-											{%- assign available_hunting_values = available_hunting_values | append: fv.label | append: '|||' -%}
-										{%- endif -%}
-									{%- endfor -%}
-								{%- elsif param_down contains 'seasonal' -%}
+								{%- if param_down contains 'seasonal' -%}
 									{%- for fv in filter.values -%}
 										{%- if fv.count > 0 or fv.active -%}
 											{%- assign available_seasonal_values = available_seasonal_values | append: fv.label | append: '|||' -%}
-										{%- endif -%}
-									{%- endfor -%}
-								{%- elsif param_down contains 'product_type' -%}
-									{%- for fv in filter.values -%}
-										{%- if fv.count > 0 or fv.active -%}
-											{%- assign available_clothing_values = available_clothing_values | append: fv.label | append: '|||' -%}
 										{%- endif -%}
 									{%- endfor -%}
 								{%- endif -%}
@@ -147,58 +132,6 @@
 							</div>
 
 							{%- assign filter_list_index = filter_list_index | plus: 1 -%}
-
-							{%- comment -%} Custom Collection Filter (mobile drawer) {%- endcomment -%}
-							{%- if template.name == 'collection' -%}
-								<div
-									id="filter-{{ section.id }}-collection-{{- id -}}"
-									class="accordion__item product-filters__form-item js-accordion-item js-filter-item"
-								>
-									<h3 class="accordion__title">
-										<button
-											class="focus-visible-outline accordion__control product-filters__form-item-toggle-button js-accordion-control"
-											type="button"
-											id="Filter-accordion-{{ section.id }}-collection-{{- id -}}"
-											aria-controls="filter-list-{{ section.id }}-collection-{{- id -}}"
-											aria-expanded="false"
-										>
-											<span typeof="product-filters__form-item-toggle-title">
-												COLLECTION
-											</span>
-											{%- render 'icons', icon: 'arrow-down' -%}
-										</button>
-									</h3>
-
-									<div
-										class="accordion__content accordion__content--animate js-accordion-content"
-										id="filter-list-{{ section.id }}-collection-{{- id -}}"
-										aria-labelledby="Filter-accordion-{{ section.id }}-collection-{{- id -}}"
-										role="region"
-										style="height: 0;"
-									>
-										<div class="js-accordion-inner product-filters__form-item-content">
-											<ul class="filter-list filter-list--sidebar filter-list--collection-custom js-collection-filter-list">
-												{%- for col in collections -%}
-													{%- if col.all_products_count > 0 -%}
-														<li class="filter-list__item">
-															<a
-																href="{{ col.url }}"
-																class="filter-list__collection-link js-collection-ajax-link {% if collection.handle == col.handle %}filter-list__collection-link--active{% endif %}"
-																data-collection-handle="{{ col.handle }}"
-															>
-																<span class="custom-checkbox-icon"></span>
-																{{ col.title }}
-															</a>
-														</li>
-													{%- endif -%}
-												{%- endfor -%}
-											</ul>
-										</div>
-									</div>
-								</div>
-
-								{%- assign filter_list_index = filter_list_index | plus: 1 -%}
-							{%- endif -%}
 
 							{%- comment -%} ── BRAND (Seasonal) ── {%- endcomment -%}
 							{%- if false -%}
@@ -246,100 +179,86 @@
 
 							{%- endif -%}
 
-							{%- comment -%} ── CLOTHING (Product Type) ── {%- endcomment -%}
-							<div id="filter-{{ section.id }}-clothing-{{- id -}}" class="accordion__item product-filters__form-item js-accordion-item js-filter-item js-clothing-accordion">
-								<h3 class="accordion__title">
-									<button class="focus-visible-outline accordion__control product-filters__form-item-toggle-button js-accordion-control js-clothing-accordion-btn" type="button" aria-expanded="false">
-										<span typeof="product-filters__form-item-toggle-title">
-											CLOTHING
-											<span class="js-clothing-counter js-filter-item-counter" style="display:none;">&nbsp;(1)</span>
-										</span>
-										{%- render 'icons', icon: 'arrow-down' -%}
-									</button>
-								</h3>
-								<div class="accordion__content accordion__content--animate js-accordion-content js-clothing-accordion-content" style="height: 0;">
-									<div class="js-accordion-inner product-filters__form-item-content">
-										<ul class="filter-list filter-list--sidebar filter-list--collection-custom js-clothing-filter-list js-filter-list">
-										{%- assign clothing_labels = "T-SHIRTS,SWEATSHIRTS,HOODIES,HATS" | split: "," -%}
-										{%- assign default_clothing_values = "Type1|3D Tshirt|T-Shirt,Sweatshirt,Hoodie,Hat" | split: "," -%}
-										{%- assign clothing_values_output = "" -%}
-										{%- for i in (0..3) -%}
-											{%- assign c_label = clothing_labels[i] | downcase -%}
-											{%- assign matched_val = default_clothing_values[i] -%}
-											{%- for filter in product_list.filters -%}
-												{%- if filter.param_name == 'filter.p.product_type' -%}
-													{%- for value in filter.values -%}
-														{%- assign v_label = value.label | downcase -%}
-														{%- if c_label contains 't-shirt' and v_label contains 't-shirt' -%}
-															{%- assign matched_val = value.value -%}
-														{%- elsif c_label == 'sweatshirts' and v_label contains 'sweatshirt' -%}
-															{%- assign matched_val = value.value -%}
-														{%- elsif c_label == 'hoodies' and v_label contains 'hoodie' -%}
-															{%- assign matched_val = value.value -%}
-														{%- elsif c_label == 'hats' and v_label contains 'hat' -%}
-															{%- assign matched_val = value.value -%}
-														{%- endif -%}
-													{%- endfor -%}
-												{%- endif -%}
-											{%- endfor -%}
-											{%- assign clothing_values_output = clothing_values_output | append: matched_val | append: "%%%" -%}
-										{%- endfor -%}
-										{%- assign clothing_values_mapped = clothing_values_output | split: "%%%" -%}
-										{%- for i in (0..3) -%}
-											<li class="filter-list__item">
-												<a href="javascript:void(0);" class="filter-list__collection-link js-clothing-type-link" data-product-type="{{ clothing_values_mapped[i] | replace: '|', ',' }}">
-													<span class="custom-checkbox-icon"></span>
-													{{ clothing_labels[i] }}
-												</a>
-											</li>
-										{%- endfor -%}
-										</ul>
-									</div>
-								</div>
-							</div>
+							{%- comment -%} CLOTHING (Product Type) {%- endcomment -%}
+							{%- assign product_type_filter = null -%}
+							{%- assign has_product_type_values = false -%}
+							{%- for filter in product_list.filters -%}
+								{%- if filter.param_name == 'filter.p.product_type' -%}
+									{%- assign product_type_filter = filter -%}
+									{%- for value in filter.values -%}
+										{%- if value.count > 0 or value.active -%}
+											{%- assign has_product_type_values = true -%}
+											{%- break -%}
+										{%- endif -%}
+									{%- endfor -%}
+									{%- break -%}
+								{%- endif -%}
+							{%- endfor -%}
 
-							{%- comment -%} ── HUNTING ── {%- endcomment -%}
-							<div id="filter-{{ section.id }}-hunting-{{- id -}}" class="accordion__item product-filters__form-item js-accordion-item js-filter-item js-custom-accordion" data-filter-group="{{ param_hunting }}">
-								<h3 class="accordion__title">
-									<button class="focus-visible-outline accordion__control product-filters__form-item-toggle-button js-accordion-control js-custom-accordion-btn" type="button" aria-expanded="false">
-										<span typeof="product-filters__form-item-toggle-title">
-											HUNTING
-											<span class="js-custom-counter" style="display:none;"></span>
-										</span>
-										{%- render 'icons', icon: 'arrow-down' -%}
-									</button>
-								</h3>
-								<div class="accordion__content accordion__content--animate js-accordion-content js-custom-accordion-content" style="height: 0;">
-									<div class="js-accordion-inner product-filters__form-item-content">
-										<ul class="filter-list filter-list--sidebar filter-list--collection-custom js-filter-list">
-										{%- assign hunting_labels = "Deer,Turkey,Waterfowl,Fishing" | split: "," -%}
-										{%- for h_label in hunting_labels -%}
-											{%- assign h_check = h_label | append: '|||' -%}
-											{%- assign h_available = false -%}
-											{%- if available_hunting_values contains h_check -%}{%- assign h_available = true -%}{%- endif -%}
-											{%- assign h_checked = false -%}
-											{%- assign h_target_down = h_label | downcase -%}
-										{%- for filter in product_list.filters -%}
-											{%- if filter.param_name == param_hunting -%}
-												{%- for value in filter.active_values -%}
-													{%- assign val_down = value.label | downcase -%}
-													{%- if val_down == h_target_down -%}{%- assign h_checked = true -%}{%- endif -%}
-												{%- endfor -%}
+							{%- assign show_game_day_jersey = false -%}
+							{%- assign game_day_jersey_in_filter = false -%}
+							{%- if collection.handle == 'game-day' -%}
+								{%- for product_type in collection.all_types -%}
+									{%- if product_type == '3D Tshirt' -%}
+										{%- assign show_game_day_jersey = true -%}
+										{%- assign has_product_type_values = true -%}
+										{%- break -%}
+									{%- endif -%}
+								{%- endfor -%}
+								{%- if product_type_filter -%}
+									{%- for value in product_type_filter.values -%}
+										{%- if value.value == '3D Tshirt' -%}
+											{%- if value.count > 0 or value.active -%}
+												{%- assign game_day_jersey_in_filter = true -%}
 											{%- endif -%}
-										{%- endfor -%}
-										<li class="filter-list__item">
-											<input class="checkbox__input visually-hidden filter-list__checkbox" type="checkbox" name="{{ param_hunting }}" value="{{ h_label }}" id="FilterDrawer-{{ section.id }}-hunting-{{ forloop.index }}-{{ id }}"{% if h_checked %} checked{% endif %}{% unless h_available %} disabled{% endunless %}>
-											<label class="checkbox__label{% unless h_available %} is-disabled{% endunless %}" for="FilterDrawer-{{ section.id }}-hunting-{{ forloop.index }}-{{ id }}" {% unless h_available %}style="pointer-events: none; opacity: 0.6;"{% endunless %}>
-												{{ h_label }}
-												{%- unless h_available -%}<span class="filter-list__coming-soon" style="color:#7a8a7e;"> — <em>Coming Soon</em></span>{%- endunless -%}
-											</label>
-										</li>
-										{%- endfor -%}
-										</ul>
+										{%- endif -%}
+									{%- endfor -%}
+								{%- endif -%}
+							{%- endif -%}
+
+							{%- if has_product_type_values -%}
+								<div id="filter-{{ section.id }}-clothing-{{- id -}}" class="accordion__item product-filters__form-item js-accordion-item js-filter-item js-clothing-accordion">
+									<h3 class="accordion__title">
+										<button class="focus-visible-outline accordion__control product-filters__form-item-toggle-button js-accordion-control js-clothing-accordion-btn" type="button" aria-expanded="false">
+											<span typeof="product-filters__form-item-toggle-title">
+												CLOTHING
+												<span class="js-clothing-counter js-filter-item-counter" style="display:none;">&nbsp;(1)</span>
+											</span>
+											{%- render 'icons', icon: 'arrow-down' -%}
+										</button>
+									</h3>
+									<div class="accordion__content accordion__content--animate js-accordion-content js-clothing-accordion-content" style="height: 0;">
+										<div class="js-accordion-inner product-filters__form-item-content">
+											<ul class="filter-list filter-list--sidebar filter-list--collection-custom js-clothing-filter-list js-filter-list">
+												{%- for value in product_type_filter.values -%}
+													{%- if value.count > 0 or value.active -%}
+														<li class="filter-list__item">
+															<a href="javascript:void(0);" class="filter-list__collection-link js-clothing-type-link{% if value.active %} filter-list__collection-link--active{% endif %}" data-product-type="{{ value.value | escape }}">
+																<span class="custom-checkbox-icon"></span>
+																{%- if collection.handle == 'game-day' and value.value == '3D Tshirt' -%}
+																	{{- 'general.filters.game_day_jersey' | t -}}
+																{%- else -%}
+																	{{- value.label | upcase -}}
+																{%- endif -%}
+															</a>
+														</li>
+													{%- endif -%}
+												{%- endfor -%}
+												{%- if show_game_day_jersey -%}
+													{%- unless game_day_jersey_in_filter -%}
+														<li class="filter-list__item">
+															<a href="javascript:void(0);" class="filter-list__collection-link js-clothing-type-link" data-product-type="3D Tshirt">
+																<span class="custom-checkbox-icon"></span>
+																{{- 'general.filters.game_day_jersey' | t -}}
+															</a>
+														</li>
+													{%- endunless -%}
+												{%- endif -%}
+											</ul>
+										</div>
 									</div>
 								</div>
-							</div>
-
+							{%- endif -%}
 					{%- comment -%} ── SIZE Filter ── {%- endcomment -%}
 					{%- assign size_filter = null -%}
 					{%- for filter in product_list.filters -%}
@@ -438,6 +357,9 @@
 								{%- endif -%}
 
 								{%- comment -%} Skip filters we handle with custom UI {%- endcomment -%}
+								{%- if filter.param_name == 'filter.p.product_type' -%}
+									{%- continue -%}
+								{%- endif -%}
 								{%- if downcased_label == 'product type' or downcased_label == 'loại sản phẩm' or downcased_label == 'size' or downcased_label == 'kích thước' or downcased_label == 'tag' or downcased_label == 'thẻ' or downcased_label contains 'hunting' or downcased_label contains 'terrain' or downcased_label contains 'seasonal' -%}
 									{%- continue -%}
 								{%- endif -%}

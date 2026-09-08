@@ -1,0 +1,605 @@
+.flex-upsell-mount {
+  width: 100%;
+}
+
+flex-cart-upsell {
+  display: block;
+  width: 100%;
+}
+
+.flex-upsell {
+  --flex-card-background: #fff;
+  --flex-card-border: #e3e3e3;
+  --flex-text: #1f2124;
+  --flex-muted: #6d7175;
+  --flex-button: #1f2124;
+  --flex-button-text: #fff;
+  --flex-accent: #008060;
+  --flex-card-radius: 12px;
+  --flex-image-radius: 9px;
+  --flex-image-ratio: 1;
+  --flex-spacing: 12px;
+  width: 100%;
+  color: var(--flex-text);
+}
+
+.flex-upsell__header {
+  margin: 0 0 12px;
+}
+
+.flex-upsell__heading {
+  margin: 0;
+  color: var(--flex-text);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.flex-upsell__subheading {
+  margin: 4px 0 0;
+  color: var(--flex-muted);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.flex-upsell__list {
+  display: grid;
+  gap: var(--flex-spacing);
+}
+
+.flex-upsell--grid .flex-upsell__list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.flex-upsell--carousel .flex-upsell__list {
+  grid-auto-columns: minmax(76%, 1fr);
+  grid-auto-flow: column;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+.flex-upsell__card {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  min-width: 0;
+  padding: 10px;
+  background: var(--flex-card-background);
+  border: 1px solid var(--flex-card-border);
+  border-radius: var(--flex-card-radius);
+  scroll-snap-align: start;
+}
+
+.flex-upsell--grid .flex-upsell__card,
+.flex-upsell--carousel .flex-upsell__card {
+  grid-template-columns: 1fr;
+  align-content: start;
+}
+
+.flex-upsell__image-wrap {
+  display: block;
+  overflow: hidden;
+  width: 72px;
+  aspect-ratio: var(--flex-image-ratio);
+  background: #f3f3f3;
+  border-radius: var(--flex-image-radius);
+}
+
+.flex-upsell--grid .flex-upsell__image-wrap,
+.flex-upsell--carousel .flex-upsell__image-wrap {
+  width: 100%;
+}
+
+.flex-upsell__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.flex-upsell__copy {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.flex-upsell__vendor {
+  overflow: hidden;
+  color: var(--flex-accent);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.flex-upsell__title {
+  overflow: hidden;
+  color: var(--flex-text);
+  font-size: 0.82rem;
+  font-weight: 650;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.flex-upsell__price {
+  color: var(--flex-muted);
+  font-size: 0.76rem;
+}
+
+.flex-upsell__compare-price {
+  margin-left: 5px;
+  color: var(--flex-muted);
+  opacity: 0.75;
+}
+
+.flex-upsell__variant {
+  width: 100%;
+  min-height: 34px;
+  margin-top: 4px;
+  padding: 5px 8px;
+  color: var(--flex-text);
+  background: var(--flex-card-background);
+  border: 1px solid var(--flex-card-border);
+  border-radius: 6px;
+  font: inherit;
+  font-size: 0.72rem;
+}
+
+.flex-upsell__add {
+  min-width: 58px;
+  min-height: 34px;
+  padding: 7px 10px;
+  color: var(--flex-button-text);
+  background: var(--flex-button);
+  border: 0;
+  border-radius: 7px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.flex-upsell--grid .flex-upsell__add,
+.flex-upsell--carousel .flex-upsell__add {
+  width: 100%;
+}
+
+.flex-upsell__add[disabled] {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.flex-upsell__loading,
+.flex-upsell__empty,
+.flex-upsell__error {
+  padding: 12px;
+  color: var(--flex-muted);
+  text-align: center;
+  font-size: 0.76rem;
+}
+
+@media (max-width: 460px) {
+  .flex-upsell--grid .flex-upsell__list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* CamoSignal storefront preset */
+.flex-upsell--preset-camosignal {
+  container-type: inline-size;
+  box-sizing: border-box;
+  max-width: 100%;
+  color: var(--flex-text);
+  font-family: var(
+    --base-font-family,
+    "Arial Narrow",
+    "Roboto Condensed",
+    Arial,
+    sans-serif
+  );
+}
+
+.flex-upsell--preset-camosignal *,
+.flex-upsell--preset-camosignal *::before,
+.flex-upsell--preset-camosignal *::after {
+  box-sizing: border-box;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 22px;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--product-page .flex-upsell__header {
+  margin-bottom: 10px;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__heading {
+  color: var(--flex-button);
+  font-family: var(--base-font-family, Arial, sans-serif);
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.25;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__subheading {
+  display: none;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__list {
+  gap: 8px;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 68px minmax(0, 1fr);
+  gap: 10px;
+  min-width: 0;
+  min-height: 106px;
+  padding: 10px;
+  overflow: hidden;
+  background: var(--flex-card-background);
+  border: 1px solid var(--flex-card-border);
+  border-radius: 8px;
+  box-shadow: none;
+  transition: none;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__image-wrap {
+  width: 68px;
+  height: 85px;
+  overflow: hidden;
+  background: transparent;
+  border-radius: 0;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__image {
+  object-fit: contain;
+  object-position: center;
+  transition: none;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__copy {
+  position: relative;
+  display: grid;
+  align-content: space-between;
+  gap: 6px;
+  min-width: 0;
+  padding: 1px 68px 0 0;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--product-page
+  .flex-upsell__card:has(a.flex-upsell__add)
+  .flex-upsell__copy {
+  align-self: stretch;
+  align-content: center;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__title {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--flex-button);
+  font-family: var(
+    --font-heading-family,
+    "Oswald",
+    sans-serif
+  );
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  line-height: 1.3;
+  text-decoration: none;
+  text-transform: uppercase;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__price {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: grid;
+  justify-items: end;
+  gap: 1px;
+  color: var(--flex-accent);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__price-meta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__discount-badge {
+  color: var(--flex-accent);
+  font-size: 10px;
+  font-weight: 750;
+  line-height: 1;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__compare-price {
+  margin: 0;
+  color: var(--flex-muted);
+  font-size: 10px;
+  font-weight: 500;
+  opacity: 0.82;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__variant {
+  display: block;
+  align-self: end;
+  width: fit-content;
+  min-width: 160px;
+  max-width: min(220px, calc(100% + 68px));
+  height: 33px;
+  min-height: 33px;
+  max-height: 33px;
+  margin: auto 0 0;
+  padding: 5px 24px 5px 8px;
+  color: var(--flex-text);
+  background-color: #fff;
+  border: 1px solid var(--flex-card-border);
+  border-radius: 7px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  appearance: auto;
+  -webkit-appearance: menulist;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__variant option {
+  color: var(--flex-text);
+  background: #fff;
+  font: inherit;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__variant--long {
+  min-width: 190px;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__variant:focus-visible {
+  border-color: var(--flex-text);
+  outline: none;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__add {
+  position: absolute;
+  right: 10px;
+  bottom: 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 46px;
+  width: auto;
+  min-height: 28px;
+  padding: 6px 9px;
+  color: var(--flex-button-text);
+  background: var(--flex-button);
+  border: 1px solid var(--flex-button);
+  border-radius: 7px;
+  font-family: var(
+    --button-font-family,
+    "Arial Narrow",
+    "Roboto Condensed",
+    Arial,
+    sans-serif
+  );
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition:
+    background 150ms ease,
+    border-color 150ms ease,
+    transform 150ms ease;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__add:hover {
+  background: color-mix(in srgb, var(--flex-button) 86%, #000);
+  border-color: color-mix(in srgb, var(--flex-button) 86%, #000);
+  transform: translateY(-1px);
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__add:focus-visible,
+.flex-upsell--preset-camosignal .flex-upsell__navigation button:focus-visible {
+  outline: 2px solid var(--flex-accent);
+  outline-offset: 2px;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__add[disabled] {
+  transform: none;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__add.is-error {
+  color: #fff;
+  background: var(--flex-accent);
+  border-color: var(--flex-accent);
+  cursor: not-allowed;
+  opacity: 1;
+  transform: none;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__add-error {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__navigation {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 8px;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__navigation button {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  color: #fff;
+  background: var(--flex-button);
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  place-items: center;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__navigation button:disabled {
+  background: #909691;
+  cursor: not-allowed;
+  opacity: 0.9;
+}
+
+.flex-upsell--preset-camosignal .flex-upsell__navigation img {
+  display: block;
+  width: 14px;
+  height: 14px;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer {
+  width: auto;
+  max-width: 100%;
+  margin: 0 34px 28px;
+  padding-top: 6px;
+  overflow: hidden;
+  border-top: 0;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__header {
+  margin-bottom: 14px;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__heading {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__list {
+  display: flex;
+  max-width: 100%;
+  padding: 0 0 4px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  cursor: grab;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: inline mandatory;
+  scrollbar-width: none;
+  touch-action: pan-x pan-y;
+  -webkit-overflow-scrolling: touch;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer
+  .flex-upsell__list::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer
+  .flex-upsell__list.is-dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  user-select: none;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer
+  .flex-upsell__list.is-animating {
+  scroll-snap-type: none;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__card {
+  flex: 0 0 100%;
+  width: 100%;
+  grid-template-columns: 79px minmax(0, 1fr);
+  min-height: 118px;
+  scroll-snap-align: start;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer
+  .flex-upsell__card:has(a.flex-upsell__add)
+  .flex-upsell__copy {
+  align-self: stretch;
+}
+
+@container (max-width: 430px) {
+  .flex-upsell--preset-camosignal.flex-upsell--drawer {
+    margin: 0 16px 20px;
+  }
+
+  .flex-upsell--preset-camosignal .flex-upsell__card {
+    grid-template-columns: 68px minmax(0, 1fr);
+    gap: 10px;
+    min-height: 106px;
+    padding: 10px;
+  }
+
+  .flex-upsell--preset-camosignal .flex-upsell__image-wrap {
+    width: 68px;
+    height: 85px;
+  }
+
+  .flex-upsell--preset-camosignal .flex-upsell__copy {
+    padding-right: 68px;
+  }
+
+  .flex-upsell--preset-camosignal .flex-upsell__title {
+    font-size: 12px;
+  }
+
+  .flex-upsell--preset-camosignal .flex-upsell__price {
+    font-size: 13px;
+  }
+
+  .flex-upsell--preset-camosignal .flex-upsell__variant {
+    width: min(160px, 100%);
+    height: 33px;
+    min-height: 33px;
+    max-height: 33px;
+    font-size: 10px;
+  }
+
+  .flex-upsell--preset-camosignal .flex-upsell__add {
+    right: 10px;
+    bottom: 9px;
+    min-width: 46px;
+    min-height: 28px;
+    padding-inline: 9px;
+    font-size: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flex-upsell--preset-camosignal .flex-upsell__card,
+  .flex-upsell--preset-camosignal .flex-upsell__image,
+  .flex-upsell--preset-camosignal .flex-upsell__add {
+    transition: none;
+  }
+}

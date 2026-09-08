@@ -1,0 +1,23 @@
+{%- comment -%}
+	Blocks personalized variants from cart/checkout when required line-item
+	properties are missing. Also converts Selleasy's direct Add action into a
+	Customize action that opens the product page with the selected variant.
+{%- endcomment -%}
+<script>
+	window.camoCustomizationGuardConfig = {
+		customizeLabel: {{ 'products.customization.customize' | t | json }},
+		requiredMessage: {{ 'products.customization.required_message' | t | json }},
+		productRoute: {{ routes.root_url | append: 'products/' | json }}
+	};
+</script>
+<script src="{{- 'personalized-cart-guard.js' | asset_url -}}" defer="defer"></script>
+
+<style>
+	.camo-customization-checkout-hidden {
+		display: none !important;
+	}
+
+	[data-camo-personalized-guard="true"] .lb-button {
+		cursor: pointer;
+	}
+</style>

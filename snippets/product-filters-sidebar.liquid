@@ -44,29 +44,14 @@
 					{%- endif -%}
 
 					{%- comment -%} ── Build availability lookups from Shopify filter data ── {%- endcomment -%}
-					{%- assign available_hunting_values = '' -%}
 					{%- assign available_seasonal_values = '' -%}
-					{%- assign param_hunting = 'filter.p.m.custom.hunting' -%}
 					{%- assign param_seasonal = 'filter.p.m.custom.seasonal' -%}
 					{%- for filter in product_list.filters -%}
 						{%- assign param_down = filter.param_name | downcase -%}
-						{%- if param_down contains 'hunting' -%}
-							{%- assign param_hunting = filter.param_name -%}
-							{%- for fv in filter.values -%}
-								{%- if fv.count > 0 or fv.active -%}
-									{%- assign available_hunting_values = available_hunting_values | append: fv.label | append: '|||' -%}
-								{%- endif -%}
-							{%- endfor -%}
-						{%- elsif param_down contains 'seasonal' -%}
+						{%- if param_down contains 'seasonal' -%}
 							{%- for fv in filter.values -%}
 								{%- if fv.count > 0 or fv.active -%}
 									{%- assign available_seasonal_values = available_seasonal_values | append: fv.label | append: '|||' -%}
-								{%- endif -%}
-							{%- endfor -%}
-						{%- elsif param_down contains 'product_type' -%}
-							{%- for fv in filter.values -%}
-								{%- if fv.count > 0 or fv.active -%}
-									{%- assign available_clothing_values = available_clothing_values | append: fv.label | append: '|||' -%}
 								{%- endif -%}
 							{%- endfor -%}
 						{%- endif -%}
@@ -169,126 +154,105 @@
 
 					{%- assign filter_list_index = filter_list_index | plus: 1 -%}
 
-					{%- comment -%} ── CLOTHING (Product Type) Filter ── {%- endcomment -%}
-					<div
-						id="filter-{{ section.id }}-clothing-{{- id -}}"
-						class="accordion__item product-filters__form-item js-accordion-item js-filter-item js-clothing-accordion is-active"
-					>
-						<h3 class="accordion__title">
-							<button
-								class="focus-visible-outline accordion__control product-filters__form-item-toggle-button js-accordion-control js-clothing-accordion-btn is-active"
-								type="button"
-								id="Filter-accordion-{{ section.id }}-clothing-{{- id -}}"
-								aria-controls="filter-list-{{ section.id }}-clothing-{{- id -}}"
-								aria-expanded="true" is-active
-							>
-								<span typeof="product-filters__form-item-toggle-title">
-									CLOTHING
-									<span class="js-clothing-counter js-filter-item-counter" style="display:none;">&nbsp;(1)</span>
-								</span>
-								{%- render 'icons', icon: 'arrow-down' -%}
-							</button>
-						</h3>
-						<div
-							class="accordion__content accordion__content--animate js-accordion-content js-clothing-accordion-content is-active"
-							id="filter-list-{{ section.id }}-clothing-{{- id -}}"
-							aria-labelledby="Filter-accordion-{{ section.id }}-clothing-{{- id -}}"
-							role="region"
-							style="height: auto;"
-						>
-							<div class="js-accordion-inner product-filters__form-item-content">
-								<ul class="filter-list filter-list--sidebar filter-list--collection-custom js-clothing-filter-list js-filter-list">
-									{%- assign product_type_filter = null -%}
-									{%- for filter in product_list.filters -%}
-										{%- if filter.param_name == 'filter.p.product_type' -%}
-											{%- assign product_type_filter = filter -%}
-											{%- break -%}
-										{%- endif -%}
-									{%- endfor -%}
+					{%- comment -%} CLOTHING (Product Type) Filter {%- endcomment -%}
+					{%- assign product_type_filter = null -%}
+					{%- assign has_product_type_values = false -%}
+					{%- for filter in product_list.filters -%}
+						{%- if filter.param_name == 'filter.p.product_type' -%}
+							{%- assign product_type_filter = filter -%}
+							{%- for value in filter.values -%}
+								{%- if value.count > 0 or value.active -%}
+									{%- assign has_product_type_values = true -%}
+									{%- break -%}
+								{%- endif -%}
+							{%- endfor -%}
+							{%- break -%}
+						{%- endif -%}
+					{%- endfor -%}
 
-									{%- if product_type_filter -%}
-										{%- for value in product_type_filter.values -%}
-											{%- assign is_available = true -%}
-											{%- if value.count == 0 and value.active == false -%}
-												{%- assign is_available = false -%}
-											{%- endif -%}
-											<li class="filter-list__item">
-												<a
-													href="javascript:void(0);"
-													class="filter-list__collection-link js-clothing-type-link{% if value.active %} filter-list__collection-link--active{% endif %}{% unless is_available %} filter-list__collection-link--disabled filter-list__clothing-disabled{% endunless %}"
-													data-product-type="{{ value.value | escape }}"
-												>
-													<span class="custom-checkbox-icon"></span>
-													{{ value.label | upcase }}
-													{%- unless is_available -%}<span class="filter-list__coming-soon" style="color:#7a8a7e;"> — <em>Coming Soon</em></span>{%- endunless -%}
-												</a>
-											</li>
-										{%- endfor -%}
-									{%- else -%}
-										{%- comment -%} Fallback if product type filter is somehow missing {%- endcomment -%}
-										<li class="filter-list__item">
-											<span class="filter-list__collection-link filter-list__collection-link--disabled">No clothing types found</span>
-										</li>
+					{%- assign show_game_day_jersey = false -%}
+					{%- assign game_day_jersey_in_filter = false -%}
+					{%- if collection.handle == 'game-day' -%}
+						{%- for product_type in collection.all_types -%}
+							{%- if product_type == '3D Tshirt' -%}
+								{%- assign show_game_day_jersey = true -%}
+								{%- assign has_product_type_values = true -%}
+								{%- break -%}
+							{%- endif -%}
+						{%- endfor -%}
+						{%- if product_type_filter -%}
+							{%- for value in product_type_filter.values -%}
+								{%- if value.value == '3D Tshirt' -%}
+									{%- if value.count > 0 or value.active -%}
+										{%- assign game_day_jersey_in_filter = true -%}
 									{%- endif -%}
-								</ul>
-							</div>
-						</div>
-					</div>
+								{%- endif -%}
+							{%- endfor -%}
+						{%- endif -%}
+					{%- endif -%}
 
-					{%- comment -%} ── HUNTING Filter ── {%- endcomment -%}
-					<div id="filter-{{ section.id }}-hunting-{{- id -}}" class="accordion__item product-filters__form-item js-accordion-item js-filter-item is-active js-custom-accordion" data-filter-group="{{ param_hunting }}">
-						<h3 class="accordion__title">
-							<button class="focus-visible-outline accordion__control product-filters__form-item-toggle-button js-accordion-control js-custom-accordion-btn is-active" type="button" aria-expanded="true">
-								<span typeof="product-filters__form-item-toggle-title">
-									HUNTING
-									<span class="js-custom-counter" style="display:none;"></span>
-								</span>
-								{%- render 'icons', icon: 'arrow-down' -%}
-							</button>
-						</h3>
-						<div class="accordion__content accordion__content--animate js-accordion-content js-custom-accordion-content is-active" style="height: auto;">
-							<div class="js-accordion-inner product-filters__form-item-content">
-
-
-								<ul class="filter-list filter-list--sidebar filter-list--collection-custom js-filter-list">
-									{%- assign hunting_labels = "Deer,Turkey,Waterfowl,Fishing" | split: "," -%}
-									{%- for h_label in hunting_labels -%}
-										{%- assign h_target_down = h_label | downcase -%}
-										{%- assign h_available = false -%}
-										{%- assign h_checked = false -%}
-										{%- assign h_submit_value = h_label -%}
-										{%- assign exact_matched = false -%}
-										{%- for filter in product_list.filters -%}
-											{%- if filter.param_name == param_hunting -%}
-												{%- for value in filter.values -%}
-													{%- assign val_down = value.label | downcase -%}
-													{%- if val_down == h_target_down -%}
-														{%- assign h_submit_value = value.value -%}
-														{%- if value.count > 0 or value.active -%}{%- assign h_available = true -%}{%- endif -%}
-														{%- if value.active -%}{%- assign h_checked = true -%}{%- endif -%}
-														{%- assign exact_matched = true -%}
-														{%- break -%}
-													{%- elsif val_down contains h_target_down and exact_matched == false -%}
-														{%- assign h_submit_value = value.value -%}
-														{%- if value.count > 0 or value.active -%}{%- assign h_available = true -%}{%- endif -%}
-														{%- if value.active -%}{%- assign h_checked = true -%}{%- endif -%}
-													{%- endif -%}
-												{%- endfor -%}
+					{%- if has_product_type_values -%}
+						<div
+							id="filter-{{ section.id }}-clothing-{{- id -}}"
+							class="accordion__item product-filters__form-item js-accordion-item js-filter-item js-clothing-accordion is-active"
+						>
+							<h3 class="accordion__title">
+								<button
+									class="focus-visible-outline accordion__control product-filters__form-item-toggle-button js-accordion-control js-clothing-accordion-btn is-active"
+									type="button"
+									id="Filter-accordion-{{ section.id }}-clothing-{{- id -}}"
+									aria-controls="filter-list-{{ section.id }}-clothing-{{- id -}}"
+									aria-expanded="true" is-active
+								>
+									<span typeof="product-filters__form-item-toggle-title">
+										CLOTHING
+										<span class="js-clothing-counter js-filter-item-counter" style="display:none;">&nbsp;(1)</span>
+									</span>
+									{%- render 'icons', icon: 'arrow-down' -%}
+								</button>
+							</h3>
+							<div
+								class="accordion__content accordion__content--animate js-accordion-content js-clothing-accordion-content is-active"
+								id="filter-list-{{ section.id }}-clothing-{{- id -}}"
+								aria-labelledby="Filter-accordion-{{ section.id }}-clothing-{{- id -}}"
+								role="region"
+								style="height: auto;"
+							>
+								<div class="js-accordion-inner product-filters__form-item-content">
+									<ul class="filter-list filter-list--sidebar filter-list--collection-custom js-clothing-filter-list js-filter-list">
+										{%- for value in product_type_filter.values -%}
+											{%- if value.count > 0 or value.active -%}
+												<li class="filter-list__item">
+													<a
+														href="javascript:void(0);"
+														class="filter-list__collection-link js-clothing-type-link{% if value.active %} filter-list__collection-link--active{% endif %}"
+														data-product-type="{{ value.value | escape }}"
+													>
+														<span class="custom-checkbox-icon"></span>
+														{%- if collection.handle == 'game-day' and value.value == '3D Tshirt' -%}
+															{{- 'general.filters.game_day_jersey' | t -}}
+														{%- else -%}
+															{{- value.label | upcase -}}
+														{%- endif -%}
+													</a>
+												</li>
 											{%- endif -%}
 										{%- endfor -%}
-										<li class="filter-list__item">
-											<input class="checkbox__input visually-hidden filter-list__checkbox" type="checkbox" name="{{ param_hunting }}" value="{{ h_submit_value | escape }}" id="Filter-{{ section.id }}-hunting-{{ forloop.index }}-{{ id }}"{% if h_checked %} checked{% endif %}{% unless h_available %} disabled{% endunless %}>
-											<label class="checkbox__label{% unless h_available %} is-disabled{% endunless %}" for="Filter-{{ section.id }}-hunting-{{ forloop.index }}-{{ id }}" {% unless h_available %}style="pointer-events: none; opacity: 0.6;"{% endunless %}>
-												{{ h_label }}
-												{%- unless h_available -%}<span class="filter-list__coming-soon" style="color:#7a8a7e;"> — <em>Coming Soon</em></span>{%- endunless -%}
-											</label>
-										</li>
-									{%- endfor -%}
-								</ul>
+										{%- if show_game_day_jersey -%}
+											{%- unless game_day_jersey_in_filter -%}
+												<li class="filter-list__item">
+													<a href="javascript:void(0);" class="filter-list__collection-link js-clothing-type-link" data-product-type="3D Tshirt">
+														<span class="custom-checkbox-icon"></span>
+														{{- 'general.filters.game_day_jersey' | t -}}
+													</a>
+												</li>
+											{%- endunless -%}
+										{%- endif -%}
+									</ul>
+								</div>
 							</div>
 						</div>
-					</div>
-
+					{%- endif -%}
 					{%- comment -%} ── SIZE Filter ── {%- endcomment -%}
 					{%- assign size_filter = null -%}
 					{%- for filter in product_list.filters -%}
@@ -389,6 +353,9 @@
 						{%- endif -%}
 
 						{%- comment -%} Skip filters we handle with custom UI {%- endcomment -%}
+						{%- if filter.param_name == 'filter.p.product_type' -%}
+							{%- continue -%}
+						{%- endif -%}
 						{%- if downcased_label == 'product type' or downcased_label == 'loại sản phẩm' or downcased_label == 'size' or downcased_label == 'kích thước' or downcased_label == 'tag' or downcased_label == 'thẻ' or downcased_label contains 'hunting' or downcased_label contains 'terrain' or downcased_label contains 'seasonal' -%}
 							{%- continue -%}
 						{%- endif -%}
@@ -848,43 +815,35 @@ document.addEventListener('DOMContentLoaded', () => {
 	/* ---- Clothing Type Filter ---- */
 	function initClothingFilter() {
 		const url = new URL(window.location.href);
-		const activeTypes = url.searchParams.getAll('filter.p.product_type');
-		const activeTypesStr = activeTypes.sort().join(',');
+		const activeTypes = new Set(url.searchParams.getAll('filter.p.product_type'));
 		const clothingLinks = document.querySelectorAll('.js-clothing-type-link');
-		const accordion = document.querySelector('.js-clothing-accordion');
-		const accordionBtn = document.querySelector('.js-clothing-accordion-btn');
-		const accordionContent = document.querySelector('.js-clothing-accordion-content');
-		const counter = document.querySelector('.js-clothing-counter');
 
 		clothingLinks.forEach(link => {
 			const typeAttr = link.getAttribute('data-product-type');
 			if (!typeAttr) return;
-			const typesArray = typeAttr.split(',');
-			const typesStr = [...typesArray].sort().join(',');
-			const icon = link.querySelector('.filter-list__collection-icon');
-
-			/* Mark active */
-			if (activeTypesStr && activeTypesStr === typesStr) {
-				link.classList.add('filter-list__collection-link--active');
-				if (icon) icon.innerHTML = '\u25A0'; /* ■ filled */
-			}
+			link.classList.toggle('filter-list__collection-link--active', activeTypes.has(typeAttr));
 		});
 
-		/* Auto-expand accordion if filter is active, otherwise reset */
-		if (activeTypes.length > 0) {
-			if (accordion) accordion.classList.add('is-active');
-			if (accordionBtn) {
-				accordionBtn.classList.add('is-active');
-				accordionBtn.setAttribute('aria-expanded', 'true');
+		document.querySelectorAll('.js-clothing-accordion').forEach(accordion => {
+			const accordionBtn = accordion.querySelector('.js-clothing-accordion-btn');
+			const accordionContent = accordion.querySelector('.js-clothing-accordion-content');
+			const counter = accordion.querySelector('.js-clothing-counter');
+
+			if (activeTypes.size > 0) {
+				accordion.classList.add('is-active');
+				if (accordionBtn) {
+					accordionBtn.classList.add('is-active');
+					accordionBtn.setAttribute('aria-expanded', 'true');
+				}
+				if (accordionContent) {
+					accordionContent.style.height = 'auto';
+					accordionContent.classList.add('is-active');
+				}
+				if (counter) counter.style.display = 'inline';
+			} else if (counter) {
+				counter.style.display = 'none';
 			}
-			if (accordionContent) {
-				accordionContent.style.height = 'auto';
-				accordionContent.classList.add('is-active');
-			}
-			if (counter) counter.style.display = 'inline';
-		} else {
-			if (counter) counter.style.display = 'none';
-		}
+		});
 	}
 	initClothingFilter();
 
@@ -900,7 +859,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		const productTypeAttr = typeLink.getAttribute('data-product-type');
 		if (!productTypeAttr) return;
 
-		const typesToApply = productTypeAttr.split(',');
+		const typesToApply = [productTypeAttr];
 		const typesToApplyStr = [...typesToApply].sort().join(',');
 
 		const url = new URL(window.location.href);

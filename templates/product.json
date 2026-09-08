@@ -14,7 +14,6 @@
       "blocks": {
         "breadcrumbs": {
           "type": "breadcrumbs",
-          "disabled": true,
           "settings": {
             "offset_top_desktop": 0,
             "offset_bottom_desktop": 0,
@@ -113,9 +112,11 @@
             "offset_bottom_mobile": 12
           }
         },
-        "selleasy_lb_upsell_widget_cpal_JbWLNH": {
-          "type": "shopify://apps/selleasy/blocks/lb-upsell-widget-cpal/790c1a03-a71f-4bc1-9869-00dad526d3c2",
-          "settings": {}
+        "camosignal_upsell_product_page_upsell_XyKNGF": {
+          "type": "shopify://apps/camosignal-upsell/blocks/product-page-upsell/01a037b7-7756-79a9-89c5-3abb9c0f40ed",
+          "settings": {
+            "loading_text": "Finding the best match..."
+          }
         },
         "drawers": {
           "type": "drawers",
@@ -203,7 +204,7 @@
         "dealeasy_vd_cards_F9ftCd",
         "add_to_cart",
         "upsell",
-        "selleasy_lb_upsell_widget_cpal_JbWLNH",
+        "camosignal_upsell_product_page_upsell_XyKNGF",
         "drawers",
         "pickup_availability",
         "sales_point_zx6rLq",
@@ -238,6 +239,53 @@
         "inner_offset_bottom": 0,
         "inner_offset_top_mobile": 16,
         "inner_offset_bottom_mobile": 0
+      }
+    },
+    "product-recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "enable_color_scheme_inheritance": true,
+        "color_scheme": "",
+        "heading": "You Might Also Like",
+        "heading_font_size_desktop": 36,
+        "heading_font_size_mobile": 25,
+        "products_to_show": 4,
+        "best_seller_products_to_show": 4,
+        "products_to_show_mobile": 8,
+        "enable_shopify_recommendations": true,
+        "collection": "",
+        "best_seller_collection": "",
+        "container_width": "inherit",
+        "offset_top_desktop": 25,
+        "offset_bottom_desktop": 15,
+        "offset_top_mobile": 15,
+        "offset_bottom_mobile": 10,
+        "inner_offset_top": 15,
+        "inner_offset_bottom": 10,
+        "inner_offset_top_mobile": 15,
+        "inner_offset_bottom_mobile": 10
+      }
+    },
+    "product-collections-showcase": {
+      "type": "product-collections-showcase",
+      "disabled": true,
+      "settings": {
+        "enable_color_scheme_inheritance": true,
+        "color_scheme": "",
+        "heading": "Explore More Collections",
+        "heading_font_size_desktop": 34,
+        "heading_font_size_mobile": 24,
+        "best_seller_collection_1": "",
+        "best_seller_collection_2": "",
+        "container_width": "inherit",
+        "offset_top_desktop": 15,
+        "offset_bottom_desktop": 25,
+        "offset_top_mobile": 10,
+        "offset_bottom_mobile": 20,
+        "inner_offset_top": 15,
+        "inner_offset_bottom": 10,
+        "inner_offset_top_mobile": 10,
+        "inner_offset_bottom_mobile": 10
       }
     },
     "17750062752dbc4a4a": {
@@ -433,49 +481,6 @@
         "inner_offset_bottom": 0,
         "inner_offset_top_mobile": 0,
         "inner_offset_bottom_mobile": 0
-      }
-    },
-    "product-recommendations": {
-      "type": "product-recommendations",
-      "settings": {
-        "enable_color_scheme_inheritance": true,
-        "color_scheme": "",
-        "heading": "Customer Favorites",
-        "heading_font_size_desktop": 36,
-        "heading_font_size_mobile": 25,
-        "products_to_show": 4,
-        "enable_shopify_recommendations": true,
-        "collection": "",
-        "container_width": "inherit",
-        "offset_top_desktop": 25,
-        "offset_bottom_desktop": 15,
-        "offset_top_mobile": 15,
-        "offset_bottom_mobile": 10,
-        "inner_offset_top": 15,
-        "inner_offset_bottom": 10,
-        "inner_offset_top_mobile": 15,
-        "inner_offset_bottom_mobile": 10
-      }
-    },
-    "product-collections-showcase": {
-      "type": "product-collections-showcase",
-      "settings": {
-        "enable_color_scheme_inheritance": true,
-        "color_scheme": "",
-        "heading": "Explore More Collections",
-        "heading_font_size_desktop": 34,
-        "heading_font_size_mobile": 24,
-        "best_seller_collection_1": "",
-        "best_seller_collection_2": "",
-        "container_width": "inherit",
-        "offset_top_desktop": 15,
-        "offset_bottom_desktop": 25,
-        "offset_top_mobile": 10,
-        "offset_bottom_mobile": 20,
-        "inner_offset_top": 15,
-        "inner_offset_bottom": 10,
-        "inner_offset_top_mobile": 10,
-        "inner_offset_bottom_mobile": 10
       }
     },
     "recently-viewed": {

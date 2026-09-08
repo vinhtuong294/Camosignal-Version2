@@ -37,6 +37,25 @@
 	{%- assign show_payment_icons = false -%}
 {%- endif -%}
 
+{%- assign cart_has_missing_customization = false -%}
+{%- for item in cart.items -%}
+	{%- assign item_requires_name = item.product.metafields.custom.enable_name.value -%}
+	{%- assign item_requires_number = item.product.metafields.custom.enable_number.value -%}
+	{%- assign item_custom_name = item.properties['Your Name'] | strip -%}
+	{%- assign item_custom_number = item.properties['Your Number'] | strip -%}
+
+	{%- if item_requires_name and item_custom_name == blank -%}
+		{%- assign cart_has_missing_customization = true -%}
+	{%- endif -%}
+	{%- if item_requires_number and item_custom_number == blank -%}
+		{%- assign cart_has_missing_customization = true -%}
+	{%- endif -%}
+{%- endfor -%}
+
+{%- if cart_has_missing_customization -%}
+	{%- assign show_dynamic_checkout_buttons = false -%}
+{%- endif -%}
+
 {%- if cart_drawer == true -%}
 	{%- assign show_payment_icons = false -%}
 {%- endif -%}
@@ -123,7 +142,11 @@
 		{%- assign cta_class = "cart-template__ctas" -%}
 	{%- endif -%}
 
-	<div class="{{ cta_class }} js-cart-footer-button" style="display: flex; flex-direction: column; width: 100%; z-index: 200; background: var(--cart-drawer-footer-bg, #ffffff); padding: var(--cart-drawer-footer-padding, 20px 24px 16px); border-top: 1px solid var(--cart-drawer-footer-border-color, rgba(0,0,0,0.06)); margin-left: auto; margin-right: auto; max-width: 100%;">
+		<div
+			class="{{ cta_class }} js-cart-footer-button"
+			data-camo-cart-customization-invalid="{{- cart_has_missing_customization -}}"
+			style="display: flex; flex-direction: column; width: 100%; z-index: 200; background: var(--cart-drawer-footer-bg, #ffffff); padding: var(--cart-drawer-footer-padding, 20px 24px 16px); border-top: 1px solid var(--cart-drawer-footer-border-color, rgba(0,0,0,0.06)); margin-left: auto; margin-right: auto; max-width: 100%;"
+		>
 		{%- render 'cart-discount', show_discount_form: show_discount_form -%}
 
 		<div class="js-cart-subtotal" style="width: 100%;">
@@ -135,18 +158,33 @@
 
 		{%- assign checkout_button = section.settings.checkout_button_label | default: settings.cart_checkout_button | default: default_checkout_button -%}
 
-		{%- if cart_button_label != blank and cart_drawer == true -%}
-			<a href="{{ routes.cart_url }}" class="cart-footer__button button button--primary button--block" style="display: none;">
-				{{- cart_button_label -}}
-			</a>
-		{%- endif -%}
+			{%- if cart_button_label != blank and cart_drawer == true -%}
+				<a href="{{ routes.cart_url }}" class="cart-footer__button button button--primary button--block" style="display: none;">
+					{{- cart_button_label -}}
+				</a>
+			{%- endif -%}
 
-		<button
-			type="button"
-			class="cart-footer__button button button--secondary button--block js-checkout-button"
-			style="width: 100%; background: var(--cart-drawer-checkout-bg, #0d1f6b) !important; border-color: var(--cart-drawer-checkout-border, #0d1f6b) !important; color: var(--cart-drawer-checkout-color, #ffffff) !important; font-family: 'Oswald', sans-serif !important; text-transform: uppercase; font-size: var(--cart-drawer-checkout-font-size, 16px); font-weight: 600; padding: var(--cart-drawer-checkout-padding, 14px); margin-bottom: 8px; border-radius: var(--cart-drawer-checkout-radius, 6px) !important;"
-			onclick="window.location.href = '/checkout';"
-		>
+			{%- if cart_has_missing_customization -%}
+				<p
+					class="cart-footer__customization-error"
+					role="alert"
+					style="margin: 0 0 10px; padding: 10px 12px; border: 1px solid #c9574d; border-radius: 4px; background: #fff6f5; color: #8a2f28; font-size: 13px; line-height: 1.45;"
+				>
+					{{- 'products.customization.cart_missing_checkout' | t -}}
+				</p>
+			{%- endif -%}
+
+			<button
+				type="button"
+				class="cart-footer__button button button--secondary button--block js-checkout-button"
+				style="width: 100%; background: var(--cart-drawer-checkout-bg, #0d1f6b) !important; border-color: var(--cart-drawer-checkout-border, #0d1f6b) !important; color: var(--cart-drawer-checkout-color, #ffffff) !important; font-family: 'Oswald', sans-serif !important; text-transform: uppercase; font-size: var(--cart-drawer-checkout-font-size, 16px); font-weight: 600; padding: var(--cart-drawer-checkout-padding, 14px); margin-bottom: 8px; border-radius: var(--cart-drawer-checkout-radius, 6px) !important;"
+				{%- if cart_has_missing_customization -%}
+					disabled
+					aria-disabled="true"
+				{%- else -%}
+					onclick="window.location.href = '/checkout';"
+				{%- endif -%}
+			>
 			<span data-text="{{- checkout_button | strip_html -}}">
 				<span>{{ checkout_button }}</span>
 			</span>
@@ -245,10 +283,9 @@
 					{%- endif -%}
 				</div>
 
-				{{- checkout_buttons -}}
+					{{- checkout_buttons -}}
+				</div>
 			</div>
-		</div>
-	</div>
 {%- else -%}
 	<div class="cart-footer" style="display: contents;">
 		<div class="cart-footer__summary" style="padding: 0 24px;">

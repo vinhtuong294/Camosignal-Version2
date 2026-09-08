@@ -263,6 +263,8 @@
 		</div>
 
 		{%- render 'product-customization-fields', product: product, section_id: section.id -%}
+		{%- render 'product-combo-builder', product: product, section_id: section.id, context: 'quick-view' -%}
+		{%- render 'product-order-note', product: product, section_id: section.id, context: 'quick-view' -%}
 
 		{%- render 'product-quantity' -%}
 
@@ -311,7 +313,12 @@
 			{%- render 'icons', icon: 'loader' -%}
 		</button>
 
-		{%- if quick_view_enable_buy_it_now -%}
+		{%- assign requires_customization = false -%}
+		{%- if product.metafields.custom.enable_name.value or product.metafields.custom.enable_number.value -%}
+			{%- assign requires_customization = true -%}
+		{%- endif -%}
+
+		{%- if quick_view_enable_buy_it_now and requires_customization == false -%}
 			<div class="additional-checkout-buttons additional-checkout-buttons--{{ button_buy_it_type }}">
 				{{- form | payment_button  -}}
 			</div>

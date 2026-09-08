@@ -300,27 +300,18 @@
 		padding: 0;
 		margin: 0;
 		margin-left: auto;
-		font-size: 0.8rem;
-		font-weight: 500;
+		font-family: inherit;
+		font-size: inherit !important;
+		font-weight: inherit;
 		color: #2c3d33;
 		cursor: pointer;
 		text-decoration: underline;
 		text-underline-offset: 2px;
-		letter-spacing: 0.02em;
-		line-height: 1.4;
+		letter-spacing: inherit;
+		line-height: inherit;
 		min-width: 0 !important;
 		min-height: 0 !important;
 		flex-shrink: 0;
-	}
-	@media (min-width: 768px) {
-		.product-options__size-guide-inline {
-			font-size: 1rem;
-		}
-	}
-	@media (max-width: 767px) {
-		.product-options__size-guide-inline {
-			font-size: calc(0.8rem + 3px);
-		}
 	}
 	.product-options__size-guide-inline:hover {
 		opacity: 0.7;
@@ -346,6 +337,12 @@
 		height: 28px !important;
 	}
 
+	.product-options img.radio-option-swatch__image {
+		display: block;
+		object-fit: contain !important;
+		object-position: center;
+	}
+
 	/* Increase gap between color swatches on desktop */
 	.product-options .product-options__swatch-container {
 		gap: 12px !important;
@@ -356,13 +353,8 @@
 			width: 100% !important;
 			min-width: 0;
 			padding: 3px;
-			flex-wrap: nowrap !important;
-			overflow-x: auto;
-			scrollbar-width: none;
-		}
-
-		.product-options .product-options__swatch-container::-webkit-scrollbar {
-			display: none;
+			flex-wrap: wrap !important;
+			overflow: visible;
 		}
 
 		.product-options .radio-option-swatch {

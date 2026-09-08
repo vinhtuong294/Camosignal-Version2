@@ -39,7 +39,7 @@
 	endif
 
 	assign is_spooky_collection = false
-	if collection.handle == 'spooky-kids-tee'
+	if collection.handle == 'spooky-kids-tee' or collection.handle == 'halloween-dog-t-shirt'
 		assign is_spooky_collection = true
 	endif
 -%}
@@ -236,6 +236,45 @@
 		body .product-filters__open-menu-button {
 			border-color: #f2711c !important;
 			color: #b9470f !important;
+		}
+		body .filter-price .filter-price__input:not(.error):not(.is-error) {
+			border-color: #f2711c !important;
+			color: #b9470f !important;
+		}
+		body .filter-price .filter-price__input:not(.error):not(.is-error):hover,
+		body .filter-price .filter-price__input:not(.error):not(.is-error):focus,
+		body .filter-price .filter-price__input:not(.error):not(.is-error):focus-visible {
+			border-color: #b9470f !important;
+		}
+		body .filter-price .filter-price__input:not(.error):not(.is-error)::placeholder,
+		body .filter-price .filter-price__input:not(.error):not(.is-error) + .filter-price__currency {
+			color: #b9470f !important;
+		}
+		body .filter-price .filter-price__range-inputs {
+			background: linear-gradient(
+				to right,
+				rgba(242, 113, 28, 0.32) var(--range-min),
+				#f2711c var(--range-min),
+				#f2711c var(--range-max),
+				rgba(242, 113, 28, 0.32) var(--range-max)
+			) !important;
+		}
+		body .filter-price input[type="range"]::-webkit-slider-thumb {
+			border-color: #f2711c !important;
+			background-color: #fff2d7 !important;
+		}
+		body .filter-price input[type="range"]::-moz-range-thumb {
+			border-color: #f2711c !important;
+			background-color: #fff2d7 !important;
+		}
+		body.rtl .filter-price .filter-price__range-inputs {
+			background: linear-gradient(
+				to left,
+				rgba(242, 113, 28, 0.32) var(--range-min),
+				#f2711c var(--range-min),
+				#f2711c var(--range-max),
+				rgba(242, 113, 28, 0.32) var(--range-max)
+			) !important;
 		}
 		@media screen and (max-width: 767px) {
 			#shopify-section-{{ section.id }} .collection-banner--halloween .collection-banner__content {

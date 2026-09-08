@@ -1,0 +1,120 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Note that some adapters may set a maximum length for the String type by default, please ensure your strings are long
+// enough when changing adapters.
+// See https://www.prisma.io/docs/orm/reference/prisma-schema-reference#string for more information
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+model Session {
+  id            String    @id
+  shop          String
+  state         String
+  isOnline      Boolean   @default(false)
+  scope         String?
+  expires       DateTime?
+  accessToken   String
+  userId        BigInt?
+  firstName     String?
+  lastName      String?
+  email         String?
+  accountOwner  Boolean   @default(false)
+  locale        String?
+  collaborator  Boolean?  @default(false)
+  emailVerified Boolean?  @default(false)
+  refreshToken        String?
+  refreshTokenExpires DateTime?
+}
+
+model ShopSetting {
+  shop              String    @id
+  currency          String    @default("USD")
+  catalogueSyncedAt DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}
+
+model Campaign {
+  id             String   @id @default(cuid())
+  shop           String
+  placement      String
+  name           String
+  enabled        Boolean  @default(false)
+  strategy       String
+  strategyJson   String
+  conditionsJson String
+  filtersJson    String
+  appearanceJson String
+  discountJson   String   @default("{}")
+  discountId     String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([shop, placement])
+  @@index([shop, enabled])
+}
+
+model ProductSnapshot {
+  id                 String   @id @default(cuid())
+  shop               String
+  productId          String
+  handle             String
+  title              String
+  vendor             String
+  productType        String
+  tagsJson           String
+  collectionsJson    String
+  imageUrl           String?
+  variantsJson       String
+  priceMin           Float
+  priceMax           Float
+  inventoryAvailable Boolean  @default(true)
+  publishedAt        DateTime?
+  popularityScore    Float    @default(0)
+  updatedAt          DateTime @updatedAt
+
+  @@unique([shop, productId])
+  @@index([shop, inventoryAvailable])
+  @@index([shop, productType])
+  @@index([shop, vendor])
+}
+
+model UpsellEvent {
+  id         String   @id @default(cuid())
+  shop       String
+  campaignId String?
+  placement  String
+  eventType  String
+  productId  String?
+  sessionKey String?
+  value      Float?
+  createdAt  DateTime @default(now())
+
+  @@index([shop, createdAt])
+  @@index([campaignId, eventType])
+}
+
+model ListingRun {
+  id                String   @id @default(cuid())
+  shop              String
+  larkRecordId      String
+  designId          String
+  templateProductId String?
+  createdProductId  String?
+  status            String
+  detailsJson       String
+  error             String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([shop, larkRecordId])
+  @@index([shop, status])
+}

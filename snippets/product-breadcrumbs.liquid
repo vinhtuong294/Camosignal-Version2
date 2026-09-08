@@ -15,11 +15,22 @@
 	<span aria-hidden="true" class="product-breadcrumbs__separator">·</span>
 {% endcapture %}
 
-<style>
-	@media (max-width: 767.98px) {
-		.product-breadcrumbs { display: none !important; }
-	}
-</style>
+{%- assign parent_collection = collection -%}
+
+{%- if parent_collection == blank or parent_collection.handle == 'all' -%}
+	{%- assign parent_collection = product.collections.first -%}
+
+	{%- for product_collection in product.collections -%}
+		{%- unless product_collection.handle == 'all' or product_collection.handle == 'frontpage' -%}
+			{%- assign parent_collection = product_collection -%}
+			{%- break -%}
+		{%- endunless -%}
+	{%- endfor -%}
+{%- endif -%}
+
+{%- assign home_label = 'general.breadcrumbs.home' | t | downcase -%}
+{%- assign parent_collection_label = parent_collection.title | downcase -%}
+
 <nav
 	class="product-breadcrumbs"
 	aria-label="{{ 'general.breadcrumbs.title' | t | escape }}"
@@ -29,21 +40,14 @@
 		<a
 			class="product-breadcrumbs__link"
 			href="{{ routes.root_url }}"
-			title="{{ 'general.breadcrumbs.home' | t }}"
+			title="{{ home_label | escape }}"
 		>
-			{{ 'general.breadcrumbs.home' | t }}
+			{{ home_label }}
 		</a>
 
-		{%- assign parent_collection = product.collections.first -%}
-
-		{% if settings.show_collection_on_pdp == true and parent_collection != blank %}
-			{{ breadcrumb_seperator }}
-
-			{{ parent_collection.title | link_to: parent_collection.url, class: 'product-breadcrumbs__item product-breadcrumbs__link' }}
+		{% if parent_collection != blank %}
+			<span aria-hidden="true" class="product-breadcrumbs__separator">&gt;</span>
+			{{ parent_collection_label | link_to: parent_collection.url, class: 'product-breadcrumbs__item product-breadcrumbs__link' }}
 		{% endif %}
-
-		{{ breadcrumb_seperator }}
-
-		<span class="product-breadcrumbs__item">{{ product.title }}</span>
 	</div>
 </nav>

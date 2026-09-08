@@ -1,0 +1,65 @@
+.storefront-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #34342f;
+}
+
+.storefront-menu svg,
+.storefront-cart svg {
+  display: block;
+}
+
+.storefront-thumbnails button {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  overflow: hidden;
+  background: #efefea;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.storefront-thumbnails button.is-selected {
+  border-color: #1e342d;
+}
+
+.storefront-thumbnails img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.storefront-rating > span,
+.storefront-product-notes span,
+.preview-product button,
+.cart-page-summary button,
+.cart-drawer-footer button {
+  display: inline-flex;
+  align-items: center;
+}
+
+.storefront-rating > span {
+  gap: 1px;
+}
+
+.storefront-product-notes span {
+  gap: 4px;
+}
+
+.preview-product button,
+.cart-page-summary button,
+.cart-drawer-footer button {
+  justify-content: center;
+  gap: 4px;
+}
+
+.cart-drawer-header > button {
+  display: grid;
+  place-items: center;
+}
+
+.storefront-preview-canvas--mobile .storefront-header-actions > svg {
+  display: none;
+}

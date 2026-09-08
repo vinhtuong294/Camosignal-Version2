@@ -80,6 +80,8 @@
 						{% render 'product-combination', block: block, product: product %}
 					{%- when 'options' -%}
 						{%- render 'product-options', section: section, block: block, product: product -%}
+						{%- render 'product-combo-builder', product: product, section_id: section.id, context: 'product-form' -%}
+						{%- render 'product-order-note', product: product, section_id: section.id, context: 'product-form' -%}
 					{%- when 'quantity' -%}
 						{%- render 'product-customization-fields', product: product, section_id: section.id -%}
 						{%- render 'product-quantity', block: block, product: product -%}
@@ -102,9 +104,6 @@
 										block: block
 									-%}
 								</div>
-							</div>
-							<div class="product-countdown-container" style="flex: 0 0 auto;">
-								{%- render 'product-countdown', section: section -%}
 							</div>
 						</div>
 					{%- when 'add_to_cart' -%}

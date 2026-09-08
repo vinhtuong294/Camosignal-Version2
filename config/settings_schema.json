@@ -1102,8 +1102,8 @@
 				"type": "textarea",
 				"id": "predictive_search_trending_terms",
 				"label": "Popular Search keywords",
-				"info": "Add comma-separated items as Label|Collection URL. Example: Hoodies|/collections/hunting-hoodie?filter.p.product_type=Hoodie.",
-				"default": "T-Shirts|/collections/graphictee,Hoodies|/collections/hunting-hoodie?filter.p.product_type=Hoodie,Jerseys|/collections/game-day-jersey,New Arrivals|/collections/new-arrivals"
+				"info": "Add comma-separated items. Use Label for search results, or Label|Collection URL for a custom destination.",
+				"default": "Fishing T-shirt,Turkey,Deer Hunting,Faith Outdoors,Let Us Thank Him for Our Food,Trout Species Of The Appalachian Mountains T-Shirt"
 			},
 			{
 				"type": "product_list",

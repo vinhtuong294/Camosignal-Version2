@@ -1,0 +1,62 @@
+{%- layout none -%}
+
+{%- liquid
+	assign design_tag = current_tags | first | strip
+	assign design_tag_normalized = design_tag | downcase
+-%}
+
+{%- if design_tag != blank -%}
+	{%- paginate collection.products by 50 -%}
+		{%- for related_product in collection.products -%}
+			{%- liquid
+				assign has_matching_design = false
+
+				for related_tag in related_product.tags
+					assign normalized_related_tag = related_tag | strip | downcase
+
+					if normalized_related_tag == design_tag_normalized
+						assign has_matching_design = true
+						break
+					endif
+				endfor
+
+				assign formatted_price = related_product.price | money
+			-%}
+
+			{%- if has_matching_design -%}
+				<a
+					href="{{ related_product.url }}"
+					class="also-available__item focus-visible-outline"
+					data-also-available-product
+					data-product-id="{{ related_product.id }}"
+					data-product-price="{{ related_product.price }}"
+					data-product-tags="{{ related_product.tags | json | escape }}"
+					role="listitem"
+					aria-label="{{ related_product.title | escape }}"
+				>
+					<span class="also-available__media">
+						{%- if related_product.featured_image != blank -%}
+							{{- related_product.featured_image
+								| image_url: width: 1280
+								| image_tag:
+									alt: related_product.title,
+									class: 'also-available__image',
+									loading: 'lazy',
+									sizes: '(max-width: 767px) calc(50vw - 24px), 360px',
+									widths: '240, 320, 480, 640, 800, 960, 1280'
+							-}}
+						{%- else -%}
+							{{- 'product-1' | placeholder_svg_tag: 'also-available__image placeholder-svg' -}}
+						{%- endif -%}
+
+						<span class="also-available__price-difference" data-price-difference hidden></span>
+					</span>
+					<span class="also-available__title">{{ related_product.title | escape }}</span>
+					<span class="also-available__price">
+						{{- 'products.product.price.from_price_html' | t: price: formatted_price -}}
+					</span>
+				</a>
+			{%- endif -%}
+		{%- endfor -%}
+	{%- endpaginate -%}
+{%- endif -%}

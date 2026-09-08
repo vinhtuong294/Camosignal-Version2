@@ -1,0 +1,11 @@
+<span class="halloween-nav-wordmark{% if wordmark_class != blank %} {{ wordmark_class }}{% endif %}">
+	<img
+		class="halloween-nav-wordmark__image"
+		src="{{ 'halloween-nav-wordmark-drip.png' | asset_url }}"
+		alt="{{ wordmark_alt | default: 'Halloween' | escape }}"
+		width="878"
+		height="240"
+		loading="eager"
+		decoding="async"
+	>
+</span>

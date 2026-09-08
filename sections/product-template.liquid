@@ -14,6 +14,14 @@
 {%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
 {%- assign blocks                          = section.blocks -%}
 {%- assign breadcrumbs_block               = blocks | where: "type", "breadcrumbs" | first -%}
+{%- assign is_spooky_product                = false -%}
+
+{%- for product_collection in product.collections -%}
+	{%- if product_collection.handle == 'spooky-kids-tee' or product_collection.handle == 'halloween-dog-t-shirt' -%}
+		{%- assign is_spooky_product = true -%}
+		{%- break -%}
+	{%- endif -%}
+{%- endfor -%}
 
 {%- if enable_color_scheme_inheritance -%}
 	{%- assign color_scheme = settings.main_color_scheme -%}
@@ -49,6 +57,257 @@
 		padding-top: {{- section.settings.offset_top_mobile -}}px;
 		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
 	}
+
+	/* KUIU-inspired mobile hierarchy: product identity sits above the gallery,
+	   while price and the purchase controls remain below it. The existing nodes
+	   are moved into this slot so there is still only one breadcrumb, H1 and
+	   review widget in the page. */
+	#shopify-section-{{ section.id }} .product__mobile-summary {
+		display: none;
+	}
+
+	/* Hide the sold-count social proof on every viewport while keeping reviews. */
+	#shopify-section-{{ section.id }} .product-sold-wrapper {
+		display: none !important;
+	}
+
+	#shopify-section-{{ section.id }} .product-reviews-and-sold:has(.injected-review-container:empty) {
+		display: none;
+	}
+
+	/* Reference-style review summary: preserve Judge.me colors, tighten the stars,
+	   and make the separated review count read as a clear jump link. */
+	#shopify-section-{{ section.id }} .injected-review-container .jdgm-prev-badge {
+		column-gap: 12px !important;
+	}
+
+	#shopify-section-{{ section.id }} .injected-review-container .jdgm-prev-badge__stars {
+		margin: 0 !important;
+	}
+
+	#shopify-section-{{ section.id }} .injected-review-container .jdgm-star {
+		font-size: 16px !important;
+	}
+
+	#shopify-section-{{ section.id }} .injected-review-container .jdgm-prev-badge__text {
+		margin: 0 !important;
+		font-family: var(--base-font-family), Arial, Helvetica, sans-serif !important;
+		font-size: 12px !important;
+		font-weight: 400 !important;
+		line-height: 1.2 !important;
+		text-decoration-line: underline;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 3px;
+		white-space: nowrap;
+		cursor: pointer;
+	}
+
+	#shopify-section-{{ section.id }} .injected-review-container .jdgm-prev-badge[data-number-of-reviews="0"] .jdgm-prev-badge__text {
+		display: none !important;
+	}
+
+	#shopify-section-{{ section.id }} .injected-review-container .jdgm-prev-badge__text:focus-visible {
+		outline: 1px solid currentColor;
+		outline-offset: 3px;
+	}
+
+	body.template-product #judgeme_product_reviews,
+	body.template-product .jdgm-review-widget,
+	body.template-product .jdgm-rev-widg {
+		scroll-margin-top: 120px;
+	}
+
+	@media screen and (max-width: 767px) {
+		#shopify-section-{{ section.id }} .product__mobile-summary {
+			display: flex;
+			flex-direction: column;
+			align-self: center;
+			gap: 0;
+			width: 100%;
+			max-width: 800px;
+		}
+
+		#shopify-section-{{ section.id }} .product__mobile-summary .product-breadcrumbs,
+		#shopify-section-{{ section.id }} .product__mobile-summary .product-title-wrapper {
+			width: 100%;
+			margin: 0 !important;
+			padding-top: 0 !important;
+			padding-bottom: 0 !important;
+		}
+
+		#shopify-section-{{ section.id }} .product__mobile-summary .product-breadcrumbs {
+			font-size: 10px;
+			font-weight: 400;
+			line-height: 1.4;
+			letter-spacing: 0.01em;
+			text-transform: none;
+			margin-bottom: 14px !important;
+		}
+
+		#shopify-section-{{ section.id }} .product__mobile-summary .product-breadcrumbs__link {
+			display: inline-block;
+			text-transform: capitalize;
+		}
+
+		#shopify-section-{{ section.id }} .product__mobile-summary .product-breadcrumbs__separator {
+			padding-left: 8px;
+			padding-right: 8px;
+			font-size: 10px;
+			font-weight: 400;
+			line-height: 1;
+		}
+
+		#shopify-section-{{ section.id }} .product__mobile-summary .product-title-and-fomo {
+			gap: 0 !important;
+		}
+
+		#shopify-section-{{ section.id }} .product__mobile-summary .product-reviews-and-sold {
+			margin-top: 8px !important;
+			margin-bottom: 0 !important;
+		}
+
+		#shopify-section-{{ section.id }} .product__mobile-summary .product-reviews-and-sold:not(:has(.product-sold-wrapper)):has(.injected-review-container:empty) {
+			display: none;
+		}
+
+		#shopify-section-{{ section.id }} .product__mobile-summary .product-sold-wrapper:has(+ .injected-review-container:empty) .product-sold-separator {
+			display: none;
+		}
+	}
+
+	@media screen and (min-width: 768px) {
+		body.template-product #judgeme_product_reviews,
+		body.template-product .jdgm-review-widget,
+		body.template-product .jdgm-rev-widg {
+			scroll-margin-top: 150px;
+		}
+
+		#shopify-section-{{ section.id }} .product-breadcrumbs {
+			font-size: 10px;
+			font-weight: 400;
+			line-height: 1.4;
+			letter-spacing: 0.01em;
+			text-transform: none;
+		}
+
+		#shopify-section-{{ section.id }} .product-breadcrumbs__link {
+			display: inline-block;
+			text-transform: capitalize;
+		}
+
+		#shopify-section-{{ section.id }} .product-breadcrumbs__separator {
+			padding-left: 8px;
+			padding-right: 8px;
+			font-size: 10px;
+			font-weight: 400;
+			line-height: 1;
+		}
+	}
+
+	{%- if is_spooky_product -%}
+		#shopify-section-{{ section.id }} .product.product--spooky {
+			--spooky-text-orange: #a83f08;
+			--spooky-accent-orange: #f2711c;
+			--spooky-accent-orange-hover: #d65b14;
+			--spooky-cream: #fff2d7;
+			--color-text-primary: var(--spooky-text-orange);
+			--color-text-secondary: var(--spooky-text-orange);
+			--color-text-thirdly: var(--spooky-text-orange);
+			--color-heading: var(--spooky-text-orange);
+			--link-color: var(--spooky-text-orange);
+		}
+
+		#shopify-section-{{ section.id }} .product--spooky .product-title,
+		#shopify-section-{{ section.id }} .product--spooky .product-sold-count,
+		#shopify-section-{{ section.id }} .product--spooky .product-sold-separator,
+		#shopify-section-{{ section.id }} .product--spooky .injected-review-container .jdgm-prev-badge__text,
+		#shopify-section-{{ section.id }} .product--spooky .product-options__size-guide-inline,
+		#shopify-section-{{ section.id }} .product--spooky .price:not(.price--on-sale) .price-item--regular {
+			color: var(--spooky-text-orange) !important;
+		}
+
+		#shopify-section-{{ section.id }} .product--spooky .product-price .price-item--sale {
+			color: var(--spooky-accent-orange) !important;
+		}
+
+		#shopify-section-{{ section.id }} .product--spooky .product-price.price--on-sale .price-item--regular {
+			color: #b9470f !important;
+		}
+
+		#shopify-section-{{ section.id }} .product--spooky .product-options .radio-option-swatch .radio-input:checked + .radio-option-swatch__label {
+			outline-color: var(--spooky-accent-orange) !important;
+		}
+
+		#shopify-section-{{ section.id }} .product--spooky .product-options .radio-option .radio-input:checked + .radio-option__label {
+			border-color: var(--spooky-accent-orange) !important;
+			background-color: var(--spooky-accent-orange) !important;
+			color: var(--spooky-cream) !important;
+		}
+
+		#shopify-section-{{ section.id }} .product--spooky .product-add-to-cart > .add-to-cart,
+		#shopify-section-{{ section.id }} .product--spooky .mobile-sticky-atc__btn {
+			border-color: var(--spooky-accent-orange) !important;
+			background-color: var(--spooky-accent-orange) !important;
+			color: var(--spooky-cream) !important;
+		}
+
+		#shopify-section-{{ section.id }} .product--spooky .product-add-to-cart > .add-to-cart:not(:disabled):hover,
+		#shopify-section-{{ section.id }} .product--spooky .product-add-to-cart > .add-to-cart:not(:disabled):focus-visible,
+		#shopify-section-{{ section.id }} .product--spooky .mobile-sticky-atc__btn:not(:disabled):hover,
+		#shopify-section-{{ section.id }} .product--spooky .mobile-sticky-atc__btn:not(:disabled):focus-visible {
+			border-color: var(--spooky-accent-orange-hover) !important;
+			background-color: var(--spooky-accent-orange-hover) !important;
+		}
+
+		#shopify-section-{{ section.id }} .product--spooky .product-upsell-block.is-selected {
+			border-color: var(--spooky-accent-orange) !important;
+		}
+
+		#shopify-section-{{ section.id }} .product--spooky .product-upsell__checkbox {
+			border-color: var(--spooky-accent-orange) !important;
+		}
+
+		#shopify-section-{{ section.id }} .product--spooky .product-upsell-block.is-selected .product-upsell__checkbox {
+			background-color: var(--spooky-accent-orange) !important;
+		}
+
+		#shopify-section-{{ section.id }} .product--spooky .product-upsell__title,
+		#shopify-section-{{ section.id }} .product--spooky .product-upsell__price {
+			color: var(--spooky-text-orange) !important;
+		}
+
+		#shopify-section-{{ section.id }} .product--spooky .product-accordion__trigger:hover,
+		#shopify-section-{{ section.id }} .product--spooky .product-accordion__trigger:hover .product-accordion__trigger-icon {
+			color: var(--spooky-accent-orange) !important;
+		}
+
+		#shopify-section-{{ section.id }} .product--spooky form.product-form > lb-upsell-widget.lb-widget {
+			color: var(--spooky-text-orange) !important;
+		}
+
+		#shopify-section-{{ section.id }} .product--spooky form.product-form > lb-upsell-widget.lb-widget lb-pitch,
+		#shopify-section-{{ section.id }} .product--spooky form.product-form > lb-upsell-widget.lb-widget .lb-pitch,
+		#shopify-section-{{ section.id }} .product--spooky form.product-form > lb-upsell-widget.lb-widget .lb-card-title,
+		#shopify-section-{{ section.id }} .product--spooky form.product-form > lb-upsell-widget.lb-widget .lb-variant-picker {
+			color: var(--spooky-text-orange) !important;
+		}
+
+		#shopify-section-{{ section.id }} .product--spooky form.product-form > lb-upsell-widget.lb-widget lb-button,
+		#shopify-section-{{ section.id }} .product--spooky form.product-form > lb-upsell-widget.lb-widget .lb-button {
+			border-color: var(--spooky-accent-orange) !important;
+			background-color: var(--spooky-accent-orange) !important;
+			color: var(--spooky-cream) !important;
+		}
+
+		#shopify-section-{{ section.id }} .product--spooky form.product-form > lb-upsell-widget.lb-widget lb-button *,
+		#shopify-section-{{ section.id }} .product--spooky form.product-form > lb-upsell-widget.lb-widget .lb-button * {
+			color: inherit !important;
+		}
+
+		html body.template-product .featured-products.product-recommendations .featured-products__header.product-recommendations__header h2 {
+			color: var(--spooky-text-orange, #a83f08) !important;
+		}
+	{%- endif -%}
 
 	@media screen and (min-width: 768px) {
 		#shopify-section-{{- section.id -}} {
@@ -254,14 +513,19 @@
 {%- endcapture -%}
 
 <section
-	class="product color-{{ color_scheme }}"
+	class="product color-{{ color_scheme }}{% if is_spooky_product %} product--spooky{% endif %}"
 	style="{{ section_styles }}"
 	data-section-type="product"
 	data-section-id="{{- section.id -}}"
 	data-product-handle="{{- product.handle -}}"
 	data-url="{{- product.url -}}"
 >
+	{%- if is_spooky_product -%}
+		<div class="product__spooky-corner" aria-hidden="true"></div>
+	{%- endif -%}
+
 	<div class="product__container container">
+		<div class="product__mobile-summary" data-mobile-product-summary></div>
 		{%- include 'product-media', media_height: section.settings.media_height, enable_video_play_on_autoplay: section.settings.enable_video_play_on_autoplay -%}
 		{%- include 'product-form', blocks: blocks, enable_history_state: true, product_template: true -%}
 		{%- render 'product-drawers-content', product: product, section: section, blocks: blocks -%}
@@ -277,6 +541,151 @@
 		{% endif %}
 	{%- endfor -%}
 </section>
+
+<script>
+/* On small screens, place the existing breadcrumb and title/review block before
+   the gallery. Moving (rather than copying) keeps IDs, app widgets and heading
+   semantics unique. Restore the original form order when the viewport grows. */
+(function() {
+	var sectionRoot = document.getElementById('shopify-section-{{ section.id }}');
+	if (!sectionRoot) return;
+
+	var summarySlot = sectionRoot.querySelector('[data-mobile-product-summary]');
+	var productForm = sectionRoot.querySelector('.product-form');
+	if (!summarySlot || !productForm) return;
+
+	var mobileQuery = window.matchMedia('(max-width: 767px)');
+	var movedItems = [];
+
+	function findDirectChild(className) {
+		for (var i = 0; i < productForm.children.length; i++) {
+			if (productForm.children[i].classList.contains(className)) {
+				return productForm.children[i];
+			}
+		}
+		return null;
+	}
+
+	function moveSummaryAboveGallery() {
+		if (movedItems.length > 0) return;
+
+		['product-breadcrumbs', 'product-title-wrapper'].forEach(function(className) {
+			var element = findDirectChild(className);
+			if (!element) return;
+
+			var marker = document.createComment('mobile-product-summary-' + className);
+			element.parentNode.insertBefore(marker, element);
+			movedItems.push({ element: element, marker: marker });
+			summarySlot.appendChild(element);
+		});
+	}
+
+	function restoreSummaryToForm() {
+		movedItems.forEach(function(item) {
+			if (item.marker.parentNode) {
+				item.marker.parentNode.insertBefore(item.element, item.marker);
+				item.marker.parentNode.removeChild(item.marker);
+			}
+		});
+		movedItems = [];
+	}
+
+	function syncMobileProductHierarchy() {
+		if (mobileQuery.matches) {
+			moveSummaryAboveGallery();
+		} else {
+			restoreSummaryToForm();
+		}
+	}
+
+	syncMobileProductHierarchy();
+
+	if (mobileQuery.addEventListener) {
+		mobileQuery.addEventListener('change', syncMobileProductHierarchy);
+	} else if (mobileQuery.addListener) {
+		mobileQuery.addListener(syncMobileProductHierarchy);
+	}
+})();
+</script>
+
+<script>
+/* Keep the Judge.me review count concise and use it as an accessible jump link
+   to the full review widget, even when the app hydrates asynchronously. */
+(function() {
+	var sectionRoot = document.getElementById('shopify-section-{{ section.id }}');
+	var reviewContainer = document.getElementById('injected-review-container-{{ section.id }}');
+	if (!sectionRoot || !reviewContainer) return;
+
+	function findReviewTarget() {
+		return document.getElementById('judgeme_product_reviews')
+			|| document.querySelector('.jdgm-review-widget:not(.jdgm-preview-badge), .jdgm-rev-widg');
+	}
+
+	function jumpToReviews(event) {
+		if (event.type === 'keydown' && event.key !== 'Enter' && event.key !== ' ') return;
+
+		var reviewTarget = findReviewTarget();
+		if (!reviewTarget) return;
+
+		event.preventDefault();
+		event.stopPropagation();
+
+		var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		reviewTarget.scrollIntoView({
+			behavior: reduceMotion ? 'auto' : 'smooth',
+			block: 'start'
+		});
+	}
+
+	function enhanceReviewBadge() {
+		var badge = reviewContainer.querySelector('.jdgm-prev-badge');
+		var reviewCountLink = reviewContainer.querySelector('.jdgm-prev-badge__text');
+		if (!badge || !reviewCountLink) return;
+
+		var reviewCount = badge.getAttribute('data-number-of-reviews');
+		if (reviewCount === null || reviewCount === '') {
+			var countMatch = reviewCountLink.textContent.match(/[\d][\d,.]*/);
+			if (!countMatch) return;
+			reviewCount = countMatch[0];
+		}
+
+		reviewCount = String(reviewCount).trim();
+		if (reviewCountLink.textContent.trim() !== reviewCount) {
+			reviewCountLink.textContent = reviewCount;
+		}
+
+		var numericCount = parseInt(reviewCount.replace(/[^\d]/g, ''), 10) || 0;
+		reviewCountLink.setAttribute('role', 'link');
+		reviewCountLink.setAttribute('tabindex', '0');
+		reviewCountLink.setAttribute(
+			'aria-label',
+			'View ' + reviewCount + ' customer review' + (numericCount === 1 ? '' : 's')
+		);
+
+		if (reviewCountLink.getAttribute('data-review-jump-bound') !== 'true') {
+			reviewCountLink.setAttribute('data-review-jump-bound', 'true');
+			reviewCountLink.addEventListener('click', jumpToReviews);
+			reviewCountLink.addEventListener('keydown', jumpToReviews);
+		}
+	}
+
+	enhanceReviewBadge();
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', enhanceReviewBadge, { once: true });
+	}
+	window.addEventListener('load', enhanceReviewBadge, { once: true });
+
+	var reviewObserver = new MutationObserver(enhanceReviewBadge);
+	reviewObserver.observe(sectionRoot, {
+		childList: true,
+		subtree: true,
+		characterData: true,
+		attributes: true,
+		attributeFilter: ['data-number-of-reviews']
+	});
+})();
+</script>
 
 <script>
 /* Fix zoom modal kẹt trong stacking context do position: sticky.

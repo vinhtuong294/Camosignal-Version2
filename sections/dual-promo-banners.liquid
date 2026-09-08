@@ -18,6 +18,7 @@
   #{{ section_id }} {
     --dual-promo-gap-desktop: {{ section.settings.gap_desktop }}px;
     --dual-promo-gap-mobile: {{ section.settings.gap_mobile }}px;
+    --dual-promo-side-padding-mobile: {{ section.settings.side_padding_mobile }}px;
     --dual-promo-max-width: {{ section.settings.max_width }}px;
     --dual-promo-hover-border: {{ section.settings.hover_border_color }};
   }
@@ -44,8 +45,35 @@
         assign external_image_url = block.settings.external_image_url | strip
         assign banner_link = block.settings.link
         assign banner_alt = block.settings.alt_text | default: banner_image.alt | default: 'Featured promotion'
+        assign eyebrow = block.settings.eyebrow | strip
+        assign heading = block.settings.heading | strip
+        assign description = block.settings.description | strip
+        assign button_label = block.settings.button_label | strip
         assign image_loading = 'lazy'
         assign image_priority = 'auto'
+
+        if eyebrow == blank
+          assign eyebrow = 'GEAR UP FOR'
+        endif
+
+        if heading == blank
+          if forloop.first
+            assign heading = 'TROUT SEASON'
+          else
+            assign heading = 'OFFSHORE SEASON'
+          endif
+        endif
+
+        if description == blank
+          assign description = 'Explore the fishing & outdoors collection'
+        endif
+
+        if button_label == blank
+          assign button_label = 'SHOP NOW'
+        endif
+
+        assign heading_length = heading | size
+
         if forloop.first
           assign image_loading = first_image_loading
           assign image_priority = first_image_priority
@@ -94,6 +122,20 @@
         {%- else -%}
           </div>
         {%- endif -%}
+
+        {%- if section.settings.show_content_below -%}
+        <div class="dual-promo-banners__content">
+          <p class="dual-promo-banners__eyebrow">{{ eyebrow | escape }}</p>
+          <h2 class="dual-promo-banners__heading{% if heading_length > 13 %} dual-promo-banners__heading--long{% endif %}">{{ heading | escape }}</h2>
+          <p class="dual-promo-banners__description">{{ description | escape }}</p>
+
+          {%- if banner_link != blank -%}
+            <a class="dual-promo-banners__button" href="{{ banner_link }}">{{ button_label | escape }}</a>
+          {%- else -%}
+            <span class="dual-promo-banners__button">{{ button_label | escape }}</span>
+          {%- endif -%}
+        </div>
+        {%- endif -%}
       </div>
     {%- endfor -%}
   </div>
@@ -118,6 +160,10 @@
 
   .dual-promo-banners__item {
     min-width: 0;
+  }
+
+  .dual-promo-banners__content {
+    display: none;
   }
 
   .dual-promo-banners__card {
@@ -204,12 +250,97 @@
 
   @media screen and (max-width: 749px) {
     .dual-promo-banners {
-      padding-inline: 0;
+      padding-inline: var(--dual-promo-side-padding-mobile);
     }
 
     .dual-promo-banners__grid {
       grid-template-columns: minmax(0, 1fr);
       gap: var(--dual-promo-gap-mobile);
+      align-items: stretch;
+    }
+
+    .dual-promo-banners__item {
+      display: flex;
+      flex-direction: column;
+      background: #f3f2ef;
+    }
+
+    .dual-promo-banners__card {
+      aspect-ratio: 16 / 9;
+    }
+
+    .dual-promo-banners__content {
+      display: flex;
+      flex: 1 1 auto;
+      align-items: flex-start;
+      flex-direction: column;
+      padding: 22px 0 0;
+      background: #f3f2ef;
+      color: #191a18;
+    }
+
+    .dual-promo-banners__eyebrow {
+      margin: 0 0 8px;
+      font-family: var(--heading-font-family);
+      font-size: clamp(15px, 1.15vw, 18px);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .dual-promo-banners__heading {
+      margin: 0;
+      font-family: var(--heading-font-family);
+      font-size: clamp(38px, 3.2vw, 58px);
+      font-weight: 900;
+      line-height: 0.92;
+      letter-spacing: 0.01em;
+      text-transform: uppercase;
+    }
+
+    .dual-promo-banners__heading--long {
+      font-size: clamp(25px, 7.8vw, 32px);
+      white-space: nowrap;
+    }
+
+    .dual-promo-banners__description {
+      max-width: 620px;
+      margin: 13px 0 0;
+      font-family: var(--base-font-family);
+      font-size: clamp(15px, 1.05vw, 17px);
+      font-weight: 400;
+      line-height: 1.55;
+    }
+
+    .dual-promo-banners__button {
+      display: inline-flex;
+      min-height: 48px;
+      align-items: center;
+      justify-content: center;
+      margin-top: 22px;
+      padding: 11px 28px;
+      border: 1px solid currentColor;
+      color: #191a18;
+      font-family: var(--button-font-family);
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: background-color 180ms ease, color 180ms ease;
+    }
+
+    .dual-promo-banners__button:hover,
+    .dual-promo-banners__button:focus-visible {
+      background: #191a18;
+      color: #ffffff;
+    }
+
+    .dual-promo-banners__button:focus-visible {
+      outline: 2px solid #191a18;
+      outline-offset: 3px;
     }
 
     .dual-promo-banners__card[href]:hover,
@@ -231,7 +362,8 @@
 
     .dual-promo-banners__card,
     .dual-promo-banners__image,
-    .dual-promo-banners__card::after {
+    .dual-promo-banners__card::after,
+    .dual-promo-banners__button {
       transition: none;
     }
   }
@@ -299,6 +431,12 @@
       "default": true
     },
     {
+      "type": "checkbox",
+      "id": "show_content_below",
+      "label": "Show content below banners on mobile",
+      "default": true
+    },
+    {
       "type": "color",
       "id": "hover_border_color",
       "label": "Hover border color",
@@ -333,6 +471,16 @@
       "step": 1,
       "unit": "px",
       "default": 10
+    },
+    {
+      "type": "range",
+      "id": "side_padding_mobile",
+      "label": "Mobile side spacing",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
     },
     {
       "type": "range",
@@ -410,6 +558,29 @@
           "type": "text",
           "id": "alt_text",
           "label": "Accessible label"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow",
+          "default": "GEAR UP FOR"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Explore the fishing & outdoors collection"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "SHOP NOW"
         }
       ]
     }

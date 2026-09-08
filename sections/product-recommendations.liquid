@@ -8,13 +8,16 @@
 {%- render 'adastra' with '/src/styles/featured-products.scss' -%}
 {%- render 'adastra' with '/src/styles/product-card.scss' -%}
 
-{%- assign desktop_limit = section.settings.products_to_show | default: 4 | plus: 0 -%}
-{%- assign mobile_limit = section.settings.products_to_show_mobile | default: 6 | plus: 0 -%}
-{%- assign limit = desktop_limit -%}
-{%- if mobile_limit > limit -%}
-	{%- assign limit = mobile_limit -%}
+{%- assign recommended_limit = section.settings.products_to_show | default: 4 | plus: 0 -%}
+{%- assign best_seller_limit = section.settings.best_seller_products_to_show | default: 4 | plus: 0 -%}
+{%- assign recommended_candidate_limit = recommended_limit -%}
+{%- assign best_seller_candidate_limit = best_seller_limit -%}
+{%- assign desktop_limit = recommended_limit | plus: best_seller_limit -%}
+{%- assign mobile_limit = section.settings.products_to_show_mobile | default: desktop_limit | plus: 0 -%}
+{%- if mobile_limit > desktop_limit -%}
+	{%- assign mobile_limit = desktop_limit -%}
 {%- endif -%}
-{%- assign candidate_limit = limit | plus: 4 -%}
+{%- assign limit = desktop_limit -%}
 
 {%- style -%}
 	#shopify-section-{{- section.id -}} {
@@ -37,27 +40,184 @@
 		}
 	}
 
-	#shopify-section-{{- section.id -}} .product-recommendations__mobile-pagination {
+	#shopify-section-{{ section.id }} .product-recommendations__mobile-pagination {
 		display: none;
 	}
 
-	#shopify-section-{{- section.id -}} .featured-products__header.product-recommendations__header h2 {
+	#shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header h2 {
 		font-size: var(--product-recommendations-heading-size-desktop, {{- section.settings.heading_font_size_desktop | default: 36 -}}px) !important;
 	}
 
+	#shopify-section-{{ section.id }} .featured-products__row {
+		transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1) !important;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__carousel-shell {
+		--product-recommendations-arrow-top: 50%;
+		position: relative;
+		isolation: isolate;
+		margin-inline: -28px;
+		padding-inline: 28px;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__carousel-shell .featured-products__slider {
+		overflow: hidden !important;
+		overflow-x: hidden !important;
+		clip-path: inset(0);
+		contain: paint;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__navigation {
+		position: absolute;
+		inset: 0;
+		display: block !important;
+		z-index: 50;
+		opacity: 1 !important;
+		visibility: visible !important;
+		pointer-events: none;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__arrow {
+		position: absolute !important;
+		top: var(--product-recommendations-arrow-top) !important;
+		z-index: 51;
+		display: flex !important;
+		align-items: center;
+		justify-content: center;
+		width: 40px !important;
+		height: 44px !important;
+		padding: 0;
+		border: 0 !important;
+		border-radius: 0;
+		background: transparent !important;
+		color: #2c3d33 !important;
+		box-shadow: none;
+		opacity: 1;
+		transform: translateY(-50%) !important;
+		visibility: visible;
+		pointer-events: auto;
+		touch-action: manipulation;
+		transition:
+			background-color 0.2s ease,
+			border-color 0.2s ease,
+			color 0.2s ease,
+			box-shadow 0.2s ease,
+			transform 0.12s ease;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__arrow::after {
+		display: none !important;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__arrow--prev {
+		left: -10px !important;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__arrow--next {
+		right: -10px !important;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__arrow .icon {
+		width: 28px !important;
+		height: 28px !important;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__arrow .icon path {
+		stroke: currentColor;
+		stroke-width: 1.5px;
+		stroke-linejoin: round;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__arrow:hover {
+		border-color: transparent !important;
+		background: transparent !important;
+		color: #2c3d33 !important;
+		box-shadow: none;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__arrow:focus-visible {
+		outline: 2px solid #2c3d33;
+		outline-offset: 2px;
+		box-shadow: none;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__arrow:active {
+		opacity: 1;
+		transform: translateY(-50%) scale(0.94) !important;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__arrow.swiper-button-lock,
+	#shopify-section-{{ section.id }} .product-recommendations__arrow.swiper-button-disabled,
+	#shopify-section-{{ section.id }} .product-recommendations__arrow[disabled],
+	#shopify-section-{{ section.id }} .product-recommendations__arrow[aria-disabled="true"] {
+		display: none !important;
+		opacity: 0 !important;
+		visibility: hidden !important;
+		pointer-events: none !important;
+	}
+
+	@media screen and (max-width: 767px) {
+		#shopify-section-{{ section.id }} .product-recommendations__carousel-shell {
+			margin-inline: 0;
+			padding-inline: 0;
+		}
+
+		#shopify-section-{{ section.id }} .product-recommendations__navigation {
+			display: none !important;
+		}
+
+		#shopify-section-{{ section.id }} .product-recommendations__arrow--prev {
+			left: -27px !important;
+		}
+
+		#shopify-section-{{ section.id }} .product-recommendations__arrow--next {
+			right: -27px !important;
+		}
+
+		#shopify-section-{{ section.id }} .product-recommendations__arrow {
+			width: 40px !important;
+			height: 44px !important;
+			border-color: transparent !important;
+			background: transparent !important;
+			color: #2c3d33 !important;
+			box-shadow: none;
+		}
+
+		#shopify-section-{{ section.id }} .product-recommendations__arrow:hover {
+			border-color: transparent !important;
+			background: transparent !important;
+			color: #2c3d33 !important;
+		}
+
+		#shopify-section-{{ section.id }} .product-recommendations__arrow .icon {
+			width: 28px !important;
+			height: 28px !important;
+		}
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__candidate-fallback {
+		display: none !important;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		#shopify-section-{{ section.id }} .featured-products__row {
+			transition-duration: 0.01ms !important;
+		}
+	}
+
 	@media screen and (min-width: 768px) {
-		#shopify-section-{{- section.id -}} .product-recommendations__slide--desktop-hidden {
+		#shopify-section-{{ section.id }} .product-recommendations__slide--desktop-hidden {
 			display: none !important;
 		}
 	}
 
 	{%- if mobile_limit > desktop_limit -%}
 		@media screen and (min-width: 768px) {
-			#shopify-section-{{- section.id -}} .featured-products__buttons-wrapper {
+			#shopify-section-{{ section.id }} .featured-products__buttons-wrapper {
 				display: none !important;
 			}
 
-			#shopify-section-{{- section.id -}} .featured-products__slider {
+			#shopify-section-{{ section.id }} .featured-products__slider {
 				cursor: default !important;
 			}
 		}
@@ -68,11 +228,11 @@
 			padding-top: max(0px, {{- section.settings.offset_top_mobile | minus: 10 -}}px);
 		}
 
-		#shopify-section-{{- section.id -}} .featured-products.product-recommendations {
+		#shopify-section-{{ section.id }} .featured-products.product-recommendations {
 			padding-top: max(0px, calc(var(--inner-offset-top-mobile) - 10px));
 		}
 
-		html body #shopify-section-{{- section.id -}} .featured-products__header.product-recommendations__header {
+		html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header {
 			position: relative !important;
 			display: block !important;
 			min-height: 40px !important;
@@ -81,7 +241,7 @@
 			padding-right: 72px !important;
 		}
 
-		html body #shopify-section-{{- section.id -}} .featured-products__header.product-recommendations__header h2 {
+		html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header h2 {
 			margin: 0 !important;
 			min-width: 0;
 			max-width: 100%;
@@ -97,7 +257,7 @@
 			overflow-wrap: normal;
 		}
 
-		html body #shopify-section-{{- section.id -}} .featured-products__header.product-recommendations__header .featured-products__buttons-wrapper {
+		html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header .featured-products__buttons-wrapper {
 			position: absolute !important;
 			top: 0 !important;
 			right: 0 !important;
@@ -113,20 +273,20 @@
 			transform: none !important;
 		}
 
-		html body #shopify-section-{{- section.id -}} .featured-products__header.product-recommendations__header .swiper-button-prev-new,
-		html body #shopify-section-{{- section.id -}} .featured-products__header.product-recommendations__header .swiper-button-next-new {
+		html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header .swiper-button-prev-new,
+		html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header .swiper-button-next-new {
 			flex: 0 0 32px !important;
 			width: 32px !important;
 			height: 40px !important;
 		}
 
-		html body #shopify-section-{{- section.id -}} .featured-products__header.product-recommendations__header .swiper-button-prev-new .icon,
-		html body #shopify-section-{{- section.id -}} .featured-products__header.product-recommendations__header .swiper-button-next-new .icon {
+		html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header .swiper-button-prev-new .icon,
+		html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header .swiper-button-next-new .icon {
 			width: 14px !important;
 			height: 14px !important;
 		}
 
-		#shopify-section-{{- section.id -}} .featured-products__slider {
+		#shopify-section-{{ section.id }} .featured-products__slider {
 			position: relative !important;
 			width: 100% !important;
 			max-width: 100% !important;
@@ -139,12 +299,12 @@
 			margin-bottom: 0 !important;
 		}
 
-		#shopify-section-{{- section.id -}} .container {
+		#shopify-section-{{ section.id }} .container {
 			padding-left: 16px !important;
 			padding-right: 16px !important;
 		}
 
-		#shopify-section-{{- section.id -}} .js-product-recommendations-content {
+		#shopify-section-{{ section.id }} .js-product-recommendations-content {
 			width: 100% !important;
 			max-width: 100% !important;
 			overflow: hidden !important;
@@ -153,7 +313,7 @@
 			contain: paint;
 		}
 
-		#shopify-section-{{- section.id -}} .featured-products__row {
+		#shopify-section-{{ section.id }} .featured-products__row {
 			display: flex !important;
 			gap: 0 !important;
 			flex-wrap: nowrap !important;
@@ -162,44 +322,35 @@
 			padding-bottom: 0 !important;
 		}
 
-		#shopify-section-{{- section.id -}} .featured-products__col {
+		#shopify-section-{{ section.id }} .featured-products__col {
 			display: block !important;
 			box-sizing: border-box !important;
-			width: calc((100% - 12px) / 2) !important;
-			max-width: calc((100% - 12px) / 2) !important;
-			flex: 0 0 calc((100% - 12px) / 2) !important;
-			margin: 0 !important;
+			margin: 0;
 			min-width: 0 !important;
 			overflow: hidden !important;
 			flex-shrink: 0 !important;
 		}
 
-		#shopify-section-{{- section.id -}} .product-recommendations__slide--desktop-hidden {
+		#shopify-section-{{ section.id }} .product-recommendations__slide--desktop-hidden {
 			display: block !important;
 		}
 
-		#shopify-section-{{- section.id -}} .product-recommendations__slide--mobile-hidden {
+		#shopify-section-{{ section.id }} .product-recommendations__slide--mobile-hidden {
 			display: none !important;
 		}
 
-		#shopify-section-{{- section.id -}} .featured-products__col:nth-child(n+{{ mobile_limit | plus: 1 }}) {
+		#shopify-section-{{ section.id }} .featured-products__col:nth-child(n+{{ mobile_limit | plus: 1 }}) {
 			display: none !important;
 		}
 
-		#shopify-section-{{- section.id -}} .featured-products__slider:not(.swiper-initialized) .featured-products__col {
-			width: calc(50% - 6px) !important;
-			max-width: calc(50% - 6px) !important;
-			flex-basis: calc(50% - 6px) !important;
-			margin-right: 12px !important;
+		#shopify-section-{{ section.id }} .featured-products__slider:not(.swiper-initialized) .featured-products__col {
+			width: calc(50% - 8px) !important;
+			max-width: calc(50% - 8px) !important;
+			flex-basis: calc(50% - 8px) !important;
+			margin-right: 16px !important;
 		}
 
-		#shopify-section-{{- section.id -}} .featured-products__slider.swiper-initialized .featured-products__col {
-			width: calc((100% - 12px) / 2) !important;
-			max-width: calc((100% - 12px) / 2) !important;
-			flex-basis: calc((100% - 12px) / 2) !important;
-		}
-
-		#shopify-section-{{- section.id -}} .product-card:not(.product-card--reference) .product-card__title {
+		#shopify-section-{{ section.id }} .product-card:not(.product-card--reference) .product-card__title {
 			min-height: auto !important;
 			line-height: 1.4 !important;
 			display: block !important;
@@ -215,58 +366,71 @@
 			font-size: 13px !important;
 		}
 
-		#shopify-section-{{- section.id -}} .product-card:not(.product-card--reference) .product-card__footer {
+		#shopify-section-{{ section.id }} .product-card:not(.product-card--reference) .product-card__footer {
 			padding: 0 !important;
 			margin-top: 5px !important;
 		}
 
-		#shopify-section-{{- section.id -}} .product-card:not(.product-card--reference) .product-card__custom-quick-add {
+		#shopify-section-{{ section.id }} .product-card:not(.product-card--reference) .product-card__custom-quick-add {
 			display: none !important;
 		}
 
-		#shopify-section-{{- section.id -}} .product-card:not(.product-card--reference) .product-card__image img {
+		#shopify-section-{{ section.id }} .product-card:not(.product-card--reference) .product-card__image img {
 			filter: brightness(1.03) contrast(0.95) saturate(0.92);
 		}
 
-		#shopify-section-{{- section.id -}} .product-card:not(.product-card--reference) .product-card__image {
+		#shopify-section-{{ section.id }} .product-card:not(.product-card--reference) .product-card__image {
 			border-radius: 10px;
 			overflow: hidden;
 		}
 
-		#shopify-section-{{- section.id -}} .product-recommendations__mobile-pagination,
-		#shopify-section-{{- section.id -}} .product-recommendations__mobile-pagination.swiper-pagination-bullets,
-		#shopify-section-{{- section.id -}} .product-recommendations__mobile-pagination.swiper-pagination-horizontal,
-		#shopify-section-{{- section.id -}} .product-recommendations .swiper-pagination {
-			display: none !important;
-			height: 0 !important;
-			margin: 0 !important;
+		#shopify-section-{{ section.id }} .product-recommendations__mobile-pagination,
+		#shopify-section-{{ section.id }} .product-recommendations__mobile-pagination.swiper-pagination-bullets,
+		#shopify-section-{{ section.id }} .product-recommendations__mobile-pagination.swiper-pagination-horizontal,
+		#shopify-section-{{ section.id }} .product-recommendations .swiper-pagination {
+			position: relative !important;
+			inset: auto !important;
+			display: flex !important;
+			align-items: center;
+			justify-content: center;
+			gap: 5px;
+			width: min(180px, 56%) !important;
+			height: 3px !important;
+			margin: 18px auto 0 !important;
 			padding: 0 !important;
-			visibility: hidden !important;
-			pointer-events: none !important;
+			transform: none !important;
+			visibility: visible !important;
+			opacity: 1 !important;
+			pointer-events: auto !important;
 		}
 
-		#shopify-section-{{- section.id -}} .product-recommendations__mobile-pagination .swiper-pagination-bullet {
+		#shopify-section-{{ section.id }} .product-recommendations__mobile-pagination .swiper-pagination-bullet {
 			display: block;
-			width: 28px;
-			height: 2px;
+			flex: 1 1 0;
+			width: auto !important;
+			max-width: 40px;
+			height: 3px;
 			margin: 0 !important;
-			border-radius: 0;
+			padding: 0;
+			border: 0;
+			border-radius: 999px;
 			background: #2c3d33;
-			opacity: 0.14;
+			opacity: 0.2;
+			cursor: pointer;
 			transition: opacity 0.25s ease;
 		}
 
-		#shopify-section-{{- section.id -}} .product-recommendations__mobile-pagination .swiper-pagination-bullet-active {
+		#shopify-section-{{ section.id }} .product-recommendations__mobile-pagination .swiper-pagination-bullet-active {
 			opacity: 1;
 		}
 
 		@media screen and (max-width: 374px) {
-			html body #shopify-section-{{- section.id -}} .featured-products__header.product-recommendations__header {
+			html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header {
 				padding-right: 64px !important;
 			}
 
-			html body #shopify-section-{{- section.id -}} .featured-products__header.product-recommendations__header .swiper-button-prev-new,
-			html body #shopify-section-{{- section.id -}} .featured-products__header.product-recommendations__header .swiper-button-next-new {
+			html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header .swiper-button-prev-new,
+			html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header .swiper-button-next-new {
 				flex-basis: 28px !important;
 				width: 28px !important;
 				height: 38px !important;
@@ -275,7 +439,7 @@
 	}
 
 	@container (max-width: 767px) {
-		html body #shopify-section-{{- section.id -}} .featured-products__header.product-recommendations__header {
+		html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header {
 			position: relative !important;
 			display: block !important;
 			min-height: 40px !important;
@@ -284,7 +448,7 @@
 			padding-right: 72px !important;
 		}
 
-		html body #shopify-section-{{- section.id -}} .featured-products__header.product-recommendations__header h2 {
+		html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header h2 {
 			margin: 0 !important;
 			min-width: 0;
 			max-width: 100%;
@@ -300,7 +464,7 @@
 			overflow-wrap: normal;
 		}
 
-		html body #shopify-section-{{- section.id -}} .featured-products__header.product-recommendations__header .featured-products__buttons-wrapper {
+		html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header .featured-products__buttons-wrapper {
 			position: absolute !important;
 			top: 0 !important;
 			right: 0 !important;
@@ -316,15 +480,15 @@
 			transform: none !important;
 		}
 
-		html body #shopify-section-{{- section.id -}} .featured-products__header.product-recommendations__header .swiper-button-prev-new,
-		html body #shopify-section-{{- section.id -}} .featured-products__header.product-recommendations__header .swiper-button-next-new {
+		html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header .swiper-button-prev-new,
+		html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header .swiper-button-next-new {
 			flex: 0 0 32px !important;
 			width: 32px !important;
 			height: 40px !important;
 		}
 	}
 
-	html body #shopify-section-{{- section.id -}} .product-recommendations.is-mobile-layout .featured-products__header.product-recommendations__header {
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .featured-products__header.product-recommendations__header {
 		position: relative !important;
 		display: block !important;
 		min-height: 40px !important;
@@ -333,7 +497,7 @@
 		padding-right: 72px !important;
 	}
 
-	html body #shopify-section-{{- section.id -}} .product-recommendations.is-mobile-layout .featured-products__header.product-recommendations__header h2 {
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .featured-products__header.product-recommendations__header h2 {
 		margin: 0 !important;
 		min-width: 0;
 		max-width: 100%;
@@ -349,7 +513,7 @@
 		overflow-wrap: normal;
 	}
 
-	html body #shopify-section-{{- section.id -}} .product-recommendations.is-mobile-layout .featured-products__header.product-recommendations__header .featured-products__buttons-wrapper {
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .featured-products__header.product-recommendations__header .featured-products__buttons-wrapper {
 		position: absolute !important;
 		top: 0 !important;
 		right: 0 !important;
@@ -365,15 +529,15 @@
 		transform: none !important;
 	}
 
-	html body #shopify-section-{{- section.id -}} .product-recommendations.is-mobile-layout .featured-products__header.product-recommendations__header .swiper-button-prev-new,
-	html body #shopify-section-{{- section.id -}} .product-recommendations.is-mobile-layout .featured-products__header.product-recommendations__header .swiper-button-next-new {
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .featured-products__header.product-recommendations__header .swiper-button-prev-new,
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .featured-products__header.product-recommendations__header .swiper-button-next-new {
 		flex: 0 0 32px !important;
 		width: 32px !important;
 		height: 40px !important;
 	}
 
-	html body #shopify-section-{{- section.id -}} .product-recommendations.is-mobile-layout .js-product-recommendations-content,
-	html body #shopify-section-{{- section.id -}} .product-recommendations.is-mobile-layout .featured-products__slider {
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .js-product-recommendations-content,
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .featured-products__slider {
 		width: 100% !important;
 		max-width: 100% !important;
 		overflow: hidden !important;
@@ -382,7 +546,7 @@
 		contain: paint;
 	}
 
-	html body #shopify-section-{{- section.id -}} .product-recommendations.is-mobile-layout .featured-products__row {
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .featured-products__row {
 		display: flex !important;
 		gap: 0 !important;
 		flex-wrap: nowrap !important;
@@ -391,27 +555,98 @@
 		padding-bottom: 0 !important;
 	}
 
-	html body #shopify-section-{{- section.id -}} .product-recommendations.is-mobile-layout .featured-products__col {
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .featured-products__col {
 		display: block !important;
 		box-sizing: border-box !important;
-		width: calc((100% - 12px) / 2) !important;
-		max-width: calc((100% - 12px) / 2) !important;
-		flex: 0 0 calc((100% - 12px) / 2) !important;
 		min-width: 0 !important;
 		overflow: hidden !important;
 	}
 
-	html body #shopify-section-{{- section.id -}} .product-recommendations.is-mobile-layout .featured-products__slider:not(.swiper-initialized) .featured-products__col {
-		margin-right: 12px !important;
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .featured-products__slider:not(.swiper-initialized) .featured-products__col {
+		width: calc(50% - 8px) !important;
+		max-width: calc(50% - 8px) !important;
+		flex: 0 0 calc(50% - 8px) !important;
+		margin-right: 16px !important;
 	}
 
-	html body #shopify-section-{{- section.id -}} .product-recommendations.is-mobile-layout .product-recommendations__slide--desktop-hidden {
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .product-recommendations__slide--desktop-hidden {
 		display: block !important;
 	}
 
-	html body #shopify-section-{{- section.id -}} .product-recommendations.is-mobile-layout .product-recommendations__slide--mobile-hidden {
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .product-recommendations__slide--mobile-hidden {
 		display: none !important;
 	}
+
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .container {
+		padding-left: 16px !important;
+		padding-right: 16px !important;
+	}
+
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .product-recommendations__navigation {
+		display: none !important;
+	}
+
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .product-recommendations__mobile-pagination,
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .product-recommendations__mobile-pagination.swiper-pagination-bullets,
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .product-recommendations__mobile-pagination.swiper-pagination-horizontal {
+		position: relative !important;
+		inset: auto !important;
+		display: flex !important;
+		align-items: center;
+		justify-content: center;
+		gap: 5px;
+		width: min(180px, 56%) !important;
+		height: 3px !important;
+		margin: 18px auto 0 !important;
+		padding: 0 !important;
+		transform: none !important;
+		visibility: visible !important;
+		opacity: 1 !important;
+		pointer-events: auto !important;
+	}
+
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .product-recommendations__mobile-pagination .swiper-pagination-bullet {
+		display: block;
+		flex: 1 1 0;
+		width: auto !important;
+		max-width: 40px;
+		height: 3px;
+		margin: 0 !important;
+		padding: 0;
+		border: 0;
+		border-radius: 999px;
+		background: #2c3d33;
+		opacity: 0.2;
+		cursor: pointer;
+		transition: opacity 0.25s ease;
+	}
+
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .product-recommendations__mobile-pagination .swiper-pagination-bullet-active {
+		opacity: 1;
+	}
+
+	html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header {
+		padding-right: 0 !important;
+	}
+
+	@media screen and (max-width: 767px) {
+		html body #shopify-section-{{ section.id }} .product-recommendations__carousel-shell {
+			overflow: hidden !important;
+			overflow-x: hidden !important;
+			clip-path: inset(0);
+			contain: paint;
+		}
+	}
+
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .product-recommendations__carousel-shell {
+		margin-inline: 0;
+		padding-inline: 0;
+		overflow: hidden !important;
+		overflow-x: hidden !important;
+		clip-path: inset(0);
+		contain: paint;
+	}
+
 {%- endstyle -%}
 
 {%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
@@ -430,15 +665,25 @@
 	{%- assign container_width = container -%}
 {%- endif -%}
 
+
 {%- assign collection = section.settings.collection -%}
 {%- assign product_list = collection.products -%}
-
 {%- assign enable_shopify_recommendations = section.settings.enable_shopify_recommendations -%}
+
+{%- assign best_seller_collection = section.settings.best_seller_collection -%}
+{%- if best_seller_collection == blank -%}
+	{%- assign best_seller_collection = collections['all'] -%}
+{%- endif -%}
+{%- if best_seller_collection == blank -%}
+	{%- assign best_seller_collection = collections['best-sellers'] -%}
+{%- endif -%}
+{%- assign best_seller_products = best_seller_collection.products -%}
+
 
 {%- liquid
 	assign slider_enabled = false
 
-	if enable_shopify_recommendations or product_list.count > 1
+	if enable_shopify_recommendations or product_list.count > 0 or best_seller_products.count > 0
 		assign slider_enabled = true
 	endif
 
@@ -460,13 +705,18 @@
 {%- endcapture -%}
 
 <section
-	class="featured-products product-recommendations section-animate featured-products--layout-4 color-{{ color_scheme.id | default: color_scheme }} js-animate{% if desktop_slider_enabled %} js-featured-products{% endif %}{% if request.visual_preview_mode or section.index == 1 %} animated{% endif %}"
+	class="featured-products product-recommendations section-animate featured-products--layout-4 color-{{ color_scheme.id | default: color_scheme }} js-animate animated{% if desktop_slider_enabled %} js-featured-products{% endif %}"
 	id="{{- section.id -}}"
 	style="{{- styles -}}"
 	data-product-id="{{- product.id -}}"
 	data-limit="{{- limit -}}"
 	data-desktop-limit="{{- desktop_limit -}}"
 	data-mobile-limit="{{- mobile_limit -}}"
+	data-recommended-limit="{{- recommended_limit -}}"
+	data-best-seller-limit="{{- best_seller_limit -}}"
+	data-recommendation-candidates-url="{{- best_seller_collection.url | escape -}}"
+	data-current-product-handle="{{- product.handle | escape -}}"
+	data-product-type-recommendations-pending="true"
 >
 	<div class="container">
 		<div class="featured-products__header product-recommendations__header">
@@ -474,22 +724,11 @@
 				<h2>{{- heading -}}</h2>
 			{%- endif -%}
 
-			{%- if slider_enabled -%}
-				<div class="featured-products__buttons-wrapper product-recommendations__buttons-wrapper">
-					<button
-						class="focus-visible-outline swiper-button-prev-new js-featured-products-slider-button-prev">
-						{%- render 'icons', icon: 'arrow-left' -%}
-					</button>
-
-					<button
-						class="focus-visible-outline swiper-button-next-new js-featured-products-slider-button-next">
-						{%- render 'icons', icon: 'arrow-right' -%}
-					</button>
-				</div>
-			{%- endif -%}
 		</div>
 
-		<div class="js-product-recommendations-content">
+		<script type="application/json" data-product-recommendation-types>{{- best_seller_collection.all_types | json -}}</script>
+
+		<div class="js-product-recommendations-content product-recommendations__carousel-shell">
 			<div class="featured-products__slider swiper js-featured-products-slider" data-slides-in-row="4">
 				<div class="featured-products__row swiper-wrapper">
 					{%- capture slides -%}
@@ -497,18 +736,19 @@
 						{%- assign image_size_tablet = 328 -%}
 						{%- assign image_size_mobile = 308 -%}
 
-						{%- if enable_shopify_recommendations and product != blank -%}
+						{%- assign selected_products = "," -%}
+						{%- assign recommended_count = 0 -%}
+
+						{%- if recommended_limit > 0 and enable_shopify_recommendations and product != blank -%}
 							{%- assign related_collections = product.collections | sort: 'all_products_count' -%}
-							{%- assign selected_products = "," -%}
-							{%- assign selected_count = 0 -%}
 
 							{%- for related_collection in related_collections limit: 2 -%}
-								{%- if selected_count >= candidate_limit -%}
+								{%- if recommended_count >= recommended_candidate_limit -%}
 									{%- break -%}
 								{%- endif -%}
 
 								{%- for related_product in related_collection.products -%}
-									{%- if selected_count >= candidate_limit -%}
+									{%- if recommended_count >= recommended_candidate_limit -%}
 										{%- break -%}
 									{%- endif -%}
 
@@ -522,53 +762,69 @@
 
 									{%- assign product_handle = related_product.handle -%}
 									{%- assign check_handle = "," | append: product_handle | append: "," -%}
-									{%- unless selected_products contains check_handle -%}
-										{%- assign is_lazy = true -%}
-										{%- if section.index == 1 and selected_count == 0 -%}
-											{%- assign is_lazy = false -%}
-										{%- endif -%}
-										{%- assign selected_products = selected_products | append: product_handle | append: "," -%}
-										{%- assign selected_count = selected_count | plus: 1 -%}
-										<div
-											class="featured-products__col swiper-slide js-featured-products-slide{% if selected_count > desktop_limit %} product-recommendations__slide--desktop-hidden{% endif %}{% if selected_count > mobile_limit %} product-recommendations__slide--mobile-hidden{% endif %}"
-											data-product-handle="{{- related_product.handle | escape -}}"
-											data-product-title="{{- related_product.title | escape -}}"
-										>
-											{%- render
-												'product-card',
-												product: related_product,
-												size: image_size,
-												tablet_size: image_size_tablet,
-												mobile_size: image_size_mobile,
-												is_lazy: is_lazy
-											-%}
-										</div>
-									{%- endunless -%}
+									{%- if selected_products contains check_handle -%}
+										{%- continue -%}
+									{%- endif -%}
+
+									{%- assign is_lazy = true -%}
+									{%- if section.index == 1 and recommended_count == 0 -%}
+										{%- assign is_lazy = false -%}
+									{%- endif -%}
+									{%- assign selected_products = selected_products | append: product_handle | append: "," -%}
+									{%- assign recommended_count = recommended_count | plus: 1 -%}
+									<div
+										class="featured-products__col swiper-slide js-featured-products-slide{% if recommended_count > recommended_limit %} product-recommendations__candidate-fallback{% endif %}{% if recommended_count > desktop_limit %} product-recommendations__slide--desktop-hidden{% endif %}{% if recommended_count > mobile_limit %} product-recommendations__slide--mobile-hidden{% endif %}"
+										data-product-handle="{{- related_product.handle | escape -}}"
+										data-product-title="{{- related_product.title | escape -}}"
+										data-recommendation-source="related"
+									>
+										{%- render
+											'product-card',
+											product: related_product,
+											size: image_size,
+											tablet_size: image_size_tablet,
+											mobile_size: image_size_mobile,
+											is_lazy: is_lazy
+										-%}
+									</div>
 								{%- endfor -%}
 							{%- endfor -%}
-						{%- elsif product_list != blank and product_list.count > 0 -%}
-							{%- assign display_count = 0 -%}
-							{%- for product in product_list -%}
-								{%- if display_count >= candidate_limit -%}
+						{%- elsif recommended_limit > 0 and product_list != blank and product_list.count > 0 -%}
+							{%- for recommended_product in product_list -%}
+								{%- if recommended_count >= recommended_candidate_limit -%}
 									{%- break -%}
 								{%- endif -%}
 
-								{%- unless product.selected_or_first_available_variant.requires_shipping -%}{%- continue -%}{%- endunless -%}
-
-								{%- assign is_lazy = true -%}
-								{%- if section.index == 1 and display_count == 0 -%}
-									{%- assign is_lazy = false -%}
+								{%- if recommended_product.handle == product.handle -%}
+									{%- continue -%}
 								{%- endif -%}
 
-								{%- assign display_count = display_count | plus: 1 -%}
+								{%- unless recommended_product.available and recommended_product.selected_or_first_available_variant.requires_shipping -%}
+									{%- continue -%}
+								{%- endunless -%}
+
+								{%- assign product_handle = recommended_product.handle -%}
+								{%- assign check_handle = "," | append: product_handle | append: "," -%}
+								{%- if selected_products contains check_handle -%}
+									{%- continue -%}
+								{%- endif -%}
+
+								{%- assign is_lazy = true -%}
+								{%- if section.index == 1 and recommended_count == 0 -%}
+									{%- assign is_lazy = false -%}
+								{%- endif -%}
+								{%- assign selected_products = selected_products | append: product_handle | append: "," -%}
+								{%- assign recommended_count = recommended_count | plus: 1 -%}
 								<div
-									class="featured-products__col swiper-slide js-featured-products-slide{% if display_count > desktop_limit %} product-recommendations__slide--desktop-hidden{% endif %}{% if display_count > mobile_limit %} product-recommendations__slide--mobile-hidden{% endif %}"
-									data-product-handle="{{- product.handle | escape -}}"
-									data-product-title="{{- product.title | escape -}}"
+									class="featured-products__col swiper-slide js-featured-products-slide{% if recommended_count > recommended_limit %} product-recommendations__candidate-fallback{% endif %}{% if recommended_count > desktop_limit %} product-recommendations__slide--desktop-hidden{% endif %}{% if recommended_count > mobile_limit %} product-recommendations__slide--mobile-hidden{% endif %}"
+									data-product-handle="{{- recommended_product.handle | escape -}}"
+									data-product-title="{{- recommended_product.title | escape -}}"
+									data-recommendation-source="related"
 								>
 									{%- render
 										'product-card',
-										product: product,
+										product: recommended_product,
+										collection: collection,
 										size: image_size,
 										tablet_size: image_size_tablet,
 										mobile_size: image_size_mobile,
@@ -576,6 +832,68 @@
 									-%}
 								</div>
 							{%- endfor -%}
+						{%- endif -%}
+
+						{%- assign best_seller_count = 0 -%}
+						{%- assign selected_best_seller_types = "," -%}
+						{%- if best_seller_limit > 0 and best_seller_products != blank -%}
+							{%- paginate best_seller_collection.products by 250 -%}
+								{%- for best_seller_product in best_seller_collection.products -%}
+									{%- if best_seller_count >= best_seller_candidate_limit -%}
+										{%- break -%}
+									{%- endif -%}
+
+									{%- if best_seller_product.handle == product.handle -%}
+										{%- continue -%}
+									{%- endif -%}
+
+									{%- unless best_seller_product.available and best_seller_product.selected_or_first_available_variant.requires_shipping -%}
+										{%- continue -%}
+									{%- endunless -%}
+
+									{%- assign product_handle = best_seller_product.handle -%}
+									{%- assign check_handle = "," | append: product_handle | append: "," -%}
+									{%- if selected_products contains check_handle -%}
+										{%- continue -%}
+									{%- endif -%}
+
+									{%- assign best_seller_product_type = best_seller_product.type | strip -%}
+									{%- assign best_seller_product_type_key = best_seller_product_type | handleize -%}
+									{%- if best_seller_product_type_key == blank -%}
+										{%- continue -%}
+									{%- endif -%}
+									{%- assign check_product_type = "," | append: best_seller_product_type_key | append: "," -%}
+									{%- if selected_best_seller_types contains check_product_type -%}
+										{%- continue -%}
+									{%- endif -%}
+
+									{%- assign is_lazy = true -%}
+									{%- if section.index == 1 and recommended_count == 0 and best_seller_count == 0 -%}
+										{%- assign is_lazy = false -%}
+									{%- endif -%}
+									{%- assign selected_products = selected_products | append: product_handle | append: "," -%}
+									{%- assign selected_best_seller_types = selected_best_seller_types | append: best_seller_product_type_key | append: "," -%}
+									{%- assign best_seller_count = best_seller_count | plus: 1 -%}
+									{%- assign product_position = recommended_limit | plus: best_seller_count -%}
+									<div
+										class="featured-products__col swiper-slide js-featured-products-slide{% if best_seller_count > best_seller_limit %} product-recommendations__candidate-fallback{% endif %}{% if product_position > desktop_limit %} product-recommendations__slide--desktop-hidden{% endif %}{% if product_position > mobile_limit %} product-recommendations__slide--mobile-hidden{% endif %}"
+										data-product-handle="{{- best_seller_product.handle | escape -}}"
+										data-product-title="{{- best_seller_product.title | escape -}}"
+										data-product-type="{{- best_seller_product_type | escape -}}"
+										data-recommendation-source="best-seller"
+									>
+										{%- render
+											'product-card',
+											product: best_seller_product,
+											collection: best_seller_collection,
+											size: image_size,
+											tablet_size: image_size_tablet,
+											mobile_size: image_size_mobile,
+											is_lazy: is_lazy
+										-%}
+									</div>
+								{%- endfor -%}
+							{%- endpaginate -%}
 						{%- endif -%}
 					{%- endcapture -%}
 
@@ -591,6 +909,28 @@
 				</div>
 				<div class="product-recommendations__mobile-pagination js-product-recommendations-mobile-pagination"></div>
 			</div>
+
+			<div class="product-recommendations__navigation">
+				<button
+					type="button"
+					class="focus-visible-outline swiper-button-prev-new product-recommendations__arrow product-recommendations__arrow--prev js-featured-products-slider-button-prev"
+					aria-label="{{- 'general.accessibility.slider.prev_slide_message' | t | escape -}}"
+					aria-disabled="true"
+					disabled
+				>
+					{%- render 'icons', icon: 'arrow-left' -%}
+				</button>
+
+				<button
+					type="button"
+					class="focus-visible-outline swiper-button-next-new product-recommendations__arrow product-recommendations__arrow--next js-featured-products-slider-button-next"
+					aria-label="{{- 'general.accessibility.slider.next_slide_message' | t | escape -}}"
+					aria-disabled="true"
+					disabled
+				>
+					{%- render 'icons', icon: 'arrow-right' -%}
+				</button>
+			</div>
 		</div>
 	</div>
 </section>
@@ -599,6 +939,79 @@
 	(function() {
 		var mobileQuery = window.matchMedia('(max-width: 767px)');
 		var retries = 0;
+		var motionRetries = 0;
+		var featuredProductsInitRequested = false;
+		var runtimeKey = '__camoProductRecommendationsRuntime_{{ section.id }}';
+		var previousRuntime = window[runtimeKey];
+		var runtimeListeners = [];
+		var runtimeObservers = [];
+		var runtimeTimeouts = [];
+		var responsiveFrame = null;
+		var runtimeActive = true;
+
+		if (previousRuntime && typeof previousRuntime.destroy === 'function') {
+			previousRuntime.destroy();
+		}
+
+		function addRuntimeListener(target, eventName, handler, options) {
+			if (!target || typeof target.addEventListener !== 'function') return;
+
+			target.addEventListener(eventName, handler, options);
+			runtimeListeners.push(function() {
+				target.removeEventListener(eventName, handler, options);
+			});
+		}
+
+		function scheduleRuntimeTimeout(callback, delay) {
+			var timeoutId = setTimeout(function() {
+				runtimeTimeouts = runtimeTimeouts.filter(function(id) {
+					return id !== timeoutId;
+				});
+
+				if (runtimeActive) {
+					callback();
+				}
+			}, delay);
+
+			runtimeTimeouts.push(timeoutId);
+			return timeoutId;
+		}
+
+		function trackRuntimeObserver(observer) {
+			if (observer) {
+				runtimeObservers.push(observer);
+			}
+
+			return observer;
+		}
+
+		function destroyRuntime() {
+			runtimeActive = false;
+
+			runtimeListeners.splice(0).forEach(function(removeListener) {
+				removeListener();
+			});
+			runtimeObservers.splice(0).forEach(function(observer) {
+				observer.disconnect();
+			});
+			runtimeTimeouts.splice(0).forEach(function(timeoutId) {
+				clearTimeout(timeoutId);
+			});
+
+			if (responsiveFrame !== null) {
+				window.cancelAnimationFrame(responsiveFrame);
+				responsiveFrame = null;
+			}
+
+			if (window[runtimeKey] && window[runtimeKey].destroy === destroyRuntime) {
+				delete window[runtimeKey];
+			}
+		}
+
+		window[runtimeKey] = {
+			destroy: destroyRuntime
+		};
+
 		var bundleSelector = [
 			'lb-upsell-widget',
 			'lb-upsell-flat-card',
@@ -617,6 +1030,7 @@
 			'[class*="bundle" i]'
 		].join(',');
 		var filterTimer = null;
+		var bundleFilterInitialized = false;
 
 		function normalizeProductHandle(value) {
 			if (!value) return '';
@@ -643,7 +1057,7 @@
 
 			if (!title || title.length < 8) return false;
 			if (/^\d+$/.test(title)) return false;
-			if (/^(add|quick add|select|size|color|people also bought|customer favorites)$/.test(title)) return false;
+			if (/^(add|quick add|select|size|color|people also bought|customer favorites|you may also like|you might also like)$/.test(title)) return false;
 			if (title.split(' ').length <= 4 && /^(black|white|ivory|khaki|maroon|navy|sand|rectangle|small|medium|large|xl|2xl|3xl|4xl|5xl)(\s|$)/.test(title)) return false;
 
 			return true;
@@ -795,6 +1209,242 @@
 			return normalizeProductTitle(title);
 		}
 
+		function rebalanceRecommendationGroups() {
+			var section = document.getElementById('{{ section.id }}');
+			var wrapper = section ? section.querySelector('.featured-products__row') : null;
+
+			if (!section || !wrapper) return;
+
+			var recommendedLimit = parseInt(section.getAttribute('data-recommended-limit'), 10) || 0;
+			var bestSellerLimit = parseInt(section.getAttribute('data-best-seller-limit'), 10) || 0;
+			var slides = Array.prototype.slice.call(wrapper.querySelectorAll('.js-featured-products-slide'));
+			var recommendedSlides = slides.filter(function(slide) {
+				return slide.getAttribute('data-recommendation-source') === 'related';
+			});
+			var bestSellerSlides = slides.filter(function(slide) {
+				return slide.getAttribute('data-recommendation-source') === 'best-seller';
+			});
+
+			if (!recommendedSlides.length && !bestSellerSlides.length) return;
+
+			var activeSlides = recommendedSlides.slice(0, recommendedLimit).concat(
+				bestSellerSlides.slice(0, bestSellerLimit)
+			);
+			var fallbackSlides = recommendedSlides.slice(recommendedLimit).concat(
+				bestSellerSlides.slice(bestSellerLimit)
+			);
+			var remainingSlides = slides.filter(function(slide) {
+				return recommendedSlides.indexOf(slide) === -1 && bestSellerSlides.indexOf(slide) === -1;
+			});
+			var orderedSlides = activeSlides.concat(fallbackSlides, remainingSlides);
+			var needsReorder = orderedSlides.some(function(slide, index) {
+				return wrapper.children[index] !== slide;
+			});
+
+			if (needsReorder) {
+				orderedSlides.forEach(function(slide) {
+					wrapper.appendChild(slide);
+				});
+			}
+
+			slides.forEach(function(slide) {
+				slide.classList.toggle(
+					'product-recommendations__candidate-fallback',
+					activeSlides.indexOf(slide) === -1
+				);
+			});
+		}
+		function getCarouselGroupSize(section) {
+			var availableWidth = section && section.clientWidth
+				? section.clientWidth
+				: window.innerWidth;
+
+			if (availableWidth >= 1200) return 4;
+			if (availableWidth >= 768) return 3;
+			return 2;
+		}
+
+		function syncNavigationToProductImages(section) {
+			section = section || document.getElementById('{{ section.id }}');
+			if (!section) return;
+
+			var shell = section.querySelector('.product-recommendations__carousel-shell');
+			var imageArea = shell && shell.querySelector(
+				'.js-featured-products-slide:not([aria-hidden="true"]) .product-card__image-wrapper-link'
+			);
+
+			if (!shell || !imageArea) return;
+
+			if (
+				window.ResizeObserver &&
+				imageArea.productRecommendationsArrowRuntime !== runtimeKey
+			) {
+				if (imageArea.productRecommendationsArrowObserver) {
+					imageArea.productRecommendationsArrowObserver.disconnect();
+				}
+
+				imageArea.productRecommendationsArrowObserver = trackRuntimeObserver(new ResizeObserver(function() {
+					syncNavigationToProductImages(section);
+				}));
+				imageArea.productRecommendationsArrowRuntime = runtimeKey;
+				imageArea.productRecommendationsArrowObserver.observe(imageArea);
+			}
+
+			window.requestAnimationFrame(function() {
+				if (!document.documentElement.contains(shell) || !document.documentElement.contains(imageArea)) return;
+
+				var imageCenter = imageArea.offsetHeight / 2;
+
+				if (!isFinite(imageCenter) || imageCenter <= 0) return;
+
+				var nextValue = imageCenter.toFixed(2) + 'px';
+				if (shell.style.getPropertyValue('--product-recommendations-arrow-top') !== nextValue) {
+					shell.style.setProperty('--product-recommendations-arrow-top', nextValue);
+				}
+			});
+		}
+
+		function syncCarouselMotion() {
+			var section = document.getElementById('{{ section.id }}');
+			var slider = section ? section.querySelector('.js-featured-products-slider') : null;
+			var swiper = slider ? slider.swiper : null;
+			var shouldUseMobileLayout = shouldUseMobileRecommendationsLayout(section);
+
+			if (!section || !slider) return;
+
+			if (shouldUseMobileLayout) {
+				if (!swiper || slider.dataset.camoMobileSwiper !== 'true') {
+					initMobileRecommendationsSlider();
+					swiper = slider.swiper;
+				}
+
+				if (swiper && slider.dataset.camoMobileSwiper === 'true') {
+					swiper.update();
+					normalizeMobileSwiperPosition(section, swiper);
+					syncNavigationToProductImages(section);
+					motionRetries = 0;
+					featuredProductsInitRequested = false;
+					return;
+				}
+
+				motionRetries += 1;
+
+				if (motionRetries < 60) {
+					scheduleRuntimeTimeout(syncCarouselMotion, 150);
+				}
+
+				return;
+			}
+
+			if (!swiper) {
+				if (
+					!featuredProductsInitRequested &&
+					window.themeCore &&
+					window.themeCore.FeaturedProducts &&
+					typeof window.themeCore.FeaturedProducts.init === 'function'
+				) {
+					featuredProductsInitRequested = true;
+					window.themeCore.FeaturedProducts.init('{{ section.id }}');
+				}
+
+				motionRetries += 1;
+
+				if (motionRetries < 60) {
+					scheduleRuntimeTimeout(syncCarouselMotion, 150);
+				}
+
+				return;
+			}
+
+			featuredProductsInitRequested = false;
+			motionRetries = 0;
+
+			var speed = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 550;
+			var slidesPerGroup = getCarouselGroupSize(section);
+			var visibleSlides = Array.prototype.filter.call(
+				slider.querySelectorAll('.js-featured-products-slide'),
+				function(slide) {
+					return window.getComputedStyle(slide).display !== 'none';
+				}
+			);
+			var hasMultiplePages = visibleSlides.length > slidesPerGroup;
+			var navigationButtons = section.querySelectorAll(
+				'.js-featured-products-slider-button-prev, .js-featured-products-slider-button-next'
+			);
+
+			swiper.params.speed = speed;
+			swiper.params.slidesPerView = slidesPerGroup;
+			swiper.params.slidesPerGroup = slidesPerGroup;
+			swiper.params.rewind = hasMultiplePages;
+			swiper.params.grabCursor = true;
+			swiper.params.allowTouchMove = true;
+			swiper.params.watchOverflow = true;
+
+			[swiper.params.breakpoints, swiper.originalParams && swiper.originalParams.breakpoints].forEach(function(breakpoints) {
+				if (!breakpoints) return;
+				if (breakpoints[576]) {
+					breakpoints[576].slidesPerView = 2;
+					breakpoints[576].slidesPerGroup = 2;
+				}
+				if (breakpoints[768]) {
+					breakpoints[768].slidesPerView = 3;
+					breakpoints[768].slidesPerGroup = 3;
+				}
+				if (breakpoints[1200]) {
+					breakpoints[1200].slidesPerView = 4;
+					breakpoints[1200].slidesPerGroup = 4;
+				}
+			});
+
+			if (swiper.originalParams) {
+				swiper.originalParams.speed = speed;
+				swiper.originalParams.slidesPerView = slidesPerGroup;
+				swiper.originalParams.slidesPerGroup = slidesPerGroup;
+				swiper.originalParams.rewind = hasMultiplePages;
+				swiper.originalParams.watchOverflow = true;
+			}
+
+			if (typeof swiper.update === 'function') {
+				swiper.update();
+			}
+
+			if (hasMultiplePages) {
+				swiper.isLocked = false;
+				swiper.allowSlidePrev = true;
+				swiper.allowSlideNext = true;
+			} else {
+				if (typeof swiper.slideTo === 'function') {
+					swiper.allowSlidePrev = true;
+					swiper.allowSlideNext = true;
+					swiper.slideTo(0, 0, false);
+				}
+
+				swiper.isLocked = true;
+				swiper.allowSlidePrev = false;
+				swiper.allowSlideNext = false;
+			}
+
+			if (typeof swiper.checkOverflow === 'function') {
+				swiper.checkOverflow();
+			}
+
+			if (swiper.navigation && typeof swiper.navigation.update === 'function') {
+				swiper.navigation.update();
+			}
+
+			navigationButtons.forEach(function(button) {
+				button.disabled = !hasMultiplePages;
+				button.setAttribute('aria-disabled', hasMultiplePages ? 'false' : 'true');
+
+				if (hasMultiplePages) {
+					button.classList.remove('swiper-button-lock', 'swiper-button-disabled');
+				} else {
+					button.classList.add('swiper-button-lock');
+				}
+			});
+
+			syncNavigationToProductImages(section);
+		}
 		function refreshRecommendationsSlider() {
 			var section = document.getElementById('{{ section.id }}');
 			if (!section) return;
@@ -802,19 +1452,25 @@
 			var slider = section.querySelector('.js-featured-products-slider');
 
 			if (slider && slider.swiper && typeof slider.swiper.update === 'function') {
+				syncMobileTwoUpLayout(section);
 				slider.swiper.update();
+				normalizeMobileSwiperPosition(section, slider.swiper);
 
 				if (slider.swiper.navigation && typeof slider.swiper.navigation.update === 'function') {
 					slider.swiper.navigation.update();
 				}
 
-				syncMobileTwoUpLayout(section);
+				syncCarouselMotion();
 			}
 		}
 
 		function filterBundleProductsFromRecommendations() {
 			var section = document.getElementById('{{ section.id }}');
 			if (!section) return false;
+			if (
+				section.getAttribute('data-product-type-recommendations-pending') === 'true' ||
+				section.getAttribute('data-product-type-recommendations-failed') === 'true'
+			) return false;
 
 			var productMatches = collectBundleProductMatches();
 			var bundleHandleCount = Object.keys(productMatches.handles).length;
@@ -823,18 +1479,42 @@
 			if (!bundleHandleCount && !bundleTitleCount) return false;
 
 			var removed = false;
+			var randomProductTypeRecommendationsLoaded = section.getAttribute('data-product-type-recommendations-loaded') === 'true';
+			var shouldRefreshRandomProductTypeRecommendations = false;
 
 			section.querySelectorAll('.js-featured-products-slide').forEach(function(slide) {
 				var handle = getRecommendationProductHandle(slide);
 				var title = getRecommendationProductTitle(slide);
+				var recommendationSource = slide.getAttribute('data-recommendation-source');
 
 				if ((handle && productMatches.handles[handle]) || (title && productMatches.titles[title])) {
+					if (recommendationSource === 'related') return;
+
+					if (randomProductTypeRecommendationsLoaded && recommendationSource === 'best-seller') {
+						shouldRefreshRandomProductTypeRecommendations = true;
+						return;
+					}
+
 					slide.remove();
 					removed = true;
 				}
 			});
 
+			if (shouldRefreshRandomProductTypeRecommendations) {
+				if (section.getAttribute('data-product-type-recommendations-refreshing') !== 'true') {
+					section.setAttribute('data-product-type-recommendations-refreshing', 'true');
+					section.removeAttribute('data-product-type-recommendations-loaded');
+					section.setAttribute('data-product-type-recommendations-pending', 'true');
+					scheduleRuntimeTimeout(function() {
+						loadRandomProductTypeRecommendations(true);
+					}, 0);
+				}
+
+				return false;
+			}
+
 			if (removed) {
+				rebalanceRecommendationGroups();
 				applyResponsiveProductLimit();
 				refreshRecommendationsSlider();
 			}
@@ -847,7 +1527,7 @@
 
 		function requestBundleFilter() {
 			clearTimeout(filterTimer);
-			filterTimer = setTimeout(filterBundleProductsFromRecommendations, 80);
+			filterTimer = scheduleRuntimeTimeout(filterBundleProductsFromRecommendations, 80);
 		}
 
 		function elementMatchesBundleSelector(element) {
@@ -863,7 +1543,7 @@
 		function observeBundleWidgets() {
 			if (!window.MutationObserver || !document.body) return;
 
-			new MutationObserver(function(mutations) {
+			var bundleObserver = trackRuntimeObserver(new MutationObserver(function(mutations) {
 				var shouldFilter = mutations.some(function(mutation) {
 					if (mutation.target && mutation.target.closest && mutation.target.closest(bundleSelector)) {
 						return true;
@@ -875,7 +1555,9 @@
 				if (shouldFilter) {
 					requestBundleFilter();
 				}
-			}).observe(document.body, {
+			}));
+
+			bundleObserver.observe(document.body, {
 				childList: true,
 				subtree: true,
 				characterData: true
@@ -888,16 +1570,24 @@
 
 			if (!window.MutationObserver || !content) return;
 
-			new MutationObserver(requestBundleFilter).observe(content, {
+			var contentObserver = trackRuntimeObserver(new MutationObserver(requestBundleFilter));
+
+			contentObserver.observe(content, {
 				childList: true,
 				subtree: true
 			});
 		}
 
 		function initBundleRecommendationFilter() {
+			if (bundleFilterInitialized) {
+				requestBundleFilter();
+				return;
+			}
+
+			bundleFilterInitialized = true;
 			filterBundleProductsFromRecommendations();
 			[250, 750, 1500, 3000, 5000].forEach(function(delay) {
-				setTimeout(filterBundleProductsFromRecommendations, delay);
+				scheduleRuntimeTimeout(filterBundleProductsFromRecommendations, delay);
 			});
 			observeBundleWidgets();
 			observeRecommendationContent();
@@ -906,8 +1596,35 @@
 		function shouldUseMobileRecommendationsLayout(section) {
 			if (!section) return mobileQuery.matches;
 
-			var sectionWidth = section.getBoundingClientRect().width || window.innerWidth;
+			var sectionWidth = section.clientWidth || window.innerWidth;
 			return mobileQuery.matches || sectionWidth <= 767;
+		}
+
+		function normalizeMobileSwiperPosition(section, swiper) {
+			if (
+				!section ||
+				!swiper ||
+				!shouldUseMobileRecommendationsLayout(section) ||
+				typeof swiper.slideTo !== 'function'
+			) {
+				return;
+			}
+
+			var visibleSlides = Array.prototype.filter.call(
+				swiper.slides || [],
+				function(slide) {
+					return window.getComputedStyle(slide).display !== 'none';
+				}
+			);
+			var lastGroupIndex = Math.max(0, (Math.ceil(visibleSlides.length / 2) - 1) * 2);
+			var currentIndex = parseInt(swiper.activeIndex, 10) || 0;
+			var targetIndex = Math.min(lastGroupIndex, Math.max(0, Math.floor(currentIndex / 2) * 2));
+
+			swiper.slideTo(targetIndex, 0, false);
+
+			if (swiper.pagination && typeof swiper.pagination.update === 'function') {
+				swiper.pagination.update();
+			}
 		}
 
 		function syncMobileTwoUpLayout(section) {
@@ -916,29 +1633,27 @@
 			var shouldUseMobileLayout = shouldUseMobileRecommendationsLayout(section);
 			var slider = section.querySelector('.js-featured-products-slider');
 			var slides = section.querySelectorAll('.js-featured-products-slide');
-			var mobileSlideWidth = 'calc((100% - 12px) / 2)';
 
 			section.classList.toggle('is-mobile-layout', shouldUseMobileLayout);
-
-			slides.forEach(function(slide) {
-				if (shouldUseMobileLayout) {
-					slide.style.setProperty('width', mobileSlideWidth, 'important');
-					slide.style.setProperty('max-width', mobileSlideWidth, 'important');
-					slide.style.setProperty('flex', '0 0 ' + mobileSlideWidth, 'important');
-					slide.style.setProperty('margin-right', '12px', 'important');
-					return;
-				}
-
-				slide.style.removeProperty('width');
-				slide.style.removeProperty('max-width');
-				slide.style.removeProperty('flex');
-				slide.style.removeProperty('margin-right');
-			});
 
 			if (!shouldUseMobileLayout && slider && slider.swiper && slider.dataset.camoMobileSwiper === 'true') {
 				slider.swiper.destroy(true, true);
 				delete slider.dataset.camoMobileSwiper;
+				featuredProductsInitRequested = false;
 			}
+
+			slides.forEach(function(slide) {
+				['width', 'max-width', 'flex', 'margin-right'].forEach(function(property) {
+					if (
+						!shouldUseMobileLayout ||
+						slide.style.getPropertyPriority(property) === 'important'
+					) {
+						slide.style.removeProperty(property);
+					}
+				});
+			});
+
+			syncNavigationToProductImages(section);
 		}
 
 		function updateResponsiveHeadingLayout() {
@@ -950,6 +1665,7 @@
 			var desktopHeadingSize = section.style.getPropertyValue('--product-recommendations-heading-size-desktop').trim() || '{{ section.settings.heading_font_size_desktop | default: 36 }}px';
 			var mobileHeadingSize = section.style.getPropertyValue('--product-recommendations-heading-size-mobile').trim() || '{{ section.settings.heading_font_size_mobile | default: 22 }}px';
 
+			rebalanceRecommendationGroups();
 			section.classList.toggle('is-mobile-layout', shouldUseMobileLayout);
 
 			if (heading) {
@@ -993,41 +1709,42 @@
 				}
 			});
 
+			syncMobileTwoUpLayout(section);
+
 			if (slider && slider.swiper && typeof slider.swiper.update === 'function') {
 				slider.swiper.update();
+				normalizeMobileSwiperPosition(section, slider.swiper);
 			}
-
-			syncMobileTwoUpLayout(section);
 		}
 
 		function initMobileRecommendationsSlider() {
 			updateResponsiveHeadingLayout();
-			applyResponsiveProductLimit();
-
-			if (!mobileQuery.matches) return;
 
 			var section = document.getElementById('{{ section.id }}');
 			if (!section) return;
 
-			section.classList.remove('js-featured-products');
-
 			var slider = section.querySelector('.js-featured-products-slider');
 			var prevButton = section.querySelector('.js-featured-products-slider-button-prev');
 			var nextButton = section.querySelector('.js-featured-products-slider-button-next');
+			var mobilePagination = section.querySelector('.js-product-recommendations-mobile-pagination');
 			var Swiper = window.themeCore && window.themeCore.utils && window.themeCore.utils.Swiper;
 
 			if (!slider) return;
 
 			if (!shouldUseMobileRecommendationsLayout(section)) {
 				syncMobileTwoUpLayout(section);
+				section.classList.add('js-featured-products');
+				featuredProductsInitRequested = false;
 				return;
 			}
+
+			section.classList.remove('js-featured-products');
 
 			if (!Swiper) {
 				retries += 1;
 
 				if (retries < 60) {
-					setTimeout(initMobileRecommendationsSlider, 150);
+					scheduleRuntimeTimeout(initMobileRecommendationsSlider, 150);
 				}
 
 				return;
@@ -1038,15 +1755,20 @@
 				var params = currentSwiper.params || {};
 				var isTwoUpMobileSlider = params.slidesPerView === 2
 					&& params.slidesPerGroup === 2
-					&& params.spaceBetween === 12;
+					&& params.spaceBetween === 16
+					&& params.rewind === false
+					&& params.roundLengths === false;
+				var hasMobilePagination = currentSwiper.pagination
+					&& currentSwiper.pagination.el === mobilePagination;
 
-				if (isTwoUpMobileSlider) {
+				if (isTwoUpMobileSlider && hasMobilePagination) {
 					slider.dataset.camoMobileSwiper = 'true';
-					currentSwiper.update();
 					syncMobileTwoUpLayout(section);
-					setTimeout(function() {
+					currentSwiper.update();
+					normalizeMobileSwiperPosition(section, currentSwiper);
+					scheduleRuntimeTimeout(function() {
 						currentSwiper.update();
-						syncMobileTwoUpLayout(section);
+						normalizeMobileSwiperPosition(section, currentSwiper);
 					}, 50);
 					return;
 				}
@@ -1058,11 +1780,13 @@
 
 			var mobileSwiper = new Swiper(slider, {
 				grabCursor: true,
+				speed: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 550,
+				rewind: false,
 				slidesPerView: 2,
 				slidesPerGroup: 2,
-				spaceBetween: 12,
+				spaceBetween: 16,
 				centeredSlides: false,
-				roundLengths: true,
+				roundLengths: false,
 				watchOverflow: true,
 				observer: true,
 				observeParents: true,
@@ -1071,6 +1795,12 @@
 					prevEl: prevButton,
 					nextEl: nextButton
 				},
+				pagination: {
+					el: mobilePagination,
+					type: 'bullets',
+					clickable: true,
+					bulletElement: 'button'
+				},
 				on: {
 					init: function() {
 						section.classList.add('is-initialized');
@@ -1078,44 +1808,324 @@
 					},
 					resize: function() {
 						syncMobileTwoUpLayout(section);
+						var currentSwiper = this;
+
+						scheduleRuntimeTimeout(function() {
+							currentSwiper.update();
+							normalizeMobileSwiperPosition(section, currentSwiper);
+						}, 0);
 					}
 				}
 			});
 
 			slider.dataset.camoMobileSwiper = 'true';
 
-			setTimeout(function() {
+			scheduleRuntimeTimeout(function() {
 				mobileSwiper.update();
-				syncMobileTwoUpLayout(section);
+				normalizeMobileSwiperPosition(section, mobileSwiper);
 			}, 50);
 		}
 
-		if (document.readyState === 'loading') {
-			document.addEventListener('DOMContentLoaded', initMobileRecommendationsSlider);
-			document.addEventListener('DOMContentLoaded', updateResponsiveHeadingLayout);
-			document.addEventListener('DOMContentLoaded', initBundleRecommendationFilter);
-		} else {
-			updateResponsiveHeadingLayout();
+		function runResponsiveRecommendationSync() {
+			if (!runtimeActive) return;
+
 			initMobileRecommendationsSlider();
+			syncCarouselMotion();
+		}
+
+		function requestResponsiveRecommendationSync() {
+			if (!runtimeActive) return;
+
+			if (responsiveFrame !== null) {
+				window.cancelAnimationFrame(responsiveFrame);
+			}
+
+			responsiveFrame = window.requestAnimationFrame(function() {
+				responsiveFrame = null;
+				runResponsiveRecommendationSync();
+			});
+		}
+
+		function shuffleRecommendationItems(items) {
+			var shuffledItems = items.slice();
+
+			for (var index = shuffledItems.length - 1; index > 0; index -= 1) {
+				var randomIndex = Math.floor(Math.random() * (index + 1));
+				var temporaryItem = shuffledItems[index];
+
+				shuffledItems[index] = shuffledItems[randomIndex];
+				shuffledItems[randomIndex] = temporaryItem;
+			}
+
+			return shuffledItems;
+		}
+
+		function getProductTypeRecommendationTypes(section) {
+			var typeData = section ? section.querySelector('[data-product-recommendation-types]') : null;
+			var seenTypes = {};
+
+			if (!typeData) return [];
+
+			try {
+				var productTypes = JSON.parse(typeData.textContent || '[]');
+
+				if (!Array.isArray(productTypes)) return [];
+
+				return productTypes.filter(function(productType) {
+					var normalizedType = String(productType || '').trim();
+					var normalizedTypeKey = normalizedType.toLowerCase();
+
+					if (!normalizedType || seenTypes[normalizedTypeKey]) return false;
+
+					seenTypes[normalizedTypeKey] = true;
+					return true;
+				});
+			} catch (error) {
+				return [];
+			}
+		}
+
+		function fetchProductTypeRecommendationCandidates(section, productType) {
+			var endpoint = section ? section.getAttribute('data-recommendation-candidates-url') : '';
+
+			if (!endpoint || !window.fetch || !window.DOMParser) {
+				return Promise.resolve([]);
+			}
+
+			try {
+				var url = new URL(endpoint, window.location.origin);
+
+				url.searchParams.set('view', 'product-recommendation-candidates');
+				url.searchParams.set('sort_by', 'best-selling');
+				url.searchParams.set('filter.p.product_type', productType);
+
+				var requestController = window.AbortController ? new AbortController() : null;
+				var requestOptions = { credentials: 'same-origin' };
+				var requestTimeout;
+
+				if (requestController) {
+					requestOptions.signal = requestController.signal;
+				}
+
+				var fetchCandidates = window.fetch(url.toString(), requestOptions)
+					.then(function(response) {
+						if (!response.ok) return '';
+
+						return response.text();
+					})
+					.then(function(markup) {
+						if (!markup) return [];
+
+						var responseDocument = new DOMParser().parseFromString(markup, 'text/html');
+
+						return Array.prototype.slice.call(
+							responseDocument.querySelectorAll('[data-recommendation-candidate]')
+						);
+					})
+					.catch(function() {
+						return [];
+					});
+
+				var timeoutCandidates = new Promise(function(resolve) {
+					requestTimeout = window.setTimeout(function() {
+						if (requestController) requestController.abort();
+						resolve([]);
+					}, 5000);
+				});
+
+				return Promise.race([fetchCandidates, timeoutCandidates]).then(function(candidates) {
+					window.clearTimeout(requestTimeout);
+					return candidates;
+				});
+			} catch (error) {
+				return Promise.resolve([]);
+			}
+		}
+
+		function replaceProductTypeRecommendationSlides(section, selectedCandidates) {
+			var wrapper = section.querySelector('.featured-products__row');
+			if (!wrapper || !selectedCandidates.length) return;
+
+			section.hidden = false;
+
+			section.querySelectorAll('.js-featured-products-slide[data-recommendation-source="best-seller"]').forEach(function(slide) {
+				slide.remove();
+			});
+
+			selectedCandidates.forEach(function(candidate) {
+				var slide = candidate.cloneNode(true);
+
+				slide.removeAttribute('data-recommendation-candidate');
+				slide.classList.remove(
+					'product-recommendations__candidate-fallback',
+					'product-recommendations__slide--desktop-hidden',
+					'product-recommendations__slide--mobile-hidden'
+				);
+				wrapper.appendChild(slide);
+			});
+
+			rebalanceRecommendationGroups();
+			section.setAttribute('data-product-type-recommendations-loaded', 'true');
+			section.removeAttribute('data-product-type-recommendations-pending');
+			section.removeAttribute('data-product-type-recommendations-refreshing');
+
+			var slider = section.querySelector('.js-featured-products-slider');
+			if (slider && slider.swiper && typeof slider.swiper.update === 'function') {
+				slider.swiper.update();
+			}
+
+			requestResponsiveRecommendationSync();
+			filterBundleProductsFromRecommendations();
+		}
+		function loadRandomProductTypeRecommendations(force) {
+			var section = document.getElementById('{{ section.id }}');
+			var isRefresh = force === true;
+
+			if (
+				!runtimeActive ||
+				!section ||
+				(!isRefresh && section.getAttribute('data-product-type-recommendations-requested') === 'true')
+			) {
+				return;
+			}
+
+			if (isRefresh) {
+				section.removeAttribute('data-product-type-recommendations-failed');
+				section.setAttribute('data-product-type-recommendations-pending', 'true');
+			}
+
+			var recommendationLimit = parseInt(section.getAttribute('data-best-seller-limit'), 10) || 4;
+			var currentProductHandle = normalizeProductHandle(section.getAttribute('data-current-product-handle'));
+			var productTypes = shuffleRecommendationItems(getProductTypeRecommendationTypes(section));
+			var selectedCandidates = [];
+			var selectedHandles = {};
+
+			section.querySelectorAll('.js-featured-products-slide[data-recommendation-source="related"]')
+				.forEach(function(slide) {
+					var relatedHandle = getRecommendationProductHandle(slide);
+
+					if (relatedHandle) {
+						selectedHandles[relatedHandle] = true;
+					}
+				});
+
+			if (!productTypes.length || !recommendationLimit) {
+				section.setAttribute('data-product-type-recommendations-failed', 'true');
+				section.removeAttribute('data-product-type-recommendations-refreshing');
+				section.removeAttribute('data-product-type-recommendations-pending');
+				section.hidden = false;
+				return;
+			}
+
+			section.setAttribute('data-product-type-recommendations-requested', 'true');
+
+			function selectNextProductType(index) {
+				if (
+					!runtimeActive ||
+					selectedCandidates.length >= recommendationLimit ||
+					index >= productTypes.length
+				) {
+					return Promise.resolve();
+				}
+
+				return fetchProductTypeRecommendationCandidates(section, productTypes[index])
+					.then(function(candidates) {
+						var requestedProductType = String(productTypes[index] || '').trim().toLowerCase();
+						var bundleProductMatches = collectBundleProductMatches();
+						var eligibleCandidates = candidates.filter(function(candidate) {
+							var candidateHandle = normalizeProductHandle(candidate.getAttribute('data-product-handle'));
+							var candidateTitle = normalizeProductTitle(candidate.getAttribute('data-product-title'));
+							var candidateProductType = String(candidate.getAttribute('data-product-type') || '').trim().toLowerCase();
+
+							return candidateHandle && candidateProductType === requestedProductType && candidateHandle !== currentProductHandle && !selectedHandles[candidateHandle] && !bundleProductMatches.handles[candidateHandle] && !bundleProductMatches.titles[candidateTitle];
+						}).slice(0, 5);
+
+						if (eligibleCandidates.length) {
+							var candidateIndex = Math.floor(Math.random() * eligibleCandidates.length);
+							var selectedCandidate = eligibleCandidates[candidateIndex];
+							var selectedHandle = normalizeProductHandle(selectedCandidate.getAttribute('data-product-handle'));
+
+							selectedCandidate.setAttribute(
+								'data-product-type-top-five-rank',
+								selectedCandidate.getAttribute('data-best-seller-rank') || String(candidateIndex + 1)
+							);
+							selectedHandles[selectedHandle] = true;
+							selectedCandidates.push(selectedCandidate);
+						}
+					})
+					.then(function() {
+						return selectNextProductType(index + 1);
+					});
+			}
+
+			selectNextProductType(0).then(function() {
+				if (!runtimeActive) return;
+
+				if (selectedCandidates.length === recommendationLimit) {
+					replaceProductTypeRecommendationSlides(section, selectedCandidates);
+				} else {
+					section.setAttribute('data-product-type-recommendations-failed', 'true');
+					section.removeAttribute('data-product-type-recommendations-refreshing');
+					section.removeAttribute('data-product-type-recommendations-pending');
+					section.hidden = false;
+				}
+			}).catch(function() {
+				if (!runtimeActive) return;
+
+				section.setAttribute('data-product-type-recommendations-failed', 'true');
+				section.removeAttribute('data-product-type-recommendations-refreshing');
+				section.removeAttribute('data-product-type-recommendations-pending');
+				section.hidden = false;
+			});
+		}
+		function initializeProductRecommendations() {
+			if (!runtimeActive) return;
+
+			runResponsiveRecommendationSync();
+			initBundleRecommendationFilter();
+			loadRandomProductTypeRecommendations();
+		}
+
+		function handleThemeRuntimeRefresh() {
+			requestResponsiveRecommendationSync();
 			initBundleRecommendationFilter();
 		}
 
-		window.addEventListener('resize', updateResponsiveHeadingLayout);
-		window.addEventListener('resize', initMobileRecommendationsSlider);
-		window.addEventListener('orientationchange', updateResponsiveHeadingLayout);
-		window.addEventListener('orientationchange', initMobileRecommendationsSlider);
-		document.addEventListener('theme:all:loaded', initMobileRecommendationsSlider);
-		document.addEventListener('theme:all:loaded', filterBundleProductsFromRecommendations);
-		document.addEventListener('shopify:section:load', updateResponsiveHeadingLayout);
-		document.addEventListener('shopify:section:load', initMobileRecommendationsSlider);
-		document.addEventListener('shopify:section:select', updateResponsiveHeadingLayout);
-		document.addEventListener('shopify:section:select', initMobileRecommendationsSlider);
+		function handleSectionUnload(event) {
+			var section = document.getElementById('{{ section.id }}');
+
+			if (
+				!event ||
+				!event.target ||
+				!section ||
+				event.target === section ||
+				event.target.contains(section)
+			) {
+				destroyRuntime();
+			}
+		}
+
+		if (document.readyState === 'loading') {
+			addRuntimeListener(document, 'DOMContentLoaded', initializeProductRecommendations, { once: true });
+		} else {
+			initializeProductRecommendations();
+		}
+
+		addRuntimeListener(window, 'resize', requestResponsiveRecommendationSync);
+		addRuntimeListener(window, 'orientationchange', requestResponsiveRecommendationSync);
+		addRuntimeListener(window, 'load', requestResponsiveRecommendationSync);
+		addRuntimeListener(document, 'theme:all:loaded', handleThemeRuntimeRefresh);
+		addRuntimeListener(document, 'shopify:section:load', handleThemeRuntimeRefresh);
+		addRuntimeListener(document, 'shopify:section:select', requestResponsiveRecommendationSync);
+		addRuntimeListener(document, 'shopify:section:unload', handleSectionUnload);
+		addRuntimeListener(mobileQuery, 'change', requestResponsiveRecommendationSync);
 
 		if (window.ResizeObserver) {
 			var observedSection = document.getElementById('{{ section.id }}');
 
 			if (observedSection) {
-				new ResizeObserver(updateResponsiveHeadingLayout).observe(observedSection);
+				var sectionResizeObserver = trackRuntimeObserver(new ResizeObserver(requestResponsiveRecommendationSync));
+				sectionResizeObserver.observe(observedSection);
 			}
 		}
 
@@ -1123,7 +2133,8 @@
 			var mutableSection = document.getElementById('{{ section.id }}');
 
 			if (mutableSection) {
-				new MutationObserver(updateResponsiveHeadingLayout).observe(mutableSection, {
+				var sectionMutationObserver = trackRuntimeObserver(new MutationObserver(requestResponsiveRecommendationSync));
+				sectionMutationObserver.observe(mutableSection, {
 					attributes: true,
 					attributeFilter: ['style']
 				});
@@ -1157,7 +2168,7 @@
 			"type": "inline_richtext",
 			"id": "heading",
 			"label": "Heading",
-			"default": "Recommendations"
+			"default": "You Might Also Like"
 		},
 		{
 			"type": "range",
@@ -1182,20 +2193,29 @@
 		{
 			"type": "range",
 			"id": "products_to_show",
-			"min": 4,
-			"max": 12,
+			"min": 1,
+			"max": 8,
 			"step": 1,
 			"default": 4,
-			"label": "Products to show on desktop"
+			"label": "Recommended products"
+		},
+		{
+			"type": "range",
+			"id": "best_seller_products_to_show",
+			"min": 1,
+			"max": 8,
+			"step": 1,
+			"default": 4,
+			"label": "Best sellers from different product types"
 		},
 		{
 			"type": "range",
 			"id": "products_to_show_mobile",
 			"min": 1,
-			"max": 12,
+			"max": 16,
 			"step": 1,
-			"default": 6,
-			"label": "Products to show on mobile"
+			"default": 8,
+			"label": "Total products available on mobile"
 		},
 		{
 			"type": "checkbox",
@@ -1208,7 +2228,13 @@
 			"type": "collection",
 			"id": "collection",
 			"label": "Resource collection",
-			"info": "Use collection if Shopify recommendations is off."
+			"info": "Use collection if collection-based recommendations are off."
+		},
+		{
+			"type": "collection",
+			"id": "best_seller_collection",
+			"label": "Best seller source",
+			"info": "Leave blank to use All, which must be sorted by best selling. The section scans up to 250 ranked products and selects the first eligible product from each unique product type."
 		},
 		{
 			"type": "header",

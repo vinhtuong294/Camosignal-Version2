@@ -23,6 +23,27 @@
 -%}
 
 {%- if slide_count > 0 -%}
+	{%- liquid
+		assign first_slide = section.blocks.first
+		assign first_asset_desktop = first_slide.settings.asset_image_desktop | strip
+		assign first_asset_mobile = first_slide.settings.asset_image_mobile | strip
+		assign first_image_desktop = first_slide.settings.image_desktop | default: first_slide.settings.image_mobile
+		assign first_image_mobile = first_slide.settings.image_mobile | default: first_image_desktop
+		assign initial_desktop_aspect = '16 / 9'
+		assign initial_mobile_aspect = initial_desktop_aspect
+		if first_asset_desktop != blank or first_asset_mobile != blank
+			assign initial_desktop_aspect = '1800 / 760'
+			assign initial_mobile_aspect = '1100 / 1375'
+		else
+			if first_image_desktop != blank and first_image_desktop.width > 0 and first_image_desktop.height > 0
+				assign initial_desktop_aspect = first_image_desktop.width | append: ' / ' | append: first_image_desktop.height
+			endif
+			assign initial_mobile_aspect = initial_desktop_aspect
+			if first_image_mobile != blank and first_image_mobile.width > 0 and first_image_mobile.height > 0
+				assign initial_mobile_aspect = first_image_mobile.width | append: ' / ' | append: first_image_mobile.height
+			endif
+		endif
+	-%}
 	{%- style -%}
 		#shopify-section-{{ section.id }} {
 			padding-top: {{ offset_top_mobile }}px;
@@ -30,6 +51,8 @@
 		}
 
 		#{{ section_id }} {
+			--camo-hero-aspect-desktop: {{ initial_desktop_aspect }};
+			--camo-hero-aspect-mobile: {{ initial_mobile_aspect }};
 			--camo-hero-height-desktop: {{ section.settings.height_desktop }}px;
 			--camo-hero-height-mobile: {{ section.settings.height_mobile }}px;
 			--camo-hero-content-width: {{ content_width }}px;
@@ -624,24 +647,24 @@
 			right: auto;
 			bottom: 48px;
 			left: 50%;
-			width: 176px;
-			min-width: 176px;
+			width: 150px;
+			min-width: 150px;
+			min-height: 44px;
 			margin: 0;
 			justify-content: center;
-			gap: 0;
-			padding-inline: 42px;
+			gap: 20px;
+			padding: 9px 26px;
 			font-size: 10px;
 			translate: -50% 0;
 		}
 
 		.camo-hero-slider__button-label {
-			width: 100%;
+			width: auto;
 			text-align: center;
 		}
 
 		.camo-hero-slider__button-icon {
-			position: absolute;
-			right: 14px;
+			position: static;
 		}
 
 		.camo-hero-slider__slide--mobile-button-left .camo-hero-slider__button {

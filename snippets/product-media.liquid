@@ -20,6 +20,45 @@
 	{%- assign is_preset = true -%}
 {%- endif -%}
 
+{% liquid
+	assign combo_media_enabled = false
+	assign combo_media_id = blank
+	assign vest_media_id = blank
+	assign long_sleeve_media_id = blank
+	assign product_type_downcase = product.type | downcase
+	if is_preset == false and product_type_downcase == 'combo' or product.tags contains 'combo-builder'
+		assign combo_media_enabled = true
+		for variant in product.variants
+			assign variant_choice_downcase = variant.option1 | downcase
+			if variant.featured_media != blank
+				if variant_choice_downcase contains 'combo'
+					if combo_media_id == blank
+						assign combo_media_id = variant.featured_media.id
+					endif
+				elsif variant_choice_downcase contains 'vest'
+					if vest_media_id == blank
+						assign vest_media_id = variant.featured_media.id
+					endif
+				elsif variant_choice_downcase contains 'long'
+					if long_sleeve_media_id == blank
+						assign long_sleeve_media_id = variant.featured_media.id
+					endif
+				endif
+			endif
+		endfor
+	endif
+%}
+
+{%- assign is_spooky_product_media = false -%}
+{%- unless is_preset -%}
+	{%- for product_collection in product.collections -%}
+		{%- if product_collection.handle == 'spooky-kids-tee' or product_collection.handle == 'halloween-dog-t-shirt' -%}
+			{%- assign is_spooky_product_media = true -%}
+			{%- break -%}
+		{%- endif -%}
+	{%- endfor -%}
+{%- endunless -%}
+
 {%- if product.media.size > 0 -%}
 	{%- assign is_show_first_media_image = settings.is_show_first_media_image -%}
 	{%- assign media_layout = section.settings.media_layout | default: 'stacked_2_col' -%}
@@ -48,7 +87,7 @@
 	{%- endif -%}
 
 	{%- capture media_container_classes -%}
-		product-media product-media--layout-{{- media_layout }} product-media--thumbnails-position-{{- thumbnails_position }} js-product-media-container
+		product-media product-media--layout-{{- media_layout }} product-media--thumbnails-position-{{- thumbnails_position }} js-product-media-container{% if is_spooky_product_media %} product-media--spooky{% endif %}
 	{%- endcapture -%}
 
 	<div
@@ -324,6 +363,15 @@
 
 			<div class="swiper-wrapper product-media__slider-wrapper">
 				{%- for media in product.media  -%}
+					{% liquid
+						assign combo_media_group = 'combo'
+						assign media_alt_downcase = media.alt | downcase
+						if media.id == vest_media_id or media_alt_downcase contains 'vest'
+							assign combo_media_group = 'vest'
+						elsif media.id == long_sleeve_media_id or media_alt_downcase contains 'long-sleeve' or media_alt_downcase contains 'long sleeve'
+							assign combo_media_group = 'long-sleeve'
+						endif
+					%}
 					{%- assign aspect_ratio = 1.0 | divided_by: media.aspect_ratio | times: 100 | round: 2 -%}
 					{%- assign is_current_lazy = is_lazy -%}
 					{%- assign is_paused_class = "is-paused-video js-paused-video" -%}
@@ -362,6 +410,7 @@
 					<div
 						class="swiper-slide product-media__slider-slide {{ is_paused_class }} js-product-gallery-slide{% if is_zoom_enabled and media.media_type != 'video' and media.media_type != 'external_video' %} product-media__slider-slide--zoom js-product-gallery-slide-zoom{% endif %} {{ slide_height_class }}"
 						data-media-id="{{- media.id -}}"
+						{% if combo_media_enabled %}data-combo-media-group="{{ combo_media_group }}"{% endif %}
 						{% if media.media_type == 'model' %}
 							data-model-slide="{{- media.id -}}"
 						{% endif %}
@@ -477,8 +526,19 @@
 			>
 				<div class="swiper-wrapper product-media__slider-thumbnails-wrapper">
 					{% for media in product.media %}
+						{% liquid
+							assign combo_media_group = 'combo'
+							assign media_alt_downcase = media.alt | downcase
+							if media.id == vest_media_id or media_alt_downcase contains 'vest'
+								assign combo_media_group = 'vest'
+							elsif media.id == long_sleeve_media_id or media_alt_downcase contains 'long-sleeve' or media_alt_downcase contains 'long sleeve'
+								assign combo_media_group = 'long-sleeve'
+							endif
+						%}
 						<button class="swiper-slide product-media__slider-thumbnails-slide"
 								data-slide-index="{{ forloop.index0 }}"
+								data-media-id="{{ media.id }}"
+								{% if combo_media_enabled %}data-combo-media-group="{{ combo_media_group }}"{% endif %}
 								type="button"
 								style="--thumbnail-aspect-ratio: {{ thumbnail_aspect_ratio }};"
 						>

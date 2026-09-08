@@ -423,10 +423,14 @@
 	"products": {
 		"customization": {
 			"heading": "Personalisierung",
+			"customize": "Personalisieren",
 			"name_label": "Dein Name",
 			"name_placeholder": "Gib deinen Namen ein",
 			"number_label": "Deine Nummer",
-			"number_placeholder": "Gib deine Nummer ein"
+			"number_placeholder": "Gib deine Nummer ein",
+			"required_message": "Gib alle erforderlichen Personalisierungsangaben ein.",
+			"cart_missing_item": "Personalisierungsangaben fehlen. Entferne diesen Artikel und füge ihn erneut hinzu.",
+			"cart_missing_checkout": "Vervollständige die fehlenden Personalisierungsangaben vor dem Bezahlen."
 		},
 		"product": {
 			"sold_out": "Ausverkauft",

@@ -168,8 +168,14 @@
 									{%- assign mobile_display_title = 'Fishing' -%}
 									{%- assign dest_url = routes.collections_url | append: '/fishing' -%}
 								{%- endif -%}
+								{%- assign is_halloween_link = false -%}
+								{%- if link_title_down == 'halloween' -%}
+									{%- assign is_halloween_link = true -%}
+									{%- assign mobile_display_title = 'Halloween' -%}
+									{%- assign dest_url = '#' -%}
+								{%- endif -%}
 
-								{%- if first_level_link.links != blank or is_collection_link or is_support_link or is_fishing_link or is_hunting_link -%}
+								{%- if first_level_link.links != blank or is_collection_link or is_support_link or is_fishing_link or is_halloween_link or is_hunting_link -%}
 									{%- comment -%} ==========================================
 									   Menu nesting → accordion (split link and toggle)
 									========================================== {%- endcomment -%}
@@ -179,15 +185,19 @@
 
 									<div class="header-mobile__menu-item-row" style="display: flex; align-items: center; justify-content: flex-start; gap: 6px; width: 100%;">
 										<a
-											class="button-link header-mobile__menu-item header-mobile__menu-item--main{% if is_shop_link or is_fishing_link or is_hunting_link or is_more_collections_link %} js-mobile-dropdown-text-toggle{% endif %}"
-											href="{%- if is_shop_link or is_fishing_link or is_hunting_link or is_more_collections_link -%}#{%- else -%}{{- dest_url -}}{%- endif -%}"
+											class="button-link header-mobile__menu-item header-mobile__menu-item--main{% if is_halloween_link %} header-mobile__menu-item--halloween{% endif %}{% if is_shop_link or is_fishing_link or is_halloween_link or is_hunting_link or is_more_collections_link %} js-mobile-dropdown-text-toggle{% endif %}"
+											href="{%- if is_shop_link or is_fishing_link or is_halloween_link or is_hunting_link or is_more_collections_link -%}#{%- else -%}{{- dest_url -}}{%- endif -%}"
 											style="white-space: nowrap; flex: 0 1 auto; text-align: left;"
-											{% if first_level_link.current and is_shop_link == false and is_fishing_link == false and is_hunting_link == false and is_more_collections_link == false %}aria-current="page"{% endif %}
-											{% if is_shop_link or is_fishing_link or is_hunting_link or is_more_collections_link %}onclick="event.preventDefault(); event.stopPropagation(); var btn = this.parentElement.querySelector('.js-mobile-dropdown-toggle'); if (btn) { btn.click(); }"{% endif %}
+											{% if first_level_link.current and is_shop_link == false and is_fishing_link == false and is_halloween_link == false and is_hunting_link == false and is_more_collections_link == false %}aria-current="page"{% endif %}
+											{% if is_shop_link or is_fishing_link or is_halloween_link or is_hunting_link or is_more_collections_link %}onclick="event.preventDefault(); event.stopPropagation(); var btn = this.parentElement.querySelector('.js-mobile-dropdown-toggle'); if (btn) { btn.click(); }"{% endif %}
 										>
-											<span data-text="{{- mobile_display_title | escape -}}">
-												<span>{{- mobile_display_title | escape -}}</span>
-											</span>
+											{%- if is_halloween_link -%}
+												{%- render 'halloween-nav-wordmark', wordmark_alt: mobile_display_title -%}
+											{%- else -%}
+												<span data-text="{{- mobile_display_title | escape -}}">
+													<span>{{- mobile_display_title | escape -}}</span>
+												</span>
+											{%- endif -%}
 										</a>
 										<button
 											class="button-link header-mobile__menu-item header-mobile__menu-item--main js-mobile-dropdown-toggle"
@@ -228,8 +238,8 @@
 													<a class="header-mobile__dropdown-link" href="{{ routes.all_products_collection_url }}?filter.p.product_type=Hat"><span>Hats</span></a>
 												</li>
 										{%- elsif is_hunting_link -%}
-											{%- assign mobile_hunting_handles = 'turkey,deer,hunting-spirit' | split: ',' -%}
-											{%- assign mobile_hunting_labels = 'Turkey,Deer,All Hunting' | split: ',' -%}
+{%- assign mobile_hunting_handles = 'vest,hunting-hoodie-1,the-uplands,deer,turkey,faith-outdoors' | split: ',' -%}
+{%- assign mobile_hunting_labels = 'Curated Sets,Hunting UV Hoodie,The Uplands,Deer,Turkey,Faith & Outdoors' | split: ',' -%}
 											{%- for mobile_hunting_handle in mobile_hunting_handles -%}
 												{%- assign mobile_hunting_col = collections[mobile_hunting_handle] -%}
 												{%- assign mobile_hunting_url = routes.collections_url | append: '/' | append: mobile_hunting_handle -%}
@@ -243,14 +253,16 @@
 												</li>
 											{%- endfor -%}
 										{%- elsif is_fishing_link -%}
-											{%- assign mobile_all_fishing_col = collections['fishing'] -%}
-												{%- assign mobile_all_fishing_url = dest_url -%}
-												{%- if mobile_all_fishing_url == blank or mobile_all_fishing_url == '#' -%}
-													{%- assign mobile_all_fishing_url = routes.collections_url | append: '/fishing' -%}
-													{%- if mobile_all_fishing_col != blank -%}
-														{%- assign mobile_all_fishing_url = mobile_all_fishing_col.url -%}
-													{%- endif -%}
-												{%- endif -%}
+											{%- assign mobile_shirt_col = collections['reel-life-shirt'] -%}
+											{%- assign mobile_shirt_url = routes.collections_url | append: '/reel-life-shirt' -%}
+											{%- if mobile_shirt_col != blank -%}
+												{%- assign mobile_shirt_url = mobile_shirt_col.url -%}
+											{%- endif -%}
+											{%- assign mobile_hoodie_col = collections['fishing-hoodie'] -%}
+											{%- assign mobile_hoodie_url = routes.collections_url | append: '/fishing-hoodie' -%}
+											{%- if mobile_hoodie_col != blank -%}
+												{%- assign mobile_hoodie_url = mobile_hoodie_col.url -%}
+											{%- endif -%}
 												{%- assign mobile_freshwater_col = collections['fishing-t-shirt'] -%}
 												{%- assign mobile_freshwater_url = routes.collections_url | append: '/fishing-t-shirt' -%}
 												{%- if mobile_freshwater_col != blank -%}
@@ -265,14 +277,30 @@
 												{%- assign mobile_saltwater_url = mobile_saltwater_col.url -%}
 											{%- endif -%}
 											<li class="header-mobile__dropdown-item">
+												<a class="header-mobile__dropdown-link" href="{{ mobile_freshwater_url }}"><span>Freshwater Fishing</span></a>
+											</li>
+											<li class="header-mobile__dropdown-item">
 												<a class="header-mobile__dropdown-link" href="{{ mobile_saltwater_url }}"><span>Saltwater Fishing</span></a>
 											</li>
 											<li class="header-mobile__dropdown-item">
-												<a class="header-mobile__dropdown-link" href="{{ mobile_freshwater_url }}"><span>Fresh Water Fishing</span></a>
+												<a class="header-mobile__dropdown-link" href="{{ mobile_hoodie_url }}"><span>Fishing Hoodie</span></a>
 											</li>
 											<li class="header-mobile__dropdown-item">
-												<a class="header-mobile__dropdown-link" href="{{ mobile_all_fishing_url }}"><span>All Fishing</span></a>
+												<a class="header-mobile__dropdown-link" href="{{ mobile_shirt_url }}"><span>Fishing Shirt</span></a>
 											</li>
+											{%- elsif is_halloween_link -%}
+												{%- assign mobile_halloween_handles = 'spooky-season,halloween-dog-t-shirt,spooky-kids-tee' | split: ',' -%}
+												{%- assign mobile_halloween_labels = 'HUNT INTO HALLOWEEN,Spooky Pups Tee,Spooky Kids Tee' | split: ',' -%}
+											{%- for mobile_halloween_handle in mobile_halloween_handles -%}
+												{%- assign mobile_halloween_col = collections[mobile_halloween_handle] -%}
+												{%- assign mobile_halloween_url = routes.collections_url | append: '/' | append: mobile_halloween_handle -%}
+												{%- if mobile_halloween_col != blank -%}
+													{%- assign mobile_halloween_url = mobile_halloween_col.url -%}
+												{%- endif -%}
+												<li class="header-mobile__dropdown-item">
+													<a class="header-mobile__dropdown-link" href="{{ mobile_halloween_url }}"><span>{{ mobile_halloween_labels[forloop.index0] | escape }}</span></a>
+												</li>
+											{%- endfor -%}
 										{%- elsif is_more_collections_link -%}
 											<li class="header-mobile__mega-group">
 												<button class="header-mobile__mega-toggle" type="button" aria-expanded="false" onclick="event.preventDefault(); event.stopPropagation(); var content = this.nextElementSibling; if (content &amp;&amp; content.classList.contains('header-mobile__mega-panel')) { var isOpen = this.getAttribute('aria-expanded') === 'true'; this.setAttribute('aria-expanded', !isOpen); content.classList.toggle('is-open', !isOpen); }">
@@ -299,8 +327,8 @@
 													<span class="header-mobile__mega-plus" aria-hidden="true"></span>
 												</button>
 												<ul class="header-mobile__mega-panel">
-											{%- assign mobile_occasion_handles = 'spooky-kids-tee,game-day,back-to-school,usa' | split: ',' -%}
-												{%- assign mobile_occasion_labels = 'Spooky Kids Tee,Game Day,First Day Kids Tee,Independence Day' | split: ',' -%}
+											{%- assign mobile_occasion_handles = 'halloween-dog-t-shirt,spooky-kids-tee,game-day,back-to-school' | split: ',' -%}
+												{%- assign mobile_occasion_labels = 'Spooky Pups Tee,Spooky Kids Tee,Game Day,First Day Kids Tee' | split: ',' -%}
 													{%- for mobile_occasion_handle in mobile_occasion_handles -%}
 														{%- assign mobile_occasion_col = collections[mobile_occasion_handle] -%}
 														{%- assign mobile_occasion_url = routes.collections_url | append: '/' | append: mobile_occasion_handle -%}
@@ -308,7 +336,7 @@
 													{%- assign mobile_occasion_url = mobile_occasion_col.url -%}
 												{%- endif -%}
 										<li class="header-mobile__dropdown-item{% if mobile_occasion_handle == 'game-day' %} header-mobile__occasion-parent{% endif %}">
-									<a class="header-mobile__dropdown-link{% if mobile_occasion_handle == 'spooky-kids-tee' %} header-mobile__dropdown-link--spooky{% endif %}" href="{{ mobile_occasion_url }}"><span>{{ mobile_occasion_labels[forloop.index0] | escape }}</span></a>
+									<a class="header-mobile__dropdown-link{% if mobile_occasion_handle == 'halloween-dog-t-shirt' or mobile_occasion_handle == 'spooky-kids-tee' %} header-mobile__dropdown-link--spooky{% endif %}" href="{{ mobile_occasion_url }}"><span>{{ mobile_occasion_labels[forloop.index0] | escape }}</span></a>
 											{%- if mobile_occasion_handle == 'game-day' -%}
 														<ul class="header-mobile__occasion-submenu">
 											{%- assign mobile_game_day_sub_handles = 'game-day-t-shirt,game-day-jersey' | split: ',' -%}
@@ -477,10 +505,11 @@
 										<span class="header-mobile__mega-plus" aria-hidden="true"></span>
 									</button>
 									<ul class="header-mobile__mega-panel">
-								{%- assign mob_fishing_handles = "fishing,fishing-t-shirt,saltwater-fishing" | split: "," -%}
-								{%- assign mob_fishing_fallback_handles = "fishing,fishing-t-shirt,saltwater-fishing-t-shirt" | split: "," -%}
-								{%- assign mob_fishing_labels = "All Fishing,Freshwater Fishing,Saltwater Fishing" | split: "," -%}
-								{%- assign mob_fishing_icon_fallbacks = "https://cdn.shopify.com/s/files/1/0741/7987/0911/collections/icon_bass.jpg?v=1780569828,https://cdn.shopify.com/s/files/1/0741/7987/0911/collections/icon_bass.jpg?v=1780569828,https://cdn.shopify.com/s/files/1/0741/7987/0911/collections/icon_swordfish.jpg?v=1780569816" | split: "," -%}
+
+								{%- assign mob_fishing_handles = "fishing-t-shirt,saltwater-fishing,fishing-hoodie,reel-life-shirt" | split: "," -%}
+								{%- assign mob_fishing_fallback_handles = "freshwater-fishing,saltwater-fishing-t-shirt,fishing-hoodie,reel-life-shirt" | split: "," -%}
+								{%- assign mob_fishing_labels = "Freshwater Fishing,Saltwater Fishing,Fishing Hoodie,Fishing Shirt" | split: "," -%}
+								{%- assign mob_fishing_icon_fallbacks = "https://cdn.shopify.com/s/files/1/0741/7987/0911/collections/icon_bass.jpg?v=1780569828,https://cdn.shopify.com/s/files/1/0741/7987/0911/collections/icon_swordfish.jpg?v=1780569816,https://cdn.shopify.com/s/files/1/0741/7987/0911/collections/icon_bass.jpg?v=1780569828,https://cdn.shopify.com/s/files/1/0741/7987/0911/collections/icon_bass.jpg?v=1780569828" | split: "," -%}
 								{%- for mf in mob_fishing_handles -%}
 									{%- assign mf_col = collections[mf] -%}
 									{%- if mf_col == blank -%}

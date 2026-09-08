@@ -1,0 +1,37 @@
+<script
+  src="{{ 'flex-upsell-cart-refresh.js' | asset_url }}"
+  async
+  fetchpriority="high"
+></script>
+<div class="flex-upsell-mount" {{ block.shopify_attributes }}>
+  <flex-cart-upsell
+    data-placement="PRODUCT_PAGE"
+    data-product-id="{{ product.id }}"
+    data-endpoint="/apps/flex-cart-upsell-1/recommendations"
+    data-events-endpoint="/apps/flex-cart-upsell-1/events"
+    data-close-icon-url="{{ 'flex-close.svg' | asset_url }}"
+  >
+    <div class="flex-upsell__loading" aria-live="polite">
+      {{ block.settings.loading_text }}
+    </div>
+  </flex-cart-upsell>
+</div>
+
+{% schema %}
+{
+  "name": "Product page upsell",
+  "target": "section",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "stylesheet": "flex-upsell.css",
+  "settings": [
+    {
+      "type": "text",
+      "id": "loading_text",
+      "label": "Loading text",
+      "default": "Finding the best match..."
+    }
+  ]
+}
+{% endschema %}

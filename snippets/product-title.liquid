@@ -302,6 +302,11 @@
 	{%- assign title = preset_title -%}
 {%- endif -%}
 
+{%- assign display_title = title -%}
+{%- if template.name == 'product' -%}
+	{%- assign display_title = title | replace: '-', '&#8209;' -%}
+{%- endif -%}
+
 {%- capture styles -%}
 	--offset-top-desktop: {{ block.settings.offset_top_desktop }}px; {{-  -}}
 	--offset-bottom-desktop: {{ block.settings.offset_bottom_desktop }}px; {{-  -}}
@@ -314,11 +319,11 @@
 		<div class="product-title-container" style="width: 100%;">
 			{%- if template.name == 'product' -%}
 				<h1 class="product-title h3" style="margin: 0;">
-					{{- title -}}
+					{{- display_title -}}
 				</h1>
 			{%- else -%}
 				<a class="product-title h3 focus-visible-outline" href="{{- product.url -}}" style="margin: 0;">
-					{{- title -}}
+					{{- display_title -}}
 				</a>
 			{%- endif -%}
 		</div>
@@ -383,43 +388,58 @@
 			.product-sold-wrapper {
 				display: flex;
 				align-items: center;
-				position: relative;
-				top: 2px;
+				line-height: 1;
 			}
 			.product-sold-count {
+				display: inline-flex;
+				align-items: center;
 				font-family: var(--font-heading-family), 'Oswald', sans-serif;
 				font-size: 15px;
 				color: #2c3d33;
 				font-weight: 500;
+				line-height: 1;
 				letter-spacing: 0.5px;
 			}
 			.product-sold-separator {
+				display: inline-flex;
+				align-items: center;
 				color: #2c3d33;
-				font-size: 18px;
+				font-size: 15px;
 				font-weight: 300;
 				margin-left: 6px;
 				line-height: 1;
-				position: relative;
-				top: -2px;
 			}
-			/* Fix Judge.me badge margins causing vertical misalignment */
 			.injected-review-container .jdgm-preview-badge,
-			.injected-review-container .jdgm-widget {
+			.injected-review-container .jdgm-widget,
+			.injected-review-container .jdgm-prev-badge {
 				margin-bottom: 0 !important;
 				margin-top: 0 !important;
 				line-height: 1 !important;
 				display: flex !important;
 				align-items: center !important;
 			}
+			.injected-review-container .jdgm-prev-badge__stars,
+			.injected-review-container .jdgm-star,
+			.injected-review-container .jdgm-prev-badge__text {
+				display: inline-flex !important;
+				align-items: center !important;
+				line-height: 1 !important;
+			}
+			.injected-review-container .jdgm-prev-badge__text {
+				font-family: var(--font-heading-family), 'Oswald', sans-serif !important;
+				font-size: 15px !important;
+				font-weight: 500 !important;
+			}
 			@media screen and (max-width: 767px) {
 				.product-reviews-and-sold {
 					margin-bottom: 12px;
 				}
-				.product-sold-count {
-					font-size: 14px;
+				.product-sold-count,
+				.injected-review-container .jdgm-prev-badge__text {
+					font-size: 14px !important;
 				}
 				.product-sold-separator {
-					font-size: 13px;
+					font-size: 14px;
 				}
 			}
 		</style>
@@ -442,13 +462,17 @@
 				var wrapper = document.getElementById('injected-review-container-{{ section.id }}');
 				if (!wrapper) return;
 				
-				// Try to find common review widgets inside the product form
-				var form = wrapper.closest('.product-form');
+				// On mobile the title block is moved above the gallery, outside the
+				// product form. Keep the review lookup scoped to this product section.
+				var productRoot = wrapper.closest('.product');
+				var form = wrapper.closest('.product-form') || (productRoot && productRoot.querySelector('.product-form'));
 				if (!form) return;
 				
-				var reviewWidgets = form.querySelectorAll('.loox-rating, .jdgm-preview-badge, .spr-badge, .yotpo.bottomLine, .okeReviews-reviewsSummary, [data-stamped-product-reviews-badge]');
+				var reviewRoot = productRoot || form;
+				var reviewWidgets = reviewRoot.querySelectorAll('.loox-rating, .jdgm-preview-badge, .spr-badge, .yotpo.bottomLine, .okeReviews-reviewsSummary, [data-stamped-product-reviews-badge]');
 				for (var i = 0; i < reviewWidgets.length; i++) {
 					var widget = reviewWidgets[i];
+					if (wrapper.contains(widget)) return;
 					var block = widget.closest('.shopify-app-block');
 					
 					// If it's inside a shopify app block wrapper, move the whole wrapper

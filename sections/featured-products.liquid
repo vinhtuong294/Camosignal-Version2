@@ -15,6 +15,14 @@
 
 	/* Mobile: 1-line truncation for product titles */
 	@media screen and (max-width: 767px) {
+		{%- if section.settings.fit_heading_one_line_mobile -%}
+			#shopify-section-{{ section.id }} .featured-products__header > h2 {
+				font-size: clamp(22px, 7.18vw, 28px);
+				line-height: 1.15;
+				white-space: nowrap;
+			}
+		{%- endif -%}
+
 		#shopify-section-{{- section.id -}} .product-card:not(.product-card--reference) .product-card__title {
 			min-height: auto !important;
 			line-height: 1.4 !important;
@@ -113,7 +121,7 @@
 					<div class="featured-products__header-inner">
 						{%- if is_link -%}
 							<a
-								href="{{- routes.all_products_collection_url -}}"
+								href="{{- link_url -}}"
 								class="featured-products__see-all-custom"
 							>
 								{{- link_label -}}
@@ -197,7 +205,7 @@
 		{%- comment -%} Bottom See All button {%- endcomment -%}
 		{%- if is_link -%}
 		<div class="featured-products__bottom-see-all">
-			<a class="featured-products__view-all-btn" href="{{- routes.all_products_collection_url -}}">
+			<a class="featured-products__view-all-btn" href="{{- link_url -}}">
 				{{- link_label -}}
 				<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
 			</a>
@@ -473,6 +481,12 @@ document.addEventListener('DOMContentLoaded', function() {
 			"id": "heading",
 			"label": "Heading",
 			"default": "Featured products"
+		},
+		{
+			"type": "checkbox",
+			"id": "fit_heading_one_line_mobile",
+			"label": "Fit heading on one line on mobile",
+			"default": false
 		},
 		{
 			"type": "text",

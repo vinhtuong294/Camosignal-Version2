@@ -14,6 +14,21 @@
 {%- endif -%}
 
 {%- assign is_sale_percentage_label_enabled = settings.is_sale_percentage_label_enabled -%}
+{%- assign is_spooky_product = false -%}
+{%- assign best_value_product_handles = '|let-us-thank-him-for-our-food-hoodie|the-genesis-turkey-hoodie|provided-by-him-hoodie|' -%}
+{%- assign product_handle_key = product.handle | prepend: '|' | append: '|' -%}
+{%- assign is_best_value_product = false -%}
+
+{%- if best_value_product_handles contains product_handle_key -%}
+	{%- assign is_best_value_product = true -%}
+{%- endif -%}
+
+{%- for product_collection in product.collections -%}
+	{%- if product_collection.handle == 'spooky-kids-tee' or product_collection.handle == 'halloween-dog-t-shirt' -%}
+		{%- assign is_spooky_product = true -%}
+		{%- break -%}
+	{%- endif -%}
+{%- endfor -%}
 
 {%- if tags.size > 0 or product.available == false or is_sale_percentage_label_enabled -%}
 	<ul
@@ -46,14 +61,18 @@
 				{%- assign sale_percentage_value = compare_at_price | minus: price | times: 100.0 | divided_by: compare_at_price | floor -%}
 			{% endif %}
 
-			<li	class="badge badge--sale-percentage {% if use_variant %} js-sale-percentage-badge {% endif %} {% unless show_sale_percentage_label %}is-hidden{% endunless %}">
+			<li	class="badge badge--sale-percentage{% if is_spooky_product %} badge--spooky-sale-percentage{% endif %}{% if use_variant and is_best_value_product == false %} js-sale-percentage-badge{% endif %}{% unless show_sale_percentage_label %} is-hidden{% endunless %}">
 				<span class="visually-hidden">
 					{{- 'products.product.product_label' | t -}}:
 				</span>
 
 				<span class="badge__sale-visual" aria-hidden="true">
-					<span class="badge__sale-text" data-sale-percentage>
-						{{- "products.product.sale_percentage_label" | t: number: sale_percentage_value -}}
+					<span class="badge__sale-text"{% unless is_best_value_product %} data-sale-percentage{% endunless %}>
+						{%- if is_best_value_product -%}
+							BEST VALUE
+						{%- else -%}
+							{{- "products.product.sale_percentage_label" | t: number: sale_percentage_value -}}
+						{%- endif -%}
 					</span>
 				</span>
 			</li>

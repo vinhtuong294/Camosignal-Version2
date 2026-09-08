@@ -1,0 +1,32 @@
+<div class="flex-upsell-mount" data-flex-upsell-embed hidden>
+  <flex-cart-upsell
+    data-embed-placement="CART_DRAWER"
+    data-placement="CART_DRAWER"
+    data-endpoint="/apps/flex-cart-upsell-1/recommendations"
+    data-events-endpoint="/apps/flex-cart-upsell-1/events"
+    data-close-icon-url="{{ 'flex-close.svg' | asset_url }}"
+    data-previous-icon-url="{{ 'flex-arrow-left.svg' | asset_url }}"
+    data-next-icon-url="{{ 'flex-arrow-right.svg' | asset_url }}"
+  >
+    <div class="flex-upsell__loading" aria-live="polite">
+      {{ block.settings.loading_text }}
+    </div>
+  </flex-cart-upsell>
+</div>
+
+{% schema %}
+{
+  "name": "Cart drawer upsell",
+  "target": "body",
+  "stylesheet": "flex-upsell.css",
+  "javascript": "flex-upsell-loader.js",
+  "settings": [
+    {
+      "type": "text",
+      "id": "loading_text",
+      "label": "Loading text",
+      "default": "Finding the best match..."
+    }
+  ]
+}
+{% endschema %}

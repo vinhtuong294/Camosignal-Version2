@@ -11,10 +11,10 @@
   "current": {
     "base_font": "archivo_n4",
     "heading_font": "archivo_black_n4",
-    "button_font_family": "archivo_n7",
     "uppercase": true,
-    "button_font_uppercase": true,
     "base_font_size": 130,
+    "button_font_family": "archivo_n7",
+    "button_font_uppercase": true,
     "favicon": "shopify://shop_images/LOGO_FINAL_WEBSITE.png",
     "container_width": "2048px",
     "product_default_image": "shopify://shop_images/Northeast_Wildlife_Nature_T_shirt_5.jpg",
@@ -36,31 +36,22 @@
           "show_on_blog": false,
           "show_on_cart": false,
           "target_handles": "",
-          "image": "shopify://shop_images/wicked.png",
-          "subheading": "Join our community",
-          "heading": "GET 10% OFF FOR YOUR FIRST ORDER AND LOTS OF GOOD DEALS",
-          "description": "Join the ground",
-          "input_placeholder": "Your email address",
-          "btn_label": "Subscribe",
+          "desktop_background": "shopify://shop_images/banner_form_desktop.png",
+          "mobile_background": "shopify://shop_images/banner_form_mobile.png",
+          "brand_logo": "shopify://shop_images/logo_camosignal.png",
+          "brand_label": "CAMO SIGNAL",
+          "heading": "BE THE FIRST TO KNOW",
+          "description": "Choose the categories you’d like to hear about.",
+          "interest_btn_label": "SUBMIT",
+          "email_heading": "BE THE FIRST TO KNOW",
+          "input_placeholder": "Email Address",
+          "btn_label": "CONTINUE",
           "success_message": "Thank you! Use the promo code below at checkout:",
           "coupon_code": "CAMOSIGNAL10",
-          "disclaimer": "No spam, unsubscribe anytime. Just early promotions and new releases.",
-          "bg_color": "#2c3d33",
           "text_color": "#ffffff",
-          "input_bg": "#ffffff",
-          "input_text": "#000000",
-          "btn_bg": "#ffffff",
-          "btn_text": "#2c3d33",
-          "overlay_opacity": 50,
+          "accent_color": "#d7bd92",
           "font_family": "Capitana",
-          "heading_size_mobile": 115,
-          "heading_size_desktop": 130,
-          "heading_weight": "700",
-          "heading_transform": "uppercase",
-          "popup_max_width": 850,
-          "border_radius": 8,
-          "input_radius": 12,
-          "text_alignment": "left"
+          "input_radius": 0
         }
       }
     },
@@ -84,19 +75,10 @@
         "settings": {
           "greeting_message": "Welcome to CamoSignal! Looking for the perfect tactical gear or hunting apparel? Let us know how we can help you gear up today.",
           "button_color": "#2c3d33",
-          "secondary_color": "#ffffff",
-          "ternary_color": "#2c3d33",
           "button_icon": "chat_bubble",
           "button_text": "chat_with_us",
           "button_horizontal_position": "bottom_right",
           "button_vertical_position": "lowest"
-        }
-      },
-      "18228966181090706294": {
-        "type": "shopify://apps/selleasy/blocks/app-embed/790c1a03-a71f-4bc1-9869-00dad526d3c2",
-        "disabled": false,
-        "settings": {
-          "storefrontAccessToken": ""
         }
       },
       "144831480468751239": {
@@ -132,6 +114,20 @@
           "show_thumbnail": true,
           "form_selector": ".product-form",
           "media_selector": ".product-media"
+        }
+      },
+      "6276164485786611419": {
+        "type": "shopify://apps/camosignal-upsell/blocks/cart-drawer-upsell/01a037b7-7756-79a9-89c5-3abb9c0f40ed",
+        "disabled": false,
+        "settings": {
+          "loading_text": "Finding the best match..."
+        }
+      },
+      "16915757260902459963": {
+        "type": "shopify://apps/camosignal-upsell/blocks/cart-drawer-app-embed/01a037b7-7756-79a9-89c5-3abb9c0f40ed",
+        "disabled": false,
+        "settings": {
+          "loading_text": "Finding the best match..."
         }
       }
     },

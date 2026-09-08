@@ -19,13 +19,19 @@
 {%- endstyle -%}
 
 {%- assign container 					  = section.settings.container_width -%}
-{%- assign sidebar_heading 				  = section.settings.sidebar_heading -%}
 {%- assign product_list 					  = section.settings.product_list -%}
-{%- assign quick_view_enabled 			  = settings.is_quick_view_enabled -%}
 {%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
 {%- assign color_scheme 					  = section.settings.color_scheme -%}
 {%- assign article_image 		     	  = article.image | default: settings.article_default_image -%}
 {%- assign article_date_example            = 'May 25, 2024' -%}
+{%- assign article_author                   = article.author | default: shop.name -%}
+{%- assign article_words                    = article.content | strip_html | split: ' ' | size -%}
+{%- assign article_read_time                = article_words | plus: 199 | divided_by: 200 -%}
+{%- assign article_category                 = article.tags.first -%}
+
+{%- if article_read_time < 1 -%}
+	{%- assign article_read_time = 1 -%}
+{%- endif -%}
 
 {%- if container == 'inherit' %}
 	{%- assign container_width = settings.container_width -%}
@@ -36,21 +42,6 @@
 {%- if enable_color_scheme_inheritance -%}
 	{%- assign color_scheme = settings.main_color_scheme -%}
 {%- endif -%}
-
-{%- assign min = 1 -%}
-{%- assign max = 6 -%}
-{%- assign diff = max | minus: min -%}
-
-{%- assign is_visible_sidebar = false -%}
-
-{%- for i in (1..4) -%}
-	{%- assign article_key = 'article_' | append: i -%}
-
-	{%- if section.settings[article_key] != blank and section.settings[article_key].id != article.id -%}
-		{%- assign is_visible_sidebar = true -%}
-		{%- break -%}
-	{%- endif -%}
-{%- endfor -%}
 
 {%- render 'adastra' with '/src/styles/article.scss' -%}
 
@@ -63,93 +54,101 @@
 {%- endcapture -%}
 
 <article class="article color-{{ color_scheme }}" style="{{ styles }}">
-	<section class="article-banner container">
-		<div
-			class="article-banner__heading-block js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}">
-			<div class="article-banner__subheading">
-				<ul>
-					<li>
-						<span>
-							{{- 'blogs.article.published_at' | t -}}
-						</span>
+	<header class="article-banner container">
+		<div class="article-banner__heading-block js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}">
+			<nav class="article-banner__breadcrumbs" aria-label="Article breadcrumb">
+				<a href="{{ blog.url }}">{{ blog.title }}</a>
 
-						{%- if article != blank -%}
-							{{- article.published_at | time_tag: format: 'date' -}}
-						{%- else -%}
-							{{- article_date_example -}}
-						{%- endif -%}
-					</li>
-				</ul>
+				{%- if article_category != blank -%}
+					<span aria-hidden="true">/</span>
+					<a href="{{ blog.url }}/tagged/{{ article_category | handleize }}">{{ article_category }}</a>
+				{%- endif -%}
+			</nav>
+
+			<h1 class="article-banner__title">
+				{{- article.title -}}
+			</h1>
+
+			{%- if article.excerpt != blank -%}
+				<p class="article-banner__excerpt">
+					{{- article.excerpt | strip_html -}}
+				</p>
+			{%- endif -%}
+
+			<div class="article-banner__meta" aria-label="Article details">
+				<span>Posted</span>
+				{%- if article != blank -%}
+					{{- article.published_at | time_tag: format: 'date' -}}
+				{%- else -%}
+					<time>{{ article_date_example }}</time>
+				{%- endif -%}
+				<span>by {{ article_author }}</span>
+				<span aria-hidden="true">•</span>
+				<span>{{ article_read_time }} min read</span>
 			</div>
 
-			<h1 class="h2">
-				{{ article.title }}
-			</h1>
+			<div class="article-banner__socials" aria-label="Share this article">
+				{%- render 'share-button', social: "facebook", product: article -%}
+				{%- render 'share-button', social: "twitter", product: article -%}
+				{%- render 'share-button', social: "pinterest", product: article -%}
+			</div>
 		</div>
 
 		{%- if article_image != blank -%}
-			<div class="article-banner__image-container">
+			<figure class="article-banner__image-container">
 				<picture>
 					<source
-						srcset="{{ article_image | image_url: width: 343, height: 314 }} 1x,
-								{{ article_image | image_url: width: 686, height: 628 }} 2x"
+						srcset="{{ article_image | image_url: width: 375 }} 1x,
+								{{ article_image | image_url: width: 750 }} 2x"
 						media="(max-width: 375px)"
-						width="343"
-						height="314"
 					/>
 
 					<source
-						srcset="{{ article_image | image_url: width: 388, height: 355 }} 1x,
-								{{ article_image | image_url: width: 776, height: 710 }} 2x"
+						srcset="{{ article_image | image_url: width: 420 }} 1x,
+								{{ article_image | image_url: width: 840 }} 2x"
 						media="(max-width: 420px)"
-						width="388"
-						height="355"
 					/>
 
 					<source
-						srcset="{{ article_image | image_url: width: 543, height: 496 }} 1x,
-								{{ article_image | image_url: width: 1086, height: 992 }} 2x"
+						srcset="{{ article_image | image_url: width: 575 }} 1x,
+								{{ article_image | image_url: width: 1150 }} 2x"
 						media="(max-width: 575px)"
-						width="543"
-						height="496"
 					/>
 
 					<source
-						srcset="{{ article_image | image_url: width: 735, height: 672 }} 1x,
-								{{ article_image | image_url: width: 1470, height: 1344 }} 2x"
+						srcset="{{ article_image | image_url: width: 768 }} 1x,
+								{{ article_image | image_url: width: 1536 }} 2x"
 						media="(max-width: 767px)"
-						width="735"
-						height="672"
 					/>
 
 					<source
-						srcset="{{ article_image | image_url: width: 959, height: 877 }} 1x,
-								{{ article_image | image_url: width: 2688, height: 1754 }} 2x"
-						media="(max-width: 991px)"
-						width="959"
-						height="877"
+						srcset="{{ article_image | image_url: width: 1200 }} 1x,
+								{{ article_image | image_url: width: 2400 }} 2x"
+						media="(max-width: 1199px)"
 					/>
 
 					<img
-						src="{{ article_image | img_url: "10px" }}"
-						srcset="{{ article_image | image_url: width: 864, height: 790 }} 1x,
-								{{ article_image | image_url: width: 1728, height: 1580 }} 2x"
-						alt="{{ article_image.alt }}"
+						src="{{ article_image | image_url: width: 1600 }}"
+						srcset="{{ article_image | image_url: width: 1600 }} 1x,
+								{{ article_image | image_url: width: 2400 }} 2x"
+						alt="{{ article_image.alt | default: article.title | escape }}"
 						class="article-banner__image js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}"
-						width="864"
-						height="790"
+						width="{{ article_image.width }}"
+						height="{{ article_image.height }}"
 						loading="eager"
 						fetchpriority="high"
 					/>
 				</picture>
-			</div>
-		{%- endif -%}
-	</section>
 
-	<div class="article__divider"></div>
+				{%- if section.settings.show_image_caption and article_image.alt != blank -%}
+					<figcaption>{{ article_image.alt }}</figcaption>
+				{%- endif -%}
+			</figure>
+		{%- endif -%}
+	</header>
 
 	<div class="article__content container">
-		<div class="article__inner{% if is_visible_sidebar == false %} article__inner--full-width{% endif %}">
+		<div class="article__inner">
 			<section class="article-main">
 				{%- if article.content != blank -%}
 					<div class="article-main__rte">
@@ -203,31 +202,6 @@
 			{%- render 'comment-form' -%}
 		</div>
 
-		{%- if is_visible_sidebar -%}
-			<aside class="article-sidebar">
-				<div class="article-sidebar__articles">
-					{%- if sidebar_heading != blank -%}
-						<h4 class="article-sidebar__title">
-							{{- sidebar_heading -}}
-						</h4>
-					{%- endif -%}
-
-					{%- assign limit_articles = 1 -%}
-
-					{%- for i in (1..4) -%}
-						{%- assign article_key     = 'article_' | append: i -%}
-						{%- assign recent_articles = section.settings[article_key] -%}
-
-						{%- if recent_articles != blank -%}
-							{%- render "article-sidebar-item",
-								article: article,
-								recent_articles: recent_articles
-							-%}
-						{%- endif -%}
-					{%- endfor -%}
-				</div>
-			</aside>
-		{%- endif -%}
 	</div>
 
 	{%- if blog.articles_count > 1 -%}
@@ -310,34 +284,10 @@
 			"default": "scheme-1"
 		},
 		{
-			"type": "header",
-			"content": "Sidebar"
-		},
-		{
-			"type": "inline_richtext",
-			"id": "sidebar_heading",
-			"label": "Heading",
-			"default": "Popular News"
-		},
-		{
-			"type": "article",
-			"id": "article_1",
-			"label": "First article"
-		},
-		{
-			"type": "article",
-			"id": "article_2",
-			"label": "Second article"
-		},
-		{
-			"type": "article",
-			"id": "article_3",
-			"label": "Third article"
-		},
-		{
-			"type": "article",
-			"id": "article_4",
-			"label": "Fourth article"
+			"type": "checkbox",
+			"id": "show_image_caption",
+			"label": "Show featured image caption",
+			"default": true
 		},
 		{
 			"type": "header",

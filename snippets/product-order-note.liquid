@@ -1,0 +1,99 @@
+{% doc %}
+Renders an optional order note as a line item property when enabled by a product metafield.
+
+@param {product} product - The product receiving the note.
+@param {string} section_id - The product section identifier.
+@param {string} [context] - An optional suffix used to keep field IDs unique.
+
+@example
+{% render 'product-order-note', product: product, section_id: section.id %}
+{% enddoc %}
+
+{% liquid
+	assign enable_order_note = false
+	assign product_type_downcase = product.type | downcase
+	assign is_combo_builder = false
+	if product_type_downcase == 'combo' or product.tags contains 'combo-builder'
+		assign is_combo_builder = true
+	endif
+	unless is_combo_builder
+		if product.metafields.custom.enable_order_note != blank
+			assign enable_order_note = product.metafields.custom.enable_order_note.value
+		endif
+	endunless
+	assign order_note_label = product.metafields.custom.order_note_label.value | default: 'Order note'
+	assign order_note_placeholder = product.metafields.custom.order_note_placeholder.value | default: 'Add any special instructions for this item.'
+	assign field_context = context | default: 'product-form'
+	assign field_id = 'OrderNote-' | append: field_context | append: '-' | append: section_id | append: '-' | append: product.id
+%}
+
+{% if enable_order_note %}
+	<div class="product-order-note">
+		<label class="product-order-note__label" for="{{ field_id | escape }}">
+			{{- order_note_label | escape -}}
+			<span class="product-order-note__optional">(optional)</span>
+		</label>
+
+		<textarea
+			class="product-order-note__input"
+			id="{{ field_id | escape }}"
+			name="properties[Order note]"
+			rows="4"
+			maxlength="300"
+			placeholder="{{ order_note_placeholder | escape }}"
+		></textarea>
+	</div>
+{% endif %}
+
+{% stylesheet %}
+	.product-order-note {
+		display: grid;
+		gap: 10px;
+		width: 100%;
+		margin: 18px 0 20px;
+	}
+
+	.product-order-note__label {
+		color: var(--color-text-primary, #324335);
+		font-family: 'Oswald', var(--font-heading-family), sans-serif;
+		font-size: 14px;
+		font-weight: 400;
+		line-height: 1.2;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+
+	.product-order-note__optional {
+		margin-left: 4px;
+		font-family: var(--font-body-family), sans-serif;
+		font-size: 12px;
+		font-weight: 400;
+		letter-spacing: 0;
+		text-transform: none;
+	}
+
+	.product-order-note__input {
+		box-sizing: border-box;
+		width: 100%;
+		min-height: 104px;
+		padding: 14px;
+		resize: vertical;
+		border: 1px solid #c8cbc8 !important;
+		border-radius: 4px !important;
+		background: #ffffff !important;
+		color: var(--color-text-primary, #324335);
+		font: inherit;
+		line-height: 1.5;
+		transition: border-color 160ms ease, box-shadow 160ms ease;
+	}
+
+	.product-order-note__input:hover {
+		border-color: #929992 !important;
+	}
+
+	.product-order-note__input:focus-visible {
+		border-color: var(--color-text-primary, #324335) !important;
+		outline: 0;
+		box-shadow: 0 0 0 1px var(--color-text-primary, #324335) !important;
+	}
+{% endstylesheet %}

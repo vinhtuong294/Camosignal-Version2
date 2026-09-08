@@ -85,6 +85,12 @@
 					{%- assign header_display_title = 'Fishing' -%}
 					{%- assign header_link_url = routes.collections_url | append: '/fishing' -%}
 				{%- endif -%}
+				{%- assign is_halloween_menu = false -%}
+				{%- if link_title_down == 'halloween' -%}
+					{%- assign is_halloween_menu = true -%}
+					{%- assign header_display_title = 'Halloween' -%}
+					{%- assign header_link_url = '#' -%}
+				{%- endif -%}
 				{%- assign is_hunting_menu = false -%}
 				{%- if link_title_down == 'hunting' or link_title_down == 'turkey' or link_title_down == 'wild turkey' -%}
 					{%- assign is_hunting_menu = true -%}
@@ -92,19 +98,23 @@
 					{%- assign header_link_url = routes.collections_url | append: '/hunting-spirit' -%}
 				{%- endif -%}
 
-				{%- if first_level_link.links != blank or is_mega_menu or is_support_menu or is_fishing_menu or is_hunting_menu -%}
+				{%- if first_level_link.links != blank or is_mega_menu or is_support_menu or is_fishing_menu or is_halloween_menu or is_hunting_menu -%}
 					<a
-						class="button-link header-menu__item{% if first_level_link.active %} header-menu__item--active{% endif %} no-js"
+						class="button-link header-menu__item{% if is_halloween_menu %} header-menu__item--halloween{% endif %}{% if first_level_link.active %} header-menu__item--active{% endif %} no-js"
 						href="{{- header_link_url -}}"
 						{% if first_level_link.current %}
 							aria-current="page"
 						{% endif %}
 					>
-						<span data-text="{{- header_display_title | escape -}}">
-							<span>
-								{{- header_display_title | escape -}}
+						{%- if is_halloween_menu -%}
+							{%- render 'halloween-nav-wordmark', wordmark_alt: header_display_title -%}
+						{%- else -%}
+							<span data-text="{{- header_display_title | escape -}}">
+								<span>
+									{{- header_display_title | escape -}}
+								</span>
 							</span>
-						</span>
+						{%- endif -%}
 					</a>
 
 					{%- if display_link_on_first_lvl and header_link_url != '#' -%}
@@ -133,29 +143,34 @@
 						</button>
 					{%- else -%}
 						<button
-							class="button-link header-menu__item{% if first_level_link.child_active %} header-menu__item--active{% endif %} js-header-dropdown-menu-toggler"
+							class="button-link header-menu__item{% if is_halloween_menu %} header-menu__item--halloween{% endif %}{% if first_level_link.child_active %} header-menu__item--active{% endif %} js-header-dropdown-menu-toggler"
 							type="button"
 							data-target="headerDesktopMenu:{{- first_level_link.title | handleize -}}-{{- first_level_index -}}"
 							aria-controls="headerDesktopMenu:{{- first_level_link.title | handleize -}}-{{- first_level_index -}}"
 							aria-expanded="false"
 						>
-							<span data-text="{{- header_display_title | escape -}}">
-								<span>
-									{{- header_display_title | escape -}}
+							{%- if is_halloween_menu -%}
+								{%- render 'halloween-nav-wordmark', wordmark_alt: header_display_title -%}
+							{%- else -%}
+								<span data-text="{{- header_display_title | escape -}}">
+									<span>
+										{{- header_display_title | escape -}}
+									</span>
 								</span>
-							</span>
+							{%- endif -%}
 
 							{%- render 'icons', icon: 'arrow-down' -%}
 						</button>
 					{%- endif -%}
 
 					<div class="header-menu__list-nested-wrapper js-header-dropdown-menu-wrapper" data-target-nested-wrapper="headerDesktopMenu:{{- first_level_link.title | handleize -}}-{{- first_level_index -}}">
-						{%- if is_mega_menu or is_fishing_menu or is_hunting_menu -%}
+						{%- if is_mega_menu or is_fishing_menu or is_halloween_menu or is_hunting_menu -%}
 							{%- render 'header-mega-menu-collection',
 								first_level_link: first_level_link,
 								first_level_index: first_level_index,
 								is_shop_menu: is_shop_menu,
 								is_fishing_menu: is_fishing_menu,
+								is_halloween_menu: is_halloween_menu,
 								is_hunting_menu: is_hunting_menu,
 								is_more_collections_menu: is_more_collections_menu,
 								header_link_url: header_link_url

@@ -99,13 +99,22 @@
 
 	/* Force transparent header to overlay banner */
 	@media (min-width: 1200px) {
-		.header[data-header-transparent] {
+		.header-section--top-position .header[data-header-transparent] {
 			position: absolute !important;
 			top: 0 !important;
 			left: 0 !important;
 			width: 100% !important;
 			z-index: 100 !important;
 			background: transparent !important;
+		}
+
+		.header-section--transparent:not(.header-section--top-position) .header[data-header-transparent] {
+			position: relative !important;
+			background: #ffffff !important;
+		}
+
+		.header-section--transparent:not(.header-section--top-position) .header[data-header-transparent] .header__container {
+			background-color: #ffffff !important;
 		}
 	}
 
@@ -119,7 +128,7 @@
 		color: #2c3d33 !important;
 	}
 
-	{%- if template.name == "page" and template.suffix == "about" -%}
+	{%- if template.name == "index" or template.name == "page" and template.suffix == "about" -%}
 	/* About page: white header text + icons over banner — only at top (not scrolled) */
 	.header-section--top-position .header[data-header-transparent] .header-menu__item,
 	.header-section--top-position .header[data-header-transparent] .header__icon,
@@ -130,6 +139,7 @@
 		color: #ffffff !important;
 	}
 
+	@media (min-width: 1200px) {
 	.header-section--top-position .header[data-header-transparent]:hover .header-menu__item,
 	.header-section--top-position .header[data-header-transparent]:hover .header__icon,
 	.header-section--top-position .header[data-header-transparent]:hover .header__heading-link,
@@ -143,6 +153,7 @@
 	.header-section--top-position.header-section--transparent-mobile .header[data-header-transparent-mobile]:focus-within .header__burger-mobile-menu-button,
 	.header-section--top-position.header-section--transparent-mobile .header[data-header-transparent-mobile]:focus-within .header__heading-link {
 		color: #2c3d33 !important;
+	}
 	}
 	{%- endif -%}
 
@@ -193,6 +204,33 @@
 
 	.header-menu__list--main .header-menu__item * {
 		font-weight: 900 !important;
+	}
+
+	/* Halloween nav wordmark: thick source lettering with sharp, natural drips. */
+	.halloween-nav-wordmark {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		flex: 0 0 auto;
+		line-height: 0;
+		overflow: visible;
+	}
+
+	.halloween-nav-wordmark__image {
+		display: block;
+		width: auto;
+		max-width: none;
+		height: 28px;
+		pointer-events: none;
+		user-select: none;
+	}
+
+	.header-menu__item--halloween {
+		gap: 2px;
+	}
+
+	.header-mobile__menu-item--halloween .halloween-nav-wordmark__image {
+		height: 34px;
 	}
 
 	/* ============================================
@@ -898,13 +936,24 @@
 
 		requestAnimationFrame(() => {
 			if (isHeaderTransparent) {
-				header.classList.add("header-section--transparent", "header-section--top-position");
+				header.classList.add("header-section--transparent");
 
 				if (isHeaderTransparentMobile) {
 					header.classList.add("header-section--transparent-mobile");
 				}
+
+				updateTransparentHeaderState();
 			}
 		});
+
+		function updateTransparentHeaderState() {
+			const scrollTop = window.scrollY || document.documentElement.scrollTop || 0;
+			header.classList.toggle("header-section--top-position", scrollTop <= 0);
+		}
+
+		if (isHeaderTransparent) {
+			window.addEventListener("scroll", updateTransparentHeaderState, { passive: true });
+		}
 
 		function changeCssVariable(variable, value) {
 			requestAnimationFrame(() => {
@@ -1263,8 +1312,9 @@
 		},
 		{
 			"type": "product",
-			"id": "fishing_mega_all_product",
-			"label": "All Fishing product card"
+			"id": "fishing_mega_hoodie_product",
+			"label": "Fishing Hoodie product card",
+			"info": "Leave blank to show the first product from the Fishing Hoodie collection."
 		},
 		{
 			"type": "product",
@@ -1437,3 +1487,18 @@
 	]
 }
 {% endschema %}
+<head>
+	<!-- TikTok Pixel Code Start -->
+<script>
+!function (w, d, t) {
+  w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
+var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
+;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+
+
+  ttq.load('D9T8U2RC77U5OHLI6LSG');
+  ttq.page();
+}(window, document, 'ttq');
+</script>
+<!-- TikTok Pixel Code End -->
+</head>

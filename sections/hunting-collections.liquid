@@ -109,13 +109,52 @@
   "
 >
   <div class="hunter-promo-grid__container container">
-    {%- if section.settings.section_heading != blank -%}
+    {%- if section.settings.section_heading != blank or section.blocks.size > 1 -%}
       <div class="hunter-promo-grid__header">
-        <h2 class="hunter-promo-grid__heading{% if section.settings.use_theme_heading_style %} hunter-promo-grid__heading--theme{% endif %}">{{ section.settings.section_heading }}</h2>
+        {%- if section.settings.section_heading != blank -%}
+          <h2 class="hunter-promo-grid__heading{% if section.settings.use_theme_heading_style %} hunter-promo-grid__heading--theme{% endif %}">{{ section.settings.section_heading }}</h2>
+        {%- endif -%}
+        {%- if section.blocks.size > 1 -%}
+          <div class="hunter-promo-grid__controls hunter-promo-grid__controls--desktop" data-promo-controls aria-label="Collection carousel controls">
+            <button
+              class="hunter-promo-grid__arrow hunter-promo-grid__arrow--previous hunter-promo-grid__arrow--desktop"
+              type="button"
+              aria-label="Previous collections"
+              aria-controls="hunter-promo-track-{{ section.id }}"
+              data-promo-previous
+              disabled
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M15 18 9 12l6-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/>
+              </svg>
+            </button>
+            <button
+              class="hunter-promo-grid__arrow hunter-promo-grid__arrow--next hunter-promo-grid__arrow--desktop"
+              type="button"
+              aria-label="Next collections"
+              aria-controls="hunter-promo-track-{{ section.id }}"
+              data-promo-next
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="m9 18 6-6-6-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/>
+              </svg>
+            </button>
+          </div>
+        {%- endif -%}
       </div>
     {%- endif -%}
 
-    <div class="hunter-promo-grid__items">
+    <div class="hunter-promo-grid__viewport">
+      <div
+        class="hunter-promo-grid__items"
+        id="hunter-promo-track-{{ section.id }}"
+        role="list"
+        tabindex="0"
+        aria-label="{{ section.settings.section_heading | default: 'Collections' | escape }}"
+        data-promo-track
+        data-columns-desktop="{{ section.settings.columns_desktop }}"
+        data-columns-mobile="{{ section.settings.columns_mobile }}"
+      >
       {%- for block in section.blocks -%}
       {%- liquid
         assign promo_collection = block.settings.collection
@@ -161,10 +200,16 @@
         if block_image_position == 'inherit'
           assign block_image_position = section.settings.image_position
         endif
+
+        assign mobile_columns = section.settings.columns_mobile | plus: 0
+        assign desktop_page_remainder = forloop.index0 | modulo: section.settings.columns_desktop
+        assign mobile_page_remainder = forloop.index0 | modulo: mobile_columns
       -%}
 
       <figure
-        class="hunter-promo-grid__item{% if block.settings.use_custom_overlay %} hunter-promo-grid__item--custom-overlay{% endif %}{% if block.settings.use_custom_typography %} hunter-promo-grid__item--custom-typography{% endif %}"
+        class="hunter-promo-grid__item{% if desktop_page_remainder == 0 %} hunter-promo-grid__item--desktop-page-start{% endif %}{% if mobile_page_remainder == 0 %} hunter-promo-grid__item--mobile-page-start{% endif %}{% if block.settings.use_custom_overlay %} hunter-promo-grid__item--custom-overlay{% endif %}{% if block.settings.use_custom_typography %} hunter-promo-grid__item--custom-typography{% endif %}"
+        role="listitem"
+        data-mobile-column="{{ mobile_page_remainder | plus: 1 }}"
         style="
           --promo-index: {{ forloop.index0 }};
           --promo-block-justify: {{ block_justify }};
@@ -229,7 +274,13 @@
         {%- endif -%}
         </figure>
       {%- endfor -%}
+      </div>
     </div>
+    <div
+      class="hunter-promo-grid__pagination"
+      data-promo-pagination
+      aria-label="Collection carousel pagination"
+    ></div>
   </div>
 </section>
 
@@ -255,6 +306,10 @@
   }
 
   .hunter-promo-grid__header {
+    align-items: center;
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
     box-sizing: border-box;
     margin: 0 0 var(--promo-section-heading-spacing-desktop);
     margin-left: auto;
@@ -276,6 +331,64 @@
     text-transform: var(--promo-section-heading-transform);
   }
 
+  .hunter-promo-grid__controls {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 8px;
+  }
+
+  .hunter-promo-grid__controls[hidden] {
+    display: none;
+  }
+
+  .hunter-promo-grid__controls--desktop {
+    display: none;
+  }
+
+  .hunter-promo-grid__pagination {
+    display: none;
+  }
+
+  .hunter-promo-grid__pagination[hidden] {
+    display: none;
+  }
+
+  .hunter-promo-grid__arrow {
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid var(--promo-section-heading-color);
+    border-radius: 50%;
+    color: var(--promo-section-heading-color);
+    cursor: pointer;
+    display: inline-flex;
+    height: 44px;
+    justify-content: center;
+    padding: 0;
+    transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+    width: 44px;
+  }
+
+  .hunter-promo-grid__arrow svg {
+    height: 22px;
+    width: 22px;
+  }
+
+  .hunter-promo-grid__arrow:hover:not(:disabled),
+  .hunter-promo-grid__arrow:focus-visible {
+    background: var(--promo-section-heading-color);
+    color: #ffffff;
+  }
+
+  .hunter-promo-grid__arrow:focus-visible {
+    outline: 2px solid var(--promo-section-heading-color);
+    outline-offset: 3px;
+  }
+
+  .hunter-promo-grid__arrow:disabled {
+    cursor: default;
+    opacity: 0.32;
+  }
+
   .hunter-promo-grid__heading--theme {
     color: var(--color-heading);
     font-family: var(--heading-font-family);
@@ -286,20 +399,43 @@
     text-transform: var(--heading-text-transform);
   }
 
+  .hunter-promo-grid__viewport {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+  }
+
   .hunter-promo-grid__items {
-    display: grid;
+    display: flex;
     gap: var(--promo-gap-desktop);
-    grid-template-columns: repeat(var(--promo-columns-desktop), minmax(0, 1fr));
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    position: relative;
+    scroll-behavior: smooth;
+    scroll-snap-type: inline mandatory;
+    scrollbar-width: none;
+  }
+
+  .hunter-promo-grid__items::-webkit-scrollbar {
+    display: none;
   }
 
   .hunter-promo-grid__item {
     box-sizing: border-box;
+    flex: 0 0 calc((100% - (var(--promo-columns-desktop) - 1) * var(--promo-gap-desktop)) / var(--promo-columns-desktop));
     margin: 0;
     min-width: 0;
     overflow: hidden;
     padding: 0;
     position: relative;
+    scroll-snap-align: none;
+    scroll-snap-stop: normal;
     text-align: var(--promo-block-text-align);
+  }
+
+  .hunter-promo-grid__item--desktop-page-start {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
   }
 
   .hunter-promo-grid__inner {
@@ -477,10 +613,120 @@
       line-height: 1.3333333333;
     }
 
+    .hunter-promo-grid__arrow {
+      height: 38px;
+      width: 38px;
+    }
+
+    .hunter-promo-grid__arrow svg {
+      height: 20px;
+      width: 20px;
+    }
+
     .hunter-promo-grid__items {
-      column-gap: var(--promo-gap-mobile);
+      align-items: start;
+      display: grid;
+      gap: var(--promo-gap-mobile);
       grid-template-columns: repeat(var(--promo-columns-mobile), minmax(0, 1fr));
-      row-gap: calc(var(--promo-gap-mobile) * 2);
+      overflow: hidden;
+      scroll-snap-type: none;
+      touch-action: pan-y;
+      transition: height 320ms cubic-bezier(0.4, 0, 0.2, 1);
+      width: 100%;
+    }
+
+    .hunter-promo-grid__item {
+      --mobile-slide-shift-positive: calc(200% + var(--promo-gap-mobile));
+      --mobile-slide-shift-negative: calc(-200% - var(--promo-gap-mobile));
+      flex: none;
+      grid-row: 1;
+      opacity: 0 !important;
+      pointer-events: none;
+      transform: translateX(var(--mobile-slide-shift-positive)) !important;
+      transition: transform 320ms cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 320ms !important;
+      visibility: hidden;
+      width: auto;
+      will-change: transform;
+    }
+
+    .hunter-promo-grid__item[data-mobile-column="1"] {
+      grid-column: 1;
+    }
+
+    .hunter-promo-grid__item[data-mobile-column="2"] {
+      grid-column: 2;
+    }
+
+    .hunter-promo-grid__item.is-mobile-active {
+      opacity: 1 !important;
+      pointer-events: auto;
+      transform: translateX(0) !important;
+      transition-delay: 0s;
+      visibility: visible;
+      z-index: 2;
+    }
+
+    .hunter-promo-grid__item.is-mobile-entering-from-left,
+    .hunter-promo-grid__item.is-mobile-entering-from-right,
+    .hunter-promo-grid__item.is-mobile-exiting-to-left,
+    .hunter-promo-grid__item.is-mobile-exiting-to-right {
+      opacity: 1 !important;
+      pointer-events: none;
+      visibility: visible;
+    }
+
+    .hunter-promo-grid__item.is-mobile-entering-from-left {
+      transform: translateX(var(--mobile-slide-shift-negative)) !important;
+      transition: none !important;
+      z-index: 2;
+    }
+
+    .hunter-promo-grid__item.is-mobile-entering-from-right {
+      transform: translateX(var(--mobile-slide-shift-positive)) !important;
+      transition: none !important;
+      z-index: 2;
+    }
+
+    .hunter-promo-grid__item.is-mobile-exiting-to-left {
+      transform: translateX(var(--mobile-slide-shift-negative)) !important;
+      z-index: 1;
+    }
+
+    .hunter-promo-grid__item.is-mobile-exiting-to-right {
+      transform: translateX(var(--mobile-slide-shift-positive)) !important;
+      z-index: 1;
+    }
+
+    .hunter-promo-grid__pagination {
+      align-items: center;
+      display: flex;
+      gap: 5px;
+      justify-content: center;
+      margin: 18px auto 0;
+      width: min(175px, 100%);
+    }
+
+    .hunter-promo-grid__page {
+      appearance: none;
+      background: #d5d8d6;
+      border: 0;
+      border-radius: 2px;
+      cursor: pointer;
+      flex: 0 0 40px;
+      height: 4px;
+      margin: 0;
+      padding: 0;
+      transition: background-color 180ms ease;
+      width: 40px;
+    }
+
+    .hunter-promo-grid__page.is-active {
+      background: var(--promo-section-heading-color);
+    }
+
+    .hunter-promo-grid__page:focus-visible {
+      outline: 2px solid var(--promo-section-heading-color);
+      outline-offset: 3px;
     }
 
     .hunter-promo-grid__overlay {
@@ -503,6 +749,56 @@
     .hunter-promo-grid--content-hover .hunter-promo-grid__content {
       opacity: 1;
       transform: none;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .hunter-promo-grid__viewport {
+      overflow: visible;
+    }
+
+    .hunter-promo-grid__controls--desktop {
+      align-items: center;
+      background: #ffffff;
+      border: 1px solid rgba(44, 61, 51, 0.28);
+      border-radius: 2px;
+      display: flex;
+      gap: 0;
+      margin-left: auto;
+      overflow: hidden;
+      pointer-events: auto;
+      position: static;
+    }
+
+    .hunter-promo-grid__controls--desktop .hunter-promo-grid__arrow--desktop {
+      background: rgba(255, 255, 255, 0.92);
+      border: 0;
+      border-radius: 0;
+      height: 44px;
+      pointer-events: auto;
+      position: static;
+      transform: none;
+      width: 40px;
+    }
+
+    .hunter-promo-grid__controls--desktop .hunter-promo-grid__arrow--desktop + .hunter-promo-grid__arrow--desktop {
+      border-left: 1px solid rgba(44, 61, 51, 0.2);
+    }
+
+    .hunter-promo-grid__controls--desktop .hunter-promo-grid__arrow--desktop svg {
+      height: 26px;
+      width: 26px;
+    }
+
+    .hunter-promo-grid__controls--desktop .hunter-promo-grid__arrow--desktop:hover:not(:disabled),
+    .hunter-promo-grid__controls--desktop .hunter-promo-grid__arrow--desktop:focus-visible {
+      background: #f3f5f4;
+      color: var(--promo-section-heading-color);
+    }
+
+    .hunter-promo-grid__controls--desktop .hunter-promo-grid__arrow--desktop:disabled {
+      color: rgba(44, 61, 51, 0.32);
+      opacity: 1;
     }
   }
 
@@ -553,13 +849,328 @@
     .hunter-promo-grid__content {
       transition: none;
     }
+
+    .hunter-promo-grid__items {
+      scroll-behavior: auto;
+    }
   }
 {% endstylesheet %}
 
 <script>
   (function() {
     var section = document.getElementById('hunter-promo-{{ section.id }}');
-    if (!section || !section.classList.contains('hunter-promo-grid--animate')) return;
+    if (!section) return;
+
+    var track = section.querySelector('[data-promo-track]');
+    var controlGroups = Array.prototype.slice.call(section.querySelectorAll('[data-promo-controls]'));
+    var previousButtons = Array.prototype.slice.call(section.querySelectorAll('[data-promo-previous]'));
+    var nextButtons = Array.prototype.slice.call(section.querySelectorAll('[data-promo-next]'));
+    var pagination = section.querySelector('[data-promo-pagination]');
+
+    if (track && controlGroups.length && previousButtons.length && nextButtons.length) {
+      var items = Array.prototype.slice.call(track.querySelectorAll('.hunter-promo-grid__item'));
+      var currentPage = 0;
+      var isAnimating = false;
+      var animationTimer;
+      var pointerStartX = null;
+      var pointerStartY = null;
+      var resizeTimer;
+      var scrollTimer;
+      var mobileMedia = window.matchMedia('(max-width: 749px)');
+      var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      var motionClasses = [
+        'is-mobile-entering-from-left',
+        'is-mobile-entering-from-right',
+        'is-mobile-exiting-to-left',
+        'is-mobile-exiting-to-right'
+      ];
+
+      function getColumns() {
+        var value = mobileMedia.matches
+          ? track.getAttribute('data-columns-mobile')
+          : track.getAttribute('data-columns-desktop');
+        return Math.max(1, parseInt(value, 10) || 1);
+      }
+
+      function getPageCount() {
+        return Math.max(1, Math.ceil(items.length / getColumns()));
+      }
+
+      function getPageOffset(page) {
+        var target = items[Math.min(page * getColumns(), items.length - 1)];
+        if (!target) return 0;
+        return target.getBoundingClientRect().left - track.getBoundingClientRect().left + track.scrollLeft;
+      }
+
+      function getPageItems(page) {
+        var columns = getColumns();
+        return items.slice(page * columns, (page + 1) * columns);
+      }
+
+      function updateTrackHeight() {
+        if (!mobileMedia.matches) {
+          track.style.removeProperty('height');
+          return;
+        }
+
+        var activeHeight = getPageItems(currentPage).reduce(function(height, item) {
+          return Math.max(height, Math.ceil(item.getBoundingClientRect().height));
+        }, 0);
+
+        if (activeHeight > 0) track.style.height = activeHeight + 'px';
+      }
+
+      function cancelItemAnimations() {
+        items.forEach(function(item) {
+          if (typeof item.getAnimations !== 'function') return;
+          item.getAnimations().forEach(function(animation) {
+            animation.cancel();
+          });
+        });
+      }
+
+      function updatePagination() {
+        if (!pagination) return;
+
+        var pageCount = getPageCount();
+
+        if (!mobileMedia.matches || pageCount <= 1) {
+          pagination.hidden = true;
+          pagination.innerHTML = '';
+          return;
+        }
+
+        pagination.hidden = false;
+
+        if (pagination.children.length !== pageCount) {
+          pagination.innerHTML = '';
+
+          for (var page = 0; page < pageCount; page += 1) {
+            var button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'hunter-promo-grid__page';
+            button.setAttribute('aria-label', 'Go to collection group ' + (page + 1));
+            button.setAttribute('data-promo-page', page);
+            pagination.appendChild(button);
+          }
+        }
+
+        Array.prototype.forEach.call(pagination.children, function(button, page) {
+          var isActive = page === currentPage;
+          button.classList.toggle('is-active', isActive);
+
+          if (isActive) {
+            button.setAttribute('aria-current', 'page');
+          } else {
+            button.removeAttribute('aria-current');
+          }
+        });
+      }
+
+      function updateControls() {
+        var pageCount = getPageCount();
+        currentPage = Math.max(0, Math.min(currentPage, pageCount - 1));
+        controlGroups.forEach(function(controls) {
+          controls.hidden = pageCount <= 1;
+        });
+        previousButtons.forEach(function(button) {
+          button.disabled = currentPage === 0;
+        });
+        nextButtons.forEach(function(button) {
+          button.disabled = currentPage >= pageCount - 1;
+        });
+        updatePagination();
+      }
+
+      function renderMode() {
+        window.clearTimeout(animationTimer);
+        isAnimating = false;
+        updateControls();
+
+        if (!mobileMedia.matches) {
+          items.forEach(function(item) {
+            item.classList.remove('is-mobile-active');
+            item.classList.remove.apply(item.classList, motionClasses);
+            item.removeAttribute('aria-hidden');
+          });
+          track.style.removeProperty('height');
+          track.scrollTo({ left: getPageOffset(currentPage), behavior: 'auto' });
+          return;
+        }
+
+        var activeItems = getPageItems(currentPage);
+        track.scrollLeft = 0;
+        items.forEach(function(item) {
+          var isActive = activeItems.indexOf(item) !== -1;
+          item.classList.remove.apply(item.classList, motionClasses);
+          item.classList.toggle('is-mobile-active', isActive);
+          item.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+        });
+        window.requestAnimationFrame(updateTrackHeight);
+      }
+
+      function goToPage(page, instant) {
+        var nextPage = Math.max(0, Math.min(page, getPageCount() - 1));
+
+        if (mobileMedia.matches) {
+          if (isAnimating || nextPage === currentPage) return;
+          cancelItemAnimations();
+
+          var currentItems = getPageItems(currentPage);
+          var incomingItems = getPageItems(nextPage);
+          var movingForward = nextPage > currentPage;
+          var enteringClass = movingForward ? 'is-mobile-entering-from-right' : 'is-mobile-entering-from-left';
+          var exitingClass = movingForward ? 'is-mobile-exiting-to-left' : 'is-mobile-exiting-to-right';
+          var animationDuration = instant || reducedMotion.matches ? 0 : 320;
+
+          if (instant) {
+            currentPage = nextPage;
+            renderMode();
+            return;
+          }
+
+          isAnimating = true;
+          incomingItems.forEach(function(item) {
+            item.classList.remove.apply(item.classList, motionClasses);
+            item.classList.add(enteringClass);
+            item.setAttribute('aria-hidden', 'false');
+          });
+          track.getBoundingClientRect();
+
+          window.requestAnimationFrame(function() {
+            currentItems.forEach(function(item) {
+              item.classList.add(exitingClass);
+            });
+            incomingItems.forEach(function(item) {
+              item.classList.add('is-mobile-active');
+              item.classList.remove(enteringClass);
+            });
+            currentPage = nextPage;
+            updateControls();
+            window.requestAnimationFrame(updateTrackHeight);
+
+            animationTimer = window.setTimeout(function() {
+              currentItems.forEach(function(item) {
+                item.classList.remove('is-mobile-active', exitingClass);
+                item.setAttribute('aria-hidden', 'true');
+              });
+              incomingItems.forEach(function(item) {
+                item.classList.remove.apply(item.classList, motionClasses);
+              });
+              isAnimating = false;
+              updateTrackHeight();
+            }, animationDuration + 40);
+          });
+          return;
+        }
+
+        currentPage = nextPage;
+        track.scrollTo({
+          left: getPageOffset(currentPage),
+          behavior: instant || reducedMotion.matches ? 'auto' : 'smooth'
+        });
+        updateControls();
+      }
+
+      function syncPageFromScroll() {
+        if (mobileMedia.matches) return;
+
+        var pageCount = getPageCount();
+        var nearestPage = 0;
+        var nearestDistance = Infinity;
+
+        for (var page = 0; page < pageCount; page += 1) {
+          var distance = Math.abs(track.scrollLeft - getPageOffset(page));
+          if (distance < nearestDistance) {
+            nearestDistance = distance;
+            nearestPage = page;
+          }
+        }
+
+        currentPage = nearestPage;
+        updateControls();
+      }
+
+      function onPointerDown(event) {
+        if (!mobileMedia.matches || event.pointerType === 'mouse') return;
+        pointerStartX = event.clientX;
+        pointerStartY = event.clientY;
+      }
+
+      function onPointerUp(event) {
+        if (!mobileMedia.matches || pointerStartX === null || pointerStartY === null) return;
+
+        var deltaX = event.clientX - pointerStartX;
+        var deltaY = event.clientY - pointerStartY;
+        pointerStartX = null;
+        pointerStartY = null;
+
+        if (Math.abs(deltaX) < 44 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+        goToPage(currentPage + (deltaX < 0 ? 1 : -1), false);
+      }
+
+      function onPointerCancel() {
+        pointerStartX = null;
+        pointerStartY = null;
+      }
+
+      previousButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+          goToPage(currentPage - 1, false);
+        });
+      });
+
+      nextButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+          goToPage(currentPage + 1, false);
+        });
+      });
+
+      if (pagination) {
+        pagination.addEventListener('click', function(event) {
+          var button = event.target.closest('[data-promo-page]');
+          if (!button || !pagination.contains(button)) return;
+          goToPage(parseInt(button.getAttribute('data-promo-page'), 10), false);
+        });
+      }
+
+      track.addEventListener('keydown', function(event) {
+        if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+        event.preventDefault();
+        goToPage(currentPage + (event.key === 'ArrowRight' ? 1 : -1), false);
+      });
+
+      track.addEventListener('scroll', function() {
+        if (mobileMedia.matches) return;
+        window.clearTimeout(scrollTimer);
+        scrollTimer = window.setTimeout(syncPageFromScroll, 120);
+      }, { passive: true });
+
+      track.addEventListener('pointerdown', onPointerDown);
+      track.addEventListener('pointerup', onPointerUp);
+      track.addEventListener('pointercancel', onPointerCancel);
+
+      if (mobileMedia.addEventListener) {
+        mobileMedia.addEventListener('change', renderMode);
+      } else {
+        mobileMedia.addListener(renderMode);
+      }
+
+      window.addEventListener('resize', function() {
+        window.clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(function() {
+          if (mobileMedia.matches) {
+            updateTrackHeight();
+          } else {
+            goToPage(currentPage, true);
+          }
+        }, 120);
+      });
+
+      renderMode();
+    }
+
+    if (!section.classList.contains('hunter-promo-grid--animate')) return;
 
     section.classList.add('is-animation-ready');
 
@@ -594,7 +1205,7 @@
   "disabled_on": {
     "groups": ["header", "footer", "custom.popup"]
   },
-  "max_blocks": 4,
+  "max_blocks": 8,
   "blocks": [
     {
       "type": "collection",

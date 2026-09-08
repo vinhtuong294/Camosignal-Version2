@@ -13,14 +13,6 @@
   "sections": {
     "announcement-bar": {
       "type": "announcement-bar",
-      "custom_css": [
-        ".announcement-bar__container {min-height: 23px; padding: 0; background-color: #f4c430;}",
-        ".announcement-bar__text {color: #000000; font-size: 14px; line-height: 23px; font-weight: 400;}",
-        ".announcement-bar__text p {margin: 0;}",
-        ".announcement-bar__slider {margin: 0;}",
-        ".announcement-bar__slide-container {min-height: 23px; padding: 0 40px;}",
-        ".swiper-button-prev-new, .swiper-button-next-new {display: none;}"
-      ],
       "blocks": {
         "announcement_slide_1": {
           "type": "text_slide",
@@ -60,6 +52,14 @@
         "announcement_slide_2",
         "announcement_slide_3",
         "announcement_slide_4"
+      ],
+      "custom_css": [
+        ".announcement-bar__container {min-height: 23px; padding: 0; background-color: #f4c430;}",
+        ".announcement-bar__text {color: #000000; font-size: 14px; line-height: 23px; font-weight: 400;}",
+        ".announcement-bar__text p {margin: 0;}",
+        ".announcement-bar__slider {margin: 0;}",
+        ".announcement-bar__slide-container {min-height: 23px; padding: 0 40px;}",
+        ".swiper-button-prev-new,.swiper-button-next-new {display: none;}"
       ],
       "settings": {
         "layout": "slideshow",
@@ -106,12 +106,14 @@
         "shop_mega_hat_product": "boy-dad-trucker-hat-with-leather-patch",
         "shop_mega_tshirt_product": "wild-white-tailed-deer-infographic-t-shirt",
         "shop_mega_longsleeve_product": "turkey-hunters-world-slam-long-sleeve-1",
-		"more_collections_national_park_product": "the-1929-teton-heritage-t-shirt",
-		"more_collections_faith_outdoors_product": "world-turkey-slam-t-shirt",
-		"more_collections_game_day_product": "san-francisco-phantom-inferno-football-t-shirt",
-		"more_collections_back_to_school_product": "marllard-go-to-school-youth-tee",
+        "more_collections_national_park_product": "the-1929-teton-heritage-t-shirt",
+        "more_collections_faith_outdoors_product": "world-turkey-slam-t-shirt",
+        "more_collections_game_day_product": "san-francisco-phantom-inferno-football-t-shirt",
+        "more_collections_back_to_school_product": "marllard-go-to-school-youth-tee",
+        "hunting_mega_turkey_product": "",
+        "hunting_mega_deer_product": "",
         "fishing_mega_show_products": true,
-        "fishing_mega_all_product": "billfish-grand-slam-t-shirt",
+        "fishing_mega_hoodie_product": "",
         "fishing_mega_freshwater_product": "trophy-largemouth-bass-fishing-t-shirt",
         "fishing_mega_saltwater_product": "offshore-by-nature-t-shirt",
         "burger_menu": "main-menu",
@@ -127,7 +129,7 @@
         "desktop_movement_speed": 10,
         "mobile_movement_speed": 20,
         "enable_color_scheme_inheritance": true,
-        "color_scheme": "",
+        "color_scheme": "scheme-1",
         "text_color_transparent": "#ffffff",
         "count_text_color": "#000000",
         "count_text_color_transparent": "#000000",

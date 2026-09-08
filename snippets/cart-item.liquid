@@ -17,6 +17,18 @@
 {%- assign volume_pricing_array = variant.quantity_price_breaks | sort: 'quantity' | reverse -%}
 {%- assign has_quantity_rules	= true -%}
 {%- capture img_focal -%}{%- endcapture -%}
+{%- assign missing_customization = false -%}
+{%- assign item_requires_name = item.product.metafields.custom.enable_name.value -%}
+{%- assign item_requires_number = item.product.metafields.custom.enable_number.value -%}
+{%- assign item_custom_name = item.properties['Your Name'] | strip -%}
+{%- assign item_custom_number = item.properties['Your Number'] | strip -%}
+
+{%- if item_requires_name and item_custom_name == blank -%}
+	{%- assign missing_customization = true -%}
+{%- endif -%}
+{%- if item_requires_number and item_custom_number == blank -%}
+	{%- assign missing_customization = true -%}
+{%- endif -%}
 
 {%- if variant.quantity_rule.increment < 2 and variant.quantity_rule.min < 2 and variant.quantity_rule.max == null -%}
 	{%- assign has_quantity_rules = false -%}
@@ -206,6 +218,12 @@
 		<dl>
 			{{- properties -}}
 		</dl>
+	{%- endif -%}
+
+	{%- if missing_customization -%}
+		<p class="cart-item__customization-error" role="alert" style="margin: 8px 0 0; color: #9d332b; font-size: 12px; line-height: 1.45;">
+			{{- 'products.customization.cart_missing_item' | t -}}
+		</p>
 	{%- endif -%}
 
 

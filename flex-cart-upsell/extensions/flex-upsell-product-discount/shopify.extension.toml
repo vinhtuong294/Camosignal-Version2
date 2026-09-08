@@ -1,0 +1,19 @@
+api_version = "2026-07"
+
+[[extensions]]
+name = "Flex Upsell Product Discount"
+handle = "flex-upsell-product-discount"
+
+uid = "0987ce8f-1e0f-08ef-585b-e2cc6b975718cff1e5c0"
+
+type = "function"
+description = "Applies campaign discounts only to products added through Flex Upsell."
+
+  [[extensions.targeting]]
+  target = "cart.lines.discounts.generate.run"
+  input_query = "src/cart_lines_discounts_generate_run.graphql"
+  export = "cart-lines-discounts-generate-run"
+
+  [extensions.build]
+  command = ""
+  path = "dist/function.wasm"

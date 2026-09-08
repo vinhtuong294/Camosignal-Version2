@@ -1,0 +1,41 @@
+{%- comment -%}
+	Renders a high-resolution theme asset or Shopify Files URL on desktop while
+	keeping the configured Shopify image on mobile.
+{%- endcomment -%}
+
+{%- capture img_focal -%}
+	--img-desktop-pos: center top; --img-mob-pos: {{ image_mobile.presentation.focal_point }};
+{%- endcapture -%}
+
+{%- if asset_image_desktop contains '://' -%}
+	{%- assign desktop_image_src = asset_image_desktop -%}
+{%- else -%}
+	{%- assign desktop_image_src = asset_image_desktop | asset_url -%}
+{%- endif -%}
+
+<picture>
+	{%- if image_mobile != blank -%}
+		<source
+			srcset="{{ image_mobile | image_url: width: 767 }} 767w, {{ image_mobile | image_url: width: 1534 }} 1534w"
+			sizes="100vw"
+			media="(max-width: 767px)"
+			width="767"
+			height="345"
+		>
+	{%- endif -%}
+
+	<img
+		class="banner__media"
+		src="{{ desktop_image_src }}"
+		alt="{{ image_desktop.alt | escape }}"
+		width="{{ asset_image_desktop_width }}"
+		height="{{ asset_image_desktop_height }}"
+		decoding="async"
+		fetchpriority="high"
+		{% if enable_lazy_load %}loading="lazy"{% else %}loading="eager"{% endif %}
+		{% if image_desktop != blank %}
+			onerror="this.onerror=null; this.src='{{ image_desktop | image_url: width: 2400 }}';"
+		{% endif %}
+		style="{{ img_focal }}"
+	>
+</picture>

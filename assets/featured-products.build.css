@@ -141,8 +141,4 @@
     box-sizing: border-box;
     overflow: hidden;
   }
-  .featured-products.product-recommendations .featured-products__slider.swiper-initialized .featured-products__col {
-    width: calc((100% - 12px) / 2) !important;
-    max-width: calc((100% - 12px) / 2) !important;
-  }
 }

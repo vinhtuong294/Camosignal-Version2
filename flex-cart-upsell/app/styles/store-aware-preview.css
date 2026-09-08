@@ -1,0 +1,136 @@
+.preview-toolbar-title small {
+  overflow: hidden;
+  color: #7b7b76;
+  font-size: 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.storefront-preview-canvas {
+  font-family: var(
+    --store-font-family,
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif
+  );
+}
+
+.storefront-logo {
+  overflow: hidden;
+  max-width: 160px;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.storefront-flash-sale {
+  display: inline-flex;
+  align-items: stretch;
+  width: fit-content;
+  margin: 0 0 8px;
+  overflow: hidden;
+  color: var(--store-sale-accent);
+  border: 1px solid var(--store-sale-accent);
+  border-radius: 4px;
+  font-size: 7px;
+  font-style: italic;
+  font-weight: 800;
+}
+
+.storefront-flash-sale strong,
+.storefront-flash-sale span {
+  padding: 4px 6px;
+}
+
+.storefront-flash-sale strong {
+  color: #fff;
+  background: var(--store-sale-accent);
+}
+
+.storefront-flash-sale span {
+  background: #fff9f9;
+}
+
+.storefront-add-button,
+.cart-page-summary button,
+.cart-drawer-footer button {
+  min-height: var(--store-button-height);
+  color: var(--store-button-text);
+  background: var(--store-button);
+  border-radius: var(--store-button-radius);
+}
+
+.store-preview-image-empty {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  min-height: 70px;
+  place-items: center;
+  color: #8c8c86;
+  background: #f1f1ed;
+}
+
+.preview-product-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: var(--preview-image-ratio);
+  overflow: hidden;
+  background: #f1f1ed;
+  border-radius: var(--preview-image-radius);
+}
+
+.preview-product-image > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cart-line-image {
+  width: 58px;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: #f1f1ed;
+  border-radius: 5px;
+}
+
+.cart-line-image > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-catalogue-empty {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 16px 10px;
+  margin-top: 10px;
+  color: #656560;
+  text-align: center;
+  background: #f6f6f3;
+  border: 1px dashed #c9c9c2;
+  border-radius: 8px;
+}
+
+.preview-catalogue-empty strong {
+  color: #30302d;
+  font-size: 9px;
+}
+
+.preview-catalogue-empty span {
+  font-size: 8px;
+}
+
+.storefront-preview-canvas--mobile .storefront-logo {
+  max-width: 120px;
+}
+
+@media (max-width: 600px) {
+  .preview-toolbar-title small {
+    display: none;
+  }
+}

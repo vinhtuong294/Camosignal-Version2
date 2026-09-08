@@ -1,0 +1,1227 @@
+{% doc %}
+Renders a single-listing selector for a vest, a long-sleeve, or a two-size combo.
+
+The first product option selects the offer and the second option remains the
+native Shopify size. For a combo, the vest size controls the native variant and
+the long-sleeve size is stored as a line item property.
+
+@param {product} product - The combo product.
+@param {string} section_id - The product section identifier.
+@param {string} [context] - A unique rendering context.
+{% enddoc %}
+
+{% liquid
+	assign combo_builder_enabled = false
+	assign product_type_downcase = product.type | downcase
+	if product_type_downcase == 'combo' or product.tags contains 'combo-builder'
+		assign combo_builder_enabled = true
+	endif
+
+	assign builder_context = context | default: 'product-form'
+	assign choice_option = product.options_with_values[0]
+	assign size_option = product.options_with_values[1]
+	assign selected_choice = choice_option.selected_value | default: product.selected_or_first_available_variant.option1
+	assign selected_size = size_option.selected_value | default: product.selected_or_first_available_variant.option2
+	assign size_modal_id = 'ComboSizeGuide-' | append: builder_context | append: '-' | append: section_id | append: '-' | append: product.id
+%}
+
+{% if combo_builder_enabled and choice_option != blank and size_option != blank %}
+	<section
+		class="product-combo-builder"
+		data-product-combo-builder
+		data-context="{{ builder_context | escape }}"
+		data-choice-option-name="{{ choice_option.name | escape }}"
+		data-size-option-name="{{ size_option.name | escape }}"
+		data-initial-choice="{{ selected_choice | escape }}"
+		data-initial-size="{{ selected_size | escape }}"
+		data-currency="{{ cart.currency.iso_code | default: shop.currency | escape }}"
+		data-size-modal-id="{{ size_modal_id | escape }}"
+	>
+		<script type="application/json" data-combo-variants>{{ product.variants | json }}</script>
+
+		<div class="product-combo-builder__heading">Available as</div>
+		<div class="product-combo-builder__choices" role="group" aria-label="Available as">
+			{% for choice_value in choice_option.values %}
+				{% liquid
+					assign choice_text = choice_value | append: ''
+					assign choice_downcase = choice_text | downcase
+					assign choice_group = 'combo'
+					assign choice_label = choice_text
+					if choice_downcase contains 'combo'
+						assign choice_label = 'Combo'
+					elsif choice_downcase contains 'vest'
+						assign choice_group = 'vest'
+						assign choice_label = 'Vest'
+					elsif choice_downcase contains 'long'
+						assign choice_group = 'long-sleeve'
+						assign choice_label = 'Long-Sleeve'
+					endif
+
+					assign choice_image = blank
+					assign choice_price = blank
+					assign choice_compare_price = 0
+					assign choice_price_varies = false
+					assign choice_first_price = blank
+
+					for variant in product.variants
+						if variant.option1 == choice_text
+							if choice_image == blank and variant.featured_media != blank
+								assign choice_image = variant.featured_media.preview_image
+							endif
+							if choice_price == blank or variant.price < choice_price
+								assign choice_price = variant.price
+							endif
+							if variant.compare_at_price > choice_compare_price
+								assign choice_compare_price = variant.compare_at_price
+							endif
+							if choice_first_price == blank
+								assign choice_first_price = variant.price
+							elsif variant.price != choice_first_price
+								assign choice_price_varies = true
+							endif
+						endif
+					endfor
+
+					if choice_image == blank
+						assign choice_image = product.featured_media.preview_image
+					endif
+					assign choice_savings = choice_compare_price | minus: choice_price
+				%}
+
+				<button
+					type="button"
+					class="product-combo-builder__choice{% if choice_text == selected_choice %} is-selected{% endif %}"
+					data-combo-choice
+					data-choice-value="{{ choice_text | escape }}"
+					data-choice-group="{{ choice_group }}"
+					data-choice-image="{% if choice_image != blank %}{{ choice_image | image_url: width: 160 }}{% endif %}"
+					aria-pressed="{% if choice_text == selected_choice %}true{% else %}false{% endif %}"
+				>
+					{% if choice_image != blank %}
+						<img
+							class="product-combo-builder__choice-image"
+							src="{{ choice_image | image_url: width: 240 }}"
+							alt="{{ choice_label | escape }}"
+							width="120"
+							height="120"
+							loading="lazy"
+						>
+					{% endif %}
+					<span class="product-combo-builder__choice-label">{{ choice_label }}</span>
+					<span class="product-combo-builder__choice-price">
+						{% if choice_price_varies %}From {% endif %}{{ choice_price | money }}
+					</span>
+					{% if choice_group == 'combo' and choice_savings > 0 %}
+						<span class="product-combo-builder__choice-saving">Save {{ choice_savings | money_without_trailing_zeros }}</span>
+					{% endif %}
+				</button>
+			{% endfor %}
+		</div>
+
+		<div class="product-combo-builder__customize">
+			<div class="product-combo-builder__subheading" data-combo-customize-heading>Customize your combo</div>
+
+			<div class="product-combo-builder__size-row" data-combo-size-row="vest">
+				<div class="product-combo-builder__size-label-wrap">
+					<span class="product-combo-builder__size-icon" data-combo-row-image="vest" aria-hidden="true"></span>
+				</div>
+				<div class="product-combo-builder__sizes" role="group" aria-label="Vest size">
+					{% for size_value in size_option.values %}
+						{% assign size_text = size_value | append: '' %}
+						<button
+							type="button"
+							class="product-combo-builder__size{% if size_text == selected_size %} is-selected{% endif %}"
+							data-combo-size="vest"
+							data-size-value="{{ size_text | escape }}"
+							aria-pressed="{% if size_text == selected_size %}true{% else %}false{% endif %}"
+						>{{ size_text }}</button>
+					{% endfor %}
+				</div>
+				<button class="product-combo-builder__size-guide" type="button" data-combo-size-guide="vest">Size guide</button>
+			</div>
+
+			<div class="product-combo-builder__size-row" data-combo-size-row="long-sleeve">
+				<div class="product-combo-builder__size-label-wrap">
+					<span class="product-combo-builder__size-icon" data-combo-row-image="long-sleeve" aria-hidden="true"></span>
+				</div>
+				<div class="product-combo-builder__sizes" role="group" aria-label="Long-sleeve size">
+					{% for size_value in size_option.values %}
+						{% assign size_text = size_value | append: '' %}
+						<button
+							type="button"
+							class="product-combo-builder__size{% if size_text == selected_size %} is-selected{% endif %}"
+							data-combo-size="long-sleeve"
+							data-size-value="{{ size_text | escape }}"
+							aria-pressed="{% if size_text == selected_size %}true{% else %}false{% endif %}"
+						>{{ size_text }}</button>
+					{% endfor %}
+				</div>
+				<button class="product-combo-builder__size-guide" type="button" data-combo-size-guide="long-sleeve">Size guide</button>
+			</div>
+
+		</div>
+
+		<input type="hidden" name="properties[Vest Size]" value="" data-combo-property="vest">
+		<input type="hidden" name="properties[Long-Sleeve Size]" value="" data-combo-property="long-sleeve">
+		<input type="hidden" name="properties[_Camo line signature]" value="" data-combo-line-signature>
+
+		<div class="product-combo-builder__summary" aria-live="polite">
+			<span class="product-combo-builder__summary-images" data-combo-summary-images aria-hidden="true"></span>
+			<strong class="product-combo-builder__summary-text" data-combo-summary-text></strong>
+			<span class="product-combo-builder__summary-price" data-combo-summary-price></span>
+		</div>
+
+		<div class="product-combo-builder__modal" id="{{ size_modal_id }}" role="dialog" aria-modal="true" aria-labelledby="{{ size_modal_id }}-title" hidden>
+			<button class="product-combo-builder__modal-backdrop" type="button" data-combo-modal-close aria-label="Close size guide"></button>
+			<div class="product-combo-builder__modal-panel">
+				<div class="product-combo-builder__modal-header">
+					<h2 id="{{ size_modal_id }}-title" data-combo-modal-title>Size guide</h2>
+					<button class="product-combo-builder__modal-close" type="button" data-combo-modal-close aria-label="Close size guide">&times;</button>
+				</div>
+				<div class="product-combo-builder__modal-content" data-combo-chart="vest" hidden>
+					<div class="product-combo-builder__unit-tabs" role="tablist" aria-label="Vest measurement unit">
+						<button class="is-active" type="button" role="tab" aria-selected="true" data-combo-unit="in">In</button>
+						<button type="button" role="tab" aria-selected="false" data-combo-unit="cm">Cm</button>
+					</div>
+					<div role="tabpanel" data-combo-unit-panel="in">
+						<p class="product-combo-builder__chart-note">Garment measurements are in <strong>inches</strong>.</p>
+						<div class="product-combo-builder__table-wrap">
+							<table class="product-combo-builder__chart-table">
+								<thead><tr><th>Size</th><th>US</th><th>Length</th><th>Chest</th><th>Shoulder</th></tr></thead>
+								<tbody>
+									<tr><th>S</th><td>36</td><td>24.2</td><td>42.5</td><td>16.7</td></tr>
+									<tr><th>M</th><td>38</td><td>25.0</td><td>44.1</td><td>17.2</td></tr>
+									<tr><th>L</th><td>40</td><td>25.8</td><td>45.7</td><td>17.8</td></tr>
+									<tr><th>XL</th><td>42</td><td>26.6</td><td>47.2</td><td>18.4</td></tr>
+									<tr><th>2XL</th><td>44</td><td>27.4</td><td>48.8</td><td>19.0</td></tr>
+									<tr><th>3XL</th><td>46</td><td>28.0</td><td>50.4</td><td>19.6</td></tr>
+									<tr><th>4XL</th><td>48</td><td>28.5</td><td>52.0</td><td>20.2</td></tr>
+									<tr><th>5XL</th><td>50</td><td>29.1</td><td>53.5</td><td>20.8</td></tr>
+									<tr><th>6XL</th><td>52</td><td>29.7</td><td>55.1</td><td>21.4</td></tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div role="tabpanel" data-combo-unit-panel="cm" hidden>
+						<p class="product-combo-builder__chart-note">Garment measurements are in <strong>centimeters</strong>.</p>
+						<div class="product-combo-builder__table-wrap">
+							<table class="product-combo-builder__chart-table">
+								<thead><tr><th>Size</th><th>US</th><th>Length</th><th>Chest</th><th>Shoulder</th></tr></thead>
+								<tbody>
+									<tr><th>S</th><td>36</td><td>61.5</td><td>108.0</td><td>42.4</td></tr>
+									<tr><th>M</th><td>38</td><td>63.5</td><td>112.0</td><td>43.7</td></tr>
+									<tr><th>L</th><td>40</td><td>65.5</td><td>116.1</td><td>45.2</td></tr>
+									<tr><th>XL</th><td>42</td><td>67.6</td><td>119.9</td><td>46.7</td></tr>
+									<tr><th>2XL</th><td>44</td><td>69.6</td><td>124.0</td><td>48.3</td></tr>
+									<tr><th>3XL</th><td>46</td><td>71.1</td><td>128.0</td><td>49.8</td></tr>
+									<tr><th>4XL</th><td>48</td><td>72.4</td><td>132.1</td><td>51.3</td></tr>
+									<tr><th>5XL</th><td>50</td><td>73.9</td><td>135.9</td><td>52.8</td></tr>
+									<tr><th>6XL</th><td>52</td><td>75.4</td><td>140.0</td><td>54.4</td></tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<p class="product-combo-builder__tolerance">Manual measurements may vary by 2–3 cm.</p>
+					<div class="product-combo-builder__measure-guide">
+						<figure class="product-combo-builder__measure-figure">
+							<img
+								class="product-combo-builder__measure-image"
+								src="{{ 'combo-fleece-vest-size-guide.webp' | asset_url }}"
+								alt="Full-zip fleece vest measurement guide showing length, chest circumference, and shoulder width"
+								width="768"
+								height="1152"
+								loading="lazy"
+							>
+						</figure>
+						<div class="product-combo-builder__measure-instructions">
+							<h3>How to measure</h3>
+							<p><span class="product-combo-builder__measure-number">1</span><span><strong>Length</strong> — Measure from the highest shoulder point beside the collar to the bottom hem.</span></p>
+							<p><span class="product-combo-builder__measure-number">2</span><span><strong>Chest</strong> — Measure around the garment at chest level, just below the armholes.</span></p>
+							<p><span class="product-combo-builder__measure-number">3</span><span><strong>Shoulder</strong> — Measure straight across from one shoulder point to the other.</span></p>
+						</div>
+					</div>
+				</div>
+				<div class="product-combo-builder__modal-content" data-combo-chart="long-sleeve" hidden>
+					<div class="product-combo-builder__unit-tabs" role="tablist" aria-label="Long-sleeve zip measurement unit">
+						<button class="is-active" type="button" role="tab" aria-selected="true" data-combo-unit="in">In</button>
+						<button type="button" role="tab" aria-selected="false" data-combo-unit="cm">Cm</button>
+					</div>
+					<div role="tabpanel" data-combo-unit-panel="in">
+						<p class="product-combo-builder__chart-note">Garment measurements are in <strong>inches</strong>.</p>
+						<div class="product-combo-builder__table-wrap">
+							<table class="product-combo-builder__chart-table">
+								<thead><tr><th>Size</th><th>US</th><th>Length</th><th>Chest</th><th>Sleeve length</th></tr></thead>
+								<tbody>
+									<tr><th>S</th><td>36</td><td>26.0</td><td>37.0</td><td>27.6</td></tr>
+									<tr><th>M</th><td>38</td><td>26.8</td><td>38.6</td><td>28.1</td></tr>
+									<tr><th>L</th><td>40</td><td>27.6</td><td>40.6</td><td>28.9</td></tr>
+									<tr><th>XL</th><td>42</td><td>28.3</td><td>42.5</td><td>29.6</td></tr>
+									<tr><th>2XL</th><td>44</td><td>29.1</td><td>44.5</td><td>30.3</td></tr>
+									<tr><th>3XL</th><td>46</td><td>29.9</td><td>46.5</td><td>31.0</td></tr>
+									<tr><th>4XL</th><td>48</td><td>30.7</td><td>48.4</td><td>31.7</td></tr>
+									<tr><th>5XL</th><td>50</td><td>31.5</td><td>50.4</td><td>32.4</td></tr>
+									<tr><th>6XL</th><td>52</td><td>32.3</td><td>52.4</td><td>33.1</td></tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div role="tabpanel" data-combo-unit-panel="cm" hidden>
+						<p class="product-combo-builder__chart-note">Garment measurements are in <strong>centimeters</strong>.</p>
+						<div class="product-combo-builder__table-wrap">
+							<table class="product-combo-builder__chart-table">
+								<thead><tr><th>Size</th><th>US</th><th>Length</th><th>Chest</th><th>Sleeve length</th></tr></thead>
+								<tbody>
+									<tr><th>S</th><td>36</td><td>66.0</td><td>94.0</td><td>70.1</td></tr>
+									<tr><th>M</th><td>38</td><td>68.1</td><td>98.0</td><td>71.4</td></tr>
+									<tr><th>L</th><td>40</td><td>70.1</td><td>103.1</td><td>73.4</td></tr>
+									<tr><th>XL</th><td>42</td><td>71.9</td><td>108.0</td><td>75.2</td></tr>
+									<tr><th>2XL</th><td>44</td><td>73.9</td><td>113.0</td><td>77.0</td></tr>
+									<tr><th>3XL</th><td>46</td><td>75.9</td><td>118.1</td><td>78.7</td></tr>
+									<tr><th>4XL</th><td>48</td><td>78.0</td><td>122.9</td><td>80.5</td></tr>
+									<tr><th>5XL</th><td>50</td><td>80.0</td><td>128.0</td><td>82.3</td></tr>
+									<tr><th>6XL</th><td>52</td><td>82.0</td><td>133.1</td><td>84.1</td></tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<p class="product-combo-builder__tolerance">Manual measurements may vary by 2–3 cm.</p>
+					<div class="product-combo-builder__measure-guide">
+						<figure class="product-combo-builder__measure-figure">
+							<img
+								class="product-combo-builder__measure-image"
+								src="{{ 'combo-quarter-zip-size-guide.webp' | asset_url }}"
+								alt="Quarter-zip long-sleeve measurement guide showing length, chest circumference, and sleeve length"
+								width="768"
+								height="1152"
+								loading="lazy"
+							>
+						</figure>
+						<div class="product-combo-builder__measure-instructions">
+							<h3>How to measure</h3>
+							<p><span class="product-combo-builder__measure-number">1</span><span><strong>Length</strong> — Measure from the highest shoulder point beside the collar to the bottom hem.</span></p>
+							<p><span class="product-combo-builder__measure-number">2</span><span><strong>Chest</strong> — Measure around the garment at chest level, just below the armholes.</span></p>
+							<p><span class="product-combo-builder__measure-number">3</span><span><strong>Sleeve length</strong> — Measure from the shoulder/armhole seam along the outer sleeve to the cuff.</span></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<style>
+		.product-combo-builder {
+			--combo-ink: var(--color-text-primary, #263b2e);
+			--combo-accent: #e6a400;
+			display: grid;
+			gap: 12px;
+			width: 100%;
+			margin: 14px 0 18px;
+			color: var(--combo-ink);
+		}
+
+		.product-combo-builder__native-options {
+			display: none !important;
+		}
+
+		.product-combo-builder__heading,
+		.product-combo-builder__subheading,
+		.product-combo-builder__choice-label,
+		.product-combo-builder__summary-text {
+			font-family: 'Oswald', var(--font-heading-family), sans-serif;
+			text-transform: uppercase;
+		}
+
+		.product-combo-builder__heading,
+		.product-combo-builder__subheading {
+			font-size: 14px;
+			font-weight: 600;
+			letter-spacing: 0.025em;
+		}
+
+		.product-combo-builder__choices {
+			display: grid;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: 10px;
+		}
+
+		.product-combo-builder__choice {
+			position: relative;
+			display: flex;
+			min-width: 0;
+			padding: 10px 8px;
+			flex-direction: column;
+			align-items: center;
+			border: 1px solid #d7dad7;
+			border-radius: 2px;
+			background: #fff;
+			color: inherit;
+			cursor: pointer;
+			transition: border-color 150ms ease, box-shadow 150ms ease;
+		}
+
+		.product-combo-builder__choice:hover {
+			border-color: #7f8a81;
+		}
+
+		.product-combo-builder__choice.is-selected {
+			border-color: var(--combo-ink);
+			box-shadow: inset 0 0 0 1px var(--combo-ink);
+		}
+
+		.product-combo-builder__choice.is-selected::before {
+			position: absolute;
+			top: 7px;
+			left: 7px;
+			width: 20px;
+			height: 20px;
+			border-radius: 1px;
+			background: var(--combo-ink);
+			color: #fff;
+			content: '\2713';
+			font-size: 14px;
+			line-height: 20px;
+			text-align: center;
+		}
+
+		.product-combo-builder__choice-image {
+			width: min(100%, 112px);
+			height: 104px;
+			object-fit: contain;
+		}
+
+		.product-combo-builder__choice-label {
+			margin-top: 3px;
+			font-size: 14px;
+			font-weight: 600;
+			line-height: 1.2;
+			text-align: center;
+		}
+
+		.product-combo-builder__choice-price {
+			margin-top: 3px;
+			font-size: 14px;
+			line-height: 1.2;
+		}
+
+		.product-combo-builder__choice-saving {
+			margin-top: 3px;
+			color: var(--combo-accent);
+			font-size: 12px;
+			font-weight: 700;
+			line-height: 1.2;
+			text-transform: uppercase;
+		}
+
+		.product-combo-builder__customize {
+			display: grid;
+			gap: 10px;
+			padding-top: 12px;
+			border-top: 1px solid #dedfde;
+		}
+
+		.product-combo-builder__size-row {
+			display: grid;
+			grid-template-columns: 68px minmax(0, 1fr);
+			grid-template-rows: auto auto;
+			gap: 4px 10px;
+			align-items: center;
+		}
+
+		.product-combo-builder__size-row[hidden] {
+			display: none !important;
+		}
+
+		.product-combo-builder__size-label-wrap {
+			display: flex;
+			grid-column: 1;
+			grid-row: 1 / span 2;
+			min-width: 0;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.product-combo-builder__size-icon {
+			display: block;
+			width: 60px;
+			height: 72px;
+			flex: 0 0 60px;
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: contain;
+		}
+
+		.product-combo-builder__sizes {
+			display: grid;
+			grid-column: 2;
+			grid-row: 2;
+			grid-template-columns: repeat(9, minmax(0, 1fr));
+			gap: 5px;
+		}
+
+		.product-combo-builder__size {
+			min-height: 40px;
+			padding: 6px;
+			border: 1px solid #d7dad7;
+			border-radius: 1px;
+			background: #fff;
+			color: inherit;
+			font: inherit;
+			cursor: pointer;
+		}
+
+		.product-combo-builder__size:hover {
+			border-color: #7f8a81;
+		}
+
+		.product-combo-builder__size.is-selected {
+			border-color: var(--combo-ink);
+			background: var(--combo-ink);
+			color: #fff;
+		}
+
+		.product-combo-builder__size-guide {
+			grid-column: 2;
+			grid-row: 1;
+			justify-self: end;
+			padding: 4px 0;
+			border: 0;
+			background: transparent;
+			color: inherit;
+			font: inherit;
+			font-size: 12px;
+			text-decoration: underline;
+			white-space: nowrap;
+			cursor: pointer;
+		}
+
+		.product-combo-builder__summary {
+			display: grid;
+			grid-template-columns: auto 1fr auto;
+			min-height: 48px;
+			padding: 6px 10px;
+			gap: 10px;
+			align-items: center;
+			border: 1px solid #aeb4ae;
+			background: #fff;
+		}
+
+		.product-combo-builder__summary-images {
+			display: flex;
+			gap: 3px;
+		}
+
+		.product-combo-builder__summary-images img {
+			width: 30px;
+			height: 38px;
+			object-fit: contain;
+		}
+
+		.product-combo-builder__summary-text {
+			font-size: 14px;
+			font-weight: 600;
+			line-height: 1.25;
+		}
+
+		.product-combo-builder__summary-price {
+			font-size: 14px;
+			font-weight: 700;
+			white-space: nowrap;
+		}
+
+		.product-combo-builder__modal[hidden],
+		.product-combo-builder__modal-content[hidden] {
+			display: none !important;
+		}
+
+		.product-combo-builder__modal {
+			--combo-ink: var(--color-text-primary, #263b2e);
+			--combo-accent: #e6a400;
+			position: fixed;
+			z-index: 10000;
+			inset: 0;
+			display: grid;
+			place-items: center;
+			padding: 20px;
+		}
+
+		.product-combo-builder__modal-backdrop {
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			padding: 0;
+			border: 0;
+			background: rgba(16, 24, 18, 0.64);
+			cursor: pointer;
+		}
+
+		.product-combo-builder__modal-panel {
+			position: relative;
+			z-index: 1;
+			width: min(900px, 100%);
+			max-height: calc(100vh - 40px);
+			overflow: auto;
+			border-radius: 4px;
+			background: #fff;
+			box-shadow: 0 20px 60px rgba(0, 0, 0, 0.24);
+		}
+
+		.product-combo-builder__modal-header {
+			display: flex;
+			padding: 18px 20px;
+			align-items: center;
+			justify-content: space-between;
+			border-bottom: 1px solid #e0e2e0;
+		}
+
+		.product-combo-builder__modal-header h2 {
+			margin: 0;
+			font-family: 'Oswald', var(--font-heading-family), sans-serif;
+			font-size: 20px;
+			text-transform: uppercase;
+		}
+
+		.product-combo-builder__modal-close {
+			width: 36px;
+			height: 36px;
+			padding: 0;
+			border: 0;
+			background: transparent;
+			font-size: 28px;
+			line-height: 1;
+			cursor: pointer;
+		}
+
+		.product-combo-builder__modal-content {
+			padding: 24px;
+			text-align: center;
+		}
+
+		.product-combo-builder__modal-content img {
+			width: 100%;
+			height: auto;
+		}
+
+		.product-combo-builder__modal-content p {
+			margin: 12px auto;
+			max-width: 560px;
+			line-height: 1.6;
+		}
+
+		.product-combo-builder__unit-tabs {
+			display: inline-flex;
+			gap: 4px;
+			margin-bottom: 16px;
+			padding: 4px;
+			border-radius: 4px;
+			background: #edf0ed;
+		}
+
+		.product-combo-builder__unit-tabs button {
+			min-width: 64px;
+			padding: 8px 16px;
+			border: 1px solid transparent;
+			border-radius: 3px;
+			background: transparent;
+			color: var(--combo-ink);
+			font: inherit;
+			font-weight: 700;
+			cursor: pointer;
+		}
+
+		.product-combo-builder__unit-tabs button.is-active {
+			border-color: var(--combo-ink);
+			background: var(--combo-ink);
+			color: #fff;
+		}
+
+		.product-combo-builder__modal-content [data-combo-unit-panel][hidden] {
+			display: none !important;
+		}
+
+		.product-combo-builder__modal-content .product-combo-builder__chart-note {
+			margin: 0 auto 12px;
+			color: #59615b;
+			font-size: 13px;
+		}
+
+		.product-combo-builder__table-wrap {
+			overflow-x: auto;
+			border: 1px solid #dfe3df;
+			border-radius: 4px;
+		}
+
+		.product-combo-builder__chart-table {
+			width: 100%;
+			border-collapse: collapse;
+			font-size: 14px;
+			font-variant-numeric: tabular-nums;
+		}
+
+		.product-combo-builder__chart-table th,
+		.product-combo-builder__chart-table td {
+			padding: 10px 12px;
+			border-right: 1px solid #e6e9e6;
+			border-bottom: 1px solid #e6e9e6;
+			text-align: center;
+			white-space: nowrap;
+		}
+
+		.product-combo-builder__chart-table th:last-child,
+		.product-combo-builder__chart-table td:last-child {
+			border-right: 0;
+		}
+
+		.product-combo-builder__chart-table tbody tr:last-child th,
+		.product-combo-builder__chart-table tbody tr:last-child td {
+			border-bottom: 0;
+		}
+
+		.product-combo-builder__chart-table thead th {
+			background: #f3f5f3;
+			color: var(--combo-ink);
+			font-weight: 700;
+		}
+
+		.product-combo-builder__chart-table tbody th {
+			background: #fafbfa;
+			font-weight: 700;
+		}
+
+		.product-combo-builder__modal-content .product-combo-builder__tolerance {
+			margin: 10px 0 18px;
+			max-width: none;
+			color: #68706a;
+			font-size: 12px;
+			font-style: italic;
+			text-align: left;
+		}
+
+		.product-combo-builder__measure-guide {
+			display: grid;
+			grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.2fr);
+			gap: 34px;
+			margin-top: 20px;
+			padding-top: 22px;
+			align-items: center;
+			border-top: 1px solid #dfe3df;
+			text-align: left;
+		}
+
+		.product-combo-builder__measure-figure {
+			display: flex;
+			min-width: 0;
+			margin: 0;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.product-combo-builder__modal-content .product-combo-builder__measure-image {
+			display: block;
+			width: auto;
+			max-width: 100%;
+			height: auto;
+			max-height: 330px;
+			object-fit: contain;
+		}
+
+		.product-combo-builder__measure-instructions {
+			min-width: 0;
+		}
+
+		.product-combo-builder__measure-guide h3 {
+			margin: 0 0 10px;
+			color: var(--combo-ink);
+			font-family: 'Oswald', var(--font-heading-family), sans-serif;
+			font-size: 17px;
+			text-transform: uppercase;
+		}
+
+		.product-combo-builder__modal-content .product-combo-builder__measure-guide p {
+			display: grid;
+			grid-template-columns: 26px auto;
+			column-gap: 8px;
+			margin: 7px 0;
+			max-width: none;
+			line-height: 1.45;
+		}
+
+		.product-combo-builder__measure-number {
+			display: inline-grid;
+			width: 22px;
+			height: 22px;
+			place-items: center;
+			border-radius: 50%;
+			background: var(--combo-ink);
+			color: #fff;
+			font-size: 12px;
+			font-weight: 700;
+		}
+
+		@media (max-width: 767px) {
+			.product-combo-builder__modal {
+				padding: 10px;
+			}
+
+			.product-combo-builder__modal-panel {
+				max-height: calc(100vh - 20px);
+			}
+
+			.product-combo-builder__modal-content {
+				padding: 18px 14px;
+			}
+
+			.product-combo-builder__chart-table {
+				min-width: 520px;
+			}
+
+			.product-combo-builder__chart-table th,
+			.product-combo-builder__chart-table td {
+				padding: 9px 10px;
+			}
+
+			.product-combo-builder__measure-guide {
+				grid-template-columns: 1fr;
+				gap: 18px;
+				padding-top: 18px;
+			}
+
+			.product-combo-builder__modal-content .product-combo-builder__measure-image {
+				max-height: 280px;
+			}
+
+			.product-combo-builder__choices {
+				gap: 6px;
+			}
+
+			.product-combo-builder__choice {
+				padding: 8px 4px;
+			}
+
+			.product-combo-builder__choice-image {
+				height: 82px;
+			}
+
+			.product-combo-builder__choice-label,
+			.product-combo-builder__choice-price {
+				font-size: 12px;
+			}
+
+			.product-combo-builder__size-row {
+				grid-template-columns: 62px 1fr auto;
+				gap: 7px 10px;
+			}
+
+			.product-combo-builder__size-label-wrap {
+				grid-column: 1;
+				grid-row: 1 / span 2;
+			}
+
+			.product-combo-builder__size-guide {
+				grid-column: 3;
+				grid-row: 1;
+			}
+
+			.product-combo-builder__sizes {
+				grid-column: 2 / -1;
+				grid-row: 2;
+				grid-template-columns: repeat(5, minmax(42px, 1fr));
+			}
+
+			.product-combo-builder__size-icon {
+				width: 56px;
+				height: 68px;
+				flex-basis: 56px;
+			}
+
+			.product-combo-builder__summary {
+				grid-template-columns: auto 1fr;
+			}
+
+			.product-combo-builder__summary-price {
+				grid-column: 2;
+			}
+		}
+	</style>
+
+	<script>
+		(function () {
+			var root = document.currentScript.previousElementSibling;
+			while (root && !root.matches('[data-product-combo-builder]')) {
+				root = root.previousElementSibling;
+			}
+			if (!root || root.dataset.comboInitialized === 'true') return;
+			root.dataset.comboInitialized = 'true';
+
+			var form = root.closest('form');
+			if (!form) return;
+
+			var variantsScript = root.querySelector('[data-combo-variants]');
+			var variants = [];
+			try {
+				variants = JSON.parse(variantsScript ? variantsScript.textContent : '[]');
+			} catch (error) {
+				variants = [];
+			}
+
+			var choiceOptionName = root.dataset.choiceOptionName;
+			var sizeOptionName = root.dataset.sizeOptionName;
+			var state = {
+				choice: root.dataset.initialChoice || '',
+				vest: root.dataset.initialSize || '',
+				longSleeve: root.dataset.initialSize || ''
+			};
+
+			var choiceButtons = Array.prototype.slice.call(root.querySelectorAll('[data-combo-choice]'));
+			var propertyVest = root.querySelector('[data-combo-property="vest"]');
+			var propertyLong = root.querySelector('[data-combo-property="long-sleeve"]');
+			var propertyLineSignature = root.querySelector('[data-combo-line-signature]');
+			var summaryText = root.querySelector('[data-combo-summary-text]');
+			var summaryPrice = root.querySelector('[data-combo-summary-price]');
+			var summaryImages = root.querySelector('[data-combo-summary-images]');
+			var customizeHeading = root.querySelector('[data-combo-customize-heading]');
+			var modal = document.getElementById(root.dataset.sizeModalId);
+			if (modal && modal.parentElement !== document.body) document.body.appendChild(modal);
+
+			function selectChartUnit(chart, unit) {
+				chart.querySelectorAll('[data-combo-unit]').forEach(function (button) {
+					var isActive = button.dataset.comboUnit === unit;
+					button.classList.toggle('is-active', isActive);
+					button.setAttribute('aria-selected', isActive ? 'true' : 'false');
+				});
+				chart.querySelectorAll('[data-combo-unit-panel]').forEach(function (panel) {
+					panel.hidden = panel.dataset.comboUnitPanel !== unit;
+				});
+			}
+			var pendingSizeTimer;
+
+			function normalizeChoice(value) {
+				var normalized = String(value || '').toLowerCase();
+				if (normalized.indexOf('vest') !== -1 && normalized.indexOf('combo') === -1) return 'vest';
+				if (normalized.indexOf('long') !== -1 && normalized.indexOf('combo') === -1) return 'long-sleeve';
+				return 'combo';
+			}
+
+			function nativeOptionsRoot() {
+				return form.querySelector('.js-product-options, .js-quick-view-product-options');
+			}
+
+			function hideNativeOptions() {
+				var source = nativeOptionsRoot();
+				if (source) source.classList.add('product-combo-builder__native-options');
+			}
+
+			function optionControls(position, optionName) {
+				var source = nativeOptionsRoot();
+				if (!source) return [];
+				var controls = Array.prototype.slice.call(source.querySelectorAll('[name="option' + position + '"]'));
+				if (controls.length) return controls;
+				return Array.prototype.slice.call(source.querySelectorAll('[data-option="' + CSS.escape(optionName) + '"]'));
+			}
+
+			function selectedNativeValue(position, optionName) {
+				var controls = optionControls(position, optionName);
+				for (var index = 0; index < controls.length; index += 1) {
+					var control = controls[index];
+					if (control.tagName === 'SELECT') return control.value;
+					if (control.checked) return control.value;
+				}
+				return '';
+			}
+
+			function setNativeValue(position, optionName, value) {
+				var controls = optionControls(position, optionName);
+				var control = controls.find(function (item) {
+					return item.tagName === 'SELECT' || item.value === value;
+				});
+				if (!control) return false;
+				if (control.tagName === 'SELECT') {
+					if (control.value === value) return false;
+					control.value = value;
+				} else {
+					if (control.checked) return false;
+					control.checked = true;
+				}
+				control.dispatchEvent(new Event('change', { bubbles: true }));
+				return true;
+			}
+
+			function desiredNativeSize() {
+				var group = normalizeChoice(state.choice);
+				return group === 'long-sleeve' ? state.longSleeve : state.vest;
+			}
+
+			function settleNativeSize() {
+				window.clearTimeout(pendingSizeTimer);
+				pendingSizeTimer = window.setTimeout(function () {
+					hideNativeOptions();
+					setNativeValue(2, sizeOptionName, desiredNativeSize());
+				}, 320);
+			}
+
+			function selectedVariant() {
+				var desiredSize = desiredNativeSize();
+				return variants.find(function (variant) {
+					return variant.options && variant.options[0] === state.choice && variant.options[1] === desiredSize;
+				});
+			}
+
+			function syncVariantId() {
+				var variant = selectedVariant();
+				var variantInput = form.querySelector('[name="id"]');
+				if (variant && variantInput) variantInput.value = String(variant.id);
+				return variant;
+			}
+
+			function hashLineSignature(value) {
+				var hash = 2166136261;
+				for (var index = 0; index < value.length; index += 1) {
+					hash ^= value.charCodeAt(index);
+					hash = Math.imul(hash, 16777619);
+				}
+				return (hash >>> 0).toString(36);
+			}
+
+			function updateLineSignature() {
+				var variant = syncVariantId();
+				if (!propertyLineSignature) return;
+				var group = normalizeChoice(state.choice);
+				var noteInput = form.querySelector('[name="properties[Order note]"]');
+				var note = noteInput ? noteInput.value.trim() : '';
+				var signatureParts = [
+					variant ? String(variant.id) : '',
+					group,
+					group === 'long-sleeve' ? '' : state.vest,
+					group === 'vest' ? '' : state.longSleeve,
+					note
+				];
+				propertyLineSignature.value = 'camo-v1-' + hashLineSignature(signatureParts.join('|'));
+			}
+
+			function formatMoney(cents) {
+				try {
+					return new Intl.NumberFormat(document.documentElement.lang || 'en-US', {
+						style: 'currency',
+						currency: root.dataset.currency || 'USD'
+					}).format((Number(cents) || 0) / 100);
+				} catch (error) {
+					return '$' + ((Number(cents) || 0) / 100).toFixed(2);
+				}
+			}
+
+			function formatPriceNode(cents, node) {
+				var formatted = formatMoney(cents);
+				var currencySymbol = node && node.dataset ? node.dataset.currencySymbol : '';
+				return currencySymbol ? formatted.replace(currencySymbol, '').trim() : formatted;
+			}
+
+			function updateMainPrice(variant) {
+				if (!variant) return;
+				var productSection = root.closest('[data-section-type="product"]') || form;
+				var priceContainers = productSection.querySelectorAll('.product-price.js-price');
+				var compareAtPrice = Number(variant.compare_at_price) || 0;
+				var price = Number(variant.price) || 0;
+				var isOnSale = compareAtPrice > price;
+
+				priceContainers.forEach(function (priceContainer) {
+					priceContainer.classList.remove('price--hide');
+					priceContainer.classList.toggle('price--on-sale', isOnSale);
+
+					priceContainer.querySelectorAll('[data-product-price]').forEach(function (priceNode) {
+						priceNode.textContent = formatPriceNode(price, priceNode);
+						priceNode.dataset.amount = String(price);
+					});
+
+					priceContainer.querySelectorAll('[data-price-old]').forEach(function (compareNode) {
+						compareNode.textContent = isOnSale ? formatPriceNode(compareAtPrice, compareNode) : '';
+					});
+				});
+
+				productSection.querySelectorAll('.js-sale-percentage-badge').forEach(function (badge) {
+					badge.classList.toggle('is-hidden', !isOnSale);
+					var salePercentage = badge.querySelector('[data-sale-percentage]');
+					if (!salePercentage || !isOnSale) return;
+
+					var percentage = Math.floor((compareAtPrice - price) * 100 / compareAtPrice);
+					var label = percentage + '% OFF';
+					if (window.themeCore && window.themeCore.translations && window.themeCore.translations.get) {
+						label = window.themeCore.translations.get('products.product.sale_percentage_label', { number: percentage });
+					}
+					salePercentage.textContent = label;
+				});
+			}
+
+			function choiceImage(group) {
+				var button = choiceButtons.find(function (item) {
+					return item.dataset.choiceGroup === group;
+				});
+				return button ? button.dataset.choiceImage : '';
+			}
+
+			function imageMarkup(url, alt) {
+				if (!url) return '';
+				var image = document.createElement('img');
+				image.src = url;
+				image.alt = alt || '';
+				return image.outerHTML;
+			}
+
+			function updateGallery(group) {
+				if (root.dataset.context === 'quick-view') return;
+				var thumbnails = Array.prototype.slice.call(document.querySelectorAll('.product-media__slider-thumbnails-slide[data-combo-media-group]'));
+				thumbnails.forEach(function (thumbnail) {
+					thumbnail.hidden = thumbnail.dataset.comboMediaGroup !== group;
+				});
+
+				var firstThumbnail = thumbnails.find(function (thumbnail) {
+					return thumbnail.dataset.comboMediaGroup === group;
+				});
+				var thumbnailSwiperElement = document.querySelector('[class*="js-product-media-slider-thumbnails-"]');
+				if (thumbnailSwiperElement && thumbnailSwiperElement.swiper) thumbnailSwiperElement.swiper.update();
+
+				if (firstThumbnail) {
+					var slideIndex = Number(firstThumbnail.dataset.slideIndex);
+					var mainSwiperElement = document.querySelector('[class*="js-product-media-slider-"]:not([class*="thumbnails"])');
+					if (mainSwiperElement && mainSwiperElement.swiper && Number.isFinite(slideIndex)) {
+						mainSwiperElement.swiper.slideTo(slideIndex);
+					}
+				}
+
+				var visibleCount = thumbnails.filter(function (thumbnail) { return !thumbnail.hidden; }).length;
+				document.querySelectorAll('[class*="js-thumb-nav-prev-"], [class*="js-thumb-nav-next-"]').forEach(function (button) {
+					button.hidden = visibleCount <= 7;
+				});
+			}
+
+			function render() {
+				var group = normalizeChoice(state.choice);
+
+				choiceButtons.forEach(function (button) {
+					var selected = button.dataset.choiceValue === state.choice;
+					button.classList.toggle('is-selected', selected);
+					button.setAttribute('aria-pressed', selected ? 'true' : 'false');
+				});
+
+				root.querySelectorAll('[data-combo-size]').forEach(function (button) {
+					var role = button.dataset.comboSize;
+					var selectedValue = role === 'vest' ? state.vest : state.longSleeve;
+					var selected = button.dataset.sizeValue === selectedValue;
+					button.classList.toggle('is-selected', selected);
+					button.setAttribute('aria-pressed', selected ? 'true' : 'false');
+				});
+
+				root.querySelector('[data-combo-size-row="vest"]').hidden = group === 'long-sleeve';
+				root.querySelector('[data-combo-size-row="long-sleeve"]').hidden = group === 'vest';
+				customizeHeading.textContent = group === 'combo' ? 'Customize your combo' : 'Choose your size';
+
+				propertyVest.value = group === 'combo' ? state.vest : '';
+				propertyLong.value = group === 'combo' ? state.longSleeve : '';
+				updateLineSignature();
+
+				var vestImage = choiceImage('vest');
+				var longImage = choiceImage('long-sleeve');
+				var vestIcon = root.querySelector('[data-combo-row-image="vest"]');
+				var longIcon = root.querySelector('[data-combo-row-image="long-sleeve"]');
+				vestIcon.style.backgroundImage = vestImage ? 'url("' + vestImage + '")' : '';
+				longIcon.style.backgroundImage = longImage ? 'url("' + longImage + '")' : '';
+
+				if (group === 'combo') {
+					summaryText.textContent = 'Combo: Vest ' + state.vest + ' + Long-Sleeve ' + state.longSleeve;
+					summaryImages.innerHTML = imageMarkup(vestImage, '') + imageMarkup(longImage, '');
+				} else if (group === 'vest') {
+					summaryText.textContent = 'Vest: ' + state.vest;
+					summaryImages.innerHTML = imageMarkup(vestImage, '');
+				} else {
+					summaryText.textContent = 'Long-Sleeve: ' + state.longSleeve;
+					summaryImages.innerHTML = imageMarkup(longImage, '');
+				}
+
+				var variant = selectedVariant();
+				summaryPrice.textContent = variant ? formatMoney(variant.price) : '';
+				updateMainPrice(variant);
+				updateGallery(group);
+			}
+
+			choiceButtons.forEach(function (button) {
+				button.addEventListener('click', function () {
+					state.choice = button.dataset.choiceValue;
+					render();
+					setNativeValue(1, choiceOptionName, state.choice);
+					settleNativeSize();
+				});
+			});
+
+			root.querySelectorAll('[data-combo-size]').forEach(function (button) {
+				button.addEventListener('click', function () {
+					var role = button.dataset.comboSize;
+					var value = button.dataset.sizeValue;
+					if (role === 'vest') {
+						state.vest = value;
+					} else {
+						state.longSleeve = value;
+					}
+					render();
+					setNativeValue(2, sizeOptionName, desiredNativeSize());
+				});
+			});
+
+			root.querySelectorAll('[data-combo-size-guide]').forEach(function (button) {
+				button.addEventListener('click', function () {
+					var role = button.dataset.comboSizeGuide;
+					if (!modal) return;
+					modal.querySelector('[data-combo-modal-title]').textContent = role === 'vest' ? 'Vest size guide' : 'Long-Sleeve Zip size guide';
+					var activeChart = null;
+					modal.querySelectorAll('[data-combo-chart]').forEach(function (chart) {
+						chart.hidden = chart.dataset.comboChart !== role;
+						if (!chart.hidden) activeChart = chart;
+					});
+					if (activeChart) selectChartUnit(activeChart, 'in');
+					modal.hidden = false;
+					document.body.style.overflow = 'hidden';
+				});
+			});
+
+			if (modal) {
+				modal.querySelectorAll('[data-combo-unit]').forEach(function (button) {
+					button.addEventListener('click', function () {
+						var chart = button.closest('[data-combo-chart]');
+						if (chart) selectChartUnit(chart, button.dataset.comboUnit);
+					});
+				});
+
+				modal.querySelectorAll('[data-combo-modal-close]').forEach(function (button) {
+					button.addEventListener('click', function () {
+						modal.hidden = true;
+						document.body.style.overflow = '';
+					});
+				});
+			}
+
+			form.addEventListener('input', function (event) {
+				if (event.target.matches('[name="properties[Order note]"]')) updateLineSignature();
+			});
+
+			form.addEventListener('submit', function () {
+				updateLineSignature();
+			}, true);
+
+			form.addEventListener('change', function (event) {
+				if (!event.target.matches('[name="option1"], [name="option2"]')) return;
+				window.setTimeout(function () {
+					hideNativeOptions();
+					var nativeChoice = selectedNativeValue(1, choiceOptionName);
+					if (nativeChoice) state.choice = nativeChoice;
+					render();
+				}, 0);
+			});
+
+			var observer = new MutationObserver(function () {
+				hideNativeOptions();
+			});
+			observer.observe(form, { childList: true, subtree: true });
+
+			hideNativeOptions();
+			render();
+		})();
+	</script>
+{% endif %}

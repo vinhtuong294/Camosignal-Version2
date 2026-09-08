@@ -10,15 +10,32 @@
 	For T-Shirt products, tag-specific details win. Other product types use type-only details.
 {%- endcomment -%}
 {%- assign product_details_type = product.type | downcase | strip -%}
+{%- assign product_details_type_handle = product.type | handleize -%}
 {%- assign product_details_profile = blank -%}
+{%- assign product_details_show_delivery_total = false -%}
 {%- assign product_details_is_tshirt = false -%}
 {%- assign product_details_is_tshirt_family = false -%}
+{%- assign product_details_is_youth_tee = false -%}
+{%- assign product_details_is_game_day_jersey = false -%}
 {%- assign product_details_has_bella = false -%}
 {%- assign product_details_has_vneck = false -%}
 {%- assign product_details_has_wash = false -%}
 {%- assign product_details_has_tanktop = false -%}
 {%- assign product_details_has_comfort_1745 = false -%}
 {%- assign product_details_has_comfort_1717 = false -%}
+
+{%- if product_details_type_handle == 'upf-hoodie' or product_details_type_handle == 'combo' or product_details_type_handle == '3d-tshirt' -%}
+	{%- assign product_details_show_delivery_total = true -%}
+{%- endif -%}
+
+{%- for product_details_collection in product.collections -%}
+	{%- if product_details_collection.handle == 'back-to-school' or product_details_collection.handle == 'spooky-kids-tee' -%}
+		{%- assign product_details_is_youth_tee = true -%}
+	{%- endif -%}
+	{%- if product_details_type_handle == '3d-tshirt' and product_details_collection.handle == 'game-day-jersey' -%}
+		{%- assign product_details_is_game_day_jersey = true -%}
+	{%- endif -%}
+{%- endfor -%}
 
 {%- if product_details_type == 't-shirt' or product_details_type == 'tshirt' or product_details_type == 't shirt' -%}
 	{%- assign product_details_is_tshirt = true -%}
@@ -27,7 +44,17 @@
 	{%- assign product_details_is_tshirt_family = true -%}
 {%- endif -%}
 
-{%- if product_details_is_tshirt -%}
+{%- if product_details_type == 'upf hoodie' -%}
+	{%- assign product_details_profile = 'upf-hoodie' -%}
+{%- elsif product_details_type == 'combo' -%}
+	{%- assign product_details_profile = 'combo' -%}
+{%- elsif product_details_type == 'shirt' -%}
+	{%- assign product_details_profile = 'shirt' -%}
+{%- elsif product_details_is_game_day_jersey -%}
+	{%- assign product_details_profile = 'game-day-jersey' -%}
+{%- elsif product_details_is_youth_tee -%}
+	{%- assign product_details_profile = 'youth-tee' -%}
+{%- elsif product_details_is_tshirt -%}
 	{%- for tag in product.tags -%}
 		{%- assign product_details_tag = tag | handleize -%}
 		{%- if product_details_tag contains 'bella' -%}
@@ -71,6 +98,8 @@
 	{%- assign product_details_profile = 'sweatshirt' -%}
 {%- elsif product_details_type contains 'long' and product_details_type contains 'sleeve' -%}
 	{%- assign product_details_profile = 'long-sleeve' -%}
+{%- elsif product_details_type == 'beanie hat' or product_details_type == 'beanie' -%}
+	{%- assign product_details_profile = 'beanie' -%}
 {%- elsif product_details_type contains 'hat' or product_details_type contains 'cap' -%}
 	{%- assign product_details_profile = 'hat' -%}
 {%- elsif product_details_is_tshirt_family -%}
@@ -79,6 +108,46 @@
 
 {%- capture product_details_content -%}
 	{%- case product_details_profile -%}
+		{%- when 'combo' -%}
+			<h3>1/ Quarter-Zipper Long Sleeve</h3>
+			<p><strong>Protection:</strong> The long-sleeve design and stand-up collar help reduce direct exposure to sunlight and insects while providing moderate warmth.</p>
+			<p><strong>Sizes:</strong> S&ndash;6XL (True to size)</p>
+			<p><strong>Style:</strong> Stretchy fabric supports flexible movement, making it suitable for outdoor activities such as hunting, fishing, hiking, and camping.</p>
+			<p><strong>Material:</strong> 180 GSM Milk Silk fabric made from 95% polyester&mdash;soft, lightweight, and breathable.</p>
+			<p><strong>Print Method:</strong> Dye-sublimation printing delivers sharp details, long-lasting colors, and a peel-resistant finish.</p>
+			<p><strong>Origin:</strong> Eco-friendly &amp; Made to Order &mdash; crafted fresh after every purchase for peak print quality.</p>
+
+			<h3>2/ Full-Zipper Fleece Vest</h3>
+			<p><strong>Protection:</strong> The 310 GSM fleece fabric and stand-up collar help retain core warmth in cool weather, while the sleeveless design allows unrestricted movement.</p>
+			<p><strong>Sizes:</strong> S&ndash;6XL (True to size)</p>
+			<p><strong>Style:</strong> Full-zip fleece vest with a loose fit, stand-up collar, and practical inseam pockets. Ideal for hunting, fishing, hiking, camping, travel, and everyday wear during spring and fall.</p>
+			<p><strong>Material:</strong> Premium 310 GSM polar fleece. Soft, breathable, sweat-wicking, anti-pilling, durable, and wrinkle-resistant.</p>
+			<p><strong>Print Method:</strong> Dye-sublimation printing delivers sharp details, long-lasting colors, and a peel-resistant finish.</p>
+			<p><strong>Origin:</strong> Eco-friendly &amp; Made to Order &mdash; crafted fresh after every purchase for peak print quality.</p>
+		{%- when 'shirt' -%}
+			<p><strong>Base Item:</strong> Premium Slub Cotton Shirt</p>
+			<p><strong>Sizes:</strong> XS to 5XL (True to size)</p>
+			<p><strong>Style:</strong> Regular fit with back yoke for structure, back pleats for a fluid silhouette, and a curved hem for a clean, tailored finish.</p>
+			<p><strong>Material:</strong> 100% slub cotton (140 g/m&sup2;) &mdash; natural linen-like texture, soft against skin, and cool enough for all-day wear.</p>
+			<p><strong>Durability:</strong> Double overlock stitching throughout, print-matched chest pocket and placket &mdash; every detail aligned, nothing left to chance.</p>
+			<p><strong>Print Method:</strong> Unique hand-painted graphic printed directly onto fabric &mdash; vivid, one-of-a-kind artwork that can't be found anywhere else.</p>
+			<p><strong>Care:</strong> Machine wash cold with similar colors. Line dry. Do not bleach or dry clean. Iron at max 110&deg;C &mdash; no steam, as steam may permanently damage the fabric texture.</p>
+			<p><strong>Origin:</strong> Eco-friendly &amp; Made to Order &mdash; crafted fresh after every purchase for peak print quality.</p>
+		{%- when 'game-day-jersey' -%}
+			<p><strong>Base Item:</strong> Premium V-Neck Jersey Tee</p>
+			<p><strong>Sizes:</strong> S to 5XL (True to size)</p>
+			<p><strong>Style:</strong> Loose fit, V-neck, short sleeves &mdash; built for casual wear and active days.</p>
+			<p><strong>Material:</strong> Performance polyester jersey (100% polyester, 150 g/m&sup2;) &mdash; lightweight, breathable, and moisture-wicking. Smooth surface engineered to hold prints sharply and vibrantly, wash after wash.</p>
+			<p><strong>Origin:</strong> Eco-friendly &amp; Made to Order &mdash; crafted fresh after every purchase for peak print quality.</p>
+		{%- when 'youth-tee' -%}
+			<p><strong>Base Item:</strong> Premium Gildan 5000B Youth Tee</p>
+			<p><strong>Sizes:</strong> XS to XL (True to size)</p>
+			<p><strong>Colors:</strong> Select via color swatches</p>
+			<p><strong>Style:</strong> Classic crew neck, short sleeves &mdash; soft, relaxed fit built for kids on the move.</p>
+			<p><strong>Durability:</strong> Preshrunk fabric with double-needle stitched sleeves and hem &mdash; holds its shape and size, wash after wash.</p>
+			<p><strong>Material:</strong> 100% soft-touch cotton (180 g/m&sup2;, 5.3 oz/yd&sup2;) &mdash; breathable, gentle on sensitive skin, and comfortable all day long.</p>
+			<p><strong>Print Method:</strong> Premium Direct-to-Garment (DTG) printing for realistic, vintage, lasting designs.</p>
+			<p><strong>Origin:</strong> Proudly Made in the USA.</p>
 		{%- when 'bella' -%}
 			<p><strong>Base Item:</strong> Bella+Canvas 3001.</p>
 			<p><strong>Sizes:</strong> S to 4XL.</p>
@@ -133,6 +202,12 @@
 			<p><strong>Print Method:</strong> Premium Direct-to-Garment (DTG) printing for realistic, vintage, lasting designs.</p>
 			<p><strong>Premium Quality:</strong> Made from 100% Ring Spun US Cotton (6.1 oz/yd&sup2;) for a superior, heavyweight feel.</p>
 			<p><strong>Origin:</strong> Proudly Made in the USA.</p>
+		{%- when 'upf-hoodie' -%}
+			<p><strong>Protection:</strong> UPF 50+ rated &mdash; blocks 98% of harmful UV rays. Your skin stays protected from the first cast to the last mile.</p>
+			<p><strong>Sizes:</strong> S to 6XL (True to size)</p>
+			<p><strong>Style:</strong> Loose fit, hooded, long sleeve &mdash; built to cover and protect without slowing you down on the water or the trail.</p>
+			<p><strong>Material:</strong> Performance-grade fabric (92% polyester / 8% spandex, 180 g/m&sup2;) &mdash; lightweight, 4-way stretch, moisture-wicking, and cool-touch for all-day wear in the heat.</p>
+			<p><strong>Print Method:</strong> Premium all-over print for vivid, edge-to-edge designs that won't fade or crack.</p>
 		{%- when 'hoodie' -%}
 			<p><strong>Base Item:</strong> Gildan 18500.</p>
 			<p><strong>Sizes:</strong> S to 5XL.</p>
@@ -158,6 +233,10 @@
 			<p><strong>Print Method:</strong> Premium Direct-to-Garment (DTG) printing for realistic, vintage, lasting designs.</p>
 			<p><strong>Material:</strong> 100% Cotton (5.3 oz/yd&sup2;) with Solid Colors; Sport Grey: 90% Cotton/ 10% Polyester; Graphite Heather &amp; Dark Heather: 50% Cotton/ 50% Polyester.</p>
 			<p><strong>Origin:</strong> Proudly Made in the USA.</p>
+		{%- when 'beanie' -%}
+			<p><strong>Front Height x Width:</strong> 2.5 inches x 5 inches</p>
+			<p><strong>Stitches Color Limit:</strong> 5 colors</p>
+			<p><strong>Design Recommendation:</strong> Too much detail is not recommended.</p>
 		{%- when 'hat' -%}
 			<p><strong>Material:</strong></p>
 			<p><strong>Front Panels:</strong> 60% cotton/ 40% polyester - structured and sturdy for a polished look.</p>
@@ -345,6 +424,27 @@
 		.product-accordion__trigger > span:first-child {
 			min-width: 0;
 		}
+		.product-accordion__trigger-text {
+			display: flex;
+			flex: 1 1 auto;
+			align-items: center;
+			justify-content: space-between;
+			gap: 12px;
+		}
+		.product-accordion__trigger-text > span:first-child {
+			white-space: nowrap;
+		}
+		.product-accordion__delivery-total {
+			color: var(--color-text-secondary, #657168);
+			font-family: var(--font-body-family), Arial, Helvetica, sans-serif;
+			font-size: 12px;
+			font-weight: 500;
+			letter-spacing: 0;
+			line-height: 1.3;
+			text-align: right;
+			text-transform: none;
+			white-space: nowrap;
+		}
 		.product-accordion__trigger:hover {
 			color: #31513f;
 			opacity: 1;
@@ -479,8 +579,18 @@
 		/* Mobile optimizations */
 		@media (max-width: 767.98px) {
 			.product-accordion__trigger {
+				gap: 10px;
 				padding: 14px 0;
 				font-size: calc(var(--body-font-size, 14px) * 0.85);
+			}
+			.product-accordion__trigger-text {
+				gap: 8px;
+			}
+			.product-accordion__delivery-total {
+				font-size: 11px;
+			}
+			.product-accordion__delivery-total-label {
+				display: none;
 			}
 			.product-accordion__content-inner {
 				font-size: calc(var(--body-font-size, 14px) * 0.9);
@@ -538,7 +648,7 @@
 					class="product-accordion__trigger"
 					type="button"
 					aria-expanded="false"
-					onclick="document.getElementById('description-overlay').classList.add('is-active'); document.body.style.overflow='hidden';"
+					data-product-info-overlay-target="description-overlay"
 				>
 					<span>PRODUCT DETAILS</span>
 					<span class="product-accordion__trigger-icon" aria-hidden="true"></span>
@@ -554,9 +664,15 @@
 				class="product-accordion__trigger"
 				type="button"
 				aria-expanded="false"
-				onclick="document.getElementById('shipping-overlay').classList.add('is-active'); document.body.style.overflow='hidden';"
+				data-product-info-overlay-target="shipping-overlay"
 			>
-				<span>SHIPPING &amp; DELIVERY</span>
+				<span class="product-accordion__trigger-text">
+					<span>SHIPPING &amp; DELIVERY</span>
+					<span class="product-accordion__delivery-total">
+						<span class="product-accordion__delivery-total-label">Total Day: </span>
+						{%- if product_details_show_delivery_total -%}12&ndash;16 days{%- else -%}6&ndash;10 days{%- endif -%}
+					</span>
+				</span>
 				<span class="product-accordion__trigger-icon" aria-hidden="true"></span>
 			</button>
 		</div>
@@ -567,7 +683,7 @@
 				class="product-accordion__trigger"
 				type="button"
 				aria-expanded="false"
-				onclick="document.getElementById('care-instructions-overlay').classList.add('is-active'); document.body.style.overflow='hidden';"
+				data-product-info-overlay-target="care-instructions-overlay"
 			>
 				<span>CARE INSTRUCTIONS</span>
 				<span class="product-accordion__trigger-icon" aria-hidden="true"></span>
@@ -2258,6 +2374,18 @@
 					var target = event.target;
 					if (!target || !target.closest) return;
 
+					var openControl = target.closest('[data-product-info-overlay-target]');
+					if (openControl) {
+						var targetOverlay = document.getElementById(openControl.getAttribute('data-product-info-overlay-target'));
+						if (!targetOverlay) return;
+
+						event.preventDefault();
+						targetOverlay.classList.add('is-active');
+						document.body.style.overflow = 'hidden';
+						syncInfoOverlayState();
+						return;
+					}
+
 					var closeControl = target.closest('.size-chart-overlay__close, .size-chart-overlay__close-btn');
 					var backdrop = target.classList && target.classList.contains('size-chart-overlay__backdrop') ? target : null;
 
@@ -2269,7 +2397,7 @@
 						return;
 					}
 
-					if (target.closest('.size-chart-overlay') || target.closest('[onclick*="overlay"]')) {
+					if (target.closest('.size-chart-overlay')) {
 						queueInfoOverlaySync();
 					}
 				}, true);
@@ -2300,15 +2428,25 @@
 
 				<div class="size-chart-overlay__content shipping-tab-content" style="padding-top: 10px; text-align: left;">
 					<div class="rte" style="color: var(--color-text-primary, #203224);">
-						<p><strong>Shipping Origin:</strong> Shipped directly from the United States.</p>
-						<p><strong>Processing Time:</strong> 1 &ndash; 3 business days (excluding weekends and holidays).</p>
-						<p><strong>Standard Shipping:</strong> 5 &ndash; 7 business days.</p>
-						<p><strong>Express Shipping:</strong> 3 &ndash; 5 business days.</p>
+						{%- if product_details_show_delivery_total -%}
+							<p><strong>Production Time:</strong> 3 &ndash; 7 days.</p>
+							<p><strong>Shipping Time:</strong> 5 &ndash; 9 days.</p>
+						{%- elsif product_details_profile == 'shirt' -%}
+							<p><strong>Production Time:</strong> 5 &ndash; 9 days.</p>
+							<p><strong>Shipping Time:</strong> 8 &ndash; 15 days.</p>
+						{%- else -%}
+							<p><strong>Shipping Origin:</strong> Shipped directly from the United States.</p>
+							<p><strong>Processing Time:</strong> 1 &ndash; 3 business days (excluding weekends and holidays).</p>
+							<p><strong>Standard Shipping:</strong> 5 &ndash; 7 business days.</p>
+						{%- endif -%}
 						<p><strong>Tracking:</strong> You will receive a confirmation email with tracking information as soon as your order ships.</p>
 						<p><strong>Multiple Packages:</strong> Items with separate locations may arrive in multiple packages with individual tracking numbers.</p>
 
 						<p><strong>Order Cancellations:</strong><br>
 						Only accepted if the order has not been processed (not yet packed or handed over to the carrier) and requires official approval from the seller.</p>
+						{%- if product_details_profile == 'upf-hoodie' -%}
+							<p><strong>Origin:</strong> Eco-friendly &amp; Made to Order &mdash; crafted fresh after every purchase for peak print quality.</p>
+						{%- endif -%}
 					</div>
 				</div>
 			</div>

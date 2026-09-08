@@ -1,0 +1,20 @@
+query CartInput {
+  cart {
+    lines {
+      id
+      quantity
+      attribute(key: "_flex_upsell_campaign") {
+        value
+      }
+    }
+  }
+  discount {
+    discountClasses
+    metafield(
+      namespace: "$app:flex-upsell-product-discount"
+      key: "configuration"
+    ) {
+      value
+    }
+  }
+}

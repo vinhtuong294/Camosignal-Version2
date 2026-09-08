@@ -244,22 +244,30 @@
 {%- assign size_guide_button_text_translation = "products.drawers.size_guide" | t -%}
 {%- assign size_guide_button_text			  = section.settings.size_guide_button_text | default: size_guide_button_text_translation -%}
 {%- assign size_chart_product_type = product.type | downcase | strip -%}
-{%- assign size_chart_mode = 'all' -%}
-{%- assign use_game_day_jersey_size_chart = false -%}
-
-{%- if size_chart_product_type == '3d tshirt' -%}
-	{%- for size_chart_collection in product.collections -%}
-		{%- if size_chart_collection.handle == 'game-day-jersey' -%}
-			{%- assign use_game_day_jersey_size_chart = true -%}
-			{%- break -%}
-		{%- endif -%}
-	{%- endfor -%}
+{%- assign product_type_handle = product.type | handleize -%}
+{%- comment -%} Unmapped product types intentionally fall back to the T-Shirt chart and illustration. {%- endcomment -%}
+{%- assign size_chart_mode = 'tshirt' -%}
+{%- assign is_3d_tshirt = false -%}
+{%- assign hoodie_size_guide_asset = 'hoodie-size-guide.webp' -%}
+{%- assign hoodie_size_guide_alt = 'Pullover hoodie measurement guide showing chest width, length, and sleeve length' -%}
+{%- if product_type_handle == '3d-tshirt' -%}
+	{%- assign is_3d_tshirt = true -%}
+{%- endif -%}
+{%- if size_chart_product_type contains 'sweatshirt' or size_chart_product_type contains 'sweater' -%}
+	{%- assign hoodie_size_guide_asset = 'sweatshirt-size-guide.webp' -%}
+	{%- assign hoodie_size_guide_alt = 'Crew-neck sweatshirt measurement guide showing chest width, length, and sleeve length' -%}
 {%- endif -%}
 
-{%- if use_game_day_jersey_size_chart -%}
-	{%- assign size_chart_mode = 'game-day-jersey' -%}
-{%- elsif size_chart_product_type == 'hat' -%}
-	{%- assign size_chart_mode = 'all' -%}
+{%- if size_chart_product_type == 'upf hoodie' -%}
+	{%- assign size_chart_mode = 'upf-hoodie' -%}
+{%- elsif size_chart_product_type == 'shirt' -%}
+	{%- assign size_chart_mode = 'shirt' -%}
+{%- elsif is_3d_tshirt -%}
+	{%- assign size_chart_mode = '3d-tshirt' -%}
+{%- elsif size_chart_product_type == 'beanie hat' or size_chart_product_type == 'beanie' -%}
+	{%- assign size_chart_mode = 'beanie' -%}
+{%- elsif size_chart_product_type contains 'hat' or size_chart_product_type contains 'cap' -%}
+	{%- assign size_chart_mode = 'hat' -%}
 {%- elsif size_chart_product_type contains 'long' and size_chart_product_type contains 'sleeve' -%}
 	{%- assign size_chart_mode = 'longsleeve' -%}
 {%- elsif size_chart_product_type contains 'hoodie' or size_chart_product_type contains 'sweatshirt' -%}
@@ -602,7 +610,7 @@
 		{%- comment -%} SIZE CHART OVERLAY {%- endcomment -%}
 		<div id="size-chart-overlay" class="size-chart-overlay">
 			<div class="size-chart-overlay__backdrop" onclick="document.getElementById('size-chart-overlay').classList.remove('is-active'); document.body.style.overflow='';"></div>
-			<div class="size-chart-overlay__panel">
+			<div class="size-chart-overlay__panel{% if size_chart_mode == 'shirt' %} size-chart-overlay__panel--shirt{% elsif is_3d_tshirt %} size-chart-overlay__panel--3d-tshirt{% elsif size_chart_mode == 'upf-hoodie' %} size-chart-overlay__panel--upf-hoodie{% endif %}">
 				<div class="size-chart-overlay__header">
 					<h2 class="size-chart-overlay__title">{{- size_guide_button_text -}}</h2>
 					<button
@@ -617,30 +625,115 @@
 						</svg>
 					</button>
 				</div>
-				{%- if use_game_day_jersey_size_chart -%}
-					<div class="size-chart-overlay__content size-chart-overlay__content--game-day-jersey">
-						<div class="size-chart-overlay__unit-tabs" role="tablist" aria-label="Game Day Jersey measurement unit">
+				{%- if size_chart_mode == 'shirt' -%}
+					<div class="size-chart-overlay__content size-chart-overlay__content--shirt">
+						<div class="size-chart-overlay__unit-tabs" role="tablist" aria-label="Shirt measurement unit">
+							<button class="size-chart-overlay__unit-tab is-active" type="button" onclick="switchSizeUnit(this, 'in')">In</button>
+							<button class="size-chart-overlay__unit-tab" type="button" onclick="switchSizeUnit(this, 'cm')">Cm</button>
+						</div>
+
+						<div class="size-chart-overlay__unit-panel is-active" data-unit-panel="in">
+						<h3 class="size-chart-overlay__subtitle">New Classic Fit Aloha Shirts Size Chart</h3>
+						<p class="size-chart-overlay__note">Measurements are in <strong>inches</strong>.</p>
+						<div class="size-chart-overlay__table-wrap">
+							<table class="size-chart-overlay__table size-chart-overlay__table--shirt">
+								<thead>
+									<tr>
+										<th scope="col">Size</th>
+										<th scope="col">Neck</th>
+										<th scope="col">Chest</th>
+										<th scope="col">Waist</th>
+										<th scope="col">Shoulder</th>
+										<th scope="col">Length</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr><td>S</td><td>16.7"</td><td>46.1"</td><td>43.3"</td><td>20.1"</td><td>29.5"</td></tr>
+									<tr><td>M</td><td>17.1"</td><td>48.0"</td><td>46.5"</td><td>20.5"</td><td>30.3"</td></tr>
+									<tr><td>L</td><td>17.5"</td><td>50.4"</td><td>49.6"</td><td>21.1"</td><td>31.5"</td></tr>
+									<tr><td>XL</td><td>17.9"</td><td>53.1"</td><td>52.0"</td><td>21.7"</td><td>32.7"</td></tr>
+									<tr><td>2XL</td><td>18.3"</td><td>56.3"</td><td>54.7"</td><td>22.0"</td><td>33.9"</td></tr>
+									<tr><td>3XL</td><td>18.7"</td><td>59.1"</td><td>57.5"</td><td>22.4"</td><td>35.0"</td></tr>
+									<tr><td>4XL</td><td>19.7"</td><td>63.0"</td><td>60.2"</td><td>22.8"</td><td>35.8"</td></tr>
+									<tr><td>5XL</td><td>20.1"</td><td>66.1"</td><td>63.0"</td><td>23.4"</td><td>36.6"</td></tr>
+								</tbody>
+							</table>
+						</div>
+						</div>
+
+						<div class="size-chart-overlay__unit-panel" data-unit-panel="cm">
+							<h3 class="size-chart-overlay__subtitle">New Classic Fit Aloha Shirts Size Chart</h3>
+							<p class="size-chart-overlay__note">Measurements are in <strong>centimeters (cm)</strong>.</p>
+							<div class="size-chart-overlay__table-wrap">
+								<table class="size-chart-overlay__table size-chart-overlay__table--shirt">
+									<thead>
+										<tr>
+											<th scope="col">Size</th>
+											<th scope="col">Neck</th>
+											<th scope="col">Chest</th>
+											<th scope="col">Waist</th>
+											<th scope="col">Shoulder</th>
+											<th scope="col">Length</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr><td>S</td><td>42.4</td><td>117.1</td><td>110.0</td><td>51.1</td><td>74.9</td></tr>
+										<tr><td>M</td><td>43.4</td><td>121.9</td><td>118.1</td><td>52.1</td><td>77.0</td></tr>
+										<tr><td>L</td><td>44.5</td><td>128.0</td><td>126.0</td><td>53.6</td><td>80.0</td></tr>
+										<tr><td>XL</td><td>45.5</td><td>134.9</td><td>132.1</td><td>55.1</td><td>83.1</td></tr>
+										<tr><td>2XL</td><td>46.5</td><td>143.0</td><td>138.9</td><td>55.9</td><td>86.1</td></tr>
+										<tr><td>3XL</td><td>47.5</td><td>150.1</td><td>146.1</td><td>56.9</td><td>88.9</td></tr>
+										<tr><td>4XL</td><td>50.0</td><td>160.0</td><td>152.9</td><td>57.9</td><td>90.9</td></tr>
+										<tr><td>5XL</td><td>51.1</td><td>167.9</td><td>160.0</td><td>59.4</td><td>93.0</td></tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						<p class="size-chart-overlay__measurement-note"><strong>Note:</strong> Measurements above are garment measurements, not body dimensions.</p>
+						<div class="size-chart-overlay__measurement-guide">
+							<figure class="size-chart-overlay__measurement-figure">
+								<img
+									class="size-chart-overlay__measurement-image"
+									src="{{ 'shirt-size-guide.webp' | asset_url }}"
+									alt="Short-sleeve button-up shirt measurement guide showing neck, chest, waist, shoulder, and length"
+									width="768"
+									height="1152"
+									loading="lazy"
+								>
+							</figure>
+							<div class="size-chart-overlay__measurement-instructions">
+								<h3>How to measure</h3>
+								<p><span class="size-chart-overlay__measurement-number">1</span><span><strong>Neck</strong> &ndash; Measure around the inside of the collar.</span></p>
+								<p><span class="size-chart-overlay__measurement-number">2</span><span><strong>Chest</strong> &ndash; Measure around the garment at underarm level.</span></p>
+								<p><span class="size-chart-overlay__measurement-number">3</span><span><strong>Waist</strong> &ndash; Measure around the garment at the natural waist.</span></p>
+								<p><span class="size-chart-overlay__measurement-number">4</span><span><strong>Shoulder</strong> &ndash; Measure straight across from shoulder seam to shoulder seam.</span></p>
+								<p><span class="size-chart-overlay__measurement-number">5</span><span><strong>Length</strong> &ndash; Measure from the highest shoulder point beside the collar to the bottom hem.</span></p>
+							</div>
+						</div>
+					</div>
+				{%- elsif is_3d_tshirt -%}
+					<div class="size-chart-overlay__content size-chart-overlay__content--3d-tshirt">
+						<div class="size-chart-overlay__unit-tabs" role="tablist" aria-label="3D T-Shirt measurement unit">
 							<button class="size-chart-overlay__unit-tab is-active" type="button" onclick="switchSizeUnit(this, 'in')">In</button>
 							<button class="size-chart-overlay__unit-tab" type="button" onclick="switchSizeUnit(this, 'cm')">Cm</button>
 						</div>
 
 						<div class="size-chart-overlay__unit-panel is-active" data-unit-panel="in">
 							<h3 class="size-chart-overlay__subtitle">3D T-Shirt Size Chart</h3>
-							<p class="size-chart-overlay__note">Measurements are in <strong>inches</strong>. 1/2 Bust is measured flat across the garment.</p>
+							<p class="size-chart-overlay__note">Measurements are in <strong>inches</strong>.</p>
 							<div class="size-chart-overlay__table-wrap">
-								<table class="size-chart-overlay__table size-chart-overlay__table--game-day-jersey">
-									<thead>
-										<tr>
-											<th>Size</th>
-											<th>1/2 Bust (in)</th>
-											<th>Length (in)</th>
-											<th>Shoulder (in)</th>
-											<th>Sleeve Length (in)</th>
+								<table class="size-chart-overlay__table size-chart-overlay__table--3d-tshirt">
+								<thead>
+									<tr>
+										<th scope="col">Size</th>
+										<th scope="col">1/2 Chest (in)</th>
+										<th scope="col">Length (in)</th>
+										<th scope="col">Shoulder (in)</th>
+										<th scope="col">Sleeve Length (in)</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr><td>XXS</td><td>18.5</td><td>26.5</td><td>15.0</td><td>7.5</td></tr>
-										<tr><td>XS</td><td>19.7</td><td>27.5</td><td>16.5</td><td>7.9</td></tr>
 										<tr><td>S</td><td>20.9</td><td>28.5</td><td>17.3</td><td>8.3</td></tr>
 										<tr><td>M</td><td>22.0</td><td>29.5</td><td>18.1</td><td>8.7</td></tr>
 										<tr><td>L</td><td>23.2</td><td>30.5</td><td>19.3</td><td>9.1</td></tr>
@@ -649,8 +742,6 @@
 										<tr><td>3XL</td><td>26.8</td><td>33.5</td><td>22.8</td><td>10.2</td></tr>
 										<tr><td>4XL</td><td>27.9</td><td>34.4</td><td>24.0</td><td>10.6</td></tr>
 										<tr><td>5XL</td><td>29.1</td><td>35.4</td><td>25.2</td><td>11.0</td></tr>
-										<tr><td>6XL</td><td>30.3</td><td>36.5</td><td>26.3</td><td>11.4</td></tr>
-										<tr><td>7XL</td><td>31.5</td><td>37.4</td><td>27.5</td><td>11.8</td></tr>
 									</tbody>
 								</table>
 							</div>
@@ -658,21 +749,19 @@
 
 						<div class="size-chart-overlay__unit-panel" data-unit-panel="cm">
 							<h3 class="size-chart-overlay__subtitle">3D T-Shirt Size Chart</h3>
-							<p class="size-chart-overlay__note">Measurements are in <strong>centimeters (cm)</strong>. 1/2 Bust is measured flat across the garment.</p>
+							<p class="size-chart-overlay__note">Measurements are in <strong>centimeters (cm)</strong>.</p>
 							<div class="size-chart-overlay__table-wrap">
-								<table class="size-chart-overlay__table size-chart-overlay__table--game-day-jersey">
-									<thead>
-										<tr>
-											<th>Size</th>
-											<th>1/2 Bust (cm)</th>
-											<th>Length (cm)</th>
-											<th>Shoulder (cm)</th>
-											<th>Sleeve Length (cm)</th>
+								<table class="size-chart-overlay__table size-chart-overlay__table--3d-tshirt">
+								<thead>
+									<tr>
+										<th scope="col">Size</th>
+										<th scope="col">1/2 Chest (cm)</th>
+										<th scope="col">Length (cm)</th>
+										<th scope="col">Shoulder (cm)</th>
+										<th scope="col">Sleeve Length (cm)</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr><td>XXS</td><td>47</td><td>67.5</td><td>38</td><td>19</td></tr>
-										<tr><td>XS</td><td>50</td><td>70.0</td><td>42</td><td>20</td></tr>
 										<tr><td>S</td><td>53</td><td>72.5</td><td>44</td><td>21</td></tr>
 										<tr><td>M</td><td>56</td><td>75.0</td><td>46</td><td>22</td></tr>
 										<tr><td>L</td><td>59</td><td>77.5</td><td>49</td><td>23</td></tr>
@@ -681,16 +770,165 @@
 										<tr><td>3XL</td><td>68</td><td>85.0</td><td>58</td><td>26</td></tr>
 										<tr><td>4XL</td><td>71</td><td>87.5</td><td>61</td><td>27</td></tr>
 										<tr><td>5XL</td><td>74</td><td>90.0</td><td>64</td><td>28</td></tr>
-										<tr><td>6XL</td><td>77</td><td>92.5</td><td>67</td><td>29</td></tr>
-										<tr><td>7XL</td><td>80</td><td>95.0</td><td>70</td><td>30</td></tr>
 									</tbody>
 								</table>
 							</div>
 						</div>
 
-						<p class="size-chart-overlay__disclaimer">
-							<em>* Measurements are taken from the garment laid flat. Actual fit may vary slightly depending on body shape and personal preference.</em>
+						<p class="size-chart-overlay__3d-tshirt-garment-note">
+							<strong>Note:</strong> Measurements above are garment measurements, not body dimensions.
 						</p>
+
+						<div class="size-chart-overlay__3d-tshirt-measurement-guide">
+							<figure class="size-chart-overlay__3d-tshirt-figure">
+								<img
+									class="size-chart-overlay__3d-tshirt-image"
+									src="{{ '3d-tshirt-size-guide.webp' | asset_url }}"
+									alt="White V-neck jersey measurement guide showing shoulder, half chest, length, and sleeve length"
+									width="768"
+									height="1152"
+									loading="lazy"
+								>
+							</figure>
+							<div class="size-chart-overlay__3d-tshirt-instructions">
+								<p><strong>1/2 Chest</strong> &ndash; Measure flat across the garment, just below the armholes.</p>
+								<p><strong>Length</strong> &ndash; Measure from the highest shoulder point to the bottom hem.</p>
+								<p><strong>Shoulder</strong> &ndash; Measure straight across from shoulder seam to shoulder seam.</p>
+								<p><strong>Sleeve Length</strong> &ndash; Measure from the shoulder seam to the sleeve hem.</p>
+							</div>
+						</div>
+					</div>
+				{%- elsif size_chart_mode == 'upf-hoodie' -%}
+					<div class="size-chart-overlay__content size-chart-overlay__content--upf-hoodie">
+						<div class="size-chart-overlay__unit-tabs" role="tablist" aria-label="UPF Hoodie measurement unit">
+							<button class="size-chart-overlay__unit-tab is-active" type="button" onclick="switchSizeUnit(this, 'in')">In</button>
+							<button class="size-chart-overlay__unit-tab" type="button" onclick="switchSizeUnit(this, 'cm')">Cm</button>
+						</div>
+
+						<div class="size-chart-overlay__unit-panel is-active" data-unit-panel="in">
+							<h3 class="size-chart-overlay__subtitle">UPF Hoodie Size Chart</h3>
+							<p class="size-chart-overlay__note">Measurements are in <strong>inches</strong>.</p>
+							<div class="size-chart-overlay__table-wrap">
+								<table class="size-chart-overlay__table size-chart-overlay__table--upf-hoodie">
+									<thead>
+										<tr>
+											<th>Size</th>
+											<th>Length (in)</th>
+										<th>Chest (in)</th>
+											<th>Sleeve Length (in)</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr><td>S</td><td>26.0</td><td>37.0</td><td>29.1</td></tr>
+										<tr><td>M</td><td>26.8</td><td>38.6</td><td>29.7</td></tr>
+										<tr><td>L</td><td>27.6</td><td>40.6</td><td>30.3</td></tr>
+										<tr><td>XL</td><td>28.3</td><td>42.5</td><td>30.9</td></tr>
+										<tr><td>XXL</td><td>29.1</td><td>44.5</td><td>31.5</td></tr>
+										<tr><td>XXXL</td><td>29.9</td><td>46.5</td><td>32.1</td></tr>
+										<tr><td>4XL</td><td>30.7</td><td>48.4</td><td>32.7</td></tr>
+										<tr><td>5XL</td><td>31.5</td><td>50.4</td><td>33.3</td></tr>
+										<tr><td>6XL</td><td>32.3</td><td>52.4</td><td>33.9</td></tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						<div class="size-chart-overlay__unit-panel" data-unit-panel="cm">
+							<h3 class="size-chart-overlay__subtitle">UPF Hoodie Size Chart</h3>
+							<p class="size-chart-overlay__note">Measurements are in <strong>centimeters (cm)</strong>.</p>
+							<div class="size-chart-overlay__table-wrap">
+								<table class="size-chart-overlay__table size-chart-overlay__table--upf-hoodie">
+									<thead>
+										<tr>
+											<th>Size</th>
+											<th>Length (cm)</th>
+										<th>Chest (cm)</th>
+											<th>Sleeve Length (cm)</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr><td>S</td><td>66</td><td>94</td><td>74</td></tr>
+										<tr><td>M</td><td>68</td><td>98</td><td>75.5</td></tr>
+										<tr><td>L</td><td>70</td><td>103</td><td>77</td></tr>
+										<tr><td>XL</td><td>72</td><td>108</td><td>78.5</td></tr>
+										<tr><td>XXL</td><td>74</td><td>113</td><td>80</td></tr>
+										<tr><td>XXXL</td><td>76</td><td>118</td><td>81.5</td></tr>
+										<tr><td>4XL</td><td>78</td><td>123</td><td>83</td></tr>
+										<tr><td>5XL</td><td>80</td><td>128</td><td>84.5</td></tr>
+										<tr><td>6XL</td><td>82</td><td>133</td><td>86</td></tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						<p class="size-chart-overlay__upf-hoodie-garment-note">
+							<strong>Note:</strong> Measurements above are garment measurements, not body dimensions.
+						</p>
+
+						<div class="size-chart-overlay__upf-hoodie-measurement-guide">
+							<figure class="size-chart-overlay__upf-hoodie-figure">
+								<img
+									class="size-chart-overlay__upf-hoodie-image"
+									src="{{ 'upf-hoodie-size-guide.webp' | asset_url }}"
+									alt="UPF hoodie measurement guide showing length, chest, and sleeve length"
+									width="768"
+									height="1154"
+									loading="lazy"
+								>
+							</figure>
+							<div class="size-chart-overlay__upf-hoodie-instructions">
+								<p><strong>Length</strong> &ndash; Measure from where the shoulder seam meets the collar to the hem.</p>
+								<p><strong>Chest</strong> &ndash; Measure around the garment at chest level, just below the armholes.</p>
+								<p><strong>Sleeve Length</strong> &ndash; Measure from the neckline along the outer sleeve to the cuff.</p>
+								<p class="size-chart-overlay__upf-hoodie-variation"><em>Please allow a 2&ndash;3 cm variation due to manual measurement.</em></p>
+							</div>
+						</div>
+					</div>
+				{%- elsif size_chart_mode == 'beanie' -%}
+					<div class="size-chart-overlay__content size-chart-overlay__content--headwear">
+						<h3 class="size-chart-overlay__subtitle">Beanie Hat Measurement Guide</h3>
+						<p class="size-chart-overlay__note">Use the measurements shown for the selected product variant. If only One Size is offered, head circumference is the primary fit check.</p>
+						<div class="size-chart-overlay__measurement-guide">
+							<figure class="size-chart-overlay__measurement-figure">
+								<img
+									class="size-chart-overlay__measurement-image"
+									src="{{ 'beanie-hat-size-guide.webp' | asset_url }}"
+									alt="Cuffed beanie measurement guide showing opening circumference, overall height, and cuff height"
+									width="768"
+									height="1152"
+									loading="lazy"
+								>
+							</figure>
+							<div class="size-chart-overlay__measurement-instructions">
+								<h3>How to measure</h3>
+								<p><span class="size-chart-overlay__measurement-number">1</span><span><strong>Opening circumference</strong> &ndash; Measure around the inside edge of the beanie opening without stretching it.</span></p>
+								<p><span class="size-chart-overlay__measurement-number">2</span><span><strong>Overall height</strong> &ndash; Measure from the top of the crown to the lower edge.</span></p>
+								<p><span class="size-chart-overlay__measurement-number">3</span><span><strong>Cuff height</strong> &ndash; Measure vertically from the cuff fold to its lower edge.</span></p>
+							</div>
+						</div>
+					</div>
+				{%- elsif size_chart_mode == 'hat' -%}
+					<div class="size-chart-overlay__content size-chart-overlay__content--headwear">
+						<h3 class="size-chart-overlay__subtitle">Hat Measurement Guide</h3>
+						<p class="size-chart-overlay__note">For adjustable hats, compare the inner-band circumference with a comfortable hat you already own.</p>
+						<div class="size-chart-overlay__measurement-guide">
+							<figure class="size-chart-overlay__measurement-figure">
+								<img
+									class="size-chart-overlay__measurement-image"
+									src="{{ 'hat-size-guide.webp' | asset_url }}"
+									alt="Adjustable trucker hat measurement guide showing inner circumference, crown height, and brim length"
+									width="768"
+									height="1152"
+									loading="lazy"
+								>
+							</figure>
+							<div class="size-chart-overlay__measurement-instructions">
+								<h3>How to measure</h3>
+								<p><span class="size-chart-overlay__measurement-number">1</span><span><strong>Inner circumference</strong> &ndash; Measure around the inside sweatband with the closure at your preferred setting.</span></p>
+								<p><span class="size-chart-overlay__measurement-number">2</span><span><strong>Crown height</strong> &ndash; Measure from the top button to the lower band.</span></p>
+								<p><span class="size-chart-overlay__measurement-number">3</span><span><strong>Brim length</strong> &ndash; Measure from the crown seam to the front edge of the brim.</span></p>
+							</div>
+						</div>
 					</div>
 				{%- else -%}
 				{%- comment -%} Tabs {%- endcomment -%}
@@ -812,9 +1050,29 @@
 								<tr><td>XL</td><td>50.8</td><td>67.3</td><td>43.8</td></tr>
 							</tbody>
 						</table>
+						</div>
+						</div>
+
+						<p class="size-chart-overlay__measurement-note"><strong>Note:</strong> Width, length, and sleeve values are taken from the garment laid flat.</p>
+						<div class="size-chart-overlay__measurement-guide">
+							<figure class="size-chart-overlay__measurement-figure">
+								<img
+									class="size-chart-overlay__measurement-image"
+									src="{{ 'tshirt-size-guide.webp' | asset_url }}"
+									alt="Classic T-shirt measurement guide showing width, length, and sleeve length"
+									width="768"
+									height="1152"
+									loading="lazy"
+								>
+							</figure>
+							<div class="size-chart-overlay__measurement-instructions">
+								<h3>How to measure</h3>
+								<p><span class="size-chart-overlay__measurement-number">1</span><span><strong>Width</strong> &ndash; Measure flat across the garment just below the armholes.</span></p>
+								<p><span class="size-chart-overlay__measurement-number">2</span><span><strong>Length</strong> &ndash; Measure from the highest shoulder point beside the collar to the bottom hem.</span></p>
+								<p><span class="size-chart-overlay__measurement-number">3</span><span><strong>Sleeve length</strong> &ndash; Measure from the center back neckline across the shoulder to the sleeve hem.</span></p>
+							</div>
+						</div>
 					</div>
-					</div>
-				</div>
 
 				{%- comment -%} Hoodie & Sweatshirt Size Chart {%- endcomment -%}
 				<div class="size-chart-overlay__content" id="size-tab-hoodie"{% unless size_chart_mode == 'hoodie' %} style="display:none;"{% endunless %}>
@@ -872,9 +1130,29 @@
 								<tr><td>5XL</td><td>86.4</td><td>86.4</td><td>102.9</td></tr>
 							</tbody>
 						</table>
+						</div>
+						</div>
+
+						<p class="size-chart-overlay__measurement-note"><strong>Note:</strong> Chest, length, and sleeve values are garment measurements.</p>
+						<div class="size-chart-overlay__measurement-guide">
+							<figure class="size-chart-overlay__measurement-figure">
+								<img
+									class="size-chart-overlay__measurement-image"
+									src="{{ hoodie_size_guide_asset | asset_url }}"
+									alt="{{ hoodie_size_guide_alt }}"
+									width="768"
+									height="1152"
+									loading="lazy"
+								>
+							</figure>
+							<div class="size-chart-overlay__measurement-instructions">
+								<h3>How to measure</h3>
+								<p><span class="size-chart-overlay__measurement-number">1</span><span><strong>Chest</strong> &ndash; Measure flat across the garment just below the armholes.</span></p>
+								<p><span class="size-chart-overlay__measurement-number">2</span><span><strong>Length</strong> &ndash; Measure from the highest shoulder point beside the neckline to the bottom hem.</span></p>
+								<p><span class="size-chart-overlay__measurement-number">3</span><span><strong>Sleeve</strong> &ndash; Measure from the center back neckline across the shoulder and down to the cuff.</span></p>
+							</div>
+						</div>
 					</div>
-					</div>
-				</div>
 
 			{%- comment -%} Long Sleeve Size Chart {%- endcomment -%}
 			<div class="size-chart-overlay__content" id="size-tab-longsleeve"{% unless size_chart_mode == 'longsleeve' %} style="display:none;"{% endunless %}>
@@ -983,7 +1261,28 @@
 								<tr><td>2XL</td><td>81.3</td><td>66.0</td><td>97.8</td></tr>
 								<tr><td>3XL</td><td>83.8</td><td>71.1</td><td>97.8</td></tr>
 							</tbody>
-						</table>
+							</table>
+						</div>
+				</div>
+
+				<p class="size-chart-overlay__measurement-note"><strong>Note:</strong> Use the column labels in the selected table. The standard Long Sleeve chest value is measured flat; the 3D chart chest value is garment circumference.</p>
+				<div class="size-chart-overlay__measurement-guide">
+					<figure class="size-chart-overlay__measurement-figure">
+						<img
+							class="size-chart-overlay__measurement-image"
+							src="{{ 'long-sleeve-size-guide.webp' | asset_url }}"
+							alt="Long-sleeve shirt measurement guide showing length, chest width, shoulder, and sleeve length"
+							width="768"
+							height="1152"
+							loading="lazy"
+						>
+					</figure>
+					<div class="size-chart-overlay__measurement-instructions">
+						<h3>How to measure</h3>
+						<p><span class="size-chart-overlay__measurement-number">1</span><span><strong>Length</strong> &ndash; Measure from the highest shoulder point beside the collar to the bottom hem.</span></p>
+						<p><span class="size-chart-overlay__measurement-number">2</span><span><strong>Chest</strong> &ndash; For the standard chart, measure flat across below the armholes; for the 3D chart, measure around the garment.</span></p>
+						<p><span class="size-chart-overlay__measurement-number">3</span><span><strong>Shoulder</strong> &ndash; Measure straight across from shoulder seam to shoulder seam.</span></p>
+						<p><span class="size-chart-overlay__measurement-number">4</span><span><strong>Sleeve</strong> &ndash; Measure from the center back neckline across the shoulder and down to the cuff.</span></p>
 					</div>
 				</div>
 			</div>
@@ -1232,6 +1531,169 @@
 			.size-chart-overlay__unit-panel.is-active {
 				display: block;
 			}
+			.size-chart-overlay__measurement-note {
+				margin: 22px 0 0;
+				padding-top: 18px;
+				border-top: 1px solid #d8ded7;
+				color: var(--color-text-primary, #203224);
+				font-size: 13px;
+				line-height: 1.55;
+			}
+			.size-chart-overlay__measurement-guide {
+				display: grid;
+				grid-template-columns: minmax(0, 1fr);
+				gap: 22px;
+				align-items: center;
+				margin-top: 22px;
+			}
+			.size-chart-overlay__measurement-figure {
+				display: flex;
+				min-width: 0;
+				margin: 0;
+				padding: 0;
+				align-items: center;
+				justify-content: center;
+				overflow: hidden;
+			}
+			.size-chart-overlay__measurement-image {
+				display: block;
+				width: auto;
+				max-width: 100%;
+				height: auto;
+				max-height: 280px;
+				object-fit: contain;
+			}
+			.size-chart-overlay__measurement-instructions {
+				display: grid;
+				gap: 11px;
+				min-width: 0;
+			}
+			.size-chart-overlay__measurement-instructions h3 {
+				margin: 0 0 2px;
+				color: var(--color-text-primary, #203224);
+				font-family: 'Oswald', sans-serif;
+				font-size: 17px;
+				font-weight: 600;
+				letter-spacing: 0.04em;
+				text-transform: uppercase;
+			}
+			.size-chart-overlay__measurement-instructions p {
+				display: grid;
+				grid-template-columns: 26px minmax(0, 1fr);
+				gap: 8px;
+				margin: 0;
+				color: #34463a;
+				font-size: 13px;
+				line-height: 1.55;
+			}
+			.size-chart-overlay__measurement-instructions strong {
+				color: var(--color-text-primary, #203224);
+				font-family: 'Oswald', sans-serif;
+				font-weight: 600;
+				letter-spacing: 0.03em;
+				text-transform: uppercase;
+			}
+			.size-chart-overlay__measurement-number {
+				display: inline-grid;
+				width: 22px;
+				height: 22px;
+				place-items: center;
+				border-radius: 50%;
+				background: var(--color-text-primary, #203224);
+				color: #ffffff;
+				font-size: 12px;
+				font-weight: 700;
+			}
+			.size-chart-overlay__3d-tshirt-measurement-guide,
+			.size-chart-overlay__upf-hoodie-measurement-guide {
+				display: grid;
+				grid-template-columns: minmax(0, 1fr);
+				gap: 22px;
+				align-items: center;
+				margin-top: 24px;
+			}
+			.size-chart-overlay__3d-tshirt-figure,
+			.size-chart-overlay__upf-hoodie-figure {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				min-width: 0;
+				margin: 0;
+				padding: 0;
+				overflow: hidden;
+			}
+			.size-chart-overlay__3d-tshirt-image,
+			.size-chart-overlay__upf-hoodie-image {
+				display: block;
+				width: auto;
+				max-width: 100%;
+				max-height: 280px;
+				object-fit: contain;
+			}
+			.size-chart-overlay__3d-tshirt-garment-note,
+			.size-chart-overlay__upf-hoodie-garment-note {
+				margin: 22px 0 0;
+				padding-top: 18px;
+				border-top: 1px solid #d8ded7;
+				color: var(--color-text-primary, #203224);
+				font-size: 13px;
+				line-height: 1.55;
+			}
+			.size-chart-overlay__3d-tshirt-instructions,
+			.size-chart-overlay__upf-hoodie-instructions {
+				display: grid;
+				gap: 16px;
+				min-width: 0;
+			}
+			.size-chart-overlay__3d-tshirt-instructions p,
+			.size-chart-overlay__upf-hoodie-instructions p {
+				margin: 0;
+				color: #34463a;
+				font-size: 13px;
+				line-height: 1.55;
+			}
+			.size-chart-overlay__3d-tshirt-instructions strong,
+			.size-chart-overlay__upf-hoodie-instructions strong {
+				color: var(--color-text-primary, #203224);
+				font-family: 'Oswald', sans-serif;
+				font-weight: 600;
+				letter-spacing: 0.04em;
+				text-transform: uppercase;
+			}
+			.size-chart-overlay__table--3d-tshirt th,
+			.size-chart-overlay__table--3d-tshirt td,
+			.size-chart-overlay__table--upf-hoodie th,
+			.size-chart-overlay__table--upf-hoodie td {
+				border: 1px solid #d9dedb;
+				text-align: center;
+			}
+			.size-chart-overlay__table--3d-tshirt th,
+			.size-chart-overlay__table--upf-hoodie th {
+				background: #f5f6f5;
+				color: var(--color-text-primary, #203224);
+				font-size: 12px;
+				letter-spacing: 0.04em;
+			}
+			.size-chart-overlay__table--3d-tshirt th:first-child,
+			.size-chart-overlay__table--3d-tshirt th:last-child,
+			.size-chart-overlay__table--upf-hoodie th:first-child,
+			.size-chart-overlay__table--upf-hoodie th:last-child {
+				border-radius: 0;
+			}
+			.size-chart-overlay__table--3d-tshirt td:first-child,
+			.size-chart-overlay__table--upf-hoodie td:first-child {
+				font-weight: 700;
+			}
+			.size-chart-overlay__table--3d-tshirt tbody tr:nth-child(even),
+			.size-chart-overlay__table--upf-hoodie tbody tr:nth-child(even) {
+				background: #f7f8f7;
+			}
+			.size-chart-overlay__upf-hoodie-variation {
+				padding-top: 2px;
+				color: var(--color-text-secondary, #68756b) !important;
+				font-size: 12px !important;
+			}
+
 
 			/* Content */
 			.size-chart-overlay__subtitle {
@@ -1298,6 +1760,10 @@
 			.size-chart-overlay__table tbody tr:hover {
 				background: transparent;
 			}
+			.size-chart-overlay__table--shirt th,
+			.size-chart-overlay__table--shirt td {
+				text-align: center;
+			}
 			.size-chart-overlay__disclaimer {
 				font-size: 12px;
 				color: var(--color-text-secondary, #888);
@@ -1345,6 +1811,63 @@
 			#shipping-overlay .size-chart-overlay__panel {
 				width: min(calc(100% - 48px), 580px);
 				max-width: 580px;
+			}
+			@media (min-width: 768px) {
+				#description-overlay .size-chart-overlay__panel {
+					width: min(calc(100% - 48px), 900px);
+					max-width: 900px;
+				}
+				#size-chart-overlay .size-chart-overlay__panel {
+					width: min(calc(100% - 48px), 900px);
+					max-width: 900px;
+				}
+				#size-chart-overlay .size-chart-overlay__panel--shirt {
+					width: min(calc(100% - 48px), 900px);
+                    max-width: 900px;
+                }
+				#size-chart-overlay .size-chart-overlay__panel--3d-tshirt {
+					width: min(calc(100% - 48px), 940px);
+					max-width: 940px;
+				}
+				#size-chart-overlay .size-chart-overlay__panel--upf-hoodie {
+					width: min(calc(100% - 48px), 940px);
+					max-width: 940px;
+				}
+				.size-chart-overlay__3d-tshirt-image,
+				.size-chart-overlay__upf-hoodie-image {
+					max-height: 330px;
+				}
+				.size-chart-overlay__measurement-image {
+					max-height: 330px;
+				}
+				.size-chart-overlay__measurement-guide {
+					grid-template-columns: minmax(240px, 0.82fr) minmax(0, 1.18fr);
+					gap: 38px;
+				}
+				.size-chart-overlay__content--3d-tshirt > .size-chart-overlay__unit-tabs,
+				.size-chart-overlay__content--upf-hoodie > .size-chart-overlay__unit-tabs {
+					margin-bottom: 16px;
+				}
+				.size-chart-overlay__table--3d-tshirt th,
+				.size-chart-overlay__table--3d-tshirt td,
+				.size-chart-overlay__table--upf-hoodie th,
+				.size-chart-overlay__table--upf-hoodie td {
+					padding: 12px 14px;
+					font-size: 13px;
+				}
+				.size-chart-overlay__table--3d-tshirt th,
+				.size-chart-overlay__table--upf-hoodie th {
+					font-size: 12px;
+				}
+				.size-chart-overlay__content--3d-tshirt .size-chart-overlay__note,
+				.size-chart-overlay__content--upf-hoodie .size-chart-overlay__note {
+					margin-bottom: 10px;
+				}
+				.size-chart-overlay__3d-tshirt-measurement-guide,
+				.size-chart-overlay__upf-hoodie-measurement-guide {
+					grid-template-columns: minmax(240px, 0.82fr) minmax(0, 1.18fr);
+					gap: 38px;
+				}
 			}
 			#size-chart-overlay .size-chart-overlay__header,
 			#description-overlay .size-chart-overlay__header,
@@ -1588,6 +2111,39 @@
 				.size-chart-overlay__table th {
 					font-size: 10px;
 					line-height: 1.25;
+				}
+				.size-chart-overlay__table--shirt {
+					min-width: 620px;
+					table-layout: auto;
+				}
+				.size-chart-overlay__table--3d-tshirt,
+				.size-chart-overlay__table--upf-hoodie {
+					min-width: 570px;
+					table-layout: auto;
+				}
+				.size-chart-overlay__table--3d-tshirt th:first-child,
+				.size-chart-overlay__table--3d-tshirt td:first-child,
+				.size-chart-overlay__table--upf-hoodie th:first-child,
+				.size-chart-overlay__table--upf-hoodie td:first-child {
+					width: auto;
+				}
+				.size-chart-overlay__3d-tshirt-image,
+				.size-chart-overlay__upf-hoodie-image {
+					max-height: 260px;
+				}
+				.size-chart-overlay__3d-tshirt-measurement-guide,
+				.size-chart-overlay__upf-hoodie-measurement-guide {
+					gap: 20px;
+					margin-top: 22px;
+				}
+				.size-chart-overlay__3d-tshirt-instructions,
+				.size-chart-overlay__upf-hoodie-instructions {
+					gap: 13px;
+				}
+				.size-chart-overlay__3d-tshirt-garment-note,
+				.size-chart-overlay__upf-hoodie-garment-note {
+					margin-top: 20px;
+					padding-top: 16px;
 				}
 				.size-chart-overlay__note,
 				.size-chart-overlay__disclaimer {

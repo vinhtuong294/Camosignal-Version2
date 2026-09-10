@@ -1,7 +1,8 @@
-{%- comment -%}
-  Snippet: product-short-description
-  Renders the first meaningful paragraph of the product description (skipping the title paragraph).
-{%- endcomment -%}
+{% doc %}
+  Renders the first meaningful paragraph, excluding the product title.
+  @param {product} product - The displayed product.
+  @param {boolean} [under_title] - Render a compact plain-text introduction.
+{% enddoc %}
 
 {%- assign full_description = product.description -%}
 
@@ -51,7 +52,12 @@
 
 {%- assign short_description = short_description | strip -%}
 
-{%- if short_description != blank -%}
+{%- if under_title -%}
+  {%- assign intro_text = short_description | default: cleaned | strip_html | replace: '&nbsp;', ' ' | strip -%}
+  {%- if intro_text != blank -%}
+    <p class="product-short-description product-short-description--under-title">{{ intro_text | truncate: 180 | escape_once }}</p>
+  {%- endif -%}
+{%- elsif short_description != blank -%}
   <div class="product-short-description rte desktop-only">
     {{ short_description }}
   </div>

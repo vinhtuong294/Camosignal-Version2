@@ -40,6 +40,9 @@
 {%- assign cart_has_missing_customization = false -%}
 {%- for item in cart.items -%}
 	{%- assign item_requires_name = item.product.metafields.custom.enable_name.value -%}
+	{%- if item.product.id == 8607287083199 -%}
+		{%- assign item_requires_name = false -%}
+	{%- endif -%}
 	{%- assign item_requires_number = item.product.metafields.custom.enable_number.value -%}
 	{%- assign item_custom_name = item.properties['Your Name'] | strip -%}
 	{%- assign item_custom_number = item.properties['Your Number'] | strip -%}
@@ -177,7 +180,7 @@
 			<button
 				type="button"
 				class="cart-footer__button button button--secondary button--block js-checkout-button"
-				style="width: 100%; background: var(--cart-drawer-checkout-bg, #0d1f6b) !important; border-color: var(--cart-drawer-checkout-border, #0d1f6b) !important; color: var(--cart-drawer-checkout-color, #ffffff) !important; font-family: 'Oswald', sans-serif !important; text-transform: uppercase; font-size: var(--cart-drawer-checkout-font-size, 16px); font-weight: 600; padding: var(--cart-drawer-checkout-padding, 14px); margin-bottom: 8px; border-radius: var(--cart-drawer-checkout-radius, 6px) !important;"
+				style="width: 100%; background: var(--cart-drawer-checkout-bg, #0d1f6b) !important; border-color: var(--cart-drawer-checkout-border, #0d1f6b) !important; color: var(--cart-drawer-checkout-color, #ffffff) !important; font-family: var(--heading-font-family), sans-serif !important; text-transform: uppercase; font-size: var(--cart-drawer-checkout-font-size, 16px); font-weight: 600; padding: var(--cart-drawer-checkout-padding, 14px); margin-bottom: 8px; border-radius: var(--cart-drawer-checkout-radius, 6px) !important;"
 				{%- if cart_has_missing_customization -%}
 					disabled
 					aria-disabled="true"

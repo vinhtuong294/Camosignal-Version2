@@ -1,11 +1,8 @@
-{%- comment -%}
-	------------------------------------------------------------------------------
-	Snippet: Cart empty
-	Render empty cart state
-	Usage:
-	{%- render 'cart-empty' -%}
-	------------------------------------------------------------------------------
-{%- endcomment -%}
+{% doc %}
+  Renders the empty cart with collection shortcuts.
+  @example
+  {% render 'cart-empty' %}
+{% enddoc %}
 
 <div class="cart-empty">
 	<form id="cart-{{- section.id -}}" class="is-hidden"></form>
@@ -16,14 +13,50 @@
 
 	{%- assign heading = settings.empty_cart_heading | default: default_heading -%}
 	{%- assign text    = settings.empty_cart_text -%}
+	{%- assign plain_text = text | strip_html | strip -%}
 
-	<div class="cart-empty__heading h3">
-		{{- heading -}}
+	<h2 class="cart-empty__heading h3">{{- heading | escape -}}</h2>
+
+	<div class="cart-empty__text rte">
+		{%- if plain_text == blank or plain_text == 'Tax included and shipping calculated at checkout' -%}
+			<p>{{- 'cart.empty_state.prompt' | t -}}</p>
+		{%- else -%}
+			{{- text -}}
+		{%- endif -%}
 	</div>
 
-	{%- if text != blank -%}
-		<div class="cart-empty__text rte">
-			{{- text -}}
-		</div>
+	{%- capture collection_links -%}
+		{%- if settings.empty_cart_collections != blank -%}
+			{%- for recommended_collection in settings.empty_cart_collections -%}
+				<a class="cart-empty__collection-link" href="{{ recommended_collection.url | escape }}">
+					{{- 'cart.empty_state.shop_collection' | t: collection: recommended_collection.title | escape -}}
+				</a>
+			{%- endfor -%}
+		{%- else -%}
+			{%- assign collection_handles = 'new-arrivals,best-sellers,hunting-spirit,fishing' | split: ',' -%}
+			{%- assign collection_label_keys = 'new_arrivals,best_sellers,hunting,fishing' | split: ',' -%}
+			{%- for collection_handle in collection_handles -%}
+				{%- assign recommended_collection = collections[collection_handle] -%}
+				{%- if recommended_collection != blank -%}
+					{%- assign label_key = 'cart.empty_state.' | append: collection_label_keys[forloop.index0] -%}
+					<a class="cart-empty__collection-link" href="{{ recommended_collection.url | escape }}">
+						{{- label_key | t -}}
+					</a>
+				{%- endif -%}
+			{%- endfor -%}
+		{%- endif -%}
+	{%- endcapture -%}
+
+	<nav class="cart-empty__collections" aria-label="{{ 'cart.empty_state.collections_label' | t | escape }}">
+		{%- if collection_links != blank -%}
+			{{- collection_links -}}
+		{%- else -%}
+			<a class="cart-empty__collection-link" href="{{ routes.all_products_collection_url }}">
+				{{- 'cart.empty_state.shop_all' | t -}}
+			</a>
+		{%- endif -%}
+	</nav>
+	{%- if cart.empty? -%}
+		{%- render 'cart-empty-recommendations' -%}
 	{%- endif -%}
 </div>

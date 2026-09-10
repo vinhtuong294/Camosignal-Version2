@@ -448,6 +448,7 @@
     }
 
     disconnectedCallback() {
+      this.carouselResizeObserver?.disconnect();
       const drawerMount = this.drawerMount;
       instances.delete(this);
       this.drawerObserver?.disconnect();
@@ -646,6 +647,7 @@
         .toLowerCase()
         .replaceAll("_", "-");
       const isDrawer = this.dataset.placement === "CART_DRAWER";
+      const isCamoDrawer = isDrawer && preset === "camosignal";
       const isProductPage = this.dataset.placement === "PRODUCT_PAGE";
       root.className = `flex-upsell flex-upsell--${layout} flex-upsell--preset-${preset}${
         isDrawer ? " flex-upsell--drawer flex-upsell--drawer-carousel" : ""
@@ -675,6 +677,9 @@
 
       let previousButton;
       let nextButton;
+      let carouselFooter;
+      let carouselProgress;
+      let carouselCount;
       if (isDrawer && recommendations.length > 1) {
         const navigation = document.createElement("div");
         navigation.className = "flex-upsell__navigation";
@@ -708,15 +713,57 @@
           this.dataset.nextIconUrl,
           "›",
         );
-        navigation.append(previousButton, nextButton);
-        header.appendChild(navigation);
+        if (isCamoDrawer) {
+          carouselFooter = document.createElement("div");
+          carouselFooter.className = "flex-upsell__carousel-footer";
+          const track = document.createElement("div");
+          track.className = "flex-upsell__progress";
+          track.setAttribute("aria-hidden", "true");
+          carouselProgress = document.createElement("span");
+          track.appendChild(carouselProgress);
+          carouselCount = document.createElement("span");
+          carouselCount.className = "flex-upsell__carousel-count";
+          carouselCount.setAttribute("role", "status");
+          carouselCount.setAttribute("aria-live", "polite");
+          carouselCount.setAttribute("aria-atomic", "true");
+          navigation.append(previousButton, carouselCount, nextButton);
+          carouselFooter.append(track, navigation);
+        } else {
+          navigation.append(previousButton, nextButton);
+          header.appendChild(navigation);
+        }
       }
       root.appendChild(header);
 
       const list = document.createElement("div");
       list.className = "flex-upsell__list";
+      const previousList = isCamoDrawer
+        ? this.renderHost()?.querySelector(".flex-upsell__list")
+        : null;
+      const previousCards = [...(previousList?.children || [])];
+      const sameProducts =
+        previousCards.length === recommendations.length &&
+        previousCards.every(
+          (card, index) =>
+            card.dataset.productId === String(recommendations[index].id),
+        );
+      const preservedScroll = sameProducts ? previousList.scrollLeft : 0;
       recommendations.forEach((product) => {
-        list.appendChild(this.productCard(product, appearance, discount));
+        const card = this.productCard(product, appearance, discount);
+        const previousCard = previousCards.find(
+          (item) => item.dataset.productId === String(product.id),
+        );
+        const previousVariant = previousCard?.querySelector("select")?.value;
+        const nextSelect = card.querySelector("select");
+        if (
+          previousVariant &&
+          nextSelect &&
+          [...nextSelect.options].some((option) => option.value === previousVariant)
+        ) {
+          nextSelect.value = previousVariant;
+          nextSelect.dispatchEvent(new Event("change"));
+        }
+        list.appendChild(card);
         this.track("VIEW", product.id, product.price);
       });
       let syncNavigationState;
@@ -730,6 +777,38 @@
           const maximumScroll = Math.max(0, list.scrollWidth - list.clientWidth);
           const atStart = position <= 1;
           const atEnd = position >= maximumScroll - 1;
+
+          if (carouselProgress && carouselCount) {
+            const firstCard = list.firstElementChild;
+            const gap = Number.parseFloat(getComputedStyle(list).gap) || 0;
+            const step = (firstCard?.getBoundingClientRect().width || 1) + gap;
+            const visibleEnd = Math.min(
+              recommendations.length,
+              Math.max(
+                1,
+                Math.floor((position + list.clientWidth + gap + 1) / step),
+              ),
+            );
+            const label = `${visibleEnd} / ${recommendations.length}`;
+            if (carouselCount.textContent !== label) {
+              carouselCount.textContent = label;
+              carouselCount.setAttribute(
+                "aria-label",
+                `Showing recommendations through ${visibleEnd} of ${recommendations.length}`,
+              );
+            }
+            const visibleFraction = Math.min(
+              1,
+              list.clientWidth / (list.scrollWidth || 1),
+            );
+            carouselProgress.style.width = `${visibleFraction * 100}%`;
+            carouselProgress.style.marginInlineStart = `${
+              maximumScroll
+                ? (position / maximumScroll) * (1 - visibleFraction) * 100
+                : 0
+            }%`;
+            carouselFooter.hidden = maximumScroll <= 1;
+          }
 
           if (previousButton) {
             previousButton.disabled = atStart;
@@ -797,7 +876,7 @@
           const maximumScroll = Math.max(0, list.scrollWidth - list.clientWidth);
           const nextPosition = Math.min(
             maximumScroll,
-            Math.max(0, list.scrollLeft + distance * direction),
+            Math.max(0, (navigationTarget ?? list.scrollLeft) + distance * direction),
           );
 
           animateToRecommendation(nextPosition);
@@ -819,12 +898,19 @@
           },
           { passive: true },
         );
+        if (isCamoDrawer) {
+          this.carouselResizeObserver?.disconnect();
+          this.carouselResizeObserver = new ResizeObserver(syncNavigationState);
+          this.carouselResizeObserver.observe(list);
+        }
       }
       root.appendChild(list);
+      if (carouselFooter) root.appendChild(carouselFooter);
 
       const renderHost = this.renderHost();
       if (!renderHost) return;
       renderHost.replaceChildren(root);
+      if (isCamoDrawer) list.scrollLeft = preservedScroll;
       this.addScopedCustomCss(appearance.customCss, renderHost);
       if (syncNavigationState) {
         syncNavigationState();
@@ -838,10 +924,12 @@
         appearance.stylePreset || "COMPLETE_THE_LOOK",
       ).toUpperCase();
       const isCamoSignal = stylePreset === "CAMOSIGNAL";
+      const isCamoDrawer = isDrawer && isCamoSignal;
       const isCompleteLook =
         !isDrawer && stylePreset === "COMPLETE_THE_LOOK";
       const card = document.createElement("article");
       card.className = "flex-upsell__card";
+      card.dataset.productId = String(product.id);
 
       const imageLink = document.createElement("a");
       imageLink.className = "flex-upsell__image-wrap";
@@ -894,12 +982,20 @@
         const hasCampaignDiscount = salePrice < safeBasePrice - 0.004;
         priceValue.textContent = money(salePrice);
         priceMeta.replaceChildren();
+        imageLink.querySelector(".flex-upsell__image-badge")?.remove();
 
         if (hasCampaignDiscount) {
           const badge = document.createElement("span");
           badge.className = "flex-upsell__discount-badge";
           badge.textContent = discountLabel(discount);
-          if (badge.textContent) priceMeta.appendChild(badge);
+          if (badge.textContent) {
+            if (isCamoDrawer) {
+              badge.className = "flex-upsell__image-badge";
+              imageLink.appendChild(badge);
+            } else {
+              priceMeta.appendChild(badge);
+            }
+          }
         }
 
         const compareValue = hasCampaignDiscount
@@ -955,8 +1051,26 @@
             : `${variantLabel(variant)} · ${money(variant.price)}`;
           variantSelect.appendChild(option);
         });
+        let selectedLabel;
+        if (isCamoDrawer) {
+          const picker = document.createElement("div");
+          picker.className = "flex-upsell__drawer-picker";
+          selectedLabel = document.createElement("span");
+          selectedLabel.setAttribute("aria-hidden", "true");
+          picker.append(selectedLabel, variantSelect);
+          if (this.dataset.nextIconUrl) {
+            const arrow = document.createElement("img");
+            arrow.src = this.dataset.nextIconUrl;
+            arrow.alt = "";
+            arrow.width = 12;
+            arrow.height = 12;
+            picker.appendChild(arrow);
+          }
+          copy.appendChild(picker);
+        }
         const updateVariantWidth = () => {
           const label = variantSelect.selectedOptions[0]?.textContent?.trim() || "";
+          if (selectedLabel) selectedLabel.textContent = label;
           variantSelect.classList.toggle(
             "flex-upsell__variant--long",
             label.length >= 16,
@@ -971,7 +1085,7 @@
           );
           renderPrice(selectedVariant?.price ?? product.price);
         });
-        copy.appendChild(variantSelect);
+        if (!isCamoDrawer) copy.appendChild(variantSelect);
       }
       card.appendChild(copy);
 
@@ -992,7 +1106,11 @@
         addButton = document.createElement("button");
         addButton.className = "flex-upsell__add";
         addButton.type = "button";
-        addButton.textContent = appearance.buttonLabel || "Add";
+        addButton.textContent =
+          isCamoDrawer &&
+          (!appearance.buttonLabel || /^add$/i.test(appearance.buttonLabel))
+            ? "Add to cart"
+            : appearance.buttonLabel || "Add";
         addButton.dataset.defaultLabel = addButton.textContent;
 
         if (showOptionTray) {

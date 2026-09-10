@@ -616,7 +616,14 @@
 				"type": "richtext",
 				"id": "empty_cart_text",
 				"label": "Empty cart text",
-				"default": "<p>Tax included and shipping calculated at checkout</p>"
+				"default": "<p>Find your next favorite for the great outdoors.</p>"
+			},
+			{
+				"type": "collection_list",
+				"id": "empty_cart_collections",
+				"label": "Recommended collections",
+				"limit": 4,
+				"info": "Leave empty to show New Arrivals, Best Sellers, Hunting and Fishing when available."
 			}
 		]
 	},

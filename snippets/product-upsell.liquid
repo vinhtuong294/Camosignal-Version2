@@ -121,18 +121,24 @@
 
 <label class="product-upsell-block{% if checked_by_default %} is-selected{% endif %}" style="{{ styles }}" data-product-handle="{{- upsell_product.handle | escape -}}">
 	<div class="product-upsell__left">
-		<div class="product-upsell__checkbox">
+		<div class="product-upsell__checkbox" aria-hidden="true">
 			<svg viewBox="0 0 16 16"><path d="M3 8L6 11L13 4"></path></svg>
 		</div>
 		
-		<input type="checkbox" style="display: none;" class="js-upsell-checkbox" name="properties[_upsell]" value="{{ upsell_product.selected_or_first_available_variant.id }}" autocomplete="off" {% if checked_by_default %}checked{% endif %}>
+		<input type="checkbox" class="js-upsell-checkbox visually-hidden" name="properties[_upsell]" value="{{ upsell_product.selected_or_first_available_variant.id }}" autocomplete="off" {% if checked_by_default %}checked{% endif %}>
 		
-		{%- if upsell_product.featured_image != blank -%}
+		{%- if upsell_product.featured_image != blank and upsell_product.handle != 'shipping-protection-apparel' -%}
 			<img src="{{ upsell_product.featured_image | image_url: width: 64 }}" class="product-upsell__icon" width="32" height="32" alt="{{ upsell_product.title | escape }}" loading="lazy">
 		{%- endif -%}
 
 		<div class="product-upsell__text">
-			<span class="product-upsell__title" style="font-family: var(--heading-font-family);">{{ upsell_product.title }}</span>
+			<span class="product-upsell__title" style="font-family: var(--heading-font-family);">
+				{%- if upsell_product.handle == 'shipping-protection-apparel' -%}
+					{{- 'products.product.shipping_protection_title' | t -}}
+				{%- else -%}
+					{{- upsell_product.title | escape -}}
+				{%- endif -%}
+			</span>
 			{%- if upsell_subtitle != blank -%}
 				<span class="product-upsell__subtitle">{{ upsell_subtitle }}</span>
 			{%- endif -%}

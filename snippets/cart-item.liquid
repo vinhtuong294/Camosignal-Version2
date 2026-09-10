@@ -19,6 +19,9 @@
 {%- capture img_focal -%}{%- endcapture -%}
 {%- assign missing_customization = false -%}
 {%- assign item_requires_name = item.product.metafields.custom.enable_name.value -%}
+{%- if item.product.id == 8607287083199 -%}
+	{%- assign item_requires_name = false -%}
+{%- endif -%}
 {%- assign item_requires_number = item.product.metafields.custom.enable_number.value -%}
 {%- assign item_custom_name = item.properties['Your Name'] | strip -%}
 {%- assign item_custom_number = item.properties['Your Number'] | strip -%}
@@ -52,7 +55,7 @@
 
 		{%- if property.last != blank and property_first_char != '_' -%}
 			<div class="cart-item__option cart-item__option--flex">
-				<dt class="cart-item__option-label">{{ property.first }}: </dt>
+				<dt class="cart-item__option-label">{% if property.first == 'Your Name' %}{{ 'products.customization.cart_name_label' | t }}{% else %}{{ property.first }}{% endif %}: </dt>
 
 				<dd>
 					{%- if property.last contains '/uploads/' -%}
@@ -173,6 +176,7 @@
 
 		<a href="{{ item.url_to_remove }}"
 		   class="cart-item__cta button-link focus-visible-outline js-cart-item-remove"
+		   aria-label="{{ 'cart.general.remove' | t | escape }} {{ title | escape }}"
 		   data-index="{{- item.index | plus: 1 -}}"
 		   data-item-key="{{- item.key -}}"
 		   style="margin-top: 5px; color: #555;"

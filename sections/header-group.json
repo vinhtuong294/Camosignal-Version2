@@ -17,7 +17,7 @@
         "announcement_slide_1": {
           "type": "text_slide",
           "settings": {
-            "text_slider": "<p>Free shipping from 2 items</p>",
+            "text_slider": "<p>Free shipping on orders $45+</p>",
             "discount_code": "",
             "discount_label": "Copy"
           }
@@ -65,9 +65,9 @@
         "layout": "slideshow",
         "enable_autoplay": true,
         "autoplay_speed": 2,
-        "text_content": "<p>Free shipping from 2 items</p>",
+        "text_content": "<p>Free shipping on orders $45+</p>",
         "ticker_hide_bullets": false,
-        "ticker_text": "<p>Free shipping from 2 items</p><p>Buy 2 save 10%</p><p>Buy 3 save 15%</p><p>Buy 4 save 20%</p>",
+        "ticker_text": "<p>Free shipping on orders $45+</p><p>Buy 2 save 10%</p><p>Buy 3 save 15%</p><p>Buy 4 save 20%</p>",
         "desktop_movement_speed": 40,
         "mobile_movement_speed": 20,
         "discount_code": "",

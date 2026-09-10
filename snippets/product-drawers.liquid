@@ -435,10 +435,10 @@
 			white-space: nowrap;
 		}
 		.product-accordion__delivery-total {
-			color: var(--color-text-secondary, #657168);
+			color: #555555;
 			font-family: var(--font-body-family), Arial, Helvetica, sans-serif;
 			font-size: 12px;
-			font-weight: 500;
+			font-weight: 400;
 			letter-spacing: 0;
 			line-height: 1.3;
 			text-align: right;
@@ -589,9 +589,6 @@
 			.product-accordion__delivery-total {
 				font-size: 11px;
 			}
-			.product-accordion__delivery-total-label {
-				display: none;
-			}
 			.product-accordion__content-inner {
 				font-size: calc(var(--body-font-size, 14px) * 0.9);
 			}
@@ -639,73 +636,35 @@
 	</style>
 
 	<div class="product-accordion" style="{{ styles }}" data-product-accordion>
-		{%- comment -%} DESCRIPTION - Full Page Overlay Trigger {%- endcomment -%}
-		{%- if product_details_content != blank -%}
-			{%- assign desc_content = product_details_content -%}
+		{%- assign details_title = 'product_drawer.details' | t -%}
+		{%- assign shipping_title = 'product_drawer.shipping' | t -%}
+		{%- assign care_title = 'product_drawer.care' | t -%}
+		{%- capture shipping_summary -%}
+			{%- if product_details_show_delivery_total -%}12&ndash;16 days{%- else -%}6&ndash;10 days{%- endif -%}
+		{%- endcapture -%}
+		{%- capture inline_shipping_content -%}
+{%- if product_details_show_delivery_total -%}
+							<p><strong>Production Time:</strong> 3 &ndash; 7 days.</p>
+							<p><strong>Shipping Time:</strong> 5 &ndash; 9 days.</p>
+						{%- elsif product_details_profile == 'shirt' -%}
+							<p><strong>Production Time:</strong> 5 &ndash; 9 days.</p>
+							<p><strong>Shipping Time:</strong> 8 &ndash; 15 days.</p>
+						{%- else -%}
+							<p><strong>Shipping Origin:</strong> Shipped directly from the United States.</p>
+							<p><strong>Processing Time:</strong> 1 &ndash; 3 business days (excluding weekends and holidays).</p>
+							<p><strong>Standard Shipping:</strong> 5 &ndash; 7 business days.</p>
+						{%- endif -%}
+						<p><strong>Tracking:</strong> You will receive a confirmation email with tracking information as soon as your order ships.</p>
+						<p><strong>Multiple Packages:</strong> Items with separate locations may arrive in multiple packages with individual tracking numbers.</p>
 
-			<div class="product-accordion__item">
-				<button
-					class="product-accordion__trigger"
-					type="button"
-					aria-expanded="false"
-					data-product-info-overlay-target="description-overlay"
-				>
-					<span>PRODUCT DETAILS</span>
-					<span class="product-accordion__trigger-icon" aria-hidden="true"></span>
-				</button>
-			</div>
-
-			{%- comment -%} DESCRIPTION OVERLAY MOVED TO BOTTOM {%- endcomment -%}
-		{%- endif -%}
-
-		{%- comment -%} SHIPPING & DELIVERY - Full Page Overlay Trigger {%- endcomment -%}
-		<div class="product-accordion__item">
-			<button
-				class="product-accordion__trigger"
-				type="button"
-				aria-expanded="false"
-				data-product-info-overlay-target="shipping-overlay"
-			>
-				<span class="product-accordion__trigger-text">
-					<span>SHIPPING &amp; DELIVERY</span>
-					<span class="product-accordion__delivery-total">
-						<span class="product-accordion__delivery-total-label">Total Day: </span>
-						{%- if product_details_show_delivery_total -%}12&ndash;16 days{%- else -%}6&ndash;10 days{%- endif -%}
-					</span>
-				</span>
-				<span class="product-accordion__trigger-icon" aria-hidden="true"></span>
-			</button>
-		</div>
-
-		{%- comment -%} CARE INSTRUCTIONS - Full Page Overlay Trigger {%- endcomment -%}
-		<div class="product-accordion__item">
-			<button
-				class="product-accordion__trigger"
-				type="button"
-				aria-expanded="false"
-				data-product-info-overlay-target="care-instructions-overlay"
-			>
-				<span>CARE INSTRUCTIONS</span>
-				<span class="product-accordion__trigger-icon" aria-hidden="true"></span>
-			</button>
-		</div>
-
-		{%- comment -%} CARE INSTRUCTIONS OVERLAY {%- endcomment -%}
-		<div id="care-instructions-overlay" class="size-chart-overlay">
-			<div class="size-chart-overlay__backdrop" onclick="document.getElementById('care-instructions-overlay').classList.remove('is-active'); document.body.style.overflow='';"></div>
-			<div class="size-chart-overlay__panel">
-				<div class="size-chart-overlay__header">
-					<h2 class="size-chart-overlay__title">CARE INSTRUCTIONS</h2>
-					<button class="size-chart-overlay__close" type="button" onclick="document.getElementById('care-instructions-overlay').classList.remove('is-active'); document.body.style.overflow='';" aria-label="Close">
-						<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-							<line x1="2" y1="2" x2="18" y2="18" stroke="currentColor" stroke-width="2"/>
-							<line x1="18" y1="2" x2="2" y2="18" stroke="currentColor" stroke-width="2"/>
-						</svg>
-					</button>
-				</div>
-				<div class="size-chart-overlay__content" style="display:block; padding-top: 10px; text-align: left;">
-					<div class="rte" style="color: var(--color-text-primary, #203224);">
-						<p><strong>Washing Instructions:</strong><br>
+						<p><strong>Order Cancellations:</strong><br>
+						Only accepted if the order has not been processed (not yet packed or handed over to the carrier) and requires official approval from the seller.</p>
+						{%- if product_details_profile == 'upf-hoodie' -%}
+							<p><strong>Origin:</strong> Eco-friendly &amp; Made to Order &mdash; crafted fresh after every purchase for peak print quality.</p>
+						{%- endif -%}
+		{%- endcapture -%}
+		{%- capture inline_care_content -%}
+<p><strong>Washing Instructions:</strong><br>
 						Turn inside out.<br>
 						Hand wash cold (preferred) or machine wash cold on a gentle cycle.<br>
 						Use mild detergent. Do not bleach.<br>
@@ -718,10 +677,10 @@
 						<p><strong>Ironing Instructions:</strong><br>
 						Iron inside out on low heat.<br>
 						Never iron directly on the print (use a pressing cloth).</p>
-					</div>
-				</div>
-			</div>
-		</div>
+		{%- endcapture -%}
+		{%- render 'product-inline-details', title: details_title, content: product_details_content, kind: 'details' -%}
+		{%- render 'product-inline-details', title: shipping_title, content: inline_shipping_content, kind: 'shipping', summary_detail: shipping_summary -%}
+		{%- render 'product-inline-details', title: care_title, content: inline_care_content, kind: 'care' -%}
 
 		{%- comment -%} SIZE CHART OVERLAY {%- endcomment -%}
 		<div id="size-chart-overlay" class="size-chart-overlay">
@@ -2297,7 +2256,7 @@
 			}
 
 			(function() {
-				var overlayIds = ['size-chart-overlay', 'care-instructions-overlay', 'shipping-overlay', 'description-overlay'];
+				var overlayIds = ['size-chart-overlay'];
 				var bodyClass = 'is-product-info-overlay-open';
 
 				function getInfoOverlays() {
@@ -2412,58 +2371,6 @@
 			})();
 		</script>
 
-		{%- comment -%} SHIPPING & DELIVERY OVERLAY {%- endcomment -%}
-		<div id="shipping-overlay" class="size-chart-overlay">
-			<div class="size-chart-overlay__backdrop" onclick="document.getElementById('shipping-overlay').classList.remove('is-active'); document.body.style.overflow='';"></div>
-			<div class="size-chart-overlay__panel">
-				<div class="size-chart-overlay__header">
-					<h2 class="size-chart-overlay__title">SHIPPING &amp; DELIVERY</h2>
-					<button class="size-chart-overlay__close" type="button" onclick="document.getElementById('shipping-overlay').classList.remove('is-active'); document.body.style.overflow='';" aria-label="Close">
-						<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-							<line x1="2" y1="2" x2="18" y2="18" stroke="currentColor" stroke-width="2"/>
-							<line x1="18" y1="2" x2="2" y2="18" stroke="currentColor" stroke-width="2"/>
-						</svg>
-					</button>
-				</div>
-
-				<div class="size-chart-overlay__content shipping-tab-content" style="padding-top: 10px; text-align: left;">
-					<div class="rte" style="color: var(--color-text-primary, #203224);">
-						{%- if product_details_show_delivery_total -%}
-							<p><strong>Production Time:</strong> 3 &ndash; 7 days.</p>
-							<p><strong>Shipping Time:</strong> 5 &ndash; 9 days.</p>
-						{%- elsif product_details_profile == 'shirt' -%}
-							<p><strong>Production Time:</strong> 5 &ndash; 9 days.</p>
-							<p><strong>Shipping Time:</strong> 8 &ndash; 15 days.</p>
-						{%- else -%}
-							<p><strong>Shipping Origin:</strong> Shipped directly from the United States.</p>
-							<p><strong>Processing Time:</strong> 1 &ndash; 3 business days (excluding weekends and holidays).</p>
-							<p><strong>Standard Shipping:</strong> 5 &ndash; 7 business days.</p>
-						{%- endif -%}
-						<p><strong>Tracking:</strong> You will receive a confirmation email with tracking information as soon as your order ships.</p>
-						<p><strong>Multiple Packages:</strong> Items with separate locations may arrive in multiple packages with individual tracking numbers.</p>
-
-						<p><strong>Order Cancellations:</strong><br>
-						Only accepted if the order has not been processed (not yet packed or handed over to the carrier) and requires official approval from the seller.</p>
-						{%- if product_details_profile == 'upf-hoodie' -%}
-							<p><strong>Origin:</strong> Eco-friendly &amp; Made to Order &mdash; crafted fresh after every purchase for peak print quality.</p>
-						{%- endif -%}
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<script>
-			document.addEventListener('keydown', function(e) {
-				if (e.key === 'Escape') {
-					var overlay = document.getElementById('shipping-overlay');
-					if (overlay && overlay.classList.contains('is-active')) {
-						overlay.classList.remove('is-active');
-						document.body.style.overflow = '';
-					}
-				}
-			});
-		</script>
-
 		{%- comment -%} Drawer 1 (Specifications / custom) {%- endcomment -%}
 		{%- if show_drawer_1 -%}
 			{%- assign d1_id = 'drawer1-' | append: section.id -%}
@@ -2511,44 +2418,27 @@
 				open: false
 			-%}
 		{%- endif -%}
+		{%- if request.page_type == 'product' -%}
+			{%- render 'product-review-preview', product: product -%}
+		{%- endif -%}
 	</div>
 
-	{%- if product_details_content != blank -%}
-		{%- capture description_overlay_html -%}
-			{%- comment -%} DESCRIPTION OVERLAY MOVED TO BOTTOM TO PREVENT HTML INJECTION BREAKAGE {%- endcomment -%}
-			<div id="description-overlay" class="size-chart-overlay">
-				<div class="size-chart-overlay__backdrop" onclick="document.getElementById('description-overlay').classList.remove('is-active'); document.body.style.overflow='';"></div>
-				<div class="size-chart-overlay__panel">
-					<div class="size-chart-overlay__header">
-						<h2 class="size-chart-overlay__title">PRODUCT DETAILS</h2>
-						<button class="size-chart-overlay__close" type="button" onclick="document.getElementById('description-overlay').classList.remove('is-active'); document.body.style.overflow='';" aria-label="Close">
-							<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<line x1="2" y1="2" x2="18" y2="18" stroke="currentColor" stroke-width="2"/>
-								<line x1="18" y1="2" x2="2" y2="18" stroke="currentColor" stroke-width="2"/>
-							</svg>
-						</button>
-					</div>
-					<div class="size-chart-overlay__content" style="display:block;">
-						<div class="product-desc-overlay__body rte">
-							{{ desc_content }}
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<script>
-				document.addEventListener('keydown', function(e) {
-					if (e.key === 'Escape') {
-						var overlay = document.getElementById('description-overlay');
-						if (overlay && overlay.classList.contains('is-active')) {
-							overlay.classList.remove('is-active');
-							document.body.style.overflow = '';
-						}
-					}
-				});
-			</script>
-		{%- endcapture -%}
-		{{- description_overlay_html -}}
+	{%- if product_details_type_handle == 'combo' -%}
+		{%- assign selected_offer = product.selected_or_first_available_variant.option1 | downcase -%}
+		{%- assign active_highlight_profile = 'combo' -%}
+		{%- unless selected_offer contains 'combo' -%}
+			{%- if selected_offer contains 'vest' -%}
+				{%- assign active_highlight_profile = 'vest' -%}
+			{%- elsif selected_offer contains 'long' -%}
+				{%- assign active_highlight_profile = 'long-sleeve' -%}
+			{%- endif -%}
+		{%- endunless -%}
+		{%- assign highlight_profiles = 'combo,vest,long-sleeve' | split: ',' -%}
+		{%- for highlight_profile in highlight_profiles -%}
+			{%- render 'product-outdoor-highlights', profile: highlight_profile, active_profile: active_highlight_profile -%}
+		{%- endfor -%}
+	{%- elsif product_details_type_handle == 'upf-hoodie' -%}
+		{%- render 'product-outdoor-highlights', profile: product_details_type_handle -%}
 	{%- endif -%}
 
 	<script>

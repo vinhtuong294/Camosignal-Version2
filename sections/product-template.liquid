@@ -721,6 +721,7 @@
 
 
 {%- render 'adastra' with '/src/scripts/section-product.js' -%}
+<script src="{{ 'product-gallery-accordion.js' | asset_url }}" defer="defer"></script>
 
 {%- liquid
 	if product.selected_or_first_available_variant.featured_media

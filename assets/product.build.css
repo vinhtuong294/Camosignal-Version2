@@ -1195,6 +1195,9 @@ html.no-js .product-variants {
   padding-top: var(--offset-top-mobile);
   padding-bottom: var(--offset-bottom-mobile);
 }
+.product-add-to-cart .add-to-cart.button {
+  color: #fff !important;
+}
 .product-add-to-cart > .button {
   margin-bottom: 12px;
 }
@@ -2079,4 +2082,70 @@ html.no-js .product-variants {
 }
 .modal.is-active .zoom-slider__slide-target, .modal.is-open .zoom-slider__slide-target {
   display: block;
+}
+
+/* Let expanded product information grow in the document, independently of the
+   gallery. A sticky form changes its own position when its height changes. */
+.product-accordion details[data-accordion-expanded] {
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.product-accordion details[data-accordion-expanded] > summary .product-accordion__trigger-icon::after {
+  display: block;
+  transition: opacity 0.4s cubic-bezier(0.23, 1, 0.32, 1), transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.product-accordion details[data-accordion-expanded="true"] > summary .product-accordion__trigger-icon::after {
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(90deg) scaleX(0);
+}
+.product-accordion details[data-accordion-expanded="false"] > summary .product-accordion__trigger-icon::after {
+  opacity: 1;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .product-accordion .product-accordion__trigger-icon::after {
+    transition: none;
+  }
+}
+.product[data-section-type="product"] .product__container {
+  overflow-anchor: none;
+}
+.product[data-section-type="product"] .product__container > .product-form {
+  position: relative;
+  top: auto;
+  height: auto;
+  transition: none;
+}
+@media (min-width: 992px) {
+  .product[data-section-type="product"] .product-media.product-media--accordion-pinned {
+    position: fixed !important;
+    top: var(--accordion-gallery-top) !important;
+    left: var(--accordion-gallery-left) !important;
+    width: var(--accordion-gallery-width) !important;
+    max-width: var(--accordion-gallery-width) !important;
+    margin: 0;
+  }
+  .product[data-section-type="product"] .product-media--layout-carousel {
+    position: sticky !important;
+    top: var(--header-height-sticky, 0px) !important;
+    align-self: flex-start;
+    height: fit-content !important;
+    transition: none;
+  }
+  /* Only the outer gallery sticks; nested sticky offsets move the image and
+     thumbnails separately as the adjacent accordion changes height. */
+  .product[data-section-type="product"] .product-media--layout-carousel .product-media__container,
+  .product[data-section-type="product"] .product-media--layout-carousel .product-media__slider,
+  .product[data-section-type="product"] .product-media--layout-carousel .product-media__slider-thumbnails {
+    position: relative;
+    top: auto !important;
+    transition: none;
+  }
+}
+@media (max-width: 991.98px) {
+  .product[data-section-type="product"] .product-media--layout-carousel,
+  .product[data-section-type="product"] .product-media--layout-carousel .product-media__container {
+    position: relative !important;
+    top: auto !important;
+  }
 }

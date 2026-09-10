@@ -46,6 +46,7 @@
 				},
 				"quantity": {
 					"type": "quantity",
+					"disabled": true,
 					"settings": {}
 				},
 				"add_to_cart": {

@@ -73,7 +73,9 @@
 					{%- when 'title' -%}
 						{%- render 'product-title', block: block, product: product, is_preset: is_preset -%}
 					{%- when 'short_description' -%}
-						{%- render 'product-short-description', block: block, product: product, is_preset: is_preset -%}
+						{%- unless template.name == 'product' -%}
+							{%- render 'product-short-description', block: block, product: product, is_preset: is_preset -%}
+						{%- endunless -%}
 					{%- when 'description' -%}
 						{%- render 'product-description', block: block, product: product, is_preset: is_preset -%}
 					{% when 'product_combination' %}
@@ -168,7 +170,9 @@
 					{%- when 'title' -%}
 						{%- render 'product-title', block: block, product: product, is_preset: is_preset -%}
 					{%- when 'short_description' -%}
-						{%- render 'product-short-description', block: block, product: product, is_preset: is_preset -%}
+						{%- unless template.name == 'product' -%}
+							{%- render 'product-short-description', block: block, product: product, is_preset: is_preset -%}
+						{%- endunless -%}
 					{%- when 'options' -%}
 						{%- render 'product-options', section: section, block: block, product: product -%}
 					{%- when 'quantity' -%}

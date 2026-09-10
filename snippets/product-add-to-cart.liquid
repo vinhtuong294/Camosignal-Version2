@@ -239,12 +239,6 @@
 		{%- endif -%}
 	{%- endfor -%}
 
-	{%- assign free_shipping_from_one_item = false -%}
-	{%- assign current_type = product.type | downcase -%}
-	{%- if current_type == 'hat' -%}
-		{%- assign free_shipping_from_one_item = true -%}
-	{%- endif -%}
-
 	<button
 		type="submit"
 		class="add-to-cart button button--block button--{{- button_type }} {% unless product.first_available_variant.available %}disabled{% endunless %}"
@@ -267,26 +261,18 @@
 		{%- render 'icons', icon: 'loader' -%}
 	</button>
 
-	<aside class="product-purchase-perks" aria-label="{{- 'products.product.purchase_perks_label' | t -}}">
-		<p class="product-purchase-perks__shipping">
-			{%- render 'icons', icon: 'shipping' -%}
-			<span>
-				{%- if free_shipping_from_one_item -%}
-					{{- 'products.product.free_shipping_from_one_item' | t -}}
-				{%- else -%}
-					{{- 'products.product.free_shipping_from_two_items' | t -}}
-				{%- endif -%}
-			</span>
-		</p>
-
-		<div
-			class="product-purchase-perks__savings"
-			role="list"
-			aria-label="{{- 'products.product.buy_more_save_more' | t -}}"
-		>
-			<span role="listitem">{{- 'products.product.buy_two_save_ten' | t -}}</span>
-			<span role="listitem">{{- 'products.product.buy_three_save_fifteen' | t -}}</span>
-			<span role="listitem">{{- 'products.product.buy_four_save_twenty' | t -}}</span>
+	<aside class="product-purchase-perks" aria-label="{{- 'products.product.buy_more_save_more' | t -}}">
+		<svg class="product-purchase-perks__tag" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false">
+			<path d="M20 13 11 22 2 13V2h11l9 9-2 2Z" stroke-linejoin="round" />
+			<circle cx="7" cy="7" r="1.5" />
+		</svg>
+		<div class="product-purchase-perks__content">
+			<p class="product-purchase-perks__heading">
+				{{- 'products.product.buy_more_save_more' | t -}}
+			</p>
+			<p class="product-purchase-perks__tiers">
+				{{- 'products.product.savings_tier_two' | t -}}, {{ 'products.product.savings_tier_three' | t }}, {{ 'products.product.savings_tier_four' | t -}}
+			</p>
 		</div>
 	</aside>
 
@@ -299,87 +285,56 @@
 
 {% stylesheet %}
 	.product-purchase-perks {
-		display: grid;
-		grid-template-columns: minmax(170px, 1fr) auto;
+		display: flex;
+		flex-direction: row;
 		align-items: center;
-		gap: 10px;
+		gap: 8px;
 		order: 16;
 		width: 100%;
-		margin: 0 0 10px;
-		padding: 6px 10px;
-		border: 1px solid var(--color-accent, #ffd875);
-		border-radius: 0;
+		margin: 36px 0 8px;
+		padding: 0;
+		border: 0;
 		background: transparent;
 		color: var(--color-text-primary, #203224);
+		font-family: var(--base-font-family), Arial, sans-serif;
+		line-height: 1.4;
+		text-align: left;
 	}
 
-	.product-purchase-perks__shipping {
+	.product-purchase-perks__heading {
 		display: flex;
 		align-items: center;
-		gap: 7px;
+		justify-content: flex-start;
 		margin: 0;
-		font-size: 12px;
-		font-weight: 700;
-		line-height: 1.2;
-		letter-spacing: 0.02em;
-		text-transform: uppercase;
+		font-size: 13px;
+		font-weight: 600;
 	}
 
-	.product-purchase-perks__shipping .icon {
-		flex: 0 0 auto;
-		width: 19px;
-		height: 19px;
+	.product-purchase-perks__tag {
+		width: 28px;
+		height: 28px;
+		flex: 0 0 28px;
+		align-self: center;
 	}
 
-	.product-purchase-perks__savings {
+	.product-purchase-perks__content {
+		display: flex;
+		flex-direction: column;
+		gap: 3px;
+		min-width: 0;
+	}
+
+	.product-purchase-perks__tiers {
 		display: flex;
 		align-items: center;
-		padding-left: 6px;
-		border-left: 1px solid var(--color-accent, #ffd875);
+		justify-content: flex-start;
+		margin: 0;
+		padding: 0;
+		font-size: 12px;
+		font-weight: 400;
+		line-height: 1.4;
 	}
 
-	.product-purchase-perks__savings span {
-		padding: 2px 7px;
-		border-left: 1px solid var(--color-accent, #ffd875);
-		font-family: "Oswald", sans-serif;
-		font-size: 11px;
-		font-weight: 600;
-		line-height: 1.2;
-		letter-spacing: 0.02em;
-		text-transform: uppercase;
-		white-space: nowrap;
-	}
-
-	.product-purchase-perks__savings span:first-child {
-		border-left: 0;
-	}
-
-	@media screen and (max-width: 767px) {
-		.product-purchase-perks {
-			grid-template-columns: 1fr;
-			gap: 6px;
-			padding: 6px 10px;
-		}
-
-		.product-purchase-perks__shipping {
-			justify-content: center;
-		}
-
-		.product-purchase-perks__savings {
-			display: grid;
-			grid-template-columns: repeat(3, 1fr);
-			padding-top: 6px;
-			padding-left: 0;
-			border-top: 1px solid var(--color-accent, #ffd875);
-			border-left: 0;
-		}
-
-		.product-purchase-perks__savings span {
-			padding: 2px 4px;
-			font-size: 10.5px;
-			text-align: center;
-		}
-	}
 {% endstylesheet %}
 
 {%- if show_sticky_add_to_cart -%}
@@ -474,7 +429,7 @@
 				display: block !important;
 				width: 100% !important;
 				background: var(--color-text-primary, #203224) !important;
-				color: var(--color-background, #faf6ee) !important;
+				color: #fff !important;
 				border: none !important;
 				padding: 15px 20px !important;
 				font-family: 'Oswald', sans-serif !important;

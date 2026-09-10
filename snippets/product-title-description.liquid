@@ -1,0 +1,35 @@
+{% doc %}
+  Renders a compact introduction directly beneath the product title.
+  @param {product} product - The displayed product.
+{% enddoc %}
+
+{%- if product.description != blank -%}
+  {%- render 'product-short-description', product: product, under_title: true -%}
+{%- endif -%}
+
+{% stylesheet %}
+  .product-short-description--under-title {
+    display: block;
+    margin: 8px 0 0;
+    padding: 0;
+    color: var(--color-text-secondary, #535353);
+    font-family: var(--base-font-family);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: 0;
+    text-transform: none;
+    overflow-wrap: anywhere;
+  }
+
+  .product-short-description--under-title[hidden] {
+    display: none;
+  }
+
+  @media (max-width: 767px) {
+    .product-short-description--under-title {
+      font-size: 13px;
+      line-height: 1.5;
+    }
+  }
+{% endstylesheet %}

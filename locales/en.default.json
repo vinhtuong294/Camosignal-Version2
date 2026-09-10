@@ -8,6 +8,84 @@
  * ------------------------------------------------------------
  */
 {
+	"upf_highlights": {
+		"accessibility_label": "UPF hoodie features",
+		"best_use_label": "Best Use:",
+		"best_use": "Outdoor Activities & Sunny Weather",
+		"description": "Engineered with advanced cooling fabric and UPF 50+ sun protection, this top shields you from harmful UV rays while keeping your core temperature cool. Lightweight, breathable, and built for unrestricted mobility during hot-weather outdoor pursuits.",
+		"weight_label": "Weight",
+		"weight": "6.3 oz / 180 g",
+		"protection_label": "Protection",
+		"protection": "UPF 50+ Sun Protection",
+		"material_label": "Material",
+		"material": "4-Way Stretch Cooling Polyester-Spandex Blend",
+		"conditions_label": "Conditions",
+		"conditions": "Sunny, Hot Weather (Summer)",
+		"layering_label": "Layering Position",
+		"layering": "Outer Layer / Standalone"
+	},
+	"combo_highlights": {
+		"accessibility_label": "Outdoor combo features",
+		"best_use_label": "Best Use:",
+		"best_use": "Cold Weather Outdoors & Work",
+		"description": "Our high-performance 2-piece combo: optimally designed for maximum warmth, thermal retention, and light wind resistance during demanding work or outdoor pursuits. Experience unmatched all-day comfort and flexible stretch in any environment.",
+		"weight_label": "Weight",
+		"weight": "17.3 oz / 490 g Total (6.3 oz / 180g Long-sleeve, 10.9 oz / 310g Vest)",
+		"protection_label": "Protection",
+		"protection": "Thermal Retention & Light Wind Resistance (Long-sleeve) / Core Warmth Insulation (Vest)",
+		"material_label": "Material",
+		"material": "Lightweight Milk Silk (Long Sleeve) + Warm Polar Fleece (Vest)",
+		"conditions_label": "Conditions",
+		"conditions": "Mild to Cold",
+		"layering_label": "Layering Position",
+		"layering": "Base/Mid Layer (Long-sleeve) & Outer Layer (Vest)"
+	},
+	"vest_highlights": {
+		"accessibility_label": "Fleece vest features",
+		"best_use_label": "Best Use:",
+		"best_use": "All Conditions",
+		"description": "Soft polar fleece keeps your core warm and your arms free to move. Layer over a long sleeve for cool days outdoors.",
+		"weight_label": "Fabric Weight",
+		"weight": "310 g/m² — Polar Fleece",
+		"protection_label": "Protection",
+		"protection": "Core Warmth & Stand-Up Collar",
+		"material_label": "Material",
+		"material": "Soft, Breathable Polar Fleece",
+		"conditions_label": "Conditions",
+		"conditions": "Cool Weather — Spring & Fall",
+		"layering_label": "Layering Position",
+		"layering": "Outer Layer — Full-Zip Fleece Vest"
+	},
+	"quarter_zip_highlights": {
+		"accessibility_label": "Quarter-zip long-sleeve features",
+		"best_use_label": "Best Use:",
+		"best_use": "All Conditions",
+		"description": "A lightweight, stretchy quarter-zip for active days outdoors. Long sleeves and a stand-up collar add coverage, worn alone or under a vest.",
+		"weight_label": "Fabric Weight",
+		"weight": "180 g/m² — Lightweight",
+		"protection_label": "Protection",
+		"protection": "Long Sleeves & Stand-Up Collar",
+		"material_label": "Material",
+		"material": "Stretchy Milk Silk — 95% Polyester",
+		"conditions_label": "Conditions",
+		"conditions": "Mild Weather & Active Days",
+		"layering_label": "Layering Position",
+		"layering": "Base Layer or Worn Alone — Quarter-Zip Long Sleeve"
+	},
+	"product_drawer": {
+		"details": "Product details",
+		"shipping": "Shipping & delivery",
+		"care": "Care instructions"
+	},
+	"product_review_preview": {
+		"heading": "Reviews",
+		"rating_label": "{{ rating }} out of 5 stars",
+		"empty": "No reviews yet.",
+		"loading": "Reviews are loading…",
+		"no_text": "See all customer reviews in the full review section below.",
+		"verified": "Verified buyer",
+		"read_more": "Read more reviews"
+	},
 	"general": {
 		"accessibility": {
 			"error": "Error",
@@ -187,6 +265,23 @@
 		}
 	},
 	"cart": {
+		"empty_state": {
+			"recommendations_heading": "Best sellers for you",
+			"best_seller_badge": "Best seller",
+			"view_all": "View all",
+			"choose_options": "Choose options",
+			"view_product": "View product",
+			"previous_products": "Previous best sellers",
+			"next_products": "Next best sellers",
+			"prompt": "Find your next favorite for the great outdoors.",
+			"collections_label": "Explore Camosignal collections",
+			"shop_collection": "Shop {{ collection }}",
+			"new_arrivals": "Shop new arrivals",
+			"best_sellers": "Shop best sellers",
+			"hunting": "Shop hunting apparel",
+			"fishing": "Shop fishing apparel",
+			"shop_all": "Shop all collections"
+		},
 		"general": {
 			"title": "Shopping cart",
 			"note": "Add a note to your order",
@@ -436,7 +531,10 @@
 			"heading": "Personalization",
 			"customize": "Customize",
 			"name_label": "Your Name",
+			"cart_name_label": "Your Custom",
 			"name_placeholder": "Enter your name",
+			"dog_name_label": "Add Your Dog's Name",
+			"dog_name_placeholder": "Keep the original design or enter your dog's name",
 			"number_label": "Your Number",
 			"number_placeholder": "Enter your number",
 			"required_message": "Please enter all required personalization details.",
@@ -457,6 +555,11 @@
 			"free_shipping_from_one_item": "Free shipping from 1 item",
 			"free_shipping_from_two_items": "Free shipping from 2 items",
 			"buy_more_save_more": "Buy more, save more",
+			"shipping_protection_title": "Shipping protection",
+			"savings_tier_two": "10% Off 2+",
+			"savings_tier_three": "15% Off 3+",
+			"savings_tier_four": "20% Off 4+",
+			"buy_more_save_more_inline": "Buy More, Save More — 10% Off 2+, 15% Off 3+, 20% Off 4+",
 			"buy_two_save_ten": "Buy 2 · Save 10%",
 			"buy_three_save_fifteen": "Buy 3 · Save 15%",
 			"buy_four_save_twenty": "Buy 4 · Save 20%",

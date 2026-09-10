@@ -1,0 +1,73 @@
+{% doc %}
+  Renders up to eight Best Sellers in the empty cart.
+  @example
+  {% render 'cart-empty-recommendations' %}
+{% enddoc %}
+
+{%- assign best_sellers = collections['best-sellers'] -%}
+{%- if cart.empty? and best_sellers != blank and best_sellers.products_count > 0 -%}
+  {%- assign recommendation_count = 0 -%}
+  {%- capture recommendation_cards -%}
+    {%- for recommended_product in best_sellers.products -%}
+      {%- if recommended_product.handle == 'shipping-protection-apparel' -%}
+        {%- continue -%}
+      {%- endif -%}
+      {%- assign recommendation_count = recommendation_count | plus: 1 -%}
+      {%- assign card_image = recommended_product.featured_image | default: settings.product_default_image -%}
+      {%- assign card_title = recommended_product.title | escape
+        | replace: 'T-shirt', '<span class="cart-empty-product__title-type">T-shirt</span>'
+        | replace: 'T-Shirt', '<span class="cart-empty-product__title-type">T-Shirt</span>'
+        | replace: 't-shirt', '<span class="cart-empty-product__title-type">t-shirt</span>'
+        | replace: 'T-SHIRT', '<span class="cart-empty-product__title-type">T-SHIRT</span>'
+      -%}
+      <li class="cart-empty-product">
+        <a class="cart-empty-product__image-link product-card__image-wrapper-link" href="{{ recommended_product.url | escape }}" aria-label="{{ recommended_product.title | escape }}">
+          <div class="product-card__image-wrapper product-card__image-wrapper--reference is-active">
+            {%- render 'product-card-image',
+              product: recommended_product,
+              image: card_image,
+              size: 280,
+              tablet_size: 280,
+              mobile_size: 280,
+              is_lazy: true,
+              is_hover_image: false
+            -%}
+          </div>
+        </a>
+        <div class="cart-empty-product__body">
+          <h4 class="cart-empty-product__title"><a href="{{ recommended_product.url | escape }}">{{ card_title }}</a></h4>
+          <div class="cart-empty-product__price">
+            {%- render 'price', product: recommended_product, currency_code_enabled: settings.is_currency_code_enabled, show_unit_price: false, hide_from_price: true -%}
+          </div>
+          <a class="cart-empty-product__button" href="{{ recommended_product.url | escape }}">
+            {%- if recommended_product.available and recommended_product.has_only_default_variant == false -%}
+              {{- 'cart.empty_state.choose_options' | t -}}
+            {%- else -%}
+              {{- 'cart.empty_state.view_product' | t -}}
+            {%- endif -%}
+            <span class="visually-hidden">: {{ recommended_product.title | escape }}</span>
+          </a>
+        </div>
+      </li>
+      {%- if recommendation_count == 8 -%}{%- break -%}{%- endif -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+  {%- if recommendation_count > 0 -%}
+    <camo-empty-cart-products class="cart-empty-recommendations" role="region" aria-label="{{ 'cart.empty_state.recommendations_heading' | t | escape }}">
+      <div class="cart-empty-recommendations__header">
+        <h3 class="cart-empty-recommendations__heading">{{ 'cart.empty_state.recommendations_heading' | t }}</h3>
+        <div class="cart-empty-recommendations__controls" hidden>
+          <button type="button" data-direction="previous" aria-label="{{ 'cart.empty_state.previous_products' | t | escape }}" disabled>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" focusable="false"><path d="m14 5-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button type="button" data-direction="next" aria-label="{{ 'cart.empty_state.next_products' | t | escape }}">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" focusable="false"><path d="m10 5 7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+      <ul class="cart-empty-recommendations__track" tabindex="0" aria-label="{{ 'cart.empty_state.recommendations_heading' | t | escape }}">
+        {{- recommendation_cards -}}
+      </ul>
+    </camo-empty-cart-products>
+  {%- endif -%}
+{%- endif -%}

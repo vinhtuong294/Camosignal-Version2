@@ -611,8 +611,9 @@
 				if (!sw || !sw.slides || !sw.slides.length) return MAX_VISIBLE;
 
 				var firstSlide = sw.slides[0];
-				var slideH = firstSlide ? firstSlide.offsetHeight : 0;
-				var viewportH = swiperEl.clientHeight || 0;
+				var isHorizontal = !window.matchMedia('(min-width: 1200px)').matches;
+				var slideH = firstSlide ? (isHorizontal ? firstSlide.offsetWidth : firstSlide.offsetHeight) : 0;
+				var viewportH = (isHorizontal ? swiperEl.clientWidth : swiperEl.clientHeight) || 0;
 				var gap = Number(sw.params && sw.params.spaceBetween) || SPACE_BETWEEN;
 
 				if (!slideH || slideH < 10 || !viewportH) return MAX_VISIBLE;
@@ -789,7 +790,23 @@
 			var SPACE_BETWEEN = 8;
 
 			function applyMaxSlides(sw) {
-				if (!sw || !sw.slides || sw.slides.length <= MAX_VISIBLE) return;
+				if (!sw || sw.destroyed) return;
+				var isDesktop = window.matchMedia('(min-width: 1200px)').matches;
+				var direction = isDesktop ? 'vertical' : 'horizontal';
+				var directionChanged = sw.params.direction !== direction;
+				if (directionChanged) {
+					sw.changeDirection(direction, false);
+				}
+				if (!isDesktop) {
+					swiperEl.style.removeProperty('height');
+					swiperEl.style.removeProperty('max-height');
+					if (directionChanged) sw.update();
+					return;
+				}
+				if (!sw.slides || sw.slides.length <= MAX_VISIBLE) {
+					if (directionChanged) sw.update();
+					return;
+				}
 
 				// Đọc chiều cao thực tế của 1 slide từ DOM
 				var firstSlide = sw.slides[0];

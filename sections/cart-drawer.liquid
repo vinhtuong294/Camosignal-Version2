@@ -211,7 +211,7 @@
 	data-section-id="{{- section.id -}}"
 	data-shadow-root
 	role="dialog"
-	aria-labelledby="CartDrawer-{{- heading | handle -}}"
+	aria-labelledby="CartDrawer-{{- cart_drawer_heading_base | handle -}}"
 	style="{{ cart_drawer_vars }} background-color: var(--cart-drawer-bg) !important; --color-background: var(--cart-drawer-bg) !important; --color-background-popup-drawer: var(--cart-drawer-bg) !important;"
 	data-cart-drawer-fix
 >
@@ -249,7 +249,7 @@
 								style="--tier-offers-radius: {{ custom_banner_radius }}px; margin: {{ custom_banner_margin_top }}px {{ custom_banner_margin_horizontal }}px {{ custom_banner_margin_bottom }}px;"
 								aria-label="Cart discount milestones"
 							>
-								<div class="cart-tier-offer{% if active_discount_tier >= 2 %} is-active{% elsif active_discount_tier > 0 %} is-muted{% endif %}" data-tier="2">
+								<div class="cart-tier-offer{% if active_discount_tier == 2 %} is-active{% elsif active_discount_tier > 0 %} is-muted{% endif %}" data-tier="2">
 									<span class="cart-tier-offer__label">
 										<span class="cart-tier-offer__word">BUY</span>
 										<span class="cart-tier-offer__quantity">2</span>
@@ -262,7 +262,7 @@
 									<span class="cart-tier-offer__outline" aria-hidden="true"></span>
 								</div>
 
-								<div class="cart-tier-offer{% if active_discount_tier >= 3 %} is-active{% elsif active_discount_tier > 0 %} is-muted{% endif %}" data-tier="3">
+								<div class="cart-tier-offer{% if active_discount_tier == 3 %} is-active{% elsif active_discount_tier > 0 %} is-muted{% endif %}" data-tier="3">
 									<span class="cart-tier-offer__label">
 										<span class="cart-tier-offer__word">BUY</span>
 										<span class="cart-tier-offer__quantity">3</span>

@@ -54,6 +54,11 @@
 				fetchpriority="low"
 				style="{{ img_focal }}"
 			/>
+		{%- else -%}
+			<svg class="cart-shipping__check" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+				<circle cx="12" cy="12" r="11" fill="currentColor"/>
+				<path d="m7 12 3.2 3.2L17 8.5" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+			</svg>
 		{%- endif -%}
 	{%- endcapture -%}
 
@@ -64,7 +69,7 @@
 		 data-amount-message="{{ message | escape }}"
 		 data-success-message="{{ congratulatory_message | escape }}"
 	>
-		<p class="cart-shipping__label" style="color: {{ label_color }}; font-family: 'Oswald', sans-serif; font-weight: 500; text-transform: {{ label_text_transform }}; font-size: {{ label_font_size }}px; letter-spacing: {{ label_letter_spacing }}px; text-align: center; margin: 0;">
+		<p class="cart-shipping__label" role="status" aria-live="polite" aria-atomic="true" style="color: {{ label_color }}; font-family: 'Oswald', sans-serif; font-weight: 500; text-transform: {{ label_text_transform }}; font-size: {{ label_font_size }}px; letter-spacing: {{ label_letter_spacing }}px; text-align: center; margin: 0;">
 			{%- if icon != '' -%}
 				<span class="cart-shipping__icon js-cart-shipping-icon is-hidden">
 					{{- icon -}}
@@ -74,8 +79,12 @@
 			<span class="js-cart-shipping-amount-msg"></span>
 		</p>
 
-		<div class="cart-shipping__progress js-cart-shipping-progress-bar">
-			<span class="visually-hidden js-shipping-bar-progress-hidden-text"></span>
+		<div class="cart-shipping__range">
+			<span class="cart-shipping__endpoint">{{ 0 | money_without_trailing_zeros }}</span>
+			<div class="cart-shipping__progress js-cart-shipping-progress-bar">
+				<span class="visually-hidden js-shipping-bar-progress-hidden-text"></span>
+			</div>
+			<span class="cart-shipping__endpoint">{{ amount_cents | money }}</span>
 		</div>
 	</div>
 {%- endif -%}

@@ -765,7 +765,7 @@
 						widget: widget,
 						quantity: quantity,
 						timer: setTimeout(function() { flushCustomQuantity(key); }, 140),
-						inFlight: false
+						inFlight: !!(existing && existing.inFlight)
 					});
 					markQtyChanging(widget.controls.input);
 				}
@@ -779,19 +779,29 @@
 
 					pending.inFlight = true;
 					pending.timer = null;
+					var requestedQuantity = pending.quantity;
 					var sectionsIds = Array.from(document.querySelectorAll('[data-section-type="cart-template"]'))
 						.map(function(s) { return s.dataset.sectionId; })
 						.filter(Boolean)
 						.join(',');
 
-					CartApi.makeRequest(CartApi.actions.CHANGE_CART_ITEM_QUANTITY, key, pending.quantity, sectionsIds)
+					CartApi.makeRequest(CartApi.actions.CHANGE_CART_ITEM_QUANTITY, key, requestedQuantity, sectionsIds)
 						.catch(function() {
-							if (pending.widget && typeof pending.widget.rollbackValue === 'function') {
+							var latest = customPending.get(key);
+							if (latest && latest.quantity === requestedQuantity && pending.widget && typeof pending.widget.rollbackValue === 'function') {
 								pending.widget.rollbackValue();
 							}
 						})
 						.finally(function() {
-							customPending.delete(key);
+							var latest = customPending.get(key);
+							if (!latest) return;
+							if (latest.quantity !== requestedQuantity) {
+								latest.inFlight = false;
+								if (latest.timer) clearTimeout(latest.timer);
+								latest.timer = setTimeout(function() { flushCustomQuantity(key); }, 0);
+							} else {
+								customPending.delete(key);
+							}
 						});
 				}
 
@@ -912,6 +922,7 @@
 				   the overlay never gets a chance to flash in. */
 				var qtyChangeTimer = null;
 				var cartScrollSnapshot = null;
+				var nativeCartWindowScrollTo = typeof window.scrollTo === 'function' ? window.scrollTo : null;
 
 				function captureCartScrollPosition(target) {
 					var drawer = target && target.closest ? target.closest('#CartDrawer') : null;
@@ -945,7 +956,9 @@
 							snapshot.element.scrollLeft = snapshot.left;
 							return;
 						}
-						window.scrollTo(snapshot.left, snapshot.top);
+						if (nativeCartWindowScrollTo) {
+							nativeCartWindowScrollTo.call(window, snapshot.left, snapshot.top);
+						}
 					};
 
 					restore();
@@ -992,8 +1005,7 @@
 						};
 					}
 
-					if (typeof window.scrollTo === 'function') {
-						var nativeWindowScrollTo = window.scrollTo;
+					if (nativeCartWindowScrollTo) {
 						window.scrollTo = function() {
 							var top = getScrollTopArg(arguments);
 							var isCartAppAdding = document.documentElement.classList.contains('is-cart-app-adding');
@@ -1015,7 +1027,7 @@
 								}
 								return;
 							}
-							return nativeWindowScrollTo.apply(window, arguments);
+							return nativeCartWindowScrollTo.apply(window, arguments);
 						};
 					}
 				}
@@ -1631,5 +1643,6 @@
 		});
 		</script>
 
+		<script src="{{ 'cart-empty-recommendations.js' | asset_url }}" defer></script>
 	</body>
 </html>

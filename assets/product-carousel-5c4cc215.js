@@ -1033,8 +1033,8 @@ const ProductCarousel = ({ config, selectors, sectionId }) => {
       if (thumbnailsDirections === "horizontal") {
         Thumbnails = new Swiper(selectors.sliderThumbnails, {
           direction: thumbnailsDirections,
-          slidesPerView: 5,
-          spaceBetween: 4,
+          slidesPerView: "auto",
+          spaceBetween: 8,
           freeMode: true,
           watchSlidesProgress: true,
           a11y: {
@@ -1052,13 +1052,16 @@ const ProductCarousel = ({ config, selectors, sectionId }) => {
         const thumbPrev = document.querySelector(`.js-thumb-nav-prev-${sectionId}`);
         const thumbNext = document.querySelector(`.js-thumb-nav-next-${sectionId}`);
         Thumbnails = new Swiper(selectors.sliderThumbnails, {
-          direction: thumbnailsDirections,
+          direction: "horizontal",
           slidesPerView: "auto",
           spaceBetween: 10,
           freeMode: false,
           watchSlidesProgress: true,
           threshold: 10,
-          speed: 400
+          speed: 400,
+          breakpoints: {
+            1200: { direction: thumbnailsDirections }
+          }
         });
 
         // Wire up buttons manually — reliable hơn Swiper navigation option

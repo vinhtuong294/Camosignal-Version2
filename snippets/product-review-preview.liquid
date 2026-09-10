@@ -1,0 +1,329 @@
+{% doc %}
+  Renders an expandable preview of the current product's Judge.me reviews.
+  @param {product} product - The displayed product.
+{% enddoc %}
+
+<product-review-preview
+  class="product-accordion__item product-review-preview"
+  data-product-id="{{ product.id }}"
+  data-rating-label="{{ 'product_review_preview.rating_label' | t: rating: '[rating]' | escape }}"
+  data-empty-label="{{ 'product_review_preview.empty' | t | escape }}"
+  data-no-text-label="{{ 'product_review_preview.no_text' | t | escape }}"
+  hidden
+>
+  <details class="product-review-preview__details">
+    <summary class="product-review-preview__summary">
+      <span class="product-review-preview__heading">{{ 'product_review_preview.heading' | t }}</span>
+      <span class="product-review-preview__stars" data-review-average role="img" hidden></span>
+      <span class="product-review-preview__count" data-review-count hidden></span>
+      <span class="product-accordion__trigger-icon product-review-preview__toggle" aria-hidden="true"></span>
+    </summary>
+    <div class="product-review-preview__content">
+      <p class="product-review-preview__status" data-review-status role="status">{{ 'product_review_preview.loading' | t }}</p>
+      <div class="product-review-preview__list" data-review-list></div>
+      <a class="product-review-preview__more" data-review-more href="#judgeme_product_reviews" hidden>{{ 'product_review_preview.read_more' | t }}</a>
+    </div>
+  </details>
+  <template data-review-template>
+    <article class="product-review-preview__card">
+      <div class="product-review-preview__author-row">
+        <span class="product-review-preview__avatar" aria-hidden="true" data-review-avatar></span>
+        <div class="product-review-preview__author-info">
+          <div class="product-review-preview__byline">
+            <span data-review-author></span>
+            <span class="product-review-preview__verified" data-review-verified hidden>{{ 'product_review_preview.verified' | t }}</span>
+          </div>
+          <span class="product-review-preview__stars" data-review-rating role="img" hidden></span>
+        </div>
+      </div>
+      <p class="product-review-preview__title" data-review-title hidden></p>
+      <p class="product-review-preview__body" data-review-body hidden></p>
+    </article>
+  </template>
+</product-review-preview>
+
+{% stylesheet %}
+  .product-review-preview {
+    display: block;
+    border-block: 1px solid var(--color-border-thirdly, #dcdcdc);
+    color: var(--color-text-primary, #2c3d33);
+    font-family: var(--base-font-family);
+  }
+  .product-review-preview [hidden],
+  .product-review-preview[hidden] { display: none; }
+  .product-review-preview__summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 58px;
+    padding: 16px 0;
+    cursor: pointer;
+    list-style: none;
+  }
+  .product-review-preview__summary::-webkit-details-marker { display: none; }
+  .product-review-preview__heading,
+  .product-review-preview__more {
+    font-family: var(--heading-font-family);
+    font-size: 16px;
+    font-weight: var(--heading-font-weight, 900);
+    line-height: 1.4;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .product-review-preview__heading {
+    font-size: calc(var(--body-font-size, 14px) * 0.875);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+  }
+  .product-review-preview__stars {
+    display: inline-flex;
+    gap: 4.5px;
+    flex-shrink: 0;
+    font-family: JudgemeStar, monospace;
+    font-size: 27px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0;
+    white-space: nowrap;
+    color: #d2d2c9;
+  }
+  .product-review-preview__summary .product-review-preview__stars { font-size: 20px; gap: 3px; }
+  .product-review-preview__star {
+    position: relative;
+    display: block;
+    width: 1em;
+    height: 1em;
+  }
+  .product-review-preview__star::before { content: '\e000'; }
+  .product-review-preview__star::after {
+    content: '\e000';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: var(--review-star-fill, 0%);
+    overflow: hidden;
+    color: #dfa717;
+  }
+  .product-review-preview__count { font-size: 12px; line-height: 1.4; }
+  .product-review-preview__toggle {
+    margin-inline-start: auto;
+  }
+  .product-review-preview__details[open] .product-review-preview__toggle::after { display: none; }
+  .product-review-preview__content { padding: 12px 0 24px; }
+  .product-review-preview__list { display: grid; gap: 32px; }
+  .product-review-preview__author-row { display: flex; align-items: center; gap: 16px; margin-bottom: 14px; }
+  .product-review-preview__avatar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 49.5px;
+    height: 49.5px;
+    border-radius: 50%;
+    color: #000;
+    background: rgb(223 167 23 / 10%);
+    font-family: var(--base-font-family), sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0;
+  }
+  .product-review-preview__avatar[data-verified]::after {
+    content: '✓';
+    position: absolute;
+    right: -2px;
+    bottom: -2px;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background: #626b48;
+    color: #fff;
+    font: 12px/17px Arial, sans-serif;
+    text-align: center;
+  }
+  .product-review-preview__author-info { min-width: 0; }
+  .product-review-preview__byline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+    margin-bottom: 3px;
+    font-size: 12px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+  }
+  .product-review-preview__verified { color: var(--color-text-secondary, #535353); }
+  .product-review-preview__title,
+  .product-review-preview__body,
+  .product-review-preview__status { margin: 0; font-size: 15px; line-height: 1.6; overflow-wrap: anywhere; }
+  .product-review-preview__title { margin-bottom: 4px; font-weight: 700; }
+  .product-review-preview__body { white-space: pre-line; }
+  .product-review-preview__more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px;
+    margin-top: 28px;
+    padding: 12px 16px;
+    border: 1px solid currentColor;
+    color: inherit;
+    text-align: center;
+    text-decoration: none;
+  }
+  .product-review-preview__more:hover { background: #f3f2ee; }
+  .product-review-preview__summary:focus-visible,
+  .product-review-preview__more:focus-visible { outline: 2px solid #626b48; outline-offset: 4px; }
+  @media (max-width: 767px) {
+    .product-review-preview__summary { gap: 8px; min-height: 54px; padding: 14px 0; }
+    .product-review-preview__heading { font-size: calc(var(--body-font-size, 14px) * 0.85); }
+    .product-review-preview__body { font-size: 16px; }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  if (!customElements.get('product-review-preview')) {
+    customElements.define('product-review-preview', class extends HTMLElement {
+      connectedCallback() {
+        this.list = this.querySelector('[data-review-list]');
+        this.more = this.querySelector('[data-review-more]');
+        this.status = this.querySelector('[data-review-status]');
+        this.loadingLabel = this.status.textContent;
+        this.onJump = this.jump.bind(this);
+        this.more.addEventListener('click', this.onJump);
+        this.observer = new MutationObserver(records => {
+          const selector = '.jdgm-review-widget, .jdgm-rev-widg, .jm-review-widget, .jdgm-prev-badge';
+          const relevant = records.some(record => {
+            if (this.contains(record.target)) return false;
+            const parent = record.target.nodeType === 1 ? record.target : record.target.parentElement;
+            if (parent?.closest(selector)) return true;
+            return [...record.addedNodes, ...record.removedNodes].some(node =>
+              node.nodeType === 1 && (node.matches(selector) || node.querySelector(selector))
+            );
+          });
+          if (relevant) this.schedule();
+        });
+        this.observer.observe(document.body, {
+          childList: true, subtree: true, characterData: true, attributes: true,
+          attributeFilter: ['data-average-rating', 'data-number-of-reviews', 'data-score', 'data-verified-buyer', 'aria-label']
+        });
+        this.sync();
+      }
+      disconnectedCallback() {
+        this.observer?.disconnect();
+        cancelAnimationFrame(this.frame);
+        this.more?.removeEventListener('click', this.onJump);
+      }
+      schedule() {
+        cancelAnimationFrame(this.frame);
+        this.frame = requestAnimationFrame(() => this.sync());
+      }
+      findTarget() {
+        const candidates = [...document.querySelectorAll('#judgeme_product_reviews, .jdgm-review-widget')];
+        return candidates.find(node => node.dataset.id === this.dataset.productId)
+          || candidates.find(node => !node.dataset.id && node.id === 'judgeme_product_reviews');
+      }
+      setRating(element, value) {
+        const rating = Number.parseFloat(value);
+        element.hidden = !Number.isFinite(rating) || rating <= 0 || rating > 5;
+        if (element.hidden) return;
+        if (element.children.length !== 5) {
+          element.replaceChildren(...Array.from({ length: 5 }, () => {
+            const star = document.createElement('span');
+            star.className = 'product-review-preview__star';
+            star.setAttribute('aria-hidden', 'true');
+            return star;
+          }));
+        }
+        [...element.children].forEach((star, index) => {
+          star.style.setProperty('--review-star-fill', `${Math.max(0, Math.min(1, rating - index)) * 100}%`);
+        });
+        element.setAttribute('aria-label', this.dataset.ratingLabel.replace('[rating]', String(rating)));
+      }
+      text(node, selector) {
+        const source = node.querySelector(selector);
+        if (!source) return '';
+        const content = source.cloneNode(true);
+        content.querySelectorAll('img, picture, video, audio, iframe, svg, script, style').forEach(media => media.remove());
+        content.querySelectorAll('br').forEach(line => line.replaceWith('\n'));
+        content.querySelectorAll('p, li').forEach(block => block.append('\n'));
+        return content.textContent.trim();
+      }
+      rating(node) {
+        const stars = node.querySelector('.jdgm-rev__rating, .jm-star-rating');
+        return stars?.getAttribute('data-score')
+          ?? stars?.getAttribute('aria-label')?.match(/\d+(?:[.,]\d+)?/)?.[0]?.replace(',', '.');
+      }
+      reviews(target) {
+        return [...target.querySelectorAll('.jdgm-rev, .jm-review-item')].map(node => ({
+          author: this.text(node, '.jdgm-rev__author, .jm-reviewer-info__name'),
+          title: this.text(node, '.jdgm-rev__title, .jm-review-content__title'),
+          body: this.text(node, '.jdgm-rev__body, .jdgm-review-content__body-content'),
+          rating: this.rating(node),
+          verified: node.getAttribute('data-verified-buyer') === 'true'
+            || !!node.querySelector('.jm-reviewer-info .jm-verified-badge')
+        })).filter(review => review.title || review.body).slice(0, 3);
+      }
+      sync() {
+        const target = this.findTarget();
+        this.hidden = !target;
+        if (!target) return;
+        const summary = target.querySelector('.jdgm-rev-widg') || target;
+        const badge = this.closest('[data-section-type="product"]')?.querySelector('.jdgm-prev-badge');
+        const modernSummary = target.querySelector('.jm-average-rating-display');
+        const modernCount = modernSummary?.textContent.match(/\(([\d\s.,]+)\s/)?.[1]?.replace(/[^\d]/g, '');
+        const countValue = summary.getAttribute('data-number-of-reviews')
+          ?? badge?.getAttribute('data-number-of-reviews') ?? modernCount;
+        const count = countValue === null || countValue === undefined ? NaN : Number(countValue);
+        const countElement = this.querySelector('[data-review-count]');
+        countElement.hidden = !Number.isFinite(count);
+        const countText = Number.isFinite(count) ? `(${count})` : '';
+        if (countElement.textContent !== countText) countElement.textContent = countText;
+        this.setRating(this.querySelector('[data-review-average]'),
+          summary.getAttribute('data-average-rating') ?? badge?.getAttribute('data-average-rating')
+            ?? (modernSummary ? this.rating(modernSummary) : undefined));
+        const reviews = this.reviews(target);
+        const signature = JSON.stringify(reviews);
+        if (signature !== this.signature) {
+          this.signature = signature;
+          this.list.replaceChildren(...reviews.map(review => this.card(review)));
+        }
+        this.status.hidden = reviews.length > 0;
+        const loaded = !!target.querySelector('.jdgm-review-list, .jdgm-rev-widg__reviews');
+        const statusText = count === 0 ? this.dataset.emptyLabel
+          : loaded ? this.dataset.noTextLabel : this.loadingLabel;
+        if (this.status.textContent !== statusText) this.status.textContent = statusText;
+        if (!target.id) target.id = `product-reviews-${this.dataset.productId}`;
+        this.more.href = `#${target.id}`;
+        this.more.hidden = false;
+      }
+      card(review) {
+        const card = this.querySelector('[data-review-template]').content.firstElementChild.cloneNode(true);
+        const avatar = card.querySelector('[data-review-avatar]');
+        avatar.textContent = Array.from(review.author)[0]?.toUpperCase() || '•';
+        if (review.verified) avatar.setAttribute('data-verified', '');
+        card.querySelector('[data-review-author]').textContent = review.author;
+        card.querySelector('[data-review-verified]').hidden = !review.verified;
+        this.setRating(card.querySelector('[data-review-rating]'), review.rating);
+        [['title', review.title], ['body', review.body]].forEach(([key, value]) => {
+          const element = card.querySelector(`[data-review-${key}]`);
+          element.hidden = !value;
+          element.textContent = value.length > 360 ? `${value.slice(0, 357).trimEnd()}…` : value;
+        });
+        return card;
+      }
+      jump(event) {
+        const target = this.findTarget();
+        if (!target) { event.preventDefault(); this.sync(); return; }
+        event.preventDefault();
+        for (let parent = target.parentElement; parent; parent = parent.parentElement) {
+          if (parent.tagName === 'DETAILS') parent.open = true;
+        }
+        if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+        target.focus({ preventScroll: true });
+        target.scrollIntoView({
+          behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  }
+{% endjavascript %}

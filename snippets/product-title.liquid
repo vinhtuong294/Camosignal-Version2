@@ -289,11 +289,6 @@
 		opacity: 1 !important;
 	}
 
-	@media (min-width: 768px) {
-		.product .product-short-description {
-			display: none !important;
-		}
-	}
 </style>
 {%- assign preset_title = 'Product title' -%}
 {%- assign title 		= product.title -%}
@@ -321,6 +316,7 @@
 				<h1 class="product-title h3" style="margin: 0;">
 					{{- display_title -}}
 				</h1>
+				{%- render 'product-title-description', product: product -%}
 			{%- else -%}
 				<a class="product-title h3 focus-visible-outline" href="{{- product.url -}}" style="margin: 0;">
 					{{- display_title -}}
@@ -510,40 +506,4 @@
 		})();
 	</script>
 
-	{%- comment -%} Short description: extract intro text before DESIGN & MATERIAL (desktop only) {%- endcomment -%}
-	{%- if template.name == 'product' and product.description != blank -%}
-		{%- liquid
-			assign full_desc = product.description
-			assign split_marker = 'DESIGN &amp; MATERIAL'
-			assign has_marker = full_desc | split: split_marker
-			if has_marker.size > 1
-				assign before_design = has_marker | first
-			else
-				assign split_marker_alt = 'DESIGN & MATERIAL'
-				assign has_marker_alt = full_desc | split: split_marker_alt
-				if has_marker_alt.size > 1
-					assign before_design = has_marker_alt | first
-				else
-					assign before_design = ''
-				endif
-			endif
-		-%}
-		{%- if before_design != blank -%}
-			{%- comment -%} Remove the product title line (first strong/bold text) from the intro {%- endcomment -%}
-			{%- assign desc_parts = before_design | split: product.title -%}
-			{%- if desc_parts.size > 1 -%}
-				{%- assign short_desc_raw = desc_parts | last -%}
-			{%- else -%}
-				{%- assign short_desc_raw = before_design -%}
-			{%- endif -%}
-			{%- assign short_desc_stripped = short_desc_raw | strip_html | strip | truncate: 500 -%}
-			{%- if short_desc_stripped != blank -%}
-				<div class="product-short-description desktop-only">
-					<div class="product-short-description__content rte">
-						{{- short_desc_raw -}}
-					</div>
-				</div>
-			{%- endif -%}
-		{%- endif -%}
-	{%- endif -%}
 </div>

@@ -1,0 +1,217 @@
+{% doc %}
+  Renders an outdoor product overview beneath the product drawers.
+  @param {string} profile - Overview profile: upf-hoodie, combo, vest, or long-sleeve.
+  @param {string} [active_profile] - Initially selected offer for a combo listing.
+{% enddoc %}
+
+{%- assign highlight_prefix = 'upf_highlights.' -%}
+{%- if profile == 'combo' or active_profile != blank -%}
+  {%- assign highlight_prefix = 'combo_highlights.' -%}
+{%- elsif profile == 'vest' -%}
+  {%- assign highlight_prefix = 'vest_highlights.' -%}
+{%- elsif profile == 'long-sleeve' -%}
+  {%- assign highlight_prefix = 'quarter_zip_highlights.' -%}
+{%- endif -%}
+
+<section class="product-outdoor-highlights" aria-label="{{ highlight_prefix | append: 'accessibility_label' | t | escape }}"
+  {% if active_profile != blank %}data-combo-highlights="{{ profile | escape }}"{% if profile != active_profile %} hidden{% endif %}{% endif %}>
+  <div class="product-outdoor-highlights__intro">
+    <p class="product-outdoor-highlights__best-use"><strong>{{ highlight_prefix | append: 'best_use_label' | t }}</strong><span>{{ highlight_prefix | append: 'best_use' | t }}</span></p>
+    <p class="product-outdoor-highlights__description">{{ highlight_prefix | append: 'description' | t }}</p>
+  </div>
+
+  <dl class="product-outdoor-highlights__specs">
+    {%- assign highlight_types = 'weight,protection,material,conditions,layering' | split: ',' -%}
+    {%- for highlight_type in highlight_types -%}
+      {%- assign label_key = highlight_prefix | append: highlight_type | append: '_label' -%}
+      {%- assign value_key = highlight_prefix | append: highlight_type -%}
+      {%- assign highlight_icon = highlight_type -%}
+      {%- if profile == 'combo' or profile == 'vest' -%}
+        {%- assign highlight_icon = highlight_type | append: '-combo' -%}
+      {%- endif -%}
+      {%- if highlight_type == 'layering' and profile == 'vest' -%}
+        {%- assign highlight_icon = 'layering-vest' -%}
+      {%- elsif highlight_type == 'layering' and profile == 'long-sleeve' -%}
+        {%- assign highlight_icon = 'layering-quarter-zip' -%}
+      {%- elsif highlight_type == 'material' and profile == 'long-sleeve' -%}
+        {%- assign highlight_icon = 'material-combo' -%}
+      {%- endif -%}
+      <div class="product-outdoor-highlights__spec">
+        <dt class="product-outdoor-highlights__label">
+          <span class="product-outdoor-highlights__icon" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+              <g stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                {%- case highlight_icon -%}
+                  {%- when 'layering-vest' -%}
+                    <path d="M9 3h6l1 3 3 1v6l-2 1v8H7v-8l-2-1V7l3-1 1-3Z"/>
+                    <path d="m9 3 3 3 3-3M12 6v16M9 16v3m6-3v3"/>
+                  {%- when 'layering-quarter-zip' -%}
+                    <path d="M9 3h6l1 3 4 3 2 10-3 1-3-9v11H8V11l-3 9-3-1L4 9l4-3 1-3Z"/>
+                    <path d="m9 3 3 3 3-3M12 6v6m-1 0h2"/>
+                  {%- when 'weight-combo' -%}
+                    <path d="m3 7 9-4 9 4-9 4-9-4Zm0 5 9 4 9-4M3 17l9 4 9-4"/>
+                  {%- when 'protection-combo' -%}
+                    <path d="M12 2.5c2 1.8 4.5 2.8 8 3.5v6c0 4.5-3.8 7.7-8 9.5C7.8 19.7 4 16.5 4 12V6c3.5-.7 6-1.7 8-3.5Z"/>
+                    <path d="M9 15c-2-2 2-4 0-6m3 6c-2-2 2-4 0-6m3 6c-2-2 2-4 0-6"/>
+                  {%- when 'material-combo' -%}
+                    <rect x="4" y="4" width="16" height="16" rx="1"/>
+                    <path d="M9 4v16m6-16v16M4 9h16M4 15h16"/>
+                  {%- when 'conditions-combo' -%}
+                    <path d="M5 12a4 4 0 1 1 7-4M6 2v1M2 6h1m.2-3.8 1 1M11 2l-1 1"/>
+                    <path d="M7 19a4 4 0 0 1-.5-8A5 5 0 0 1 16 10a4.5 4.5 0 1 1 1.5 9H7Z"/>
+                  {%- when 'layering-combo' -%}
+                    <path d="M8 3h8l1 4 3 2 2 10-3 1-3-9v11H8V11l-3 9-3-1L4 9l3-2 1-4Z"/>
+                    <path d="m8 3 4 3 4-3M12 6v16M8 8H6m10 0h2M9 16v3m6-3v3"/>
+                  {%- when 'weight' -%}
+                    <path d="M6 18c-2-4-1-8 3-11s8-3 12-4c-1 4-1 8-4 11s-7 4-11 4Z"/>
+                    <path d="M3 21 16 8m-8 8v-5m3 2h5"/>
+                  {%- when 'protection' -%}
+                    <path d="M12 2.5c2 1.8 4.5 2.8 8 3.5v6c0 4.5-3.8 7.7-8 9.5C7.8 19.7 4 16.5 4 12V6c3.5-.7 6-1.7 8-3.5Z"/>
+                    <circle cx="12" cy="11" r="2.5"/>
+                    <path d="M12 6.5v.5m0 8v.5M7.5 11H8m8 0h.5M8.8 7.8l.4.4m5.6 5.6.4.4m-6.4 0 .4-.4m5.6-5.6.4-.4"/>
+                  {%- when 'material' -%}
+                    <path d="m12 8 4 4-4 4-4-4 4-4Zm0-6v4m-2-2 2-2 2 2m-2 14v4m-2-2 2 2 2-2M2 12h4m-2-2-2 2 2 2m14-2h4m-2-2 2 2-2 2"/>
+                  {%- when 'conditions' -%}
+                    <circle cx="12" cy="12" r="4"/>
+                    <path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/>
+                  {%- when 'layering' -%}
+                    <path d="M8 7c0-3 1.5-5 4-5s4 2 4 5l3 2 3 10-3 1-3-7v9H8v-9l-3 7-3-1L5 9l3-2Z"/>
+                    <path d="m8 7 4 3 4-3m-6 2v4m4-4v4m-4 4h4l1 3H9l1-3Z"/>
+                {%- endcase -%}
+              </g>
+            </svg>
+          </span>
+          {{ label_key | t }}
+        </dt>
+        <dd class="product-outdoor-highlights__value">{{ value_key | t }}</dd>
+      </div>
+    {%- endfor -%}
+  </dl>
+</section>
+
+{% stylesheet %}
+  .product-outdoor-highlights[hidden] {
+    display: none;
+  }
+
+  .product-outdoor-highlights {
+    box-sizing: border-box;
+    width: 100%;
+    margin-block: 20px 0;
+    border: 0;
+    border-radius: 0;
+    background: #f3f2ee;
+    color: var(--color-text-primary, #2c3d33);
+    font-family: var(--base-font-family);
+    text-align: start;
+  }
+
+  .product-outdoor-highlights__intro {
+    padding: 28px 28px 0;
+  }
+
+  .product-outdoor-highlights__best-use {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.55;
+    letter-spacing: 0;
+  }
+
+  .product-outdoor-highlights__best-use strong,
+  .product-outdoor-highlights__label {
+    color: var(--color-heading, #2c3d33);
+    font-family: var(--heading-font-family);
+    font-size: 15px;
+    font-weight: var(--heading-font-weight, 900);
+    line-height: 1.4;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .product-outdoor-highlights__best-use strong {
+    margin-inline-end: 6px;
+  }
+
+  .product-outdoor-highlights__description {
+    margin: 18px 0 0;
+    color: var(--color-text-primary, #2c3d33);
+    font-family: var(--base-font-family);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: 0;
+  }
+
+  .product-outdoor-highlights__specs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 1fr;
+    gap: 24px 28px;
+    margin: 0;
+    padding: 32px 28px;
+  }
+
+  .product-outdoor-highlights__spec {
+    position: relative;
+    min-width: 0;
+    min-height: 73px;
+    padding-inline-start: 58px;
+  }
+
+  .product-outdoor-highlights__spec:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .product-outdoor-highlights__icon {
+    position: absolute;
+    inset-inline-start: 0;
+    top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 44px;
+    color: #fff;
+    background: #626b48;
+    clip-path: polygon(50% 0, 94% 25%, 94% 75%, 50% 100%, 6% 75%, 6% 25%);
+  }
+
+  .product-outdoor-highlights__icon svg {
+    display: block;
+    width: 23px;
+    height: 23px;
+  }
+
+  .product-outdoor-highlights__label {
+    margin: 0;
+  }
+
+  .product-outdoor-highlights__value {
+    margin: 4px 0 0;
+    color: var(--color-text-primary, #2c3d33);
+    font-family: var(--base-font-family);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 0;
+    overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 767px) {
+    .product-outdoor-highlights {
+      box-shadow: 0 0 0 100vmax #f3f2ee;
+      clip-path: inset(0 -100vmax);
+    }
+
+    .product-outdoor-highlights__intro {
+      padding: 28px 20px 0;
+    }
+
+    .product-outdoor-highlights__specs {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 24px;
+      padding: 32px 20px;
+    }
+  }
+{% endstylesheet %}

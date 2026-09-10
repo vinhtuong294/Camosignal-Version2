@@ -1,5 +1,5 @@
 {% doc %}
-Renders required product customization fields controlled by product metafields.
+Renders product customization fields controlled by product metafields.
 
 @param {product} product - The product being customized.
 @param {string} section_id - The product section identifier.
@@ -11,6 +11,12 @@ Renders required product customization fields controlled by product metafields.
 {% liquid
 	assign enable_name = product.metafields.custom.enable_name.value
 	assign enable_number = product.metafields.custom.enable_number.value
+	assign requires_name = enable_name
+	assign is_dog_name = false
+	if product.id == 8607287083199
+		assign is_dog_name = true
+		assign requires_name = false
+	endif
 %}
 
 {% if enable_name or enable_number %}
@@ -19,15 +25,21 @@ Renders required product customization fields controlled by product metafields.
 		data-camo-customization
 		data-product-handle="{{- product.handle | escape -}}"
 		data-product-url="{{- product.url -}}"
-		data-requires-name="{{- enable_name -}}"
+		data-requires-name="{{- requires_name -}}"
 		data-requires-number="{{- enable_number -}}"
 		data-variant-ids="{%- for variant in product.variants -%}{{- variant.id -}}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}"
 	>
 		{% if enable_name %}
 			<div class="product-customization__field">
 				<label class="product-customization__label" for="CustomizationName-{{ section_id }}-{{ product.id }}">
-					{{- 'products.customization.name_label' | t -}}
-					<span class="product-customization__required" aria-hidden="true">*</span>
+					{% if is_dog_name %}
+						{{- 'products.customization.dog_name_label' | t -}}
+					{% else %}
+						{{- 'products.customization.name_label' | t -}}
+					{% endif %}
+					{% if requires_name %}
+						<span class="product-customization__required" aria-hidden="true">*</span>
+					{% endif %}
 				</label>
 
 				<input
@@ -37,8 +49,13 @@ Renders required product customization fields controlled by product metafields.
 					name="properties[Your Name]"
 					maxlength="40"
 					autocomplete="off"
-					aria-required="true"
-					required
+					{% if is_dog_name %}
+						placeholder="{{ 'products.customization.dog_name_placeholder' | t | escape_once }}"
+					{% endif %}
+					{% if requires_name %}
+						aria-required="true"
+						required
+					{% endif %}
 				>
 			</div>
 		{% endif %}
@@ -112,6 +129,22 @@ Renders required product customization fields controlled by product metafields.
 
 	.product-customization__input:hover {
 		border-color: #929992 !important;
+	}
+
+	.product-customization__input::placeholder {
+		color: #767676;
+		opacity: 1;
+	}
+
+	.product-customization[data-product-handle="upland-gun-dog-sun-protection-hoodie"] .product-customization__input {
+		padding: 0 12px !important;
+	}
+
+	@media screen and (max-width: 767px) {
+		.product-customization[data-product-handle="upland-gun-dog-sun-protection-hoodie"] .product-customization__input::placeholder {
+			font-size: clamp(10px, 2.9vw, 12px);
+			letter-spacing: 0;
+		}
 	}
 
 	.product-customization__input:focus-visible {

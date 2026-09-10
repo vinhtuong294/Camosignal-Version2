@@ -406,6 +406,12 @@
 			padding: 6px 5px !important;
 			min-width: 0 !important;
 		}
+		.header .header__icon--search .icon,
+		.header .header__icon--search-mobile .icon,
+		.header .header__icon--account .icon,
+		.header .header__icon--cart .icon {
+			stroke-width: 1.35;
+		}
 		.header__utils .header__icons .header__icon--search {
 			order: 1;
 		}
@@ -418,6 +424,11 @@
 		.header__utils .header__icons .header__icon--search-close {
 			order: 3;
 		}
+	}
+	/* A softly squared badge complements the navigation outlines. */
+	.header .header__cart-count {
+		border-radius: 6px;
+		font-weight: 600;
 	}
 </style>
 
@@ -544,7 +555,7 @@
 								aria-controls="headerDrawerSearch"
 								aria-label="{{- "layout.navigation.search" | t | escape -}}"
 							>
-								{%- render 'icons', icon: 'search' -%}
+								{%- render 'header-icon', icon: 'search' -%}
 							</button>
 
 							<a
@@ -552,7 +563,7 @@
 								class="header__icon header__icon--search focus-visible-outline no-js"
 								aria-label="{{- "layout.navigation.search" | t | escape -}}"
 							>
-								{%- render 'icons', icon: 'search' -%}
+								{%- render 'header-icon', icon: 'search' -%}
 							</a>
 						{%- endif -%}
 
@@ -566,7 +577,7 @@
 									aria-label="{{- "layout.customer.log_in" | t | escape -}}"
 								{% endif %}
 							>
-								{%- render 'icons', icon: 'account' -%}
+								{%- render 'header-icon', icon: 'account' -%}
 							</a>
 						{%- endif -%}
 
@@ -579,7 +590,7 @@
 								aria-expanded="false"
 								aria-controls="CartDrawer"
 							>
-								{%- render 'icons', icon: 'cart' -%}
+								{%- render 'header-icon', icon: 'cart' -%}
 
 								<span class="visually-hidden">
 									{{- "layout.header.labels.cart_drawer" | t | escape -}}
@@ -604,7 +615,7 @@
 							</button>
 
 							<a href="{{- routes.cart_url -}}" class="header__icon header__icon--cart focus-visible-outline no-js">
-								{%- render 'icons', icon: 'cart' -%}
+								{%- render 'header-icon', icon: 'cart' -%}
 
 								<span class="visually-hidden">
 									{{- "layout.header.labels.cart_drawer" | t | escape -}}
@@ -629,7 +640,7 @@
 							</a>
 						{%- else -%}
 							<a href="{{- routes.cart_url -}}" class="header__icon header__icon--cart focus-visible-outline">
-								{%- render 'icons', icon: 'cart' -%}
+								{%- render 'header-icon', icon: 'cart' -%}
 
 								<span class="visually-hidden">
 									{{- "layout.header.labels.cart" | t | escape -}}
@@ -694,7 +705,7 @@
 					data-js-toggle="searchToggleDrawer"
 					aria-label="{{- "layout.navigation.search" | t | escape -}}"
 				>
-					{%- render 'icons', icon: 'search' -%}
+					{%- render 'header-icon', icon: 'search' -%}
 				</button>
 
 				<a
@@ -702,7 +713,7 @@
 					class="header__icon header__icon--search-mobile focus-visible-outline no-js"
 					aria-label="{{- "layout.navigation.search" | t | escape -}}"
 				>
-					{%- render 'icons', icon: 'search' -%}
+					{%- render 'header-icon', icon: 'search' -%}
 				</a>
 			{%- endif -%}
 		</div>
@@ -747,7 +758,7 @@
 						aria-controls="headerDrawerSearch"
 						aria-label="{{- "layout.navigation.search" | t | escape -}}"
 					>
-						{%- render 'icons', icon: 'search' -%}
+						{%- render 'header-icon', icon: 'search' -%}
 					</button>
 
 					<a
@@ -755,7 +766,7 @@
 						class="header__icon header__icon--search focus-visible-outline no-js"
 						aria-label="{{- "layout.navigation.search" | t | escape -}}"
 					>
-						{%- render 'icons', icon: 'search' -%}
+						{%- render 'header-icon', icon: 'search' -%}
 					</a>
 				{%- endif -%}
 
@@ -769,7 +780,7 @@
 							aria-label="{{- "layout.customer.log_in" | t | escape -}}"
 						{% endif %}
 					>
-						{%- render 'icons', icon: 'account' -%}
+						{%- render 'header-icon', icon: 'account' -%}
 					</a>
 				{%- endif -%}
 
@@ -782,7 +793,7 @@
 						aria-expanded="false"
 						aria-controls="CartDrawer"
 					>
-						{%- render 'icons', icon: 'cart' -%}
+						{%- render 'header-icon', icon: 'cart' -%}
 
 						<span class="visually-hidden">
 							{{- "layout.header.labels.cart_drawer" | t | escape -}}
@@ -807,7 +818,7 @@
 					</button>
 
 					<a href="{{- routes.cart_url -}}" class="header__icon header__icon--cart focus-visible-outline no-js">
-						{%- render 'icons', icon: 'cart' -%}
+						{%- render 'header-icon', icon: 'cart' -%}
 
 						<span class="visually-hidden">
 							{{- "layout.header.labels.cart_drawer" | t | escape -}}
@@ -832,7 +843,7 @@
 					</a>
 				{%- else -%}
 					<a href="{{- routes.cart_url -}}" class="header__icon header__icon--cart focus-visible-outline">
-						{%- render 'icons', icon: 'cart' -%}
+						{%- render 'header-icon', icon: 'cart' -%}
 
 						<span class="visually-hidden">
 							{{- "layout.header.labels.cart" | t | escape -}}

@@ -73,6 +73,7 @@
         },
         "quantity": {
           "type": "quantity",
+          "disabled": true,
           "settings": {
             "offset_top_desktop": 8,
             "offset_bottom_desktop": 8,
@@ -219,7 +220,7 @@
         "is_zoom_enabled": true,
         "media_layout": "carousel",
         "thumbnails_position": "left",
-        "show_thumbnails_mobile": false,
+        "show_thumbnails_mobile": true,
         "media_height": "full_size",
         "image_object_fit": "cover",
         "show_taxes_included": true,

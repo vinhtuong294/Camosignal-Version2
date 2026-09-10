@@ -603,3 +603,255 @@ flex-cart-upsell {
     transition: none;
   }
 }
+
+/* Vertical recommendation rail: scoped to the CamoSignal cart drawer only. */
+.flex-upsell--preset-camosignal.flex-upsell--drawer {
+  --flex-drawer-ink: var(--cart-upsell-title-color, var(--flex-button));
+  --flex-drawer-surface: var(--cart-upsell-card-bg, var(--flex-card-background));
+  --flex-drawer-border: var(--cart-upsell-card-border, var(--flex-card-border));
+  --flex-drawer-button: var(--cart-upsell-button-bg, var(--flex-button));
+  --flex-drawer-button-text: var(--cart-upsell-button-color, var(--flex-button-text));
+  margin: 0 0 24px clamp(16px, 5%, 28px);
+  padding-top: 8px;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__heading {
+  color: var(--flex-drawer-ink);
+  font-family: var(--font-heading-family, var(--heading-font-family, sans-serif));
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.35px;
+  text-transform: uppercase;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__list {
+  align-items: stretch;
+  gap: 16px;
+  padding: 0 0 3px;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__card {
+  display: flex;
+  flex: 0 0 clamp(196px, 44%, 236px);
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  width: auto;
+  min-height: 0;
+  padding: 14px;
+  background: color-mix(in srgb, var(--flex-drawer-ink) 4%, var(--flex-drawer-surface));
+  border: 1px solid var(--flex-drawer-border);
+  border-radius: 6px;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__image-wrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 100%;
+  height: 128px;
+  margin: 0 0 12px;
+  aspect-ratio: auto;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  transform: none;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__image-badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 5px 7px;
+  color: var(--flex-button-text);
+  background: var(--flex-drawer-ink);
+  border-radius: 2px;
+  font-family: var(--button-font-family, inherit);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__title {
+  color: var(--flex-drawer-ink);
+  min-height: 2.7em;
+  overflow: visible;
+  font-size: 13px;
+  line-height: 1.35;
+  letter-spacing: 0.3px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__price {
+  color: var(--cart-upsell-sale-price-color, var(--flex-accent));
+  position: static;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: flex-start;
+  gap: 7px;
+  margin: 0 0 8px;
+  font-size: 15px;
+  line-height: 1.3;
+  text-align: left;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__price-meta {
+  justify-content: flex-start;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__compare-price {
+  font-size: 11px;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__drawer-picker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  margin-top: auto;
+  padding: 8px 10px;
+  color: var(--flex-drawer-ink);
+  background: var(--flex-drawer-surface);
+  border: 1px solid var(--flex-drawer-border);
+  border-radius: 4px;
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__drawer-picker > span {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__drawer-picker > img {
+  flex: 0 0 12px;
+  width: 12px;
+  height: 12px;
+  filter: brightness(0);
+  opacity: 0.7;
+  transform: rotate(90deg);
+}
+
+/* Keep the native, keyboard-accessible picker; its visible label may wrap. */
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__variant {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  height: 100%;
+  min-height: 100%;
+  max-height: none;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__drawer-picker:focus-within {
+  outline: 2px solid var(--flex-drawer-ink);
+  outline-offset: 2px;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__add {
+  position: static;
+  flex-shrink: 0;
+  width: 100%;
+  min-height: 38px;
+  margin-top: 8px;
+  padding: 10px 6px;
+  color: var(--flex-drawer-button-text);
+  background: var(--flex-drawer-button);
+  border-color: var(--flex-drawer-button);
+  border-radius: 4px;
+  font-size: 11px;
+  line-height: 1.2;
+  transform: none;
+  transition: none;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__add:hover {
+  background: var(--flex-drawer-button);
+  border-color: var(--flex-drawer-button);
+  transform: none;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__add.is-error {
+  background: var(--cart-upsell-sale-price-color, var(--flex-accent));
+  border-color: var(--cart-upsell-sale-price-color, var(--flex-accent));
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__carousel-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+  margin-inline-end: clamp(16px, 5%, 28px);
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__carousel-footer[hidden] {
+  display: none;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__progress {
+  flex: 1;
+  height: 3px;
+  overflow: hidden;
+  background: var(--flex-drawer-border);
+  border-radius: 3px;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__progress > span {
+  display: block;
+  height: 100%;
+  background: var(--flex-drawer-ink);
+  border-radius: inherit;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__navigation {
+  align-items: center;
+  gap: 2px;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__navigation button {
+  width: 36px;
+  height: 36px;
+  color: var(--flex-drawer-ink);
+  background: transparent;
+  border-radius: 4px;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__navigation button:disabled {
+  background: transparent;
+  opacity: 0.25;
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__navigation img {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0);
+}
+
+.flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__carousel-count {
+  min-width: 40px;
+  color: var(--flex-muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}

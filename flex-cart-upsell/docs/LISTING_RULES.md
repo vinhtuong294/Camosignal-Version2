@@ -127,3 +127,11 @@
 ## 11. Mẫu lệnh từ người dùng
 
 Khi người dùng yêu cầu listing, hãy đọc file này trước rồi xác nhận ngắn gọn record/design sẽ xử lý. Chỉ hỏi lại khi có dữ liệu thiếu hoặc mâu thuẫn; không hỏi lại những quy tắc đã có trong tài liệu.
+
+## 12. UPF Hoodie kèm Face Mask/Gaiter
+
+- Nếu `Product type` có cả `UPF Hoodie` và `Face Mask`, duplicate từ template UPF Hoodie có option `CHOOSE YOUR SET` và `Size`.
+- Giữ đúng hai lựa chọn `Hoodie Only` và `Hoodie + Gaiter` trong option `CHOOSE YOUR SET`, cùng dải size của template (hiện tại S–5XL).
+- Không tạo option màu cho UPF Hoodie; ảnh mask/gaiter và hoodie đưa vào gallery theo bộ ZIP, nhưng không gán ảnh theo màu/variant như áo có màu.
+- Tồn kho mặc định là 100 cho mọi variant; giữ Draft, không publish và ghi URL về Lark.
+- Nếu chỉ có `UPF Hoodie` không kèm `Face Mask`, tiếp tục dùng cấu trúc UPF size-only theo mục 3/5.

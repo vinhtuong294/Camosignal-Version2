@@ -607,12 +607,21 @@
 				return mainSwiperEl && mainSwiperEl.swiper ? mainSwiperEl.swiper : null;
 			}
 
+			function getMobileTransitionSpeed() {
+				return window.matchMedia('(max-width: 767.98px)').matches &&
+					!window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 320 : 0;
+			}
+
 			function getVisibleThumbCount(sw) {
 				if (!sw || !sw.slides || !sw.slides.length) return MAX_VISIBLE;
 
 				var firstSlide = sw.slides[0];
 				var isHorizontal = !window.matchMedia('(min-width: 1200px)').matches;
 				var slideH = firstSlide ? (isHorizontal ? firstSlide.offsetWidth : firstSlide.offsetHeight) : 0;
+				// Preserve fractional widths so six mobile thumbnails are not rounded down to five.
+				if (firstSlide && window.matchMedia('(max-width: 767.98px)').matches) {
+					slideH = firstSlide.getBoundingClientRect().width;
+				}
 				var viewportH = (isHorizontal ? swiperEl.clientWidth : swiperEl.clientHeight) || 0;
 				var gap = Number(sw.params && sw.params.spaceBetween) || SPACE_BETWEEN;
 
@@ -641,7 +650,7 @@
 				targetStartIndex = Math.min(Math.max(targetStartIndex, 0), lastStartIndex);
 
 				if (sw.activeIndex !== targetStartIndex) {
-					sw.slideTo(targetStartIndex, 0);
+					sw.slideTo(targetStartIndex, getMobileTransitionSpeed());
 				}
 
 				updateButtons(sw);
@@ -717,7 +726,7 @@
 				event.stopImmediatePropagation();
 				clearScheduledThumbSync();
 
-				mainSw.slideTo(targetIndex, 0, true);
+				mainSw.slideTo(targetIndex, getMobileTransitionSpeed(), true);
 
 				if (typeof mainSw.updateSlidesClasses === 'function') {
 					mainSw.updateSlidesClasses();
@@ -873,9 +882,11 @@
 
 		{%- if media_layout == 'carousel' -%}
 		<style>
-			/* When a variant change is in progress, make thumbnail Swiper jump instantly */
-			.product-media--instant-thumb .swiper-wrapper {
-				transition-duration: 0ms !important;
+			/* Preserve the existing instant variant change on tablet and desktop. */
+			@media (min-width: 768px) {
+				.product-media--instant-thumb .swiper-wrapper {
+					transition-duration: 0ms !important;
+				}
 			}
 		</style>
 		<script>

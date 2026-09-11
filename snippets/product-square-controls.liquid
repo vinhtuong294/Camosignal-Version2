@@ -4,6 +4,11 @@
 {% enddoc %}
 
 <style>
+	/* Center the square sold-out icon inside rectangular color swatches. */
+	#shopify-section-{{ section.id }} .product-options .radio-option-swatch__label.is-disabled::before {
+		background-position: center;
+	}
+
 	#shopify-section-{{ section.id }} .product-form .product-options {
 		padding-top: max(24px, var(--offset-top-desktop, 0px)) !important;
 		padding-bottom: max(12px, var(--offset-bottom-desktop, 0px));
@@ -23,6 +28,11 @@
 		color: var(--color-text-primary);
 	}
 
+	#shopify-section-{{ section.id }} :is(.product-options__option-label, .product-options__size-guide-inline, .product-combo-builder__size-label, .product-combo-builder__size-guide) {
+		font-size: 13px !important;
+		line-height: 1.4;
+	}
+
 	#shopify-section-{{ section.id }} .product-options__swatch-value {
 		display: inline-block;
 		font-size: inherit;
@@ -36,6 +46,16 @@
 
 	#shopify-section-{{ section.id }} .product-options__size-guide-inline {
 		font-weight: 400;
+	}
+
+	/* Match combo sizes and text variants to the standard size-button typography. */
+	#shopify-section-{{ section.id }} .product-options__size-grid .radio-option__label,
+	#shopify-section-{{ section.id }} .product-combo-builder__size {
+		font-family: var(--base-font-family), Arial, sans-serif !important;
+		font-size: 13px !important;
+		font-weight: 500 !important;
+		line-height: 1.5;
+		letter-spacing: normal;
 	}
 
 	#shopify-section-{{ section.id }} .product-upsell-block[data-product-handle="shipping-protection-apparel"] {
@@ -111,6 +131,44 @@
 		object-fit: contain;
 	}
 
+	@media (min-width: 768px) {
+		/* Keep desktop color and size controls equally sized and easy to scan. */
+		#shopify-section-{{ section.id }} .product-options .product-options__swatch-container {
+			padding: 0;
+		}
+
+		#shopify-section-{{ section.id }} .product-options .radio-input:checked + .radio-option-swatch__label {
+			outline-offset: -2px !important;
+		}
+
+		#shopify-section-{{ section.id }} .product-options__size-grid.is-size-option {
+			flex-wrap: wrap;
+			gap: 12px;
+		}
+
+		#shopify-section-{{ section.id }} :is(.product-options__size-grid.is-size-option .radio-option, .product-options .radio-option-swatch) {
+			width: 64px !important;
+			height: 40px !important;
+			flex: 0 0 64px !important;
+		}
+
+		#shopify-section-{{ section.id }} :is(.product-options__size-grid.is-size-option .radio-option__label, .product-options .radio-option-swatch__label, .product-combo-builder__size) {
+			box-sizing: border-box !important;
+			width: 64px !important;
+			min-width: 64px !important;
+			height: 40px !important;
+			min-height: 40px !important;
+			max-height: 40px !important;
+			padding: 0 !important;
+			font-size: 13px;
+		}
+
+		#shopify-section-{{ section.id }} .product-combo-builder__sizes {
+			grid-template-columns: repeat(auto-fill, 64px);
+			gap: 12px;
+		}
+	}
+
 	@media (min-width: 1200px) {
 		#shopify-section-{{ section.id }} .product-media--thumbnails-position-left .product-media__slider-thumbnails-container {
 			width: 64px;
@@ -168,21 +226,112 @@
 	}
 
 	@media (max-width: 767.98px) {
+		/* One rhythm between product content blocks; keep the gallery/price pair compact. */
+		#shopify-section-{{ section.id }} .product-form {
+			--pdp-block-gap: 32px;
+		}
+
+		#shopify-section-{{ section.id }} .product-form > :is(.product-options, .product-combo-builder, .product-combination, .product-quantity, .product-add-to-cart, .also-available, .product-accordion, .flex-upsell--product-page, lb-upsell-widget.lb-widget, .product-description, .product-sales-point, .product-text, .product-custom-liquid, .product-complementary),
+		#shopify-section-{{ section.id }} .product-form > .shopify-app-block:has(.flex-upsell--product-page) {
+			margin-top: var(--pdp-block-gap) !important;
+			margin-bottom: 0 !important;
+			padding-top: 0 !important;
+			padding-bottom: 0 !important;
+		}
+
+		/* Hidden native options must not add a second gap before the combo picker. */
+		#shopify-section-{{ section.id }} .product-form > .product-options:has(.product-combo-builder__native-options) {
+			margin-top: 0 !important;
+		}
+
+		#shopify-section-{{ section.id }} .product-combo-builder__customize {
+			/* The builder grid already supplies 12px above this block. */
+			padding-top: calc(var(--pdp-block-gap) - 12px);
+		}
+
+		#shopify-section-{{ section.id }} .product-form .product-options .js-product-options {
+			gap: var(--pdp-block-gap);
+		}
+
+		#shopify-section-{{ section.id }} .product-form .product-price {
+			padding-bottom: 0;
+		}
+
+		#shopify-section-{{ section.id }} .product-form .product-flashsale-and-price-group {
+			margin-bottom: 0 !important;
+		}
+
+		#shopify-section-{{ section.id }} .product-form .product-add-to-cart {
+			row-gap: var(--pdp-block-gap);
+		}
+
+		#shopify-section-{{ section.id }} .product-add-to-cart > :is(.product-upsell-block, .add-to-cart, .product-purchase-perks, .product-add-to-cart__additional-buttons, .product-add-to-cart__error) {
+			margin-top: 0 !important;
+			margin-bottom: 0 !important;
+		}
+
+		#shopify-section-{{ section.id }} .product-add-to-cart > .product-upsell-block {
+			padding-top: 0;
+			padding-bottom: 0;
+		}
+
+		/* Keep protection close to the purchase button within the 32px block rhythm. */
+		#shopify-section-{{ section.id }} .product-add-to-cart > .product-upsell-block[data-product-handle="shipping-protection-apparel"] {
+			margin-bottom: calc(12px - var(--pdp-block-gap)) !important;
+		}
+
+		#shopify-section-{{ section.id }} .product-add-to-cart__error:has(> .js-product-quantity-error:empty) {
+			display: none;
+		}
+
+		#shopify-section-{{ section.id }} .product-form > .also-available {
+			/* Spacing separates this block without adding a second inset above its title. */
+			border-top: 0;
+		}
+
+		/* Remove stacked spacing between the mobile gallery and its price. */
+		#shopify-section-{{ section.id }} .product__container {
+			row-gap: 8px;
+		}
+
+		#shopify-section-{{ section.id }} .product__mobile-summary:not(:empty) {
+			margin-bottom: 8px;
+		}
+
+		#shopify-section-{{ section.id }} .product__container > .product-form {
+			padding-top: 0 !important;
+		}
+
+		#shopify-section-{{ section.id }} .product-form .product-price {
+			padding-top: 0;
+		}
+
 		#shopify-section-{{ section.id }} .product-media .product-media__slider-thumbnails {
+			--product-thumbnail-gap: 8px;
 			padding: 2px 0;
-			margin: 8px 0 8px;
+			margin: 8px 0 0;
 			overflow: hidden;
 		}
 
+		#shopify-section-{{ section.id }} .product-media .product-media__slider-thumbnails:is([data-thumbnails-position="left"], [data-thumbnails-position="right"]) {
+			--product-thumbnail-gap: 10px;
+		}
+
+		/* Fit six thumbnails, accounting for Swiper's five gaps between them. */
 		#shopify-section-{{ section.id }} .product-media .product-media__slider-thumbnails-slide {
-			width: 48px;
-			height: 60px;
+			width: calc((100% - 5 * var(--product-thumbnail-gap)) / 6);
+			height: auto;
+			aspect-ratio: var(--thumbnail-aspect-ratio, 1);
 			padding: 0;
 			flex-shrink: 0;
 			border: 1px solid #d6d6d6;
 			background: #f5f5f5;
 			box-sizing: border-box;
 			overflow: hidden;
+		}
+
+		#shopify-section-{{ section.id }} .product-media .product-media__slider-thumbnails:not(.swiper-initialized) .product-media__slider-thumbnails-slide {
+			margin-right: var(--product-thumbnail-gap);
 		}
 
 		#shopify-section-{{ section.id }} .product-media .product-media__slider-thumbnails-slide.swiper-slide-thumb-active {
@@ -197,6 +346,16 @@
 		#shopify-section-{{ section.id }} .product-media .product-media__slider-thumbnails-slide:focus-visible {
 			outline: 2px solid #292929;
 			outline-offset: -2px;
+		}
+
+		#shopify-section-{{ section.id }} .product-media .swiper-wrapper {
+			transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+		}
+	}
+
+	@media (max-width: 767.98px) and (prefers-reduced-motion: reduce) {
+		#shopify-section-{{ section.id }} .product-media .swiper-wrapper {
+			transition-duration: 0ms !important;
 		}
 	}
 

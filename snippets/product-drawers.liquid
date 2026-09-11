@@ -109,21 +109,35 @@
 {%- capture product_details_content -%}
 	{%- case product_details_profile -%}
 		{%- when 'combo' -%}
-			<h3>1/ Quarter-Zipper Long Sleeve</h3>
-			<p><strong>Protection:</strong> The long-sleeve design and stand-up collar help reduce direct exposure to sunlight and insects while providing moderate warmth.</p>
-			<p><strong>Sizes:</strong> S&ndash;6XL (True to size)</p>
-			<p><strong>Style:</strong> Stretchy fabric supports flexible movement, making it suitable for outdoor activities such as hunting, fishing, hiking, and camping.</p>
-			<p><strong>Material:</strong> 180 GSM Milk Silk fabric made from 95% polyester&mdash;soft, lightweight, and breathable.</p>
-			<p><strong>Print Method:</strong> Dye-sublimation printing delivers sharp details, long-lasting colors, and a peel-resistant finish.</p>
-			<p><strong>Origin:</strong> Eco-friendly &amp; Made to Order &mdash; crafted fresh after every purchase for peak print quality.</p>
+			<details class="product-inline-details__nested">
+				<summary class="product-inline-details__nested-trigger">
+					<span>1. Quarter-Zipper Long Sleeve</span>
+					<span class="product-inline-details__nested-icon" aria-hidden="true"></span>
+				</summary>
+				<div class="product-inline-details__nested-content">
+					<p><strong>Protection:</strong> The long-sleeve design and stand-up collar help reduce direct exposure to sunlight and insects while providing moderate warmth.</p>
+					<p><strong>Sizes:</strong> S&ndash;6XL (True to size)</p>
+					<p><strong>Style:</strong> Stretchy fabric supports flexible movement, making it suitable for outdoor activities such as hunting, fishing, hiking, and camping.</p>
+					<p><strong>Material:</strong> 180 GSM Milk Silk fabric made from 95% polyester&mdash;soft, lightweight, and breathable.</p>
+					<p><strong>Print Method:</strong> Dye-sublimation printing delivers sharp details, long-lasting colors, and a peel-resistant finish.</p>
+					<p><strong>Origin:</strong> Eco-friendly &amp; Made to Order &mdash; crafted fresh after every purchase for peak print quality.</p>
+				</div>
+			</details>
 
-			<h3>2/ Full-Zipper Fleece Vest</h3>
-			<p><strong>Protection:</strong> The 310 GSM fleece fabric and stand-up collar help retain core warmth in cool weather, while the sleeveless design allows unrestricted movement.</p>
-			<p><strong>Sizes:</strong> S&ndash;6XL (True to size)</p>
-			<p><strong>Style:</strong> Full-zip fleece vest with a loose fit, stand-up collar, and practical inseam pockets. Ideal for hunting, fishing, hiking, camping, travel, and everyday wear during spring and fall.</p>
-			<p><strong>Material:</strong> Premium 310 GSM polar fleece. Soft, breathable, sweat-wicking, anti-pilling, durable, and wrinkle-resistant.</p>
-			<p><strong>Print Method:</strong> Dye-sublimation printing delivers sharp details, long-lasting colors, and a peel-resistant finish.</p>
-			<p><strong>Origin:</strong> Eco-friendly &amp; Made to Order &mdash; crafted fresh after every purchase for peak print quality.</p>
+			<details class="product-inline-details__nested">
+				<summary class="product-inline-details__nested-trigger">
+					<span>2. Full-Zipper Fleece Vest</span>
+					<span class="product-inline-details__nested-icon" aria-hidden="true"></span>
+				</summary>
+				<div class="product-inline-details__nested-content">
+					<p><strong>Protection:</strong> The 310 GSM fleece fabric and stand-up collar help retain core warmth in cool weather, while the sleeveless design allows unrestricted movement.</p>
+					<p><strong>Sizes:</strong> S&ndash;6XL (True to size)</p>
+					<p><strong>Style:</strong> Full-zip fleece vest with a loose fit, stand-up collar, and practical inseam pockets. Ideal for hunting, fishing, hiking, camping, travel, and everyday wear during spring and fall.</p>
+					<p><strong>Material:</strong> Premium 310 GSM polar fleece. Soft, breathable, sweat-wicking, anti-pilling, durable, and wrinkle-resistant.</p>
+					<p><strong>Print Method:</strong> Dye-sublimation printing delivers sharp details, long-lasting colors, and a peel-resistant finish.</p>
+					<p><strong>Origin:</strong> Eco-friendly &amp; Made to Order &mdash; crafted fresh after every purchase for peak print quality.</p>
+				</div>
+			</details>
 		{%- when 'shirt' -%}
 			<p><strong>Base Item:</strong> Premium Slub Cotton Shirt</p>
 			<p><strong>Sizes:</strong> XS to 5XL (True to size)</p>
@@ -632,6 +646,15 @@
 
 		form.product-form > lb-upsell-widget.lb-widget .lb-price-compare-price {
 			font-size: 12px !important;
+		}
+
+		@media (max-width: 767.98px) {
+			/* Give each product suggestion a little more breathing room. */
+			form.product-form > lb-upsell-widget.lb-widget lb-upsell-flat-card + lb-upsell-flat-card,
+			form.product-form > lb-upsell-widget.lb-widget .lb-product-card + .lb-product-card,
+			form.product-form > lb-upsell-widget.lb-widget .lb-flat-card-host + .lb-flat-card-host {
+				margin-top: 13px !important;
+			}
 		}
 	</style>
 

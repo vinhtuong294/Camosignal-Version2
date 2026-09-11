@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CamoSignal upsell design comparison</title>
+    <style>
+      :root {
+        color: #18251f;
+        background: #eef0ec;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        width: min(1260px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 28px 0 48px;
+      }
+
+      h1,
+      h2,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        margin-bottom: 8px;
+        font-size: 25px;
+      }
+
+      p {
+        color: #657068;
+      }
+
+      .reference-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+        gap: 20px;
+        margin: 24px 0;
+      }
+
+      figure {
+        padding: 16px;
+        margin: 0;
+        background: #fff;
+        border: 1px solid #dce2dd;
+        border-radius: 12px;
+      }
+
+      figcaption {
+        margin-bottom: 12px;
+        color: #657068;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .implementation {
+        padding: 18px;
+        background: #fff;
+        border: 2px solid #294237;
+        border-radius: 14px;
+      }
+
+      @media (max-width: 760px) {
+        .reference-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>CamoSignal upsell comparison</h1>
+    <p>Source references above, browser-rendered CamoSignal implementation below.</p>
+
+    <section class="reference-grid" aria-label="Source references">
+      <figure>
+        <figcaption>Reference 1 · Product page</figcaption>
+        <img
+          src="/@fs/C:/Users/ADMIN/AppData/Local/Temp/codex-clipboard-60cdd8b4-b4f9-489b-bfd7-6948fc548517.png"
+          alt="Product page upsell reference"
+        />
+      </figure>
+      <figure>
+        <figcaption>Reference 2 · Cart drawer</figcaption>
+        <img
+          src="/@fs/C:/Users/ADMIN/AppData/Local/Temp/codex-clipboard-9b91a90a-0d0f-4075-8e5c-7ab33cd1f235.png"
+          alt="Cart drawer upsell reference"
+        />
+      </figure>
+    </section>
+
+    <figure class="implementation">
+      <figcaption>Implementation · Desktop browser render</figcaption>
+      <img
+        src="./implementation-desktop-iteration2.png"
+        alt="CamoSignal product page and cart drawer upsell implementation"
+      />
+    </figure>
+  </body>
+</html>

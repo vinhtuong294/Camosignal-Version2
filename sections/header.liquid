@@ -353,6 +353,11 @@
 
 	/* Mobile: move search icon to right side (next to cart) */
 	@media (max-width: 1199px) {
+		/* The open drawer gives the transparent header a white background. */
+		html.is-mobile-nav-open .header-section .header[data-header-transparent-mobile] .header__icon {
+			color: #2c3d33 !important;
+		}
+
 		html.is-mobile-nav-open .mobile-floating-cart,
 		html.is-mobile-nav-open #ShopifyChat,
 		html.is-mobile-nav-open #shopify-chat,

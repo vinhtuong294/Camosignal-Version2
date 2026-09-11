@@ -134,7 +134,7 @@
 {%- assign mobile_grid					= '2' -%}
 {%- assign pagination_type 		  		= section.settings.pagination_type -%}
 {%- assign load_more_style 				= section.settings.load_more_style -%}
-{%- assign paginate_by = section.settings.paginate_by | default: 12 -%}
+{%- assign paginate_by = section.settings.paginate_by | default: 24 | at_most: 24 -%}
 {%- assign show_color_swatch_in_filters	= section.settings.show_color_swatch_in_filters -%}
 {%- assign filters_type 				= 'sidebar' -%}
 {%- assign container 					= section.settings.container_width -%}
@@ -151,7 +151,6 @@
 {%- endif -%}
 
 {%- if grid_banner != blank -%}
-	{%- assign paginate_by 					= paginate_by | minus: 1 -%}
 	{%- assign grid_banner_position 		= grid_banner.settings.position -%}
 	{%- assign grid_banner_last_position 	= false -%}
 {%- endif -%}
@@ -1029,10 +1028,10 @@
 			"type": "range",
 			"id": "paginate_by",
 			"min": 12,
-			"max": 50,
+			"max": 24,
 			"step": 1,
 			"label": "Paginate by",
-			"default": 16
+			"default": 24
 		},
 		{
 			"type": "select",

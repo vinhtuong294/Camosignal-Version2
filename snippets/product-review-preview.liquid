@@ -108,7 +108,7 @@
     margin-inline-start: auto;
   }
   .product-review-preview__details[open] .product-review-preview__toggle::after { display: none; }
-  .product-review-preview__content { padding: 12px 0 24px; }
+  .product-review-preview__content { padding: 12px 16px 24px; }
   .product-review-preview__list { display: grid; gap: 32px; }
   .product-review-preview__author-row { display: flex; align-items: center; gap: 16px; margin-bottom: 14px; }
   .product-review-preview__avatar {
@@ -154,7 +154,7 @@
   .product-review-preview__verified { color: var(--color-text-secondary, #535353); }
   .product-review-preview__title,
   .product-review-preview__body,
-  .product-review-preview__status { margin: 0; font-size: 15px; line-height: 1.6; overflow-wrap: anywhere; }
+  .product-review-preview__status { margin: 0; font-size: 14px; line-height: 1.65; overflow-wrap: anywhere; }
   .product-review-preview__title { margin-bottom: 4px; font-weight: 700; }
   .product-review-preview__body { white-space: pre-line; }
   .product-review-preview__more {
@@ -175,7 +175,6 @@
   @media (max-width: 767px) {
     .product-review-preview__summary { gap: 8px; min-height: 54px; padding: 14px 0; }
     .product-review-preview__heading { font-size: calc(var(--body-font-size, 14px) * 0.85); }
-    .product-review-preview__body { font-size: 16px; }
   }
 {% endstylesheet %}
 

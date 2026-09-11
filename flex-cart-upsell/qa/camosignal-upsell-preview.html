@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CamoSignal upsell preview</title>
+    <link
+      rel="stylesheet"
+      href="../extensions/flex-cart-upsell-theme/assets/flex-upsell.css"
+    />
+    <style>
+      :root {
+        color: #18251f;
+        background: #eef0ec;
+        font-family: "Arial Narrow", "Roboto Condensed", Arial, sans-serif;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      .preview-shell {
+        display: grid;
+        gap: 28px;
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 30px 0 48px;
+      }
+
+      .preview-title {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .preview-title h1,
+      .preview-title p {
+        margin: 0;
+      }
+
+      .preview-title h1 {
+        font-size: 28px;
+        font-weight: 650;
+      }
+
+      .preview-title p {
+        max-width: 520px;
+        color: #657068;
+        font-size: 14px;
+        line-height: 1.45;
+        text-align: right;
+      }
+
+      .preview-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(340px, 420px);
+        gap: 28px;
+        align-items: start;
+      }
+
+      .preview-panel {
+        background: #fff;
+        border: 1px solid #dce2dd;
+        border-radius: 16px;
+        box-shadow: 0 12px 36px rgb(24 37 31 / 9%);
+      }
+
+      .preview-panel__label {
+        padding: 14px 18px;
+        color: #647068;
+        border-bottom: 1px solid #e5e9e5;
+        font-size: 11px;
+        font-weight: 750;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .product-preview {
+        padding: 26px 28px 30px;
+      }
+
+      .drawer-preview {
+        overflow: hidden;
+      }
+
+      .drawer-preview__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 20px;
+        border-bottom: 1px solid #e5e9e5;
+      }
+
+      .drawer-preview__header strong {
+        font-size: 20px;
+      }
+
+      .drawer-preview__content {
+        display: grid;
+        gap: 16px;
+        max-height: 480px;
+        padding: 18px 20px 20px;
+        overflow-y: auto;
+      }
+
+      .drawer-line {
+        display: grid;
+        grid-template-columns: 64px minmax(0, 1fr) auto;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .drawer-line img {
+        width: 64px;
+        height: 76px;
+        object-fit: contain;
+        background: #f5f6f3;
+        border-radius: 8px;
+      }
+
+      .drawer-line span,
+      .drawer-line small {
+        display: block;
+      }
+
+      .drawer-line span {
+        overflow: hidden;
+        font-size: 13px;
+        font-weight: 650;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .drawer-line small {
+        margin-top: 5px;
+        color: #6d766f;
+      }
+
+      .drawer-preview__footer {
+        padding: 16px 20px 20px;
+        background: #fff;
+        border-top: 1px solid #dce2dd;
+        box-shadow: 0 -8px 24px rgb(24 37 31 / 6%);
+      }
+
+      .drawer-preview__subtotal {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 13px;
+        font-size: 16px;
+        font-weight: 750;
+      }
+
+      .drawer-preview__checkout {
+        width: 100%;
+        min-height: 46px;
+        color: #fff;
+        background: #142b70;
+        border: 0;
+        border-radius: 7px;
+        font: inherit;
+        font-weight: 750;
+        text-transform: uppercase;
+      }
+
+      .flex-upsell {
+        --flex-card-background: #ffffff;
+        --flex-card-border: #dce2dd;
+        --flex-text: #18251f;
+        --flex-muted: #6d766f;
+        --flex-button: #294237;
+        --flex-button-text: #ffffff;
+        --flex-accent: #c84436;
+        --flex-card-radius: 12px;
+        --flex-image-radius: 8px;
+        --flex-image-ratio: 4 / 5;
+        --flex-spacing: 10px;
+      }
+
+      @media (max-width: 860px) {
+        .preview-title {
+          align-items: start;
+          flex-direction: column;
+        }
+
+        .preview-title p {
+          text-align: left;
+        }
+
+        .preview-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .drawer-preview {
+          width: min(100%, 430px);
+        }
+      }
+
+      @media (max-width: 520px) {
+        .preview-shell {
+          width: min(100% - 20px, 430px);
+          padding-top: 18px;
+        }
+
+        .product-preview {
+          padding: 20px 12px 22px;
+        }
+
+        .preview-title h1 {
+          font-size: 23px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-shell">
+      <header class="preview-title">
+        <h1>CamoSignal upsell system</h1>
+        <p>
+          A tighter product-page list and a checkout-safe cart drawer carousel,
+          using the CamoSignal forest and sale-red palette.
+        </p>
+      </header>
+
+      <div class="preview-grid">
+        <section class="preview-panel" aria-labelledby="product-preview-label">
+          <div class="preview-panel__label" id="product-preview-label">
+            Product page upsell
+          </div>
+          <div class="product-preview">
+            <section
+              class="flex-upsell flex-upsell--stacked flex-upsell--preset-camosignal flex-upsell--product-page"
+              aria-label="People also bought"
+            >
+              <header class="flex-upsell__header">
+                <h2 class="flex-upsell__heading">People also bought</h2>
+              </header>
+              <div class="flex-upsell__list">
+                <article class="flex-upsell__card">
+                  <a class="flex-upsell__image-wrap" href="#bred-to-point">
+                    <img
+                      class="flex-upsell__image"
+                      src="../../listing-assets/2026-08-18/bred-to-point-hoodie/unzipped/Bred%20To%20Point%20Hoodie.jpg"
+                      alt="Bred To Point Hunting Hoodie"
+                    />
+                  </a>
+                  <div class="flex-upsell__copy">
+                    <a class="flex-upsell__title" href="#bred-to-point">
+                      Bred To Point Hunting Hoodie
+                    </a>
+                    <span class="flex-upsell__price">
+                      <span class="flex-upsell__price-value">$63.00</span>
+                      <span class="flex-upsell__price-meta">
+                        <span class="flex-upsell__discount-badge">-10%</span>
+                        <s class="flex-upsell__compare-price">$70.00</s>
+                      </span>
+                    </span>
+                    <select class="flex-upsell__variant" aria-label="Variant for Bred To Point Hunting Hoodie">
+                      <option>WHITE / S</option>
+                      <option>SAND / M</option>
+                    </select>
+                  </div>
+                  <button class="flex-upsell__add" type="button">Add</button>
+                </article>
+
+                <article class="flex-upsell__card">
+                  <a class="flex-upsell__image-wrap" href="#elk-long-sleeve">
+                    <img
+                      class="flex-upsell__image"
+                      src="../../listing-assets/2026-08-18/CRT170805/Inspirational%20Bible%20Verse%20Elk%20Long-sleeve.jpg"
+                      alt="The Wild Proclaims His Glory Long-sleeve"
+                    />
+                  </a>
+                  <div class="flex-upsell__copy">
+                    <a class="flex-upsell__title" href="#elk-long-sleeve">
+                      The Wild Proclaims His Glory Long-sleeve
+                    </a>
+                    <span class="flex-upsell__price">
+                      <span class="flex-upsell__price-value">$22.46</span>
+                      <span class="flex-upsell__price-meta">
+                        <span class="flex-upsell__discount-badge">-10%</span>
+                        <s class="flex-upsell__compare-price">$24.95</s>
+                      </span>
+                    </span>
+                  </div>
+                  <a class="flex-upsell__add" href="#customize">Customize</a>
+                </article>
+
+                <article class="flex-upsell__card">
+                  <a class="flex-upsell__image-wrap" href="#fishing-long-sleeve">
+                    <img
+                      class="flex-upsell__image"
+                      src="../../listing-assets/2026-08-18/CRT170801/Trout%20Fishing%20Faith-Based%20Long-sleeve.jpg"
+                      alt="Cast All Your Cares Fishing Long-sleeve"
+                    />
+                  </a>
+                  <div class="flex-upsell__copy">
+                    <a class="flex-upsell__title" href="#fishing-long-sleeve">
+                      Cast All Your Cares Fishing Long-sleeve
+                    </a>
+                    <span class="flex-upsell__price">
+                      <span class="flex-upsell__price-value">$22.46</span>
+                      <span class="flex-upsell__price-meta">
+                        <span class="flex-upsell__discount-badge">-10%</span>
+                        <s class="flex-upsell__compare-price">$24.95</s>
+                      </span>
+                    </span>
+                    <select class="flex-upsell__variant" aria-label="Variant for Cast All Your Cares Fishing Long-sleeve">
+                      <option>CHARCOAL / S</option>
+                      <option>SAND / M</option>
+                    </select>
+                  </div>
+                  <button class="flex-upsell__add" type="button">Add</button>
+                </article>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="preview-panel drawer-preview" aria-labelledby="drawer-preview-label">
+          <div class="preview-panel__label" id="drawer-preview-label">
+            Cart drawer upsell
+          </div>
+          <header class="drawer-preview__header">
+            <strong>Your cart</strong>
+            <span>1 item</span>
+          </header>
+          <div class="drawer-preview__content">
+            <div class="drawer-line">
+              <img
+                src="../../listing-assets/2026-08-18/black-labrador-beanie/unzipped/Black%20Labrador%20Embroidery%20Beanie%20Hat.jpg"
+                alt="Black Labrador Embroidery Beanie"
+              />
+              <div>
+                <span>Black Labrador Embroidery Beanie</span>
+                <small>Forest green · 1</small>
+              </div>
+              <strong>$24.95</strong>
+            </div>
+
+            <section
+              class="flex-upsell flex-upsell--carousel flex-upsell--preset-camosignal flex-upsell--drawer"
+              aria-label="You might also like these"
+            >
+              <header class="flex-upsell__header">
+                <h2 class="flex-upsell__heading">You might also like these</h2>
+                <div class="flex-upsell__navigation">
+                  <button type="button" aria-label="Previous recommendation">
+                    <img
+                      src="../extensions/flex-cart-upsell-theme/assets/flex-arrow-left.svg"
+                      alt=""
+                    />
+                  </button>
+                  <button type="button" aria-label="Next recommendation">
+                    <img
+                      src="../extensions/flex-cart-upsell-theme/assets/flex-arrow-right.svg"
+                      alt=""
+                    />
+                  </button>
+                </div>
+              </header>
+              <div class="flex-upsell__list">
+                <article class="flex-upsell__card">
+                  <a class="flex-upsell__image-wrap" href="#drawer-hoodie">
+                    <img
+                      class="flex-upsell__image"
+                      src="../../listing-assets/2026-08-18/bred-to-point-hoodie/unzipped/Bred%20To%20Point%20Hoodie.jpg"
+                      alt="Bred To Point Hunting Hoodie"
+                    />
+                  </a>
+                  <div class="flex-upsell__copy">
+                    <a class="flex-upsell__title" href="#drawer-hoodie">
+                      Bred To Point Hunting Hoodie
+                    </a>
+                    <span class="flex-upsell__price">
+                      <span class="flex-upsell__price-value">$63.00</span>
+                      <span class="flex-upsell__price-meta">
+                        <span class="flex-upsell__discount-badge">-10%</span>
+                        <s class="flex-upsell__compare-price">$70.00</s>
+                      </span>
+                    </span>
+                    <select class="flex-upsell__variant" aria-label="Variant for Bred To Point Hunting Hoodie in cart drawer">
+                      <option>WHITE / S</option>
+                      <option>SAND / M</option>
+                    </select>
+                  </div>
+                  <button class="flex-upsell__add" type="button">Add</button>
+                </article>
+                <article class="flex-upsell__card">
+                  <a class="flex-upsell__image-wrap" href="#drawer-shirt">
+                    <img
+                      class="flex-upsell__image"
+                      src="../../listing-assets/2026-08-18/CRT170801/Trout%20Fishing%20Faith-Based%20Long-sleeve.jpg"
+                      alt="Cast All Your Cares Fishing Long-sleeve"
+                    />
+                  </a>
+                  <div class="flex-upsell__copy">
+                    <a class="flex-upsell__title" href="#drawer-shirt">
+                      Cast All Your Cares Fishing Long-sleeve
+                    </a>
+                    <span class="flex-upsell__price">
+                      <span class="flex-upsell__price-value">$22.46</span>
+                      <span class="flex-upsell__price-meta">
+                        <span class="flex-upsell__discount-badge">-10%</span>
+                        <s class="flex-upsell__compare-price">$24.95</s>
+                      </span>
+                    </span>
+                    <select class="flex-upsell__variant" aria-label="Variant for Cast All Your Cares Fishing Long-sleeve in cart drawer">
+                      <option>CHARCOAL / S</option>
+                    </select>
+                  </div>
+                  <button class="flex-upsell__add" type="button">Add</button>
+                </article>
+              </div>
+            </section>
+          </div>
+          <footer class="drawer-preview__footer">
+            <div class="drawer-preview__subtotal">
+              <span>Subtotal</span>
+              <strong>$24.95</strong>
+            </div>
+            <button class="drawer-preview__checkout" type="button">Checkout</button>
+          </footer>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      document.querySelectorAll(".flex-upsell__add:is(button)").forEach((button) => {
+        button.addEventListener("click", () => {
+          const original = button.textContent;
+          button.disabled = true;
+          button.textContent = "Adding…";
+          window.setTimeout(() => {
+            button.textContent = "Added";
+            window.setTimeout(() => {
+              button.disabled = false;
+              button.textContent = original;
+            }, 700);
+          }, 450);
+        });
+      });
+
+      const drawerList = document.querySelector(
+        ".flex-upsell--drawer .flex-upsell__list",
+      );
+      const drawerButtons = document.querySelectorAll(
+        ".flex-upsell--drawer .flex-upsell__navigation button",
+      );
+      drawerButtons.forEach((button, index) => {
+        button.addEventListener("click", () => {
+          drawerList?.scrollBy({
+            behavior: "smooth",
+            left: drawerList.clientWidth * (index === 0 ? -1 : 1),
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

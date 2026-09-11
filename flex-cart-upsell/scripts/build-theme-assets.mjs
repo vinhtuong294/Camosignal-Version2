@@ -8,6 +8,13 @@ const shared = {
 await Promise.all([
   build({
     ...shared,
+    bundle: true,
+    entryPoints: ["app/storefront/flex-upsell.js"],
+    outfile: "../assets/cart-upsell-preview.js",
+  }),
+  build({
+    ...shared,
+    bundle: true,
     entryPoints: ["app/storefront/flex-upsell.js"],
     outfile:
       "extensions/flex-cart-upsell-theme/assets/flex-upsell-cart-refresh.js",

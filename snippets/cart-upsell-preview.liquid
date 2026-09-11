@@ -1,0 +1,7 @@
+{% doc %}
+  Loads the cart recommendation preview for the designated development theme.
+{% enddoc %}
+{%- if theme.id == 155350925503 -%}
+  <script>window.__flexUpsellCoreRequested = true;</script>
+  <script src="{{ 'cart-upsell-preview.js' | asset_url }}"></script>
+{%- endif -%}

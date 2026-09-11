@@ -65,7 +65,9 @@ async function graphql<T>(admin: ShopifyAdminClient, query: string, variables: R
 }
 
 function productSearch(productType: string) {
-  return productType ? `product_type:'${productType.replace(/'/g, "\\'")}'` : "";
+  const normalized = normalizeText(productType);
+  const searchableType = normalized.includes("upf hoodie") ? "UPF Hoodie" : productType;
+  return searchableType ? `product_type:'${searchableType.replace(/'/g, "\\'")}'` : "";
 }
 
 
@@ -316,6 +318,7 @@ function valueKey(values: Array<{ name: string; value: string }>) {
 function variantPlan(row: LarkListingRow, template: ShopifyProduct) {
   const colorOption = template.options.find((option) => normalizeText(option.name) === "color");
   const colorless = isColorlessProductType(row.productType);
+  const maskBundle = normalizeText(row.productType).includes("face mask");
   if (!colorless && !colorOption) {
     throw new Error("The selected template has no Color option. Choose a matching product template.");
   }
@@ -323,11 +326,15 @@ function variantPlan(row: LarkListingRow, template: ShopifyProduct) {
     throw new Error("UPF Hoodie must use a template with no Color option.");
   }
   const colors = effectiveColors(row);
-  const sourceVariants = template.variants.nodes;
+  const sourceVariants = template.variants.nodes.filter((source) => {
+    if (maskBundle) return true;
+    const setOption = source.selectedOptions.find((option) => normalizeText(option.name) === "choose your set");
+    return !setOption || normalizeText(setOption.value) === "hoodie only";
+  });
   if (!sourceVariants.length) throw new Error("The selected template has no variants.");
   const bases = new Map<string, ProductVariant>();
   for (const source of sourceVariants) {
-    const nonColor = source.selectedOptions.filter((option) => normalizeText(option.name) !== "color");
+    const nonColor = source.selectedOptions.filter((option) => normalizeText(option.name) !== "color" && (maskBundle || normalizeText(option.name) !== "choose your set"));
     bases.set(valueKey(nonColor), source);
   }
   const linkedColorValues = new Map((colorOption?.optionValues ?? []).map((value) => [normalizeText(value.name), value.linkedMetafieldValue ?? null]));
@@ -363,7 +370,7 @@ function variantPlan(row: LarkListingRow, template: ShopifyProduct) {
       return {
         optionValues: [
           ...source.selectedOptions
-            .filter((option) => normalizeText(option.name) !== "color")
+            .filter((option) => normalizeText(option.name) !== "color" && (maskBundle || normalizeText(option.name) !== "choose your set"))
             .map((option) => optionValue(option.name, option.value)),
           ...(color && colorOption ? [optionValue(colorOption.name, color)] : []),
         ],
@@ -373,7 +380,7 @@ function variantPlan(row: LarkListingRow, template: ShopifyProduct) {
     }),
   );
   const productOptions = template.options
-    .filter((option) => !colorless || normalizeText(option.name) !== "color")
+    .filter((option) => (!colorless || normalizeText(option.name) !== "color") && (maskBundle || normalizeText(option.name) !== "choose your set"))
     .map((option) => ({
       name: option.name,
       position: option.position,      ...(option.linkedMetafield ? {
@@ -441,7 +448,7 @@ async function setListingProduct(
         title: row.title,
         descriptionHtml: "",
         status: "DRAFT",
-        productType: row.productType || template.productType,
+        productType: normalizeText(row.productType).includes("upf hoodie") ? "UPF Hoodie" : row.productType || template.productType,
         productOptions: plan.productOptions,
         variants: plan.variants,
         collections: [collectionId],

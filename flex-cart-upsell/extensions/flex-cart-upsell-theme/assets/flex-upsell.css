@@ -527,12 +527,13 @@ flex-cart-upsell {
   .flex-upsell__list.is-dragging {
   cursor: grabbing;
   scroll-snap-type: none;
+  scroll-behavior: auto;
   user-select: none;
 }
 
-.flex-upsell--preset-camosignal.flex-upsell--drawer
-  .flex-upsell__list.is-animating {
+.flex-upsell--drawer .flex-upsell__list.is-animating {
   scroll-snap-type: none;
+  scroll-behavior: auto;
 }
 
 .flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__card {
@@ -611,7 +612,7 @@ flex-cart-upsell {
   --flex-drawer-border: var(--cart-upsell-card-border, var(--flex-card-border));
   --flex-drawer-button: var(--cart-upsell-button-bg, var(--flex-button));
   --flex-drawer-button-text: var(--cart-upsell-button-color, var(--flex-button-text));
-  margin: 0 0 24px clamp(16px, 5%, 28px);
+  margin: 0 clamp(16px, 5%, 28px) 24px;
   padding-top: 8px;
 }
 
@@ -632,7 +633,7 @@ flex-cart-upsell {
 
 .flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__card {
   display: flex;
-  flex: 0 0 clamp(196px, 44%, 236px);
+  flex: 0 0 calc((100% - 16px) / 2);
   flex-direction: column;
   align-items: stretch;
   gap: 0;
@@ -685,14 +686,18 @@ flex-cart-upsell {
 
 .flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__title {
   color: var(--flex-drawer-ink);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   min-height: 2.7em;
-  overflow: visible;
+  max-height: 2.7em;
+  overflow: hidden;
   font-size: 13px;
   line-height: 1.35;
   letter-spacing: 0.3px;
   white-space: normal;
   overflow-wrap: anywhere;
-  text-overflow: clip;
+  text-overflow: ellipsis;
 }
 
 .flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__price {
@@ -786,6 +791,10 @@ flex-cart-upsell {
   transition: none;
 }
 
+.flex-upsell--preset-camosignal.flex-upsell--drawer button.flex-upsell__add {
+  --flex-drawer-button: var(--flex-drawer-ink);
+}
+
 .flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__add:hover {
   background: var(--flex-drawer-button);
   border-color: var(--flex-drawer-button);
@@ -802,7 +811,7 @@ flex-cart-upsell {
   align-items: center;
   gap: 12px;
   margin-top: 14px;
-  margin-inline-end: clamp(16px, 5%, 28px);
+  margin-inline-end: 0;
 }
 
 .flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__carousel-footer[hidden] {
@@ -819,9 +828,11 @@ flex-cart-upsell {
 
 .flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__progress > span {
   display: block;
+  width: 100%;
   height: 100%;
   background: var(--flex-drawer-ink);
   border-radius: inherit;
+  transform-origin: left center;
 }
 
 .flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__navigation {
@@ -854,4 +865,41 @@ flex-cart-upsell {
   font-size: 12px;
   font-variant-numeric: tabular-nums;
   text-align: center;
+}
+
+/* Keep two complete cards on mobile, with room for the color/size label to wrap. */
+@container (max-width: 407px) {
+  .flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__list {
+    gap: 10px;
+  }
+
+  .flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__card {
+    flex-basis: calc((100% - 10px) / 2);
+    padding: 10px;
+  }
+
+  .flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__image-wrap {
+    height: 112px;
+  }
+
+  .flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__title {
+    font-size: 12px;
+  }
+
+  .flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__price {
+    gap: 4px;
+    font-size: 14px;
+  }
+
+  .flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__compare-price {
+    font-size: 10px;
+  }
+
+  .flex-upsell--preset-camosignal.flex-upsell--drawer .flex-upsell__drawer-picker {
+    min-height: 44px;
+    gap: 6px;
+    padding: 7px;
+    font-size: 10px;
+    line-height: 1.4;
+  }
 }

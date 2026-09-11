@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Combo Size Chart Preview</title>
+  <style>
+    :root { --ink:#263b2e; --accent:#e6a400; --line:#dfe3df; }
+    * { box-sizing:border-box; }
+    body { margin:0; padding:24px; background:#e7ebe8; color:#202722; font:14px/1.5 Arial,sans-serif; }
+    button { font:inherit; }
+    .shell { width:min(900px,100%); margin:auto; overflow:hidden; border-radius:4px; background:#fff; box-shadow:0 20px 60px rgba(0,0,0,.18); }
+    .header { display:flex; align-items:center; justify-content:space-between; padding:18px 24px; border-bottom:1px solid #e0e2e0; }
+    h1 { margin:0; color:var(--ink); font:700 22px/1.2 Arial,sans-serif; letter-spacing:.02em; text-transform:uppercase; }
+    .close { width:36px; height:36px; padding:0; border:0; background:transparent; color:#303832; font-size:28px; line-height:1; }
+    .product-tabs { display:flex; gap:8px; padding:18px 24px 0; }
+    .product-tabs button, .units button { border:1px solid var(--line); border-radius:4px; background:#fff; color:var(--ink); font-weight:700; cursor:pointer; }
+    .product-tabs button { padding:9px 14px; }
+    .product-tabs button.active, .units button.active { border-color:var(--ink); background:var(--ink); color:#fff; }
+    .content { padding:18px 24px 26px; text-align:center; }
+    .units { display:inline-flex; gap:4px; margin-bottom:16px; padding:4px; border-radius:4px; background:#edf0ed; }
+    .units button { min-width:64px; padding:8px 16px; border-color:transparent; background:transparent; }
+    .chart-note { margin:0 auto 12px; color:#59615b; font-size:13px; }
+    .table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:4px; }
+    table { width:100%; border-collapse:collapse; font-size:14px; font-variant-numeric:tabular-nums; }
+    th,td { padding:10px 12px; border-right:1px solid #e6e9e6; border-bottom:1px solid #e6e9e6; text-align:center; white-space:nowrap; }
+    th:last-child,td:last-child { border-right:0; }
+    tbody tr:last-child th,tbody tr:last-child td { border-bottom:0; }
+    thead th { background:#f3f5f3; color:var(--ink); }
+    tbody th { background:#fafbfa; }
+    .tolerance { margin:10px 0 18px; color:#68706a; font-size:12px; font-style:italic; text-align:left; }
+    .guide { display:grid; grid-template-columns:minmax(240px,.8fr) minmax(0,1.2fr); gap:34px; align-items:center; margin-top:20px; padding-top:22px; border-top:1px solid var(--line); text-align:left; }
+    figure { display:flex; min-width:0; margin:0; align-items:center; justify-content:center; }
+    .guide img { display:block; width:auto; max-width:100%; height:auto; max-height:330px; object-fit:contain; }
+    .instructions { min-width:0; }
+    h2 { margin:0 0 10px; color:var(--ink); font-size:17px; text-transform:uppercase; }
+    .instructions p { display:grid; grid-template-columns:26px auto; gap:8px; margin:7px 0; line-height:1.45; }
+    .num { display:inline-grid; width:22px; height:22px; place-items:center; border-radius:50%; background:var(--ink); color:#fff; font-size:12px; font-weight:700; }
+    @media (max-width:767px) {
+      body { padding:10px; }
+      .header { padding:16px 14px; }
+      h1 { font-size:18px; }
+      .product-tabs { overflow-x:auto; padding:14px 14px 0; }
+      .product-tabs button { flex:0 0 auto; }
+      .content { padding:16px 14px 22px; }
+      table { min-width:520px; }
+      th,td { padding:9px 10px; }
+      .guide { grid-template-columns:1fr; gap:18px; padding-top:18px; }
+      .guide img { max-height:280px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="header"><h1 id="title">Full-Zipper Fleece Vest Size Guide</h1><button class="close" aria-label="Close">&times;</button></header>
+    <nav class="product-tabs" aria-label="Combo product"><button class="active" data-product="vest">Fleece Vest</button><button data-product="long">Quarter-Zip Long Sleeve</button></nav>
+    <section class="content">
+      <div class="units" aria-label="Measurement unit"><button class="active" data-unit="in">In</button><button data-unit="cm">Cm</button></div>
+      <p class="chart-note">Garment measurements are in <strong id="unit-label">inches</strong>.</p>
+      <div class="table-wrap"><table><thead><tr id="head"></tr></thead><tbody id="body"></tbody></table></div>
+      <p class="tolerance">Manual measurements may vary by 2–3 cm.</p>
+      <div class="guide">
+        <figure><img id="image" src="../assets/combo-fleece-vest-size-guide.webp" alt="Full-zip fleece vest measurement guide"></figure>
+        <div class="instructions"><h2>How to measure</h2><div id="instructions"></div></div>
+      </div>
+    </section>
+  </main>
+  <script>
+    const data = {
+      vest: {
+        title:'Full-Zipper Fleece Vest Size Guide', image:'../assets/combo-fleece-vest-size-guide.webp',
+        headers:['Size','US','Length','Chest','Shoulder'],
+        in:[['S','36','24.2','42.5','16.7'],['M','38','25.0','44.1','17.2'],['L','40','25.8','45.7','17.8'],['XL','42','26.6','47.2','18.4'],['2XL','44','27.4','48.8','19.0'],['3XL','46','28.0','50.4','19.6'],['4XL','48','28.5','52.0','20.2'],['5XL','50','29.1','53.5','20.8'],['6XL','52','29.7','55.1','21.4']],
+        cm:[['S','36','61.5','108.0','42.4'],['M','38','63.5','112.0','43.7'],['L','40','65.5','116.1','45.2'],['XL','42','67.6','119.9','46.7'],['2XL','44','69.6','124.0','48.3'],['3XL','46','71.1','128.0','49.8'],['4XL','48','72.4','132.1','51.3'],['5XL','50','73.9','135.9','52.8'],['6XL','52','75.4','140.0','54.4']],
+        instructions:[['Length','Measure from the highest shoulder point beside the collar to the bottom hem.'],['Chest','Measure around the garment at chest level, just below the armholes.'],['Shoulder','Measure straight across from one shoulder point to the other.']]
+      },
+      long: {
+        title:'Quarter-Zipper Long Sleeve Size Guide', image:'../assets/combo-quarter-zip-size-guide.webp',
+        headers:['Size','US','Length','Chest','Sleeve length'],
+        in:[['S','36','26.0','37.0','27.6'],['M','38','26.8','38.6','28.1'],['L','40','27.6','40.6','28.9'],['XL','42','28.3','42.5','29.6'],['2XL','44','29.1','44.5','30.3'],['3XL','46','29.9','46.5','31.0'],['4XL','48','30.7','48.4','31.7'],['5XL','50','31.5','50.4','32.4'],['6XL','52','32.3','52.4','33.1']],
+        cm:[['S','36','66.0','94.0','70.1'],['M','38','68.1','98.0','71.4'],['L','40','70.1','103.1','73.4'],['XL','42','71.9','108.0','75.2'],['2XL','44','73.9','113.0','77.0'],['3XL','46','75.9','118.1','78.7'],['4XL','48','78.0','122.9','80.5'],['5XL','50','80.0','128.0','82.3'],['6XL','52','82.0','133.1','84.1']],
+        instructions:[['Length','Measure from the highest shoulder point beside the collar to the bottom hem.'],['Chest','Measure around the garment at chest level, just below the armholes.'],['Sleeve length','Measure from the shoulder/armhole seam along the outer sleeve to the cuff.']]
+      }
+    };
+    let product='vest', unit='in';
+    function render(){
+      const d=data[product];
+      document.querySelector('#title').textContent=d.title;
+      document.querySelector('#image').src=d.image;
+      document.querySelector('#image').alt=d.title.replace(' Size Guide',' measurement guide');
+      document.querySelector('#unit-label').textContent=unit==='in'?'inches':'centimeters';
+      document.querySelector('#head').innerHTML=d.headers.map(x=>`<th>${x}</th>`).join('');
+      document.querySelector('#body').innerHTML=d[unit].map(r=>`<tr>${r.map((x,i)=>i===0?`<th>${x}</th>`:`<td>${x}</td>`).join('')}</tr>`).join('');
+      document.querySelector('#instructions').innerHTML=d.instructions.map((r,i)=>`<p><span class="num">${i+1}</span><span><strong>${r[0]}</strong> — ${r[1]}</span></p>`).join('');
+    }
+    document.querySelectorAll('[data-product]').forEach(b=>b.addEventListener('click',()=>{ product=b.dataset.product; document.querySelectorAll('[data-product]').forEach(x=>x.classList.toggle('active',x===b)); render(); }));
+    document.querySelectorAll('[data-unit]').forEach(b=>b.addEventListener('click',()=>{ unit=b.dataset.unit; document.querySelectorAll('[data-unit]').forEach(x=>x.classList.toggle('active',x===b)); render(); }));
+    render();
+  </script>
+</body>
+</html>

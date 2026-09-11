@@ -1,0 +1,87 @@
+[
+  {
+    "Url": "https://camosignal.com/collections/all",
+    "Status": 200,
+    "ProductCards": 24,
+    "ProductLinks": [
+      "/collections/all/products/250-years-of-usa-with-elk-t-shirt-copy",
+      "/collections/all/products/death-from-above-hoodie",
+      "/collections/all/products/fishin-and-free-usa-flag-t-shirt",
+      "/collections/all/products/gobbler-fight-t-shirt",
+      "/collections/all/products/grand-slam-subspecies-t-shirt",
+      "/collections/all/products/inshore-super-grand-slam-t-shirt",
+      "/collections/all/products/king-of-the-woods-t-shirt",
+      "/collections/all/products/land-of-the-free-t-shirt-1",
+      "/collections/all/products/let-us-thank-him-for-our-food-hoodie",
+      "/collections/all/products/let-us-thank-him-for-our-food-long-sleeve-back",
+      "/collections/all/products/let-us-thank-him-for-our-food-pocket-tee",
+      "/collections/all/products/let-us-thank-him-for-our-food-t-shirt",
+      "/collections/all/products/provided-by-him-t-shirt",
+      "/collections/all/products/rustic-moulton-barn-teton-national-park-t-shirt",
+      "/collections/all/products/strut-around-and-find-out-t-shirt",
+      "/collections/all/products/the-1929-teton-heritage-t-shirt",
+      "/collections/all/products/the-sun-road-expedition-t-shirt",
+      "/collections/all/products/trout-species-of-the-appalachian-mountains-t-shirt",
+      "/collections/all/products/turkey-hunters-world-slam-t-shirt",
+      "/collections/all/products/wild-turkey-t-shirt-copy",
+      "/collections/all/products/world-slam-of-turkey-t-shirt",
+      "/collections/all/products/world-turkey-slam-t-shirt",
+      "/collections/all/products/yellowstone-est-1872-t-shirt",
+      "/collections/all/products/yellowstone-national-park-t-shirt"
+    ],
+    "HasPageTwo": true
+  },
+  {
+    "Url": "https://camosignal.com/collections/all?page=2",
+    "Status": 200,
+    "ProductCards": 24,
+    "ProductLinks": [
+      "/collections/all/products/buck-fever-t-shirt",
+      "/collections/all/products/eastern-turkey-hunting-t-shirt",
+      "/collections/all/products/faith-fishing-cast-your-cares-t-shirt",
+      "/collections/all/products/fearless-christian-hunter-hoodie",
+      "/collections/all/products/fishers-of-men-matthew-4-19-t-shirt",
+      "/collections/all/products/hunt-hard-live-free-t-shirt",
+      "/collections/all/products/in-it-for-blood-camo-layering-series",
+      "/collections/all/products/labrador-4th-of-july-t-shirt-copy",
+      "/collections/all/products/let-us-thank-him-genesis-93-wildlife-t-shirt",
+      "/collections/all/products/liberty-or-death-gadsden-flag-t-shirt",
+      "/collections/all/products/patience-brings-the-harvest-pocket-tee",
+      "/collections/all/products/patience-brings-the-harvest-t-shirt",
+      "/collections/all/products/patriotic-dog-hunting-t-shirt",
+      "/collections/all/products/patriotic-labrador-dogs-back-print-t-shirt",
+      "/collections/all/products/patriotic-moose-hunting-t-shirt-copy-2",
+      "/collections/all/products/rack-seeker-camo-layering-series",
+      "/collections/all/products/run-gun-hunting-t-shirt",
+      "/collections/all/products/shallow-water-brawler-redfish-t-shirt",
+      "/collections/all/products/trout-royal-slam-t-shirt",
+      "/collections/all/products/trout-trifecta-t-shirt",
+      "/collections/all/products/turkey-in-the-wild-t-shirt",
+      "/collections/all/products/wild-turkey-family-oak-branch-t-shirt",
+      "/collections/all/products/wild-turkey-vintage-t-shirt",
+      "/collections/all/products/yellowstone-explorer-map-t-shirt"
+    ],
+    "HasPageTwo": true
+  },
+  {
+    "Url": "https://camosignal.com/collections/camo",
+    "Status": 404,
+    "ProductCards": 0,
+    "ProductLinks": null,
+    "HasPageTwo": false
+  },
+  {
+    "Url": "https://camosignal.com/pages/usa",
+    "Status": 200,
+    "ProductCards": 0,
+    "ProductLinks": null,
+    "HasPageTwo": false
+  },
+  {
+    "Url": "https://camosignal.com/pages/camo",
+    "Status": 200,
+    "ProductCards": 0,
+    "ProductLinks": null,
+    "HasPageTwo": false
+  }
+]

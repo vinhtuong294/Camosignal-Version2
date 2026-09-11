@@ -1,0 +1,17 @@
+type Output {
+  shouldNotify: Boolean!
+  nativeRecipientEligible: Boolean!
+  nativeRecipientReason: String!
+  mixedFactories: Boolean!
+  decisionReason: String!
+  checkoutEmail: String!
+  orderName: String!
+  idempotencyKey: String!
+  chinaItemCount: Int!
+  otherItemCount: Int!
+  unclassifiedItemCount: Int!
+  productTypeCount: Int!
+  productTypes: [String!]!
+  factoryGroupCount: Int!
+  factoryGroups: [String!]!
+}

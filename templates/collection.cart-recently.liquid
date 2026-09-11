@@ -1,0 +1,8 @@
+{%- layout none -%}
+{%- paginate collection.products by 50 -%}
+[
+  {%- for candidate in collection.products -%}
+    {"id":{{ candidate.id | json }},"handle":{{ candidate.handle | json }},"title":{{ candidate.title | json }},"requiresCustomization":{% if candidate.metafields.custom.enable_name.value or candidate.metafields.custom.enable_number.value %}true{% else %}false{% endif %}}{% unless forloop.last %},{% endunless %}
+  {%- endfor -%}
+]
+{%- endpaginate -%}

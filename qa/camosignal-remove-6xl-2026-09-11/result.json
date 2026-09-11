@@ -1,0 +1,569 @@
+{
+  "shop": "camosignal.com",
+  "completedAt": "2026-09-11T04:26:49.702Z",
+  "productsChanged": 74,
+  "variantsDeleted": 119,
+  "results": [
+    {
+      "data": {
+        "p0": {
+          "product": {
+            "id": "gid://shopify/Product/8394274406591",
+            "title": "Hardwood Camo Hunting T-shirt Ver 1"
+          },
+          "userErrors": []
+        },
+        "p1": {
+          "product": {
+            "id": "gid://shopify/Product/8394321428671",
+            "title": "Hardwood Camo Hunting T-shirt Ver 2"
+          },
+          "userErrors": []
+        },
+        "p2": {
+          "product": {
+            "id": "gid://shopify/Product/8396229116095",
+            "title": "Hardwood Camo Hunting T-shirt Ver 3"
+          },
+          "userErrors": []
+        },
+        "p3": {
+          "product": {
+            "id": "gid://shopify/Product/8401341415615",
+            "title": "Hardwood Camo Hunting T-shirt Ver 4"
+          },
+          "userErrors": []
+        },
+        "p4": {
+          "product": {
+            "id": "gid://shopify/Product/8406408265919",
+            "title": "Hardwood Camo Hunting T-shirt Ver 5"
+          },
+          "userErrors": []
+        },
+        "p5": {
+          "product": {
+            "id": "gid://shopify/Product/8400913301695",
+            "title": "Hardwood Camo Hunting T-shirt Ver 6"
+          },
+          "userErrors": []
+        },
+        "p6": {
+          "product": {
+            "id": "gid://shopify/Product/8401342529727",
+            "title": "Personalized Name Patriotic Deer 3D T-shirt"
+          },
+          "userErrors": []
+        },
+        "p7": {
+          "product": {
+            "id": "gid://shopify/Product/8394298556607",
+            "title": "Marsh Camo Hunting T-shirt Ver 1"
+          },
+          "userErrors": []
+        },
+        "p8": {
+          "product": {
+            "id": "gid://shopify/Product/8396291670207",
+            "title": "Marsh Camo Hunting T-shirt Ver 2"
+          },
+          "userErrors": []
+        },
+        "p9": {
+          "product": {
+            "id": "gid://shopify/Product/8396231016639",
+            "title": "Marsh Camo Hunting T-shirt Ver 3"
+          },
+          "userErrors": []
+        }
+      }
+    },
+    {
+      "data": {
+        "p10": {
+          "product": {
+            "id": "gid://shopify/Product/8400909107391",
+            "title": "Marsh Camo Hunting T-shirt Ver 4"
+          },
+          "userErrors": []
+        },
+        "p11": {
+          "product": {
+            "id": "gid://shopify/Product/8406409248959",
+            "title": "Personalized Name USA Flag Deer 3D T-shirt"
+          },
+          "userErrors": []
+        },
+        "p12": {
+          "product": {
+            "id": "gid://shopify/Product/8396243861695",
+            "title": "Moutainous Camo Hunting T-shirt Ver 1"
+          },
+          "userErrors": []
+        },
+        "p13": {
+          "product": {
+            "id": "gid://shopify/Product/8413957128383",
+            "title": "Unisex Respect The Wild PUFF Camo T-shirt"
+          },
+          "userErrors": []
+        },
+        "p14": {
+          "product": {
+            "id": "gid://shopify/Product/8413990289599",
+            "title": "Unisex I'd Rather Be Hunting PUFF Camo T-shirt"
+          },
+          "userErrors": []
+        },
+        "p15": {
+          "product": {
+            "id": "gid://shopify/Product/8413995303103",
+            "title": "Unisex Born To Hunt Est. Custom Year PUFF Camo T-shirt"
+          },
+          "userErrors": []
+        },
+        "p16": {
+          "product": {
+            "id": "gid://shopify/Product/8413998612671",
+            "title": "Unisex Dad: The Man, The Myth, The Legend PUFF Camo T-shirt"
+          },
+          "userErrors": []
+        },
+        "p17": {
+          "product": {
+            "id": "gid://shopify/Product/8414001627327",
+            "title": "Unisex Best Buckin' Dad Ever PUFF Camo T-shirt"
+          },
+          "userErrors": []
+        },
+        "p18": {
+          "product": {
+            "id": "gid://shopify/Product/8416351322303",
+            "title": "Personalized Name 'We The People' Deer Hunter 3D T-shirt"
+          },
+          "userErrors": []
+        },
+        "p19": {
+          "product": {
+            "id": "gid://shopify/Product/8416356073663",
+            "title": "Patriotic Buck 3D T-shirt"
+          },
+          "userErrors": []
+        }
+      }
+    },
+    {
+      "data": {
+        "p20": {
+          "product": {
+            "id": "gid://shopify/Product/8416365674687",
+            "title": "Personalized Name Heritage Deer Hunter 3D T-shirt"
+          },
+          "userErrors": []
+        },
+        "p21": {
+          "product": {
+            "id": "gid://shopify/Product/8416380846271",
+            "title": "Personalized Name American Pride Elk Hunter 3D T-shirt"
+          },
+          "userErrors": []
+        },
+        "p22": {
+          "product": {
+            "id": "gid://shopify/Product/8416385204415",
+            "title": "Personalized Name Moose Hunter USA 3D T-shirt"
+          },
+          "userErrors": []
+        },
+        "p23": {
+          "product": {
+            "id": "gid://shopify/Product/8532504412351",
+            "title": "Offshore By Nature Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p24": {
+          "product": {
+            "id": "gid://shopify/Product/8532505297087",
+            "title": "Sailfish The Genesis Of A Legacy Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p25": {
+          "product": {
+            "id": "gid://shopify/Product/8535891214527",
+            "title": "Shallow Water Brawler Redfish Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p26": {
+          "product": {
+            "id": "gid://shopify/Product/8541908631743",
+            "title": "Sailfish Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p27": {
+          "product": {
+            "id": "gid://shopify/Product/8541916233919",
+            "title": "Billfish Super Grand Slam Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p28": {
+          "product": {
+            "id": "gid://shopify/Product/8541922590911",
+            "title": "Fly Fishing Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p29": {
+          "product": {
+            "id": "gid://shopify/Product/8542174740671",
+            "title": "Reel Life Freshwater Sun Protection Hoodie"
+          },
+          "userErrors": []
+        }
+      }
+    },
+    {
+      "data": {
+        "p30": {
+          "product": {
+            "id": "gid://shopify/Product/8547616915647",
+            "title": "Redfish Chase Lifestyle Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p31": {
+          "product": {
+            "id": "gid://shopify/Product/8547617636543",
+            "title": "Inshore Red Drum Fishing Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p32": {
+          "product": {
+            "id": "gid://shopify/Product/8548479074495",
+            "title": "Beyond The Break Inshore Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p33": {
+          "product": {
+            "id": "gid://shopify/Product/8549353390271",
+            "title": "Nautical Anchor Marlin Performance Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p34": {
+          "product": {
+            "id": "gid://shopify/Product/8549354275007",
+            "title": "Deep Sea Sailfish Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p35": {
+          "product": {
+            "id": "gid://shopify/Product/8558613856447",
+            "title": "Greenhead Fever Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p36": {
+          "product": {
+            "id": "gid://shopify/Product/8558622900415",
+            "title": "Feather Fever Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p37": {
+          "product": {
+            "id": "gid://shopify/Product/8558623064255",
+            "title": "Buck Battle Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p38": {
+          "product": {
+            "id": "gid://shopify/Product/8558623097023",
+            "title": "Big Bass Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p39": {
+          "product": {
+            "id": "gid://shopify/Product/8560115450047",
+            "title": "Bowhunter Life Sun Protection Hoodie"
+          },
+          "userErrors": []
+        }
+      }
+    },
+    {
+      "data": {
+        "p40": {
+          "product": {
+            "id": "gid://shopify/Product/8560115581119",
+            "title": "Good Boy Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p41": {
+          "product": {
+            "id": "gid://shopify/Product/8568090755263",
+            "title": "Marlin Coast Offshore Sportfishing Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p42": {
+          "product": {
+            "id": "gid://shopify/Product/8572105162943",
+            "title": "Salt Addiction Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p43": {
+          "product": {
+            "id": "gid://shopify/Product/8572105261247",
+            "title": "Chasin' Flyer Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p44": {
+          "product": {
+            "id": "gid://shopify/Product/8572105359551",
+            "title": "Salt Life Skeleton Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p45": {
+          "product": {
+            "id": "gid://shopify/Product/8575863062719",
+            "title": "Offshore Proven Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p46": {
+          "product": {
+            "id": "gid://shopify/Product/8579211034815",
+            "title": "Bowhunter Life Camo Layering Series"
+          },
+          "userErrors": []
+        },
+        "p47": {
+          "product": {
+            "id": "gid://shopify/Product/8580005626047",
+            "title": "Hunt Hard Camo Layering Series"
+          },
+          "userErrors": []
+        },
+        "p48": {
+          "product": {
+            "id": "gid://shopify/Product/8580005986495",
+            "title": "Wild Crown Camo Layering Series"
+          },
+          "userErrors": []
+        },
+        "p49": {
+          "product": {
+            "id": "gid://shopify/Product/8580099145919",
+            "title": "Rack Seeker Camo Layering Series"
+          },
+          "userErrors": []
+        }
+      }
+    },
+    {
+      "data": {
+        "p50": {
+          "product": {
+            "id": "gid://shopify/Product/8580311613631",
+            "title": "In It For Blood Camo Layering Series"
+          },
+          "userErrors": []
+        },
+        "p51": {
+          "product": {
+            "id": "gid://shopify/Product/8586425663679",
+            "title": "Wapiti Legendary Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p52": {
+          "product": {
+            "id": "gid://shopify/Product/8588824150207",
+            "title": "Buck Fever Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p53": {
+          "product": {
+            "id": "gid://shopify/Product/8588824182975",
+            "title": "Deadth From Above Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p54": {
+          "product": {
+            "id": "gid://shopify/Product/8588829098175",
+            "title": "Marsh Raised Camo Layering Series"
+          },
+          "userErrors": []
+        },
+        "p55": {
+          "product": {
+            "id": "gid://shopify/Product/8590400454847",
+            "title": "The Upland Wingman Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p56": {
+          "product": {
+            "id": "gid://shopify/Product/8590400618687",
+            "title": "Head To Head Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p57": {
+          "product": {
+            "id": "gid://shopify/Product/8592119103679",
+            "title": "Marked & Retrieved Camo Layering Series"
+          },
+          "userErrors": []
+        },
+        "p58": {
+          "product": {
+            "id": "gid://shopify/Product/8592319381695",
+            "title": "Elk-Aholic Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p59": {
+          "product": {
+            "id": "gid://shopify/Product/8592319578303",
+            "title": "Limb Hanger Sun Protection Hoodie"
+          },
+          "userErrors": []
+        }
+      }
+    },
+    {
+      "data": {
+        "p60": {
+          "product": {
+            "id": "gid://shopify/Product/8592328360127",
+            "title": "Dove Field Social Club Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p61": {
+          "product": {
+            "id": "gid://shopify/Product/8592333471935",
+            "title": "Legend Of The Fall Camo Layering Series"
+          },
+          "userErrors": []
+        },
+        "p62": {
+          "product": {
+            "id": "gid://shopify/Product/8599483678911",
+            "title": "The Upland Way Camo Layering Series"
+          },
+          "userErrors": []
+        },
+        "p63": {
+          "product": {
+            "id": "gid://shopify/Product/8607286198463",
+            "title": "Rooster Chaser Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p64": {
+          "product": {
+            "id": "gid://shopify/Product/8607286591679",
+            "title": "Rooster Upland Wingshooting Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p65": {
+          "product": {
+            "id": "gid://shopify/Product/8607287083199",
+            "title": "Upland Gun Dog Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p66": {
+          "product": {
+            "id": "gid://shopify/Product/8607287541951",
+            "title": "Heritage Of The Uplands Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p67": {
+          "product": {
+            "id": "gid://shopify/Product/8608954908863",
+            "title": "Bruiser Camo Layering Series"
+          },
+          "userErrors": []
+        },
+        "p68": {
+          "product": {
+            "id": "gid://shopify/Product/8608954974399",
+            "title": "Monarch Camo Layering Series"
+          },
+          "userErrors": []
+        },
+        "p69": {
+          "product": {
+            "id": "gid://shopify/Product/8608958316735",
+            "title": "Autumn Flights Sun Protection Hoodie"
+          },
+          "userErrors": []
+        }
+      }
+    },
+    {
+      "data": {
+        "p70": {
+          "product": {
+            "id": "gid://shopify/Product/8611563241663",
+            "title": "Rooster Camo Layering Series"
+          },
+          "userErrors": []
+        },
+        "p71": {
+          "product": {
+            "id": "gid://shopify/Product/8611571859647",
+            "title": "Rut Signal Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p72": {
+          "product": {
+            "id": "gid://shopify/Product/8611572252863",
+            "title": "Marsh Tested Sun Protection Hoodie"
+          },
+          "userErrors": []
+        },
+        "p73": {
+          "product": {
+            "id": "gid://shopify/Product/8611627925695",
+            "title": "In It For Blood Sun Protection Hoodie"
+          },
+          "userErrors": []
+        }
+      }
+    }
+  ],
+  "verification": {
+    "data": {
+      "productVariants": {
+        "nodes": [],
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": null
+        }
+      }
+    }
+  }
+}

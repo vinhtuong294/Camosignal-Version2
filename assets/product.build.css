@@ -2142,10 +2142,109 @@ html.no-js .product-variants {
     transition: none;
   }
 }
+/* Separate purchase benefits, recommendations and product information evenly. */
+.product-form .product-purchase-perks {
+  margin: 24px 0 16px;
+}
+.product-form .flex-upsell--product-page .flex-upsell__header {
+  margin-bottom: 12px;
+}
+.product-form .flex-upsell--product-page .flex-upsell__list {
+  gap: 12px;
+}
+.product-form .product-accordion {
+  padding-top: 32px;
+}
+
+@media (max-width: 767.98px) {
+  .product-media .product-media__navigation {
+    display: none !important;
+  }
+  .product-media .product-media__slider-thumbnails {
+    padding-bottom: 8px;
+  }
+}
+
 @media (max-width: 991.98px) {
   .product[data-section-type="product"] .product-media--layout-carousel,
   .product[data-section-type="product"] .product-media--layout-carousel .product-media__container {
     position: relative !important;
     top: auto !important;
   }
+}
+
+/* Mobile PDP color and size share one four-column grid.
+   Scoped overrides replace the legacy inline picker dimensions without
+   changing desktop, product cards, quick views or other option types. */
+@media (max-width: 767.98px) {
+.product[data-section-type="product"] .product-options {
+  --pdp-option-height: 48px;
+  --pdp-option-gap: 12px;
+  padding-top: 32px !important;
+  padding-bottom: 24px !important;
+}
+.product[data-section-type="product"] .product-options .js-product-options {
+  display: grid;
+  gap: 32px;
+}
+.product[data-section-type="product"] .product-options :is(.product-options__swatch, .product-options__default) {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  margin: 0 !important;
+}
+.product[data-section-type="product"] .product-options .product-options__option-label {
+  margin-bottom: 12px;
+}
+.product[data-section-type="product"] .product-options :is(.product-options__swatch-container, .product-options__size-grid.is-size-option) {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: var(--pdp-option-gap) !important;
+  width: 100% !important;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+}
+.product[data-section-type="product"] .product-options :is(.radio-option-swatch, .product-options__size-grid.is-size-option .radio-option) {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: var(--pdp-option-height) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex: none !important;
+  aspect-ratio: auto !important;
+}
+.product[data-section-type="product"] .product-options :is(.radio-option-swatch__label, .product-options__size-grid.is-size-option .radio-option__label) {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  height: var(--pdp-option-height) !important;
+  min-height: var(--pdp-option-height) !important;
+  max-height: var(--pdp-option-height) !important;
+  padding: 0 !important;
+  border-radius: 2px !important;
+}
+.product[data-section-type="product"] .product-options .radio-option-swatch__image {
+  top: 3px;
+  left: 3px;
+  width: calc(100% - 6px);
+  height: calc(100% - 6px);
+  object-fit: cover !important;
+}
+.product[data-section-type="product"] .product-options .radio-input:checked + .radio-option-swatch__label {
+  outline: 2px solid #2c3d33 !important;
+  outline-offset: -2px !important;
+}
+.product[data-section-type="product"] .product-options .radio-option-swatch__label::after {
+  display: none;
+}
+.product[data-section-type="product"] .product-options .radio-input:focus-visible + :is(.radio-option-swatch__label, .radio-option__label) {
+  outline: 2px solid #2c3d33 !important;
+  outline-offset: 3px !important;
+}
 }

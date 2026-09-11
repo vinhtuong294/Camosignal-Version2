@@ -1,5 +1,5 @@
 import type { ListingFieldNames, ListingMetafieldInput, ListingStatus, LarkAttachment, LarkListingRow } from "./listing-types";
-import { dedupeLabels, effectiveColors, normalizeText } from "./listing-utils";
+import { dedupeLabels, effectiveColors, isColorlessProductType, normalizeText } from "./listing-utils";
 
 const LARK_API = "https://open.larksuite.com/open-apis";
 
@@ -235,7 +235,7 @@ function mapRow(record: LarkRecord, weeklyPlanTitle: string | null): LarkListing
   const tags = asLabels(record.fields[fields.tags]);
   const rowWithoutStatus = { productType, mainColor, colors };
   const warnings: string[] = [];
-  if (!effectiveColors(rowWithoutStatus).length && productType.toLowerCase() !== "upf hoodie") {
+  if (!effectiveColors(rowWithoutStatus).length && !isColorlessProductType(productType)) {
     warnings.push("No colors found. Confirm this product is intentionally colorless.");
   }
   if (!weeklyPlanText) warnings.push("No linked Weekly Design Plan. Collection may need review.");

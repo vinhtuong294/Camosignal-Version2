@@ -1800,6 +1800,35 @@
   color: #68794c;
 }
 .cart-shipping__check { display: block; flex-shrink: 0; }
+
+/* Keep the free-shipping state as a completed gold progress bar. */
+#CartDrawer.cart-drawer .cart-shipping:has(.js-cart-shipping-progress-bar.is-hidden) .cart-shipping__label,
+.cart-template[data-section-type="cart-template"] .cart-shipping:has(.js-cart-shipping-progress-bar.is-hidden) .cart-shipping__label {
+  min-height: 0;
+  padding: 0 0 7px;
+  border: 0;
+  background: transparent;
+  color: #2c3d33 !important;
+  font-family: var(--base-font-family), sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  line-height: 1.5;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+#CartDrawer.cart-drawer .cart-shipping:has(.js-cart-shipping-progress-bar.is-hidden) .cart-shipping__icon,
+.cart-template[data-section-type="cart-template"] .cart-shipping:has(.js-cart-shipping-progress-bar.is-hidden) .cart-shipping__icon {
+  display: none !important;
+}
+#CartDrawer.cart-drawer .cart-shipping:has(.js-cart-shipping-progress-bar.is-hidden) .cart-shipping__range,
+.cart-template[data-section-type="cart-template"] .cart-shipping:has(.js-cart-shipping-progress-bar.is-hidden) .cart-shipping__range {
+  display: flex;
+  margin-top: 0;
+}
+#CartDrawer.cart-drawer .cart-shipping .js-cart-shipping-progress-bar.is-hidden,
+.cart-template[data-section-type="cart-template"] .cart-shipping .js-cart-shipping-progress-bar.is-hidden {
+  display: block !important;
+}
 #CartDrawer.cart-drawer .cart-shipping__label,
 .cart-template[data-section-type="cart-template"] .cart-shipping__label {
   color: #2c3d33 !important;

@@ -1,0 +1,25 @@
+{
+  order {
+    id
+    name
+    email
+    test
+    cancelledAt
+    tags
+    customer {
+      id
+      defaultEmailAddress {
+        emailAddress
+        marketingState
+      }
+    }
+    lineItems {
+      currentQuantity
+      requiresShipping
+      isGiftCard
+      product {
+        productType
+      }
+    }
+  }
+}

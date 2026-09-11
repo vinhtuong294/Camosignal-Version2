@@ -124,6 +124,7 @@ the long-sleeve size is stored as a line item property.
 			<div class="product-combo-builder__size-row" data-combo-size-row="vest">
 				<div class="product-combo-builder__size-label-wrap">
 					<span class="product-combo-builder__size-icon" data-combo-row-image="vest" aria-hidden="true"></span>
+					<span class="product-combo-builder__size-label">Vest</span>
 				</div>
 				<div class="product-combo-builder__sizes" role="group" aria-label="Vest size">
 					{% for size_value in size_option.values %}
@@ -143,6 +144,7 @@ the long-sleeve size is stored as a line item property.
 			<div class="product-combo-builder__size-row" data-combo-size-row="long-sleeve">
 				<div class="product-combo-builder__size-label-wrap">
 					<span class="product-combo-builder__size-icon" data-combo-row-image="long-sleeve" aria-hidden="true"></span>
+					<span class="product-combo-builder__size-label">Long-sleeve</span>
 				</div>
 				<div class="product-combo-builder__sizes" role="group" aria-label="Long-sleeve size">
 					{% for size_value in size_option.values %}
@@ -340,9 +342,12 @@ the long-sleeve size is stored as a line item property.
 
 		.product-combo-builder__heading,
 		.product-combo-builder__subheading {
-			font-size: 14px;
-			font-weight: 600;
-			letter-spacing: 0.025em;
+			text-transform: none;
+			font-family: inherit;
+			font-size: 16px;
+			font-weight: 700;
+			line-height: 1.4;
+			letter-spacing: normal;
 		}
 
 		.product-combo-builder__choices {
@@ -427,7 +432,7 @@ the long-sleeve size is stored as a line item property.
 
 		.product-combo-builder__size-row {
 			display: grid;
-			grid-template-columns: 68px minmax(0, 1fr);
+			grid-template-columns: minmax(0, 1fr) auto;
 			grid-template-rows: auto auto;
 			gap: 4px 10px;
 			align-items: center;
@@ -440,14 +445,20 @@ the long-sleeve size is stored as a line item property.
 		.product-combo-builder__size-label-wrap {
 			display: flex;
 			grid-column: 1;
-			grid-row: 1 / span 2;
+			grid-row: 1;
 			min-width: 0;
 			align-items: center;
-			justify-content: center;
+			justify-content: flex-start;
+		}
+
+		.product-combo-builder__size-label {
+			display: inline;
+			font-size: 13px;
+			font-weight: 700;
 		}
 
 		.product-combo-builder__size-icon {
-			display: block;
+			display: none;
 			width: 60px;
 			height: 72px;
 			flex: 0 0 60px;
@@ -458,7 +469,7 @@ the long-sleeve size is stored as a line item property.
 
 		.product-combo-builder__sizes {
 			display: grid;
-			grid-column: 2;
+			grid-column: 1 / -1;
 			grid-row: 2;
 			grid-template-columns: repeat(9, minmax(0, 1fr));
 			gap: 5px;
@@ -501,7 +512,7 @@ the long-sleeve size is stored as a line item property.
 		}
 
 		.product-combo-builder__summary {
-			display: grid;
+			display: none;
 			grid-template-columns: auto 1fr auto;
 			min-height: 48px;
 			padding: 6px 10px;
@@ -814,43 +825,51 @@ the long-sleeve size is stored as a line item property.
 			}
 
 			.product-combo-builder__size-row {
-				grid-template-columns: 62px 1fr auto;
-				gap: 7px 10px;
+				grid-template-columns: minmax(0, 1fr) auto;
+				gap: 12px;
 			}
 
 			.product-combo-builder__size-label-wrap {
 				grid-column: 1;
-				grid-row: 1 / span 2;
+				grid-row: 1;
+				justify-content: flex-start;
+			}
+
+			.product-combo-builder__size-label {
+				display: inline;
+				font-size: 14px;
+				font-weight: 700;
 			}
 
 			.product-combo-builder__size-guide {
-				grid-column: 3;
+				grid-column: 2;
 				grid-row: 1;
 			}
 
 			.product-combo-builder__sizes {
-				grid-column: 2 / -1;
+				grid-column: 1 / -1;
 				grid-row: 2;
-				grid-template-columns: repeat(5, minmax(42px, 1fr));
+				grid-template-columns: repeat(4, minmax(0, 1fr));
+				gap: 12px;
 			}
 
-			.product-combo-builder__size-icon {
-				width: 56px;
-				height: 68px;
-				flex-basis: 56px;
-			}
-
-			.product-combo-builder__summary {
-				grid-template-columns: auto minmax(0, 1fr) auto;
-			}
-
-			.product-combo-builder__summary-text {
+			.product-combo-builder__size {
+				box-sizing: border-box;
+				width: 100%;
 				min-width: 0;
+				height: 48px;
+				min-height: 48px;
+				padding: 0;
+				border-radius: 2px;
 			}
 
-			.product-combo-builder__summary-price {
-				grid-column: 3;
-				grid-row: 1;
+			.product-combo-builder__size-row:not([hidden]) + .product-combo-builder__size-row {
+				margin-top: 22px; /* Together with the 10px parent gap, separate size groups by 32px. */
+			}
+
+			.product-combo-builder__size-icon,
+			.product-combo-builder__summary {
+				display: none;
 			}
 		}
 	</style>

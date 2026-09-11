@@ -1,0 +1,3176 @@
+{
+  "shop": "camosignal.com",
+  "capturedAt": "2026-09-11T04:24:43.734Z",
+  "variants": [
+    {
+      "id": "gid://shopify/ProductVariant/45517936623807",
+      "title": "Hardwood / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Hardwood"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "33.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8394274406591",
+        "title": "Hardwood Camo Hunting T-shirt Ver 1",
+        "handle": "hardwood-camo-hunting-t-shirt-ver-1",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45517936853183",
+      "title": "Hardwood2 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Hardwood2"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "33.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8394321428671",
+        "title": "Hardwood Camo Hunting T-shirt Ver 2",
+        "handle": "hardwood-camo-hunting-t-shirt-ver-2",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45517936984255",
+      "title": "Hardwood / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Hardwood"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "33.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8396229116095",
+        "title": "Hardwood Camo Hunting T-shirt Ver 3",
+        "handle": "hardwood-camo-hunting-t-shirt-ver-2-copy-1",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45517937180863",
+      "title": "Hardwood / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Hardwood"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "33.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8401341415615",
+        "title": "Hardwood Camo Hunting T-shirt Ver 4",
+        "handle": "hardwood-camo-hunting-t-shirt-ver-6-copy",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45517937279167",
+      "title": "Hardwood5 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Hardwood5"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "33.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8406408265919",
+        "title": "Hardwood Camo Hunting T-shirt Ver 5",
+        "handle": "hardwood-camo-hunting-t-shirt-ver-4-copy",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45517944619199",
+      "title": "Hardwood / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Hardwood"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "33.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8400913301695",
+        "title": "Hardwood Camo Hunting T-shirt Ver 6",
+        "handle": "marsh-camo-hunting-t-shirt-ver-4-copy",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45517944848575",
+      "title": "Personalized1 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Personalized1"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "33.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8401342529727",
+        "title": "Personalized Name Patriotic Deer 3D T-shirt",
+        "handle": "hardwood-camo-hunting-t-shirt-ver-5",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45517944946879",
+      "title": "Marsh / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Marsh"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "33.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8394298556607",
+        "title": "Marsh Camo Hunting T-shirt Ver 1",
+        "handle": "marsh-camo-hunting-t-shirt-ver-1",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45517945209023",
+      "title": "Marsh / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Marsh"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "33.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8396291670207",
+        "title": "Marsh Camo Hunting T-shirt Ver 2",
+        "handle": "moutainous-camo-hunting-t-shirt-ver-1-copy",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45517945372863",
+      "title": "Marsh3 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Marsh3"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "33.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8396231016639",
+        "title": "Marsh Camo Hunting T-shirt Ver 3",
+        "handle": "hardwood-camo-hunting-t-shirt-ver-3-copy",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45517945438399",
+      "title": "Marsh4 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Marsh4"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "33.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8400909107391",
+        "title": "Marsh Camo Hunting T-shirt Ver 4",
+        "handle": "marsh-camo-hunting-t-shirt-ver-2-copy",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45517951271103",
+      "title": "Personalized2 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Personalized2"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "33.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8406409248959",
+        "title": "Personalized Name USA Flag Deer 3D T-shirt",
+        "handle": "personalize-name-patriotic-deer-3d-t-shirt-copy",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45517953007807",
+      "title": "Moutainous1 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Moutainous1"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "33.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8396243861695",
+        "title": "Moutainous Camo Hunting T-shirt Ver 1",
+        "handle": "marsh-camo-hunting-t-shirt-ver-3-copy",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45543167164607",
+      "title": "Moutainous1 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Moutainous1"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "34.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8413957128383",
+        "title": "Unisex Respect The Wild PUFF Camo T-shirt",
+        "handle": "moutainous-camo-hunting-t-shirt-ver-1-copy-1",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45543328809151",
+      "title": "Hardwood5 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Hardwood5"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "34.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8413957128383",
+        "title": "Unisex Respect The Wild PUFF Camo T-shirt",
+        "handle": "moutainous-camo-hunting-t-shirt-ver-1-copy-1",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45543329136831",
+      "title": "Marsh3 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Marsh3"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "34.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8413957128383",
+        "title": "Unisex Respect The Wild PUFF Camo T-shirt",
+        "handle": "moutainous-camo-hunting-t-shirt-ver-1-copy-1",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45543329464511",
+      "title": "Marsh4 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Marsh4"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "34.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8413957128383",
+        "title": "Unisex Respect The Wild PUFF Camo T-shirt",
+        "handle": "moutainous-camo-hunting-t-shirt-ver-1-copy-1",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45543344996543",
+      "title": "Hardwood5 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Hardwood5"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "34.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8413990289599",
+        "title": "Unisex I'd Rather Be Hunting PUFF Camo T-shirt",
+        "handle": "unisex-respect-the-wild-puff-camo-t-shirt-copy",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45543345324223",
+      "title": "Moutainous1 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Moutainous1"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "34.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8413990289599",
+        "title": "Unisex I'd Rather Be Hunting PUFF Camo T-shirt",
+        "handle": "unisex-respect-the-wild-puff-camo-t-shirt-copy",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45543345651903",
+      "title": "Marsh3 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Marsh3"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "34.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8413990289599",
+        "title": "Unisex I'd Rather Be Hunting PUFF Camo T-shirt",
+        "handle": "unisex-respect-the-wild-puff-camo-t-shirt-copy",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45543345979583",
+      "title": "Marsh4 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Marsh4"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "34.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8413990289599",
+        "title": "Unisex I'd Rather Be Hunting PUFF Camo T-shirt",
+        "handle": "unisex-respect-the-wild-puff-camo-t-shirt-copy",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45543360856255",
+      "title": "Hardwood5 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Hardwood5"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "34.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8413995303103",
+        "title": "Unisex Born To Hunt Est. Custom Year PUFF Camo T-shirt",
+        "handle": "unisex-born-to-hunt-est-custom-year-puff-camo-t-shirt",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45543361183935",
+      "title": "Moutainous1 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Moutainous1"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "34.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8413995303103",
+        "title": "Unisex Born To Hunt Est. Custom Year PUFF Camo T-shirt",
+        "handle": "unisex-born-to-hunt-est-custom-year-puff-camo-t-shirt",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45543361511615",
+      "title": "Marsh3 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Marsh3"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "34.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8413995303103",
+        "title": "Unisex Born To Hunt Est. Custom Year PUFF Camo T-shirt",
+        "handle": "unisex-born-to-hunt-est-custom-year-puff-camo-t-shirt",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45543361839295",
+      "title": "Marsh4 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Marsh4"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "34.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8413995303103",
+        "title": "Unisex Born To Hunt Est. Custom Year PUFF Camo T-shirt",
+        "handle": "unisex-born-to-hunt-est-custom-year-puff-camo-t-shirt",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45543376617663",
+      "title": "Hardwood5 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Hardwood5"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "34.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8413998612671",
+        "title": "Unisex Dad: The Man, The Myth, The Legend PUFF Camo T-shirt",
+        "handle": "unisex-respect-the-wild-puff-camo-t-shirt-copy-1",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45543376945343",
+      "title": "Moutainous1 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Moutainous1"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "34.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8413998612671",
+        "title": "Unisex Dad: The Man, The Myth, The Legend PUFF Camo T-shirt",
+        "handle": "unisex-respect-the-wild-puff-camo-t-shirt-copy-1",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45543377273023",
+      "title": "Marsh3 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Marsh3"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "34.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8413998612671",
+        "title": "Unisex Dad: The Man, The Myth, The Legend PUFF Camo T-shirt",
+        "handle": "unisex-respect-the-wild-puff-camo-t-shirt-copy-1",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45543377600703",
+      "title": "Marsh4 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Marsh4"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "34.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8413998612671",
+        "title": "Unisex Dad: The Man, The Myth, The Legend PUFF Camo T-shirt",
+        "handle": "unisex-respect-the-wild-puff-camo-t-shirt-copy-1",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45543398473919",
+      "title": "Hardwood5 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Hardwood5"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "34.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8414001627327",
+        "title": "Unisex Best Buckin' Dad Ever PUFF Camo T-shirt",
+        "handle": "unisex-respect-the-wild-puff-camo-t-shirt-copy-2",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45543398801599",
+      "title": "Moutainous1 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Moutainous1"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "34.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8414001627327",
+        "title": "Unisex Best Buckin' Dad Ever PUFF Camo T-shirt",
+        "handle": "unisex-respect-the-wild-puff-camo-t-shirt-copy-2",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45543399129279",
+      "title": "Marsh3 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Marsh3"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "34.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8414001627327",
+        "title": "Unisex Best Buckin' Dad Ever PUFF Camo T-shirt",
+        "handle": "unisex-respect-the-wild-puff-camo-t-shirt-copy-2",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45543399456959",
+      "title": "Marsh4 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Marsh4"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "34.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8414001627327",
+        "title": "Unisex Best Buckin' Dad Ever PUFF Camo T-shirt",
+        "handle": "unisex-respect-the-wild-puff-camo-t-shirt-copy-2",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45548117524671",
+      "title": "Personalized3 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Personalized3"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "33.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8416351322303",
+        "title": "Personalized Name 'We The People' Deer Hunter 3D T-shirt",
+        "handle": "personalized-nam-we-the-people-deer-hunter-3d-t-shirt",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45548143018175",
+      "title": "Personalize4 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Personalize4"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "33.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8416356073663",
+        "title": "Patriotic Buck 3D T-shirt",
+        "handle": "personalized-nam-we-the-people-deer-hunter-3d-t-shirt-copy",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45548223201471",
+      "title": "Personalized5 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Personalized5"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "33.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8416365674687",
+        "title": "Personalized Name Heritage Deer Hunter 3D T-shirt",
+        "handle": "personalize-name-heritage-deer-hunter-3d-t-shirt",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45548283101375",
+      "title": "Personalized6 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Personalized6"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "33.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8416380846271",
+        "title": "Personalized Name American Pride Elk Hunter 3D T-shirt",
+        "handle": "personalize-name-american-pride-elk-hunter-3d-t-shirt",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45548312658111",
+      "title": "Personalized7 / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Color",
+          "value": "Personalized7"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "33.95",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8416385204415",
+        "title": "Personalized Name Moose Hunter USA 3D T-shirt",
+        "handle": "personalize-name-moose-hunter-usa-3d-t-shirt",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45945771917503",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8532504412351",
+        "title": "Offshore By Nature Sun Protection Hoodie",
+        "handle": "offshore-by-nature-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45945772572863",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8532505297087",
+        "title": "Sailfish The Genesis Of A Legacy Sun Protection Hoodie",
+        "handle": "sailfish-the-genesis-of-a-legacy-sun-protection-hoodie",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45953590788287",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8535891214527",
+        "title": "Shallow Water Brawler Redfish Sun Protection Hoodie",
+        "handle": "shallow-water-brawler-redfish-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45970105008319",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8541908631743",
+        "title": "Sailfish Sun Protection Hoodie",
+        "handle": "sailfish-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45970117427391",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8541916233919",
+        "title": "Billfish Super Grand Slam Sun Protection Hoodie",
+        "handle": "billfish-super-grand-slam-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45970124112063",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8541922590911",
+        "title": "Fly Fishing Sun Protection Hoodie",
+        "handle": "fly-fishing-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/45970507628735",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 8,
+      "product": {
+        "id": "gid://shopify/Product/8542174740671",
+        "title": "Reel Life Freshwater Sun Protection Hoodie",
+        "handle": "reel-life-freshwater-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46000691806399",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8547616915647",
+        "title": "Redfish Chase Lifestyle Sun Protection Hoodie",
+        "handle": "redfish-chase-lifestyle-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46000697376959",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8547617636543",
+        "title": "Inshore Red Drum Fishing Sun Protection Hoodie",
+        "handle": "inshore-red-drum-fishing-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46003139084479",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8548479074495",
+        "title": "Beyond The Break Inshore Sun Protection Hoodie",
+        "handle": "beyond-the-break-inshore-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46005522694335",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8549353390271",
+        "title": "Nautical Anchor Marlin Performance Sun Protection Hoodie",
+        "handle": "nautical-anchor-marlin-performance-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46005525577919",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8549354275007",
+        "title": "Deep Sea Sailfish Sun Protection Hoodie",
+        "handle": "deep-sea-sailfish-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46026082844863",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8558613856447",
+        "title": "Greenhead Fever Sun Protection Hoodie",
+        "handle": "greenhead-fever-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46026092150975",
+      "title": "Hoodie Only / 6XL",
+      "selectedOptions": [
+        {
+          "name": "CHOOSE YOUR SET",
+          "value": "Hoodie Only"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8558622900415",
+        "title": "Feather Fever Sun Protection Hoodie",
+        "handle": "feather-fever-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46026092740799",
+      "title": "Hoodie Only / 6XL",
+      "selectedOptions": [
+        {
+          "name": "CHOOSE YOUR SET",
+          "value": "Hoodie Only"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8558623064255",
+        "title": "Buck Battle Sun Protection Hoodie",
+        "handle": "buck-battle-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46026093068479",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 9,
+      "product": {
+        "id": "gid://shopify/Product/8558623097023",
+        "title": "Big Bass Sun Protection Hoodie",
+        "handle": "big-bass-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46028991168703",
+      "title": "Hoodie Only / 6XL",
+      "selectedOptions": [
+        {
+          "name": "CHOOSE YOUR SET",
+          "value": "Hoodie Only"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8560115450047",
+        "title": "Bowhunter Life Sun Protection Hoodie",
+        "handle": "bowhunter-life-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46028994478271",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8560115581119",
+        "title": "Good Boy Sun Protection Hoodie",
+        "handle": "good-boy-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46047337775295",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8568090755263",
+        "title": "Marlin Coast Offshore Sportfishing Sun Protection Hoodie",
+        "handle": "marlin-coast-offshore-sportfishing-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46058217701567",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8572105162943",
+        "title": "Salt Addiction Sun Protection Hoodie",
+        "handle": "salt-addiction-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46058218062015",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8572105261247",
+        "title": "Chasin' Flyer Sun Protection Hoodie",
+        "handle": "chasin-flyer-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46058218422463",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8572105359551",
+        "title": "Salt Life Skeleton Sun Protection Hoodie",
+        "handle": "salt-life-skeleton-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46064275882175",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8575863062719",
+        "title": "Offshore Proven Sun Protection Hoodie",
+        "handle": "offshore-proven-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46069616902335",
+      "title": "Combo (Vest + Long-Sleeve) / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Combo (Vest + Long-Sleeve)"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "69.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8579211034815",
+        "title": "Bowhunter Life Camo Layering Series",
+        "handle": "bowhuter-life-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46069616935103",
+      "title": "Quarter-Zipper Fleece Vest / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Quarter-Zipper Fleece Vest"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "53.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8579211034815",
+        "title": "Bowhunter Life Camo Layering Series",
+        "handle": "bowhuter-life-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46069616967871",
+      "title": "Full-Zipper Long-Sleeve / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Full-Zipper Long-Sleeve"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "39.99",
+      "sku": null,
+      "inventoryQuantity": 99,
+      "product": {
+        "id": "gid://shopify/Product/8579211034815",
+        "title": "Bowhunter Life Camo Layering Series",
+        "handle": "bowhuter-life-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46070652960959",
+      "title": "Combo (Vest + Long-Sleeve) / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Combo (Vest + Long-Sleeve)"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "69.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8580005626047",
+        "title": "Hunt Hard Camo Layering Series",
+        "handle": "hunt-hard-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46070653255871",
+      "title": "Quarter-Zipper Fleece Vest / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Quarter-Zipper Fleece Vest"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "53.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8580005626047",
+        "title": "Hunt Hard Camo Layering Series",
+        "handle": "hunt-hard-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46070653550783",
+      "title": "Full-Zipper Long-Sleeve / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Full-Zipper Long-Sleeve"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "39.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8580005626047",
+        "title": "Hunt Hard Camo Layering Series",
+        "handle": "hunt-hard-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46070654173375",
+      "title": "Combo (Vest + Long-Sleeve) / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Combo (Vest + Long-Sleeve)"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "69.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8580005986495",
+        "title": "Wild Crown Camo Layering Series",
+        "handle": "wild-crown-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46070654468287",
+      "title": "Quarter-Zipper Fleece Vest / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Quarter-Zipper Fleece Vest"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "53.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8580005986495",
+        "title": "Wild Crown Camo Layering Series",
+        "handle": "wild-crown-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46070654763199",
+      "title": "Full-Zipper Long-Sleeve / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Full-Zipper Long-Sleeve"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "39.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8580005986495",
+        "title": "Wild Crown Camo Layering Series",
+        "handle": "wild-crown-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46071075242175",
+      "title": "Combo (Vest + Long-Sleeve) / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Combo (Vest + Long-Sleeve)"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "69.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8580099145919",
+        "title": "Rack Seeker Camo Layering Series",
+        "handle": "rack-seeker-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46071075537087",
+      "title": "Quarter-Zipper Fleece Vest / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Quarter-Zipper Fleece Vest"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "53.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8580099145919",
+        "title": "Rack Seeker Camo Layering Series",
+        "handle": "rack-seeker-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46071075831999",
+      "title": "Full-Zipper Long-Sleeve / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Full-Zipper Long-Sleeve"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "39.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8580099145919",
+        "title": "Rack Seeker Camo Layering Series",
+        "handle": "rack-seeker-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46071838113983",
+      "title": "Combo (Vest + Long-Sleeve) / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Combo (Vest + Long-Sleeve)"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "69.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8580311613631",
+        "title": "In It For Blood Camo Layering Series",
+        "handle": "in-it-for-blood-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46071838408895",
+      "title": "Quarter-Zipper Fleece Vest / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Quarter-Zipper Fleece Vest"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "53.99",
+      "sku": null,
+      "inventoryQuantity": 99,
+      "product": {
+        "id": "gid://shopify/Product/8580311613631",
+        "title": "In It For Blood Camo Layering Series",
+        "handle": "in-it-for-blood-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46071838703807",
+      "title": "Full-Zipper Long-Sleeve / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Full-Zipper Long-Sleeve"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "39.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8580311613631",
+        "title": "In It For Blood Camo Layering Series",
+        "handle": "in-it-for-blood-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46086808993983",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8586425663679",
+        "title": "Wapiti Legendary Sun Protection Hoodie",
+        "handle": "wapiti-legendary-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46098427052223",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8588824150207",
+        "title": "Buck Fever Sun Protection Hoodie",
+        "handle": "buck-fever-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46098427379903",
+      "title": "Hoodie Only / 6XL",
+      "selectedOptions": [
+        {
+          "name": "CHOOSE YOUR SET",
+          "value": "Hoodie Only"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8588824182975",
+        "title": "Deadth From Above Sun Protection Hoodie",
+        "handle": "deadth-from-above-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46098448449727",
+      "title": "Combo (Vest + Long-Sleeve) / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Combo (Vest + Long-Sleeve)"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "69.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8588829098175",
+        "title": "Marsh Raised Camo Layering Series",
+        "handle": "marsh-raised-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46098448744639",
+      "title": "Quarter-Zipper Fleece Vest / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Quarter-Zipper Fleece Vest"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "53.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8588829098175",
+        "title": "Marsh Raised Camo Layering Series",
+        "handle": "marsh-raised-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46098449039551",
+      "title": "Full-Zipper Long-Sleeve / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Full-Zipper Long-Sleeve"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "39.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8588829098175",
+        "title": "Marsh Raised Camo Layering Series",
+        "handle": "marsh-raised-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46105060737215",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8590400454847",
+        "title": "The Upland Wingman Sun Protection Hoodie",
+        "handle": "the-upland-wingman-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46105061130431",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8590400618687",
+        "title": "Head To Head Sun Protection Hoodie",
+        "handle": "head-to-head-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46109887955135",
+      "title": "Combo (Vest + Long-Sleeve) / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Combo (Vest + Long-Sleeve)"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "69.99",
+      "sku": null,
+      "inventoryQuantity": 0,
+      "product": {
+        "id": "gid://shopify/Product/8592119103679",
+        "title": "Marked & Retrieved Camo Layering Series",
+        "handle": "marked-retrieved-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46109888250047",
+      "title": "Quarter-Zipper Fleece Vest / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Quarter-Zipper Fleece Vest"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "53.99",
+      "sku": null,
+      "inventoryQuantity": 0,
+      "product": {
+        "id": "gid://shopify/Product/8592119103679",
+        "title": "Marked & Retrieved Camo Layering Series",
+        "handle": "marked-retrieved-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46109888544959",
+      "title": "Full-Zipper Long-Sleeve / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Full-Zipper Long-Sleeve"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "39.99",
+      "sku": null,
+      "inventoryQuantity": 0,
+      "product": {
+        "id": "gid://shopify/Product/8592119103679",
+        "title": "Marked & Retrieved Camo Layering Series",
+        "handle": "marked-retrieved-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46110462050495",
+      "title": "Hoodie Only / 6XL",
+      "selectedOptions": [
+        {
+          "name": "CHOOSE YOUR SET",
+          "value": "Hoodie Only"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 50,
+      "product": {
+        "id": "gid://shopify/Product/8592319381695",
+        "title": "Elk-Aholic Sun Protection Hoodie",
+        "handle": "elk-aholic-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46110470537407",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 50,
+      "product": {
+        "id": "gid://shopify/Product/8592319578303",
+        "title": "Limb Hanger Sun Protection Hoodie",
+        "handle": "limb-hanger-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46110523130047",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 50,
+      "product": {
+        "id": "gid://shopify/Product/8592328360127",
+        "title": "Dove Field Social Club Sun Protection Hoodie",
+        "handle": "dove-field-social-club-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46110586306751",
+      "title": "Combo (Vest + Long-Sleeve) / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Combo (Vest + Long-Sleeve)"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "69.99",
+      "sku": null,
+      "inventoryQuantity": 0,
+      "product": {
+        "id": "gid://shopify/Product/8592333471935",
+        "title": "Legend Of The Fall Camo Layering Series",
+        "handle": "legend-of-the-fall-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46110586601663",
+      "title": "Quarter-Zipper Fleece Vest / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Quarter-Zipper Fleece Vest"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "53.99",
+      "sku": null,
+      "inventoryQuantity": 0,
+      "product": {
+        "id": "gid://shopify/Product/8592333471935",
+        "title": "Legend Of The Fall Camo Layering Series",
+        "handle": "legend-of-the-fall-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46110586896575",
+      "title": "Full-Zipper Long-Sleeve / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Full-Zipper Long-Sleeve"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "39.99",
+      "sku": null,
+      "inventoryQuantity": 0,
+      "product": {
+        "id": "gid://shopify/Product/8592333471935",
+        "title": "Legend Of The Fall Camo Layering Series",
+        "handle": "legend-of-the-fall-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46133376549055",
+      "title": "Combo (Vest + Long-Sleeve) / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Combo (Vest + Long-Sleeve)"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "69.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8599483678911",
+        "title": "The Upland Way Camo Layering Series",
+        "handle": "the-upland-way-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46133376843967",
+      "title": "Quarter-Zipper Fleece Vest / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Quarter-Zipper Fleece Vest"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "53.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8599483678911",
+        "title": "The Upland Way Camo Layering Series",
+        "handle": "the-upland-way-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46133377138879",
+      "title": "Full-Zipper Long-Sleeve / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Full-Zipper Long-Sleeve"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "39.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8599483678911",
+        "title": "The Upland Way Camo Layering Series",
+        "handle": "the-upland-way-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46168210931903",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8607286198463",
+        "title": "Rooster Chaser Sun Protection Hoodie",
+        "handle": "rooster-chaser-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46168211587263",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8607286591679",
+        "title": "Rooster Upland Wingshooting Sun Protection Hoodie",
+        "handle": "rooster-upland-wingshooting-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46168212308159",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8607287083199",
+        "title": "Upland Gun Dog Sun Protection Hoodie",
+        "handle": "upland-gun-dog-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46168213094591",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8607287541951",
+        "title": "Heritage Of The Uplands Sun Protection Hoodie",
+        "handle": "heritage-of-the-uplands-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46175500730559",
+      "title": "Combo (Vest + Long-Sleeve) / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Combo (Vest + Long-Sleeve)"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "69.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8608954908863",
+        "title": "Bruiser Camo Layering Series",
+        "handle": "bruiser-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46175501025471",
+      "title": "Quarter-Zipper Fleece Vest / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Quarter-Zipper Fleece Vest"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "53.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8608954908863",
+        "title": "Bruiser Camo Layering Series",
+        "handle": "bruiser-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46175501320383",
+      "title": "Full-Zipper Long-Sleeve / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Full-Zipper Long-Sleeve"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "39.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8608954908863",
+        "title": "Bruiser Camo Layering Series",
+        "handle": "bruiser-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46175501713599",
+      "title": "Combo (Vest + Long-Sleeve) / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Combo (Vest + Long-Sleeve)"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "69.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8608954974399",
+        "title": "Monarch Camo Layering Series",
+        "handle": "monarch-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46175502008511",
+      "title": "Quarter-Zipper Fleece Vest / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Quarter-Zipper Fleece Vest"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "53.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8608954974399",
+        "title": "Monarch Camo Layering Series",
+        "handle": "monarch-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46175502303423",
+      "title": "Full-Zipper Long-Sleeve / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Full-Zipper Long-Sleeve"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "39.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8608954974399",
+        "title": "Monarch Camo Layering Series",
+        "handle": "monarch-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46175511642303",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8608958316735",
+        "title": "Autumn Flights Sun Protection Hoodie",
+        "handle": "autumn-flights-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46182668828863",
+      "title": "Combo (Vest + Long-Sleeve) / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Combo (Vest + Long-Sleeve)"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "69.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8611563241663",
+        "title": "Rooster Camo Layering Series",
+        "handle": "rooster-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46182669123775",
+      "title": "Quarter-Zipper Fleece Vest / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Quarter-Zipper Fleece Vest"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "53.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8611563241663",
+        "title": "Rooster Camo Layering Series",
+        "handle": "rooster-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46182669418687",
+      "title": "Full-Zipper Long-Sleeve / 6XL",
+      "selectedOptions": [
+        {
+          "name": "Your choice",
+          "value": "Full-Zipper Long-Sleeve"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "39.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8611563241663",
+        "title": "Rooster Camo Layering Series",
+        "handle": "rooster-camo-layering-series",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46182682001599",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8611571859647",
+        "title": "Rut Signal Sun Protection Hoodie",
+        "handle": "rut-signal-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46182682820799",
+      "title": "6XL",
+      "selectedOptions": [
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8611572252863",
+        "title": "Marsh Tested Sun Protection Hoodie",
+        "handle": "marsh-tested-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46182758514879",
+      "title": "Hoodie Only / 6XL",
+      "selectedOptions": [
+        {
+          "name": "CHOOSE YOUR SET",
+          "value": "Hoodie Only"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "43.99",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8611627925695",
+        "title": "In It For Blood Sun Protection Hoodie",
+        "handle": "in-it-for-blood-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46182763692223",
+      "title": "Hoodie + Neck Gaiter / 6XL",
+      "selectedOptions": [
+        {
+          "name": "CHOOSE YOUR SET",
+          "value": "Hoodie + Neck Gaiter"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "53.98",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8611627925695",
+        "title": "In It For Blood Sun Protection Hoodie",
+        "handle": "in-it-for-blood-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46182785646783",
+      "title": "Hoodie + Neck Gaiter / 6XL",
+      "selectedOptions": [
+        {
+          "name": "CHOOSE YOUR SET",
+          "value": "Hoodie + Neck Gaiter"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "53.98",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8588824182975",
+        "title": "Deadth From Above Sun Protection Hoodie",
+        "handle": "deadth-from-above-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46182787350719",
+      "title": "Hoodie + Neck Gaiter / 6XL",
+      "selectedOptions": [
+        {
+          "name": "CHOOSE YOUR SET",
+          "value": "Hoodie + Neck Gaiter"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "53.98",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8592319381695",
+        "title": "Elk-Aholic Sun Protection Hoodie",
+        "handle": "elk-aholic-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46182792855743",
+      "title": "Hoodie + Neck Gaiter / 6XL",
+      "selectedOptions": [
+        {
+          "name": "CHOOSE YOUR SET",
+          "value": "Hoodie + Neck Gaiter"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "53.98",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8560115450047",
+        "title": "Bowhunter Life Sun Protection Hoodie",
+        "handle": "bowhunter-life-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46183029735615",
+      "title": "Hoodie + Neck Gaiter / 6XL",
+      "selectedOptions": [
+        {
+          "name": "CHOOSE YOUR SET",
+          "value": "Hoodie + Neck Gaiter"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "53.98",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8558622900415",
+        "title": "Feather Fever Sun Protection Hoodie",
+        "handle": "feather-fever-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "gid://shopify/ProductVariant/46183036649663",
+      "title": "Hoodie + Neck Gaiter / 6XL",
+      "selectedOptions": [
+        {
+          "name": "CHOOSE YOUR SET",
+          "value": "Hoodie + Neck Gaiter"
+        },
+        {
+          "name": "Size",
+          "value": "6XL"
+        }
+      ],
+      "price": "53.98",
+      "sku": null,
+      "inventoryQuantity": 100,
+      "product": {
+        "id": "gid://shopify/Product/8558623064255",
+        "title": "Buck Battle Sun Protection Hoodie",
+        "handle": "buck-battle-sun-protection-hoodie",
+        "status": "ACTIVE"
+      }
+    }
+  ],
+  "groups": [
+    {
+      "productId": "gid://shopify/Product/8394274406591",
+      "title": "Hardwood Camo Hunting T-shirt Ver 1",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45517936623807"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8394321428671",
+      "title": "Hardwood Camo Hunting T-shirt Ver 2",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45517936853183"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8396229116095",
+      "title": "Hardwood Camo Hunting T-shirt Ver 3",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45517936984255"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8401341415615",
+      "title": "Hardwood Camo Hunting T-shirt Ver 4",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45517937180863"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8406408265919",
+      "title": "Hardwood Camo Hunting T-shirt Ver 5",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45517937279167"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8400913301695",
+      "title": "Hardwood Camo Hunting T-shirt Ver 6",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45517944619199"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8401342529727",
+      "title": "Personalized Name Patriotic Deer 3D T-shirt",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45517944848575"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8394298556607",
+      "title": "Marsh Camo Hunting T-shirt Ver 1",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45517944946879"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8396291670207",
+      "title": "Marsh Camo Hunting T-shirt Ver 2",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45517945209023"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8396231016639",
+      "title": "Marsh Camo Hunting T-shirt Ver 3",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45517945372863"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8400909107391",
+      "title": "Marsh Camo Hunting T-shirt Ver 4",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45517945438399"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8406409248959",
+      "title": "Personalized Name USA Flag Deer 3D T-shirt",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45517951271103"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8396243861695",
+      "title": "Moutainous Camo Hunting T-shirt Ver 1",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45517953007807"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8413957128383",
+      "title": "Unisex Respect The Wild PUFF Camo T-shirt",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45543167164607",
+        "gid://shopify/ProductVariant/45543328809151",
+        "gid://shopify/ProductVariant/45543329136831",
+        "gid://shopify/ProductVariant/45543329464511"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8413990289599",
+      "title": "Unisex I'd Rather Be Hunting PUFF Camo T-shirt",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45543344996543",
+        "gid://shopify/ProductVariant/45543345324223",
+        "gid://shopify/ProductVariant/45543345651903",
+        "gid://shopify/ProductVariant/45543345979583"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8413995303103",
+      "title": "Unisex Born To Hunt Est. Custom Year PUFF Camo T-shirt",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45543360856255",
+        "gid://shopify/ProductVariant/45543361183935",
+        "gid://shopify/ProductVariant/45543361511615",
+        "gid://shopify/ProductVariant/45543361839295"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8413998612671",
+      "title": "Unisex Dad: The Man, The Myth, The Legend PUFF Camo T-shirt",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45543376617663",
+        "gid://shopify/ProductVariant/45543376945343",
+        "gid://shopify/ProductVariant/45543377273023",
+        "gid://shopify/ProductVariant/45543377600703"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8414001627327",
+      "title": "Unisex Best Buckin' Dad Ever PUFF Camo T-shirt",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45543398473919",
+        "gid://shopify/ProductVariant/45543398801599",
+        "gid://shopify/ProductVariant/45543399129279",
+        "gid://shopify/ProductVariant/45543399456959"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8416351322303",
+      "title": "Personalized Name 'We The People' Deer Hunter 3D T-shirt",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45548117524671"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8416356073663",
+      "title": "Patriotic Buck 3D T-shirt",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45548143018175"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8416365674687",
+      "title": "Personalized Name Heritage Deer Hunter 3D T-shirt",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45548223201471"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8416380846271",
+      "title": "Personalized Name American Pride Elk Hunter 3D T-shirt",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45548283101375"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8416385204415",
+      "title": "Personalized Name Moose Hunter USA 3D T-shirt",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45548312658111"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8532504412351",
+      "title": "Offshore By Nature Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45945771917503"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8532505297087",
+      "title": "Sailfish The Genesis Of A Legacy Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45945772572863"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8535891214527",
+      "title": "Shallow Water Brawler Redfish Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45953590788287"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8541908631743",
+      "title": "Sailfish Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45970105008319"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8541916233919",
+      "title": "Billfish Super Grand Slam Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45970117427391"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8541922590911",
+      "title": "Fly Fishing Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45970124112063"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8542174740671",
+      "title": "Reel Life Freshwater Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/45970507628735"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8547616915647",
+      "title": "Redfish Chase Lifestyle Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46000691806399"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8547617636543",
+      "title": "Inshore Red Drum Fishing Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46000697376959"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8548479074495",
+      "title": "Beyond The Break Inshore Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46003139084479"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8549353390271",
+      "title": "Nautical Anchor Marlin Performance Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46005522694335"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8549354275007",
+      "title": "Deep Sea Sailfish Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46005525577919"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8558613856447",
+      "title": "Greenhead Fever Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46026082844863"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8558622900415",
+      "title": "Feather Fever Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46026092150975",
+        "gid://shopify/ProductVariant/46183029735615"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8558623064255",
+      "title": "Buck Battle Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46026092740799",
+        "gid://shopify/ProductVariant/46183036649663"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8558623097023",
+      "title": "Big Bass Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46026093068479"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8560115450047",
+      "title": "Bowhunter Life Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46028991168703",
+        "gid://shopify/ProductVariant/46182792855743"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8560115581119",
+      "title": "Good Boy Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46028994478271"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8568090755263",
+      "title": "Marlin Coast Offshore Sportfishing Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46047337775295"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8572105162943",
+      "title": "Salt Addiction Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46058217701567"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8572105261247",
+      "title": "Chasin' Flyer Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46058218062015"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8572105359551",
+      "title": "Salt Life Skeleton Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46058218422463"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8575863062719",
+      "title": "Offshore Proven Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46064275882175"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8579211034815",
+      "title": "Bowhunter Life Camo Layering Series",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46069616902335",
+        "gid://shopify/ProductVariant/46069616935103",
+        "gid://shopify/ProductVariant/46069616967871"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8580005626047",
+      "title": "Hunt Hard Camo Layering Series",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46070652960959",
+        "gid://shopify/ProductVariant/46070653255871",
+        "gid://shopify/ProductVariant/46070653550783"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8580005986495",
+      "title": "Wild Crown Camo Layering Series",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46070654173375",
+        "gid://shopify/ProductVariant/46070654468287",
+        "gid://shopify/ProductVariant/46070654763199"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8580099145919",
+      "title": "Rack Seeker Camo Layering Series",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46071075242175",
+        "gid://shopify/ProductVariant/46071075537087",
+        "gid://shopify/ProductVariant/46071075831999"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8580311613631",
+      "title": "In It For Blood Camo Layering Series",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46071838113983",
+        "gid://shopify/ProductVariant/46071838408895",
+        "gid://shopify/ProductVariant/46071838703807"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8586425663679",
+      "title": "Wapiti Legendary Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46086808993983"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8588824150207",
+      "title": "Buck Fever Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46098427052223"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8588824182975",
+      "title": "Deadth From Above Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46098427379903",
+        "gid://shopify/ProductVariant/46182785646783"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8588829098175",
+      "title": "Marsh Raised Camo Layering Series",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46098448449727",
+        "gid://shopify/ProductVariant/46098448744639",
+        "gid://shopify/ProductVariant/46098449039551"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8590400454847",
+      "title": "The Upland Wingman Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46105060737215"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8590400618687",
+      "title": "Head To Head Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46105061130431"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8592119103679",
+      "title": "Marked & Retrieved Camo Layering Series",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46109887955135",
+        "gid://shopify/ProductVariant/46109888250047",
+        "gid://shopify/ProductVariant/46109888544959"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8592319381695",
+      "title": "Elk-Aholic Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46110462050495",
+        "gid://shopify/ProductVariant/46182787350719"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8592319578303",
+      "title": "Limb Hanger Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46110470537407"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8592328360127",
+      "title": "Dove Field Social Club Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46110523130047"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8592333471935",
+      "title": "Legend Of The Fall Camo Layering Series",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46110586306751",
+        "gid://shopify/ProductVariant/46110586601663",
+        "gid://shopify/ProductVariant/46110586896575"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8599483678911",
+      "title": "The Upland Way Camo Layering Series",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46133376549055",
+        "gid://shopify/ProductVariant/46133376843967",
+        "gid://shopify/ProductVariant/46133377138879"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8607286198463",
+      "title": "Rooster Chaser Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46168210931903"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8607286591679",
+      "title": "Rooster Upland Wingshooting Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46168211587263"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8607287083199",
+      "title": "Upland Gun Dog Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46168212308159"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8607287541951",
+      "title": "Heritage Of The Uplands Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46168213094591"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8608954908863",
+      "title": "Bruiser Camo Layering Series",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46175500730559",
+        "gid://shopify/ProductVariant/46175501025471",
+        "gid://shopify/ProductVariant/46175501320383"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8608954974399",
+      "title": "Monarch Camo Layering Series",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46175501713599",
+        "gid://shopify/ProductVariant/46175502008511",
+        "gid://shopify/ProductVariant/46175502303423"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8608958316735",
+      "title": "Autumn Flights Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46175511642303"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8611563241663",
+      "title": "Rooster Camo Layering Series",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46182668828863",
+        "gid://shopify/ProductVariant/46182669123775",
+        "gid://shopify/ProductVariant/46182669418687"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8611571859647",
+      "title": "Rut Signal Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46182682001599"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8611572252863",
+      "title": "Marsh Tested Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46182682820799"
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8611627925695",
+      "title": "In It For Blood Sun Protection Hoodie",
+      "variantsIds": [
+        "gid://shopify/ProductVariant/46182758514879",
+        "gid://shopify/ProductVariant/46182763692223"
+      ]
+    }
+  ]
+}

@@ -23,6 +23,7 @@
 	#shopify-section-{{- section.id -}} {
 		container-type: inline-size;
 		overflow-x: hidden;
+		margin-top: 17px;
 		padding-top: {{- section.settings.offset_top_mobile -}}px;
 		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
 	}
@@ -35,6 +36,7 @@
 
 	@media screen and (min-width: 768px) {
 		#shopify-section-{{- section.id -}} {
+			margin-top: 20px;
 			padding-top: {{- section.settings.offset_top_desktop -}}px;
 			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
 		}
@@ -225,18 +227,20 @@
 
 	@media screen and (max-width: 767px) {
 		#shopify-section-{{- section.id -}} {
-			padding-top: max(0px, {{- section.settings.offset_top_mobile | minus: 10 -}}px);
+			/* Use one gap instead of stacking outer and inner section offsets. */
+			margin-top: 32px;
+			padding-top: 0;
 		}
 
 		#shopify-section-{{ section.id }} .featured-products.product-recommendations {
-			padding-top: max(0px, calc(var(--inner-offset-top-mobile) - 10px));
+			padding-top: 0;
 		}
 
 		html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header {
 			position: relative !important;
 			display: block !important;
 			min-height: 40px !important;
-			margin-bottom: 24px !important;
+			margin-bottom: 12px !important;
 			width: 100%;
 			padding-right: 72px !important;
 		}
@@ -443,7 +447,7 @@
 			position: relative !important;
 			display: block !important;
 			min-height: 40px !important;
-			margin-bottom: 24px !important;
+			margin-bottom: 12px !important;
 			width: 100%;
 			padding-right: 72px !important;
 		}
@@ -492,7 +496,7 @@
 		position: relative !important;
 		display: block !important;
 		min-height: 40px !important;
-		margin-bottom: 24px !important;
+		margin-bottom: 12px !important;
 		width: 100%;
 		padding-right: 72px !important;
 	}

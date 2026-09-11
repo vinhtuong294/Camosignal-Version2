@@ -1,0 +1,37 @@
+{%- liquid
+  assign cs_china_units = 0
+  assign cs_other_units = 0
+  assign cs_unknown_units = 0
+  for cs_line in line_items
+    assign cs_type = cs_line.product.type | strip | downcase
+    assign cs_quantity = cs_line.current_quantity | default: cs_line.quantity
+    if cs_line.requires_shipping and cs_line.gift_card != true and cs_quantity > 0
+      unless cs_type == 'shipping insurance'
+        if cs_line.product == blank or cs_type == blank
+          assign cs_unknown_units = cs_unknown_units | plus: cs_quantity
+        elsif cs_type == '3d tshirt' or cs_type == '3d t-shirt' or cs_type == 'upf hoodie' or cs_type == 'combo'
+          assign cs_china_units = cs_china_units | plus: cs_quantity
+        else
+          assign cs_other_units = cs_other_units | plus: cs_quantity
+        endif
+      endunless
+    endif
+  endfor
+-%}
+{% if cs_china_units > 0 and cs_other_units > 0 and cs_unknown_units == 0 %}
+  {% unless cancelled %}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:24px 0;background:#FFFFFF;border:1px solid #DCE3DE;border-top:3px solid #2B3E32;">
+      <tr>
+        <td style="padding:24px;font-family:Arial,Helvetica,sans-serif;text-align:left;">
+          <p style="margin:0 0 10px;color:#2B3E32;font-size:11px;font-weight:700;letter-spacing:1.5px;">A NOTE ABOUT YOUR DELIVERY</p>
+          <h2 style="margin:0 0 14px;color:#203B30;font-size:24px;line-height:1.25;font-weight:700;">Your gear may arrive separately.</h2>
+          <p style="margin:0 0 12px;color:#354139;font-size:15px;line-height:1.65;">Your items are made at different production facilities. Production times vary, so your order may ship in separate packages and arrive on different days.</p>
+          <p style="margin:0;color:#354139;font-size:15px;line-height:1.65;">If one package arrives first, your remaining items may still be in production or on their way. Check your shipping confirmation emails for tracking updates.</p>
+        </td>
+      </tr>
+      <tr>
+        <td bgcolor="#2B3E32" style="padding:16px 24px;background:#2B3E32;color:#FFFFFF;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;">Questions about your delivery? Reply to this email and the Camo Signal team will help.</td>
+      </tr>
+    </table>
+  {% endunless %}
+{% endif %}

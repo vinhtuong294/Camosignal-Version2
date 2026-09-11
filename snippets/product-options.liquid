@@ -132,7 +132,7 @@
 				{%- capture other_options -%}
 					<fieldset class="product-options__default">
 						<legend class="legend product-options__option-label{% if downcased_option == 'size' %} product-options__option-label--size{% endif %}">
-							<span>{{- option.name -}}:</span>
+							<span>{%- if downcased_option == 'choose your set' -%}Choose your set{%- else -%}{{- option.name -}}{%- endif -%}:</span>
 							{%- if downcased_option == 'size' -%}
 								<button
 									class="product-options__size-guide-inline"
@@ -144,9 +144,9 @@
 
 						{% if variants_type == "radio" %}
 							<div class="product-options__size-grid {% if downcased_option == 'size' %}is-size-option{% else %}is-other-option{% endif %}">
-							{%- for value in option.values  -%}
-								{%- assign handleized_value = value | handleize -%}
-								{%- assign is_disabled = true -%}
+								{%- for value in option.values  -%}
+									{%- assign handleized_value = value | handleize -%}
+									{%- assign is_disabled = true -%}
 
 								{% if value.available %}
 									{%- assign is_disabled = false -%}

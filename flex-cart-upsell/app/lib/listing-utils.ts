@@ -22,7 +22,8 @@ export function dedupeLabels(values: string[]) {
 }
 
 export function isColorlessProductType(productType: string) {
-  return COLORLESS_PRODUCT_TYPES.has(normalizeText(productType));
+  const normalized = normalizeText(productType);
+  return COLORLESS_PRODUCT_TYPES.has(normalized) || (normalized.includes("upf hoodie") && normalized.includes("face mask"));
 }
 
 export function effectiveColors(row: Pick<LarkListingRow, "colors" | "mainColor" | "productType">) {

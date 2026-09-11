@@ -1,3 +1,11 @@
+import {
+  carouselSnapPositions,
+  nextCarouselPosition,
+} from "../lib/carousel-navigation.ts";
+import { createCarouselMotion } from "../lib/carousel-motion.ts";
+import { enableHorizontalDrag } from "../lib/carousel-drag.ts";
+import { cartRecentlyProducts } from "../lib/cart-recently.ts";
+
 (() => {
   window.__flexUpsellCoreRequested = true;
   if (customElements.get("flex-cart-upsell")) return;
@@ -31,62 +39,6 @@
     drawerTargetSelectors
       .map((selector) => document.querySelector(selector))
       .find(Boolean);
-  const enableHorizontalDrag = (scroller) => {
-    let pointerId;
-    let startX = 0;
-    let startScrollLeft = 0;
-    let dragged = false;
-    let suppressClick = false;
-
-    const finishDrag = (event) => {
-      if (pointerId === undefined || event.pointerId !== pointerId) return;
-      const activePointerId = pointerId;
-      pointerId = undefined;
-      if (scroller.hasPointerCapture?.(activePointerId)) {
-        scroller.releasePointerCapture(activePointerId);
-      }
-      scroller.classList.remove("is-dragging");
-      if (dragged) {
-        suppressClick = true;
-        window.setTimeout(() => {
-          suppressClick = false;
-        }, 0);
-      }
-    };
-
-    scroller.addEventListener("pointerdown", (event) => {
-      if (event.pointerType !== "mouse" || event.button !== 0) return;
-      if (event.target.closest("button, input, select, textarea")) return;
-      pointerId = event.pointerId;
-      startX = event.clientX;
-      startScrollLeft = scroller.scrollLeft;
-      dragged = false;
-      scroller.setPointerCapture?.(pointerId);
-    });
-    scroller.addEventListener("pointermove", (event) => {
-      if (event.pointerId !== pointerId) return;
-      const distance = event.clientX - startX;
-      if (Math.abs(distance) > 4) dragged = true;
-      if (!dragged) return;
-      event.preventDefault();
-      scroller.classList.add("is-dragging");
-      scroller.scrollLeft = startScrollLeft - distance;
-    });
-    scroller.addEventListener("pointerup", finishDrag);
-    scroller.addEventListener("pointercancel", finishDrag);
-    scroller.addEventListener("dragstart", (event) => event.preventDefault());
-    scroller.addEventListener(
-      "click",
-      (event) => {
-        if (!suppressClick) return;
-        event.preventDefault();
-        event.stopPropagation();
-        suppressClick = false;
-      },
-      true,
-    );
-  };
-
   const refreshAll = (event) => {
     clearTimeout(refreshTimer);
     refreshTimer = setTimeout(() => {
@@ -259,6 +211,33 @@
   };
 
   const storefrontProductCache = new Map();
+  const recentlyMetadataCache = new Map();
+  const recentJson = async (url) => {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 6000);
+    try {
+      const response = await fetch(url, { signal: controller.signal });
+      if (!response.ok) throw new Error("Recently products unavailable");
+      return await response.json();
+    } finally {
+      clearTimeout(timer);
+    }
+  };
+  const loadRecentlyProduct = async (candidate) => {
+    let metadata = candidate;
+    if (typeof metadata.requiresCustomization !== "boolean") {
+      let request = recentlyMetadataCache.get(candidate.handle);
+      if (!request) {
+        request = recentJson(`${productUrl(candidate.handle)}?view=cart-recently`);
+        recentlyMetadataCache.set(candidate.handle, request);
+        request.catch(() => recentlyMetadataCache.delete(candidate.handle));
+      }
+      metadata = await request;
+    }
+    if (!metadata?.id || metadata.requiresCustomization) return null;
+    const product = await storefrontProduct(metadata);
+    return product ? { ...product, ...metadata } : null;
+  };
 
   const normalizeOptionName = (value) =>
     String(value || "")
@@ -439,6 +418,7 @@
     connectedCallback() {
       instances.add(this);
       bindGlobalListeners();
+      if (this.dataset.recentlyViewed === "true") return;
       if (this.dataset.embedPlacement === "CART_DRAWER") {
         this.replaceChildren();
         if (this.mountDrawerEmbed()) this.refresh();
@@ -448,7 +428,8 @@
     }
 
     disconnectedCallback() {
-      this.carouselResizeObserver?.disconnect();
+      this.carouselCleanup?.();
+      this.carouselCleanup = undefined;
       const drawerMount = this.drawerMount;
       instances.delete(this);
       this.drawerObserver?.disconnect();
@@ -490,7 +471,11 @@
         "footer, .drawer__footer, .cart-drawer__footer, [data-cart-footer]",
       );
       const insertionParent = insertionPoint?.parentElement;
-      if (insertionPoint && insertionParent && target.contains(insertionParent)) {
+      if (
+        insertionPoint &&
+        insertionParent &&
+        target.contains(insertionParent)
+      ) {
         insertionParent.insertBefore(mount, insertionPoint);
       } else {
         target.appendChild(mount);
@@ -570,6 +555,7 @@
     }
 
     async refresh() {
+      if (this.dataset.recentlyViewed === "true") return;
       if (this.loading) return;
       this.loading = true;
 
@@ -604,17 +590,50 @@
           itemCount = cart.item_count || 0;
         }
 
+        let recentRequest = Promise.resolve([]);
+        if (placement === "CART_DRAWER") {
+          let history = [];
+          try {
+            history = JSON.parse(localStorage.getItem("theme_recently_viewed") || "[]");
+          } catch {}
+          const currentHandle = document.querySelector(
+            '[data-section-type="product"][data-product-handle]',
+          )?.dataset.productHandle;
+          if (currentHandle) {
+            history = (Array.isArray(history) ? history : [])
+              .filter((handle) => handle !== currentHandle)
+              .concat(currentHandle);
+          }
+          recentRequest = cartRecentlyProducts({
+            history,
+            cartIds: productIds,
+            loadProduct: loadRecentlyProduct,
+            loadBestSellers: async () => {
+              const products = await recentJson(`${storefrontRoot()}collections/best-sellers?view=cart-recently&sort_by=best-selling`);
+              return Array.isArray(products) ? products : [];
+            },
+          }).catch(() => []);
+        }
+
         const params = new URLSearchParams({
           placement,
           product_ids: productIds.join(","),
           subtotal: String(subtotal),
           item_count: String(itemCount),
         });
-        const response = await fetch(`${this.dataset.endpoint}?${params}`, {
-          headers: { Accept: "application/json" },
-        });
-        if (!response.ok) throw new Error("Unable to load recommendations");
-        const payload = await response.json();
+        let payload;
+        try {
+          const response = await fetch(`${this.dataset.endpoint}?${params}`, {
+            headers: { Accept: "application/json" },
+          });
+          if (!response.ok) throw new Error("Unable to load recommendations");
+          payload = await response.json();
+        } catch (error) {
+          if (placement !== "CART_DRAWER") throw error;
+          payload = { recommendations: [], appearance: this.lastAppearance || { stylePreset: "CAMOSIGNAL" } };
+        }
+        this.lastAppearance = payload.appearance;
+        this.recentProducts = await recentRequest;
         await this.render(payload);
       } catch (error) {
         this.renderState(
@@ -628,14 +647,21 @@
     }
 
     async render(payload) {
+      const isDrawer = this.dataset.placement === "CART_DRAWER";
+      const isRecently = this.dataset.recentlyViewed === "true";
+      // Keep custom products on product pages, but exclude them from the drawer.
+      const eligibleRecommendations = (payload.recommendations || []).filter(
+        (product) => !isDrawer || product?.requiresCustomization !== true,
+      );
       const loadedRecommendations = await Promise.all(
-        (payload.recommendations || []).map((product) =>
-          storefrontProduct(product),
-        ),
+        eligibleRecommendations.map((product) => isRecently ? product : storefrontProduct(product)),
       );
       const recommendations = loadedRecommendations.filter(Boolean);
+      this.carouselCleanup?.();
+      this.carouselCleanup = undefined;
       if (!recommendations.length) {
         this.renderHost()?.replaceChildren();
+        await this.renderRecently(payload.appearance || {});
         return;
       }
 
@@ -646,7 +672,6 @@
       const preset = String(appearance.stylePreset || "COMPLETE_THE_LOOK")
         .toLowerCase()
         .replaceAll("_", "-");
-      const isDrawer = this.dataset.placement === "CART_DRAWER";
       const isCamoDrawer = isDrawer && preset === "camosignal";
       const isProductPage = this.dataset.placement === "PRODUCT_PAGE";
       root.className = `flex-upsell flex-upsell--${layout} flex-upsell--preset-${preset}${
@@ -738,7 +763,7 @@
       const list = document.createElement("div");
       list.className = "flex-upsell__list";
       const previousList = isCamoDrawer
-        ? this.renderHost()?.querySelector(".flex-upsell__list")
+        ? this.renderHost()?.querySelector(":scope > .flex-upsell > .flex-upsell__list")
         : null;
       const previousCards = [...(previousList?.children || [])];
       const sameProducts =
@@ -758,7 +783,9 @@
         if (
           previousVariant &&
           nextSelect &&
-          [...nextSelect.options].some((option) => option.value === previousVariant)
+          [...nextSelect.options].some(
+            (option) => option.value === previousVariant,
+          )
         ) {
           nextSelect.value = previousVariant;
           nextSelect.dispatchEvent(new Event("change"));
@@ -768,25 +795,37 @@
       });
       let syncNavigationState;
       if (isDrawer) {
-        enableHorizontalDrag(list);
         let navigationTarget = null;
-        let navigationFrame;
+        let stateFrame;
+        let maximumScroll = 0;
+        let viewportWidth = 0;
+        let visibleFraction = 1;
+        let snapPositions = [0];
+        let cardEnds = [];
 
-        syncNavigationState = () => {
-          const position = navigationTarget ?? list.scrollLeft;
-          const maximumScroll = Math.max(0, list.scrollWidth - list.clientWidth);
-          const atStart = position <= 1;
-          const atEnd = position >= maximumScroll - 1;
+        const updateNavigationState = () => {
+          const position = Math.min(
+            maximumScroll,
+            Math.max(0, list.scrollLeft),
+          );
+          if (
+            navigationTarget !== null &&
+            Math.abs(position - navigationTarget) <= 1 &&
+            !motion.active
+          ) {
+            navigationTarget = null;
+          }
+          const destination = navigationTarget ?? position;
+          const atStart = destination <= 1;
+          const atEnd = destination >= maximumScroll - 1;
 
           if (carouselProgress && carouselCount) {
-            const firstCard = list.firstElementChild;
-            const gap = Number.parseFloat(getComputedStyle(list).gap) || 0;
-            const step = (firstCard?.getBoundingClientRect().width || 1) + gap;
             const visibleEnd = Math.min(
               recommendations.length,
               Math.max(
                 1,
-                Math.floor((position + list.clientWidth + gap + 1) / step),
+                cardEnds.filter((end) => end <= position + viewportWidth + 1)
+                  .length,
               ),
             );
             const label = `${visibleEnd} / ${recommendations.length}`;
@@ -797,112 +836,167 @@
                 `Showing recommendations through ${visibleEnd} of ${recommendations.length}`,
               );
             }
-            const visibleFraction = Math.min(
-              1,
-              list.clientWidth / (list.scrollWidth || 1),
-            );
-            carouselProgress.style.width = `${visibleFraction * 100}%`;
-            carouselProgress.style.marginInlineStart = `${
-              maximumScroll
-                ? (position / maximumScroll) * (1 - visibleFraction) * 100
-                : 0
-            }%`;
-            carouselFooter.hidden = maximumScroll <= 1;
+            const progress = maximumScroll ? position / maximumScroll : 0;
+            carouselProgress.style.transform = `translateX(${progress * (1 - visibleFraction) * 100}%) scaleX(${visibleFraction})`;
           }
 
-          if (previousButton) {
+          if (previousButton && previousButton.disabled !== atStart) {
             previousButton.disabled = atStart;
             previousButton.setAttribute("aria-disabled", String(atStart));
           }
-          if (nextButton) {
+          if (nextButton && nextButton.disabled !== atEnd) {
             nextButton.disabled = atEnd;
             nextButton.setAttribute("aria-disabled", String(atEnd));
           }
         };
 
-        const stopNavigationAnimation = () => {
-          if (navigationFrame) cancelAnimationFrame(navigationFrame);
-          navigationFrame = undefined;
-          list.classList.remove("is-animating");
+        const scheduleNavigationState = () => {
+          if (stateFrame !== undefined) return;
+          stateFrame = requestAnimationFrame(() => {
+            stateFrame = undefined;
+            updateNavigationState();
+          });
         };
 
-        const animateToRecommendation = (target) => {
-          stopNavigationAnimation();
-          const start = list.scrollLeft;
-          const distance = target - start;
-          const duration = window.matchMedia("(prefers-reduced-motion: reduce)")
-            .matches
-            ? 0
-            : 180;
-
-          navigationTarget = target;
-          syncNavigationState();
-
-          if (!distance || !duration) {
-            list.scrollLeft = target;
+        const motion = createCarouselMotion({
+          read: () => list.scrollLeft,
+          write: (position) => {
+            list.scrollLeft = position;
+            scheduleNavigationState();
+          },
+          requestFrame: (callback) => requestAnimationFrame(callback),
+          cancelFrame: (frame) => cancelAnimationFrame(frame),
+          reducedMotion: () =>
+            window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+          onActive: (active) => list.classList.toggle("is-animating", active),
+          onFinish: () => {
             navigationTarget = null;
-            syncNavigationState();
-            return;
+            scheduleNavigationState();
+          },
+        });
+
+        // Measure only on layout changes, not on every scroll frame.
+        syncNavigationState = () => {
+          const previousWidth = viewportWidth;
+          const pendingSnapIndex =
+            navigationTarget === null
+              ? -1
+              : snapPositions.findIndex(
+                  (position) => Math.abs(position - navigationTarget) <= 1,
+                );
+          viewportWidth = list.clientWidth;
+          maximumScroll = Math.max(0, list.scrollWidth - viewportWidth);
+          visibleFraction = Math.min(
+            1,
+            viewportWidth / (list.scrollWidth || 1),
+          );
+          const origin =
+            list.getBoundingClientRect().left +
+            list.clientLeft -
+            list.scrollLeft;
+          const cardBounds = [...list.children].map((card) =>
+            card.getBoundingClientRect(),
+          );
+          snapPositions = carouselSnapPositions(
+            cardBounds.map((card) => card.left - origin),
+            maximumScroll,
+          );
+          cardEnds = cardBounds.map((card) => card.right - origin);
+          // A resize can leave native scrolling aimed at an obsolete pixel offset.
+          if (previousWidth > 0 && previousWidth !== viewportWidth) {
+            const resizedPosition =
+              pendingSnapIndex >= 0
+                ? snapPositions[
+                    Math.min(pendingSnapIndex, snapPositions.length - 1)
+                  ]
+                : snapPositions.reduce(
+                    (nearest, position) =>
+                      Math.abs(position - list.scrollLeft) <
+                      Math.abs(nearest - list.scrollLeft)
+                        ? position
+                        : nearest,
+                    0,
+                  );
+            motion.stop();
+            list.scrollTo({
+              left: resizedPosition,
+              behavior: "instant",
+            });
           }
-
-          list.classList.add("is-animating");
-          const startedAt = performance.now();
-          const step = (now) => {
-            const progress = Math.min(1, (now - startedAt) / duration);
-            const eased = 1 - (1 - progress) ** 3;
-            list.scrollLeft = start + distance * eased;
-
-            if (progress < 1) {
-              navigationFrame = requestAnimationFrame(step);
-              return;
-            }
-
-            list.scrollLeft = target;
-            navigationFrame = undefined;
-            list.classList.remove("is-animating");
-            navigationTarget = null;
-            syncNavigationState();
-          };
-
-          navigationFrame = requestAnimationFrame(step);
+          if (!motion.active) navigationTarget = null;
+          if (carouselFooter) carouselFooter.hidden = maximumScroll <= 1;
+          updateNavigationState();
         };
 
         const scrollRecommendations = (direction) => {
-          const firstCard = list.querySelector(".flex-upsell__card");
-          const gap = Number.parseFloat(getComputedStyle(list).gap || "0");
-          const distance = firstCard
-            ? firstCard.getBoundingClientRect().width + gap
-            : list.clientWidth;
-          const maximumScroll = Math.max(0, list.scrollWidth - list.clientWidth);
-          const nextPosition = Math.min(
-            maximumScroll,
-            Math.max(0, (navigationTarget ?? list.scrollLeft) + distance * direction),
+          navigationTarget = nextCarouselPosition(
+            snapPositions,
+            navigationTarget ?? list.scrollLeft,
+            direction,
           );
-
-          animateToRecommendation(nextPosition);
+          motion.to(navigationTarget);
+          updateNavigationState();
         };
 
         previousButton?.addEventListener("click", () =>
           scrollRecommendations(-1),
         );
-        nextButton?.addEventListener("click", () =>
-          scrollRecommendations(1),
-        );
-        list.addEventListener("scroll", syncNavigationState, { passive: true });
-        list.addEventListener(
-          "pointerdown",
-          () => {
-            stopNavigationAnimation();
-            navigationTarget = null;
-            syncNavigationState();
+        nextButton?.addEventListener("click", () => scrollRecommendations(1));
+        const releaseNavigationTarget = () => {
+          if (motion.active) return;
+          navigationTarget = null;
+          scheduleNavigationState();
+        };
+        const interruptMotion = () => {
+          motion.stop();
+          navigationTarget = null;
+          scheduleNavigationState();
+        };
+        const cleanupDrag = enableHorizontalDrag(list, {
+          onStart: interruptMotion,
+          onEnd: ({ dragged, startScrollLeft }) => {
+            const position = list.scrollLeft;
+            const projectedPosition =
+              position + (dragged ? (position - startScrollLeft) * 0.25 : 0);
+            navigationTarget = snapPositions.reduce(
+              (nearest, candidate) =>
+                Math.abs(candidate - projectedPosition) <
+                Math.abs(nearest - projectedPosition)
+                  ? candidate
+                  : nearest,
+              0,
+            );
+            motion.to(navigationTarget);
+            updateNavigationState();
           },
-          { passive: true },
-        );
-        if (isCamoDrawer) {
-          this.carouselResizeObserver?.disconnect();
-          this.carouselResizeObserver = new ResizeObserver(syncNavigationState);
-          this.carouselResizeObserver.observe(list);
-        }
+        });
+        const interruptTouchMotion = (event) => {
+          if (event.pointerType !== "mouse") interruptMotion();
+        };
+        list.addEventListener("scroll", scheduleNavigationState, {
+          passive: true,
+        });
+        list.addEventListener("scrollend", releaseNavigationTarget, {
+          passive: true,
+        });
+        list.addEventListener("pointerdown", interruptTouchMotion, {
+          passive: true,
+        });
+        list.addEventListener("wheel", interruptMotion, {
+          passive: true,
+        });
+        const resizeObserver = new ResizeObserver(syncNavigationState);
+        resizeObserver.observe(list);
+        this.carouselCleanup = () => {
+          resizeObserver.disconnect();
+          cleanupDrag();
+          motion.stop();
+          if (stateFrame !== undefined) cancelAnimationFrame(stateFrame);
+          list.removeEventListener("scroll", scheduleNavigationState);
+          list.removeEventListener("scrollend", releaseNavigationTarget);
+          list.removeEventListener("pointerdown", interruptTouchMotion);
+          list.removeEventListener("wheel", interruptMotion);
+        };
       }
       root.appendChild(list);
       if (carouselFooter) root.appendChild(carouselFooter);
@@ -916,6 +1010,25 @@
         syncNavigationState();
         requestAnimationFrame(() => syncNavigationState());
       }
+      await this.renderRecently(appearance);
+    }
+
+    async renderRecently(appearance) {
+      if (this.dataset.recentlyViewed === "true" || !this.recentProducts?.length) return;
+      const host = this.renderHost();
+      if (!host) return;
+      const recent = document.createElement("flex-cart-upsell");
+      recent.dataset.placement = "CART_DRAWER";
+      recent.dataset.recentlyViewed = "true";
+      for (const key of ["closeIconUrl", "previousIconUrl", "nextIconUrl"]) {
+        if (this.dataset[key]) recent.dataset[key] = this.dataset[key];
+      }
+      host.prepend(recent);
+      await recent.render({
+        recommendations: this.recentProducts,
+        appearance: { ...appearance, heading: "RECENTLY VIEWED", subheading: "" },
+        discount: { type: "NONE" },
+      });
     }
 
     productCard(product, appearance, discount) {
@@ -925,8 +1038,7 @@
       ).toUpperCase();
       const isCamoSignal = stylePreset === "CAMOSIGNAL";
       const isCamoDrawer = isDrawer && isCamoSignal;
-      const isCompleteLook =
-        !isDrawer && stylePreset === "COMPLETE_THE_LOOK";
+      const isCompleteLook = !isDrawer && stylePreset === "COMPLETE_THE_LOOK";
       const card = document.createElement("article");
       card.className = "flex-upsell__card";
       card.dataset.productId = String(product.id);
@@ -1013,7 +1125,7 @@
         priceMeta.hidden = priceMeta.childNodes.length === 0;
       };
 
-      renderPrice(product.price);
+      renderPrice(product.variants?.[0]?.price ?? product.price);
       copy.appendChild(price);
 
       const requiresCustomization = product.requiresCustomization === true;
@@ -1027,7 +1139,8 @@
       const optionNames = optionNamesFor(variantItems);
       const needsVariantChoice =
         !requiresCustomization &&
-        appearance.showVariantPicker !== false && variants.length > 1;
+        appearance.showVariantPicker !== false &&
+        variants.length > 1;
       const showOptionTray =
         !isCamoSignal &&
         (isCompleteLook || isDrawer) &&
@@ -1069,7 +1182,8 @@
           copy.appendChild(picker);
         }
         const updateVariantWidth = () => {
-          const label = variantSelect.selectedOptions[0]?.textContent?.trim() || "";
+          const label =
+            variantSelect.selectedOptions[0]?.textContent?.trim() || "";
           if (selectedLabel) selectedLabel.textContent = label;
           variantSelect.classList.toggle(
             "flex-upsell__variant--long",
@@ -1094,10 +1208,7 @@
         customizeLink.className = "flex-upsell__add";
         customizeLink.href = productUrl(product.handle);
         customizeLink.textContent = "Customize";
-        customizeLink.setAttribute(
-          "aria-label",
-          `Customize ${product.title}`,
-        );
+        customizeLink.setAttribute("aria-label", `Customize ${product.title}`);
         customizeLink.addEventListener("click", () =>
           this.track("CLICK", product.id, product.price),
         );
@@ -1174,11 +1285,7 @@
           });
 
           const addVariant = async (variant) => {
-            const added = await this.addToCart(
-              addButton,
-              variant.id,
-              product,
-            );
+            const added = await this.addToCart(addButton, variant.id, product);
             if (added) closeTray();
           };
 
@@ -1301,11 +1408,10 @@
           quantity: 1,
         };
         const upsellPlacement = this.dataset.placement || "CART_DRAWER";
-        formData.append(
-          "properties[_flex_upsell_campaign]",
-          upsellPlacement,
-        );
-        themeCartItem["properties[_flex_upsell_campaign]"] = upsellPlacement;
+        if (this.dataset.recentlyViewed !== "true") {
+          formData.append("properties[_flex_upsell_campaign]", upsellPlacement);
+          themeCartItem["properties[_flex_upsell_campaign]"] = upsellPlacement;
+        }
         const mainImageUrl = normalizeImageUrl(product.imageUrl);
         if (mainImageUrl) {
           formData.append(

@@ -230,20 +230,7 @@
 									<div class="accordion__content accordion__content--animate js-accordion-content js-clothing-accordion-content" style="height: 0;">
 										<div class="js-accordion-inner product-filters__form-item-content">
 											<ul class="filter-list filter-list--sidebar filter-list--collection-custom js-clothing-filter-list js-filter-list">
-												{%- for value in product_type_filter.values -%}
-													{%- if value.count > 0 or value.active -%}
-														<li class="filter-list__item">
-															<a href="javascript:void(0);" class="filter-list__collection-link js-clothing-type-link{% if value.active %} filter-list__collection-link--active{% endif %}" data-product-type="{{ value.value | escape }}">
-																<span class="custom-checkbox-icon"></span>
-																{%- if collection.handle == 'game-day' and value.value == '3D Tshirt' -%}
-																	{{- 'general.filters.game_day_jersey' | t -}}
-																{%- else -%}
-																	{{- value.label | upcase -}}
-																{%- endif -%}
-															</a>
-														</li>
-													{%- endif -%}
-												{%- endfor -%}
+												{%- render 'product-type-filter-links', filter: product_type_filter -%}
 												{%- if show_game_day_jersey -%}
 													{%- unless game_day_jersey_in_filter -%}
 														<li class="filter-list__item">

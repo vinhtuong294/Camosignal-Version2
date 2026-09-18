@@ -5,6 +5,8 @@
 ></script>
 <div class="flex-upsell-mount" {{ block.shopify_attributes }}>
   <flex-cart-upsell
+    data-theme-id="{{ theme.id }}"
+    data-shopify-config="{{ shop.metafields.camosignal_upsell.storefront_config.value | json | escape }}"
     data-placement="PRODUCT_PAGE"
     data-product-id="{{ product.id }}"
     data-endpoint="/apps/flex-cart-upsell-1/recommendations"

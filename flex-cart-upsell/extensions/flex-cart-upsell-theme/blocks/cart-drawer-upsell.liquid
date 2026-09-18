@@ -1,5 +1,7 @@
 <div class="flex-upsell-mount" data-flex-upsell-embed hidden>
   <flex-cart-upsell
+    data-theme-id="{{ theme.id }}"
+    data-shopify-config="{{ shop.metafields.camosignal_upsell.storefront_config.value | json | escape }}"
     data-embed-placement="CART_DRAWER"
     data-placement="CART_DRAWER"
     data-endpoint="/apps/flex-cart-upsell-1/recommendations"

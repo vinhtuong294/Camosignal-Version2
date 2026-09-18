@@ -1,0 +1,6 @@
+{%- layout none -%}
+{%- if product.available and product.selected_or_first_available_variant.requires_shipping -%}
+  <div class="featured-products__col swiper-slide js-featured-products-slide" data-product-handle="{{ product.handle | escape }}">
+    {%- render 'product-card', product: product, size: 439, tablet_size: 328, mobile_size: 308, is_lazy: true -%}
+  </div>
+{%- endif -%}

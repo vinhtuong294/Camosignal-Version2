@@ -26,6 +26,7 @@ import {
 } from "../models/campaign.server";
 import { getDashboardMetrics } from "../models/dashboard.server";
 import { syncUpsellCampaignDiscount } from "../models/upsell-discount.server";
+import { syncNativeStorefrontConfig } from "../models/storefront-config.server";
 import { authenticate } from "../shopify.server";
 import { syncProductCatalogue } from "../models/catalogue-sync.server";
 
@@ -159,6 +160,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       campaign: savedCampaign,
       shop: session.shop,
     });
+    await syncNativeStorefrontConfig(admin, savedCampaign);
   } catch (error) {
     console.error("Upsell discount sync failed", {
       error,

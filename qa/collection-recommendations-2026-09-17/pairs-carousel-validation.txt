@@ -1,0 +1,14 @@
+## Validation Summary
+
+**Overall Status:** ✅ VALID
+**Total Files:** 1
+
+## Detailed Results
+
+### File 1
+**Artifact ID:** pairs-carousel-20260918
+**Revision:** 1
+*Use same ID & increment revision when retrying on an improvement of this artifact*
+
+**Status:** ✅ SUCCESS
+**Details:** sections/collection-recommendations.liquid passed all checks.

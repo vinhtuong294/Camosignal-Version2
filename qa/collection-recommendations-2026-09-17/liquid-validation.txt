@@ -1,0 +1,62 @@
+## Validation Summary
+
+**Overall Status:** ✅ VALID
+**Total Files:** 7
+
+## Detailed Results
+
+### File 1
+**Artifact ID:** collection-recommendations-20260917
+**Revision:** 3
+*Use same ID & increment revision when retrying on an improvement of this artifact*
+
+**Status:** ✅ SUCCESS
+**Details:** sections/collection-recommendations.liquid passed all checks.
+
+### File 2
+**Artifact ID:** collection-recommendations-20260917
+**Revision:** 3
+*Use same ID & increment revision when retrying on an improvement of this artifact*
+
+**Status:** ✅ SUCCESS
+**Details:** snippets/collection-recommendation-product.liquid passed all checks.
+
+### File 3
+**Artifact ID:** collection-recommendations-20260917
+**Revision:** 3
+*Use same ID & increment revision when retrying on an improvement of this artifact*
+
+**Status:** ✅ SUCCESS
+**Details:** snippets/collection-recommendations-styles.liquid passed all checks.
+
+### File 4
+**Artifact ID:** collection-recommendations-20260917
+**Revision:** 3
+*Use same ID & increment revision when retrying on an improvement of this artifact*
+
+**Status:** ✅ SUCCESS
+**Details:** templates/collection.cross-sell-candidates.liquid passed all checks.
+
+### File 5
+**Artifact ID:** collection-recommendations-20260917
+**Revision:** 3
+*Use same ID & increment revision when retrying on an improvement of this artifact*
+
+**Status:** ✅ SUCCESS
+**Details:** templates/product.cross-sell-card.liquid passed all checks.
+
+### File 6
+**Artifact ID:** collection-recommendations-20260917
+**Revision:** 3
+*Use same ID & increment revision when retrying on an improvement of this artifact*
+
+**Status:** ✅ SUCCESS
+**Details:** templates/product.json passed all checks.
+
+### File 7
+**Artifact ID:** collection-recommendations-20260917
+**Revision:** 3
+*Use same ID & increment revision when retrying on an improvement of this artifact*
+
+**Status:** ✅ SUCCESS
+**Details:** templates/product.pre-order.json passed all checks.

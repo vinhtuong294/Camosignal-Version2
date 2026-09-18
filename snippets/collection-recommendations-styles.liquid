@@ -1,0 +1,638 @@
+{% doc %}
+  @param {section} section - Section appearance settings.
+{% enddoc %}
+{%- assign desktop_limit = 8 -%}
+{%- assign mobile_limit = 8 -%}
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		container-type: inline-size;
+		overflow-x: hidden;
+		margin-top: 17px;
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@supports (overflow: clip) {
+		#shopify-section-{{- section.id -}} {
+			overflow-x: clip;
+		}
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			margin-top: 20px;
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__mobile-pagination {
+		display: none;
+	}
+
+	#shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header h2 {
+		font-size: var(--product-recommendations-heading-size-desktop, {{- section.settings.heading_font_size_desktop | default: 36 -}}px) !important;
+	}
+
+	#shopify-section-{{ section.id }} .featured-products__row {
+		transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1) !important;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__carousel-shell {
+		--product-recommendations-arrow-top: 50%;
+		position: relative;
+		isolation: isolate;
+		margin-inline: -28px;
+		padding-inline: 28px;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__carousel-shell .featured-products__slider {
+		overflow: hidden !important;
+		overflow-x: hidden !important;
+		clip-path: inset(0);
+		contain: paint;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__navigation {
+		position: absolute;
+		inset: 0;
+		display: block !important;
+		z-index: 50;
+		opacity: 1 !important;
+		visibility: visible !important;
+		pointer-events: none;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__arrow {
+		position: absolute !important;
+		top: var(--product-recommendations-arrow-top) !important;
+		z-index: 51;
+		display: flex !important;
+		align-items: center;
+		justify-content: center;
+		width: 40px !important;
+		height: 44px !important;
+		padding: 0;
+		border: 0 !important;
+		border-radius: 0;
+		background: transparent !important;
+		color: #2c3d33 !important;
+		box-shadow: none;
+		opacity: 1;
+		transform: translateY(-50%) !important;
+		visibility: visible;
+		pointer-events: auto;
+		touch-action: manipulation;
+		transition:
+			background-color 0.2s ease,
+			border-color 0.2s ease,
+			color 0.2s ease,
+			box-shadow 0.2s ease,
+			transform 0.12s ease;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__arrow::after {
+		display: none !important;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__arrow--prev {
+		left: -10px !important;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__arrow--next {
+		right: -10px !important;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__arrow .icon {
+		width: 28px !important;
+		height: 28px !important;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__arrow .icon path {
+		stroke: currentColor;
+		stroke-width: 1.5px;
+		stroke-linejoin: round;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__arrow:hover {
+		border-color: transparent !important;
+		background: transparent !important;
+		color: #2c3d33 !important;
+		box-shadow: none;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__arrow:focus-visible {
+		outline: 2px solid #2c3d33;
+		outline-offset: 2px;
+		box-shadow: none;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__arrow:active {
+		opacity: 1;
+		transform: translateY(-50%) scale(0.94) !important;
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__arrow.swiper-button-lock,
+	#shopify-section-{{ section.id }} .product-recommendations__arrow.swiper-button-disabled,
+	#shopify-section-{{ section.id }} .product-recommendations__arrow[disabled],
+	#shopify-section-{{ section.id }} .product-recommendations__arrow[aria-disabled="true"] {
+		display: none !important;
+		opacity: 0 !important;
+		visibility: hidden !important;
+		pointer-events: none !important;
+	}
+
+	@media screen and (max-width: 767px) {
+		#shopify-section-{{ section.id }} .product-recommendations__carousel-shell {
+			margin-inline: 0;
+			padding-inline: 0;
+		}
+
+		#shopify-section-{{ section.id }} .product-recommendations__navigation {
+			display: none !important;
+		}
+
+		#shopify-section-{{ section.id }} .product-recommendations__arrow--prev {
+			left: -27px !important;
+		}
+
+		#shopify-section-{{ section.id }} .product-recommendations__arrow--next {
+			right: -27px !important;
+		}
+
+		#shopify-section-{{ section.id }} .product-recommendations__arrow {
+			width: 40px !important;
+			height: 44px !important;
+			border-color: transparent !important;
+			background: transparent !important;
+			color: #2c3d33 !important;
+			box-shadow: none;
+		}
+
+		#shopify-section-{{ section.id }} .product-recommendations__arrow:hover {
+			border-color: transparent !important;
+			background: transparent !important;
+			color: #2c3d33 !important;
+		}
+
+		#shopify-section-{{ section.id }} .product-recommendations__arrow .icon {
+			width: 28px !important;
+			height: 28px !important;
+		}
+	}
+
+	#shopify-section-{{ section.id }} .product-recommendations__candidate-fallback {
+		display: none !important;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		#shopify-section-{{ section.id }} .featured-products__row {
+			transition-duration: 0.01ms !important;
+		}
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{ section.id }} .product-recommendations__slide--desktop-hidden {
+			display: none !important;
+		}
+	}
+
+	{%- if mobile_limit > desktop_limit -%}
+		@media screen and (min-width: 768px) {
+			#shopify-section-{{ section.id }} .featured-products__buttons-wrapper {
+				display: none !important;
+			}
+
+			#shopify-section-{{ section.id }} .featured-products__slider {
+				cursor: default !important;
+			}
+		}
+	{%- endif -%}
+
+	@media screen and (max-width: 767px) {
+		#shopify-section-{{- section.id -}} {
+
+			margin-top: 32px;
+			padding-top: 0;
+		}
+
+		#shopify-section-{{ section.id }} .featured-products.product-recommendations {
+			padding-top: 0;
+		}
+
+		html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header {
+			position: relative !important;
+			display: block !important;
+			min-height: 40px !important;
+			margin-bottom: 12px !important;
+			width: 100%;
+			padding-right: 72px !important;
+		}
+
+		html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header h2 {
+			margin: 0 !important;
+			min-width: 0;
+			max-width: 100%;
+			min-height: 40px !important;
+			display: flex !important;
+			align-items: center !important;
+			line-height: 1.05;
+			font-size: var(--product-recommendations-heading-size-mobile, {{- section.settings.heading_font_size_mobile | default: 22 -}}px) !important;
+			white-space: nowrap !important;
+			overflow: hidden !important;
+			text-overflow: clip !important;
+			word-break: normal;
+			overflow-wrap: normal;
+		}
+
+		html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header .featured-products__buttons-wrapper {
+			position: absolute !important;
+			top: 0 !important;
+			right: 0 !important;
+			display: inline-flex !important;
+			flex-direction: row !important;
+			flex-wrap: nowrap !important;
+			align-items: center;
+			flex: 0 0 auto !important;
+			margin: 0 !important;
+			width: auto !important;
+			min-width: 0 !important;
+			white-space: nowrap !important;
+			transform: none !important;
+		}
+
+		html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header .swiper-button-prev-new,
+		html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header .swiper-button-next-new {
+			flex: 0 0 32px !important;
+			width: 32px !important;
+			height: 40px !important;
+		}
+
+		html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header .swiper-button-prev-new .icon,
+		html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header .swiper-button-next-new .icon {
+			width: 14px !important;
+			height: 14px !important;
+		}
+
+		#shopify-section-{{ section.id }} .featured-products__slider {
+			position: relative !important;
+			width: 100% !important;
+			max-width: 100% !important;
+			overflow: hidden !important;
+			overflow-x: hidden !important;
+			clip-path: inset(0);
+			contain: paint;
+			cursor: grab !important;
+			padding-bottom: 0 !important;
+			margin-bottom: 0 !important;
+		}
+
+		#shopify-section-{{ section.id }} .container {
+			padding-left: 16px !important;
+			padding-right: 16px !important;
+		}
+
+		#shopify-section-{{ section.id }} .js-product-recommendations-content {
+			width: 100% !important;
+			max-width: 100% !important;
+			overflow: hidden !important;
+			overflow-x: hidden !important;
+			clip-path: inset(0);
+			contain: paint;
+		}
+
+		#shopify-section-{{ section.id }} .featured-products__row {
+			display: flex !important;
+			gap: 0 !important;
+			flex-wrap: nowrap !important;
+			overflow: visible !important;
+			margin-bottom: 0 !important;
+			padding-bottom: 0 !important;
+		}
+
+		#shopify-section-{{ section.id }} .featured-products__col {
+			display: block !important;
+			box-sizing: border-box !important;
+			margin: 0;
+			min-width: 0 !important;
+			overflow: hidden !important;
+			flex-shrink: 0 !important;
+		}
+
+		#shopify-section-{{ section.id }} .product-recommendations__slide--desktop-hidden {
+			display: block !important;
+		}
+
+		#shopify-section-{{ section.id }} .product-recommendations__slide--mobile-hidden {
+			display: none !important;
+		}
+
+		#shopify-section-{{ section.id }} .featured-products__col:nth-child(n+{{ mobile_limit | plus: 1 }}) {
+			display: none !important;
+		}
+
+		#shopify-section-{{ section.id }} .featured-products__slider:not(.swiper-initialized) .featured-products__col {
+			width: calc(50% - 8px) !important;
+			max-width: calc(50% - 8px) !important;
+			flex-basis: calc(50% - 8px) !important;
+			margin-right: 16px !important;
+		}
+
+		#shopify-section-{{ section.id }} .product-card:not(.product-card--reference) .product-card__title {
+			min-height: auto !important;
+			line-height: 1.4 !important;
+			display: block !important;
+			white-space: nowrap !important;
+			overflow: hidden !important;
+			text-overflow: ellipsis !important;
+			word-break: normal !important;
+			overflow-wrap: normal !important;
+			-webkit-line-clamp: unset !important;
+			-webkit-box-orient: unset !important;
+			font-weight: 500 !important;
+			text-transform: capitalize !important;
+			font-size: 13px !important;
+		}
+
+		#shopify-section-{{ section.id }} .product-card:not(.product-card--reference) .product-card__footer {
+			padding: 0 !important;
+			margin-top: 5px !important;
+		}
+
+		#shopify-section-{{ section.id }} .product-card:not(.product-card--reference) .product-card__custom-quick-add {
+			display: none !important;
+		}
+
+		#shopify-section-{{ section.id }} .product-card:not(.product-card--reference) .product-card__image img {
+			filter: brightness(1.03) contrast(0.95) saturate(0.92);
+		}
+
+		#shopify-section-{{ section.id }} .product-card:not(.product-card--reference) .product-card__image {
+			border-radius: 10px;
+			overflow: hidden;
+		}
+
+		#shopify-section-{{ section.id }} .product-recommendations__mobile-pagination,
+		#shopify-section-{{ section.id }} .product-recommendations__mobile-pagination.swiper-pagination-bullets,
+		#shopify-section-{{ section.id }} .product-recommendations__mobile-pagination.swiper-pagination-horizontal,
+		#shopify-section-{{ section.id }} .product-recommendations .swiper-pagination {
+			position: relative !important;
+			inset: auto !important;
+			display: flex !important;
+			align-items: center;
+			justify-content: center;
+			gap: 5px;
+			width: min(180px, 56%) !important;
+			height: 3px !important;
+			margin: 18px auto 0 !important;
+			padding: 0 !important;
+			transform: none !important;
+			visibility: visible !important;
+			opacity: 1 !important;
+			pointer-events: auto !important;
+		}
+
+		#shopify-section-{{ section.id }} .product-recommendations__mobile-pagination .swiper-pagination-bullet {
+			display: block;
+			flex: 1 1 0;
+			width: auto !important;
+			max-width: 40px;
+			height: 3px;
+			margin: 0 !important;
+			padding: 0;
+			border: 0;
+			border-radius: 999px;
+			background: #2c3d33;
+			opacity: 0.2;
+			cursor: pointer;
+			transition: opacity 0.25s ease;
+		}
+
+		#shopify-section-{{ section.id }} .product-recommendations__mobile-pagination .swiper-pagination-bullet-active {
+			opacity: 1;
+		}
+
+		@media screen and (max-width: 374px) {
+			html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header {
+				padding-right: 64px !important;
+			}
+
+			html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header .swiper-button-prev-new,
+			html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header .swiper-button-next-new {
+				flex-basis: 28px !important;
+				width: 28px !important;
+				height: 38px !important;
+			}
+		}
+	}
+
+	@container (max-width: 767px) {
+		html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header {
+			position: relative !important;
+			display: block !important;
+			min-height: 40px !important;
+			margin-bottom: 12px !important;
+			width: 100%;
+			padding-right: 72px !important;
+		}
+
+		html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header h2 {
+			margin: 0 !important;
+			min-width: 0;
+			max-width: 100%;
+			min-height: 40px !important;
+			display: flex !important;
+			align-items: center !important;
+			line-height: 1.05;
+			font-size: var(--product-recommendations-heading-size-mobile, {{- section.settings.heading_font_size_mobile | default: 22 -}}px) !important;
+			white-space: nowrap !important;
+			overflow: hidden !important;
+			text-overflow: clip !important;
+			word-break: normal;
+			overflow-wrap: normal;
+		}
+
+		html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header .featured-products__buttons-wrapper {
+			position: absolute !important;
+			top: 0 !important;
+			right: 0 !important;
+			display: inline-flex !important;
+			flex-direction: row !important;
+			flex-wrap: nowrap !important;
+			align-items: center;
+			flex: 0 0 auto !important;
+			margin: 0 !important;
+			width: auto !important;
+			min-width: 0 !important;
+			white-space: nowrap !important;
+			transform: none !important;
+		}
+
+		html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header .swiper-button-prev-new,
+		html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header .swiper-button-next-new {
+			flex: 0 0 32px !important;
+			width: 32px !important;
+			height: 40px !important;
+		}
+	}
+
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .featured-products__header.product-recommendations__header {
+		position: relative !important;
+		display: block !important;
+		min-height: 40px !important;
+		margin-bottom: 12px !important;
+		width: 100%;
+		padding-right: 72px !important;
+	}
+
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .featured-products__header.product-recommendations__header h2 {
+		margin: 0 !important;
+		min-width: 0;
+		max-width: 100%;
+		min-height: 40px !important;
+		display: flex !important;
+		align-items: center !important;
+		line-height: 1.05;
+		font-size: var(--product-recommendations-heading-size-mobile, {{- section.settings.heading_font_size_mobile | default: 22 -}}px) !important;
+		white-space: nowrap !important;
+		overflow: hidden !important;
+		text-overflow: clip !important;
+		word-break: normal;
+		overflow-wrap: normal;
+	}
+
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .featured-products__header.product-recommendations__header .featured-products__buttons-wrapper {
+		position: absolute !important;
+		top: 0 !important;
+		right: 0 !important;
+		display: inline-flex !important;
+		flex-direction: row !important;
+		flex-wrap: nowrap !important;
+		align-items: center;
+		flex: 0 0 auto !important;
+		margin: 0 !important;
+		width: auto !important;
+		min-width: 0 !important;
+		white-space: nowrap !important;
+		transform: none !important;
+	}
+
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .featured-products__header.product-recommendations__header .swiper-button-prev-new,
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .featured-products__header.product-recommendations__header .swiper-button-next-new {
+		flex: 0 0 32px !important;
+		width: 32px !important;
+		height: 40px !important;
+	}
+
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .js-product-recommendations-content,
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .featured-products__slider {
+		width: 100% !important;
+		max-width: 100% !important;
+		overflow: hidden !important;
+		overflow-x: hidden !important;
+		clip-path: inset(0);
+		contain: paint;
+	}
+
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .featured-products__row {
+		display: flex !important;
+		gap: 0 !important;
+		flex-wrap: nowrap !important;
+		overflow: visible !important;
+		margin-bottom: 0 !important;
+		padding-bottom: 0 !important;
+	}
+
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .featured-products__col {
+		display: block !important;
+		box-sizing: border-box !important;
+		min-width: 0 !important;
+		overflow: hidden !important;
+	}
+
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .featured-products__slider:not(.swiper-initialized) .featured-products__col {
+		width: calc(50% - 8px) !important;
+		max-width: calc(50% - 8px) !important;
+		flex: 0 0 calc(50% - 8px) !important;
+		margin-right: 16px !important;
+	}
+
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .product-recommendations__slide--desktop-hidden {
+		display: block !important;
+	}
+
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .product-recommendations__slide--mobile-hidden {
+		display: none !important;
+	}
+
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .container {
+		padding-left: 16px !important;
+		padding-right: 16px !important;
+	}
+
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .product-recommendations__navigation {
+		display: none !important;
+	}
+
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .product-recommendations__mobile-pagination,
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .product-recommendations__mobile-pagination.swiper-pagination-bullets,
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .product-recommendations__mobile-pagination.swiper-pagination-horizontal {
+		position: relative !important;
+		inset: auto !important;
+		display: flex !important;
+		align-items: center;
+		justify-content: center;
+		gap: 5px;
+		width: min(180px, 56%) !important;
+		height: 3px !important;
+		margin: 18px auto 0 !important;
+		padding: 0 !important;
+		transform: none !important;
+		visibility: visible !important;
+		opacity: 1 !important;
+		pointer-events: auto !important;
+	}
+
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .product-recommendations__mobile-pagination .swiper-pagination-bullet {
+		display: block;
+		flex: 1 1 0;
+		width: auto !important;
+		max-width: 40px;
+		height: 3px;
+		margin: 0 !important;
+		padding: 0;
+		border: 0;
+		border-radius: 999px;
+		background: #2c3d33;
+		opacity: 0.2;
+		cursor: pointer;
+		transition: opacity 0.25s ease;
+	}
+
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .product-recommendations__mobile-pagination .swiper-pagination-bullet-active {
+		opacity: 1;
+	}
+
+	html body #shopify-section-{{ section.id }} .featured-products__header.product-recommendations__header {
+		padding-right: 0 !important;
+	}
+
+	@media screen and (max-width: 767px) {
+		html body #shopify-section-{{ section.id }} .product-recommendations__carousel-shell {
+			overflow: hidden !important;
+			overflow-x: hidden !important;
+			clip-path: inset(0);
+			contain: paint;
+		}
+	}
+
+	html body #shopify-section-{{ section.id }} .product-recommendations.is-mobile-layout .product-recommendations__carousel-shell {
+		margin-inline: 0;
+		padding-inline: 0;
+		overflow: hidden !important;
+		overflow-x: hidden !important;
+		clip-path: inset(0);
+		contain: paint;
+	}
+
+{%- endstyle -%}

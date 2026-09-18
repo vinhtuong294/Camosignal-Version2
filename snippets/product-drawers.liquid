@@ -46,6 +46,8 @@
 
 {%- if product_details_type == 'upf hoodie' -%}
 	{%- assign product_details_profile = 'upf-hoodie' -%}
+{%- elsif product_details_type_handle == 'fleece-hoodie' -%}
+	{%- assign product_details_profile = 'fleece-hoodie' -%}
 {%- elsif product_details_type == 'combo' -%}
 	{%- assign product_details_profile = 'combo' -%}
 {%- elsif product_details_type == 'shirt' -%}
@@ -108,6 +110,13 @@
 
 {%- capture product_details_content -%}
 	{%- case product_details_profile -%}
+		{%- when 'fleece-hoodie' -%}
+			<p><strong>Protection:</strong> Provides light wind resistance and helps retain body warmth with a soft fleece inner layer, keeping you comfortable in cold weather conditions.</p>
+			<p><strong>Sizes:</strong> S to 5XL</p>
+			<p><strong>Style:</strong> Stretch-enhanced fabric allows flexible movement, making it suitable for outdoor activities.</p>
+			<p><strong>Material:</strong> Premium fleece fabric (100% polyester, 280 GSM) &mdash; soft, warm, and comfortable with breathable performance for extended wear.</p>
+			<p><strong>Print Method:</strong> Premium all-over print for vivid, edge-to-edge designs that won't fade or crack.</p>
+			<p><strong>Origin:</strong> Eco-friendly &amp; Made to Order &mdash; crafted fresh after every purchase for peak print quality.</p>
 		{%- when 'combo' -%}
 			<details class="product-inline-details__nested">
 				<summary class="product-inline-details__nested-trigger">
@@ -1815,8 +1824,13 @@
 			}
 			.size-chart-overlay__table-wrap {
 				width: 100%;
+				position: relative;
+				isolation: isolate;
 				overflow-x: auto;
-				-webkit-overflow-scrolling: touch;
+				touch-action: pan-x pan-y pinch-zoom;
+				overscroll-behavior-x: none;
+				scrollbar-color: rgba(32, 50, 36, 0.5) transparent;
+				scrollbar-width: thin;
 			}
 			.size-chart-overlay__table {
 				width: 100%;
@@ -1849,11 +1863,30 @@
 				border-top-right-radius: 6px;
 				border-bottom-right-radius: 6px;
 			}
+			/* Keep the size visible while the measurement columns are scrolled. */
+			.size-chart-overlay__table th:first-child,
+			.size-chart-overlay__table td:first-child {
+				position: sticky;
+				left: 0;
+				z-index: 1;
+				min-width: 68px;
+			}
+			.size-chart-overlay__table th:first-child {
+				z-index: 3;
+				background: var(--color-text-primary, #203224);
+			}
 			.size-chart-overlay__table td {
 				border-bottom: 1px solid #d8ded7;
 			}
+			.size-chart-overlay__table td:first-child {
+				background: #ffffff;
+			}
 			.size-chart-overlay__table tbody tr:nth-child(even) {
 				background: transparent;
+			}
+			.size-chart-overlay__table--3d-tshirt tbody tr:nth-child(even) td:first-child,
+			.size-chart-overlay__table--upf-hoodie tbody tr:nth-child(even) td:first-child {
+				background: #f7f8f7;
 			}
 			.size-chart-overlay__table tbody tr:hover {
 				background: transparent;
@@ -2066,6 +2099,16 @@
 
 			/* Mobile */
 			@media (max-width: 767.98px) {
+				/* Keep horizontal scrolling inside the table, not the modal. */
+				#size-chart-overlay.is-active {
+					overflow: hidden;
+				}
+				#size-chart-overlay.is-active .size-chart-overlay__panel {
+					transform: none;
+					transition: none;
+					overflow-x: hidden;
+					overscroll-behavior-y: contain;
+				}
 				.size-chart-overlay__panel {
 					width: 100%;
 					max-width: 100%;
@@ -2100,7 +2143,7 @@
 					max-height: calc(100vh - 36px);
 					max-height: calc(100dvh - 36px);
 					margin: 0;
-					padding: 22px 16px 24px;
+					padding: 20px 12px 22px;
 					border: 1px solid rgba(32, 50, 36, 0.12);
 					border-radius: 6px;
 					box-shadow: 0 18px 48px rgba(15, 24, 18, 0.24);
@@ -2191,39 +2234,44 @@
 				.size-chart-overlay__unit-tab { flex: 1; min-width: 0; }
 				.size-chart-overlay__subtitle { font-size: 17px; }
 				.size-chart-overlay__table {
-					min-width: 0;
+					min-width: 400px;
 					table-layout: fixed;
 					text-align: center;
 				}
 				.size-chart-overlay__table th:first-child,
 				.size-chart-overlay__table td:first-child {
-					width: 22%;
+					width: 66px;
+					min-width: 66px;
+					/* Composite the pinned cells with native scrolling, without JS offsets. */
+					transform: translateZ(0);
+					transition: none;
 				}
 				.size-chart-overlay__table th,
 				.size-chart-overlay__table td {
-					padding: 10px 8px;
+					padding: 9px 6px;
 					font-size: 12px;
 					white-space: normal;
 					word-break: normal;
 				}
 				.size-chart-overlay__table th {
-					font-size: 10px;
+					font-size: 9px;
 					line-height: 1.25;
 				}
 				.size-chart-overlay__table--shirt {
-					min-width: 620px;
-					table-layout: auto;
+					min-width: 520px;
+					table-layout: fixed;
 				}
 				.size-chart-overlay__table--3d-tshirt,
 				.size-chart-overlay__table--upf-hoodie {
-					min-width: 570px;
-					table-layout: auto;
+					min-width: 460px;
+					table-layout: fixed;
 				}
 				.size-chart-overlay__table--3d-tshirt th:first-child,
 				.size-chart-overlay__table--3d-tshirt td:first-child,
 				.size-chart-overlay__table--upf-hoodie th:first-child,
 				.size-chart-overlay__table--upf-hoodie td:first-child {
-					width: auto;
+					width: 66px;
+					min-width: 66px;
 				}
 				.size-chart-overlay__3d-tshirt-image,
 				.size-chart-overlay__upf-hoodie-image {
@@ -2460,7 +2508,7 @@
 		{%- for highlight_profile in highlight_profiles -%}
 			{%- render 'product-outdoor-highlights', profile: highlight_profile, active_profile: active_highlight_profile -%}
 		{%- endfor -%}
-	{%- elsif product_details_type_handle == 'upf-hoodie' -%}
+	{%- elsif product_details_type_handle == 'upf-hoodie' or product_details_type_handle == 'fleece-hoodie' -%}
 		{%- render 'product-outdoor-highlights', profile: product_details_type_handle -%}
 	{%- endif -%}
 

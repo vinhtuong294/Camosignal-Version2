@@ -1,0 +1,24 @@
+{%- liquid
+  assign requires_customization = false
+  assign custom_name = candidate.metafields.custom.enable_name_custom.value | append: '' | strip | downcase
+  if candidate.metafields.custom.enable_name.value or candidate.metafields.custom.enable_number.value
+    assign requires_customization = true
+  endif
+  if custom_name == 'true' or custom_name == '1' or custom_name == 'yes' or custom_name == 'on'
+    assign requires_customization = true
+  endif
+  assign excluded_from_upsell = false
+  for tag in candidate.tags
+    assign normalized_tag = tag | strip | downcase
+    if normalized_tag == 'flex-upsell:customize' or normalized_tag == 'combo-builder'
+      assign requires_customization = true
+    endif
+    if normalized_tag == 'flex-upsell:exclude'
+      assign excluded_from_upsell = true
+    endif
+  endfor
+  if candidate.gift_card or candidate.requires_selling_plan or candidate.available == false
+    assign excluded_from_upsell = true
+  endif
+-%}
+{"metadataVersion":1,"id":{{ candidate.id | json }},"handle":{{ candidate.handle | json }},"title":{{ candidate.title | json }},"requiresCustomization":{{ requires_customization | json }},"excludedFromUpsell":{{ excluded_from_upsell | json }}}

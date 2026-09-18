@@ -1,0 +1,9 @@
+.env*
+.shopify/
+.vercel/
+node_modules/
+build/
+tmp/
+qa/
+*.db
+*.db-journal

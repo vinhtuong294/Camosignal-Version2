@@ -1,0 +1,210 @@
+{% doc %}
+  Renders the store footer using its existing section settings.
+  @param {section} section - Footer section.
+{% enddoc %}
+{%- liquid
+  assign display_logo = section.settings.logo_image | default: settings.logo
+  assign newsletter_block = section.blocks | where: 'type', 'newsletter' | first
+  assign success_message = 'newsletter.success' | t
+  assign success_message = newsletter_block.settings.success_message | default: success_message
+  assign form_id = 'CamoFooterNewsletter-' | append: section.id
+  assign input_id = form_id | append: '-email'
+  assign message_id = form_id | append: '-message'
+  assign phone = section.settings.info_phone | strip_html
+  assign email = section.settings.info_email | strip_html
+  assign facebook = settings.social_facebook_link | default: 'https://www.facebook.com/profile.php?id=61575744733042'
+  assign instagram = settings.social_instagram_link | default: 'https://www.instagram.com/camo.signal/'
+-%}
+<footer class="camo-footer" data-camo-footer>
+  <div class="camo-footer__inner">
+    <div class="camo-footer__main">
+      <section class="camo-footer__newsletter" aria-labelledby="{{ form_id }}-heading">
+        <div class="camo-footer__newsletter-top">
+          {%- if display_logo != blank -%}
+            <a class="camo-footer__logo-link" href="{{ routes.root_url }}" aria-label="{{ 'general.accessibility.link_messages.link_to_home_page' | t | escape }}">{{ display_logo | image_url: width: 180 | image_tag: loading: 'lazy', class: 'camo-footer__logo', widths: '90, 180', sizes: '72px', alt: shop.name }}</a>
+          {%- endif -%}
+          <div>
+            <h2 id="{{ form_id }}-heading" class="camo-footer__headline">{{ section.settings.newsletter_heading | escape }}</h2>
+            <div class="camo-footer__intro">{{ section.settings.newsletter_text }}</div>
+        {%- form 'customer', id: form_id, class: 'camo-footer__form js-newsletter-form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <div class="camo-footer__field">
+            <label class="visually-hidden" for="{{ input_id }}">{{ 'newsletter.label' | t }}</label>
+            <input id="{{ input_id }}" type="email" name="contact[email]" value="{{ form.email | escape }}" placeholder="{{ 'camo_footer.email_address' | t }}" class="camo-footer__input js-newsletter-input" required autocomplete="email" autocapitalize="off" {% if form.errors %}aria-invalid="true" aria-describedby="{{ message_id }}"{% elsif form.posted_successfully? %}aria-describedby="{{ message_id }}"{% endif %}>
+            <button type="submit" name="commit" class="camo-footer__submit" aria-label="{{ 'newsletter.button_label' | t }}">
+              <svg width="40" height="32" viewBox="0 0 40 32" fill="none" aria-hidden="true" focusable="false"><path d="M2 16h34M24 4l12 12-12 12" stroke="currentColor" stroke-width="1.5"/></svg>
+            </button>
+          </div>
+          {%- if form.errors -%}<div class="camo-footer__message" id="{{ message_id }}" role="alert">{{ form.errors | default_errors }}</div>{%- endif -%}
+          {%- if form.posted_successfully? -%}<p class="camo-footer__message" id="{{ message_id }}" role="status">{{ success_message | escape }}</p>{%- endif -%}
+        {%- endform -%}
+          </div>
+        </div>
+      </section>
+      <div class="camo-footer__groups">
+        <details class="camo-footer__group" open>
+          <summary class="camo-footer__heading">{{ 'camo_footer.support' | t }}<span class="camo-footer__toggle" aria-hidden="true"></span></summary>
+          <div class="camo-footer__content">
+            <ul class="camo-footer__links">
+              {%- if section.settings.sub_footer_menu != blank -%}
+                {%- for link in section.settings.sub_footer_menu.links -%}
+                  {%- liquid
+                    assign footer_url = link.url
+                    if footer_url contains 'shipping-policy'
+                      assign footer_url = '/pages/shipping-policy'
+                    elsif footer_url contains 'refund-policy'
+                      assign footer_url = '/pages/refund-policy'
+                    endif
+                  -%}
+                  <li><a href="{{ footer_url }}">{{ link.title | escape }}</a></li>
+                {%- endfor -%}
+              {%- else -%}
+                <li><a href="/pages/contact">{{ 'camo_footer.contact' | t }}</a></li>
+                <li><a href="/pages/shipping-policy">{{ 'camo_footer.shipping' | t }}</a></li>
+                <li><a href="/pages/refund-policy">{{ 'camo_footer.refund' | t }}</a></li>
+              {%- endif -%}
+            </ul>
+          </div>
+        </details>
+        <details class="camo-footer__group" open>
+          <summary class="camo-footer__heading">{{ 'camo_footer.our_story' | t }}<span class="camo-footer__toggle" aria-hidden="true"></span></summary>
+          <div class="camo-footer__content camo-footer__brand">
+            {%- if section.settings.manifesto_subheading != blank -%}<p>{{ section.settings.manifesto_subheading }}</p>{%- endif -%}
+            <div class="camo-footer__manifesto">{{ section.settings.manifesto_text }}</div>
+            <a class="camo-footer__about" href="/pages/about-us1">{{ 'camo_footer.about' | t }} <span aria-hidden="true">→</span></a>
+          </div>
+        </details>
+        <details class="camo-footer__group" open>
+          <summary class="camo-footer__heading">{{ 'camo_footer.our_store' | t }}<span class="camo-footer__toggle" aria-hidden="true"></span></summary>
+          <div class="camo-footer__content">
+            <ul class="camo-footer__links camo-footer__info">
+              {%- if phone != blank -%}<li><a href="tel:{{ phone | remove: ' ' | remove: '(' | remove: ')' }}">{{ phone | escape }}</a></li>{%- endif -%}
+              {%- if email != blank -%}<li><a href="mailto:{{ email | escape }}">{{ email | escape | replace: '@', '@<wbr>' }}</a></li>{%- endif -%}
+              {%- if section.settings.info_address != blank -%}<li><address>{{ section.settings.info_address }}</address></li>{%- endif -%}
+            </ul>
+          </div>
+        </details>
+      </div>
+    </div>
+    <div class="camo-footer__utilities">
+      <div class="camo-footer__socials">
+        <a href="{{ facebook }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.social_link_aria_label' | t: social: 'Facebook' | escape }}">{% render 'icons-social', icon: 'facebook' %}</a>
+        <a href="{{ instagram }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.social_link_aria_label' | t: social: 'Instagram' | escape }}">{% render 'icons-social', icon: 'instagram' %}</a>
+        {%- if settings.social_tiktok_link != blank -%}<a href="{{ settings.social_tiktok_link }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.social_link_aria_label' | t: social: 'TikTok' | escape }}">{% render 'icons-social', icon: 'tiktok' %}</a>{%- endif -%}
+      </div>
+      {%- if section.settings.is_show_language_selector and localization.available_languages.size > 1 -%}
+        <div class="camo-footer__localization">
+          {%- assign language_form_id = 'CamoFooterLanguage-' | append: section.id -%}
+          {% render 'language-localization-form', class: 'camo-footer', id_prefix: language_form_id, form_id: language_form_id %}
+        </div>
+      {%- endif -%}
+    </div>
+    <div class="camo-footer__bottom">
+      <div class="camo-footer__legal">
+        {%- assign year = 'now' | date: '%Y' -%}
+        <p>{{ 'camo_footer.copyright' | t: year: year }}</p>
+        <ul class="camo-footer__policies">
+          <li><a href="/policies/privacy-policy">{{ 'camo_footer.privacy' | t }}</a></li>
+          <li><a href="/policies/terms-of-service">{{ 'camo_footer.terms' | t }}</a></li>
+        </ul>
+      </div>
+      {%- if section.settings.is_show_payment_methods and shop.enabled_payment_types != blank -%}
+        <ul class="camo-footer__payments" aria-label="{{ 'general.payment.method' | t | escape }}">
+          {%- for type in shop.enabled_payment_types -%}<li>{{ type | payment_type_svg_tag: class: 'payment-icon' }}</li>{%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </div>
+</footer>
+{% stylesheet %}
+  .camo-footer { background: #243029; color: #fff; padding: 64px 40px 28px; font-family: var(--base-font-family, var(--font-body-family)); font-size: 14px; font-weight: 400; letter-spacing: 0; line-height: 1.6; }
+  .camo-footer *, .camo-footer *::before, .camo-footer *::after { box-sizing: border-box; }
+  .camo-footer__inner { max-width: 1400px; margin: 0 auto; }
+  .camo-footer a { color: inherit; text-decoration: none; }
+  .camo-footer a:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .camo-footer :is(a, button, input, summary):focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
+  .camo-footer__main { display: grid; grid-template-columns: minmax(410px, 1.35fr) minmax(0, 2fr); gap: 48px; }
+  .camo-footer__headline { font-family: var(--heading-font-family, var(--font-heading-family)); color: inherit; font-size: clamp(24px, 2.2vw, 32px); line-height: 1.2; margin: 0 0 14px; text-transform: uppercase; }
+  .camo-footer__intro p { margin: 0; }
+  .camo-footer__field { display: flex; align-items: center; border-bottom: 1px solid #ffffffa6; margin-top: 36px; }
+  .camo-footer .camo-footer__input { appearance: none; min-width: 0; width: 100%; height: 58px; border: 0; border-radius: 0; background: transparent; color: inherit; padding: 12px 0; margin: 0; font-family: inherit; font-size: 16px; box-shadow: none; }
+  .camo-footer .camo-footer__input::placeholder { color: #ffffffcc; opacity: 1; }
+  .camo-footer__submit { display: flex; align-items: center; justify-content: flex-end; flex-shrink: 0; width: 52px; min-height: 58px; padding: 8px 0 8px 12px; border: 0; background: transparent; color: inherit; cursor: pointer; }
+  .camo-footer__message { margin: 16px 0 0; }
+  .camo-footer__groups { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+  .camo-footer__group { min-width: 0; }
+  .camo-footer__heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; list-style: none; color: inherit; font-family: var(--heading-font-family, var(--font-heading-family)); font-size: 18px; font-weight: 700; line-height: 1.3; text-transform: uppercase; }
+  .camo-footer__heading::-webkit-details-marker { display: none; }
+  .camo-footer__content { padding-top: 24px; overflow-wrap: anywhere; }
+  .camo-footer__links, .camo-footer__policies, .camo-footer__payments { list-style: none; margin: 0; padding: 0; }
+  .camo-footer__links { display: grid; gap: 14px; }
+  .camo-footer__info address { font-style: normal; }
+  .camo-footer__newsletter-top { display: flex; align-items: flex-start; gap: 20px; }
+  .camo-footer__newsletter-top > div { flex: 1; min-width: 0; }
+  .camo-footer__logo-link { flex: 0 0 72px; }
+  .camo-footer__logo { display: block; width: 72px; height: auto; }
+  .camo-footer__brand p { margin: 0 0 12px; }
+  .camo-footer__about { display: inline-flex; gap: 12px; margin-top: 6px; }
+  .camo-footer__toggle { display: none; }
+  .camo-footer__utilities { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 52px; }
+  .camo-footer__socials { display: flex; align-items: center; gap: 12px; }
+  .camo-footer__socials a { display: flex; align-items: center; justify-content: center; width: 32px; height: 40px; }
+  .camo-footer__socials svg { width: 19px; height: 19px; }
+  .camo-footer__localization { display: flex; flex-wrap: wrap; gap: 20px; }
+  .camo-footer__localization .disclosure__button { color: inherit; font-size: 13px; min-height: 40px; }
+  .camo-footer__localization .disclosure__list { color: #243029; background: #fff; }
+  .camo-footer__bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; border-top: 1px solid #ffffff38; padding-top: 24px; margin-top: 24px; }
+  .camo-footer__legal { font-size: 12px; line-height: 1.7; }
+  .camo-footer__legal p { margin: 0 0 6px; }
+  .camo-footer__policies { display: flex; flex-wrap: wrap; gap: 6px 20px; }
+  .camo-footer__payments { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; max-width: 440px; }
+  .camo-footer__payments .payment-icon { display: block; width: 34px; height: 22px; }
+  @media (min-width: 1025px) {
+    .camo-footer__heading { pointer-events: none; }
+    .camo-footer__newsletter-top > div { flex: 0 1 auto; width: min-content; }
+    .camo-footer__headline { font-size: clamp(20px, 1.85vw, 28px); white-space: nowrap; }
+  }
+  @media (max-width: 1200px) and (min-width: 1025px) { .camo-footer__main { gap: 32px; } .camo-footer__groups { gap: 24px; } .camo-footer__heading { font-size: 16px; } }
+  @media (max-width: 1024px) {
+    .camo-footer { padding: 36px 24px 28px; }
+    .camo-footer__main { display: block; }
+    .camo-footer__newsletter { max-width: 560px; }
+    .camo-footer__newsletter-top { display: block; }
+    .camo-footer__logo-link { display: none; }
+    .camo-footer__headline { font-size: 28px; }
+    .camo-footer__field { margin-top: 32px; }
+    .camo-footer__groups { display: block; margin-top: 20px; }
+    .camo-footer__heading { min-height: 54px; padding: 12px 0; cursor: pointer; font-size: 18px; }
+    .camo-footer__toggle { display: block; position: relative; flex: 0 0 18px; height: 18px; }
+    .camo-footer__toggle::before, .camo-footer__toggle::after { content: ''; position: absolute; background: currentColor; }
+    .camo-footer__toggle::before { width: 16px; height: 1.5px; top: 8px; left: 1px; }
+    .camo-footer__toggle::after { width: 1.5px; height: 16px; left: 8px; top: 1px; }
+    .camo-footer__group[open] .camo-footer__toggle::after { display: none; }
+    .camo-footer__content { padding: 4px 0 24px; max-width: 560px; }
+    .camo-footer__utilities { margin-top: 30px; align-items: flex-start; flex-direction: column; gap: 8px; }
+    .camo-footer__bottom { margin-top: 30px; padding-top: 0; border: 0; align-items: flex-start; flex-direction: column; gap: 24px; }
+    .camo-footer__payments { justify-content: flex-start; }
+  }
+{% endstylesheet %}
+{% javascript %}
+  (() => {
+    const initialize = () => {
+      document.querySelectorAll('[data-camo-footer]').forEach(footer => {
+        if (footer.dataset.ready) return;
+        footer.dataset.ready = 'true';
+        const desktop = matchMedia('(min-width: 1025px)');
+        const update = () => {
+          if (!footer.isConnected) { desktop.removeEventListener('change', update); return; }
+          footer.querySelectorAll('.camo-footer__group').forEach(group => {
+            group.open = desktop.matches;
+            group.querySelector('summary').tabIndex = desktop.matches ? -1 : 0;
+          });
+        };
+        update();
+        desktop.addEventListener('change', update);
+      });
+    };
+    initialize();
+    document.addEventListener('shopify:section:load', initialize);
+  })();
+{% endjavascript %}

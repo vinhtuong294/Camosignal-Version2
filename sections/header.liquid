@@ -120,6 +120,7 @@
 
 	/* User request: Green text color when header is transparent */
 	.header[data-header-transparent] .header-menu__item,
+	.header[data-header-transparent] .camo-nav__trigger,
 	.header[data-header-transparent] .header__icon,
 	.header[data-header-transparent] .header__heading-link,
 	.header-section.header-section--transparent-mobile .header[data-header-transparent-mobile] .header__icon,
@@ -131,6 +132,7 @@
 	{%- if template.name == "index" or template.name == "page" and template.suffix == "about" -%}
 	/* About page: white header text + icons over banner — only at top (not scrolled) */
 	.header-section--top-position .header[data-header-transparent] .header-menu__item,
+	.header-section--top-position .header[data-header-transparent] .camo-nav__trigger,
 	.header-section--top-position .header[data-header-transparent] .header__icon,
 	.header-section--top-position .header[data-header-transparent] .header__heading-link,
 	.header-section--top-position.header-section--transparent-mobile .header[data-header-transparent-mobile] .header__icon,
@@ -141,9 +143,11 @@
 
 	@media (min-width: 1200px) {
 	.header-section--top-position .header[data-header-transparent]:hover .header-menu__item,
+	.header-section--top-position .header[data-header-transparent]:hover .camo-nav__trigger,
 	.header-section--top-position .header[data-header-transparent]:hover .header__icon,
 	.header-section--top-position .header[data-header-transparent]:hover .header__heading-link,
 	.header-section--top-position .header[data-header-transparent]:focus-within .header-menu__item,
+	.header-section--top-position .header[data-header-transparent]:focus-within .camo-nav__trigger,
 	.header-section--top-position .header[data-header-transparent]:focus-within .header__icon,
 	.header-section--top-position .header[data-header-transparent]:focus-within .header__heading-link,
 	.header-section--top-position.header-section--transparent-mobile .header[data-header-transparent-mobile]:hover .header__icon,

@@ -33,6 +33,20 @@ test("UPF hoodies intentionally have no color option", () => {
   );
 });
 
+test("waterproof jackets are size-only and follow the approved gallery order", () => {
+  assert.equal(isColorlessProductType("Waterproof Jacket"), true);
+  const images = Array.from({ length: 7 }, (_, index) => ({
+    name: index === 0 ? "jacket.jpg" : `jacket (${index + 1}).jpg`,
+    color: null,
+    mimeType: "image/jpeg",
+    bytes: new Uint8Array(),
+  }));
+  assert.deepEqual(
+    orderListingImages(images, { productType: "Waterproof Jacket", mainColor: null, colors: [] }).map((image) => image.name),
+    ["jacket.jpg", "jacket (4).jpg", "jacket (5).jpg", "jacket (6).jpg", "jacket (3).jpg", "jacket (2).jpg", "jacket (7).jpg"],
+  );
+});
+
 test("ranks a matching product type above a loose candidate", () => {
   const row = { productType: "Hoodie", title: "Turkey Woods Hoodie", designId: "TGV120802" };
   const matching = scoreTemplate(row, {
@@ -103,4 +117,8 @@ test("builds one canonical design tag across garment product types", () => {
     assert.equal(designNameFromProductTitle(title), "Trout Trifecta");
     assert.equal(designTagForProductTitle(title), "design:Trout-Trifecta");
   }
+  assert.equal(designNameFromProductTitle("Wild Crown Camo Layering Series"), "Wild Crown Camo");
+  assert.equal(designNameFromProductTitle("Wild Crown Camo Water-Resistant Jacket"), "Wild Crown Camo");
+  assert.equal(designNameFromProductTitle("Hunt Hard Camo Water‑Resistant Jacket"), "Hunt Hard Camo");
+  assert.equal(designNameFromProductTitle("Rut Driven Camo Fleece Hoodie"), "Rut Driven Camo");
 });

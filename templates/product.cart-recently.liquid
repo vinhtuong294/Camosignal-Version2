@@ -1,6 +1,2 @@
 {%- layout none -%}
-{%- assign requires_customization = false -%}
-{%- if product.metafields.custom.enable_name.value or product.metafields.custom.enable_number.value -%}
-  {%- assign requires_customization = true -%}
-{%- endif -%}
-{"id":{{ product.id | json }},"handle":{{ product.handle | json }},"title":{{ product.title | json }},"requiresCustomization":{{ requires_customization | json }}}
+{%- render 'cart-upsell-product-metadata', candidate: product -%}

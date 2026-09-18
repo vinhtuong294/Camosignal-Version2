@@ -1,0 +1,275 @@
+[
+  {
+    "title": "Deer Season",
+    "id": "gid://shopify/Collection/379105476799",
+    "handle": "deer-season",
+    "collectionType": "manual",
+    "expectedCount": 163,
+    "initialCount": 163,
+    "rules": null,
+    "error": false
+  },
+  {
+    "title": "Turkey Season",
+    "id": "gid://shopify/Collection/379105509567",
+    "handle": "turkey-season",
+    "collectionType": "manual",
+    "expectedCount": 126,
+    "initialCount": 126,
+    "rules": null,
+    "error": false
+  },
+  {
+    "title": "Waterfowl Season",
+    "id": "gid://shopify/Collection/379105542335",
+    "handle": "waterfowl-season",
+    "collectionType": "manual",
+    "expectedCount": 23,
+    "initialCount": 23,
+    "rules": null,
+    "error": false
+  },
+  {
+    "title": "Upland Season",
+    "id": "gid://shopify/Collection/379105575103",
+    "handle": "upland-season",
+    "collectionType": "manual",
+    "expectedCount": 47,
+    "initialCount": 47,
+    "rules": null,
+    "error": false
+  },
+  {
+    "title": "Freshwater Life",
+    "id": "gid://shopify/Collection/379105607871",
+    "handle": "freshwater-life",
+    "collectionType": "manual",
+    "expectedCount": 55,
+    "initialCount": 55,
+    "rules": null,
+    "error": false
+  },
+  {
+    "title": "Saltwater Life",
+    "id": "gid://shopify/Collection/379105673407",
+    "handle": "saltwater-life",
+    "collectionType": "manual",
+    "expectedCount": 60,
+    "initialCount": 60,
+    "rules": null,
+    "error": false
+  },
+  {
+    "title": "Outdoor Faith",
+    "id": "gid://shopify/Collection/379105706175",
+    "handle": "outdoor-faith",
+    "collectionType": "manual",
+    "expectedCount": 71,
+    "initialCount": 71,
+    "rules": null,
+    "error": false
+  },
+  {
+    "title": "Park Adventures",
+    "id": "gid://shopify/Collection/379105738943",
+    "handle": "park-adventures",
+    "collectionType": "manual",
+    "expectedCount": 59,
+    "initialCount": 59,
+    "rules": null,
+    "error": false
+  },
+  {
+    "title": "American Pride",
+    "id": "gid://shopify/Collection/379105804479",
+    "handle": "american-pride",
+    "collectionType": "manual",
+    "expectedCount": 59,
+    "initialCount": 59,
+    "rules": null,
+    "error": false
+  },
+  {
+    "title": "Outdoor Dads",
+    "id": "gid://shopify/Collection/379105902783",
+    "handle": "outdoor-dads",
+    "collectionType": "manual",
+    "expectedCount": 23,
+    "initialCount": 23,
+    "rules": null,
+    "error": false
+  },
+  {
+    "title": "Youth Tees",
+    "id": "gid://shopify/Collection/379105968319",
+    "handle": "youth-tees",
+    "collectionType": "manual",
+    "expectedCount": 47,
+    "initialCount": 47,
+    "rules": null,
+    "error": false
+  },
+  {
+    "title": "Curated Sets",
+    "id": "gid://shopify/Collection/379106066623",
+    "handle": "curated-sets",
+    "collectionType": "smart",
+    "expectedCount": 15,
+    "initialCount": 15,
+    "rules": {
+      "appliedDisjunctively": true,
+      "rules": [
+        {
+          "column": "TYPE",
+          "relation": "EQUALS",
+          "condition": "Combo"
+        }
+      ]
+    },
+    "error": false
+  },
+  {
+    "title": "T-Shirts",
+    "id": "gid://shopify/Collection/379106099391",
+    "handle": "t-shirts",
+    "collectionType": "smart",
+    "expectedCount": 513,
+    "initialCount": 100,
+    "rules": {
+      "appliedDisjunctively": true,
+      "rules": [
+        {
+          "column": "TYPE",
+          "relation": "EQUALS",
+          "condition": "T-Shirt"
+        },
+        {
+          "column": "TYPE",
+          "relation": "EQUALS",
+          "condition": "T-shirt"
+        },
+        {
+          "column": "TYPE",
+          "relation": "EQUALS",
+          "condition": "3D Tshirt"
+        },
+        {
+          "column": "TYPE",
+          "relation": "EQUALS",
+          "condition": "Type1"
+        },
+        {
+          "column": "TYPE",
+          "relation": "EQUALS",
+          "condition": "Pocket Tee"
+        }
+      ]
+    },
+    "error": false
+  },
+  {
+    "title": "Long Sleeves",
+    "id": "gid://shopify/Collection/379106132159",
+    "handle": "long-sleeves",
+    "collectionType": "smart",
+    "expectedCount": 119,
+    "initialCount": 119,
+    "rules": {
+      "appliedDisjunctively": true,
+      "rules": [
+        {
+          "column": "TYPE",
+          "relation": "EQUALS",
+          "condition": "Long-sleeve"
+        }
+      ]
+    },
+    "error": false
+  },
+  {
+    "title": "Sweatshirts",
+    "id": "gid://shopify/Collection/379106164927",
+    "handle": "sweatshirts",
+    "collectionType": "smart",
+    "expectedCount": 32,
+    "initialCount": 32,
+    "rules": {
+      "appliedDisjunctively": true,
+      "rules": [
+        {
+          "column": "TYPE",
+          "relation": "EQUALS",
+          "condition": "Sweatshirt"
+        }
+      ]
+    },
+    "error": false
+  },
+  {
+    "title": "Hoodies",
+    "id": "gid://shopify/Collection/379106197695",
+    "handle": "hoodies",
+    "collectionType": "smart",
+    "expectedCount": 81,
+    "initialCount": 81,
+    "rules": {
+      "appliedDisjunctively": true,
+      "rules": [
+        {
+          "column": "TYPE",
+          "relation": "EQUALS",
+          "condition": "Hoodie"
+        }
+      ]
+    },
+    "error": false
+  },
+  {
+    "title": "UV Hoodies",
+    "id": "gid://shopify/Collection/379106230463",
+    "handle": "uv-hoodies",
+    "collectionType": "smart",
+    "expectedCount": 43,
+    "initialCount": 43,
+    "rules": {
+      "appliedDisjunctively": true,
+      "rules": [
+        {
+          "column": "TYPE",
+          "relation": "EQUALS",
+          "condition": "UPF HOODIE"
+        },
+        {
+          "column": "TYPE",
+          "relation": "EQUALS",
+          "condition": "UPF Hoodie"
+        }
+      ]
+    },
+    "error": false
+  },
+  {
+    "title": "Hats",
+    "id": "gid://shopify/Collection/379106263231",
+    "handle": "hats",
+    "collectionType": "smart",
+    "expectedCount": 36,
+    "initialCount": 36,
+    "rules": {
+      "appliedDisjunctively": true,
+      "rules": [
+        {
+          "column": "TYPE",
+          "relation": "EQUALS",
+          "condition": "Hat"
+        },
+        {
+          "column": "TYPE",
+          "relation": "EQUALS",
+          "condition": "Beanie Hat"
+        }
+      ]
+    },
+    "error": false
+  }
+]

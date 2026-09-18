@@ -91,16 +91,41 @@
 		},
 		"product-recommendations": {
 			"type": "product-recommendations",
-			"settings": {}
+			"settings": {
+				"products_to_show": 8,
+				"best_seller_products_to_show": 0,
+				"products_to_show_mobile": 8,
+				"enable_shopify_recommendations": true
+			}
 		},
 		"recently-viewed": {
 			"type": "recently-viewed",
 			"settings": {}
+		},
+		"collection-recommendations": {
+			"type": "collection-recommendations",
+			"settings": {
+				"heading": "Pairs Well With",
+				"hats": "hats",
+				"beanie_embroidery_hat": "beanie-embroidery-hat",
+				"game_day_jersey": "game-day-jersey",
+				"youth_tees": "youth-tees",
+				"pocket_tee": "pocket-tee",
+				"curated_sets": "curated-sets",
+				"uv_hoodies": "uv-hoodies",
+				"fleece_hoodie": "fleece-hoodie",
+				"waterproof_jacket": "waterproof-jacket",
+				"long_sleeves": "long-sleeves",
+				"hoodies": "hoodies",
+				"sweatshirts": "sweatshirts",
+				"t_shirts": "t-shirts"
+			}
 		}
 	},
 	"order": [
 		"product-template",
 		"product-recommendations",
+		"collection-recommendations",
 		"recently-viewed"
 	]
 }

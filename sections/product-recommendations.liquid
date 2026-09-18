@@ -8,9 +8,9 @@
 {%- render 'adastra' with '/src/styles/featured-products.scss' -%}
 {%- render 'adastra' with '/src/styles/product-card.scss' -%}
 
-{%- assign recommended_limit = section.settings.products_to_show | default: 4 | plus: 0 -%}
-{%- assign best_seller_limit = section.settings.best_seller_products_to_show | default: 4 | plus: 0 -%}
-{%- assign recommended_candidate_limit = recommended_limit -%}
+{%- assign recommended_limit = section.settings.products_to_show | default: 8 | plus: 0 -%}
+{%- assign best_seller_limit = section.settings.best_seller_products_to_show | default: 0 | plus: 0 -%}
+{%- assign recommended_candidate_limit = recommended_limit | times: 2 -%}
 {%- assign best_seller_candidate_limit = best_seller_limit -%}
 {%- assign desktop_limit = recommended_limit | plus: best_seller_limit -%}
 {%- assign mobile_limit = section.settings.products_to_show_mobile | default: desktop_limit | plus: 0 -%}
@@ -670,16 +670,19 @@
 {%- endif -%}
 
 
+{%- assign excluded_recommendation_collection_handles = ',new-arrival,new-arrivals,best-seller,best-sellers,' -%}
 {%- assign collection = section.settings.collection -%}
+{%- assign configured_collection_handle = ',' | append: collection.handle | append: ',' -%}
+{%- if excluded_recommendation_collection_handles contains configured_collection_handle -%}
+	{%- assign collection = collections['all'] -%}
+{%- endif -%}
 {%- assign product_list = collection.products -%}
 {%- assign enable_shopify_recommendations = section.settings.enable_shopify_recommendations -%}
 
 {%- assign best_seller_collection = section.settings.best_seller_collection -%}
-{%- if best_seller_collection == blank -%}
+{%- assign best_seller_collection_handle = ',' | append: best_seller_collection.handle | append: ',' -%}
+{%- if best_seller_collection == blank or excluded_recommendation_collection_handles contains best_seller_collection_handle -%}
 	{%- assign best_seller_collection = collections['all'] -%}
-{%- endif -%}
-{%- if best_seller_collection == blank -%}
-	{%- assign best_seller_collection = collections['best-sellers'] -%}
 {%- endif -%}
 {%- assign best_seller_products = best_seller_collection.products -%}
 
@@ -720,7 +723,7 @@
 	data-best-seller-limit="{{- best_seller_limit -}}"
 	data-recommendation-candidates-url="{{- best_seller_collection.url | escape -}}"
 	data-current-product-handle="{{- product.handle | escape -}}"
-	data-product-type-recommendations-pending="true"
+	{% if best_seller_limit > 0 %}data-product-type-recommendations-pending="true"{% endif %}
 >
 	<div class="container">
 		<div class="featured-products__header product-recommendations__header">
@@ -730,7 +733,9 @@
 
 		</div>
 
-		<script type="application/json" data-product-recommendation-types>{{- best_seller_collection.all_types | json -}}</script>
+		{%- if best_seller_limit > 0 -%}
+			<script type="application/json" data-product-recommendation-types>{{- best_seller_collection.all_types | json -}}</script>
+		{%- endif -%}
 
 		<div class="js-product-recommendations-content product-recommendations__carousel-shell">
 			<div class="featured-products__slider swiper js-featured-products-slider" data-slides-in-row="4">
@@ -745,8 +750,18 @@
 
 						{%- if recommended_limit > 0 and enable_shopify_recommendations and product != blank -%}
 							{%- assign related_collections = product.collections | sort: 'all_products_count' -%}
+							{%- assign related_collection_count = 0 -%}
 
-							{%- for related_collection in related_collections limit: 2 -%}
+							{%- for related_collection in related_collections -%}
+								{%- assign related_collection_handle = ',' | append: related_collection.handle | append: ',' -%}
+								{%- if excluded_recommendation_collection_handles contains related_collection_handle -%}
+									{%- continue -%}
+								{%- endif -%}
+								{%- if related_collection_count >= 2 -%}
+									{%- break -%}
+								{%- endif -%}
+								{%- assign related_collection_count = related_collection_count | plus: 1 -%}
+
 								{%- if recommended_count >= recommended_candidate_limit -%}
 									{%- break -%}
 								{%- endif -%}
@@ -1017,6 +1032,8 @@
 		};
 
 		var bundleSelector = [
+			'.flex-upsell--product-page',
+			'.product-upsell-block',
 			'lb-upsell-widget',
 			'lb-upsell-flat-card',
 			'.lb-widget',
@@ -1084,6 +1101,7 @@
 			if (!element) return;
 
 			var rawHandle = (
+				element.getAttribute('lb-product-handle') ||
 				element.getAttribute('data-product-card-handle') ||
 				element.getAttribute('data-product-handle') ||
 				element.getAttribute('data-handle')
@@ -1176,7 +1194,7 @@
 				roots.forEach(function(root) {
 					collectTextTitles(root, productMatches.titles);
 
-					root.querySelectorAll('[data-product-card-handle], [data-product-handle], [data-handle], [data-product-url], [data-url*="/products/"], a[href*="/products/"]').forEach(function(element) {
+					root.querySelectorAll('[lb-product-handle], [data-product-card-handle], [data-product-handle], [data-handle], [data-product-url], [data-url*="/products/"], a[href*="/products/"]').forEach(function(element) {
 						addHandleFromElement(element, productMatches.handles);
 						addTitleFromElement(element, productMatches.titles);
 					});
@@ -1492,8 +1510,6 @@
 				var recommendationSource = slide.getAttribute('data-recommendation-source');
 
 				if ((handle && productMatches.handles[handle]) || (title && productMatches.titles[title])) {
-					if (recommendationSource === 'related') return;
-
 					if (randomProductTypeRecommendationsLoaded && recommendationSource === 'best-seller') {
 						shouldRefreshRandomProductTypeRecommendations = true;
 						return;
@@ -1564,7 +1580,9 @@
 			bundleObserver.observe(document.body, {
 				childList: true,
 				subtree: true,
-				characterData: true
+				characterData: true,
+				attributes: true,
+				attributeFilter: ['href', 'lb-product-handle', 'data-product-handle', 'data-product-card-handle', 'data-handle', 'data-product-url', 'data-url']
 			});
 		}
 
@@ -1988,6 +2006,7 @@
 			if (
 				!runtimeActive ||
 				!section ||
+				!(parseInt(section.getAttribute('data-best-seller-limit'), 10) > 0) ||
 				(!isRefresh && section.getAttribute('data-product-type-recommendations-requested') === 'true')
 			) {
 				return;
@@ -1998,7 +2017,7 @@
 				section.setAttribute('data-product-type-recommendations-pending', 'true');
 			}
 
-			var recommendationLimit = parseInt(section.getAttribute('data-best-seller-limit'), 10) || 4;
+			var recommendationLimit = parseInt(section.getAttribute('data-best-seller-limit'), 10) || 0;
 			var currentProductHandle = normalizeProductHandle(section.getAttribute('data-current-product-handle'));
 			var productTypes = shuffleRecommendationItems(getProductTypeRecommendationTypes(section));
 			var selectedCandidates = [];
@@ -2200,17 +2219,18 @@
 			"min": 1,
 			"max": 8,
 			"step": 1,
-			"default": 4,
+			"default": 8,
 			"label": "Recommended products"
 		},
 		{
 			"type": "range",
 			"id": "best_seller_products_to_show",
-			"min": 1,
+			"min": 0,
 			"max": 8,
 			"step": 1,
-			"default": 4,
-			"label": "Best sellers from different product types"
+			"default": 0,
+			"label": "Best sellers from different product types",
+			"info": "Set to 0 to use only collection-based recommendations."
 		},
 		{
 			"type": "range",

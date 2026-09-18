@@ -1,6 +1,13 @@
 import type { ListingImage, LarkListingRow, ShopifyTemplateCandidate } from "./listing-types";
 
-const COLORLESS_PRODUCT_TYPES = new Set(["upf hoodie", "upf hoodies"]);
+const COLORLESS_PRODUCT_TYPES = new Set([
+  "upf hoodie",
+  "upf hoodies",
+  "fleece hoodie",
+  "fleece hoodies",
+  "waterproof jacket",
+  "waterproof jackets",
+]);
 
 export function normalizeText(value: string | null | undefined) {
   return (value ?? "")
@@ -47,6 +54,16 @@ export function colorForFilename(filename: string, colors: string[]) {
  * drag-and-drop merchandising order used by Camo Signal.
  */
 export function orderListingImages(images: ListingImage[], row: Pick<LarkListingRow, "colors" | "mainColor" | "productType">) {
+  if (normalizeText(row.productType) === "waterproof jacket") {
+    // The approved jacket template merchandises the gallery as:
+    // main, detail 4, lifestyle 5, lifestyle 6, detail 3, back 2.
+    // Extra supplied images are kept after that approved six-image sequence.
+    const priority = new Map([[0, 0], [3, 1], [4, 2], [5, 3], [2, 4], [1, 5]]);
+    return images
+      .map((image, index) => ({ image, index }))
+      .sort((left, right) => (priority.get(left.index) ?? left.index + 6) - (priority.get(right.index) ?? right.index + 6))
+      .map(({ image }) => image);
+  }
   if (!row.mainColor || isColorlessProductType(row.productType)) return images;
 
   const mainColor = normalizeText(row.mainColor);
@@ -79,7 +96,11 @@ export function randomSoldCountBase(random: () => number = Math.random) {
 }
 
 
-const PRODUCT_TYPE_SUFFIX = /(?:\s*[-\u2013\u2014:|]?\s*)(?:t[\s-]?shirt|hoodie|sweatshirt|long[\s-]?sleeve)\s*$/i;
+const DASH_OR_SPACE = "[\\s\\-\\u2010-\\u2015]";
+const PRODUCT_TYPE_SUFFIX = new RegExp(
+  `(?:\\s*[-\\u2013\\u2014:|]?\\s*)(?:water${DASH_OR_SPACE}?resistant jacket|waterproof jacket|fleece hoodie|layering series|t${DASH_OR_SPACE}?shirt|hoodie|sweatshirt|long${DASH_OR_SPACE}?sleeve)\\s*$`,
+  "i",
+);
 
 export function designNameFromProductTitle(title: string) {
   let designName = title.trim();

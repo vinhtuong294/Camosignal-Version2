@@ -1,0 +1,90 @@
+{% doc %}
+  Renders collection links and curated best sellers, with collection-based defaults.
+  @param {string} group - Navigation group key.
+{% enddoc %}
+{% liquid
+  case group
+    when 'hunting'
+      assign entries = 'deer:deer-camo,turkey:turkey-camo,waterfowl:waterfowl-camo,upland:upland-camo' | split: ','
+      assign featured_entries = 'deer-camo:let-us-thank-him-for-our-food-t-shirt,turkey-camo:world-turkey-slam-t-shirt,waterfowl-camo:patriotic-moose-hunting-t-shirt-copy-2,upland-camo:fearless-christian-hunter-hoodie' | split: ','
+    when 'fishing'
+      assign entries = 'freshwater:freshwater-camo,saltwater:saltwater-camo' | split: ','
+      assign featured_entries = 'freshwater-camo:trout-species-of-the-appalachian-mountains-t-shirt,saltwater-camo:shallow-water-brawler-redfish-t-shirt,uv-hoodies:greenhead-fever-sun-protection-hoodie,uv-hoodies:wapiti-legendary-sun-protection-hoodie' | split: ','
+    when 'products'
+      assign entries = 'curated_sets:curated-sets,t_shirts:t-shirts,long_sleeves:long-sleeves,sweatshirts:sweatshirts,hoodies:hoodies,fleece_hoodie:fleece-hoodie,uv_hoodies:uv-hoodies,waterproof_jacket:waterproof-jacket,hats:hats,youth_tees:youth-tees' | split: ','
+      assign featured_entries = 'curated-sets:in-it-for-blood-camo-layering-series,uv-hoodies:greenhead-fever-sun-protection-hoodie,hoodies:death-from-above-hoodie,long-sleeves:let-us-thank-him-for-our-food-long-sleeve-back' | split: ','
+    when 'lifestyle'
+      assign entries = 'faith_outdoors:outdoor-faith,national_parks:national-parks,patriotic:american-camo,built_for_dad:dad-life' | split: ','
+    when 'halloween'
+      assign entries = 'halloween_hunt:spooky-season,spooky_kids:spooky-kids-tee' | split: ','
+  endcase
+  assign group_key = 'camo_navigation.' | append: group
+%}
+<div class="camo-nav__links-column">
+  <h2 class="camo-nav__column-heading">{{ group_key | t }}</h2>
+  <ul class="camo-nav__links" role="list">
+    {% for entry in entries %}
+      {% liquid
+        assign parts = entry | split: ':'
+        assign label_key = 'camo_navigation.' | append: parts.first
+        assign target = collections[parts.last]
+        assign target_url = routes.collections_url | append: '/' | append: parts.last
+        if target != blank
+          assign target_url = target.url
+        endif
+      %}
+      <li>
+        <a href="{{ target_url }}"{% if request.path == target_url %} aria-current="page"{% endif %}>
+          <span>{{ label_key | t }}</span>
+          <svg class="camo-nav__collection-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="m9 5 7 7-7 7"/></svg>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+<div class="camo-nav__featured">
+  <h2 class="camo-nav__column-heading">{{ 'camo_navigation.featured' | t }}</h2>
+  <div class="camo-nav__cards">
+    {% if featured_entries != blank %}
+      {% for featured_entry in featured_entries %}
+        {% liquid
+          assign featured_parts = featured_entry | split: ':'
+          assign featured_source = collections[featured_parts.first]
+          assign featured_product = featured_source.products | where: 'handle', featured_parts.last | first
+          if featured_product == blank
+            assign featured_product = all_products[featured_parts.last]
+          endif
+        %}
+        {% if featured_product != blank and featured_product.featured_image != blank and featured_product.available %}
+          {% render 'camo-navigation-card', product: featured_product %}
+        {% endif %}
+      {% endfor %}
+    {% else %}
+    {% liquid
+      assign displayed_ids = '|'
+      assign card_count = 0
+    %}
+    {% for round in (0..3) %}
+      {% for entry in entries %}
+        {% liquid
+          assign parts = entry | split: ':'
+          assign source = collections[parts.last]
+          assign featured_product = source.products[round]
+          assign product_key = featured_product.id | prepend: '|' | append: '|'
+        %}
+        {% if featured_product != blank and featured_product.featured_image != blank and featured_product.available %}
+          {% unless displayed_ids contains product_key %}
+            {% render 'camo-navigation-card', product: featured_product %}
+            {% liquid
+              assign displayed_ids = displayed_ids | append: featured_product.id | append: '|'
+              assign card_count = card_count | plus: 1
+            %}
+          {% endunless %}
+        {% endif %}
+        {% if card_count == 4 %}{% break %}{% endif %}
+      {% endfor %}
+      {% if card_count == 4 %}{% break %}{% endif %}
+    {% endfor %}
+    {% endif %}
+  </div>
+</div>

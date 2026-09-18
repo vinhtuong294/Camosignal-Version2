@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "npm run build:theme-assets && react-router build",
-    "vercel-build": "prisma generate && prisma migrate deploy && npm run build",
+    "vercel-build": "prisma generate && npm run build",
     "build:theme-assets": "node scripts/build-theme-assets.mjs",
     "dev": "shopify app dev",
     "config:link": "shopify app config link",

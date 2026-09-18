@@ -1,0 +1,586 @@
+{
+  "checkedOn": "2026-09-14",
+  "shop": "camosignal.com",
+  "method": "Live reread of all 18 destination collections and 38 sources; exact product ID union checks; live catalog check of 7 TYPE rule collections; title review of 6 main hunting/fishing collections; targeted visual review of 19 products, not an exhaustive visual classification of the entire catalog.",
+  "copyChecks": [
+    {
+      "title": "Deer Season",
+      "sourceCount": 7,
+      "expected": 163,
+      "actual": 163,
+      "missing": [],
+      "extra": []
+    },
+    {
+      "title": "Turkey Season",
+      "sourceCount": 7,
+      "expected": 126,
+      "actual": 126,
+      "missing": [],
+      "extra": []
+    },
+    {
+      "title": "Waterfowl Season",
+      "sourceCount": 1,
+      "expected": 23,
+      "actual": 23,
+      "missing": [],
+      "extra": []
+    },
+    {
+      "title": "Upland Season",
+      "sourceCount": 2,
+      "expected": 47,
+      "actual": 47,
+      "missing": [],
+      "extra": []
+    },
+    {
+      "title": "Freshwater Life",
+      "sourceCount": 3,
+      "expected": 55,
+      "actual": 55,
+      "missing": [],
+      "extra": []
+    },
+    {
+      "title": "Saltwater Life",
+      "sourceCount": 2,
+      "expected": 60,
+      "actual": 60,
+      "missing": [],
+      "extra": []
+    },
+    {
+      "title": "Outdoor Faith",
+      "sourceCount": 2,
+      "expected": 71,
+      "actual": 71,
+      "missing": [],
+      "extra": []
+    },
+    {
+      "title": "Park Adventures",
+      "sourceCount": 3,
+      "expected": 59,
+      "actual": 59,
+      "missing": [],
+      "extra": []
+    },
+    {
+      "title": "American Pride",
+      "sourceCount": 9,
+      "expected": 59,
+      "actual": 59,
+      "missing": [],
+      "extra": []
+    },
+    {
+      "title": "Outdoor Dads",
+      "sourceCount": 2,
+      "expected": 23,
+      "actual": 23,
+      "missing": [],
+      "extra": []
+    },
+    {
+      "title": "Youth Tees",
+      "sourceCount": 2,
+      "expected": 47,
+      "actual": 47,
+      "missing": [],
+      "extra": []
+    }
+  ],
+  "typeChecks": [
+    {
+      "title": "Curated Sets",
+      "actual": 15,
+      "expected": 15,
+      "missing": [],
+      "extra": [],
+      "rulesMatch": true
+    },
+    {
+      "title": "T-Shirts",
+      "actual": 513,
+      "expected": 513,
+      "missing": [],
+      "extra": [],
+      "rulesMatch": true
+    },
+    {
+      "title": "Long Sleeves",
+      "actual": 119,
+      "expected": 119,
+      "missing": [],
+      "extra": [],
+      "rulesMatch": true
+    },
+    {
+      "title": "Sweatshirts",
+      "actual": 32,
+      "expected": 32,
+      "missing": [],
+      "extra": [],
+      "rulesMatch": true
+    },
+    {
+      "title": "Hoodies",
+      "actual": 81,
+      "expected": 81,
+      "missing": [],
+      "extra": [],
+      "rulesMatch": true
+    },
+    {
+      "title": "UV Hoodies",
+      "actual": 43,
+      "expected": 43,
+      "missing": [],
+      "extra": [],
+      "rulesMatch": true
+    },
+    {
+      "title": "Hats",
+      "actual": 36,
+      "expected": 36,
+      "missing": [],
+      "extra": [],
+      "rulesMatch": true
+    }
+  ],
+  "oldCollectionChecks": [
+    {
+      "title": "Deer",
+      "id": "gid://shopify/Collection/367430402239",
+      "preserved": true
+    },
+    {
+      "title": "DEER 250TH",
+      "id": "gid://shopify/Collection/369218289855",
+      "preserved": true
+    },
+    {
+      "title": "DEER COLLECTION",
+      "id": "gid://shopify/Collection/377582026943",
+      "preserved": true
+    },
+    {
+      "title": "DEER HUNTING",
+      "id": "gid://shopify/Collection/370855510207",
+      "preserved": true
+    },
+    {
+      "title": "Deer Hunting Hoodie",
+      "id": "gid://shopify/Collection/376727011519",
+      "preserved": true
+    },
+    {
+      "title": "Deer Hunting New",
+      "id": "gid://shopify/Collection/375281025215",
+      "preserved": true
+    },
+    {
+      "title": "DEER250",
+      "id": "gid://shopify/Collection/369566777535",
+      "preserved": true
+    },
+    {
+      "title": "Turkey",
+      "id": "gid://shopify/Collection/367430435007",
+      "preserved": true
+    },
+    {
+      "title": "TURKEY",
+      "id": "gid://shopify/Collection/372216463551",
+      "preserved": true
+    },
+    {
+      "title": "Turkey Fall Season",
+      "id": "gid://shopify/Collection/378877542591",
+      "preserved": true
+    },
+    {
+      "title": "TURKEY TOP PICKS",
+      "id": "gid://shopify/Collection/371762692287",
+      "preserved": true
+    },
+    {
+      "title": "Wild Turkey",
+      "id": "gid://shopify/Collection/370005999807",
+      "preserved": true
+    },
+    {
+      "title": "WORLD TURKEY SLAM",
+      "id": "gid://shopify/Collection/370807210175",
+      "preserved": true
+    },
+    {
+      "title": "GRAND SLAM SUBSPECIES",
+      "id": "gid://shopify/Collection/370078843071",
+      "preserved": true
+    },
+    {
+      "title": "Waterfowl",
+      "id": "gid://shopify/Collection/367430467775",
+      "preserved": true
+    },
+    {
+      "title": "THE UPLANDS",
+      "id": "gid://shopify/Collection/376776425663",
+      "preserved": true
+    },
+    {
+      "title": "Upland Birds Hunting",
+      "id": "gid://shopify/Collection/376720949439",
+      "preserved": true
+    },
+    {
+      "title": "Freshwater Fishing",
+      "id": "gid://shopify/Collection/370856853695",
+      "preserved": true
+    },
+    {
+      "title": "FRESHWATER FISHING",
+      "id": "gid://shopify/Collection/372183138495",
+      "preserved": true
+    },
+    {
+      "title": "Freshwater Fishing New Arrivals",
+      "id": "gid://shopify/Collection/374283174079",
+      "preserved": true
+    },
+    {
+      "title": "Saltwater Fishing",
+      "id": "gid://shopify/Collection/370940739775",
+      "preserved": true
+    },
+    {
+      "title": "Saltwater Fishing New Arrivals",
+      "id": "gid://shopify/Collection/372729774271",
+      "preserved": true
+    },
+    {
+      "title": "Faith Outdoors",
+      "id": "gid://shopify/Collection/374036562111",
+      "preserved": true
+    },
+    {
+      "title": "Faith Outdoors New",
+      "id": "gid://shopify/Collection/375670603967",
+      "preserved": true
+    },
+    {
+      "title": "National Park",
+      "id": "gid://shopify/Collection/370773295295",
+      "preserved": true
+    },
+    {
+      "title": "NATIONAL PARK",
+      "id": "gid://shopify/Collection/372143554751",
+      "preserved": true
+    },
+    {
+      "title": "National Park New Arrivals",
+      "id": "gid://shopify/Collection/372727382207",
+      "preserved": true
+    },
+    {
+      "title": "Patriotic T-shirt",
+      "id": "gid://shopify/Collection/373345812671",
+      "preserved": true
+    },
+    {
+      "title": "INDEPENDENCE DAY",
+      "id": "gid://shopify/Collection/366909522111",
+      "preserved": true
+    },
+    {
+      "title": "AMERICA 250",
+      "id": "gid://shopify/Collection/368775168191",
+      "preserved": true
+    },
+    {
+      "title": "LIBERTY 250TH",
+      "id": "gid://shopify/Collection/369567072447",
+      "preserved": true
+    },
+    {
+      "title": "America 250TH",
+      "id": "gid://shopify/Collection/369930666175",
+      "preserved": true
+    },
+    {
+      "title": "Dog 250TH",
+      "id": "gid://shopify/Collection/369021026495",
+      "preserved": true
+    },
+    {
+      "title": "Eagle 250TH",
+      "id": "gid://shopify/Collection/369248305343",
+      "preserved": true
+    },
+    {
+      "title": "Father’s Day",
+      "id": "gid://shopify/Collection/369110679743",
+      "preserved": true
+    },
+    {
+      "title": "Father’s Day Shirt",
+      "id": "gid://shopify/Collection/369800708287",
+      "preserved": true
+    },
+    {
+      "title": "FIRST DAY KIDS TEE",
+      "id": "gid://shopify/Collection/373388869823",
+      "preserved": true
+    },
+    {
+      "title": "SPOOKY KIDS TEE",
+      "id": "gid://shopify/Collection/374614524095",
+      "preserved": true
+    }
+  ],
+  "confirmedTopicFindings": [
+    {
+      "id": "gid://shopify/Product/8558613856447",
+      "title": "Greenhead Fever Sun Protection Hoodie",
+      "currentCollection": "Deer Season",
+      "recommendedCollection": "Waterfowl Season",
+      "reason": "Hình vịt đầu xanh.",
+      "sources": [
+        {
+          "id": "gid://shopify/Collection/377582026943",
+          "title": "DEER COLLECTION"
+        }
+      ],
+      "image": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/121_c93db261-777c-4330-aed6-ab22c3578746.jpg?v=1786895314",
+      "status": "ACTIVE",
+      "alreadyInRecommendedCollection": false
+    },
+    {
+      "id": "gid://shopify/Product/8599483678911",
+      "title": "The Upland Way Camo Layering Series",
+      "currentCollection": "Deer Season",
+      "recommendedCollection": "Upland Season",
+      "reason": "Hình chim trĩ và chữ The Upland Way.",
+      "sources": [
+        {
+          "id": "gid://shopify/Collection/377582026943",
+          "title": "DEER COLLECTION"
+        },
+        {
+          "id": "gid://shopify/Collection/375281025215",
+          "title": "Deer Hunting New"
+        }
+      ],
+      "image": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/The_Upland_Way_Camo_Layering_Series.jpg?v=1788417855",
+      "status": "ACTIVE",
+      "alreadyInRecommendedCollection": true
+    },
+    {
+      "id": "gid://shopify/Product/8408870781119",
+      "title": "Patriotic Waterfowl Hunting T-shirt",
+      "currentCollection": "Deer Season",
+      "recommendedCollection": "Waterfowl Season",
+      "reason": "Hình vịt trước lá cờ Mỹ.",
+      "sources": [
+        {
+          "id": "gid://shopify/Collection/369218289855",
+          "title": "DEER 250TH"
+        }
+      ],
+      "image": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/patriotic_waterfowl_hunting_tshirt_4.jpg?v=1778154113",
+      "status": "ACTIVE",
+      "alreadyInRecommendedCollection": true
+    },
+    {
+      "id": "gid://shopify/Product/8590400094399",
+      "title": "Duck Season After Dark T-shirt",
+      "currentCollection": "Deer Season",
+      "recommendedCollection": "Waterfowl Season",
+      "reason": "Chó săn ngậm vịt, chữ Duck Season After Dark.",
+      "sources": [
+        {
+          "id": "gid://shopify/Collection/370855510207",
+          "title": "DEER HUNTING"
+        }
+      ],
+      "image": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Duck_Season_After_Dark_T-shirt_3.jpg?v=1787905756",
+      "status": "ACTIVE",
+      "alreadyInRecommendedCollection": false
+    },
+    {
+      "id": "gid://shopify/Product/8560115581119",
+      "title": "Good Boy Sun Protection Hoodie",
+      "currentCollection": "Deer Season",
+      "recommendedCollection": "Waterfowl Season",
+      "reason": "Chó săn và chim bay, chữ Good Boy.",
+      "sources": [
+        {
+          "id": "gid://shopify/Collection/377582026943",
+          "title": "DEER COLLECTION"
+        }
+      ],
+      "image": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Good_Boy_Sun_Protection_Hoodie.jpg?v=1786942836",
+      "status": "ACTIVE",
+      "alreadyInRecommendedCollection": false
+    },
+    {
+      "id": "gid://shopify/Product/8611563241663",
+      "title": "Rooster Camo Layering Series",
+      "currentCollection": "Deer Season",
+      "recommendedCollection": "Upland Season",
+      "reason": "Bộ Rooster, đã thuộc nguồn THE UPLANDS; tên và thiết kế thuộc dòng săn chim.",
+      "sources": [
+        {
+          "id": "gid://shopify/Collection/377582026943",
+          "title": "DEER COLLECTION"
+        },
+        {
+          "id": "gid://shopify/Collection/375281025215",
+          "title": "Deer Hunting New"
+        }
+      ],
+      "image": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Rooster_Camo_Layering_Series.jpg?v=1789012968",
+      "status": "ACTIVE",
+      "alreadyInRecommendedCollection": true
+    },
+    {
+      "id": "gid://shopify/Product/8526516125887",
+      "title": "Run & Gun Hunting POCKET Tee",
+      "currentCollection": "Deer Season",
+      "recommendedCollection": "Turkey Season",
+      "reason": "Thợ săn mang gà tây, chữ Run & Gun.",
+      "sources": [
+        {
+          "id": "gid://shopify/Collection/370855510207",
+          "title": "DEER HUNTING"
+        }
+      ],
+      "image": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/359_8a600f58-bc90-49fd-88a9-9f904ebbb734.jpg?v=1785324651",
+      "status": "ACTIVE",
+      "alreadyInRecommendedCollection": false
+    },
+    {
+      "id": "gid://shopify/Product/8590401437887",
+      "title": "Bad Night To Be A Greenhead Long-sleeve",
+      "currentCollection": "Deer Season",
+      "recommendedCollection": "Waterfowl Season",
+      "reason": "Thợ săn ma cầm vịt, chữ Greenhead.",
+      "sources": [
+        {
+          "id": "gid://shopify/Collection/370855510207",
+          "title": "DEER HUNTING"
+        }
+      ],
+      "image": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Bad_Night_To_Be_A_Greenhead_Long-sleeve_3.jpg?v=1787906023",
+      "status": "ACTIVE",
+      "alreadyInRecommendedCollection": false
+    },
+    {
+      "id": "gid://shopify/Product/8590401339583",
+      "title": "Duck Season After Dark Long-sleeve",
+      "currentCollection": "Deer Season",
+      "recommendedCollection": "Waterfowl Season",
+      "reason": "Chó săn ngậm vịt, chữ Duck Season After Dark.",
+      "sources": [
+        {
+          "id": "gid://shopify/Collection/370855510207",
+          "title": "DEER HUNTING"
+        }
+      ],
+      "image": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Duck_Season_After_Dark_Long-sleeve_3.jpg?v=1787905996",
+      "status": "ACTIVE",
+      "alreadyInRecommendedCollection": false
+    },
+    {
+      "id": "gid://shopify/Product/8590401011903",
+      "title": "Swamp Reaper Skeleton Long-sleeve",
+      "currentCollection": "Deer Season",
+      "recommendedCollection": "Waterfowl Season",
+      "reason": "Thợ săn bộ xương cầm vịt trong đầm nước.",
+      "sources": [
+        {
+          "id": "gid://shopify/Collection/370855510207",
+          "title": "DEER HUNTING"
+        }
+      ],
+      "image": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Swamp_Reaper_Skeleton_Long-sleeve_4.jpg?v=1787905918",
+      "status": "ACTIVE",
+      "alreadyInRecommendedCollection": false
+    },
+    {
+      "id": "gid://shopify/Product/8590400225471",
+      "title": "Bad Night To Be A Greenhead T-shirt",
+      "currentCollection": "Deer Season",
+      "recommendedCollection": "Waterfowl Season",
+      "reason": "Thợ săn ma cầm vịt, chữ Greenhead.",
+      "sources": [
+        {
+          "id": "gid://shopify/Collection/370855510207",
+          "title": "DEER HUNTING"
+        }
+      ],
+      "image": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Bad_Night_To_Be_A_Greenhead_T-shirt_2.jpg?v=1787905780",
+      "status": "ACTIVE",
+      "alreadyInRecommendedCollection": false
+    },
+    {
+      "id": "gid://shopify/Product/8590399930559",
+      "title": "Swamp Reaper Skeleton T-shirt",
+      "currentCollection": "Deer Season",
+      "recommendedCollection": "Waterfowl Season",
+      "reason": "Thợ săn bộ xương cầm vịt trong đầm nước.",
+      "sources": [
+        {
+          "id": "gid://shopify/Collection/370855510207",
+          "title": "DEER HUNTING"
+        }
+      ],
+      "image": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Swamp_Reaper_Skeleton_T-shirt_2.jpg?v=1787905731",
+      "status": "ACTIVE",
+      "alreadyInRecommendedCollection": false
+    },
+    {
+      "id": "gid://shopify/Product/8518074859711",
+      "title": "King Of The Woods POCKET Tee",
+      "currentCollection": "Turkey Season",
+      "recommendedCollection": "Deer Season",
+      "reason": "Hình hươu có gạc, chữ King of the Woods.",
+      "sources": [
+        {
+          "id": "gid://shopify/Collection/370005999807",
+          "title": "Wild Turkey"
+        }
+      ],
+      "image": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/158.jpg?v=1784967340",
+      "status": "ACTIVE",
+      "alreadyInRecommendedCollection": true
+    }
+  ],
+  "needsMerchandisingReview": [
+    {
+      "title": "Marsh Raised Camo Layering Series",
+      "currentCollection": "Deer Season",
+      "note": "Thiết kế chó săn/đầm nước và camo; cần chốt quy ước cho các bộ camo dùng chung."
+    },
+    {
+      "title": "Marked & Retrieved Camo Layering Series",
+      "currentCollection": "Deer Season",
+      "note": "Dòng chó săn tha mồi; cần chốt quy ước cho các bộ camo dùng chung."
+    },
+    {
+      "title": "Fly Fishing Sun Protection Hoodie",
+      "currentCollection": "Freshwater Life; Saltwater Life",
+      "note": "Đã có ở cả hai nguồn, hình cá trout. Nên rà lại nếu muốn tách hai nhóm chặt chẽ."
+    },
+    {
+      "title": "Raw Energy Outdoor Adventure T‑shirt / Sweatshirt",
+      "currentCollection": "Waterfowl Season",
+      "note": "Mẫu T-shirt đã xem là hoạt động ngoài trời/cắm trại, chưa thấy yếu tố săn vịt rõ. T-shirt đang Draft; chưa rà ảnh Sweatshirt."
+    }
+  ],
+  "mutationsPerformed": false
+}

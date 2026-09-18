@@ -28,6 +28,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   await prisma.$transaction(async (transaction) => {
     await transaction.upsellEvent.create({
+      select: { id: true },
       data: {
         shop: session.shop,
         campaignId: campaign?.id,

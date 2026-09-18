@@ -126,9 +126,15 @@
 
 	#shopify-section-{{ section.id }} .product-media__slider-thumbnails-slide picture,
 	#shopify-section-{{ section.id }} .product-media__slider-thumbnails-slide .product-media__image {
+		display: block;
 		width: 100%;
 		height: 100%;
-		object-fit: contain;
+	}
+
+	#shopify-section-{{ section.id }} .product-media__slider-thumbnails-slide .product-media__image {
+		aspect-ratio: auto !important;
+		object-fit: cover !important;
+		object-position: center !important;
 	}
 
 	@media (min-width: 768px) {
@@ -340,7 +346,6 @@
 
 		#shopify-section-{{ section.id }} .product-media .product-media__slider-thumbnails-slide .product-media__image {
 			border: 0;
-			object-fit: contain;
 		}
 
 		#shopify-section-{{ section.id }} .product-media .product-media__slider-thumbnails-slide:focus-visible {

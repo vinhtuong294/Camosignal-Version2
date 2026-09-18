@@ -1,0 +1,82 @@
+[
+  {
+    "id": "gid://shopify/Collection/379105476799",
+    "oldTitle": "Deer Season",
+    "title": "Camo Deer",
+    "handle": "deer-season",
+    "count": 163,
+    "ok": true
+  },
+  {
+    "id": "gid://shopify/Collection/379105509567",
+    "oldTitle": "Turkey Season",
+    "title": "Camo Turkey",
+    "handle": "turkey-season",
+    "count": 126,
+    "ok": true
+  },
+  {
+    "id": "gid://shopify/Collection/379105542335",
+    "oldTitle": "Waterfowl Season",
+    "title": "Camo Waterfowl",
+    "handle": "waterfowl-season",
+    "count": 23,
+    "ok": true
+  },
+  {
+    "id": "gid://shopify/Collection/379105575103",
+    "oldTitle": "Upland Season",
+    "title": "Camo Upland",
+    "handle": "upland-season",
+    "count": 47,
+    "ok": true
+  },
+  {
+    "id": "gid://shopify/Collection/379105607871",
+    "oldTitle": "Freshwater Life",
+    "title": "Camo Freshwater",
+    "handle": "freshwater-life",
+    "count": 55,
+    "ok": true
+  },
+  {
+    "id": "gid://shopify/Collection/379105673407",
+    "oldTitle": "Saltwater Life",
+    "title": "Camo Saltwater",
+    "handle": "saltwater-life",
+    "count": 60,
+    "ok": true
+  },
+  {
+    "id": "gid://shopify/Collection/379105706175",
+    "oldTitle": "Outdoor Faith",
+    "title": "Camo Faith",
+    "handle": "outdoor-faith",
+    "count": 71,
+    "ok": true
+  },
+  {
+    "id": "gid://shopify/Collection/379105738943",
+    "oldTitle": "Park Adventures",
+    "title": "Camo Parks",
+    "handle": "park-adventures",
+    "count": 59,
+    "ok": true
+  },
+  {
+    "id": "gid://shopify/Collection/379105804479",
+    "oldTitle": "American Pride",
+    "title": "Camo USA",
+    "handle": "american-pride",
+    "count": 59,
+    "ok": true
+  },
+  {
+    "id": "gid://shopify/Collection/379105902783",
+    "oldTitle": "Outdoor Dads",
+    "title": "Camo Dads",
+    "handle": "outdoor-dads",
+    "count": 23,
+    "ok": true
+  }
+]

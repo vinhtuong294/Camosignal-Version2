@@ -63,7 +63,19 @@
 									{{- filter.label -}}
 
 									<span class="js-filter-item-counter">
-										{%- if filter.active_values.size > 0 and filter.type != 'price_range' -%}
+										{%- if filter.param_name == 'filter.p.product_type' -%}
+											{%- assign active_type_keys = '|' -%}
+											{%- assign active_type_count = 0 -%}
+											{%- for active_value in filter.active_values -%}
+												{%- assign active_type_key = active_value.label | strip | downcase -%}
+												{%- capture active_type_marker -%}|{{- active_type_key -}}|{%- endcapture -%}
+												{%- unless active_type_keys contains active_type_marker -%}
+													{%- assign active_type_keys = active_type_keys | append: active_type_key | append: '|' -%}
+													{%- assign active_type_count = active_type_count | plus: 1 -%}
+												{%- endunless -%}
+											{%- endfor -%}
+											{%- if active_type_count > 0 -%}&nbsp;({{- active_type_count -}}){%- endif -%}
+										{%- elsif filter.active_values.size > 0 and filter.type != 'price_range' -%}
 											&nbsp;({{- filter.active_values.size -}})
 										{%- endif -%}
 									</span>
@@ -91,7 +103,13 @@
 														</span>
 													{% endif %}
 
-													{%- render 'filter-list', filter: filter, show_swatches: show_swatches, filter_type: 'top-bar', id: 'top-bar' -%}
+													{%- if filter.param_name == 'filter.p.product_type' -%}
+														<ul class="filter-list filter-list--top-bar filter-list--collection-custom js-clothing-filter-list js-filter-list">
+															{%- render 'product-type-filter-links', filter: filter -%}
+														</ul>
+													{%- else -%}
+														{%- render 'filter-list', filter: filter, show_swatches: show_swatches, filter_type: 'top-bar', id: 'top-bar' -%}
+													{%- endif -%}
 												{%- when 'price_range' -%}
 													{%- render 'filter-price', filter: filter, id: 'top-bar' -%}
 											{%- endcase -%}

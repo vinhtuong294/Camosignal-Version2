@@ -115,6 +115,7 @@
         },
         "camosignal_upsell_product_page_upsell_XyKNGF": {
           "type": "shopify://apps/camosignal-upsell/blocks/product-page-upsell/01a037b7-7756-79a9-89c5-3abb9c0f40ed",
+          "disabled": true,
           "settings": {
             "loading_text": "Finding the best match..."
           }
@@ -250,8 +251,8 @@
         "heading": "You Might Also Like",
         "heading_font_size_desktop": 36,
         "heading_font_size_mobile": 25,
-        "products_to_show": 4,
-        "best_seller_products_to_show": 4,
+        "products_to_show": 8,
+        "best_seller_products_to_show": 0,
         "products_to_show_mobile": 8,
         "enable_shopify_recommendations": true,
         "collection": "",
@@ -565,11 +566,44 @@
         "show_time": 20,
         "delay_between": 900
       }
+    },
+    "collection-recommendations": {
+      "type": "collection-recommendations",
+      "settings": {
+        "enable_color_scheme_inheritance": true,
+        "color_scheme": "",
+        "heading": "Pairs Well With",
+        "heading_font_size_desktop": 36,
+        "heading_font_size_mobile": 25,
+        "container_width": "inherit",
+        "offset_top_desktop": 25,
+        "offset_bottom_desktop": 15,
+        "offset_top_mobile": 15,
+        "offset_bottom_mobile": 10,
+        "inner_offset_top": 15,
+        "inner_offset_bottom": 10,
+        "inner_offset_top_mobile": 15,
+        "inner_offset_bottom_mobile": 10,
+        "hats": "hats",
+        "beanie_embroidery_hat": "beanie-embroidery-hat",
+        "game_day_jersey": "game-day-jersey",
+        "youth_tees": "youth-tees",
+        "pocket_tee": "pocket-tee",
+        "curated_sets": "curated-sets",
+        "uv_hoodies": "uv-hoodies",
+        "fleece_hoodie": "fleece-hoodie",
+        "waterproof_jacket": "waterproof-jacket",
+        "long_sleeves": "long-sleeves",
+        "hoodies": "hoodies",
+        "sweatshirts": "sweatshirts",
+        "t_shirts": "t-shirts"
+      }
     }
   },
   "order": [
     "product-template",
     "product-recommendations",
+    "collection-recommendations",
     "product-collections-showcase",
     "17750062752dbc4a4a",
     "richtext",

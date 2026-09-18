@@ -331,23 +331,7 @@ export async function updateLarkListingRecord(recordId: string, fields: Record<s
   );
 }
 export async function ensureLarkDesignTag(tag: string) {
-  const tableId = env("LARK_TAG_DESIGN_TABLE_ID");
-  if (!tableId) throw new Error("Set LARK_TAG_DESIGN_TABLE_ID before creating design tags.");
-  const fieldName = env("LARK_TAG_DESIGN_FIELD", "TAG DESIGN");
-  const records = await listTableRecords(tableId);
-  const existing = records
-    .map((record) => asText(record.fields[fieldName]))
-    .find((value): value is string => Boolean(value) && normalizeText(value) === normalizeText(tag));
-  if (existing) return existing;
-
-  const appToken = env("LARK_BASE_APP_TOKEN");
-  await larkRequest(
-    `/bitable/v1/apps/${encode(appToken)}/tables/${encode(tableId)}/records`,
-    {
-      method: "POST",
-      headers: { "content-type": "application/json; charset=utf-8" },
-      body: JSON.stringify({ fields: { [fieldName]: tag } }),
-    },
-  );
+  // Compatibility for older listing scripts: the user retired the Lark tag registry.
+  // Design tags are now resolved and synchronized exclusively on Shopify.
   return tag;
 }

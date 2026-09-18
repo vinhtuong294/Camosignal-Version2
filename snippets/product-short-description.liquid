@@ -54,6 +54,9 @@
 
 {%- if under_title -%}
   {%- assign intro_text = short_description | default: cleaned | strip_html | replace: '&nbsp;', ' ' | strip -%}
+  {%- if intro_text == blank -%}
+    {%- assign intro_text = full_description | strip_html | replace: '&nbsp;', ' ' | strip -%}
+  {%- endif -%}
   {%- if intro_text != blank -%}
     <p class="product-short-description product-short-description--under-title">{{ intro_text | truncate: 180 | escape_once }}</p>
   {%- endif -%}

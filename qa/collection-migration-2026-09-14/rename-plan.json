@@ -1,0 +1,1817 @@
+{
+  "date": "2026-09-14",
+  "shop": "camosignal.com",
+  "scope": "Rename only the 10 new thematic collections; do not modify product membership, handles, product-type collections, or old source collections.",
+  "plan": [
+    {
+      "id": "gid://shopify/Collection/379105476799",
+      "oldTitle": "Deer Season",
+      "title": "Camo Deer",
+      "before": {
+        "id": "gid://shopify/Collection/379105476799",
+        "title": "Deer Season",
+        "handle": "deer-season",
+        "descriptionHtml": "",
+        "imageUrl": null,
+        "imageAltText": null,
+        "sortOrder": "BEST_SELLING",
+        "collectionType": "manual",
+        "productsCount": 163,
+        "products": [
+          {
+            "title": "Let Us Thank Him For Our Food T-shirt",
+            "variantTitle": "SAND / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/LetUsThankHimForOurFoodT-shirt_3.jpg?v=1783910894",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Death From Above Hoodie",
+            "variantTitle": "CHARCOAL / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/131_c8099629-fa5d-44e6-a13f-e9daba06490a.jpg?v=1785904608",
+            "price": "48.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Let Us Thank Him For Our Food HOODIE",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/59_dc613da0-086e-4e0e-8af1-8ac79c61ccac.jpg?v=1784966043",
+            "price": "46.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Let Us Thank Him For Our Food POCKET tee",
+            "variantTitle": "MYSTIC BLUE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/75.jpg?v=1784966343",
+            "price": "34.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "King Of The Woods T-shirt",
+            "variantTitle": "CHARCOAL / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/KingOfTheWoodsT-shirt_2.jpg?v=1779359742",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Let Us Thank Him For Our Food LONG-SLEEVE back",
+            "variantTitle": "FOREST GREEN / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/43_542e4daa-76dd-47ce-9f98-30e8da01b13f.jpg?v=1784963532",
+            "price": "32.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "In It For Blood Camo Layering Series",
+            "variantTitle": "Combo (Vest + Long-Sleeve) / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Hunt_Hard_Camo_Layering_Series_40a16f09-613f-4ffd-bb91-7e3ab947f28e.jpg?v=1787391354",
+            "price": "69.99",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Rack Seeker Camo Layering Series",
+            "variantTitle": "Combo (Vest + Long-Sleeve) / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/23.png?v=1787387382",
+            "price": "69.99",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Buck Fever T-shirt",
+            "variantTitle": "FOREST GREEN / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/BuckFeverT-shirt_2.jpg?v=1779360635",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Fearless Christian Hunter Hoodie",
+            "variantTitle": "SPORT GREY / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/43_ed2fc5f8-79ff-4f1c-bbbe-d743d19e089f.jpg?v=1785819210",
+            "price": "48.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Wildlife American Flag T-Shirt",
+            "variantTitle": "SAND / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Wildlife_American_Flag_T_Shirt_2_4030c066-c636-45f9-b452-fdc98038be1d.jpg?v=1778153294",
+            "price": "27.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Hunt Hard Live Free T-shirt",
+            "variantTitle": "SAND / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/hunt_hard_live_free_tshirt_2.jpg?v=1777459773",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "\"Let Us Thank Him\" Genesis 93 Wildlife T-shirt",
+            "variantTitle": "CHARCOAL / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/422_fc719784-bc2e-4430-88d2-a773ab0835d4.jpg?v=1785151989",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Let Us Thank Him For Our Food SWEATSHIRT",
+            "variantTitle": "SAND / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/50_7fd78872-f879-47aa-8965-d93bd2469e61.jpg?v=1784963859",
+            "price": "39.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Buck Fever HOODIE",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/269_c04ac327-a58a-4da8-8c36-8ed3a3c85e7a.jpg?v=1785127202",
+            "price": "48.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Bowhunter Life Camo Layering Series",
+            "variantTitle": "Combo (Vest + Long-Sleeve) / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/BowhuterLifeCamoLayeringSeries.jpg?v=1787369866",
+            "price": "69.99",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Hunt Hard Camo Layering Series",
+            "variantTitle": "Combo (Vest + Long-Sleeve) / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Hunt_Hard_Camo_Layering_Series.jpg?v=1787385413",
+            "price": "69.99",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Buck Around And Find Out T-shirt",
+            "variantTitle": "BROWN SAVANA / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/441_fc7fbf2d-ace7-4c0a-a611-4a9999859eef.jpg?v=1785292476",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Tale Of The Tape Deer Antler T-shirt",
+            "variantTitle": "BLACK / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/TaleOfTheTapeDeerAntlerT-shirt_2.jpg?v=1779778441",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Wild Crown Camo Layering Series",
+            "variantTitle": "Combo (Vest + Long-Sleeve) / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/16_2cd36bd0-c7e7-4202-ad12-42e5e1633361.png?v=1787385426",
+            "price": "69.99",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          }
+        ],
+        "rules": null,
+        "updatedAt": "2026-09-14T03:05:04Z",
+        "currencyCode": "USD"
+      }
+    },
+    {
+      "id": "gid://shopify/Collection/379105509567",
+      "oldTitle": "Turkey Season",
+      "title": "Camo Turkey",
+      "before": {
+        "id": "gid://shopify/Collection/379105509567",
+        "title": "Turkey Season",
+        "handle": "turkey-season",
+        "descriptionHtml": "",
+        "imageUrl": null,
+        "imageAltText": null,
+        "sortOrder": "BEST_SELLING",
+        "collectionType": "manual",
+        "productsCount": 126,
+        "products": [
+          {
+            "title": "Let Us Thank Him For Our Food T-shirt",
+            "variantTitle": "SAND / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/LetUsThankHimForOurFoodT-shirt_3.jpg?v=1783910894",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "World Turkey Slam T-shirt",
+            "variantTitle": "MILITARY GREEN / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/world_turkey_slam_tshirt_3.jpg?v=1778154368",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Grand Slam Subspecies T-shirt",
+            "variantTitle": "BROWN SAVANA / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/GrandSlamSubspeciesT-shirt_1.jpg?v=1779274672",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Turkey Hunter's World Slam T-shirt",
+            "variantTitle": "SAND / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Turkey_Hunters_World_Slam_T_Shirt.jpg?v=1778069480",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Provided By Him T-shirt",
+            "variantTitle": "BROWN SAVANA / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/ProvidedByHimT-shirt_3.jpg?v=1782986418",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Strut Around And Find Out T-shirt",
+            "variantTitle": "MILITARY GREEN / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/StrutAroundAndFindOutT-shirt_2.jpg?v=1779188141",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Let Us Thank Him For Our Food HOODIE",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/59_dc613da0-086e-4e0e-8af1-8ac79c61ccac.jpg?v=1784966043",
+            "price": "46.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "World Slam Of Turkey T-Shirt",
+            "variantTitle": "SPORT GREY / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/World_Slam_Of_Turkey_T_Shirt_1_78ba78b3-3655-47d5-9850-26c457e4dbbc.jpg?v=1778069621",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Gobbler Fight T-shirt",
+            "variantTitle": "SAND / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/GobblerFightT-shirt_1.jpg?v=1780046561",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Let Us Thank Him For Our Food POCKET tee",
+            "variantTitle": "MYSTIC BLUE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/75.jpg?v=1784966343",
+            "price": "34.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Let Us Thank Him For Our Food LONG-SLEEVE back",
+            "variantTitle": "FOREST GREEN / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/43_542e4daa-76dd-47ce-9f98-30e8da01b13f.jpg?v=1784963532",
+            "price": "32.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Six Wild Turkey T-Shirt",
+            "variantTitle": "SPORT GREY / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Six_Wild_Turkey_T_Shirt_4_2e29831d-975a-4160-9847-9c84d050a169.jpg?v=1778069752",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "The Turkey Hunter's Slam T-shirt",
+            "variantTitle": "BROWN SAVANA / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/TheTurkeyHunter_sSlamT-shirt_4.jpg?v=1780053405",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Wild Turkey Family Oak Branch T-shirt",
+            "variantTitle": "MILITARY GREEN / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/WildTurkeyFamilyOakBranchT-shirt_1.jpg?v=1779764884",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Eastern Turkey Hunting T-Shirt",
+            "variantTitle": "FOREST GREEN / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Eastern_Turkey_Hunting_T_Shirt_4.jpg?v=1778238656",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Wild Turkey Vintage T-shirt",
+            "variantTitle": "CHARCOAL / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Wild-Turkey-Vintage-T-shirt-_3.jpg?v=1777986198",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Turkey In The Wild T-shirt",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/TurkeyInTheWildT-shirt_2.jpg?v=1779188551",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Patience Brings The Harvest POCKET Tee",
+            "variantTitle": "BAY / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/291_7e78e8e6-c5c3-4c72-89f1-d83a21d0f2ae.jpg?v=1785323316",
+            "price": "34.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Run & Gun Hunting T-shirt",
+            "variantTitle": "SPORT GREY / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Run_GunHuntingT-shirt_4.jpg?v=1782096199",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Let Us Thank Him For Our Food SWEATSHIRT",
+            "variantTitle": "SAND / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/50_7fd78872-f879-47aa-8965-d93bd2469e61.jpg?v=1784963859",
+            "price": "39.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          }
+        ],
+        "rules": null,
+        "updatedAt": "2026-09-14T03:05:26Z",
+        "currencyCode": "USD"
+      }
+    },
+    {
+      "id": "gid://shopify/Collection/379105542335",
+      "oldTitle": "Waterfowl Season",
+      "title": "Camo Waterfowl",
+      "before": {
+        "id": "gid://shopify/Collection/379105542335",
+        "title": "Waterfowl Season",
+        "handle": "waterfowl-season",
+        "descriptionHtml": "",
+        "imageUrl": null,
+        "imageAltText": null,
+        "sortOrder": "BEST_SELLING",
+        "collectionType": "manual",
+        "productsCount": 23,
+        "products": [
+          {
+            "title": "Wildlife American Flag T-Shirt",
+            "variantTitle": "SAND / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Wildlife_American_Flag_T_Shirt_2_4030c066-c636-45f9-b452-fdc98038be1d.jpg?v=1778153294",
+            "price": "27.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "USA 250 Years Of Freedom Animals T-shirt",
+            "variantTitle": "Eagle / WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/USA-250-Years-Of-Freedom-Animals-T-shirt-_1.jpg?v=1778071335",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Labrador Retriever Hunting T-shirt",
+            "variantTitle": "CHARCOAL / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Labrador-Retriever-Hunting-T-shirt-_4.jpg?v=1781593250",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Let Freedom Ring 250th Anniversary Animals T-shirt",
+            "variantTitle": "Eagle / WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/let_freedom_ring_250th_anniversary_eagle_t_shirt_10.jpg?v=1777377937",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Patriotic Waterfowl Hunting T-shirt",
+            "variantTitle": "INDIGO BLUE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/patriotic_waterfowl_hunting_tshirt_4.jpg?v=1778154113",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Autumn Flights Sun Protection Hoodie",
+            "variantTitle": "S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Autumn_Flights_Sun_Protection_Hoodie.jpg?v=1788936901",
+            "price": "39.99",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Feral & Free Hunting Animal T-shirt",
+            "variantTitle": "Eagle / CARDINAL RED / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Feral_Free_Hunting_Animal_T_Shirt_1.jpg?v=1777827535",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "It's Time For Hunt T-shirt",
+            "variantTitle": "SAND / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/It_s-Time-For-Hunt-T-shirt-_3.jpg?v=1781593037",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Greenhead Sun Protection Hoodie",
+            "variantTitle": "Hoodie Only / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Greenhead_Sun_Protection_Hoodie.jpg?v=1789121631",
+            "price": "39.99",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Marsh Caller Sun Protection Hoodie",
+            "variantTitle": "Hoodie Only / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Marsh_Caller_Sun_Protection_Hoodie.jpg?v=1789121668",
+            "price": "39.99",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Backwater Calls Sun Protection Hoodie",
+            "variantTitle": "S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Backwater_Calls_Sun_Protection_Hoodie.jpg?v=1789121650",
+            "price": "39.99",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Marsh Madness Sun Protection Hoodie",
+            "variantTitle": "Hoodie Only / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Marsh_Madness_Sun_Protection_Hoodie.jpg?v=1789121613",
+            "price": "39.99",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Marsh Tested Sun Protection Hoodie",
+            "variantTitle": "S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Marsh_Tested_Sun_Protection_Hoodie.jpg?v=1789013311",
+            "price": "39.99",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Flyway Tradition Waterfowl Hunting Hoodie",
+            "variantTitle": "DARK CHOCOLATE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Flyway_Tradition_Waterfowl_Hunting_Hoodie_4.jpg?v=1788936928",
+            "price": "48.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Flyway Tradition Waterfowl Hunting Long-sleeve",
+            "variantTitle": "FOREST GREEN / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Flyway_Tradition_Waterfowl_Hunting_Long-sleeve_3.jpg?v=1788937135",
+            "price": "32.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Let Freedom Ring 250th Anniversary Waterfowl T-shirt",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/let_freedom_ring_250th_anniversary_waterfowl_t_shirt_1.jpg?v=1777377659",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "DRAFT"
+          },
+          {
+            "title": "Hunting Through The Swamp T‑shirt",
+            "variantTitle": "PEPPER / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/HuntingThroughTheSwampT_shirt_11.jpg?v=1776178788",
+            "price": "29.95",
+            "currencyCode": "USD",
+            "status": "DRAFT"
+          },
+          {
+            "title": "Raw Energy Outdoor Adventure Sweatshirt",
+            "variantTitle": "FOREST GREEN / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Raw_Energy_Outdoor_Adventure_Sweatshirt_6.jpg?v=1776093146",
+            "price": "39.95",
+            "currencyCode": "USD",
+            "status": "DRAFT"
+          },
+          {
+            "title": "Never Hunt Alone Outdoor Sweatshirt",
+            "variantTitle": "DARK CHOCOLATE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Never_Hunt_Alone_Outdoor_Sweatshirt.jpg?v=1776092648",
+            "price": "39.95",
+            "currencyCode": "USD",
+            "status": "DRAFT"
+          },
+          {
+            "title": "Marsh Life Waterfowl Hunting Sweatshirt",
+            "variantTitle": "SPORT GREY / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Marsh_Life_Waterfowl_Hunting_Sweatshirt_2.jpg?v=1776092432",
+            "price": "39.95",
+            "currencyCode": "USD",
+            "status": "DRAFT"
+          }
+        ],
+        "rules": null,
+        "updatedAt": "2026-09-14T03:05:33Z",
+        "currencyCode": "USD"
+      }
+    },
+    {
+      "id": "gid://shopify/Collection/379105575103",
+      "oldTitle": "Upland Season",
+      "title": "Camo Upland",
+      "before": {
+        "id": "gid://shopify/Collection/379105575103",
+        "title": "Upland Season",
+        "handle": "upland-season",
+        "descriptionHtml": "",
+        "imageUrl": null,
+        "imageAltText": null,
+        "sortOrder": "BEST_SELLING",
+        "collectionType": "manual",
+        "productsCount": 47,
+        "products": [
+          {
+            "title": "Fearless Christian Hunter Hoodie",
+            "variantTitle": "SPORT GREY / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/43_ed2fc5f8-79ff-4f1c-bbbe-d743d19e089f.jpg?v=1785819210",
+            "price": "48.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Covey Country Hoodie",
+            "variantTitle": "CHARCOAL / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Covey_Country_Hoodie_3_bf9e6157-22cf-4298-8d08-0486a50e7ade.jpg?v=1787203416",
+            "price": "44.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "The Upland Way Camo Layering Series",
+            "variantTitle": "Combo (Vest + Long-Sleeve) / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/The_Upland_Way_Camo_Layering_Series.jpg?v=1788417855",
+            "price": "69.99",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "The Upland Four Long-sleeve",
+            "variantTitle": "FOREST GREEN / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/The_Upland_Four_Long-sleeve_4_3f715036-7ea1-4859-bd28-6dcd81fc50d8.jpg?v=1787202690",
+            "price": "29.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Covey Country Long-sleeve",
+            "variantTitle": "NAVY / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Covey_Country_Long-sleeve_5_f7ce22f1-db4c-4806-9541-7b6e8db6b7dc.jpg?v=1787202800",
+            "price": "29.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "The Upland Four Hoodie",
+            "variantTitle": "SPORT GREY / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/The_Upland_Four_Hoodie_2_100de2d6-7b68-47a8-96c9-842277c32364.jpg?v=1787203262",
+            "price": "44.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Bred To Point Hoodie",
+            "variantTitle": "MILITARY GREEN / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/bred-to-point-1_92cf0bfc-3f02-4733-9d3d-f898ed18703e.jpg?v=1787037902",
+            "price": "48.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Always On Point Brittany Dog Hoodie",
+            "variantTitle": "DARK CHOCOLATE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Always_On_Point_Brittany_Dog_Hoodie__6_3d09c69f-4127-4ed5-8cf3-c2f0a8b02537.jpg?v=1786953218",
+            "price": "48.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Proverbs 12:27 Unshaken Hunting Hoodie",
+            "variantTitle": "SPORT GREY / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Proverbs_12_27_Unshaken_Hunting_Hoodie_2_eba9fb88-ab50-49be-8f35-315581f14294.jpg?v=1787129840",
+            "price": "44.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Fearless Hunter Pheasant Hunting Hoodie",
+            "variantTitle": "DARK CHOCOLATE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Fearless_Hunter_Pheasant_Hunting_Hoodie_5.jpg?v=1787362413",
+            "price": "46.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "He Knows Every Bird Long-sleeve",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/He_Knows_Every_Bird_Long-sleeve_5112b4c9-5394-47aa-b6c4-ebd7457861dc.jpg?v=1787128966",
+            "price": "29.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Always On Point Brittany Dog Long-sleeve",
+            "variantTitle": "GOLD / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/391_f3f9b2dc-7db3-4c60-ad7d-618a3b54cdce.jpg?v=1786936907",
+            "price": "32.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Fearless Christian Hunter Sweatshirt",
+            "variantTitle": "DARK CHOCOLATE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/54_0e6ce413-9b94-4d97-ba14-34350e36321e.jpg?v=1785819517",
+            "price": "39.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Field Loaded Bird Hunting Tradition Long-sleeve",
+            "variantTitle": "GOLD / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Field_Loaded_Bird_Hunting_Tradition_Long-sleeve_4_f6e990f0-9785-40db-b0bd-65603f995ea3.jpg?v=1787129075",
+            "price": "29.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "The Upland Wingman Sun Protection Hoodie",
+            "variantTitle": "S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/The_Upland_Wingman_Sun_Protection_Hoodie.jpg?v=1787905824",
+            "price": "39.99",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Fearless Hunter Pheasant Hunting Long-sleeve",
+            "variantTitle": "GOLD / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Fearless_Hunter_Pheasant_Hunting_Long-sleeve_4.jpg?v=1787362384",
+            "price": "32.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Ringneck Pheasant Season Hoodie",
+            "variantTitle": "MILITARY GREEN / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Ringneck_Pheasant_Season_Hoodie_4_87e52b26-296e-4329-8d93-1bd26f36a74b.jpg?v=1787203464",
+            "price": "44.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Ringneck Pheasant Season Long-sleeve",
+            "variantTitle": "SPORT GREY / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Ringneck_Pheasant_Season_Long-sleeve_64004809-b312-4d1c-9547-b0bde5c00c72.jpg?v=1787203893",
+            "price": "29.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "He Knows Every Bird Hoodie",
+            "variantTitle": "SAND / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/He_Knows_Every_Bird_Hoodie_5_ba396ea2-11a1-4a4f-a1bf-c7027af96923.jpg?v=1787129928",
+            "price": "44.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Loyalty In The Field Hoodie",
+            "variantTitle": "MILITARY GREEN / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Loyalty_In_The_Field_Hoodie__5_b43dae52-9ed0-4018-a322-ff3956d8c4e0.jpg?v=1786953234",
+            "price": "48.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          }
+        ],
+        "rules": null,
+        "updatedAt": "2026-09-14T03:05:41Z",
+        "currencyCode": "USD"
+      }
+    },
+    {
+      "id": "gid://shopify/Collection/379105607871",
+      "oldTitle": "Freshwater Life",
+      "title": "Camo Freshwater",
+      "before": {
+        "id": "gid://shopify/Collection/379105607871",
+        "title": "Freshwater Life",
+        "handle": "freshwater-life",
+        "descriptionHtml": "",
+        "imageUrl": null,
+        "imageAltText": null,
+        "sortOrder": "BEST_SELLING",
+        "collectionType": "manual",
+        "productsCount": 55,
+        "products": [
+          {
+            "title": "Trout Species Of The Appalachian Mountains T-shirt",
+            "variantTitle": "CHARCOAL / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/TroutSpeciesOfTheAppalachianMountainsT-shirt_6.jpg?v=1781667303",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Keepin' It Reel American Flag T-shirt",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Fishin_AndFreeUSAFlagT-shirt_1.jpg?v=1780634292",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Trout Trifecta T-shirt",
+            "variantTitle": "SAND / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/TroutTrifectaT-shirt_5.jpg?v=1780545257",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Faith & Fishing \"Cast Your Cares\" T-shirt",
+            "variantTitle": "SAND / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/380.jpg?v=1784797849",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "\"Fishers of Men\" Matthew 4:19 T-shirt",
+            "variantTitle": "AQUATIC / M",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/389.jpg?v=1784796322",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Trout Royal Slam T-shirt",
+            "variantTitle": "AQUATIC / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/TroutRoyalSlamT-shirt_1.jpg?v=1781577473",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Trout Trifecta Long-sleeve",
+            "variantTitle": "MILITARY GREEN / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/TroutTrifectaLong-sleeve_4.jpg?v=1780992619",
+            "price": "32.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "\"Jesus Fish Story\" T-shirt",
+            "variantTitle": "YELLOW HAZE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/369.jpg?v=1784796809",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Rocky Mountain Native Trout Heritage T-shirt",
+            "variantTitle": "SAND / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/RockyMountainNativeTroutHeritageT-shirt_2.jpg?v=1781751267",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Fishin' And Free USA Flag T-shirt",
+            "variantTitle": "INDIGO BLUE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Fishin_AndFreeUSAFlagT-shirt_5_62edd3ef-1a2b-4ff4-b035-d3a3d46b2308.jpg?v=1780634872",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Brook Trout Anatomy Blueprint T-shirt",
+            "variantTitle": "ROYAL BLUE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/BrookTroutAnatomyBlueprintT-shirt_3.jpg?v=1780632873",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Match The Hatch Fly Fishing Long-sleeve",
+            "variantTitle": "FOREST GREEN / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/84_99eeb696-dc5b-4b72-8a15-f066aaa5100f.jpg?v=1785990236",
+            "price": "32.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Bass Fishing Lures & Plugs T-shirt",
+            "variantTitle": "AQUATIC / M",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/BassFishingLures_PlugsT-shirt_3.jpg?v=1781836137",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Fall Brown Trout Migration T-shirt",
+            "variantTitle": "CORNSILK / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/482_7c2b4cc6-856a-4f7e-aac7-338d28e6fefc.jpg?v=1786609703",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Freshwater Game Fish T-shirt",
+            "variantTitle": "AQUATIC / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/FreshwaterGameFishT-shirt_3.jpg?v=1780971219",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Big Bass Challenge T-shirt",
+            "variantTitle": "ANTIQUE JADE DOME / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/BigBassChallengeT-shirt_3.jpg?v=1780455796",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Hooked On Freedom T-shirt",
+            "variantTitle": "INDIGO BLUE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/HookedOnFreedomT-shirt_4.jpg?v=1780633241",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Trout Species Of The Appalachian Mountains Long-sleeve",
+            "variantTitle": "CAROLINA BLUE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/6_cdf1b22d-2241-468c-ac38-bf4ad8b2f406.jpg?v=1785914856",
+            "price": "32.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Fly Fishing Field Guide T-shirt",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/61_73499dc7-af85-4778-bb2b-a59b62c78c9a.jpg?v=1786440005",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Reel American T-shirt",
+            "variantTitle": "CAROLINA BLUE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/ReelAmericanT-shirt_3.jpg?v=1780633885",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          }
+        ],
+        "rules": null,
+        "updatedAt": "2026-09-14T03:05:49Z",
+        "currencyCode": "USD"
+      }
+    },
+    {
+      "id": "gid://shopify/Collection/379105673407",
+      "oldTitle": "Saltwater Life",
+      "title": "Camo Saltwater",
+      "before": {
+        "id": "gid://shopify/Collection/379105673407",
+        "title": "Saltwater Life",
+        "handle": "saltwater-life",
+        "descriptionHtml": "",
+        "imageUrl": null,
+        "imageAltText": null,
+        "sortOrder": "BEST_SELLING",
+        "collectionType": "manual",
+        "productsCount": 60,
+        "products": [
+          {
+            "title": "Shallow Water Brawler Redfish T-shirt",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/ShallowWaterBrawlerRedfishT_shirt.jpg?v=1787302766",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "\"Fishers of Men\" Matthew 4:19 T-shirt",
+            "variantTitle": "AQUATIC / M",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/389.jpg?v=1784796322",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Florida Inshore Slam T-shirt",
+            "variantTitle": "CORNSILK / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/420_df6f799e-ce5c-4b6a-947e-60ee9d63e9c9.jpg?v=1786505626",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Matthew 4:19 Redfish Angler Faith Based T-shirt",
+            "variantTitle": "NAVY / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/401.jpg?v=1784798232",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Redfish Chase Lifestyle T-shirt",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/RedfishChaseLifestyleT-shirt_1.jpg?v=1780548740",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Billfish Super Grand Slam Long-sleeve",
+            "variantTitle": "CAROLINA BLUE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Billfish_Super_Grand_Slam_Long_sleeve_6.jpg?v=1788516978",
+            "price": "32.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Shallow Water Brawler Redfish Sun Protection Hoodie",
+            "variantTitle": "S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/21_8cba8ac2-c262-4245-a6c0-4ab5626dfd15.jpg?v=1787368983",
+            "price": "39.99",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Billfish Super Grand Slam T-shirt",
+            "variantTitle": "CORNSILK / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Billfish_Super_Grand_Slam_T_shirt_8.jpg?v=1788517170",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "White Marlin Tournament T-shirt",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/WhiteMarlinTournamentT-shirt.jpg?v=1781076860",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Offshore By Nature T-shirt",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/OffshoreByNatureT-shirt_1.jpg?v=1779937732",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Florida Inshore Slam Long-sleeve",
+            "variantTitle": "NAVY / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/171_77344766-d93d-41d9-a3df-6aefdc7d9a8e.jpg?v=1786507235",
+            "price": "32.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Mahi Strike Offshore T-shirt",
+            "variantTitle": "AQUATIC / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/MahiStrikeOffshoreT-shirt_3.jpg?v=1781666070",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Billfish Super Grand Slam Sun Protection Hoodie",
+            "variantTitle": "S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/40_be379733-6a80-489c-9f5c-8afa46c493b4.jpg?v=1787369056",
+            "price": "39.99",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Big Rock Landing T-shirt",
+            "variantTitle": "INDIGO BLUE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/BigRockLandingT-shirt_5.jpg?v=1781163352",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "White Marlin Hunter T-shirt",
+            "variantTitle": "CORNSILK / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/WhiteMarlinHunterT-shirt_3.jpg?v=1780635196",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Marsh Hunter Redfish Tail Long-sleeve",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/41_8f7538a2-b35b-4e29-addd-1aa89675f35f.jpg?v=1785913467",
+            "price": "32.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Mahi Mahi Anatomy Blueprint T-shirt",
+            "variantTitle": "ROYAL BLUE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/MahiMahiAnatomyBlueprintT-shirt_1.jpg?v=1780371252",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Redfish Chase Lifestyle Sun Protection Hoodie",
+            "variantTitle": "S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/100_fcd68457-f44f-4048-98b4-37c08a9f88a6.jpg?v=1786437176",
+            "price": "39.99",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Sailfish The Genesis Of A Legacy T-shirt",
+            "variantTitle": "NAVY / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/TheSpindlebeakLegacyT-shirt.jpg?v=1787908193",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Chasing The Offshore Slam Long-sleeve",
+            "variantTitle": "NAVY / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/65_2a46532d-6c1c-463b-aa08-0d13052a85ba.jpg?v=1785983413",
+            "price": "32.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          }
+        ],
+        "rules": null,
+        "updatedAt": "2026-09-14T03:06:09Z",
+        "currencyCode": "USD"
+      }
+    },
+    {
+      "id": "gid://shopify/Collection/379105706175",
+      "oldTitle": "Outdoor Faith",
+      "title": "Camo Faith",
+      "before": {
+        "id": "gid://shopify/Collection/379105706175",
+        "title": "Outdoor Faith",
+        "handle": "outdoor-faith",
+        "descriptionHtml": "",
+        "imageUrl": null,
+        "imageAltText": null,
+        "sortOrder": "BEST_SELLING",
+        "collectionType": "manual",
+        "productsCount": 71,
+        "products": [
+          {
+            "title": "Let Us Thank Him For Our Food T-shirt",
+            "variantTitle": "SAND / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/LetUsThankHimForOurFoodT-shirt_3.jpg?v=1783910894",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Provided By Him T-shirt",
+            "variantTitle": "BROWN SAVANA / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/ProvidedByHimT-shirt_3.jpg?v=1782986418",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Let Us Thank Him For Our Food HOODIE",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/59_dc613da0-086e-4e0e-8af1-8ac79c61ccac.jpg?v=1784966043",
+            "price": "46.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Let Us Thank Him For Our Food POCKET tee",
+            "variantTitle": "MYSTIC BLUE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/75.jpg?v=1784966343",
+            "price": "34.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Let Us Thank Him For Our Food LONG-SLEEVE back",
+            "variantTitle": "FOREST GREEN / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/43_542e4daa-76dd-47ce-9f98-30e8da01b13f.jpg?v=1784963532",
+            "price": "32.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Faith & Fishing \"Cast Your Cares\" T-shirt",
+            "variantTitle": "SAND / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/380.jpg?v=1784797849",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Fearless Christian Hunter Hoodie",
+            "variantTitle": "SPORT GREY / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/43_ed2fc5f8-79ff-4f1c-bbbe-d743d19e089f.jpg?v=1785819210",
+            "price": "48.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Patience Brings The Harvest POCKET Tee",
+            "variantTitle": "BAY / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/291_7e78e8e6-c5c3-4c72-89f1-d83a21d0f2ae.jpg?v=1785323316",
+            "price": "34.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "\"Fishers of Men\" Matthew 4:19 T-shirt",
+            "variantTitle": "AQUATIC / M",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/389.jpg?v=1784796322",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "\"Let Us Thank Him\" Genesis 93 Wildlife T-shirt",
+            "variantTitle": "CHARCOAL / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/422_fc719784-bc2e-4430-88d2-a773ab0835d4.jpg?v=1785151989",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Let Us Thank Him For Our Food SWEATSHIRT",
+            "variantTitle": "SAND / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/50_7fd78872-f879-47aa-8965-d93bd2469e61.jpg?v=1784963859",
+            "price": "39.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Patience Brings The Harvest T-shirt",
+            "variantTitle": "SPORT GREY / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/PatienceBringsTheHarvestT-shirt_4.jpg?v=1783563683",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "The Genesis Turkey T-shirt",
+            "variantTitle": "SPORT GREY / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/TheGenesisTurkeyT-shirt_2.jpg?v=1784111716",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Genesis 9:3 Christian Turkey Hunting T-shirt",
+            "variantTitle": "MILITARY GREEN / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Genesis93ChristianTurkeyHuntingT-shirt_4.jpg?v=1784087213",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Matthew 4:19 Redfish Angler Faith Based T-shirt",
+            "variantTitle": "NAVY / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/401.jpg?v=1784798232",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "\"Jesus Fish Story\" T-shirt",
+            "variantTitle": "YELLOW HAZE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/369.jpg?v=1784796809",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Great Outdoors Faith Hoodie",
+            "variantTitle": "DARK CHOCOLATE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/62_cc37ecbb-69f9-4b9f-8993-820b8d208204.jpg?v=1785903968",
+            "price": "48.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Provided By Him POCKET Tee",
+            "variantTitle": "BLUE JEAN / XL",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/116.jpg?v=1784966868",
+            "price": "34.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Never Aimless 1 Corinthians 926 T-shirt",
+            "variantTitle": "MILITARY GREEN / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/NeverAimless1Corinthians926T-shirt_4_04bccc7f-21f9-423c-8e81-221db7bfaaae.jpg?v=1784112189",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "No Haste, Just Diligence T-shirt",
+            "variantTitle": "SAND / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/NoHaste_JustDiligenceT-shirt_2.jpg?v=1784112375",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          }
+        ],
+        "rules": null,
+        "updatedAt": "2026-09-14T03:06:17Z",
+        "currencyCode": "USD"
+      }
+    },
+    {
+      "id": "gid://shopify/Collection/379105738943",
+      "oldTitle": "Park Adventures",
+      "title": "Camo Parks",
+      "before": {
+        "id": "gid://shopify/Collection/379105738943",
+        "title": "Park Adventures",
+        "handle": "park-adventures",
+        "descriptionHtml": "",
+        "imageUrl": null,
+        "imageAltText": null,
+        "sortOrder": "BEST_SELLING",
+        "collectionType": "manual",
+        "productsCount": 59,
+        "products": [
+          {
+            "title": "The 1929 Teton Heritage T-shirt",
+            "variantTitle": "SPORT GREY / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/The1929TetonHeritageT-shirt_3_cd48bc1b-1902-461c-9aab-8bb5d93ff6cf.jpg?v=1781668271",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Yellowstone Est. 1872 T-shirt",
+            "variantTitle": "MILITARY GREEN / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/YellowstoneEst.1872T-shirt_1.jpg?v=1780022693",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Yellowstone National Park T-shirt",
+            "variantTitle": "SAND / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/YellowstoneNationalParkT-shirt_1.jpg?v=1779545567",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "The Sun Road Expedition T-shirt",
+            "variantTitle": "SPORT GREY / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/TheSunRoadExpeditionT-shirt_3.jpg?v=1780887652",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Rustic Moulton Barn Teton National Park T-shirt",
+            "variantTitle": "NAVY / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/RusticMoultonBarnTetonNationalParkT-shirt_5.jpg?v=1784191030",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Yellowstone Explorer Map T-shirt",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/YellowstoneExplorerMapT-shirt_1.jpg?v=1779546931",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Yellowstone Explorer Vintage T-shirt",
+            "variantTitle": "MILITARY GREEN / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/YellowstoneExplorerVintageT-shirt_4.jpg?v=1784626598",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Yosemite Heritage Waterfall T-shirt",
+            "variantTitle": "AQUATIC / M",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/YosemiteHeritageWaterfallT-shirt_2.jpg?v=1780021718",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Grand Teton National Park Illustrated Map T-shirt",
+            "variantTitle": "FOREST GREEN / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/GrandTetonNationalParkIllustratedMapT-shirt_5.jpg?v=1781669540",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Firefall Yosemite Naitonal Park T-shirt",
+            "variantTitle": "BLACK / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/FirefallYosemiteNaitonalParkT-shirt_5.jpg?v=1780024434",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Yosemite Valley Half Dome Nature T-shirt",
+            "variantTitle": "BROWN SAVANA / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/490_b78feb4c-f866-4b5d-a596-04f58a420156.jpg?v=1786438460",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Where Mountains Meets The Sea T-shirt",
+            "variantTitle": "MILITARY GREEN / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/WhereMountainsMeetsTheSeaT-shirt_5.jpg?v=1782984034",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Yellowstone Flora & Fauna T-shirt",
+            "variantTitle": "SPORT GREY / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/YellowstoneFlora_FaunaT-shirt_1.jpg?v=1779546246",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "The Glacier Expedition Map T-shirt",
+            "variantTitle": "MILITARY GREEN / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/TheGlacierExpeditionMapT-shirt_4.jpg?v=1780886396",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "The Teton Explorer Vintage T-shirt",
+            "variantTitle": "SAND / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/TheTetonExplorerVintageT-shirt_3_47ac9f72-0fbf-468d-83eb-da826d0f8715.jpg?v=1784626366",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Rim-to-Rim Hikes Grand Canyon T-shirt",
+            "variantTitle": "YELLOW HAZE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Rim-to-RimHikesGrandCanyonT-shirt_6.jpg?v=1781054670",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Yellowstone National Park HOODIE",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/227.jpg?v=1784968935",
+            "price": "48.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "The 1915 Rocky Bighorn T-shirt",
+            "variantTitle": "SAND / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/The_1915_Rocky_Bighorn_T_shirt_3.png?v=1782468030",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Giant Sequoia Botanical Diagram T-shirt",
+            "variantTitle": "SAND / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/GiantSequoiaBotanicalDiagramT-shirt_1.jpg?v=1781578048",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Rustic Teton Mountains & Barn T-shirt",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/RusticTetonMountains_BarnT-shirt_1.jpg?v=1784189210",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          }
+        ],
+        "rules": null,
+        "updatedAt": "2026-09-14T03:06:27Z",
+        "currencyCode": "USD"
+      }
+    },
+    {
+      "id": "gid://shopify/Collection/379105804479",
+      "oldTitle": "American Pride",
+      "title": "Camo USA",
+      "before": {
+        "id": "gid://shopify/Collection/379105804479",
+        "title": "American Pride",
+        "handle": "american-pride",
+        "descriptionHtml": "",
+        "imageUrl": null,
+        "imageAltText": null,
+        "sortOrder": "BEST_SELLING",
+        "collectionType": "manual",
+        "productsCount": 59,
+        "products": [
+          {
+            "title": "Patriotic Labrador Dogs T-shirt",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Patriotic_Labrador_Dogs_T_Shirt_7.jpg?v=1777562330",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Land Of The Free T-shirt",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Land-Of-The-Free-T-shirt-_1.jpg?v=1777464368",
+            "price": "27.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Let Us Thank Him For Our Food LONG-SLEEVE back",
+            "variantTitle": "FOREST GREEN / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/43_542e4daa-76dd-47ce-9f98-30e8da01b13f.jpg?v=1784963532",
+            "price": "32.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Keepin' It Reel American Flag T-shirt",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Fishin_AndFreeUSAFlagT-shirt_1.jpg?v=1780634292",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Patriotic Dog Hunting T-shirt",
+            "variantTitle": "SAND / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Patriotic_Dog_Hunting_T_Shirt_1_97f239e9-2490-437b-b80e-b79a7f9e0a15.jpg?v=1777563687",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Red, White & Labrador Dogs T-shirt",
+            "variantTitle": "CAROLINA BLUE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Red_White_Labrador_Dogs_T_Shirt_1.jpg?v=1777563073",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Patriotic Labrador Dogs Back Print T-shirt",
+            "variantTitle": "CAROLINA BLUE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/PatrioticLabradorDogsT-shirt_2.jpg?v=1779444087",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Liberty Or Death Gadsden Flag T-shirt",
+            "variantTitle": "SPORT GREY / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/LibertyOrDeathGadsdenFlagT-shirt_3.jpg?v=1778500486",
+            "price": "27.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Wildlife American Flag T-Shirt",
+            "variantTitle": "SAND / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Wildlife_American_Flag_T_Shirt_2_4030c066-c636-45f9-b452-fdc98038be1d.jpg?v=1778153294",
+            "price": "27.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "We The People 250 Years Eagle T-shirt",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/We_The_People_250_Years_Eagle_T_Shirt_6.jpg?v=1778402187",
+            "price": "27.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "America 250 Years Eagle T-shirt",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/America-250-Years-Eagle-T-shirt-_1.jpg?v=1778071802",
+            "price": "27.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "American Boy T-shirt",
+            "variantTitle": "SAND / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/AmericanBoyT-shirt_1.jpg?v=1778671289",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Don’t Tread On Me T-shirt",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Don_tTreadOnMeT-shirt_1.jpg?v=1778499664",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Labrador 4th Of July T-shirt",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Labrador_4th_Of_July_T_Shirt_3.jpg?v=1777562669",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Fishin' And Free USA Flag T-shirt",
+            "variantTitle": "INDIGO BLUE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Fishin_AndFreeUSAFlagT-shirt_5_62edd3ef-1a2b-4ff4-b035-d3a3d46b2308.jpg?v=1780634872",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Love Labradors And America Too T-shirt",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Love_Labradors_And_America_Too_T_Shirt_1.jpg?v=1777563384",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Deer Skull EST.1776 T-shirt",
+            "variantTitle": "ROYAL BLUE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Deer_Skull_EST_1776_T_Shirt_8_c97207bb-b46c-4c44-9269-3325f767e5f5.jpg?v=1778554340",
+            "price": "27.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Patriotic Deer Hunting T-shirt",
+            "variantTitle": "INDIGO BLUE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/patriotic_deer_hunting_tshirt_5.jpg?v=1778154203",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "American Hunter T-shirt",
+            "variantTitle": "INDIGO BLUE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/AmericanHunterT-shirt_1.jpg?v=1778839627",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Independence 1776 Don’t Tread On Me T-shirt",
+            "variantTitle": "BLACK / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Independence1776Don_tTreadOnMeT-shirt_6.jpg?v=1778550818",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          }
+        ],
+        "rules": null,
+        "updatedAt": "2026-09-14T03:06:35Z",
+        "currencyCode": "USD"
+      }
+    },
+    {
+      "id": "gid://shopify/Collection/379105902783",
+      "oldTitle": "Outdoor Dads",
+      "title": "Camo Dads",
+      "before": {
+        "id": "gid://shopify/Collection/379105902783",
+        "title": "Outdoor Dads",
+        "handle": "outdoor-dads",
+        "descriptionHtml": "",
+        "imageUrl": null,
+        "imageAltText": null,
+        "sortOrder": "BEST_SELLING",
+        "collectionType": "manual",
+        "productsCount": 23,
+        "products": [
+          {
+            "title": "Girl Dad Camouflage T-shirt",
+            "variantTitle": "For Dad / WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Girl_Dad_Camouflage_T-shirt_5.jpg?v=1778846490",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Boy Dad Camouflage T-shirt",
+            "variantTitle": "For Dad / WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Boy_Dad_Camouflage_T-shirt_6.jpg?v=1778845991",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Rad Dad Camouflage T-shirt",
+            "variantTitle": "For Dad / WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Rad_Dad_Camouflage_T-shirt_7.jpg?v=1778847176",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Blue Collar Daddy T-shirt",
+            "variantTitle": "BLACK / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/BlueCollarDaddyT-shirt_1.jpg?v=1778757914",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Dad The Fishing Legend T-shirt",
+            "variantTitle": "For Dad / WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Dad_The_Fishing_Legend_T-shirt_5.jpg?v=1778843781",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Reel Great Dad T-shirt",
+            "variantTitle": "For Dad / BLACK / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Reel_Great_Dad_T-shirt.jpg?v=1778905301",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "A Dad Like Me Is Hard To Find T-shirt",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/A_Dad_Like_Me_Is_Hard_To_Find_T_Shirt_3.jpg?v=1778401790",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Reel Cool Dad T-shirt",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Reel_Cool_Dad_T_Shirt_3.jpg?v=1777826081",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Knower Of Stuff Fixer Of Things T-shirt",
+            "variantTitle": "BLACK / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Knower_Of_Stuff_Fixer_Of_Things_T_shirt_2.jpg?v=1777825365",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Boy Dad Trucker Hat with Leather Patch",
+            "variantTitle": "Black/White / Rectangle / White",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/BoyDadTruckerHatwithLeatherPatch_7.jpg?v=1778846327",
+            "price": "29.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Girl Dad Trucker Hat with Leather Patch",
+            "variantTitle": "Black/White / Rectangle / White",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/GirlDadTruckerHatwithLeatherPatch_9.jpg?v=1778845970",
+            "price": "29.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Personalized Dad Trucker Hat with Leather Patch",
+            "variantTitle": "Black/White / Rectangle / White",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/PersonalizedDadTruckerHatwithLeatherPatch_2_a0ee50ea-a334-4ca6-8309-7cc333bb6a44.jpg?v=1778845307",
+            "price": "29.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Reel Fishin’, Reel Dad T-shirt",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/ReelFishin_ReelDadT-shirt_3.jpg?v=1778671982",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Rad Dad Hunting T-shirt",
+            "variantTitle": "BLACK / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/RadDadHuntingT-shirt_1.jpg?v=1778669998",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ARCHIVED"
+          },
+          {
+            "title": "Reel Cool Dad Fishing T-shirt",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Reel-Cool-Dad-Fishing-T-shirt-_1.jpg?v=1777895106",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Dad Tax Skeleton T-Shirt",
+            "variantTitle": "BLACK / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Dad_Tax_Beer_Skeleton_T_Shirt_3.jpg?v=1777827135",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Cool Dads Club Raccoon T-shirt",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Cool_Dads_Club_Raccoon_T_Shirt_3.jpg?v=1777826951",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Funny Dad Beer Skeleton T-Shirt",
+            "variantTitle": "BLACK / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Funny_Dad_Beer_Skeleton_T_Shirt_2.jpg?v=1777826769",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "It's Not A Dad Bod Raccoon T-shirt",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Its_Not_A_Dad_Bod_Raccoon_T_Shirt_6.jpg?v=1777826623",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          },
+          {
+            "title": "Dad Tax Skeleton T-Shirt",
+            "variantTitle": "WHITE / S",
+            "imageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Dad_Tax_Skeleton_T_Shirt_1.jpg?v=1777826378",
+            "price": "24.95",
+            "currencyCode": "USD",
+            "status": "ACTIVE"
+          }
+        ],
+        "rules": null,
+        "updatedAt": "2026-09-14T03:06:41Z",
+        "currencyCode": "USD"
+      }
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import prisma from "../db.server";
 import { imageCountsByColor, loadListingImages, unmatchedImageNames } from "./listing-images.server";
-import { ensureLarkDesignTag, getLarkListingRow, larkFieldNames, updateLarkListingRecord } from "./lark.server";
+import { getLarkListingRow, larkFieldNames, updateLarkListingRecord } from "./lark.server";
 import type {
   ListingPreview,
   ListingResult,
@@ -45,6 +45,7 @@ type ShopifyProduct = {
   id: string;
   title: string;
   handle: string;
+  descriptionHtml: string;
   productType: string;
   tags: string[];
   featuredImage: { url: string } | null;
@@ -198,7 +199,7 @@ async function findTemplateProducts(admin: ShopifyAdminClient, row: LarkListingR
       query ListingTemplates($query: String!) {
         products(first: 100, query: $query, sortKey: UPDATED_AT, reverse: true) {
           nodes {
-            id title handle productType tags
+            id title handle descriptionHtml productType tags
             featuredImage { url }
             options { id name position linkedMetafield { namespace key } optionValues { name linkedMetafieldValue } }
             variants(first: 250) {
@@ -240,7 +241,7 @@ async function getProduct(admin: ShopifyAdminClient, productId: string) {
     `#graphql
       query ListingTemplate($id: ID!) {
         product(id: $id) {
-          id title handle productType tags
+          id title handle descriptionHtml productType tags
           featuredImage { url }
           options { id name position linkedMetafield { namespace key } optionValues { name linkedMetafieldValue } }
           variants(first: 250) {
@@ -446,7 +447,7 @@ async function setListingProduct(
       identifier: { id: productId },
       input: {
         title: row.title,
-        descriptionHtml: "",
+        descriptionHtml: normalizeText(row.productType) === "waterproof jacket" ? template.descriptionHtml : "",
         status: "DRAFT",
         productType: normalizeText(row.productType).includes("upf hoodie") ? "UPF Hoodie" : row.productType || template.productType,
         productOptions: plan.productOptions,
@@ -774,7 +775,7 @@ export async function createDraftListing(input: {
     await ensureLinkedOptionValues(input.admin, draftBeforeSet, row, template);
     const product = await setListingProduct(input.admin, createdProductId, row, template, collection.id, design.tag ?? undefined);
     if (design.tag) {
-      await Promise.all([ensureLarkDesignTag(design.tag), syncDesignTag(input.admin, design.products, design.tag)]);
+      await syncDesignTag(input.admin, design.products, design.tag);
     }
     await setListingMetafields(input.admin, product.id);
     const uploaded = await uploadImages(input.admin, product.id, row);

@@ -1,0 +1,3267 @@
+[
+  {
+    "id": "gid://shopify/Product/8579211034815",
+    "title": "Bowhunter Life Camo Layering Series",
+    "vendor": "Camo Signal",
+    "status": "ACTIVE",
+    "productType": "Combo",
+    "descriptionHtml": "",
+    "tags": [
+      "best-seller",
+      "combo-builder"
+    ],
+    "totalInventory": 0,
+    "featuredImageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Bowhunter_Life_Camo_Layering_Series.jpg?v=1789380546",
+    "images": [
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Bowhunter_Life_Camo_Layering_Series.jpg?v=1789380546",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34976143671487"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/BowhuterLifeCamoLayeringSeries_4.jpg?v=1787369866",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34680870731967"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/BowhuterLifeCamoLayeringSeries_2.jpg?v=1787369866",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34680870666431"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/BowhuterLifeCamoLayeringSeries_5.jpg?v=1787369866",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34680870764735"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Bowhunter_Life_Camo_Layering_Series_3.jpg?v=1789380546",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34976143638719"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Bowhunter_Life_Camo_Layering_Series_2.jpg?v=1789380546",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34976143704255"
+      }
+    ],
+    "totalVariants": 24,
+    "variants": [
+      {
+        "id": "gid://shopify/ProductVariant/46069552447679",
+        "title": "Combo (Vest + Long-Sleeve) / S",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46069552480447",
+        "title": "Combo (Vest + Long-Sleeve) / M",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 97
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46069552513215",
+        "title": "Combo (Vest + Long-Sleeve) / L",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 94
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46069552545983",
+        "title": "Combo (Vest + Long-Sleeve) / XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 95
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46069552578751",
+        "title": "Combo (Vest + Long-Sleeve) / 2XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 95
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46069552611519",
+        "title": "Combo (Vest + Long-Sleeve) / 3XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46069552644287",
+        "title": "Combo (Vest + Long-Sleeve) / 4XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46069552677055",
+        "title": "Combo (Vest + Long-Sleeve) / 5XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 98
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46069578694847",
+        "title": "Quarter-Zipper Fleece Vest / S",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46069578727615",
+        "title": "Quarter-Zipper Fleece Vest / M",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46069578760383",
+        "title": "Quarter-Zipper Fleece Vest / L",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46069578793151",
+        "title": "Quarter-Zipper Fleece Vest / XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46069578825919",
+        "title": "Quarter-Zipper Fleece Vest / 2XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46069578858687",
+        "title": "Quarter-Zipper Fleece Vest / 3XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46069578891455",
+        "title": "Quarter-Zipper Fleece Vest / 4XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46069578924223",
+        "title": "Quarter-Zipper Fleece Vest / 5XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46069578956991",
+        "title": "Full-Zipper Long-Sleeve / S",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46069578989759",
+        "title": "Full-Zipper Long-Sleeve / M",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 98
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46069579022527",
+        "title": "Full-Zipper Long-Sleeve / L",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 98
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46069579055295",
+        "title": "Full-Zipper Long-Sleeve / XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 97
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46069579088063",
+        "title": "Full-Zipper Long-Sleeve / 2XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46069579120831",
+        "title": "Full-Zipper Long-Sleeve / 3XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46069579153599",
+        "title": "Full-Zipper Long-Sleeve / 4XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46069579186367",
+        "title": "Full-Zipper Long-Sleeve / 5XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 99
+      }
+    ],
+    "currencyCode": "USD"
+  },
+  {
+    "id": "gid://shopify/Product/8580005626047",
+    "title": "Hunt Hard Camo Layering Series",
+    "vendor": "Camo Signal",
+    "status": "ACTIVE",
+    "productType": "Combo",
+    "descriptionHtml": "",
+    "tags": [
+      "best-seller",
+      "combo-builder"
+    ],
+    "totalInventory": 0,
+    "featuredImageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Hunt_Hard_Camo_Layering_Series.jpg?v=1787385413",
+    "images": [
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Hunt_Hard_Camo_Layering_Series.jpg?v=1787385413",
+        "altText": "Combo - Hunt Hard Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34686108893375"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Hunt_Hard_Camo_Layering_Series_4.jpg?v=1787385413",
+        "altText": "Combo lifestyle - Hunt Hard Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34686108926143"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Hunt_Hard_Camo_Layering_Series_2.jpg?v=1787385413",
+        "altText": "Vest - Hunt Hard Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34686108958911"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Hunt_Hard_Camo_Layering_Series_6.jpg?v=1787385413",
+        "altText": "Vest lifestyle - Hunt Hard Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34686108991679"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Hunt_Hard_Camo_Layering_Series_3.jpg?v=1787385413",
+        "altText": "Long-Sleeve - Hunt Hard Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34686109024447"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Hunt_Hard_Camo_Layering_Series_5.jpg?v=1787385413",
+        "altText": "Long-Sleeve lifestyle - Hunt Hard Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34686109057215"
+      }
+    ],
+    "totalVariants": 24,
+    "variants": [
+      {
+        "id": "gid://shopify/ProductVariant/46070652698815",
+        "title": "Combo (Vest + Long-Sleeve) / S",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070652731583",
+        "title": "Combo (Vest + Long-Sleeve) / M",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070652764351",
+        "title": "Combo (Vest + Long-Sleeve) / L",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 94
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070652797119",
+        "title": "Combo (Vest + Long-Sleeve) / XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 95
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070652829887",
+        "title": "Combo (Vest + Long-Sleeve) / 2XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 98
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070652862655",
+        "title": "Combo (Vest + Long-Sleeve) / 3XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070652895423",
+        "title": "Combo (Vest + Long-Sleeve) / 4XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070652928191",
+        "title": "Combo (Vest + Long-Sleeve) / 5XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070652993727",
+        "title": "Quarter-Zipper Fleece Vest / S",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070653026495",
+        "title": "Quarter-Zipper Fleece Vest / M",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070653059263",
+        "title": "Quarter-Zipper Fleece Vest / L",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070653092031",
+        "title": "Quarter-Zipper Fleece Vest / XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070653124799",
+        "title": "Quarter-Zipper Fleece Vest / 2XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070653157567",
+        "title": "Quarter-Zipper Fleece Vest / 3XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070653190335",
+        "title": "Quarter-Zipper Fleece Vest / 4XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070653223103",
+        "title": "Quarter-Zipper Fleece Vest / 5XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070653288639",
+        "title": "Full-Zipper Long-Sleeve / S",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 98
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070653321407",
+        "title": "Full-Zipper Long-Sleeve / M",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070653354175",
+        "title": "Full-Zipper Long-Sleeve / L",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 97
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070653386943",
+        "title": "Full-Zipper Long-Sleeve / XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 96
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070653419711",
+        "title": "Full-Zipper Long-Sleeve / 2XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070653452479",
+        "title": "Full-Zipper Long-Sleeve / 3XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070653485247",
+        "title": "Full-Zipper Long-Sleeve / 4XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070653518015",
+        "title": "Full-Zipper Long-Sleeve / 5XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 100
+      }
+    ],
+    "currencyCode": "USD"
+  },
+  {
+    "id": "gid://shopify/Product/8580005986495",
+    "title": "Wild Crown Camo Layering Series",
+    "vendor": "Camo Signal",
+    "status": "ACTIVE",
+    "productType": "Combo",
+    "descriptionHtml": "",
+    "tags": [
+      "best-seller",
+      "combo-builder"
+    ],
+    "totalInventory": 0,
+    "featuredImageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/16_2cd36bd0-c7e7-4202-ad12-42e5e1633361.png?v=1787385426",
+    "images": [
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/16_2cd36bd0-c7e7-4202-ad12-42e5e1633361.png?v=1787385426",
+        "altText": "Combo - Wild Crown Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34686111219903"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/17_f746dd2f-7cd9-468e-b5f0-18189021a084.png?v=1787385426",
+        "altText": "Combo lifestyle - Wild Crown Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34686111252671"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/18.png?v=1787385426",
+        "altText": "Vest - Wild Crown Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34686111285439"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/19.png?v=1787385426",
+        "altText": "Vest lifestyle - Wild Crown Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34686111318207"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Bowhuter_Life_Camo_Layering_Series.png?v=1787385426",
+        "altText": "Long-Sleeve - Wild Crown Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34686111350975"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/21.png?v=1787385426",
+        "altText": "Long-Sleeve lifestyle - Wild Crown Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34686111383743"
+      }
+    ],
+    "totalVariants": 24,
+    "variants": [
+      {
+        "id": "gid://shopify/ProductVariant/46070653911231",
+        "title": "Combo (Vest + Long-Sleeve) / S",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070653943999",
+        "title": "Combo (Vest + Long-Sleeve) / M",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 97
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070653976767",
+        "title": "Combo (Vest + Long-Sleeve) / L",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 93
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070654009535",
+        "title": "Combo (Vest + Long-Sleeve) / XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 98
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070654042303",
+        "title": "Combo (Vest + Long-Sleeve) / 2XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 97
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070654075071",
+        "title": "Combo (Vest + Long-Sleeve) / 3XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 98
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070654107839",
+        "title": "Combo (Vest + Long-Sleeve) / 4XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070654140607",
+        "title": "Combo (Vest + Long-Sleeve) / 5XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070654206143",
+        "title": "Quarter-Zipper Fleece Vest / S",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070654238911",
+        "title": "Quarter-Zipper Fleece Vest / M",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070654271679",
+        "title": "Quarter-Zipper Fleece Vest / L",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070654304447",
+        "title": "Quarter-Zipper Fleece Vest / XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070654337215",
+        "title": "Quarter-Zipper Fleece Vest / 2XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 98
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070654369983",
+        "title": "Quarter-Zipper Fleece Vest / 3XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070654402751",
+        "title": "Quarter-Zipper Fleece Vest / 4XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070654435519",
+        "title": "Quarter-Zipper Fleece Vest / 5XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070654501055",
+        "title": "Full-Zipper Long-Sleeve / S",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070654533823",
+        "title": "Full-Zipper Long-Sleeve / M",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070654566591",
+        "title": "Full-Zipper Long-Sleeve / L",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070654599359",
+        "title": "Full-Zipper Long-Sleeve / XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070654632127",
+        "title": "Full-Zipper Long-Sleeve / 2XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070654664895",
+        "title": "Full-Zipper Long-Sleeve / 3XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070654697663",
+        "title": "Full-Zipper Long-Sleeve / 4XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46070654730431",
+        "title": "Full-Zipper Long-Sleeve / 5XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 100
+      }
+    ],
+    "currencyCode": "USD"
+  },
+  {
+    "id": "gid://shopify/Product/8580099145919",
+    "title": "Rack Seeker Camo Layering Series",
+    "vendor": "Camo Signal",
+    "status": "ACTIVE",
+    "productType": "Combo",
+    "descriptionHtml": "",
+    "tags": [
+      "best-seller",
+      "combo-builder"
+    ],
+    "totalInventory": 0,
+    "featuredImageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/23.png?v=1787387382",
+    "images": [
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/23.png?v=1787387382",
+        "altText": "Combo - Rack Seeker Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34686607753407"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/24.png?v=1787387383",
+        "altText": "Combo lifestyle - Rack Seeker Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34686607786175"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Bowhuter_Life_Camo_Layering_Series_21db7dad-5950-4b6a-892c-044966026187.png?v=1787387382",
+        "altText": "Vest - Rack Seeker Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34686607818943"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/26.png?v=1787387382",
+        "altText": "Vest lifestyle - Rack Seeker Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34686607851711"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/27.png?v=1787387382",
+        "altText": "Long-Sleeve - Rack Seeker Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34686607884479"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/28.png?v=1787387383",
+        "altText": "Long-Sleeve lifestyle - Rack Seeker Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34686607917247"
+      }
+    ],
+    "totalVariants": 24,
+    "variants": [
+      {
+        "id": "gid://shopify/ProductVariant/46071074980031",
+        "title": "Combo (Vest + Long-Sleeve) / S",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071075012799",
+        "title": "Combo (Vest + Long-Sleeve) / M",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 96
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071075045567",
+        "title": "Combo (Vest + Long-Sleeve) / L",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 89
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071075078335",
+        "title": "Combo (Vest + Long-Sleeve) / XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 87
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071075111103",
+        "title": "Combo (Vest + Long-Sleeve) / 2XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 97
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071075143871",
+        "title": "Combo (Vest + Long-Sleeve) / 3XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 97
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071075176639",
+        "title": "Combo (Vest + Long-Sleeve) / 4XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 97
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071075209407",
+        "title": "Combo (Vest + Long-Sleeve) / 5XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 97
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071075274943",
+        "title": "Quarter-Zipper Fleece Vest / S",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071075307711",
+        "title": "Quarter-Zipper Fleece Vest / M",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071075340479",
+        "title": "Quarter-Zipper Fleece Vest / L",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071075373247",
+        "title": "Quarter-Zipper Fleece Vest / XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071075406015",
+        "title": "Quarter-Zipper Fleece Vest / 2XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071075438783",
+        "title": "Quarter-Zipper Fleece Vest / 3XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071075471551",
+        "title": "Quarter-Zipper Fleece Vest / 4XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071075504319",
+        "title": "Quarter-Zipper Fleece Vest / 5XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071075569855",
+        "title": "Full-Zipper Long-Sleeve / S",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071075602623",
+        "title": "Full-Zipper Long-Sleeve / M",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 98
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071075635391",
+        "title": "Full-Zipper Long-Sleeve / L",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071075668159",
+        "title": "Full-Zipper Long-Sleeve / XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 95
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071075700927",
+        "title": "Full-Zipper Long-Sleeve / 2XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071075733695",
+        "title": "Full-Zipper Long-Sleeve / 3XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071075766463",
+        "title": "Full-Zipper Long-Sleeve / 4XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071075799231",
+        "title": "Full-Zipper Long-Sleeve / 5XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 100
+      }
+    ],
+    "currencyCode": "USD"
+  },
+  {
+    "id": "gid://shopify/Product/8580311613631",
+    "title": "In It For Blood Camo Layering Series",
+    "vendor": "Camo Signal",
+    "status": "ACTIVE",
+    "productType": "Combo",
+    "descriptionHtml": "",
+    "tags": [
+      "best-seller",
+      "combo-builder",
+      "design:In-It-For-Blood"
+    ],
+    "totalInventory": 0,
+    "featuredImageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Hunt_Hard_Camo_Layering_Series_40a16f09-613f-4ffd-bb91-7e3ab947f28e.jpg?v=1787391354",
+    "images": [
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Hunt_Hard_Camo_Layering_Series_40a16f09-613f-4ffd-bb91-7e3ab947f28e.jpg?v=1787391354",
+        "altText": "Combo - In It For Blood Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34687568281791"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/35_b6015e8c-ef66-4741-96e4-1b4425895154.jpg?v=1787391354",
+        "altText": "Vest lifestyle - In It For Blood Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34687568380095"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/33_7c1c993c-64a4-482b-a324-78d4b8a9d66b.jpg?v=1787391354",
+        "altText": "Long-Sleeve lifestyle - In It For Blood Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34687568445631"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/31_e55041b5-0ed5-4a19-87bc-79d34babcdc2.jpg?v=1787391354",
+        "altText": "Combo lifestyle - In It For Blood Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34687568314559"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Bowhuter_Life_Camo_Layering_Series_2.jpg?v=1787391354",
+        "altText": "Vest - In It For Blood Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34687568347327"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Bowhuter_Life_Camo_Layering_Series.jpg?v=1787391354",
+        "altText": "Long-Sleeve - In It For Blood Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34687568412863"
+      }
+    ],
+    "totalVariants": 24,
+    "variants": [
+      {
+        "id": "gid://shopify/ProductVariant/46071837851839",
+        "title": "Combo (Vest + Long-Sleeve) / S",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 97
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071837884607",
+        "title": "Combo (Vest + Long-Sleeve) / M",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 93
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071837917375",
+        "title": "Combo (Vest + Long-Sleeve) / L",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 85
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071837950143",
+        "title": "Combo (Vest + Long-Sleeve) / XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 90
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071837982911",
+        "title": "Combo (Vest + Long-Sleeve) / 2XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 94
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071838015679",
+        "title": "Combo (Vest + Long-Sleeve) / 3XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 98
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071838048447",
+        "title": "Combo (Vest + Long-Sleeve) / 4XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071838081215",
+        "title": "Combo (Vest + Long-Sleeve) / 5XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 98
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071838146751",
+        "title": "Quarter-Zipper Fleece Vest / S",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071838179519",
+        "title": "Quarter-Zipper Fleece Vest / M",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071838212287",
+        "title": "Quarter-Zipper Fleece Vest / L",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 98
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071838245055",
+        "title": "Quarter-Zipper Fleece Vest / XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071838277823",
+        "title": "Quarter-Zipper Fleece Vest / 2XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071838310591",
+        "title": "Quarter-Zipper Fleece Vest / 3XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071838343359",
+        "title": "Quarter-Zipper Fleece Vest / 4XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071838376127",
+        "title": "Quarter-Zipper Fleece Vest / 5XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071838441663",
+        "title": "Full-Zipper Long-Sleeve / S",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071838474431",
+        "title": "Full-Zipper Long-Sleeve / M",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 98
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071838507199",
+        "title": "Full-Zipper Long-Sleeve / L",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 98
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071838539967",
+        "title": "Full-Zipper Long-Sleeve / XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071838572735",
+        "title": "Full-Zipper Long-Sleeve / 2XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071838605503",
+        "title": "Full-Zipper Long-Sleeve / 3XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071838638271",
+        "title": "Full-Zipper Long-Sleeve / 4XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46071838671039",
+        "title": "Full-Zipper Long-Sleeve / 5XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 99
+      }
+    ],
+    "currencyCode": "USD"
+  },
+  {
+    "id": "gid://shopify/Product/8588829098175",
+    "title": "Marsh Raised Camo Layering Series",
+    "vendor": "Camo Signal",
+    "status": "ACTIVE",
+    "productType": "Combo",
+    "descriptionHtml": "",
+    "tags": [
+      "best-seller",
+      "combo-builder"
+    ],
+    "totalInventory": 0,
+    "featuredImageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Marsh_Raised_Camo_Layering_Series.jpg?v=1787806535",
+    "images": [
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Marsh_Raised_Camo_Layering_Series.jpg?v=1787806535",
+        "altText": "Combo - Marsh Raised Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34740408221887"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Marsh_Raised_Camo_Layering_Series_2.jpg?v=1787806535",
+        "altText": "Combo lifestyle - Marsh Raised Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34740408254655"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Marsh_Raised_Camo_Layering_Series_5.jpg?v=1787806535",
+        "altText": "Vest - Marsh Raised Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34740408287423"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Marsh_Raised_Camo_Layering_Series_6.jpg?v=1787806535",
+        "altText": "Vest lifestyle - Marsh Raised Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34740408320191"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Marsh_Raised_Camo_Layering_Series_3.jpg?v=1787806535",
+        "altText": "Long-Sleeve - Marsh Raised Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34740408352959"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Marsh_Raised_Camo_Layering_Series_4.jpg?v=1787806535",
+        "altText": "Long-Sleeve lifestyle - Marsh Raised Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34740408385727"
+      }
+    ],
+    "totalVariants": 24,
+    "variants": [
+      {
+        "id": "gid://shopify/ProductVariant/46098448187583",
+        "title": "Combo (Vest + Long-Sleeve) / S",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46098448220351",
+        "title": "Combo (Vest + Long-Sleeve) / M",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 98
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46098448253119",
+        "title": "Combo (Vest + Long-Sleeve) / L",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 97
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46098448285887",
+        "title": "Combo (Vest + Long-Sleeve) / XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 97
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46098448318655",
+        "title": "Combo (Vest + Long-Sleeve) / 2XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 97
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46098448351423",
+        "title": "Combo (Vest + Long-Sleeve) / 3XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46098448384191",
+        "title": "Combo (Vest + Long-Sleeve) / 4XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46098448416959",
+        "title": "Combo (Vest + Long-Sleeve) / 5XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46098448482495",
+        "title": "Quarter-Zipper Fleece Vest / S",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46098448515263",
+        "title": "Quarter-Zipper Fleece Vest / M",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46098448548031",
+        "title": "Quarter-Zipper Fleece Vest / L",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 98
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46098448580799",
+        "title": "Quarter-Zipper Fleece Vest / XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46098448613567",
+        "title": "Quarter-Zipper Fleece Vest / 2XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46098448646335",
+        "title": "Quarter-Zipper Fleece Vest / 3XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46098448679103",
+        "title": "Quarter-Zipper Fleece Vest / 4XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46098448711871",
+        "title": "Quarter-Zipper Fleece Vest / 5XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46098448777407",
+        "title": "Full-Zipper Long-Sleeve / S",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46098448810175",
+        "title": "Full-Zipper Long-Sleeve / M",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46098448842943",
+        "title": "Full-Zipper Long-Sleeve / L",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 97
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46098448875711",
+        "title": "Full-Zipper Long-Sleeve / XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 97
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46098448908479",
+        "title": "Full-Zipper Long-Sleeve / 2XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46098448941247",
+        "title": "Full-Zipper Long-Sleeve / 3XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46098448974015",
+        "title": "Full-Zipper Long-Sleeve / 4XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46098449006783",
+        "title": "Full-Zipper Long-Sleeve / 5XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 100
+      }
+    ],
+    "currencyCode": "USD"
+  },
+  {
+    "id": "gid://shopify/Product/8592119103679",
+    "title": "Marked & Retrieved Camo Layering Series",
+    "vendor": "Camo Signal",
+    "status": "ACTIVE",
+    "productType": "Combo",
+    "descriptionHtml": "",
+    "tags": [
+      "best-seller",
+      "combo-builder"
+    ],
+    "totalInventory": 0,
+    "featuredImageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/MarshRaisedCamoLayeringSeries.jpg?v=1788019086",
+    "images": [
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/MarshRaisedCamoLayeringSeries.jpg?v=1788019086",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34778168131775"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/BowhuterLifeCamoLayeringSeries_0d9c1c93-7b3a-4309-a9d9-4fad8518291a.jpg?v=1788019086",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34778168066239"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/50_c02be755-3826-4fe5-8215-896048b46e9b.jpg?v=1788019086",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34778168033471"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/MarshRaisedCamoLayeringSeries_2.jpg?v=1788019086",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34778168099007"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/48_4c19ebbc-604d-4471-bbd9-2b1e8df21fcf.jpg?v=1788019086",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34778168000703"
+      }
+    ],
+    "totalVariants": 24,
+    "variants": [
+      {
+        "id": "gid://shopify/ProductVariant/46109887692991",
+        "title": "Combo (Vest + Long-Sleeve) / S",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46109887725759",
+        "title": "Combo (Vest + Long-Sleeve) / M",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46109887758527",
+        "title": "Combo (Vest + Long-Sleeve) / L",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": -2
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46109887791295",
+        "title": "Combo (Vest + Long-Sleeve) / XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": -5
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46109887824063",
+        "title": "Combo (Vest + Long-Sleeve) / 2XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": -1
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46109887856831",
+        "title": "Combo (Vest + Long-Sleeve) / 3XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46109887889599",
+        "title": "Combo (Vest + Long-Sleeve) / 4XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": -1
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46109887922367",
+        "title": "Combo (Vest + Long-Sleeve) / 5XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": -1
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46109887987903",
+        "title": "Quarter-Zipper Fleece Vest / S",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46109888020671",
+        "title": "Quarter-Zipper Fleece Vest / M",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": -1
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46109888053439",
+        "title": "Quarter-Zipper Fleece Vest / L",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46109888086207",
+        "title": "Quarter-Zipper Fleece Vest / XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46109888118975",
+        "title": "Quarter-Zipper Fleece Vest / 2XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46109888151743",
+        "title": "Quarter-Zipper Fleece Vest / 3XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46109888184511",
+        "title": "Quarter-Zipper Fleece Vest / 4XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46109888217279",
+        "title": "Quarter-Zipper Fleece Vest / 5XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46109888282815",
+        "title": "Full-Zipper Long-Sleeve / S",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": -1
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46109888315583",
+        "title": "Full-Zipper Long-Sleeve / M",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46109888348351",
+        "title": "Full-Zipper Long-Sleeve / L",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": -1
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46109888381119",
+        "title": "Full-Zipper Long-Sleeve / XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": -2
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46109888413887",
+        "title": "Full-Zipper Long-Sleeve / 2XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46109888446655",
+        "title": "Full-Zipper Long-Sleeve / 3XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46109888479423",
+        "title": "Full-Zipper Long-Sleeve / 4XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46109888512191",
+        "title": "Full-Zipper Long-Sleeve / 5XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 0
+      }
+    ],
+    "currencyCode": "USD"
+  },
+  {
+    "id": "gid://shopify/Product/8592333471935",
+    "title": "Legend Of The Fall Camo Layering Series",
+    "vendor": "Camo Signal",
+    "status": "ACTIVE",
+    "productType": "Combo",
+    "descriptionHtml": "",
+    "tags": [
+      "best-seller",
+      "combo-builder"
+    ],
+    "totalInventory": 0,
+    "featuredImageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/LegendOfTheFallCamoLayeringSeries1.jpg?v=1788034094",
+    "images": [
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/LegendOfTheFallCamoLayeringSeries1.jpg?v=1788034094",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34779708719295"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/LegendOfTheFallCamoLayeringSeries6.jpg?v=1788034093",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34779708883135"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/LegendOfTheFallCamoLayeringSeries3.jpg?v=1788034094",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34779708784831"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/LegendOfTheFallCamoLayeringSeries2.jpg?v=1788034093",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34779708752063"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/LegendOfTheFallCamoLayeringSeries5.jpg?v=1788034093",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34779708850367"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/LegendOfTheFallCamoLayeringSeries4.jpg?v=1788034093",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34779708817599"
+      }
+    ],
+    "totalVariants": 24,
+    "variants": [
+      {
+        "id": "gid://shopify/ProductVariant/46110586044607",
+        "title": "Combo (Vest + Long-Sleeve) / S",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46110586077375",
+        "title": "Combo (Vest + Long-Sleeve) / M",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46110586110143",
+        "title": "Combo (Vest + Long-Sleeve) / L",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": -1
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46110586142911",
+        "title": "Combo (Vest + Long-Sleeve) / XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": -3
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46110586175679",
+        "title": "Combo (Vest + Long-Sleeve) / 2XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": -2
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46110586208447",
+        "title": "Combo (Vest + Long-Sleeve) / 3XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": -2
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46110586241215",
+        "title": "Combo (Vest + Long-Sleeve) / 4XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": -5
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46110586273983",
+        "title": "Combo (Vest + Long-Sleeve) / 5XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": -3
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46110586339519",
+        "title": "Quarter-Zipper Fleece Vest / S",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46110586372287",
+        "title": "Quarter-Zipper Fleece Vest / M",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46110586405055",
+        "title": "Quarter-Zipper Fleece Vest / L",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46110586437823",
+        "title": "Quarter-Zipper Fleece Vest / XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46110586470591",
+        "title": "Quarter-Zipper Fleece Vest / 2XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46110586503359",
+        "title": "Quarter-Zipper Fleece Vest / 3XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46110586536127",
+        "title": "Quarter-Zipper Fleece Vest / 4XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": -1
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46110586568895",
+        "title": "Quarter-Zipper Fleece Vest / 5XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46110586634431",
+        "title": "Full-Zipper Long-Sleeve / S",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": -1
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46110586667199",
+        "title": "Full-Zipper Long-Sleeve / M",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46110586699967",
+        "title": "Full-Zipper Long-Sleeve / L",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": -1
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46110586732735",
+        "title": "Full-Zipper Long-Sleeve / XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": -1
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46110586765503",
+        "title": "Full-Zipper Long-Sleeve / 2XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46110586798271",
+        "title": "Full-Zipper Long-Sleeve / 3XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": -1
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46110586831039",
+        "title": "Full-Zipper Long-Sleeve / 4XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46110586863807",
+        "title": "Full-Zipper Long-Sleeve / 5XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 0
+      }
+    ],
+    "currencyCode": "USD"
+  },
+  {
+    "id": "gid://shopify/Product/8599483678911",
+    "title": "The Upland Way Camo Layering Series",
+    "vendor": "Camo Signal",
+    "status": "ACTIVE",
+    "productType": "Combo",
+    "descriptionHtml": "",
+    "tags": [
+      "best-seller",
+      "combo-builder"
+    ],
+    "totalInventory": 0,
+    "featuredImageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/The_Upland_Way_Camo_Layering_Series_3_6b7303a4-bb6b-4dee-83ec-bf926f3cf9b0.jpg?v=1789380614",
+    "images": [
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/The_Upland_Way_Camo_Layering_Series_3_6b7303a4-bb6b-4dee-83ec-bf926f3cf9b0.jpg?v=1789380614",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34976144163007"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/The_Upland_Way_Camo_Layering_Series_2.jpg?v=1788417855",
+        "altText": "Combo lifestyle - The Upland Way Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34833494868159"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/The_Upland_Way_Camo_Layering_Series_3.jpg?v=1788417855",
+        "altText": "Combo lifestyle - The Upland Way Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34833494900927"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/The_Upland_Way_Camo_Layering_Series_4.jpg?v=1788417855",
+        "altText": "Vest - The Upland Way Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34833494966463"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/The_Upland_Way_Camo_Layering_Series_5.jpg?v=1788417855",
+        "altText": "Combo lifestyle - The Upland Way Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34833494933695"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/The_Upland_Way_Camo_Layering_Series_2_c649d1b2-8525-447c-8b77-d72eca13a277.jpg?v=1789380614",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34976144097471"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/The_Upland_Way_Camo_Layering_Series_b8c84fc2-3a19-496d-b02a-ea22b902c9c1.jpg?v=1789380614",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34976144130239"
+      }
+    ],
+    "totalVariants": 24,
+    "variants": [
+      {
+        "id": "gid://shopify/ProductVariant/46133376286911",
+        "title": "Combo (Vest + Long-Sleeve) / S",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 98
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46133376319679",
+        "title": "Combo (Vest + Long-Sleeve) / M",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46133376352447",
+        "title": "Combo (Vest + Long-Sleeve) / L",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46133376385215",
+        "title": "Combo (Vest + Long-Sleeve) / XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46133376417983",
+        "title": "Combo (Vest + Long-Sleeve) / 2XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46133376450751",
+        "title": "Combo (Vest + Long-Sleeve) / 3XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46133376483519",
+        "title": "Combo (Vest + Long-Sleeve) / 4XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46133376516287",
+        "title": "Combo (Vest + Long-Sleeve) / 5XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46133376581823",
+        "title": "Quarter-Zipper Fleece Vest / S",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46133376614591",
+        "title": "Quarter-Zipper Fleece Vest / M",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46133376647359",
+        "title": "Quarter-Zipper Fleece Vest / L",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46133376680127",
+        "title": "Quarter-Zipper Fleece Vest / XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46133376712895",
+        "title": "Quarter-Zipper Fleece Vest / 2XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46133376745663",
+        "title": "Quarter-Zipper Fleece Vest / 3XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46133376778431",
+        "title": "Quarter-Zipper Fleece Vest / 4XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46133376811199",
+        "title": "Quarter-Zipper Fleece Vest / 5XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46133376876735",
+        "title": "Full-Zipper Long-Sleeve / S",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46133376909503",
+        "title": "Full-Zipper Long-Sleeve / M",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46133376942271",
+        "title": "Full-Zipper Long-Sleeve / L",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46133376975039",
+        "title": "Full-Zipper Long-Sleeve / XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 98
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46133377007807",
+        "title": "Full-Zipper Long-Sleeve / 2XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 98
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46133377040575",
+        "title": "Full-Zipper Long-Sleeve / 3XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46133377073343",
+        "title": "Full-Zipper Long-Sleeve / 4XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46133377106111",
+        "title": "Full-Zipper Long-Sleeve / 5XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 100
+      }
+    ],
+    "currencyCode": "USD"
+  },
+  {
+    "id": "gid://shopify/Product/8608954908863",
+    "title": "Bruiser Camo Layering Series",
+    "vendor": "Camo Signal",
+    "status": "ACTIVE",
+    "productType": "Combo",
+    "descriptionHtml": "",
+    "tags": [
+      "combo-builder"
+    ],
+    "totalInventory": 0,
+    "featuredImageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Bruiser_Camo_Layering_Series_6d5f989c-706d-4fa5-920a-f1f3e0001492.jpg?v=1789013202",
+    "images": [
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Bruiser_Camo_Layering_Series_6d5f989c-706d-4fa5-920a-f1f3e0001492.jpg?v=1789013202",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34922691559615"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Bruiser_Camo_Layering_Series_2.jpg?v=1788936505",
+        "altText": "Combo lifestyle - Bruiser Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34903921688767"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Bruiser_Camo_Layering_Series_3.jpg?v=1788936505",
+        "altText": "Vest - Bruiser Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34903921721535"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Bruiser_Camo_Layering_Series_4.jpg?v=1788936505",
+        "altText": "Combo lifestyle - Bruiser Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34903921754303"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Bruiser_Camo_Layering_Series_1.jpg?v=1789013202",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34922691592383"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Bruiser_Camo_Layering_Series_6.jpg?v=1788936505",
+        "altText": "Long-Sleeve - Bruiser Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34903921819839"
+      }
+    ],
+    "totalVariants": 24,
+    "variants": [
+      {
+        "id": "gid://shopify/ProductVariant/46175500468415",
+        "title": "Combo (Vest + Long-Sleeve) / S",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175500501183",
+        "title": "Combo (Vest + Long-Sleeve) / M",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175500533951",
+        "title": "Combo (Vest + Long-Sleeve) / L",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175500566719",
+        "title": "Combo (Vest + Long-Sleeve) / XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 98
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175500599487",
+        "title": "Combo (Vest + Long-Sleeve) / 2XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175500632255",
+        "title": "Combo (Vest + Long-Sleeve) / 3XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175500665023",
+        "title": "Combo (Vest + Long-Sleeve) / 4XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175500697791",
+        "title": "Combo (Vest + Long-Sleeve) / 5XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175500763327",
+        "title": "Quarter-Zipper Fleece Vest / S",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175500796095",
+        "title": "Quarter-Zipper Fleece Vest / M",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175500828863",
+        "title": "Quarter-Zipper Fleece Vest / L",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175500861631",
+        "title": "Quarter-Zipper Fleece Vest / XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175500894399",
+        "title": "Quarter-Zipper Fleece Vest / 2XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175500927167",
+        "title": "Quarter-Zipper Fleece Vest / 3XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175500959935",
+        "title": "Quarter-Zipper Fleece Vest / 4XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175500992703",
+        "title": "Quarter-Zipper Fleece Vest / 5XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175501058239",
+        "title": "Full-Zipper Long-Sleeve / S",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175501091007",
+        "title": "Full-Zipper Long-Sleeve / M",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175501123775",
+        "title": "Full-Zipper Long-Sleeve / L",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175501156543",
+        "title": "Full-Zipper Long-Sleeve / XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175501189311",
+        "title": "Full-Zipper Long-Sleeve / 2XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175501222079",
+        "title": "Full-Zipper Long-Sleeve / 3XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175501254847",
+        "title": "Full-Zipper Long-Sleeve / 4XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175501287615",
+        "title": "Full-Zipper Long-Sleeve / 5XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 100
+      }
+    ],
+    "currencyCode": "USD"
+  },
+  {
+    "id": "gid://shopify/Product/8608954974399",
+    "title": "Monarch Camo Layering Series",
+    "vendor": "Camo Signal",
+    "status": "ACTIVE",
+    "productType": "Combo",
+    "descriptionHtml": "",
+    "tags": [
+      "combo-builder"
+    ],
+    "totalInventory": 0,
+    "featuredImageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Monarch_Camo_Layering_Series.jpg?v=1788936538",
+    "images": [
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Monarch_Camo_Layering_Series.jpg?v=1788936538",
+        "altText": "Combo - Monarch Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34903926243519"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Monarch_Camo_Layering_Series_2.jpg?v=1788936538",
+        "altText": "Combo lifestyle - Monarch Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34903926276287"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Monarch_Camo_Layering_Series_3.jpg?v=1788936538",
+        "altText": "Vest - Monarch Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34903926309055"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Monarch_Camo_Layering_Series_4.jpg?v=1788936538",
+        "altText": "Vest lifestyle - Monarch Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34903926341823"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Monarch_Camo_Layering_Series_5.jpg?v=1788936538",
+        "altText": "Long-Sleeve - Monarch Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34903926374591"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Monarch_Camo_Layering_Series_6.jpg?v=1788936538",
+        "altText": "Long-Sleeve lifestyle - Monarch Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34903926407359"
+      }
+    ],
+    "totalVariants": 24,
+    "variants": [
+      {
+        "id": "gid://shopify/ProductVariant/46175501451455",
+        "title": "Combo (Vest + Long-Sleeve) / S",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175501484223",
+        "title": "Combo (Vest + Long-Sleeve) / M",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175501516991",
+        "title": "Combo (Vest + Long-Sleeve) / L",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175501549759",
+        "title": "Combo (Vest + Long-Sleeve) / XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175501582527",
+        "title": "Combo (Vest + Long-Sleeve) / 2XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175501615295",
+        "title": "Combo (Vest + Long-Sleeve) / 3XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175501648063",
+        "title": "Combo (Vest + Long-Sleeve) / 4XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175501680831",
+        "title": "Combo (Vest + Long-Sleeve) / 5XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175501746367",
+        "title": "Quarter-Zipper Fleece Vest / S",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175501779135",
+        "title": "Quarter-Zipper Fleece Vest / M",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175501811903",
+        "title": "Quarter-Zipper Fleece Vest / L",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175501844671",
+        "title": "Quarter-Zipper Fleece Vest / XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175501877439",
+        "title": "Quarter-Zipper Fleece Vest / 2XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175501910207",
+        "title": "Quarter-Zipper Fleece Vest / 3XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175501942975",
+        "title": "Quarter-Zipper Fleece Vest / 4XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175501975743",
+        "title": "Quarter-Zipper Fleece Vest / 5XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175502041279",
+        "title": "Full-Zipper Long-Sleeve / S",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175502074047",
+        "title": "Full-Zipper Long-Sleeve / M",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175502106815",
+        "title": "Full-Zipper Long-Sleeve / L",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175502139583",
+        "title": "Full-Zipper Long-Sleeve / XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 99
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175502172351",
+        "title": "Full-Zipper Long-Sleeve / 2XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175502205119",
+        "title": "Full-Zipper Long-Sleeve / 3XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175502237887",
+        "title": "Full-Zipper Long-Sleeve / 4XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46175502270655",
+        "title": "Full-Zipper Long-Sleeve / 5XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 100
+      }
+    ],
+    "currencyCode": "USD"
+  },
+  {
+    "id": "gid://shopify/Product/8611563241663",
+    "title": "Rooster Camo Layering Series",
+    "vendor": "Camo Signal",
+    "status": "ACTIVE",
+    "productType": "Combo",
+    "descriptionHtml": "",
+    "tags": [
+      "combo-builder"
+    ],
+    "totalInventory": 0,
+    "featuredImageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Rooster_Camo_Layering_Series.jpg?v=1789012968",
+    "images": [
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Rooster_Camo_Layering_Series.jpg?v=1789012968",
+        "altText": "Combo - Rooster Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34922648109247"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Rooster_Camo_Layering_Series_2.jpg?v=1789012968",
+        "altText": "Combo lifestyle - Rooster Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34922648142015"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Rooster_Camo_Layering_Series_3.jpg?v=1789012968",
+        "altText": "Vest - Rooster Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34922648174783"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Rooster_Camo_Layering_Series_4.jpg?v=1789012968",
+        "altText": "Combo lifestyle - Rooster Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34922648207551"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Rooster_Camo_Layering_Series_5.jpg?v=1789012968",
+        "altText": "Long-Sleeve - Rooster Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34922648240319"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/Rooster_Camo_Layering_Series_6.jpg?v=1789012968",
+        "altText": "Combo lifestyle - Rooster Camo Layering Series",
+        "mediaId": "gid://shopify/MediaImage/34922648273087"
+      }
+    ],
+    "totalVariants": 24,
+    "variants": [
+      {
+        "id": "gid://shopify/ProductVariant/46182668566719",
+        "title": "Combo (Vest + Long-Sleeve) / S",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46182668599487",
+        "title": "Combo (Vest + Long-Sleeve) / M",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46182668632255",
+        "title": "Combo (Vest + Long-Sleeve) / L",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46182668665023",
+        "title": "Combo (Vest + Long-Sleeve) / XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46182668697791",
+        "title": "Combo (Vest + Long-Sleeve) / 2XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46182668730559",
+        "title": "Combo (Vest + Long-Sleeve) / 3XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46182668763327",
+        "title": "Combo (Vest + Long-Sleeve) / 4XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46182668796095",
+        "title": "Combo (Vest + Long-Sleeve) / 5XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46182668861631",
+        "title": "Quarter-Zipper Fleece Vest / S",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46182668894399",
+        "title": "Quarter-Zipper Fleece Vest / M",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46182668927167",
+        "title": "Quarter-Zipper Fleece Vest / L",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46182668959935",
+        "title": "Quarter-Zipper Fleece Vest / XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46182668992703",
+        "title": "Quarter-Zipper Fleece Vest / 2XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46182669025471",
+        "title": "Quarter-Zipper Fleece Vest / 3XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46182669058239",
+        "title": "Quarter-Zipper Fleece Vest / 4XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46182669091007",
+        "title": "Quarter-Zipper Fleece Vest / 5XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46182669156543",
+        "title": "Full-Zipper Long-Sleeve / S",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46182669189311",
+        "title": "Full-Zipper Long-Sleeve / M",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46182669222079",
+        "title": "Full-Zipper Long-Sleeve / L",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46182669254847",
+        "title": "Full-Zipper Long-Sleeve / XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46182669287615",
+        "title": "Full-Zipper Long-Sleeve / 2XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46182669320383",
+        "title": "Full-Zipper Long-Sleeve / 3XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46182669353151",
+        "title": "Full-Zipper Long-Sleeve / 4XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 100
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46182669385919",
+        "title": "Full-Zipper Long-Sleeve / 5XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 100
+      }
+    ],
+    "currencyCode": "USD"
+  },
+  {
+    "id": "gid://shopify/Product/8615306952895",
+    "title": "Buck Buck Boom Camo Layering Series",
+    "vendor": "Camo Signal",
+    "status": "ACTIVE",
+    "productType": "Combo",
+    "descriptionHtml": "",
+    "tags": [
+      "combo-builder"
+    ],
+    "totalInventory": 0,
+    "featuredImageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/BuckBuckBoomCamoLayeringSeries.jpg?v=1789196429",
+    "images": [
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/BuckBuckBoomCamoLayeringSeries.jpg?v=1789196429",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34948184211647"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/BuckBuckBoomCamoLayeringSeries_2.jpg?v=1789196429",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34948184047807"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/BuckBuckBoomCamoLayeringSeries_3.jpg?v=1789196429",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34948184080575"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/BuckBuckBoomCamoLayeringSeries_4.jpg?v=1789196429",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34948184113343"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/BuckBuckBoomCamoLayeringSeries_5.jpg?v=1789196429",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34948184146111"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/BuckBuckBoomCamoLayeringSeries_6.jpg?v=1789196429",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34948184178879"
+      }
+    ],
+    "totalVariants": 24,
+    "variants": [
+      {
+        "id": "gid://shopify/ProductVariant/46196273086655",
+        "title": "Combo (Vest + Long-Sleeve) / S",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196273119423",
+        "title": "Combo (Vest + Long-Sleeve) / M",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": -1
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196273152191",
+        "title": "Combo (Vest + Long-Sleeve) / L",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": -1
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196273184959",
+        "title": "Combo (Vest + Long-Sleeve) / XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": -1
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196273217727",
+        "title": "Combo (Vest + Long-Sleeve) / 2XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": -1
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196273250495",
+        "title": "Combo (Vest + Long-Sleeve) / 3XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196273283263",
+        "title": "Combo (Vest + Long-Sleeve) / 4XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196273316031",
+        "title": "Combo (Vest + Long-Sleeve) / 5XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196273348799",
+        "title": "Quarter-Zipper Fleece Vest / S",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196273381567",
+        "title": "Quarter-Zipper Fleece Vest / M",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196273414335",
+        "title": "Quarter-Zipper Fleece Vest / L",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196273447103",
+        "title": "Quarter-Zipper Fleece Vest / XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196273479871",
+        "title": "Quarter-Zipper Fleece Vest / 2XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196273512639",
+        "title": "Quarter-Zipper Fleece Vest / 3XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196273545407",
+        "title": "Quarter-Zipper Fleece Vest / 4XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196273578175",
+        "title": "Quarter-Zipper Fleece Vest / 5XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": -1
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196273610943",
+        "title": "Full-Zipper Long-Sleeve / S",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196273643711",
+        "title": "Full-Zipper Long-Sleeve / M",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196273676479",
+        "title": "Full-Zipper Long-Sleeve / L",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196273709247",
+        "title": "Full-Zipper Long-Sleeve / XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": -1
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196273742015",
+        "title": "Full-Zipper Long-Sleeve / 2XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196273774783",
+        "title": "Full-Zipper Long-Sleeve / 3XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196273807551",
+        "title": "Full-Zipper Long-Sleeve / 4XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196273840319",
+        "title": "Full-Zipper Long-Sleeve / 5XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 0
+      }
+    ],
+    "currencyCode": "USD"
+  },
+  {
+    "id": "gid://shopify/Product/8615315996863",
+    "title": "Hardhorn Camo Layering Series",
+    "vendor": "Camo Signal",
+    "status": "ACTIVE",
+    "productType": "Combo",
+    "descriptionHtml": "",
+    "tags": [
+      "combo-builder"
+    ],
+    "totalInventory": 0,
+    "featuredImageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/HardhornCamoLayeringSeries.jpg?v=1789196710",
+    "images": [
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/HardhornCamoLayeringSeries.jpg?v=1789196710",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34948267311295"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/HardhornCamoLayeringSeries_2.jpg?v=1789196710",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34948267147455"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/HardhornCamoLayeringSeries_3.jpg?v=1789196710",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34948267180223"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/HardhornCamoLayeringSeries_4.jpg?v=1789196710",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34948267212991"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/HardhornCamoLayeringSeries_5.jpg?v=1789196710",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34948267245759"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/HardhornCamoLayeringSeries_6.jpg?v=1789196710",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34948267278527"
+      }
+    ],
+    "totalVariants": 24,
+    "variants": [
+      {
+        "id": "gid://shopify/ProductVariant/46196294713535",
+        "title": "Combo (Vest + Long-Sleeve) / S",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196294746303",
+        "title": "Combo (Vest + Long-Sleeve) / M",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196294779071",
+        "title": "Combo (Vest + Long-Sleeve) / L",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": -1
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196294811839",
+        "title": "Combo (Vest + Long-Sleeve) / XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196294844607",
+        "title": "Combo (Vest + Long-Sleeve) / 2XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196294877375",
+        "title": "Combo (Vest + Long-Sleeve) / 3XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196294910143",
+        "title": "Combo (Vest + Long-Sleeve) / 4XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196294942911",
+        "title": "Combo (Vest + Long-Sleeve) / 5XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196294975679",
+        "title": "Quarter-Zipper Fleece Vest / S",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196295008447",
+        "title": "Quarter-Zipper Fleece Vest / M",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196295041215",
+        "title": "Quarter-Zipper Fleece Vest / L",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": -1
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196295073983",
+        "title": "Quarter-Zipper Fleece Vest / XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196295106751",
+        "title": "Quarter-Zipper Fleece Vest / 2XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196295139519",
+        "title": "Quarter-Zipper Fleece Vest / 3XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196295172287",
+        "title": "Quarter-Zipper Fleece Vest / 4XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196295205055",
+        "title": "Quarter-Zipper Fleece Vest / 5XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196295237823",
+        "title": "Full-Zipper Long-Sleeve / S",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196295270591",
+        "title": "Full-Zipper Long-Sleeve / M",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196295303359",
+        "title": "Full-Zipper Long-Sleeve / L",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196295336127",
+        "title": "Full-Zipper Long-Sleeve / XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196295368895",
+        "title": "Full-Zipper Long-Sleeve / 2XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196295401663",
+        "title": "Full-Zipper Long-Sleeve / 3XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196295434431",
+        "title": "Full-Zipper Long-Sleeve / 4XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46196295467199",
+        "title": "Full-Zipper Long-Sleeve / 5XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 0
+      }
+    ],
+    "currencyCode": "USD"
+  },
+  {
+    "id": "gid://shopify/Product/8616164327615",
+    "title": "Drop Tines Camo Layering Series",
+    "vendor": "Camo Signal",
+    "status": "ACTIVE",
+    "productType": "Combo",
+    "descriptionHtml": "",
+    "tags": [
+      "combo-builder"
+    ],
+    "totalInventory": 0,
+    "featuredImageUrl": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/DropTinesCamoLayeringSeries.jpg?v=1789232405",
+    "images": [
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/DropTinesCamoLayeringSeries.jpg?v=1789232405",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34954101162175"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/DropTinesCamoLayeringSeries_2.jpg?v=1789232405",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34954100998335"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/DropTinesCamoLayeringSeries_3.jpg?v=1789232405",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34954101031103"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/DropTinesCamoLayeringSeries_4.jpg?v=1789232405",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34954101063871"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/DropTinesCamoLayeringSeries_5.jpg?v=1789232405",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34954101096639"
+      },
+      {
+        "url": "https://cdn.shopify.com/s/files/1/0741/7987/0911/files/DropTinesCamoLayeringSeries_6.jpg?v=1789232405",
+        "altText": "",
+        "mediaId": "gid://shopify/MediaImage/34954101129407"
+      }
+    ],
+    "totalVariants": 24,
+    "variants": [
+      {
+        "id": "gid://shopify/ProductVariant/46197680308415",
+        "title": "Combo (Vest + Long-Sleeve) / S",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46197680341183",
+        "title": "Combo (Vest + Long-Sleeve) / M",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46197680373951",
+        "title": "Combo (Vest + Long-Sleeve) / L",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": -1
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46197680406719",
+        "title": "Combo (Vest + Long-Sleeve) / XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46197680439487",
+        "title": "Combo (Vest + Long-Sleeve) / 2XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46197680472255",
+        "title": "Combo (Vest + Long-Sleeve) / 3XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46197680505023",
+        "title": "Combo (Vest + Long-Sleeve) / 4XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46197680537791",
+        "title": "Combo (Vest + Long-Sleeve) / 5XL",
+        "sku": null,
+        "price": "69.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46197680570559",
+        "title": "Quarter-Zipper Fleece Vest / S",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46197680603327",
+        "title": "Quarter-Zipper Fleece Vest / M",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46197680636095",
+        "title": "Quarter-Zipper Fleece Vest / L",
+        "sku": null,
+        "price": "49.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46197680668863",
+        "title": "Quarter-Zipper Fleece Vest / XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46197680701631",
+        "title": "Quarter-Zipper Fleece Vest / 2XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46197680734399",
+        "title": "Quarter-Zipper Fleece Vest / 3XL",
+        "sku": null,
+        "price": "51.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46197680767167",
+        "title": "Quarter-Zipper Fleece Vest / 4XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46197680799935",
+        "title": "Quarter-Zipper Fleece Vest / 5XL",
+        "sku": null,
+        "price": "53.99",
+        "inventoryQuantity": -1
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46197680832703",
+        "title": "Full-Zipper Long-Sleeve / S",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46197680865471",
+        "title": "Full-Zipper Long-Sleeve / M",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46197680898239",
+        "title": "Full-Zipper Long-Sleeve / L",
+        "sku": null,
+        "price": "35.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46197680931007",
+        "title": "Full-Zipper Long-Sleeve / XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": -2
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46197680963775",
+        "title": "Full-Zipper Long-Sleeve / 2XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46197680996543",
+        "title": "Full-Zipper Long-Sleeve / 3XL",
+        "sku": null,
+        "price": "37.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46197681029311",
+        "title": "Full-Zipper Long-Sleeve / 4XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 0
+      },
+      {
+        "id": "gid://shopify/ProductVariant/46197681062079",
+        "title": "Full-Zipper Long-Sleeve / 5XL",
+        "sku": null,
+        "price": "39.99",
+        "inventoryQuantity": 0
+      }
+    ],
+    "currencyCode": "USD"
+  }
+]

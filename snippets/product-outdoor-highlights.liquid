@@ -1,11 +1,13 @@
 {% doc %}
   Renders an outdoor product overview beneath the product drawers.
-  @param {string} profile - Overview profile: upf-hoodie, combo, vest, or long-sleeve.
+  @param {string} profile - Overview profile: upf-hoodie, fleece-hoodie, combo, vest, or long-sleeve.
   @param {string} [active_profile] - Initially selected offer for a combo listing.
 {% enddoc %}
 
 {%- assign highlight_prefix = 'upf_highlights.' -%}
-{%- if profile == 'combo' or active_profile != blank -%}
+{%- if profile == 'fleece-hoodie' -%}
+  {%- assign highlight_prefix = 'fleece_hoodie_highlights.' -%}
+{%- elsif profile == 'combo' or active_profile != blank -%}
   {%- assign highlight_prefix = 'combo_highlights.' -%}
 {%- elsif profile == 'vest' -%}
   {%- assign highlight_prefix = 'vest_highlights.' -%}

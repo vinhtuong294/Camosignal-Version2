@@ -775,6 +775,7 @@
         "max_width": 2048,
         "columns_desktop": 4,
         "columns_mobile": "2",
+        "mobile_peek": true,
         "gap_desktop": 12,
         "gap_mobile": 12,
         "card_radius": 0,
@@ -923,43 +924,39 @@
           "type": "collection",
           "settings": {
             "collection": "deer",
-            "label": "Deer",
-            "icon": "none"
+            "label": "Deer"
           }
         },
         "turkey": {
           "type": "collection",
           "settings": {
             "collection": "turkey",
-            "label": "Turkey",
-            "icon": "none"
+            "label": "Turkey"
           }
         },
-        "saltwater_fishing": {
+        "waterfowl": {
           "type": "collection",
           "settings": {
-            "collection": "saltwater-fishing-t-shirt",
-            "label": "Saltwater Fishing",
-            "icon": "none"
+            "collection": "waterfowl-camo",
+            "label": "Waterfowl"
           }
         },
-        "freshwater_fishing": {
+        "upland": {
           "type": "collection",
           "settings": {
-            "collection": "fishing-t-shirt",
-            "label": "Freshwater Fishing",
-            "icon": "none"
+            "collection": "upland-camo",
+            "label": "Upland"
           }
         }
       },
       "block_order": [
         "deer",
         "turkey",
-        "saltwater_fishing",
-        "freshwater_fishing"
+        "waterfowl",
+        "upland"
       ],
       "settings": {
-        "heading": "",
+        "heading": "Shop your hunt",
         "button_label": "",
         "button_url": "",
         "offset_top_desktop": 0,

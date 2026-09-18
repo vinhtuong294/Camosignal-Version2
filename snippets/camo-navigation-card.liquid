@@ -1,0 +1,15 @@
+{% doc %}
+  Renders a featured navigation product.
+  @param {product} product - Featured product.
+{% enddoc %}
+<a class="camo-nav__card" href="{{ product.url }}">
+  <div class="camo-nav__photo">
+    {{ product.featured_image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '180, 300, 450, 600', sizes: '(min-width: 1200px) 20vw, 42vw', alt: product.title }}
+  </div>
+  <div class="camo-nav__card-info">
+    <span class="camo-nav__product-title">{{ product.title | escape }}</span>
+    <span class="camo-nav__card-bottom">
+      <span class="camo-nav__view">{{ 'camo_navigation.view' | t }} <span aria-hidden="true">&gt;</span></span>
+    </span>
+  </div>
+</a>

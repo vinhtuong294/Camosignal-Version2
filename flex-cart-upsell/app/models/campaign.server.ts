@@ -1,4 +1,5 @@
 import prisma from "../db.server";
+import { createAsyncTtlCache } from "../lib/async-ttl-cache";
 import { createDefaultCampaign } from "../lib/campaign-defaults";
 import type {
   CampaignDraft,
@@ -18,11 +19,8 @@ type StoredCampaign = {
   discountJson: string;
 };
 
-const catalogueCache = new Map<
-  string,
-  { expiresAt: number; products: ProductCandidate[] }
->();
 const catalogueCacheTtlMs = 5 * 60_000;
+const catalogueCache = createAsyncTtlCache<ProductCandidate[]>(catalogueCacheTtlMs);
 
 function invalidateCatalogueCache(shop: string) {
   catalogueCache.delete(shop);
@@ -144,6 +142,8 @@ export async function replaceProductSnapshots(
 ) {
   const upserts = products.map((product) =>
     prisma.productSnapshot.upsert({
+      // The caller only needs completion, not a copy of every variant JSON.
+      select: { id: true },
       where: {
         shop_productId: { shop, productId: product.productId },
       },
@@ -203,6 +203,7 @@ export async function reconcileProductSnapshots(
   const productIds = products.map((product) => product.productId);
   const upserts = products.map((product) =>
     prisma.productSnapshot.upsert({
+      select: { id: true },
       where: {
         shop_productId: { shop, productId: product.productId },
       },
@@ -275,9 +276,10 @@ export async function removeProductSnapshot(shop: string, productId: string) {
 }
 
 export async function getProductCatalogue(shop: string) {
-  const cached = catalogueCache.get(shop);
-  if (cached && cached.expiresAt > Date.now()) return cached.products;
+  return catalogueCache.get(shop, () => loadProductCatalogue(shop));
+}
 
+async function loadProductCatalogue(shop: string) {
   const snapshots = await prisma.productSnapshot.findMany({
     where: { shop },
     orderBy: [{ popularityScore: "desc" }, { title: "asc" }],
@@ -314,10 +316,6 @@ export async function getProductCatalogue(shop: string) {
     popularityScore: snapshot.popularityScore,
     variants: [],
   }));
-  catalogueCache.set(shop, {
-    expiresAt: Date.now() + catalogueCacheTtlMs,
-    products,
-  });
   return products;
 }
 

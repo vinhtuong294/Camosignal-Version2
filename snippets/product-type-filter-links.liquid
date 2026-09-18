@@ -1,0 +1,54 @@
+{% doc %}
+  Renders product-type filter links with case-insensitive duplicate values grouped together.
+
+  @param {filter} filter - The Shopify product type filter.
+{% enddoc %}
+
+{%- assign rendered_type_keys = '|' -%}
+
+{%- for value in filter.values -%}
+	{%- assign type_key = value.label | strip | downcase -%}
+	{%- capture type_marker -%}|{{- type_key -}}|{%- endcapture -%}
+
+	{%- unless rendered_type_keys contains type_marker -%}
+		{%- assign grouped_type_values = '' -%}
+		{%- assign grouped_type_active = false -%}
+		{%- assign grouped_type_available = false -%}
+
+		{%- for candidate in filter.values -%}
+			{%- assign candidate_key = candidate.label | strip | downcase -%}
+			{%- if candidate_key == type_key -%}
+				{%- if candidate.count > 0 or candidate.active -%}
+					{%- capture grouped_type_values -%}
+						{{- grouped_type_values -}}
+						{%- if grouped_type_values != blank -%}|||{%- endif -%}
+						{{- candidate.value -}}
+					{%- endcapture -%}
+					{%- assign grouped_type_available = true -%}
+				{%- endif -%}
+				{%- if candidate.active -%}
+					{%- assign grouped_type_active = true -%}
+				{%- endif -%}
+			{%- endif -%}
+		{%- endfor -%}
+
+		{%- if grouped_type_available -%}
+			{%- assign rendered_type_keys = rendered_type_keys | append: type_key | append: '|' -%}
+			<li class="filter-list__item">
+				<a
+					href="javascript:void(0);"
+					class="filter-list__collection-link js-clothing-type-link{% if grouped_type_active %} filter-list__collection-link--active{% endif %}"
+					data-product-type="{{ value.value | escape }}"
+					data-product-types="{{ grouped_type_values | escape }}"
+				>
+					<span class="custom-checkbox-icon"></span>
+					{%- if collection.handle == 'game-day' and value.value == '3D Tshirt' -%}
+						{{- 'general.filters.game_day_jersey' | t -}}
+					{%- else -%}
+						{{- value.label | upcase -}}
+					{%- endif -%}
+				</a>
+			</li>
+		{%- endif -%}
+	{%- endunless -%}
+{%- endfor -%}

@@ -5,6 +5,8 @@ import {
 import { createCarouselMotion } from "../lib/carousel-motion.ts";
 import { enableHorizontalDrag } from "../lib/carousel-drag.ts";
 import { cartRecentlyProducts } from "../lib/cart-recently.ts";
+import { readShopifyUpsellConfig, shopifyRecommendations } from "../lib/shopify-recommendations.ts";
+import { createAsyncTtlCache } from "../lib/async-ttl-cache.ts";
 
 (() => {
   window.__flexUpsellCoreRequested = true;
@@ -13,6 +15,7 @@ import { cartRecentlyProducts } from "../lib/cart-recently.ts";
   const instances = new Set();
   const boundThemeEventBuses = new WeakSet();
   const addErrorTimers = new WeakMap();
+  const trackedViews = new Set();
   let globalListenersBound = false;
   let refreshTimer;
 
@@ -212,6 +215,7 @@ import { cartRecentlyProducts } from "../lib/cart-recently.ts";
 
   const storefrontProductCache = new Map();
   const recentlyMetadataCache = new Map();
+  const shopifyJsonCache = createAsyncTtlCache(60_000, 64);
   const recentJson = async (url) => {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 6000);
@@ -234,7 +238,18 @@ import { cartRecentlyProducts } from "../lib/cart-recently.ts";
       }
       metadata = await request;
     }
-    if (!metadata?.id || metadata.requiresCustomization) return null;
+    if (!metadata?.id || metadata.requiresCustomization || metadata.excludedFromUpsell) return null;
+    const product = await storefrontProduct(metadata);
+    return product ? { ...product, ...metadata } : null;
+  };
+  const shopifyJson = (url) => shopifyJsonCache.get(url, () => recentJson(url));
+  const loadUpsellProduct = async (candidate) => {
+    const metadata = candidate.metadataVersion === 1 ? candidate
+      : await shopifyJson(`${productUrl(candidate.handle)}?view=cart-recently`);
+    // A missing template or malformed metadata must never expose a customize
+    // product as a standard quick-add item.
+    if (metadata?.metadataVersion !== 1 || !metadata.id
+      || typeof metadata.requiresCustomization !== "boolean" || metadata.excludedFromUpsell) return null;
     const product = await storefrontProduct(metadata);
     return product ? { ...product, ...metadata } : null;
   };
@@ -331,7 +346,9 @@ import { cartRecentlyProducts } from "../lib/cart-recently.ts";
     const handle = String(product?.handle || "").trim();
     if (!handle) return Promise.resolve(null);
     const cached = storefrontProductCache.get(handle);
-    if (cached) return cached;
+    if (cached && cached.expires > Date.now()) {
+      return cached.request.then(live => live ? { ...product, ...live } : null);
+    }
 
     const request = (async () => {
       try {
@@ -387,7 +404,9 @@ import { cartRecentlyProducts } from "../lib/cart-recently.ts";
             ? liveProduct.featured_image
             : liveProduct.featured_image?.src;
         return {
-          ...product,
+          id: liveProduct.id,
+          handle: liveProduct.handle || handle,
+          title: liveProduct.title,
           imageUrl: liveImage || product.imageUrl,
           price: moneyValue(liveProduct.price, product.price),
           compareAtPrice: moneyValue(
@@ -401,8 +420,13 @@ import { cartRecentlyProducts } from "../lib/cart-recently.ts";
       }
     })();
 
-    storefrontProductCache.set(handle, request);
-    return request;
+    const entry = { request, expires: Date.now() + 60_000 };
+    storefrontProductCache.set(handle, entry);
+    if (storefrontProductCache.size > 64) storefrontProductCache.delete(storefrontProductCache.keys().next().value);
+    return request.then(live => {
+      if (!live && storefrontProductCache.get(handle) === entry) storefrontProductCache.delete(handle);
+      return live ? { ...product, ...live } : null;
+    });
   };
 
   const sessionKey = () => {
@@ -561,6 +585,13 @@ import { cartRecentlyProducts } from "../lib/cart-recently.ts";
 
       try {
         const placement = this.dataset.placement || "CART_DRAWER";
+        const previewThemeId = this.dataset.themeId || document.querySelector('meta[name="camosignal-upsell-preview-theme"]')?.content;
+        const shopifyConfig = readShopifyUpsellConfig(this.dataset.shopifyConfig, placement, previewThemeId);
+        this.trackingDisabled = Boolean(shopifyConfig);
+        if (shopifyConfig && !shopifyConfig.enabled) {
+          this.renderHost()?.replaceChildren();
+          return;
+        }
         let productIds;
         let subtotal = 0;
         let itemCount = 0;
@@ -595,7 +626,9 @@ import { cartRecentlyProducts } from "../lib/cart-recently.ts";
           let history = [];
           try {
             history = JSON.parse(localStorage.getItem("theme_recently_viewed") || "[]");
-          } catch {}
+          } catch {
+            // Storage can be unavailable in privacy-restricted browsers.
+          }
           const currentHandle = document.querySelector(
             '[data-section-type="product"][data-product-handle]',
           )?.dataset.productHandle;
@@ -622,7 +655,23 @@ import { cartRecentlyProducts } from "../lib/cart-recently.ts";
           item_count: String(itemCount),
         });
         let payload;
-        try {
+        if (shopifyConfig) {
+          payload = {
+            appearance: shopifyConfig.appearance,
+            discount: shopifyConfig.discount,
+            recommendations: await shopifyRecommendations({
+              productIds,
+              limit: shopifyConfig.maxProducts,
+              allowCustomization: placement === "PRODUCT_PAGE",
+              loadRelated: async (id) => {
+                const result = await shopifyJson(`${storefrontRoot()}recommendations/products.json?product_id=${encodeURIComponent(id)}&limit=10&intent=related`);
+                return Array.isArray(result?.products) ? result.products : [];
+              },
+              loadFallback: () => shopifyJson(`${storefrontRoot()}collections/best-sellers?view=cart-recently&sort_by=best-selling`),
+              loadProduct: loadUpsellProduct,
+            }),
+          };
+        } else try {
           const response = await fetch(`${this.dataset.endpoint}?${params}`, {
             headers: { Accept: "application/json" },
           });
@@ -1663,7 +1712,13 @@ import { cartRecentlyProducts } from "../lib/cart-recently.ts";
     }
 
     track(eventType, productId, value) {
-      if (!this.dataset.eventsEndpoint) return Promise.resolve();
+      if (this.trackingDisabled || !this.dataset.eventsEndpoint) return Promise.resolve();
+      const viewKey = `${this.dataset.placement}:${productId}`;
+      if (eventType === "VIEW") {
+        if (trackedViews.has(viewKey)) return Promise.resolve();
+        if (trackedViews.size >= 500) trackedViews.delete(trackedViews.values().next().value);
+        trackedViews.add(viewKey);
+      }
       const body = new URLSearchParams({
         placement: this.dataset.placement || "CART_DRAWER",
         eventType,

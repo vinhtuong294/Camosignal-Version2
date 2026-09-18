@@ -10,13 +10,12 @@ const EMPTY_METRICS: PlacementMetrics = {
 };
 
 export async function getDashboardMetrics(shop: string) {
-  const events = await prisma.upsellEvent.findMany({
+  // Aggregate in Postgres instead of transferring the entire event history.
+  const events = await prisma.upsellEvent.groupBy({
+    by: ["eventType", "placement"],
     where: { shop },
-    select: {
-      eventType: true,
-      placement: true,
-      value: true,
-    },
+    _count: { _all: true },
+    _sum: { value: true },
   });
   const metrics: Record<Placement, PlacementMetrics> = {
     PRODUCT_PAGE: { ...EMPTY_METRICS },
@@ -31,11 +30,11 @@ export async function getDashboardMetrics(shop: string) {
         : event.placement === "CART_PAGE"
           ? "CART_PAGE"
           : "CART_DRAWER";
-    if (event.eventType === "VIEW") metrics[placement].views += 1;
-    if (event.eventType === "CLICK") metrics[placement].clicks += 1;
+    if (event.eventType === "VIEW") metrics[placement].views += event._count._all;
+    if (event.eventType === "CLICK") metrics[placement].clicks += event._count._all;
     if (event.eventType === "ADD") {
-      metrics[placement].conversions += 1;
-      metrics[placement].conversionValue += event.value ?? 0;
+      metrics[placement].conversions += event._count._all;
+      metrics[placement].conversionValue += event._sum.value ?? 0;
     }
   }
 

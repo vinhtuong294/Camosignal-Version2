@@ -220,24 +220,7 @@
 							>
 								<div class="js-accordion-inner product-filters__form-item-content">
 									<ul class="filter-list filter-list--sidebar filter-list--collection-custom js-clothing-filter-list js-filter-list">
-										{%- for value in product_type_filter.values -%}
-											{%- if value.count > 0 or value.active -%}
-												<li class="filter-list__item">
-													<a
-														href="javascript:void(0);"
-														class="filter-list__collection-link js-clothing-type-link{% if value.active %} filter-list__collection-link--active{% endif %}"
-														data-product-type="{{ value.value | escape }}"
-													>
-														<span class="custom-checkbox-icon"></span>
-														{%- if collection.handle == 'game-day' and value.value == '3D Tshirt' -%}
-															{{- 'general.filters.game_day_jersey' | t -}}
-														{%- else -%}
-															{{- value.label | upcase -}}
-														{%- endif -%}
-													</a>
-												</li>
-											{%- endif -%}
-										{%- endfor -%}
+										{%- render 'product-type-filter-links', filter: product_type_filter -%}
 										{%- if show_game_day_jersey -%}
 											{%- unless game_day_jersey_in_filter -%}
 												<li class="filter-list__item">
@@ -811,89 +794,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 	syncHiddenCustomInputs();
-
-	/* ---- Clothing Type Filter ---- */
-	function initClothingFilter() {
-		const url = new URL(window.location.href);
-		const activeTypes = new Set(url.searchParams.getAll('filter.p.product_type'));
-		const clothingLinks = document.querySelectorAll('.js-clothing-type-link');
-
-		clothingLinks.forEach(link => {
-			const typeAttr = link.getAttribute('data-product-type');
-			if (!typeAttr) return;
-			link.classList.toggle('filter-list__collection-link--active', activeTypes.has(typeAttr));
-		});
-
-		document.querySelectorAll('.js-clothing-accordion').forEach(accordion => {
-			const accordionBtn = accordion.querySelector('.js-clothing-accordion-btn');
-			const accordionContent = accordion.querySelector('.js-clothing-accordion-content');
-			const counter = accordion.querySelector('.js-clothing-counter');
-
-			if (activeTypes.size > 0) {
-				accordion.classList.add('is-active');
-				if (accordionBtn) {
-					accordionBtn.classList.add('is-active');
-					accordionBtn.setAttribute('aria-expanded', 'true');
-				}
-				if (accordionContent) {
-					accordionContent.style.height = 'auto';
-					accordionContent.classList.add('is-active');
-				}
-				if (counter) counter.style.display = 'inline';
-			} else if (counter) {
-				counter.style.display = 'none';
-			}
-		});
-	}
-	initClothingFilter();
-
-	/* Click handler for clothing links */
-	document.addEventListener('click', (e) => {
-		const typeLink = e.target.closest('.js-clothing-type-link');
-		if (!typeLink) return;
-		e.preventDefault();
-
-		/* Don't navigate if disabled (Coming Soon) */
-		if (typeLink.classList.contains('filter-list__clothing-disabled')) return;
-
-		const productTypeAttr = typeLink.getAttribute('data-product-type');
-		if (!productTypeAttr) return;
-
-		const typesToApply = [productTypeAttr];
-		const typesToApplyStr = [...typesToApply].sort().join(',');
-
-		const url = new URL(window.location.href);
-		const activeTypes = url.searchParams.getAll('filter.p.product_type');
-		const activeTypesStr = activeTypes.sort().join(',');
-
-		const form = typeLink.closest('form.js-form') || document.querySelector('form.js-form');
-		if (!form) return;
-
-		if (activeTypesStr === typesToApplyStr) {
-			/* Already active — remove the filter */
-			form.querySelectorAll('input[name="filter.p.product_type"]').forEach(chk => chk.checked = false);
-		} else {
-			/* Apply the type filter, keep all other params */
-			form.querySelectorAll('input[name="filter.p.product_type"]').forEach(chk => chk.checked = false);
-			typesToApply.forEach(t => {
-				let existing = form.querySelector(`input[name="filter.p.product_type"][value="${t.replace(/"/g, '\\"')}"]`);
-				if (existing) {
-					existing.checked = true;
-				} else {
-					const chk = document.createElement('input');
-					chk.className = 'js-appended-hidden-filter';
-					chk.type = 'checkbox';
-					chk.name = 'filter.p.product_type';
-					chk.value = t;
-					chk.checked = true;
-					chk.style.display = 'none';
-					form.appendChild(chk);
-				}
-			});
-		}
-
-		form.dispatchEvent(new Event('change', {bubbles: true}));
-	});
 
 	/* ---- Generalized Static Filters (Hunting, Terrain, Colors, Size) ---- */
 	function initCustomFilters() {

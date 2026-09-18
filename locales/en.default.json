@@ -8,6 +8,43 @@
  * ------------------------------------------------------------
  */
 {
+	"camo_navigation": {
+		"new_arrivals": "New Arrivals",
+		"best_sellers": "Best Sellers",
+		"hunting": "Hunting",
+		"fishing": "Fishing",
+		"products": "Products",
+		"lifestyle": "Lifestyle",
+		"halloween": "Halloween",
+		"contact_us": "Contact Us",
+		"deer": "Deer",
+		"turkey": "Turkey",
+		"waterfowl": "Waterfowl",
+		"upland": "Upland",
+		"freshwater": "Freshwater",
+		"saltwater": "Saltwater",
+		"curated_sets": "Curated Sets",
+		"t_shirts": "T-Shirts",
+		"long_sleeves": "Long Sleeves",
+		"sweatshirts": "Sweatshirts",
+		"hoodies": "Hoodies",
+		"fleece_hoodie": "Fleece Hoodie",
+		"uv_hoodies": "UV Hoodies",
+		"waterproof_jacket": "Waterproof Jacket",
+		"hats": "Hats",
+		"youth_tees": "Youth Tees",
+		"faith_outdoors": "Faith & Outdoors",
+		"national_parks": "National Parks",
+		"patriotic": "Patriotic",
+		"built_for_dad": "Built For Dad",
+		"halloween_hunt": "Halloween Hunt",
+		"spooky_kids": "Spooky Kids",
+		"featured": "Featured",
+		"view": "View",
+		"back": "Back to main menu",
+		"close": "Close menu",
+		"account": "My account"
+	},
 	"upf_highlights": {
 		"accessibility_label": "UPF hoodie features",
 		"best_use_label": "Best Use:",
@@ -23,6 +60,22 @@
 		"conditions": "Sunny, Hot Weather (Summer)",
 		"layering_label": "Layering Position",
 		"layering": "Outer Layer / Standalone"
+	},
+	"fleece_hoodie_highlights": {
+		"accessibility_label": "Fleece hoodie features",
+		"best_use_label": "Best Use:",
+		"best_use": "Cold Weather Outdoor Activities",
+		"description": "Engineered with warm fleece insulation and a soft-touch fabric construction, this hoodie helps retain body heat while providing comfortable coverage in cold conditions. Lightweight, flexible, and designed for unrestricted movement, it is ideal for outdoor activities and daily layering during fall and winter.",
+		"weight_label": "Weight",
+		"weight": "37 oz / 1050 g",
+		"protection_label": "Protection",
+		"protection": "Light Wind Resistance & Thermal Warmth",
+		"material_label": "Material",
+		"material": "280 GSM High-Stretch Polyester Fleece Fabric (Soft-Touch, Breathable, Moisture-Wicking)",
+		"conditions_label": "Conditions",
+		"conditions": "Fall & Winter Seasons",
+		"layering_label": "Layering Position",
+		"layering": "Mid Layer / Outer Layer"
 	},
 	"combo_highlights": {
 		"accessibility_label": "Outdoor combo features",
@@ -670,6 +723,20 @@
 			"copy_code_success": "Code copied successfully",
 			"gift_card_image_alt": "Gift card image"
 		}
+	},
+	"camo_footer": {
+		"email_address": "Email address",
+		"support": "Need help?",
+		"my_camo_signal": "My Camo Signal",
+		"our_story": "Our story",
+		"our_store": "Our store",
+		"contact": "Contact information",
+		"shipping": "Shipping policy",
+		"refund": "Refund policy",
+		"about": "About us",
+		"privacy": "Privacy policy",
+		"terms": "Terms of service",
+		"copyright": "© {{ year }} - CAMO SIGNAL. ALL RIGHTS RESERVED."
 	},
 	"newsletter": {
 		"label": "Email",

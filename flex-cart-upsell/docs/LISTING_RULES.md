@@ -72,7 +72,8 @@
 - Chỉ thêm design tag khi design đó có ít nhất hai dòng áo khác nhau, hoặc khi sản phẩm cũ cùng design đã có biến thể dòng áo tương ứng.
 - Không sửa design tag của sản phẩm cũ đúng tag.
 - Nếu sản phẩm cũ cùng bộ design chưa có tag và đủ điều kiện, bổ sung đúng một design tag cho sản phẩm đó.
-- Mỗi design tag mới phải được kiểm tra trùng trước khi thêm vào bảng `TAG DESIGN` trong Lark.
+- Không sử dụng bảng `TAG DESIGN` trong Lark: không yêu cầu tạo bảng, không đọc/ghi hoặc chặn listing vì thiếu bảng này. Quy tắc này áp dụng từ 16/09/2026 theo yêu cầu người dùng.
+- Vẫn kiểm tra và đồng bộ design tag trực tiếp trên Shopify theo các quy tắc cùng design ở trên.
 - Nếu đã có tag trùng hoặc tên design xung đột, dùng tag canonical phù hợp với bộ áo hiện có.
 
 ## 8. Collection
@@ -135,3 +136,21 @@ Khi người dùng yêu cầu listing, hãy đọc file này trước rồi xác
 - Không tạo option màu cho UPF Hoodie; ảnh mask/gaiter và hoodie đưa vào gallery theo bộ ZIP, nhưng không gán ảnh theo màu/variant như áo có màu.
 - Tồn kho mặc định là 100 cho mọi variant; giữ Draft, không publish và ghi URL về Lark.
 - Nếu chỉ có `UPF Hoodie` không kèm `Face Mask`, tiếp tục dùng cấu trúc UPF size-only theo mục 3/5.
+
+## 13. Fleece Hoodie
+
+- `Fleece Hoodie` hiện là dòng không có lựa chọn màu; dùng option `Size` và dải size theo template đã duyệt (hiện tại S–5XL).
+- Duplicate từ `Marsh Tested Camo Fleece Hoodie` hoặc Fleece Hoodie gần nhất đã được duyệt để giữ category, bảng giá và cấu trúc variant.
+- Giữ thứ tự ảnh trong ZIP: ảnh sản phẩm chính trước, sau đó mặt sau/chi tiết, cuối cùng là ảnh lifestyle. Không gán media riêng cho từng size.
+- Gán vào `All`, `NEW ARRIVALS`, `Hunting Hoodie` và collection chủ đề phù hợp (`Waterfowl` cho thiết kế vịt/nước; `Deer Hunting` cho thiết kế deer/rut).
+- Tồn kho mặc định 100 từng variant, chỉ điền `Sold Count Base`, giữ Draft và ghi Shopify URL về Lark.
+
+## 14. Waterproof Jacket
+
+- Duplicate từ sản phẩm Waterproof Jacket do người dùng đã listing và duyệt; không dựng sản phẩm từ đầu.
+- Product type là `Waterproof Jacket`; chỉ có option `Size` gồm `S`, `M`, `L`, `XL`, `2XL`, `3XL`, `4XL`, `5XL`.
+- Giữ bảng giá theo size, compare-at price, description, product category và các dữ liệu kế thừa khác từ template.
+- Thứ tự gallery theo mẫu đã duyệt: ảnh chính, ảnh số 4, ảnh số 5, ảnh số 6, ảnh số 3, ảnh số 2; ảnh bổ sung (nếu có) đặt sau chuỗi này.
+- Collection nền gồm `All`, `NEW ARRIVALS` và collection săn bắn phù hợp xác định từ design hiện có hoặc Weekly Design Plan.
+- Chỉ gắn tag `design:` khi đã có sản phẩm Shopify khác cùng design; tuyệt đối không sao chép design tag không liên quan từ template.
+- Mặc định Draft, stock 100 từng variant, có `Sold Count Base`, và ghi Shopify admin URL về đúng record Lark.

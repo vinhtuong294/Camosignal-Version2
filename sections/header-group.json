@@ -181,22 +181,12 @@
           "settings": {
             "text": "BECOME CLUB MEMBER AND GET SPECIAL OFFERS"
           }
-        },
-        "selleasy_lb_upsell_widget_bl_MniJze": {
-          "type": "shopify://apps/selleasy/blocks/lb-upsell-widget-bl/790c1a03-a71f-4bc1-9869-00dad526d3c2",
-          "settings": {}
-        },
-        "selleasy_lb_upsell_widget_icuc_9VJKpa": {
-          "type": "shopify://apps/selleasy/blocks/lb-upsell-widget-icuc/790c1a03-a71f-4bc1-9869-00dad526d3c2",
-          "settings": {}
         }
       },
       "block_order": [
         "items",
         "selling",
-        "benefit",
-        "selleasy_lb_upsell_widget_bl_MniJze",
-        "selleasy_lb_upsell_widget_icuc_9VJKpa"
+        "benefit"
       ],
       "settings": {
         "enable_color_scheme_inheritance": true,

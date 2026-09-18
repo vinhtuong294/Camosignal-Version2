@@ -1,0 +1,13 @@
+{% doc %}
+  @param {product} item - Product metadata for collection recommendations.
+{% enddoc %}
+{
+  "id": {{ item.id | append: '' | json }},
+  "handle": {{ item.handle | json }},
+  "title": {{ item.title | json }},
+  "url": {{ item.url | json }},
+  "available": {{ item.available | json }},
+  "physical": {{ item.selected_or_first_available_variant.requires_shipping | json }},
+  "tags": {{ item.tags | json }},
+  "collections": {{ item.collections | map: 'handle' | json }}
+}

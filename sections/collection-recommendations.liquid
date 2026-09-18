@@ -1,0 +1,584 @@
+{%- liquid
+  assign source_keys = 'hats,beanie-embroidery-hat,game-day-jersey,youth-tees,pocket-tee,curated-sets,uv-hoodies,fleece-hoodie,waterproof-jacket,long-sleeves,hoodies,sweatshirts,t-shirts' | split: ','
+  assign current_handles = product.collections | map: 'handle'
+  assign source_key = ''
+  for key in source_keys
+    assign setting_key = key | replace: '-', '_'
+    assign configured = section.settings[setting_key] | default: collections[key]
+    if configured != blank and current_handles contains configured.handle
+      assign source_key = key
+      break
+    endif
+  endfor
+  case source_key
+    when 't-shirts', 'pocket-tee', 'game-day-jersey'
+      assign allocation = 'long-sleeves:4,hoodies:4'
+    when 'long-sleeves'
+      assign allocation = 'hoodies:4,t-shirts:2,pocket-tee:2'
+    when 'hoodies'
+      assign allocation = 'long-sleeves:4,t-shirts:2,pocket-tee:2'
+    when 'sweatshirts'
+      assign allocation = 'hoodies:4,long-sleeves:4'
+    when 'youth-tees'
+      assign allocation = 'hoodies:4,t-shirts:2,pocket-tee:2'
+    when 'fleece-hoodie'
+      assign allocation = 'curated-sets:4,uv-hoodies:4'
+    when 'curated-sets'
+      assign allocation = 'uv-hoodies:4,waterproof-jacket:4'
+    when 'uv-hoodies'
+      assign allocation = 'curated-sets:4,waterproof-jacket:4'
+    when 'waterproof-jacket', 'hats', 'beanie-embroidery-hat'
+      assign allocation = 'curated-sets:4,fleece-hoodie:4'
+  endcase
+  assign color_scheme = section.settings.color_scheme
+  if section.settings.enable_color_scheme_inheritance
+    assign color_scheme = settings.main_color_scheme
+  endif
+  assign container_width = section.settings.container_width
+  if container_width == 'inherit' or container_width == blank
+    assign container_width = settings.container_width
+  endif
+-%}
+{%- if allocation != blank -%}
+  {%- render 'adastra' with '/src/styles/carousel.scss' -%}
+  {%- render 'adastra' with '/src/styles/featured-products.scss' -%}
+  {%- render 'adastra' with '/src/styles/product-card.scss' -%}
+  {%- render 'collection-recommendations-styles', section: section -%}
+  {%- capture config -%}
+  {
+    "current": {% render 'collection-recommendation-product', item: product %},
+    "source": {{ source_key | json }},
+    "relatedCollections": [
+      {%- assign related_collections = product.collections | sort: 'all_products_count' -%}
+      {%- assign excluded_collection_handles = ',new-arrival,new-arrivals,best-seller,best-sellers,' -%}
+      {%- assign related_collection_count = 0 -%}
+      {%- for related_collection in related_collections -%}
+        {%- assign bounded_handle = ',' | append: related_collection.handle | append: ',' -%}
+        {%- if excluded_collection_handles contains bounded_handle -%}
+          {%- continue -%}
+        {%- endif -%}
+        {%- if related_collection_count > 0 -%},{%- endif -%}
+        {{ related_collection.handle | json }}
+        {%- assign related_collection_count = related_collection_count | plus: 1 -%}
+      {%- endfor -%}
+    ],
+    "groups": [
+      {%- assign groups = allocation | split: ',' -%}
+      {%- for group in groups -%}
+        {%- assign parts = group | split: ':' -%}
+        {%- assign key = parts | first -%}
+        {%- assign setting_key = key | replace: '-', '_' -%}
+        {%- assign target = section.settings[setting_key] | default: collections[key] -%}
+        {"key": {{ key | json }}, "handle": {{ target.handle | json }}, "url": {{ target.url | json }}, "quota": {{ parts | last | plus: 0 }}}
+        {%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    ],
+    "classification": {
+      {%- for key in source_keys -%}
+        {%- assign setting_key = key | replace: '-', '_' -%}
+        {%- assign target = section.settings[setting_key] | default: collections[key] -%}
+        {{ key | json }}: {{ target.handle | default: key | json }}{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    }
+  }
+  {%- endcapture -%}
+  <collection-recommendations data-section-id="{{ section.id }}" style="display:block">
+    <script type="application/json" data-collection-recommendation-config>{{ config | replace: '</', '<\/' }}</script>
+    <section hidden class="featured-products product-recommendations section-animate featured-products--layout-4 color-{{ color_scheme.id | default: color_scheme }} animated" id="{{ section.id }}"
+      style="--container-width:{{ container_width }};--inner-offset-top:{{ section.settings.inner_offset_top }}px;--inner-offset-bottom:{{ section.settings.inner_offset_bottom }}px;--inner-offset-top-mobile:{{ section.settings.inner_offset_top_mobile }}px;--inner-offset-bottom-mobile:{{ section.settings.inner_offset_bottom_mobile }}px;--product-recommendations-heading-size-desktop:{{ section.settings.heading_font_size_desktop | default: 36 }}px;--product-recommendations-heading-size-mobile:{{ section.settings.heading_font_size_mobile | default: 25 }}px;">
+      <div class="container">
+        <div class="featured-products__header product-recommendations__header"><h2>{{ section.settings.heading }}</h2></div>
+        <div class="js-product-recommendations-content product-recommendations__carousel-shell">
+          <div class="featured-products__slider swiper js-featured-products-slider" data-slides-in-row="4">
+            <div class="featured-products__row swiper-wrapper"></div>
+            <div class="product-recommendations__mobile-pagination js-product-recommendations-mobile-pagination"></div>
+          </div>
+          <div class="product-recommendations__navigation">
+            <button type="button" class="focus-visible-outline swiper-button-prev-new product-recommendations__arrow product-recommendations__arrow--prev" aria-label="{{ 'general.accessibility.slider.prev_slide_message' | t | escape }}">{% render 'icons', icon: 'arrow-left' %}</button>
+            <button type="button" class="focus-visible-outline swiper-button-next-new product-recommendations__arrow product-recommendations__arrow--next" aria-label="{{ 'general.accessibility.slider.next_slide_message' | t | escape }}">{% render 'icons', icon: 'arrow-right' %}</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </collection-recommendations>
+{%- endif -%}
+
+{% javascript %}
+(() => {
+  const requests = new Map();
+  const normalize = value => String(value || '').trim().toLowerCase();
+  const designTags = product => (product.tags || []).map(normalize).filter(tag => tag.startsWith('design:'));
+  const designStem = product => normalize(product.handle).replace(/-(?:back|front)$/, '').replace(/-(?:sun-protection-hoodie|waterproof-jacket|fleece-hoodie|long-sleeve|long-sleeves|pocket-tee|t-shirt|sweatshirt|hoodie|youth-tee|jersey)$/, '');
+  function score(product, current, classification) {
+    const tags = designTags(current);
+    const sameDesign = designTags(product).some(tag => tags.includes(tag));
+    const stem = designStem(current);
+    const sameStem = stem.length > 3 && stem === designStem(product);
+    const excluded = new Set([...Object.values(classification), 'all', 'frontpage', 'new-arrival', 'new-arrivals', 'best-seller', 'best-sellers']);
+    const themes = (current.collections || []).filter(handle => !excluded.has(handle));
+    const overlap = (product.collections || []).filter(handle => themes.includes(handle)).length;
+    return (sameDesign || sameStem ? 10000 : 0) + overlap;
+  }
+  function selectProducts(config, pools, excluded) {
+    const selected = new Set([config.current.handle, ...excluded]);
+    const classified = Object.entries(config.classification);
+    const relatedCollections = config.relatedCollections || [];
+    const collectionIndex = product => relatedCollections.findIndex(handle => (product.collections || []).includes(handle));
+    const byPriority = (a, b) => a.collectionIndex - b.collectionIndex || b.rank - a.rank || a.index - b.index;
+    const ranked = config.groups.map(group => (pools.get(group.key) || []).filter(product => {
+      if (!product.available || !product.physical || selected.has(product.handle)) return false;
+      if (collectionIndex(product) < 0) return false;
+      const category = classified.find(([, handle]) => (product.collections || []).includes(handle));
+      return category && category[0] === group.key;
+    }).map((product, index) => ({product, index, collectionIndex: collectionIndex(product), rank: score(product, config.current, config.classification)}))
+      .sort(byPriority));
+    const buckets = ranked.map(() => []);
+    const take = (index, count) => {
+      for (const {product} of ranked[index]) {
+        if (count <= 0) break;
+        if (selected.has(product.handle)) continue;
+        selected.add(product.handle);
+        buckets[index].push({...product, group: config.groups[index].key});
+        count -= 1;
+      }
+    };
+    // Fill each quota from the smallest collection first, advancing only for missing slots.
+    config.groups.forEach((group, index) => take(index, group.quota));
+    let missing = 8 - buckets.flat().length;
+    // Reallocate only after all related collections have been exhausted for a missing group.
+    const remaining = ranked.flatMap((items, groupIndex) => items.map(item => ({...item, groupIndex}))).sort(byPriority);
+    for (const {product, groupIndex} of remaining) {
+      if (missing <= 0) break;
+      if (selected.has(product.handle)) continue;
+      selected.add(product.handle);
+      buckets[groupIndex].push({...product, group: config.groups[groupIndex].key});
+      missing -= 1;
+    }
+    const result = [];
+    const secondary = buckets.slice(1);
+    const second = [];
+    while (secondary.some(bucket => bucket.length)) {
+      secondary.forEach(bucket => { if (bucket.length) second.push(bucket.shift()); });
+    }
+    while (buckets[0]?.length || second.length) {
+      if (buckets[0]?.length) result.push(buckets[0].shift());
+      if (second.length) result.push(second.shift());
+    }
+    return result.slice(0, 8);
+  }
+  async function cachedFetch(url) {
+    const key = url.toString();
+    if (!requests.has(key)) {
+      const request = fetch(key, {signal: AbortSignal.timeout(15000), credentials: 'same-origin'})
+        .then(response => {
+          if (!response.ok) throw new Error(`Collection cross-sell: HTTP ${response.status}`);
+          return response.text();
+        }).catch(error => { requests.delete(key); throw error; });
+      requests.set(key, request);
+    }
+    return requests.get(key);
+  }
+  async function limitedMap(items, action) {
+    const result = new Array(items.length);
+    let cursor = 0;
+    await Promise.all(Array.from({length: Math.min(4, items.length)}, async () => {
+      while (cursor < items.length) {
+        const index = cursor++;
+        try { result[index] = await action(items[index]); } catch { result[index] = null; }
+      }
+    }));
+    return result;
+  }
+  async function loadCollection(group) {
+    if (!group.url || !group.handle) return [];
+    const url = new URL(group.url, location.origin);
+    url.searchParams.set('view', 'cross-sell-candidates');
+    url.searchParams.set('page', '1');
+    const first = JSON.parse(await cachedFetch(url));
+    if (first.collection !== group.handle) throw new Error('Unexpected recommendation collection');
+    const pages = Array.from({length: Math.max(0, Math.min(first.pages, 250) - 1)}, (_, index) => index + 2);
+    const rest = await limitedMap(pages, async page => {
+      const next = new URL(url);
+      next.searchParams.set('page', page);
+      const data = JSON.parse(await cachedFetch(next));
+      if (data.collection !== group.handle || data.page !== page) throw new Error('Unexpected recommendation page');
+      return data.products;
+    });
+    return [...first.products, ...rest.filter(Boolean).flat()];
+  }
+  class CollectionRecommendations extends HTMLElement {
+    connectedCallback() {
+      if (this.started) return;
+      this.started = true;
+      this.run = 0;
+      this.failed = new Set();
+      this.config = JSON.parse(this.querySelector('[data-collection-recommendation-config]').textContent);
+      this.section = this.querySelector('section');
+      this.row = this.querySelector('.swiper-wrapper');
+      this.slider = this.querySelector('.swiper');
+      this.onThemeReady = () => this.mountSlider();
+      document.addEventListener('theme:all:loaded', this.onThemeReady);
+      if ('IntersectionObserver' in window && !window.Shopify?.designMode) {
+        this.intersection = new IntersectionObserver(entries => {
+          if (entries.some(entry => entry.isIntersecting)) {
+            this.intersection.disconnect();
+            this.load();
+          }
+        }, {rootMargin: '1000px'});
+        this.intersection.observe(this);
+      } else this.load();
+    }
+    disconnectedCallback() {
+      this.started = false;
+      this.run += 1;
+      this.intersection?.disconnect();
+      this.existingObserver?.disconnect();
+      this.resize?.disconnect();
+      clearTimeout(this.refreshTimer);
+      this.slider?.swiper?.destroy(true, true);
+      document.removeEventListener('theme:all:loaded', this.onThemeReady);
+    }
+    excludedHandles() {
+      const handles = new Set(this.failed);
+      document.querySelectorAll('.product-recommendations').forEach(section => {
+        if (this.contains(section)) return;
+        section.querySelectorAll('.js-featured-products-slide[data-product-handle]').forEach(slide => {
+          if (!slide.classList.contains('product-recommendations__candidate-fallback') && !slide.hidden) {
+            handles.add(slide.dataset.productHandle);
+          }
+        });
+      });
+      return handles;
+    }
+    async load() {
+      if (this.loading) return;
+      this.loading = true;
+      const generation = this.run;
+      const lists = await limitedMap(this.config.groups, group => loadCollection(group));
+      if (!this.isConnected || generation !== this.run) return;
+      this.pools = new Map(this.config.groups.map((group, index) => [group.key, lists[index] || []]));
+      await this.refresh();
+      if (!this.isConnected) return;
+      this.existingObserver = new MutationObserver(() => {
+        clearTimeout(this.refreshTimer);
+        this.refreshTimer = setTimeout(() => this.refresh(), 200);
+      });
+      document.querySelectorAll('.product-recommendations').forEach(section => {
+        if (!this.contains(section)) this.existingObserver.observe(section, {
+          childList: true, subtree: true, attributes: true, attributeFilter: ['hidden', 'data-product-handle']
+        });
+      });
+      this.refresh();
+    }
+    async refresh() {
+      if (!this.pools || !this.isConnected) return;
+      const generation = ++this.run;
+      let picks = selectProducts(this.config, this.pools, this.excludedHandles());
+      const signature = picks.map(product => product.handle).join(',');
+      if (signature === this.signature) return;
+      let cards = [];
+      for (let attempt = 0; attempt < 3; attempt += 1) {
+        cards = await limitedMap(picks, async product => {
+          const url = new URL(product.url, location.origin);
+          url.searchParams.set('view', 'cross-sell-card');
+          const parsed = new DOMParser().parseFromString(await cachedFetch(url), 'text/html');
+          const card = parsed.querySelector('.js-featured-products-slide');
+          if (!card || card.dataset.productHandle !== product.handle) throw new Error('Unavailable recommendation');
+          card.dataset.collectionRecommendationGroup = product.group;
+          return card;
+        });
+        if (!this.isConnected || generation !== this.run) return;
+        const missing = picks.filter((_, index) => !cards[index]);
+        if (!missing.length) break;
+        missing.forEach(product => this.failed.add(product.handle));
+        if (attempt < 2) picks = selectProducts(this.config, this.pools, this.excludedHandles());
+      }
+      // The upper section can change while product cards are being fetched.
+      const excluded = this.excludedHandles();
+      if (cards.some(card => card && excluded.has(card.dataset.productHandle))) return this.refresh();
+      this.slider.swiper?.destroy(true, true);
+      this.row.replaceChildren(...cards.filter(Boolean));
+      this.signature = picks.map(product => product.handle).join(',');
+      this.section.hidden = !this.row.children.length;
+      this.dataset.loaded = 'true';
+      this.dataset.count = String(this.row.children.length);
+      if (this.row.children.length) this.mountSlider();
+    }
+    mountSlider() {
+      const Swiper = window.themeCore?.utils?.Swiper;
+      if (!Swiper || !this.isConnected || this.section.hidden) return;
+      if (this.slider.swiper) { this.slider.swiper.update(); return; }
+      const prev = this.querySelector('.product-recommendations__arrow--prev');
+      const next = this.querySelector('.product-recommendations__arrow--next');
+      const pagination = this.querySelector('.product-recommendations__mobile-pagination');
+      const updateLayout = () => {
+        this.section.classList.toggle('is-mobile-layout', this.section.clientWidth < 768);
+        const image = this.row.querySelector('.product-card__image');
+        if (image) this.querySelector('.product-recommendations__carousel-shell').style.setProperty('--product-recommendations-arrow-top', `${image.offsetTop + image.offsetHeight / 2}px`);
+      };
+      updateLayout();
+      new Swiper(this.slider, {
+        grabCursor: true,
+        speed: matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 550,
+        slidesPerView: 2,
+        slidesPerGroup: 2,
+        spaceBetween: 16,
+        roundLengths: false,
+        watchOverflow: true,
+        rewind: true,
+        breakpoints: {768: {slidesPerView: 3, slidesPerGroup: 3, spaceBetween: 12}, 1200: {slidesPerView: 4, slidesPerGroup: 4, spaceBetween: 12}},
+        navigation: {prevEl: prev, nextEl: next},
+        pagination: {el: pagination, type: 'bullets', clickable: true, bulletElement: 'button'},
+        on: {init: () => this.section.classList.add('is-initialized'), resize: updateLayout}
+      });
+      this.resize?.disconnect();
+      this.resize = new ResizeObserver(updateLayout);
+      this.resize.observe(this.section);
+    }
+  }
+  if (!customElements.get('collection-recommendations')) customElements.define('collection-recommendations', CollectionRecommendations);
+})();
+
+{% endjavascript %}
+{% schema %}
+{
+  "name": "Collection cross-sell",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_color_scheme_inheritance",
+      "label": "Enable color scheme inheritance",
+      "default": true,
+      "info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Pairs Well With"
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size_desktop",
+      "min": 18,
+      "max": 64,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading font size desktop",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size_mobile",
+      "min": 14,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading font size mobile",
+      "default": 22
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "container_width",
+      "label": "Container width",
+      "options": [
+        {
+          "value": "1808px",
+          "label": "Default - 1680px"
+        },
+        {
+          "value": "2048px",
+          "label": "Large - 1920px"
+        },
+        {
+          "value": "100%",
+          "label": "Full width"
+        },
+        {
+          "value": "inherit",
+          "label": "Inherit of general setting"
+        }
+      ],
+      "default": "inherit",
+      "info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+    },
+    {
+      "type": "paragraph",
+      "content": "External offsets"
+    },
+    {
+      "type": "range",
+      "id": "offset_top_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop external offset top",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "offset_bottom_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop external offset bottom",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "offset_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile external offset top",
+      "default": 25
+    },
+    {
+      "type": "range",
+      "id": "offset_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile external offset bottom",
+      "default": 25
+    },
+    {
+      "type": "paragraph",
+      "content": "Internal offsets"
+    },
+    {
+      "type": "range",
+      "id": "inner_offset_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop internal offset top",
+      "default": 25
+    },
+    {
+      "type": "range",
+      "id": "inner_offset_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop internal offset bottom",
+      "default": 25
+    },
+    {
+      "type": "range",
+      "id": "inner_offset_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile internal offset top",
+      "default": 25
+    },
+    {
+      "type": "range",
+      "id": "inner_offset_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile internal offset bottom",
+      "default": 25
+    },
+    {
+      "type": "header",
+      "content": "Product collections"
+    },
+    {
+      "type": "collection",
+      "id": "hats",
+      "label": "Hats"
+    },
+    {
+      "type": "collection",
+      "id": "beanie_embroidery_hat",
+      "label": "Beanie Embroidery Hat"
+    },
+    {
+      "type": "collection",
+      "id": "game_day_jersey",
+      "label": "Game Day Jersey"
+    },
+    {
+      "type": "collection",
+      "id": "youth_tees",
+      "label": "Youth Tees"
+    },
+    {
+      "type": "collection",
+      "id": "pocket_tee",
+      "label": "Pocket Tee"
+    },
+    {
+      "type": "collection",
+      "id": "curated_sets",
+      "label": "Curated Sets"
+    },
+    {
+      "type": "collection",
+      "id": "uv_hoodies",
+      "label": "Uv Hoodies"
+    },
+    {
+      "type": "collection",
+      "id": "fleece_hoodie",
+      "label": "Fleece Hoodie"
+    },
+    {
+      "type": "collection",
+      "id": "waterproof_jacket",
+      "label": "Waterproof Jacket"
+    },
+    {
+      "type": "collection",
+      "id": "long_sleeves",
+      "label": "Long Sleeves"
+    },
+    {
+      "type": "collection",
+      "id": "hoodies",
+      "label": "Hoodies"
+    },
+    {
+      "type": "collection",
+      "id": "sweatshirts",
+      "label": "Sweatshirts"
+    },
+    {
+      "type": "collection",
+      "id": "t_shirts",
+      "label": "T Shirts"
+    }
+  ],
+  "enabled_on": {
+    "templates": [
+      "product"
+    ]
+  },
+  "presets": [
+    {
+      "name": "Collection cross-sell"
+    }
+  ]
+}
+{% endschema %}

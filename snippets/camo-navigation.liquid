@@ -1,0 +1,231 @@
+{% doc %}
+  Shared desktop mega menu and mobile drill-down navigation.
+  @param {string} mode - Desktop or mobile navigation.
+  @param {string} [color_scheme] - Drawer color scheme.
+  @param {linklist} [mobile_top_menu] - Utility navigation.
+  @param {boolean} [is_language_selector_enabled] - Show language selection.
+  @param {boolean} [is_country_selector_enabled] - Show country selection.
+{% enddoc %}
+{% assign groups = 'hunting,fishing,products,lifestyle,halloween' | split: ',' %}
+{% capture chevron %}<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>{% endcapture %}
+{% if mode == 'desktop' %}
+  <nav class="header-menu camo-nav camo-nav--desktop" aria-label="{{ 'layout.navigation.main_menu' | t | escape }}" data-camo-desktop>
+    <ul class="camo-nav__main" role="list">
+      <li class="camo-nav__item"><a class="camo-nav__trigger" href="/collections/new-arrivals"{% if request.path == '/collections/new-arrivals' %} aria-current="page"{% endif %}>{{ 'camo_navigation.new_arrivals' | t }}</a></li>
+      <li class="camo-nav__item"><a class="camo-nav__trigger" href="/collections/best-sellers"{% if request.path == '/collections/best-sellers' %} aria-current="page"{% endif %}>{{ 'camo_navigation.best_sellers' | t }}</a></li>
+      {% for group in groups %}
+        {% assign label_key = 'camo_navigation.' | append: group %}
+        <li class="camo-nav__item">
+          <details class="camo-nav__group">
+            <summary class="camo-nav__trigger" aria-controls="CamoNav-{{ section.id }}-{{ group }}">
+              <span{% if group == 'halloween' %} class="camo-nav__halloween"{% endif %}>{{ label_key | t }}</span>{{ chevron }}
+            </summary>
+            <div class="camo-nav__mega" id="CamoNav-{{ section.id }}-{{ group }}">
+              <div class="camo-nav__mega-inner">{% render 'camo-navigation-group', group: group %}</div>
+            </div>
+          </details>
+        </li>
+      {% endfor %}
+      <li class="camo-nav__item"><a class="camo-nav__trigger" href="/pages/contact"{% if request.path == '/pages/contact' %} aria-current="page"{% endif %}>{{ 'camo_navigation.contact_us' | t }}</a></li>
+    </ul>
+  </nav>
+{% else %}
+  <div id="headerDrawerMenu" class="drawer drawer--left header-mobile camo-nav camo-nav--mobile color-{{ color_scheme }}" data-menu-type="main" data-camo-mobile role="dialog" aria-modal="true" aria-labelledby="headerDrawerMenuTitle">
+    <span class="visually-hidden" id="headerDrawerMenuTitle">{{ 'layout.navigation.drawer_menu' | t }}</span>
+    <div class="camo-nav__mobile-header">
+      <button class="camo-nav__icon camo-nav__back" type="button" data-camo-back aria-label="{{ 'camo_navigation.back' | t | escape }}" hidden>{{ chevron }}</button>
+      <a class="camo-nav__brand" href="{{ routes.root_url }}" data-camo-brand>
+        {% if section.settings.logo != blank %}
+          {{ section.settings.logo | image_url: width: 320 | image_tag: widths: '160, 320', sizes: '150px', alt: shop.name }}
+        {% else %}{{ shop.name | escape }}{% endif %}
+      </a>
+      <span class="camo-nav__mobile-title" data-camo-title hidden></span>
+      <button class="camo-nav__icon camo-nav__close" type="button" data-camo-close aria-label="{{ 'camo_navigation.close' | t | escape }}"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m5 5 14 14M19 5 5 19"/></svg></button>
+    </div>
+    <div class="drawer__body header-mobile__body camo-nav__mobile-body js-mobile-header-main-menu js-scroll-lock-container">
+      <nav data-camo-root aria-label="{{ 'layout.navigation.main_menu' | t | escape }}">
+        <ul class="camo-nav__mobile-main" role="list">
+          <li><a class="camo-nav__mobile-row" href="/collections/new-arrivals"{% if request.path == '/collections/new-arrivals' %} aria-current="page"{% endif %}>{{ 'camo_navigation.new_arrivals' | t }}</a></li>
+          <li><a class="camo-nav__mobile-row" href="/collections/best-sellers"{% if request.path == '/collections/best-sellers' %} aria-current="page"{% endif %}>{{ 'camo_navigation.best_sellers' | t }}</a></li>
+          {% for group in groups %}
+            {% assign label_key = 'camo_navigation.' | append: group %}
+            <li><button class="camo-nav__mobile-row" type="button" data-camo-enter="{{ group }}" aria-controls="CamoMobile-{{ section.id }}-{{ group }}" aria-expanded="false"><span{% if group == 'halloween' %} class="camo-nav__halloween"{% endif %}>{{ label_key | t }}</span><span class="camo-nav__circle">{{ chevron }}</span></button></li>
+          {% endfor %}
+          <li><a class="camo-nav__mobile-row" href="/pages/contact"{% if request.path == '/pages/contact' %} aria-current="page"{% endif %}>{{ 'camo_navigation.contact_us' | t }}</a></li>
+        </ul>
+        {% if mobile_top_menu.links != blank %}
+          <ul class="camo-nav__utilities" role="list">
+            {% for link in mobile_top_menu.links %}<li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>{% endfor %}
+          </ul>
+        {% endif %}
+        {% if shop.customer_accounts_enabled %}<a class="camo-nav__account" href="{{ routes.account_url }}">{{ 'camo_navigation.account' | t }}</a>{% endif %}
+        {% if is_language_selector_enabled or is_country_selector_enabled %}
+          <div class="camo-nav__localization">
+            {% if is_language_selector_enabled %}{% render 'language-localization-form', class: 'header-mobile', id_prefix: 'header-mobile', form_id: 'header-mobile-localization-form' %}{% endif %}
+            {% if is_country_selector_enabled %}{% render 'country-localization-form', class: 'header-mobile', id_prefix: 'header-mobile', form_id: 'header-mobile-country-form' %}{% endif %}
+          </div>
+        {% endif %}
+      </nav>
+      {% for group in groups %}
+        {% assign label_key = 'camo_navigation.' | append: group %}
+        <nav class="camo-nav__mobile-panel" id="CamoMobile-{{ section.id }}-{{ group }}" data-camo-panel="{{ group }}" aria-label="{{ label_key | t | escape }}" hidden>{% render 'camo-navigation-group', group: group %}</nav>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .camo-nav { color: #29392f; }
+  .camo-nav [hidden] { display: none !important; }
+  .camo-nav a { color: inherit; text-decoration: none; }
+  .camo-nav button { color: inherit; cursor: pointer; }
+  .camo-nav .camo-nav__halloween { color: #d36118; }
+  .camo-nav a.camo-nav__trigger:is(:hover, [aria-current]) { text-decoration: underline; text-underline-offset: 6px; }
+  .camo-nav :is(a, button, summary):focus-visible { outline: 2px solid #536346; outline-offset: 4px; }
+  .camo-nav ul { list-style: none; margin: 0; padding: 0; }
+  .header .camo-nav--desktop { display: none; position: static; }
+  .camo-nav__column-heading { margin: 0 0 16px; padding: 0 0 12px; border-bottom: 2px solid #46534b; font-family: var(--font-heading-family); font-size: 14px; line-height: 1.4; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+  .camo-nav__links a { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 5px 0; font-size: 14px; line-height: 1.35; text-transform: uppercase; }
+  .camo-nav__collection-arrow { flex: 0 0 16px; width: 16px; height: 16px; transition: transform .18s ease; }
+  .camo-nav__links a:is(:hover, :focus-visible) .camo-nav__collection-arrow { transform: translateX(3px); }
+  .camo-nav__links a:hover, .camo-nav__links a[aria-current] { text-decoration: underline; text-underline-offset: 4px; }
+  .camo-nav__cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+  .camo-nav__card { min-width: 0; overflow: hidden; border: 1px solid #e4e6e3; border-radius: 7px; background: #fff; box-shadow: 0 3px 5px #00000012; }
+  .camo-nav__photo { aspect-ratio: 4 / 5; overflow: hidden; background: #f6f6f6; isolation: isolate; }
+  .camo-nav__photo img { display: block; width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; transition: transform .25s ease; }
+  .camo-nav__card:hover .camo-nav__photo img { transform: scale(1.025); }
+  .camo-nav__card-info { display: block; padding: 12px; border-top: 1px solid #e4e6e3; }
+  .camo-nav__product-title { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; text-overflow: ellipsis; white-space: normal; font-family: var(--font-heading-family); font-size: 12px; font-weight: 700; line-height: 1.4; text-transform: uppercase; }
+  .camo-nav__card-bottom { display: flex; align-items: center; justify-content: space-between; gap: 5px; margin-top: 5px; font-size: 15px; line-height: 1.4; }
+  .camo-nav__view { font-size: 11px; text-transform: uppercase; }
+  #headerDrawerMenu.camo-nav--mobile { top: 0; height: 100dvh; max-width: none; width: 90%; background: #fff; color: #242724; z-index: 100; }
+  .camo-nav__mobile-header { display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; align-items: center; flex-shrink: 0; box-sizing: border-box; height: calc(var(--header-height, 73px) + env(safe-area-inset-top, 0px)); min-height: calc(64px + env(safe-area-inset-top, 0px)); padding: env(safe-area-inset-top, 0px) 10px 0; border-bottom: 1px solid #e6e6e6; }
+  .camo-nav__icon { display: flex; justify-content: center; align-items: center; width: 44px; height: 44px; padding: 0; border: 0; background: none; }
+  .camo-nav__back { grid-column: 1; grid-row: 1; }
+  .camo-nav__back svg { transform: rotate(180deg); }
+  .camo-nav__close { grid-column: 3; grid-row: 1; }
+  .camo-nav__brand, .camo-nav__mobile-title { grid-column: 2; grid-row: 1; justify-self: center; text-align: center; }
+  .camo-nav__brand img { width: auto; max-width: 70px; height: auto; max-height: 44px; object-fit: contain; }
+  .camo-nav__mobile-title { font-family: var(--font-heading-family); font-size: 22px; line-height: 1.4; font-weight: 700; text-transform: uppercase; text-decoration: none; }
+  #headerDrawerMenu .camo-nav__mobile-body { display: block; flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 16px 24px max(32px, env(safe-area-inset-bottom, 0px)); }
+  .camo-nav__mobile-row { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 68px; padding: 12px 0; gap: 12px; border: 0; border-bottom: 1px solid #e6e6e6; background: none; font-family: var(--font-heading-family); font-size: 21px; font-weight: 700; line-height: 1.2; text-align: start; text-transform: uppercase; }
+  .camo-nav .camo-nav__mobile-row, .camo-nav .camo-nav__mobile-row > span { font-family: var(--heading-font-family) !important; }
+  .camo-nav__circle { display: flex; align-items: center; justify-content: center; flex: 0 0 36px; height: 36px; border: 1px solid #e7e7e7; border-radius: 50%; }
+  .camo-nav__circle svg { width: 16px; height: 16px; }
+  .camo-nav__utilities { display: flex; flex-wrap: wrap; gap: 12px 20px; margin-top: 32px !important; font-size: 13px; }
+  .camo-nav__account { display: inline-block; margin-top: 24px; font-size: 14px; }
+  .camo-nav__localization { margin-top: 24px; }
+  .camo-nav__mobile-panel .camo-nav__links-column > h2 { display: none; }
+  .camo-nav__mobile-panel .camo-nav__links a { display: flex; align-items: center; min-height: 62px; padding: 14px 0; border-bottom: 1px solid #e6e6e6; font-size: 17px; line-height: 1.4; }
+  .camo-nav__mobile-panel .camo-nav__featured { margin-top: 40px; }
+  .camo-nav__mobile-panel .camo-nav__column-heading { font-size: 16px; letter-spacing: 0; border: 0; padding: 0; margin-bottom: 18px; }
+  .camo-nav__mobile-panel .camo-nav__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 18px; }
+  .camo-nav__mobile-panel .camo-nav__card { border: 0; border-radius: 0; box-shadow: none; }
+  .camo-nav__mobile-panel .camo-nav__card-info { border: 0; padding: 10px 0 0; }
+  .camo-nav__mobile-panel .camo-nav__product-title { font-family: var(--font-body-family); font-size: 14px; font-weight: 400; line-height: 1.4; white-space: normal; text-transform: none; }
+  .camo-nav__mobile-panel .camo-nav__card-bottom { display: none; }
+  .camo-nav__mobile-panel .camo-nav__view { display: none; }
+  @media (max-width: 1199px) {
+    html.is-mobile-nav-open shopify-chat { display: none !important; }
+  }
+  @media (min-width: 1200px) {
+    .header .camo-nav--desktop { display: flex; }
+    #headerDrawerMenu.camo-nav--mobile { display: none; }
+    .camo-nav__main { display: flex; align-items: center; gap: clamp(24px, 2.4vw, 42px); }
+    .camo-nav__item, .camo-nav__group { position: static; }
+    .camo-nav__trigger { display: flex; align-items: center; gap: 7px; padding: 26px 0; cursor: pointer; list-style: none; font-family: var(--font-heading-family); font-size: 16px; line-height: 1.4; font-weight: 700; text-transform: uppercase; white-space: nowrap; }
+    .camo-nav__trigger::-webkit-details-marker { display: none; }
+    .camo-nav__trigger > svg { width: 12px; height: 12px; transform: rotate(90deg); transition: transform .18s ease; }
+    .camo-nav__group[open] > summary > svg { transform: rotate(-90deg); }
+    .camo-nav__group[open] > summary > span { text-decoration: underline; text-underline-offset: 6px; }
+    .camo-nav__mega { position: absolute; top: 100%; left: 0; right: 0; width: 100%; background: #fff; border-top: 1px solid #e6e8e5; box-shadow: 0 12px 18px #00000012; max-height: calc(100dvh - var(--header-height, 100px) - 40px); overflow-y: auto; }
+    .camo-nav__mega-inner { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 28px; max-width: 1600px; margin: 0 auto; padding: 32px 38px 24px; }
+  }
+  @media (min-width: 1200px) and (max-width: 1439px) {
+    .camo-nav__main { gap: 14px; }
+    .camo-nav__trigger { font-size: 14px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .camo-nav *, #headerDrawerMenu.camo-nav--mobile { transition: none !important; }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (() => {
+    function initNavigation(scope = document) {
+      scope.querySelectorAll('[data-camo-desktop]:not([data-camo-ready])').forEach(nav => {
+        nav.dataset.camoReady = 'true';
+        const groups = [...nav.querySelectorAll('details')];
+        let closeTimer;
+        let openTimer;
+        const close = (except) => groups.forEach(group => { if (group !== except) group.open = false; });
+        groups.forEach(group => {
+          group.addEventListener('toggle', () => { if (group.open) close(group); });
+          group.addEventListener('pointerenter', event => {
+            if (event.pointerType !== 'mouse') return;
+            clearTimeout(closeTimer);
+            clearTimeout(openTimer);
+            openTimer = setTimeout(() => { close(group); group.open = true; }, 120);
+          });
+          group.querySelector('summary').addEventListener('click', () => clearTimeout(openTimer));
+          group.addEventListener('pointerleave', event => {
+            clearTimeout(openTimer);
+            if (event.pointerType === 'mouse') closeTimer = setTimeout(() => { group.open = false; }, 160);
+          });
+        });
+        nav.addEventListener('keydown', event => {
+          if (event.key !== 'Escape') return;
+          const open = groups.find(group => group.open);
+          close();
+          open?.querySelector('summary').focus();
+        });
+        nav.addEventListener('focusout', () => {
+          queueMicrotask(() => { if (!nav.contains(document.activeElement)) close(); });
+        });
+        document.addEventListener('click', event => { if (!nav.contains(event.target)) close(); });
+        matchMedia('(min-width: 1200px)').addEventListener('change', () => close());
+      });
+      scope.querySelectorAll('[data-camo-mobile]:not([data-camo-ready])').forEach(drawer => {
+        drawer.dataset.camoReady = 'true';
+        const root = drawer.querySelector('[data-camo-root]');
+        const back = drawer.querySelector('[data-camo-back]');
+        const brand = drawer.querySelector('[data-camo-brand]');
+        const title = drawer.querySelector('[data-camo-title]');
+        const body = drawer.querySelector('.camo-nav__mobile-body');
+        const entries = [...drawer.querySelectorAll('[data-camo-enter]')];
+        const panels = [...drawer.querySelectorAll('[data-camo-panel]')];
+        let activeEntry;
+        function showRoot(restoreFocus = false) {
+          root.hidden = false;
+          brand.hidden = false;
+          back.hidden = true;
+          title.hidden = true;
+          panels.forEach(panel => { panel.hidden = true; });
+          entries.forEach(entry => entry.setAttribute('aria-expanded', 'false'));
+          body.scrollTop = 0;
+          if (restoreFocus) activeEntry?.focus();
+        }
+        entries.forEach(entry => entry.addEventListener('click', () => {
+          const panel = panels.find(item => item.dataset.camoPanel === entry.dataset.camoEnter);
+          if (!panel) return;
+          activeEntry = entry;
+          root.hidden = true;
+          brand.hidden = true;
+          back.hidden = false;
+          title.hidden = false;
+          title.textContent = entry.querySelector('span').textContent;
+          panels.forEach(item => { item.hidden = item !== panel; });
+          entry.setAttribute('aria-expanded', 'true');
+          body.scrollTop = 0;
+          back.focus();
+        }));
+        back.addEventListener('click', () => showRoot(true));
+        drawer.querySelector('[data-camo-close]').addEventListener('click', () => document.querySelector('.js-mobile-header-main-toggler')?.click());
+        new MutationObserver(() => { if (!drawer.classList.contains('is-active')) showRoot(); }).observe(drawer, { attributes: true, attributeFilter: ['class'] });
+      });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => initNavigation());
+    else initNavigation();
+    document.addEventListener('shopify:section:load', event => initNavigation(event.target));
+  })();
+{% endjavascript %}

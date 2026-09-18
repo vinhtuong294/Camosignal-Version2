@@ -1,0 +1,453 @@
+{
+  "pass": true,
+  "newCollections": [
+    {
+      "title": "Deer Season",
+      "id": "gid://shopify/Collection/379105476799",
+      "handle": "deer-season",
+      "type": "manual",
+      "expected": 163,
+      "actual": 163,
+      "missing": [],
+      "extra": [],
+      "types": null
+    },
+    {
+      "title": "Turkey Season",
+      "id": "gid://shopify/Collection/379105509567",
+      "handle": "turkey-season",
+      "type": "manual",
+      "expected": 126,
+      "actual": 126,
+      "missing": [],
+      "extra": [],
+      "types": null
+    },
+    {
+      "title": "Waterfowl Season",
+      "id": "gid://shopify/Collection/379105542335",
+      "handle": "waterfowl-season",
+      "type": "manual",
+      "expected": 23,
+      "actual": 23,
+      "missing": [],
+      "extra": [],
+      "types": null
+    },
+    {
+      "title": "Upland Season",
+      "id": "gid://shopify/Collection/379105575103",
+      "handle": "upland-season",
+      "type": "manual",
+      "expected": 47,
+      "actual": 47,
+      "missing": [],
+      "extra": [],
+      "types": null
+    },
+    {
+      "title": "Freshwater Life",
+      "id": "gid://shopify/Collection/379105607871",
+      "handle": "freshwater-life",
+      "type": "manual",
+      "expected": 55,
+      "actual": 55,
+      "missing": [],
+      "extra": [],
+      "types": null
+    },
+    {
+      "title": "Saltwater Life",
+      "id": "gid://shopify/Collection/379105673407",
+      "handle": "saltwater-life",
+      "type": "manual",
+      "expected": 60,
+      "actual": 60,
+      "missing": [],
+      "extra": [],
+      "types": null
+    },
+    {
+      "title": "Outdoor Faith",
+      "id": "gid://shopify/Collection/379105706175",
+      "handle": "outdoor-faith",
+      "type": "manual",
+      "expected": 71,
+      "actual": 71,
+      "missing": [],
+      "extra": [],
+      "types": null
+    },
+    {
+      "title": "Park Adventures",
+      "id": "gid://shopify/Collection/379105738943",
+      "handle": "park-adventures",
+      "type": "manual",
+      "expected": 59,
+      "actual": 59,
+      "missing": [],
+      "extra": [],
+      "types": null
+    },
+    {
+      "title": "American Pride",
+      "id": "gid://shopify/Collection/379105804479",
+      "handle": "american-pride",
+      "type": "manual",
+      "expected": 59,
+      "actual": 59,
+      "missing": [],
+      "extra": [],
+      "types": null
+    },
+    {
+      "title": "Outdoor Dads",
+      "id": "gid://shopify/Collection/379105902783",
+      "handle": "outdoor-dads",
+      "type": "manual",
+      "expected": 23,
+      "actual": 23,
+      "missing": [],
+      "extra": [],
+      "types": null
+    },
+    {
+      "title": "Youth Tees",
+      "id": "gid://shopify/Collection/379105968319",
+      "handle": "youth-tees",
+      "type": "manual",
+      "expected": 47,
+      "actual": 47,
+      "missing": [],
+      "extra": [],
+      "types": null
+    },
+    {
+      "title": "Curated Sets",
+      "id": "gid://shopify/Collection/379106066623",
+      "handle": "curated-sets",
+      "type": "smart",
+      "expected": 15,
+      "actual": 15,
+      "missing": [],
+      "extra": [],
+      "types": [
+        "Combo"
+      ]
+    },
+    {
+      "title": "T-Shirts",
+      "id": "gid://shopify/Collection/379106099391",
+      "handle": "t-shirts",
+      "type": "smart",
+      "expected": 513,
+      "actual": 513,
+      "missing": [],
+      "extra": [],
+      "types": [
+        "T-Shirt",
+        "T-shirt",
+        "3D Tshirt",
+        "Type1",
+        "Pocket Tee"
+      ]
+    },
+    {
+      "title": "Long Sleeves",
+      "id": "gid://shopify/Collection/379106132159",
+      "handle": "long-sleeves",
+      "type": "smart",
+      "expected": 119,
+      "actual": 119,
+      "missing": [],
+      "extra": [],
+      "types": [
+        "Long-sleeve"
+      ]
+    },
+    {
+      "title": "Sweatshirts",
+      "id": "gid://shopify/Collection/379106164927",
+      "handle": "sweatshirts",
+      "type": "smart",
+      "expected": 32,
+      "actual": 32,
+      "missing": [],
+      "extra": [],
+      "types": [
+        "Sweatshirt"
+      ]
+    },
+    {
+      "title": "Hoodies",
+      "id": "gid://shopify/Collection/379106197695",
+      "handle": "hoodies",
+      "type": "smart",
+      "expected": 81,
+      "actual": 81,
+      "missing": [],
+      "extra": [],
+      "types": [
+        "Hoodie"
+      ]
+    },
+    {
+      "title": "UV Hoodies",
+      "id": "gid://shopify/Collection/379106230463",
+      "handle": "uv-hoodies",
+      "type": "smart",
+      "expected": 43,
+      "actual": 43,
+      "missing": [],
+      "extra": [],
+      "types": [
+        "UPF HOODIE",
+        "UPF Hoodie"
+      ]
+    },
+    {
+      "title": "Hats",
+      "id": "gid://shopify/Collection/379106263231",
+      "handle": "hats",
+      "type": "smart",
+      "expected": 36,
+      "actual": 36,
+      "missing": [],
+      "extra": [],
+      "types": [
+        "Hat",
+        "Beanie Hat"
+      ]
+    }
+  ],
+  "oldCollections": [
+    {
+      "title": "Deer",
+      "id": "gid://shopify/Collection/367430402239",
+      "preserved": true,
+      "count": 81
+    },
+    {
+      "title": "DEER 250TH",
+      "id": "gid://shopify/Collection/369218289855",
+      "preserved": true,
+      "count": 13
+    },
+    {
+      "title": "DEER COLLECTION",
+      "id": "gid://shopify/Collection/377582026943",
+      "preserved": true,
+      "count": 26
+    },
+    {
+      "title": "DEER HUNTING",
+      "id": "gid://shopify/Collection/370855510207",
+      "preserved": true,
+      "count": 95
+    },
+    {
+      "title": "Deer Hunting Hoodie",
+      "id": "gid://shopify/Collection/376727011519",
+      "preserved": true,
+      "count": 56
+    },
+    {
+      "title": "Deer Hunting New",
+      "id": "gid://shopify/Collection/375281025215",
+      "preserved": true,
+      "count": 67
+    },
+    {
+      "title": "DEER250",
+      "id": "gid://shopify/Collection/369566777535",
+      "preserved": true,
+      "count": 11
+    },
+    {
+      "title": "Turkey",
+      "id": "gid://shopify/Collection/367430435007",
+      "preserved": true,
+      "count": 99
+    },
+    {
+      "title": "TURKEY",
+      "id": "gid://shopify/Collection/372216463551",
+      "preserved": true,
+      "count": 49
+    },
+    {
+      "title": "Turkey Fall Season",
+      "id": "gid://shopify/Collection/378877542591",
+      "preserved": true,
+      "count": 44
+    },
+    {
+      "title": "TURKEY TOP PICKS",
+      "id": "gid://shopify/Collection/371762692287",
+      "preserved": true,
+      "count": 18
+    },
+    {
+      "title": "Wild Turkey",
+      "id": "gid://shopify/Collection/370005999807",
+      "preserved": true,
+      "count": 83
+    },
+    {
+      "title": "WORLD TURKEY SLAM",
+      "id": "gid://shopify/Collection/370807210175",
+      "preserved": true,
+      "count": 14
+    },
+    {
+      "title": "GRAND SLAM SUBSPECIES",
+      "id": "gid://shopify/Collection/370078843071",
+      "preserved": true,
+      "count": 14
+    },
+    {
+      "title": "Waterfowl",
+      "id": "gid://shopify/Collection/367430467775",
+      "preserved": true,
+      "count": 23
+    },
+    {
+      "title": "THE UPLANDS",
+      "id": "gid://shopify/Collection/376776425663",
+      "preserved": true,
+      "count": 47
+    },
+    {
+      "title": "Upland Birds Hunting",
+      "id": "gid://shopify/Collection/376720949439",
+      "preserved": true,
+      "count": 27
+    },
+    {
+      "title": "Freshwater Fishing",
+      "id": "gid://shopify/Collection/370856853695",
+      "preserved": true,
+      "count": 55
+    },
+    {
+      "title": "FRESHWATER FISHING",
+      "id": "gid://shopify/Collection/372183138495",
+      "preserved": true,
+      "count": 33
+    },
+    {
+      "title": "Freshwater Fishing New Arrivals",
+      "id": "gid://shopify/Collection/374283174079",
+      "preserved": true,
+      "count": 41
+    },
+    {
+      "title": "Saltwater Fishing",
+      "id": "gid://shopify/Collection/370940739775",
+      "preserved": true,
+      "count": 60
+    },
+    {
+      "title": "Saltwater Fishing New Arrivals",
+      "id": "gid://shopify/Collection/372729774271",
+      "preserved": true,
+      "count": 47
+    },
+    {
+      "title": "Faith Outdoors",
+      "id": "gid://shopify/Collection/374036562111",
+      "preserved": true,
+      "count": 69
+    },
+    {
+      "title": "Faith Outdoors New",
+      "id": "gid://shopify/Collection/375670603967",
+      "preserved": true,
+      "count": 55
+    },
+    {
+      "title": "National Park",
+      "id": "gid://shopify/Collection/370773295295",
+      "preserved": true,
+      "count": 59
+    },
+    {
+      "title": "NATIONAL PARK",
+      "id": "gid://shopify/Collection/372143554751",
+      "preserved": true,
+      "count": 40
+    },
+    {
+      "title": "National Park New Arrivals",
+      "id": "gid://shopify/Collection/372727382207",
+      "preserved": true,
+      "count": 28
+    },
+    {
+      "title": "Patriotic T-shirt",
+      "id": "gid://shopify/Collection/373345812671",
+      "preserved": true,
+      "count": 20
+    },
+    {
+      "title": "INDEPENDENCE DAY",
+      "id": "gid://shopify/Collection/366909522111",
+      "preserved": true,
+      "count": 57
+    },
+    {
+      "title": "AMERICA 250",
+      "id": "gid://shopify/Collection/368775168191",
+      "preserved": true,
+      "count": 56
+    },
+    {
+      "title": "LIBERTY 250TH",
+      "id": "gid://shopify/Collection/369567072447",
+      "preserved": true,
+      "count": 12
+    },
+    {
+      "title": "America 250TH",
+      "id": "gid://shopify/Collection/369930666175",
+      "preserved": true,
+      "count": 10
+    },
+    {
+      "title": "Dog 250TH",
+      "id": "gid://shopify/Collection/369021026495",
+      "preserved": true,
+      "count": 16
+    },
+    {
+      "title": "Eagle 250TH",
+      "id": "gid://shopify/Collection/369248305343",
+      "preserved": true,
+      "count": 17
+    },
+    {
+      "title": "Father’s Day",
+      "id": "gid://shopify/Collection/369110679743",
+      "preserved": true,
+      "count": 23
+    },
+    {
+      "title": "Father’s Day Shirt",
+      "id": "gid://shopify/Collection/369800708287",
+      "preserved": true,
+      "count": 23
+    },
+    {
+      "title": "FIRST DAY KIDS TEE",
+      "id": "gid://shopify/Collection/373388869823",
+      "preserved": true,
+      "count": 27
+    },
+    {
+      "title": "SPOOKY KIDS TEE",
+      "id": "gid://shopify/Collection/374614524095",
+      "preserved": true,
+      "count": 23
+    }
+  ]
+}

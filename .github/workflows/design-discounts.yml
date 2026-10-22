@@ -1,0 +1,53 @@
+name: Sync design discounts
+
+on:
+  schedule:
+    - cron: '23 */2 * * *'
+  workflow_dispatch:
+    inputs:
+      test_only:
+        description: Run the tests without connecting to Shopify
+        type: boolean
+        default: false
+      apply:
+        description: Apply the verified 15% discount changes
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: camosignal-design-discounts
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || vars.DESIGN_SYNC_ENABLED == 'true')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            automation/design-discounts
+            .github/workflows
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24'
+      - name: Test the synchronizer
+        run: node --test automation/design-discounts/sync.test.mjs
+      - name: Reconcile matching-design discounts
+        if: inputs.test_only != true
+        env:
+          DESIGN_SHOPIFY_CLIENT_ID: ${{ secrets.DESIGN_SHOPIFY_CLIENT_ID }}
+          DESIGN_SHOPIFY_CLIENT_SECRET: ${{ secrets.DESIGN_SHOPIFY_CLIENT_SECRET }}
+          APPLY_CHANGES: ${{ github.event_name == 'schedule' || inputs.apply }}
+        shell: bash
+        run: |
+          if [ "$APPLY_CHANGES" = 'true' ]; then
+            node automation/design-discounts/sync.mjs --apply
+          else
+            node automation/design-discounts/sync.mjs --dry-run
+          fi

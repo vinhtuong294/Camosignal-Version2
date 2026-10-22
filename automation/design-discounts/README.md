@@ -27,7 +27,11 @@ It needs no Vercel deployment, database, additional Shopify app, or open compute
 
 The workflow is disabled for scheduled writes until step 6. It runs every two
 hours at minute 23 UTC (every two hours at minute 23 in Bangkok as well).
-GitHub can delay scheduled runs. Manual runs use the same concurrency group so
+GitHub can delay scheduled runs. In public repositories, GitHub automatically
+disables schedules after 60 days without repository activity; re-enable the
+workflow in Actions if that happens. A successful scheduled job by itself should
+not be treated as a guarantee that this inactivity rule will never apply.
+Manual runs use the same concurrency group so
 two sync runs cannot edit the store simultaneously. The next full reconciliation
 recovers a failed or interrupted run.
 
